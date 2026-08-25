@@ -1,0 +1,687 @@
+{
+  "tagline": "Read Chargebee source-locked ETL records.",
+  "usage": "pm chargebee <command> [flags]",
+  "source_cli": {
+    "name": "Chargebee provider API",
+    "docs": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+    "reference": "Pinned schema-v3 source documents; each ETL command retains its exact provider operation route and citation.",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "etl",
+      "title": "ETL streams",
+      "commands": [
+        "customers",
+        "subscriptions",
+        "invoices",
+        "plans",
+        "items",
+        "item-prices",
+        "item-families",
+        "coupons",
+        "coupon-codes",
+        "coupon-sets",
+        "credit-notes",
+        "transactions",
+        "orders",
+        "quotes",
+        "payment-sources",
+        "events",
+        "hosted-pages",
+        "virtual-bank-accounts",
+        "unbilled-charges",
+        "ramps",
+        "gifts",
+        "alerts",
+        "comments",
+        "promotional-credits",
+        "features",
+        "entitlements",
+        "differential-prices",
+        "price-variants",
+        "products",
+        "webhook-endpoints",
+        "ledger-operations",
+        "ledger-account-balances"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Chargebee request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit."
+    }
+  ],
+  "commands": [
+    {
+      "path": "customers list",
+      "summary": "Read Customers as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_cli_path": "GET /v2/customers",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customers"
+        }
+      ],
+      "examples": [
+        "pm chargebee customers list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListCustomers27 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "subscriptions list",
+      "summary": "Read Subscriptions as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscriptions",
+      "source_cli_path": "GET /v2/subscriptions",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/subscriptions"
+        }
+      ],
+      "examples": [
+        "pm chargebee subscriptions list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListSubscriptions122 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "invoices list",
+      "summary": "Read Invoices as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invoices",
+      "source_cli_path": "GET /v2/invoices",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/invoices"
+        }
+      ],
+      "examples": [
+        "pm chargebee invoices list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListInvoices55 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "plans list",
+      "summary": "Read Plans as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "plans",
+      "source_cli_path": "GET /v2/plans",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/plans"
+        }
+      ],
+      "examples": [
+        "pm chargebee plans list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListPlans100 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "items list",
+      "summary": "Read Items as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "items",
+      "source_cli_path": "GET /v2/items",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/items"
+        }
+      ],
+      "examples": [
+        "pm chargebee items list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListItems69 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "item-prices list",
+      "summary": "Read Item Prices as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "item_prices",
+      "source_cli_path": "GET /v2/item_prices",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/item_prices"
+        }
+      ],
+      "examples": [
+        "pm chargebee item-prices list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListItemPrices65 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "item-families list",
+      "summary": "Read Item Families as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "item_families",
+      "source_cli_path": "GET /v2/item_families",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/item_families"
+        }
+      ],
+      "examples": [
+        "pm chargebee item-families list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListItemFamilies63 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "coupons list",
+      "summary": "Read Coupons as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "coupons",
+      "source_cli_path": "GET /v2/coupons",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/coupons"
+        }
+      ],
+      "examples": [
+        "pm chargebee coupons list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListCoupons19 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "coupon-codes list",
+      "summary": "Read Coupon Codes as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "coupon_codes",
+      "source_cli_path": "GET /v2/coupon_codes",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/coupon_codes"
+        }
+      ],
+      "examples": [
+        "pm chargebee coupon-codes list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListCouponCodes15 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "coupon-sets list",
+      "summary": "Read Coupon Sets as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "coupon_sets",
+      "source_cli_path": "GET /v2/coupon_sets",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/coupon_sets"
+        }
+      ],
+      "examples": [
+        "pm chargebee coupon-sets list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListCouponSets17 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "credit-notes list",
+      "summary": "Read Credit Notes as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "credit_notes",
+      "source_cli_path": "GET /v2/credit_notes",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/credit_notes"
+        }
+      ],
+      "examples": [
+        "pm chargebee credit-notes list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListCreditNotes21 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "transactions list",
+      "summary": "Read Transactions as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "transactions",
+      "source_cli_path": "GET /v2/transactions",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/transactions"
+        }
+      ],
+      "examples": [
+        "pm chargebee transactions list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListTransactions148 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "orders list",
+      "summary": "Read Orders as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "orders",
+      "source_cli_path": "GET /v2/orders",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/orders"
+        }
+      ],
+      "examples": [
+        "pm chargebee orders list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListOrders84 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "quotes list",
+      "summary": "Read Quotes as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "quotes",
+      "source_cli_path": "GET /v2/quotes",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/quotes"
+        }
+      ],
+      "examples": [
+        "pm chargebee quotes list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListQuotes110 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "payment-sources list",
+      "summary": "Read Payment Sources as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payment_sources",
+      "source_cli_path": "GET /v2/payment_sources",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/payment_sources"
+        }
+      ],
+      "examples": [
+        "pm chargebee payment-sources list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListPaymentSources88 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "events list",
+      "summary": "Read Events as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "events",
+      "source_cli_path": "GET /v2/events",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/events"
+        }
+      ],
+      "examples": [
+        "pm chargebee events list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListEvents43 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "hosted-pages list",
+      "summary": "Read Hosted Pages as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "hosted_pages",
+      "source_cli_path": "GET /v2/hosted_pages",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/hosted_pages"
+        }
+      ],
+      "examples": [
+        "pm chargebee hosted-pages list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListHostedPages53 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "virtual-bank-accounts list",
+      "summary": "Read Virtual Bank Accounts as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "virtual_bank_accounts",
+      "source_cli_path": "GET /v2/virtual_bank_accounts",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/virtual_bank_accounts"
+        }
+      ],
+      "examples": [
+        "pm chargebee virtual-bank-accounts list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListVirtualBankAccounts156 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "unbilled-charges list",
+      "summary": "Read Unbilled Charges as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "unbilled_charges",
+      "source_cli_path": "GET /v2/unbilled_charges",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/unbilled_charges"
+        }
+      ],
+      "examples": [
+        "pm chargebee unbilled-charges list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListUnbilledCharges150 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "ramps list",
+      "summary": "Read Ramps as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ramps",
+      "source_cli_path": "GET /v2/ramps",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/ramps"
+        }
+      ],
+      "examples": [
+        "pm chargebee ramps list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListRamps115 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "gifts list",
+      "summary": "Read Gifts as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "gifts",
+      "source_cli_path": "GET /v2/gifts",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/gifts"
+        }
+      ],
+      "examples": [
+        "pm chargebee gifts list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListGifts50 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "alerts list",
+      "summary": "Read Alerts as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "alerts",
+      "source_cli_path": "GET /v2/alerts",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/alerts"
+        }
+      ],
+      "examples": [
+        "pm chargebee alerts list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListAlerts4 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "comments list",
+      "summary": "Read Comments as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "comments",
+      "source_cli_path": "GET /v2/comments",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/comments"
+        }
+      ],
+      "examples": [
+        "pm chargebee comments list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListComments12 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "promotional-credits list",
+      "summary": "Read Promotional Credits as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "promotional_credits",
+      "source_cli_path": "GET /v2/promotional_credits",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/promotional_credits"
+        }
+      ],
+      "examples": [
+        "pm chargebee promotional-credits list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListPromotionalCredits108 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "features list",
+      "summary": "Read Features as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "features",
+      "source_cli_path": "GET /v2/features",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/features"
+        }
+      ],
+      "examples": [
+        "pm chargebee features list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListFeatures46 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "entitlements list",
+      "summary": "Read Entitlements as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "entitlements",
+      "source_cli_path": "GET /v2/entitlements",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/entitlements"
+        }
+      ],
+      "examples": [
+        "pm chargebee entitlements list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListAllEntitlements42 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "differential-prices list",
+      "summary": "Read Differential Prices as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "differential_prices",
+      "source_cli_path": "GET /v2/differential_prices",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/differential_prices"
+        }
+      ],
+      "examples": [
+        "pm chargebee differential-prices list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListDifferentialPrices40 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "price-variants list",
+      "summary": "Read Price Variants as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "price_variants",
+      "source_cli_path": "GET /v2/price_variants",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/price_variants"
+        }
+      ],
+      "examples": [
+        "pm chargebee price-variants list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListPriceVariants103 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "products list",
+      "summary": "Read Products as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "products",
+      "source_cli_path": "GET /v2/products",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/products"
+        }
+      ],
+      "examples": [
+        "pm chargebee products list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListProducts105 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "webhook-endpoints list",
+      "summary": "Read Webhook Endpoints as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhook_endpoints",
+      "source_cli_path": "GET /v2/webhook_endpoints",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/webhook_endpoints"
+        }
+      ],
+      "examples": [
+        "pm chargebee webhook-endpoints list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListWebhookEndpoints158 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "ledger-operations list",
+      "summary": "Read Ledger Operations as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ledger_operations",
+      "source_cli_path": "GET /v2/ledger_operations",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/ledger_operations"
+        }
+      ],
+      "examples": [
+        "pm chargebee ledger-operations list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListLedgerOperations74 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "ledger-account-balances list",
+      "summary": "Read Ledger Account Balances as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ledger_account_balances",
+      "source_cli_path": "GET /v2/ledger_account_balances",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/ledger_account_balances"
+        }
+      ],
+      "examples": [
+        "pm chargebee ledger-account-balances list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListLedgerAccountBalances73 from source document primary; streams.json is the declared execution component."
+    }
+  ]
+}

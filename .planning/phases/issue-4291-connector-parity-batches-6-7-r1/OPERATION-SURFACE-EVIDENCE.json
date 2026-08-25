@@ -97812,18 +97812,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"campaigns list\" binds pinned source operation braze.rest.get.CampaignsList0",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"campaigns\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /campaigns/list",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "campaigns"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[0] is bound to ETL stream \"campaigns\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -97833,8 +97834,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:campaigns"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -97846,9 +97848,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "campaigns"
+            "stream": "campaigns",
+            "path": "campaigns list",
+            "source_cli_path": "GET /campaigns/list"
           }
         }
       },
@@ -97888,18 +97892,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"campaign-details list\" binds pinned source operation braze.rest.get.CampaignsDetails1",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"campaign_details\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /campaigns/details",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "campaign_details"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[1] is bound to ETL stream \"campaign_details\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -97909,8 +97914,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:campaign_details"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -97922,9 +97928,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "campaign_details"
+            "stream": "campaign_details",
+            "path": "campaign-details list",
+            "source_cli_path": "GET /campaigns/details"
           }
         }
       },
@@ -98041,18 +98049,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"canvases list\" binds pinned source operation braze.rest.get.CanvasList3",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"canvases\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /canvas/list",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "canvases"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[3] is bound to ETL stream \"canvases\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -98062,8 +98071,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:canvases"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -98075,9 +98085,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "canvases"
+            "stream": "canvases",
+            "path": "canvases list",
+            "source_cli_path": "GET /canvas/list"
           }
         }
       },
@@ -98117,18 +98129,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"canvas-details list\" binds pinned source operation braze.rest.get.CanvasDetails4",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"canvas_details\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /canvas/details",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "canvas_details"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[4] is bound to ETL stream \"canvas_details\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -98138,8 +98151,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:canvas_details"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -98151,9 +98165,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "canvas_details"
+            "stream": "canvas_details",
+            "path": "canvas-details list",
+            "source_cli_path": "GET /canvas/details"
           }
         }
       },
@@ -98270,18 +98286,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"canvas-data-summary list\" binds pinned source operation braze.rest.get.CanvasDataSummary6",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"canvas_data_summary\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /canvas/data_summary",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "canvas_data_summary"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[6] is bound to ETL stream \"canvas_data_summary\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -98291,8 +98308,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:canvas_data_summary"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -98304,9 +98322,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "canvas_data_summary"
+            "stream": "canvas_data_summary",
+            "path": "canvas-data-summary list",
+            "source_cli_path": "GET /canvas/data_summary"
           }
         }
       },
@@ -98346,18 +98366,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"catalogs list\" binds pinned source operation braze.rest.get.Catalogs7",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"catalogs\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /catalogs",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "catalogs"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[7] is bound to ETL stream \"catalogs\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -98367,8 +98388,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:catalogs"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -98380,9 +98402,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "catalogs"
+            "stream": "catalogs",
+            "path": "catalogs list",
+            "source_cli_path": "GET /catalogs"
           }
         }
       },
@@ -99493,18 +99517,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"content-blocks list\" binds pinned source operation braze.rest.get.ContentBlocksList22",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"content_blocks\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /content_blocks/list",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "content_blocks"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[22] is bound to ETL stream \"content_blocks\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -99514,8 +99539,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:content_blocks"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -99527,9 +99553,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "content_blocks"
+            "stream": "content_blocks",
+            "path": "content-blocks list",
+            "source_cli_path": "GET /content_blocks/list"
           }
         }
       },
@@ -99874,18 +99902,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"email-hard-bounces list\" binds pinned source operation braze.rest.get.EmailHardBounces27",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"email_hard_bounces\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /email/hard_bounces",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "email_hard_bounces"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[27] is bound to ETL stream \"email_hard_bounces\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -99895,8 +99924,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:email_hard_bounces"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -99908,9 +99938,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "email_hard_bounces"
+            "stream": "email_hard_bounces",
+            "path": "email-hard-bounces list",
+            "source_cli_path": "GET /email/hard_bounces"
           }
         }
       },
@@ -100102,18 +100134,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"email-unsubscribes list\" binds pinned source operation braze.rest.get.EmailUnsubscribes30",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"email_unsubscribes\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /email/unsubscribes",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "email_unsubscribes"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[30] is bound to ETL stream \"email_unsubscribes\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -100123,8 +100156,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:email_unsubscribes"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -100136,9 +100170,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "email_unsubscribes"
+            "stream": "email_unsubscribes",
+            "path": "email-unsubscribes list",
+            "source_cli_path": "GET /email/unsubscribes"
           }
         }
       },
@@ -100486,18 +100522,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"feed-cards list\" binds pinned source operation braze.rest.get.FeedList35",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"feed_cards\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /feed/list",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "feed_cards"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[35] is bound to ETL stream \"feed_cards\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -100507,8 +100544,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:feed_cards"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -100520,9 +100558,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "feed_cards"
+            "stream": "feed_cards",
+            "path": "feed-cards list",
+            "source_cli_path": "GET /feed/list"
           }
         }
       },
@@ -100562,18 +100602,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"kpi-dau list\" binds pinned source operation braze.rest.get.KpiDauDataSeries36",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"kpi_dau\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /kpi/dau/data_series",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "kpi_dau"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[36] is bound to ETL stream \"kpi_dau\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -100583,8 +100624,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:kpi_dau"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -100596,9 +100638,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "kpi_dau"
+            "stream": "kpi_dau",
+            "path": "kpi-dau list",
+            "source_cli_path": "GET /kpi/dau/data_series"
           }
         }
       },
@@ -100638,18 +100682,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"kpi-mau list\" binds pinned source operation braze.rest.get.KpiMauDataSeries37",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"kpi_mau\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /kpi/mau/data_series",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "kpi_mau"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[37] is bound to ETL stream \"kpi_mau\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -100659,8 +100704,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:kpi_mau"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -100672,9 +100718,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "kpi_mau"
+            "stream": "kpi_mau",
+            "path": "kpi-mau list",
+            "source_cli_path": "GET /kpi/mau/data_series"
           }
         }
       },
@@ -100714,18 +100762,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"kpi-new-users list\" binds pinned source operation braze.rest.get.KpiNewUsersDataSeries38",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"kpi_new_users\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /kpi/new_users/data_series",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "kpi_new_users"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[38] is bound to ETL stream \"kpi_new_users\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -100735,8 +100784,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:kpi_new_users"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -100748,9 +100798,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "kpi_new_users"
+            "stream": "kpi_new_users",
+            "path": "kpi-new-users list",
+            "source_cli_path": "GET /kpi/new_users/data_series"
           }
         }
       },
@@ -100790,18 +100842,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"kpi-uninstalls list\" binds pinned source operation braze.rest.get.KpiUninstallsDataSeries39",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"kpi_uninstalls\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /kpi/uninstalls/data_series",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "kpi_uninstalls"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[39] is bound to ETL stream \"kpi_uninstalls\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -100811,8 +100864,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:kpi_uninstalls"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -100824,9 +100878,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "kpi_uninstalls"
+            "stream": "kpi_uninstalls",
+            "path": "kpi-uninstalls list",
+            "source_cli_path": "GET /kpi/uninstalls/data_series"
           }
         }
       },
@@ -101174,18 +101230,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"scheduled-broadcasts list\" binds pinned source operation braze.rest.get.MessagesScheduledBroadcasts44",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"scheduled_broadcasts\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /messages/scheduled_broadcasts",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "scheduled_broadcasts"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[44] is bound to ETL stream \"scheduled_broadcasts\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -101195,8 +101252,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:scheduled_broadcasts"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -101208,9 +101266,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "scheduled_broadcasts"
+            "stream": "scheduled_broadcasts",
+            "path": "scheduled-broadcasts list",
+            "source_cli_path": "GET /messages/scheduled_broadcasts"
           }
         }
       },
@@ -101402,18 +101462,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"preference-centers list\" binds pinned source operation braze.rest.get.PreferenceCenterV1List47",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"preference_centers\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /preference_center/v1/list",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "preference_centers"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[47] is bound to ETL stream \"preference_centers\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -101423,8 +101484,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:preference_centers"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -101436,9 +101498,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "preference_centers"
+            "stream": "preference_centers",
+            "path": "preference-centers list",
+            "source_cli_path": "GET /preference_center/v1/list"
           }
         }
       },
@@ -102324,18 +102388,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"segments list\" binds pinned source operation braze.rest.get.SegmentsList59",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"segments\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /segments/list",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "segments"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[59] is bound to ETL stream \"segments\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -102345,8 +102410,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:segments"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -102358,9 +102424,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "segments"
+            "stream": "segments",
+            "path": "segments list",
+            "source_cli_path": "GET /segments/list"
           }
         }
       },
@@ -102400,18 +102468,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"segment-details list\" binds pinned source operation braze.rest.get.SegmentsDetails60",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"segment_details\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /segments/details",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "segment_details"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[60] is bound to ETL stream \"segment_details\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -102421,8 +102490,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:segment_details"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -102434,9 +102504,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "segment_details"
+            "stream": "segment_details",
+            "path": "segment-details list",
+            "source_cli_path": "GET /segments/details"
           }
         }
       },
@@ -102707,18 +102779,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"sessions list\" binds pinned source operation braze.rest.get.SessionsDataSeries64",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"sessions\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /sessions/data_series",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "sessions"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[64] is bound to ETL stream \"sessions\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -102728,8 +102801,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:sessions"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -102741,9 +102815,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "sessions"
+            "stream": "sessions",
+            "path": "sessions list",
+            "source_cli_path": "GET /sessions/data_series"
           }
         }
       },
@@ -102783,18 +102859,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"sms-invalid-phone-numbers list\" binds pinned source operation braze.rest.get.SmsInvalidPhoneNumbers65",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"sms_invalid_phone_numbers\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /sms/invalid_phone_numbers",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "sms_invalid_phone_numbers"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[65] is bound to ETL stream \"sms_invalid_phone_numbers\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -102804,8 +102881,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:sms_invalid_phone_numbers"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -102817,9 +102895,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "sms_invalid_phone_numbers"
+            "stream": "sms_invalid_phone_numbers",
+            "path": "sms-invalid-phone-numbers list",
+            "source_cli_path": "GET /sms/invalid_phone_numbers"
           }
         }
       },
@@ -103319,18 +103399,19 @@
         "provider_version_evidence": "internal/connectors/defs/braze/sources/braze-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"email-templates list\" binds pinned source operation braze.rest.get.TemplatesEmailList72",
+        "contract": {
+          "execution_component": "internal/connectors/defs/braze/streams.json stream \"email_templates\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /templates/email/list",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        },
         "api_surface_binding": {
           "stream": "email_templates"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The source operation has no runnable command or typed action binding.",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[72] is bound to ETL stream \"email_templates\" but has no runnable cli_surface command or typed write action binding."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -103340,8 +103421,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:email_templates"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -103353,9 +103435,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "email_templates"
+            "stream": "email_templates",
+            "path": "email-templates list",
+            "source_cli_path": "GET /templates/email/list"
           }
         }
       },
@@ -106152,18 +106236,19 @@
         "provider_version_evidence": "internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"activities list\" binds pinned source operation customer-io.rest.get.ListActivities14",
+        "contract": {
+          "execution_component": "internal/connectors/defs/customer-io/streams.json stream \"activities\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v1/activities",
+          "citation_url": "https://docs.customer.io/files/journeys-app.json"
+        },
         "api_surface_binding": {
           "stream": "activities"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[14] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/activities\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -106173,8 +106258,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:activities"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -106186,9 +106272,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "activities"
+            "stream": "activities",
+            "path": "activities list",
+            "source_cli_path": "GET /v1/activities"
           }
         }
       },
@@ -106536,18 +106624,19 @@
         "provider_version_evidence": "internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"broadcasts list\" binds pinned source operation customer-io.rest.get.ListBroadcasts19",
+        "contract": {
+          "execution_component": "internal/connectors/defs/customer-io/streams.json stream \"broadcasts\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v1/broadcasts",
+          "citation_url": "https://docs.customer.io/files/journeys-app.json"
+        },
         "api_surface_binding": {
           "stream": "broadcasts"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[19] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/broadcasts\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -106557,8 +106646,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:broadcasts"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -106570,9 +106660,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "broadcasts"
+            "stream": "broadcasts",
+            "path": "broadcasts list",
+            "source_cli_path": "GET /v1/broadcasts"
           }
         }
       },
@@ -107382,18 +107474,19 @@
         "provider_version_evidence": "internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"campaigns list\" binds pinned source operation customer-io.rest.get.ListCampaigns30",
+        "contract": {
+          "execution_component": "internal/connectors/defs/customer-io/streams.json stream \"campaigns\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v1/campaigns",
+          "citation_url": "https://docs.customer.io/files/journeys-app.json"
+        },
         "api_surface_binding": {
           "stream": "campaigns"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[30] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/campaigns\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -107403,8 +107496,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:campaigns"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -107416,9 +107510,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "campaigns"
+            "stream": "campaigns",
+            "path": "campaigns list",
+            "source_cli_path": "GET /v1/campaigns"
           }
         }
       },
@@ -108382,18 +108478,19 @@
         "provider_version_evidence": "internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"collections list\" binds pinned source operation customer-io.rest.get.GetCollections43",
+        "contract": {
+          "execution_component": "internal/connectors/defs/customer-io/streams.json stream \"collections\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v1/collections",
+          "citation_url": "https://docs.customer.io/files/journeys-app.json"
+        },
         "api_surface_binding": {
           "stream": "collections"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[43] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/collections\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -108403,8 +108500,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:collections"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -108416,9 +108514,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "collections"
+            "stream": "collections",
+            "path": "collections list",
+            "source_cli_path": "GET /v1/collections"
           }
         }
       },
@@ -110075,18 +110175,19 @@
         "provider_version_evidence": "internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"exports list\" binds pinned source operation customer-io.rest.get.ListExports65",
+        "contract": {
+          "execution_component": "internal/connectors/defs/customer-io/streams.json stream \"exports\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v1/exports",
+          "citation_url": "https://docs.customer.io/files/journeys-app.json"
+        },
         "api_surface_binding": {
           "stream": "exports"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[65] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/exports\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -110096,8 +110197,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:exports"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -110109,9 +110211,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "exports"
+            "stream": "exports",
+            "path": "exports list",
+            "source_cli_path": "GET /v1/exports"
           }
         }
       },
@@ -110536,18 +110640,19 @@
         "provider_version_evidence": "internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"messages list\" binds pinned source operation customer-io.rest.get.ListMessages71",
+        "contract": {
+          "execution_component": "internal/connectors/defs/customer-io/streams.json stream \"messages\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v1/messages",
+          "citation_url": "https://docs.customer.io/files/journeys-app.json"
+        },
         "api_surface_binding": {
           "stream": "messages"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[71] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/messages\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -110557,8 +110662,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:messages"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -110570,9 +110676,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "messages"
+            "stream": "messages",
+            "path": "messages list",
+            "source_cli_path": "GET /v1/messages"
           }
         }
       },
@@ -110766,18 +110874,19 @@
         "provider_version_evidence": "internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"newsletters list\" binds pinned source operation customer-io.rest.get.ListNewsletters74",
+        "contract": {
+          "execution_component": "internal/connectors/defs/customer-io/streams.json stream \"newsletters\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v1/newsletters",
+          "citation_url": "https://docs.customer.io/files/journeys-app.json"
+        },
         "api_surface_binding": {
           "stream": "newsletters"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[74] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/newsletters\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -110787,8 +110896,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:newsletters"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -110800,9 +110910,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "newsletters"
+            "stream": "newsletters",
+            "path": "newsletters list",
+            "source_cli_path": "GET /v1/newsletters"
           }
         }
       },
@@ -111689,18 +111801,19 @@
         "provider_version_evidence": "internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"object-types list\" binds pinned source operation customer-io.rest.get.GetObjectTypes86",
+        "contract": {
+          "execution_component": "internal/connectors/defs/customer-io/streams.json stream \"object_types\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v1/object_types",
+          "citation_url": "https://docs.customer.io/files/journeys-app.json"
+        },
         "api_surface_binding": {
           "stream": "object_types"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[86] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/object_types\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -111710,8 +111823,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:object_types"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -111723,9 +111837,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "object_types"
+            "stream": "object_types",
+            "path": "object-types list",
+            "source_cli_path": "GET /v1/object_types"
           }
         }
       },
@@ -111996,18 +112112,19 @@
         "provider_version_evidence": "internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"reporting-webhooks list\" binds pinned source operation customer-io.rest.get.ListWebhooks90",
+        "contract": {
+          "execution_component": "internal/connectors/defs/customer-io/streams.json stream \"reporting_webhooks\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v1/reporting_webhooks",
+          "citation_url": "https://docs.customer.io/files/journeys-app.json"
+        },
         "api_surface_binding": {
           "stream": "reporting_webhooks"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[90] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/reporting_webhooks\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -112017,8 +112134,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:reporting_webhooks"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -112030,9 +112148,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "reporting_webhooks"
+            "stream": "reporting_webhooks",
+            "path": "reporting-webhooks list",
+            "source_cli_path": "GET /v1/reporting_webhooks"
           }
         }
       },
@@ -112149,18 +112269,19 @@
         "provider_version_evidence": "internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"segments list\" binds pinned source operation customer-io.rest.get.ListSegments92",
+        "contract": {
+          "execution_component": "internal/connectors/defs/customer-io/streams.json stream \"segments\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v1/segments",
+          "citation_url": "https://docs.customer.io/files/journeys-app.json"
+        },
         "api_surface_binding": {
           "stream": "segments"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[92] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/segments\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -112170,8 +112291,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:segments"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -112183,9 +112305,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "segments"
+            "stream": "segments",
+            "path": "segments list",
+            "source_cli_path": "GET /v1/segments"
           }
         }
       },
@@ -112533,18 +112657,19 @@
         "provider_version_evidence": "internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"sender-identities list\" binds pinned source operation customer-io.rest.get.ListSenders97",
+        "contract": {
+          "execution_component": "internal/connectors/defs/customer-io/streams.json stream \"sender_identities\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v1/sender_identities",
+          "citation_url": "https://docs.customer.io/files/journeys-app.json"
+        },
         "api_surface_binding": {
           "stream": "sender_identities"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[97] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/sender_identities\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -112554,8 +112679,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:sender_identities"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -112567,9 +112693,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "sender_identities"
+            "stream": "sender_identities",
+            "path": "sender-identities list",
+            "source_cli_path": "GET /v1/sender_identities"
           }
         }
       },
@@ -112763,18 +112891,19 @@
         "provider_version_evidence": "internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"snippets list\" binds pinned source operation customer-io.rest.get.ListSnippets100",
+        "contract": {
+          "execution_component": "internal/connectors/defs/customer-io/streams.json stream \"snippets\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v1/snippets",
+          "citation_url": "https://docs.customer.io/files/journeys-app.json"
+        },
         "api_surface_binding": {
           "stream": "snippets"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[100] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/snippets\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -112784,8 +112913,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:snippets"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -112797,9 +112927,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "snippets"
+            "stream": "snippets",
+            "path": "snippets list",
+            "source_cli_path": "GET /v1/snippets"
           }
         }
       },
@@ -112916,18 +113048,19 @@
         "provider_version_evidence": "internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"subscription-channels list\" binds pinned source operation customer-io.rest.get.GetChannels102",
+        "contract": {
+          "execution_component": "internal/connectors/defs/customer-io/streams.json stream \"subscription_channels\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v1/subscription_channels",
+          "citation_url": "https://docs.customer.io/files/journeys-app.json"
+        },
         "api_surface_binding": {
           "stream": "subscription_channels"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[102] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/subscription_channels\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -112937,8 +113070,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:subscription_channels"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -112950,9 +113084,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "subscription_channels"
+            "stream": "subscription_channels",
+            "path": "subscription-channels list",
+            "source_cli_path": "GET /v1/subscription_channels"
           }
         }
       },
@@ -112992,18 +113128,19 @@
         "provider_version_evidence": "internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"subscription-topics list\" binds pinned source operation customer-io.rest.get.GetTopics103",
+        "contract": {
+          "execution_component": "internal/connectors/defs/customer-io/streams.json stream \"subscription_topics\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v1/subscription_topics",
+          "citation_url": "https://docs.customer.io/files/journeys-app.json"
+        },
         "api_surface_binding": {
           "stream": "subscription_topics"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[103] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/subscription_topics\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -113013,8 +113150,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:subscription_topics"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -113026,9 +113164,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "subscription_topics"
+            "stream": "subscription_topics",
+            "path": "subscription-topics list",
+            "source_cli_path": "GET /v1/subscription_topics"
           }
         }
       },
@@ -113068,18 +113208,19 @@
         "provider_version_evidence": "internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"transactional list\" binds pinned source operation customer-io.rest.get.ListTransactional104",
+        "contract": {
+          "execution_component": "internal/connectors/defs/customer-io/streams.json stream \"transactional\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v1/transactional",
+          "citation_url": "https://docs.customer.io/files/journeys-app.json"
+        },
         "api_surface_binding": {
           "stream": "transactional"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[104] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/transactional\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -113089,8 +113230,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:transactional"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -113102,9 +113244,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "transactional"
+            "stream": "transactional",
+            "path": "transactional list",
+            "source_cli_path": "GET /v1/transactional"
           }
         }
       },
@@ -113606,18 +113750,19 @@
         "provider_version_evidence": "internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"workspaces list\" binds pinned source operation customer-io.rest.get.ListWorkspaces111",
+        "contract": {
+          "execution_component": "internal/connectors/defs/customer-io/streams.json stream \"workspaces\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v1/workspaces",
+          "citation_url": "https://docs.customer.io/files/journeys-app.json"
+        },
         "api_surface_binding": {
           "stream": "workspaces"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[111] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/workspaces\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -113627,8 +113772,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:workspaces"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -113640,9 +113786,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "workspaces"
+            "stream": "workspaces",
+            "path": "workspaces list",
+            "source_cli_path": "GET /v1/workspaces"
           }
         }
       },
@@ -229876,18 +230024,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"alerts list\" binds pinned source operation chargebee.rest.get.ListAlerts4",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"alerts\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/alerts",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "alerts"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[4] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/alerts\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -229897,8 +230046,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:alerts"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -229910,9 +230060,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "alerts"
+            "stream": "alerts",
+            "path": "alerts list",
+            "source_cli_path": "GET /v2/alerts"
           }
         }
       },
@@ -230491,18 +230643,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"comments list\" binds pinned source operation chargebee.rest.get.ListComments12",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"comments\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/comments",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "comments"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[12] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/comments\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -230512,8 +230665,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:comments"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -230525,9 +230679,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "comments"
+            "stream": "comments",
+            "path": "comments list",
+            "source_cli_path": "GET /v2/comments"
           }
         }
       },
@@ -230721,18 +230877,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"coupon-codes list\" binds pinned source operation chargebee.rest.get.ListCouponCodes15",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"coupon_codes\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/coupon_codes",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "coupon_codes"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[15] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/coupon_codes\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -230742,8 +230899,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:coupon_codes"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -230755,9 +230913,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "coupon_codes"
+            "stream": "coupon_codes",
+            "path": "coupon-codes list",
+            "source_cli_path": "GET /v2/coupon_codes"
           }
         }
       },
@@ -230874,18 +231034,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"coupon-sets list\" binds pinned source operation chargebee.rest.get.ListCouponSets17",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"coupon_sets\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/coupon_sets",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "coupon_sets"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[17] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/coupon_sets\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -230895,8 +231056,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:coupon_sets"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -230908,9 +231070,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "coupon_sets"
+            "stream": "coupon_sets",
+            "path": "coupon-sets list",
+            "source_cli_path": "GET /v2/coupon_sets"
           }
         }
       },
@@ -231027,18 +231191,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"coupons list\" binds pinned source operation chargebee.rest.get.ListCoupons19",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"coupons\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/coupons",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "coupons"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[19] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/coupons\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -231048,8 +231213,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:coupons"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -231061,9 +231227,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "coupons"
+            "stream": "coupons",
+            "path": "coupons list",
+            "source_cli_path": "GET /v2/coupons"
           }
         }
       },
@@ -231180,18 +231348,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"credit-notes list\" binds pinned source operation chargebee.rest.get.ListCreditNotes21",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"credit_notes\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/credit_notes",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "credit_notes"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[21] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/credit_notes\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -231201,8 +231370,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:credit_notes"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -231214,9 +231384,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "credit_notes"
+            "stream": "credit_notes",
+            "path": "credit-notes list",
+            "source_cli_path": "GET /v2/credit_notes"
           }
         }
       },
@@ -231641,18 +231813,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"customers list\" binds pinned source operation chargebee.rest.get.ListCustomers27",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"customers\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/customers",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "customers"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[27] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/customers\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -231662,8 +231835,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:customers"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -231675,9 +231849,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "customers"
+            "stream": "customers",
+            "path": "customers list",
+            "source_cli_path": "GET /v2/customers"
           }
         }
       },
@@ -232641,18 +232817,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"differential-prices list\" binds pinned source operation chargebee.rest.get.ListDifferentialPrices40",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"differential_prices\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/differential_prices",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "differential_prices"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[40] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/differential_prices\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -232662,8 +232839,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:differential_prices"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -232675,9 +232853,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "differential_prices"
+            "stream": "differential_prices",
+            "path": "differential-prices list",
+            "source_cli_path": "GET /v2/differential_prices"
           }
         }
       },
@@ -232794,18 +232974,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"entitlements list\" binds pinned source operation chargebee.rest.get.ListAllEntitlements42",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"entitlements\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/entitlements",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "entitlements"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[42] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/entitlements\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -232815,8 +232996,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:entitlements"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -232828,9 +233010,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "entitlements"
+            "stream": "entitlements",
+            "path": "entitlements list",
+            "source_cli_path": "GET /v2/entitlements"
           }
         }
       },
@@ -232870,18 +233054,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"events list\" binds pinned source operation chargebee.rest.get.ListEvents43",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"events\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/events",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "events"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[43] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/events\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -232891,8 +233076,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:events"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -232904,9 +233090,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "events"
+            "stream": "events",
+            "path": "events list",
+            "source_cli_path": "GET /v2/events"
           }
         }
       },
@@ -233100,18 +233288,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"features list\" binds pinned source operation chargebee.rest.get.ListFeatures46",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"features\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/features",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "features"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[46] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/features\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -233121,8 +233310,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:features"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -233134,9 +233324,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "features"
+            "stream": "features",
+            "path": "features list",
+            "source_cli_path": "GET /v2/features"
           }
         }
       },
@@ -233407,18 +233599,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"gifts list\" binds pinned source operation chargebee.rest.get.ListGifts50",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"gifts\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/gifts",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "gifts"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[50] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/gifts\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -233428,8 +233621,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:gifts"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -233441,9 +233635,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "gifts"
+            "stream": "gifts",
+            "path": "gifts list",
+            "source_cli_path": "GET /v2/gifts"
           }
         }
       },
@@ -233637,18 +233833,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"hosted-pages list\" binds pinned source operation chargebee.rest.get.ListHostedPages53",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"hosted_pages\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/hosted_pages",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "hosted_pages"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[53] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/hosted_pages\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -233658,8 +233855,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:hosted_pages"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -233671,9 +233869,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "hosted_pages"
+            "stream": "hosted_pages",
+            "path": "hosted-pages list",
+            "source_cli_path": "GET /v2/hosted_pages"
           }
         }
       },
@@ -233790,18 +233990,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"invoices list\" binds pinned source operation chargebee.rest.get.ListInvoices55",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"invoices\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/invoices",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "invoices"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[55] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/invoices\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -233811,8 +234012,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:invoices"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -233824,9 +234026,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "invoices"
+            "stream": "invoices",
+            "path": "invoices list",
+            "source_cli_path": "GET /v2/invoices"
           }
         }
       },
@@ -234405,18 +234609,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"item-families list\" binds pinned source operation chargebee.rest.get.ListItemFamilies63",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"item_families\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/item_families",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "item_families"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[63] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/item_families\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -234426,8 +234631,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:item_families"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -234439,9 +234645,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "item_families"
+            "stream": "item_families",
+            "path": "item-families list",
+            "source_cli_path": "GET /v2/item_families"
           }
         }
       },
@@ -234558,18 +234766,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"item-prices list\" binds pinned source operation chargebee.rest.get.ListItemPrices65",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"item_prices\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/item_prices",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "item_prices"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[65] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/item_prices\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -234579,8 +234788,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:item_prices"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -234592,9 +234802,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "item_prices"
+            "stream": "item_prices",
+            "path": "item-prices list",
+            "source_cli_path": "GET /v2/item_prices"
           }
         }
       },
@@ -234865,18 +235077,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"items list\" binds pinned source operation chargebee.rest.get.ListItems69",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"items\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/items",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "items"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[69] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/items\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -234886,8 +235099,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:items"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -234899,9 +235113,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "items"
+            "stream": "items",
+            "path": "items list",
+            "source_cli_path": "GET /v2/items"
           }
         }
       },
@@ -235172,18 +235388,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"ledger-account-balances list\" binds pinned source operation chargebee.rest.get.ListLedgerAccountBalances73",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"ledger_account_balances\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/ledger_account_balances",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "ledger_account_balances"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[73] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/ledger_account_balances\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -235193,8 +235410,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:ledger_account_balances"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -235206,9 +235424,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "ledger_account_balances"
+            "stream": "ledger_account_balances",
+            "path": "ledger-account-balances list",
+            "source_cli_path": "GET /v2/ledger_account_balances"
           }
         }
       },
@@ -235248,18 +235468,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"ledger-operations list\" binds pinned source operation chargebee.rest.get.ListLedgerOperations74",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"ledger_operations\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/ledger_operations",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "ledger_operations"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[74] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/ledger_operations\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -235269,8 +235490,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:ledger_operations"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -235282,9 +235504,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "ledger_operations"
+            "stream": "ledger_operations",
+            "path": "ledger-operations list",
+            "source_cli_path": "GET /v2/ledger_operations"
           }
         }
       },
@@ -236017,18 +236241,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"orders list\" binds pinned source operation chargebee.rest.get.ListOrders84",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"orders\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/orders",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "orders"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[84] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/orders\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -236038,8 +236263,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:orders"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -236051,9 +236277,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "orders"
+            "stream": "orders",
+            "path": "orders list",
+            "source_cli_path": "GET /v2/orders"
           }
         }
       },
@@ -236324,18 +236552,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"payment-sources list\" binds pinned source operation chargebee.rest.get.ListPaymentSources88",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"payment_sources\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/payment_sources",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "payment_sources"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[88] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/payment_sources\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -236345,8 +236574,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:payment_sources"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -236358,9 +236588,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "payment_sources"
+            "stream": "payment_sources",
+            "path": "payment-sources list",
+            "source_cli_path": "GET /v2/payment_sources"
           }
         }
       },
@@ -237247,18 +237479,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"plans list\" binds pinned source operation chargebee.rest.get.ListPlans100",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"plans\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/plans",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "plans"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[100] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/plans\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -237268,8 +237501,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:plans"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -237281,9 +237515,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "plans"
+            "stream": "plans",
+            "path": "plans list",
+            "source_cli_path": "GET /v2/plans"
           }
         }
       },
@@ -237477,18 +237713,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"price-variants list\" binds pinned source operation chargebee.rest.get.ListPriceVariants103",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"price_variants\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/price_variants",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "price_variants"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[103] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/price_variants\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -237498,8 +237735,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:price_variants"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -237511,9 +237749,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "price_variants"
+            "stream": "price_variants",
+            "path": "price-variants list",
+            "source_cli_path": "GET /v2/price_variants"
           }
         }
       },
@@ -237630,18 +237870,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"products list\" binds pinned source operation chargebee.rest.get.ListProducts105",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"products\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/products",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "products"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[105] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/products\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -237651,8 +237892,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:products"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -237664,9 +237906,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "products"
+            "stream": "products",
+            "path": "products list",
+            "source_cli_path": "GET /v2/products"
           }
         }
       },
@@ -237860,18 +238104,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"promotional-credits list\" binds pinned source operation chargebee.rest.get.ListPromotionalCredits108",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"promotional_credits\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/promotional_credits",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "promotional_credits"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[108] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/promotional_credits\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -237881,8 +238126,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:promotional_credits"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -237894,9 +238140,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "promotional_credits"
+            "stream": "promotional_credits",
+            "path": "promotional-credits list",
+            "source_cli_path": "GET /v2/promotional_credits"
           }
         }
       },
@@ -238013,18 +238261,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"quotes list\" binds pinned source operation chargebee.rest.get.ListQuotes110",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"quotes\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/quotes",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "quotes"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[110] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/quotes\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -238034,8 +238283,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:quotes"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -238047,9 +238297,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "quotes"
+            "stream": "quotes",
+            "path": "quotes list",
+            "source_cli_path": "GET /v2/quotes"
           }
         }
       },
@@ -238397,18 +238649,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"ramps list\" binds pinned source operation chargebee.rest.get.ListRamps115",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"ramps\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/ramps",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "ramps"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[115] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/ramps\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -238418,8 +238671,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:ramps"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -238431,9 +238685,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "ramps"
+            "stream": "ramps",
+            "path": "ramps list",
+            "source_cli_path": "GET /v2/ramps"
           }
         }
       },
@@ -238935,18 +239191,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"subscriptions list\" binds pinned source operation chargebee.rest.get.ListSubscriptions122",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"subscriptions\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/subscriptions",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "subscriptions"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[122] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/subscriptions\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -238956,8 +239213,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:subscriptions"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -238969,9 +239227,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "subscriptions"
+            "stream": "subscriptions",
+            "path": "subscriptions list",
+            "source_cli_path": "GET /v2/subscriptions"
           }
         }
       },
@@ -240936,18 +241196,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"transactions list\" binds pinned source operation chargebee.rest.get.ListTransactions148",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"transactions\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/transactions",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "transactions"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[148] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/transactions\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -240957,8 +241218,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:transactions"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -240970,9 +241232,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "transactions"
+            "stream": "transactions",
+            "path": "transactions list",
+            "source_cli_path": "GET /v2/transactions"
           }
         }
       },
@@ -241089,18 +241353,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"unbilled-charges list\" binds pinned source operation chargebee.rest.get.ListUnbilledCharges150",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"unbilled_charges\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/unbilled_charges",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "unbilled_charges"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[150] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/unbilled_charges\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -241110,8 +241375,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:unbilled_charges"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -241123,9 +241389,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "unbilled_charges"
+            "stream": "unbilled_charges",
+            "path": "unbilled-charges list",
+            "source_cli_path": "GET /v2/unbilled_charges"
           }
         }
       },
@@ -241550,18 +241818,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"virtual-bank-accounts list\" binds pinned source operation chargebee.rest.get.ListVirtualBankAccounts156",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"virtual_bank_accounts\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/virtual_bank_accounts",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "virtual_bank_accounts"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[156] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/virtual_bank_accounts\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -241571,8 +241840,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:virtual_bank_accounts"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -241584,9 +241854,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "virtual_bank_accounts"
+            "stream": "virtual_bank_accounts",
+            "path": "virtual-bank-accounts list",
+            "source_cli_path": "GET /v2/virtual_bank_accounts"
           }
         }
       },
@@ -241703,18 +241975,19 @@
         "provider_version_evidence": "internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"webhook-endpoints list\" binds pinned source operation chargebee.rest.get.ListWebhookEndpoints158",
+        "contract": {
+          "execution_component": "internal/connectors/defs/chargebee/streams.json stream \"webhook_endpoints\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/webhook_endpoints",
+          "citation_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
         "api_surface_binding": {
           "stream": "webhook_endpoints"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[158] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/webhook_endpoints\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -241724,8 +241997,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:webhook_endpoints"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -241737,9 +242011,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "webhook_endpoints"
+            "stream": "webhook_endpoints",
+            "path": "webhook-endpoints list",
+            "source_cli_path": "GET /v2/webhook_endpoints"
           }
         }
       },

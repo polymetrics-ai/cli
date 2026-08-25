@@ -1,0 +1,467 @@
+{
+  "tagline": "Read Braze source-locked ETL records.",
+  "usage": "pm braze <command> [flags]",
+  "source_cli": {
+    "name": "Braze provider API",
+    "docs": "https://www.braze.com/docs/api/home/",
+    "reference": "Pinned schema-v3 source documents; each ETL command retains its exact provider operation route and citation.",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "etl",
+      "title": "ETL streams",
+      "commands": [
+        "campaigns",
+        "canvases",
+        "segments",
+        "campaign-details",
+        "canvas-details",
+        "canvas-data-summary",
+        "segment-details",
+        "catalogs",
+        "content-blocks",
+        "email-templates",
+        "feed-cards",
+        "email-hard-bounces",
+        "email-unsubscribes",
+        "sms-invalid-phone-numbers",
+        "kpi-dau",
+        "kpi-mau",
+        "kpi-new-users",
+        "kpi-uninstalls",
+        "sessions",
+        "preference-centers",
+        "scheduled-broadcasts"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Braze request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit."
+    }
+  ],
+  "commands": [
+    {
+      "path": "campaigns list",
+      "summary": "Read Campaigns as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "campaigns",
+      "source_cli_path": "GET /campaigns/list",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/list"
+        }
+      ],
+      "examples": [
+        "pm braze campaigns list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.CampaignsList0 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "canvases list",
+      "summary": "Read Canvases as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "canvases",
+      "source_cli_path": "GET /canvas/list",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/canvas/list"
+        }
+      ],
+      "examples": [
+        "pm braze canvases list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.CanvasList3 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "segments list",
+      "summary": "Read Segments as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segments",
+      "source_cli_path": "GET /segments/list",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segments/list"
+        }
+      ],
+      "examples": [
+        "pm braze segments list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.SegmentsList59 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "campaign-details list",
+      "summary": "Read Campaign Details as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "campaign_details",
+      "source_cli_path": "GET /campaigns/details",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/details"
+        }
+      ],
+      "examples": [
+        "pm braze campaign-details list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.CampaignsDetails1 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "canvas-details list",
+      "summary": "Read Canvas Details as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "canvas_details",
+      "source_cli_path": "GET /canvas/details",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/canvas/details"
+        }
+      ],
+      "examples": [
+        "pm braze canvas-details list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.CanvasDetails4 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "canvas-data-summary list",
+      "summary": "Read Canvas Data Summary as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "canvas_data_summary",
+      "source_cli_path": "GET /canvas/data_summary",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/canvas/data_summary"
+        }
+      ],
+      "examples": [
+        "pm braze canvas-data-summary list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.CanvasDataSummary6 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "segment-details list",
+      "summary": "Read Segment Details as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segment_details",
+      "source_cli_path": "GET /segments/details",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segments/details"
+        }
+      ],
+      "examples": [
+        "pm braze segment-details list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.SegmentsDetails60 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "catalogs list",
+      "summary": "Read Catalogs as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "catalogs",
+      "source_cli_path": "GET /catalogs",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/catalogs"
+        }
+      ],
+      "examples": [
+        "pm braze catalogs list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.Catalogs7 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "content-blocks list",
+      "summary": "Read Content Blocks as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "content_blocks",
+      "source_cli_path": "GET /content_blocks/list",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/content_blocks/list"
+        }
+      ],
+      "examples": [
+        "pm braze content-blocks list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.ContentBlocksList22 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "email-templates list",
+      "summary": "Read Email Templates as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "email_templates",
+      "source_cli_path": "GET /templates/email/list",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/templates/email/list"
+        }
+      ],
+      "examples": [
+        "pm braze email-templates list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.TemplatesEmailList72 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "feed-cards list",
+      "summary": "Read Feed Cards as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "feed_cards",
+      "source_cli_path": "GET /feed/list",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/feed/list"
+        }
+      ],
+      "examples": [
+        "pm braze feed-cards list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.FeedList35 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "email-hard-bounces list",
+      "summary": "Read Email Hard Bounces as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "email_hard_bounces",
+      "source_cli_path": "GET /email/hard_bounces",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/email/hard_bounces"
+        }
+      ],
+      "examples": [
+        "pm braze email-hard-bounces list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.EmailHardBounces27 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "email-unsubscribes list",
+      "summary": "Read Email Unsubscribes as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "email_unsubscribes",
+      "source_cli_path": "GET /email/unsubscribes",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/email/unsubscribes"
+        }
+      ],
+      "examples": [
+        "pm braze email-unsubscribes list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.EmailUnsubscribes30 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "sms-invalid-phone-numbers list",
+      "summary": "Read Sms Invalid Phone Numbers as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sms_invalid_phone_numbers",
+      "source_cli_path": "GET /sms/invalid_phone_numbers",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sms/invalid_phone_numbers"
+        }
+      ],
+      "examples": [
+        "pm braze sms-invalid-phone-numbers list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.SmsInvalidPhoneNumbers65 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "kpi-dau list",
+      "summary": "Read Kpi Dau as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "kpi_dau",
+      "source_cli_path": "GET /kpi/dau/data_series",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/kpi/dau/data_series"
+        }
+      ],
+      "examples": [
+        "pm braze kpi-dau list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.KpiDauDataSeries36 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "kpi-mau list",
+      "summary": "Read Kpi Mau as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "kpi_mau",
+      "source_cli_path": "GET /kpi/mau/data_series",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/kpi/mau/data_series"
+        }
+      ],
+      "examples": [
+        "pm braze kpi-mau list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.KpiMauDataSeries37 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "kpi-new-users list",
+      "summary": "Read Kpi New Users as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "kpi_new_users",
+      "source_cli_path": "GET /kpi/new_users/data_series",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/kpi/new_users/data_series"
+        }
+      ],
+      "examples": [
+        "pm braze kpi-new-users list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.KpiNewUsersDataSeries38 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "kpi-uninstalls list",
+      "summary": "Read Kpi Uninstalls as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "kpi_uninstalls",
+      "source_cli_path": "GET /kpi/uninstalls/data_series",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/kpi/uninstalls/data_series"
+        }
+      ],
+      "examples": [
+        "pm braze kpi-uninstalls list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.KpiUninstallsDataSeries39 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "sessions list",
+      "summary": "Read Sessions as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sessions",
+      "source_cli_path": "GET /sessions/data_series",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sessions/data_series"
+        }
+      ],
+      "examples": [
+        "pm braze sessions list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.SessionsDataSeries64 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "preference-centers list",
+      "summary": "Read Preference Centers as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "preference_centers",
+      "source_cli_path": "GET /preference_center/v1/list",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/preference_center/v1/list"
+        }
+      ],
+      "examples": [
+        "pm braze preference-centers list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.PreferenceCenterV1List47 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "scheduled-broadcasts list",
+      "summary": "Read Scheduled Broadcasts as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "scheduled_broadcasts",
+      "source_cli_path": "GET /messages/scheduled_broadcasts",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/messages/scheduled_broadcasts"
+        }
+      ],
+      "examples": [
+        "pm braze scheduled-broadcasts list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.MessagesScheduledBroadcasts44 from source document primary; streams.json is the declared execution component."
+    }
+  ]
+}

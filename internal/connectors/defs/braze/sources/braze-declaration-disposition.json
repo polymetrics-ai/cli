@@ -14,9 +14,9 @@
     "exact_source_rows": 95,
     "declared_operations": 95,
     "declared_percent": 100,
-    "enabled_operations": 29,
-    "enabled_percent": 30.53,
-    "disabled_operations": 66,
+    "enabled_operations": 50,
+    "enabled_percent": 52.63,
+    "disabled_operations": 45,
     "documented_deletes": 4,
     "enabled_deletes": 2,
     "parity_class_counts": [
@@ -47,14 +47,14 @@
     ],
     "stream_bindings": 21,
     "writes_actions": 29,
-    "terminal_commands": 0,
+    "terminal_commands": 21,
     "live_certification": "pending",
     "gap_ids": [],
     "foundation_gaps": [],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 66
+        "count": 45
       }
     ],
     "transport": {
@@ -75,22 +75,17 @@
       }
     },
     "declaration_pending_ids": [
-      "runnable-command-binding-braze",
       "typed-operation-contract-braze"
     ],
     "declaration_pending": [
-      {
-        "id": "runnable-command-binding-braze",
-        "count": 21
-      },
       {
         "id": "typed-operation-contract-braze",
         "count": 45
       }
     ],
-    "runnable_cli_surface_commands": 0,
+    "runnable_cli_surface_commands": 21,
     "typed_write_actions": 29,
-    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_cli_commands": 21,
     "endpoint_bound_typed_write_actions": 29
   },
   "source_only_dispositions": [],
@@ -98,7 +93,8 @@
     "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
     "An enabled source operation has an API-surface command or typed write-action binding; unbound streams and operations are declaration-pending.",
     "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented.",
-    "2026-08-20 reconciliation: source transport declares all 21 current fixture streams; update_content_block is the exact typed-destination proof. The source inventory remains unproven pending public provider inventory recovery. Every other typed action is explicitly eligible pending closed exact-action selection; direct writes without typed actions are declaration-pending."
+    "2026-08-20 reconciliation: source transport declares all 21 current fixture streams; update_content_block is the exact typed-destination proof. The source inventory remains unproven pending public provider inventory recovery. Every other typed action is explicitly eligible pending closed exact-action selection; direct writes without typed actions are declaration-pending.",
+    "2026-08-25 declaration-first ETL command materialization: enabled 21 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists."
   ],
   "ledger_dispositions": [
     {
@@ -121,25 +117,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[0] is bound to ETL stream \"campaigns\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"campaigns list\" binds GET /campaigns/list; streams.json stream \"campaigns\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[0] is bound to ETL stream \"campaigns\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"campaigns list\" binds pinned source operation braze.rest.get.CampaignsList0",
+        "command": {
+          "path": "campaigns list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /campaigns/list",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -162,25 +166,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[1] is bound to ETL stream \"campaign_details\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"campaign-details list\" binds GET /campaigns/details; streams.json stream \"campaign_details\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[1] is bound to ETL stream \"campaign_details\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"campaign-details list\" binds pinned source operation braze.rest.get.CampaignsDetails1",
+        "command": {
+          "path": "campaign-details list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /campaigns/details",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -242,25 +254,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[3] is bound to ETL stream \"canvases\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"canvases list\" binds GET /canvas/list; streams.json stream \"canvases\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[3] is bound to ETL stream \"canvases\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"canvases list\" binds pinned source operation braze.rest.get.CanvasList3",
+        "command": {
+          "path": "canvases list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /canvas/list",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -283,25 +303,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[4] is bound to ETL stream \"canvas_details\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"canvas-details list\" binds GET /canvas/details; streams.json stream \"canvas_details\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[4] is bound to ETL stream \"canvas_details\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"canvas-details list\" binds pinned source operation braze.rest.get.CanvasDetails4",
+        "command": {
+          "path": "canvas-details list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /canvas/details",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -363,25 +391,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[6] is bound to ETL stream \"canvas_data_summary\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"canvas-data-summary list\" binds GET /canvas/data_summary; streams.json stream \"canvas_data_summary\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[6] is bound to ETL stream \"canvas_data_summary\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"canvas-data-summary list\" binds pinned source operation braze.rest.get.CanvasDataSummary6",
+        "command": {
+          "path": "canvas-data-summary list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /canvas/data_summary",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -404,25 +440,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[7] is bound to ETL stream \"catalogs\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"catalogs list\" binds GET /catalogs; streams.json stream \"catalogs\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[7] is bound to ETL stream \"catalogs\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"catalogs list\" binds pinned source operation braze.rest.get.Catalogs7",
+        "command": {
+          "path": "catalogs list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /catalogs",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -1025,25 +1069,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[22] is bound to ETL stream \"content_blocks\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"content-blocks list\" binds GET /content_blocks/list; streams.json stream \"content_blocks\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[22] is bound to ETL stream \"content_blocks\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"content-blocks list\" binds pinned source operation braze.rest.get.ContentBlocksList22",
+        "command": {
+          "path": "content-blocks list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /content_blocks/list",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -1233,25 +1285,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[27] is bound to ETL stream \"email_hard_bounces\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"email-hard-bounces list\" binds GET /email/hard_bounces; streams.json stream \"email_hard_bounces\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[27] is bound to ETL stream \"email_hard_bounces\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"email-hard-bounces list\" binds pinned source operation braze.rest.get.EmailHardBounces27",
+        "command": {
+          "path": "email-hard-bounces list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /email/hard_bounces",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -1356,25 +1416,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[30] is bound to ETL stream \"email_unsubscribes\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"email-unsubscribes list\" binds GET /email/unsubscribes; streams.json stream \"email_unsubscribes\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[30] is bound to ETL stream \"email_unsubscribes\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"email-unsubscribes list\" binds pinned source operation braze.rest.get.EmailUnsubscribes30",
+        "command": {
+          "path": "email-unsubscribes list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /email/unsubscribes",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -1553,25 +1621,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[35] is bound to ETL stream \"feed_cards\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"feed-cards list\" binds GET /feed/list; streams.json stream \"feed_cards\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[35] is bound to ETL stream \"feed_cards\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"feed-cards list\" binds pinned source operation braze.rest.get.FeedList35",
+        "command": {
+          "path": "feed-cards list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /feed/list",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -1594,25 +1670,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[36] is bound to ETL stream \"kpi_dau\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"kpi-dau list\" binds GET /kpi/dau/data_series; streams.json stream \"kpi_dau\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[36] is bound to ETL stream \"kpi_dau\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"kpi-dau list\" binds pinned source operation braze.rest.get.KpiDauDataSeries36",
+        "command": {
+          "path": "kpi-dau list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /kpi/dau/data_series",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -1635,25 +1719,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[37] is bound to ETL stream \"kpi_mau\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"kpi-mau list\" binds GET /kpi/mau/data_series; streams.json stream \"kpi_mau\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[37] is bound to ETL stream \"kpi_mau\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"kpi-mau list\" binds pinned source operation braze.rest.get.KpiMauDataSeries37",
+        "command": {
+          "path": "kpi-mau list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /kpi/mau/data_series",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -1676,25 +1768,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[38] is bound to ETL stream \"kpi_new_users\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"kpi-new-users list\" binds GET /kpi/new_users/data_series; streams.json stream \"kpi_new_users\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[38] is bound to ETL stream \"kpi_new_users\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"kpi-new-users list\" binds pinned source operation braze.rest.get.KpiNewUsersDataSeries38",
+        "command": {
+          "path": "kpi-new-users list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /kpi/new_users/data_series",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -1717,25 +1817,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[39] is bound to ETL stream \"kpi_uninstalls\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"kpi-uninstalls list\" binds GET /kpi/uninstalls/data_series; streams.json stream \"kpi_uninstalls\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[39] is bound to ETL stream \"kpi_uninstalls\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"kpi-uninstalls list\" binds pinned source operation braze.rest.get.KpiUninstallsDataSeries39",
+        "command": {
+          "path": "kpi-uninstalls list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /kpi/uninstalls/data_series",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -1934,25 +2042,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[44] is bound to ETL stream \"scheduled_broadcasts\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"scheduled-broadcasts list\" binds GET /messages/scheduled_broadcasts; streams.json stream \"scheduled_broadcasts\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[44] is bound to ETL stream \"scheduled_broadcasts\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"scheduled-broadcasts list\" binds pinned source operation braze.rest.get.MessagesScheduledBroadcasts44",
+        "command": {
+          "path": "scheduled-broadcasts list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /messages/scheduled_broadcasts",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -2057,25 +2173,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[47] is bound to ETL stream \"preference_centers\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"preference-centers list\" binds GET /preference_center/v1/list; streams.json stream \"preference_centers\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[47] is bound to ETL stream \"preference_centers\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"preference-centers list\" binds pinned source operation braze.rest.get.PreferenceCenterV1List47",
+        "command": {
+          "path": "preference-centers list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /preference_center/v1/list",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -2544,25 +2668,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[59] is bound to ETL stream \"segments\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"segments list\" binds GET /segments/list; streams.json stream \"segments\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[59] is bound to ETL stream \"segments\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"segments list\" binds pinned source operation braze.rest.get.SegmentsList59",
+        "command": {
+          "path": "segments list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /segments/list",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -2585,25 +2717,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[60] is bound to ETL stream \"segment_details\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"segment-details list\" binds GET /segments/details; streams.json stream \"segment_details\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[60] is bound to ETL stream \"segment_details\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"segment-details list\" binds pinned source operation braze.rest.get.SegmentsDetails60",
+        "command": {
+          "path": "segment-details list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /segments/details",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -2748,25 +2888,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[64] is bound to ETL stream \"sessions\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"sessions list\" binds GET /sessions/data_series; streams.json stream \"sessions\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[64] is bound to ETL stream \"sessions\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"sessions list\" binds pinned source operation braze.rest.get.SessionsDataSeries64",
+        "command": {
+          "path": "sessions list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /sessions/data_series",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -2789,25 +2937,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[65] is bound to ETL stream \"sms_invalid_phone_numbers\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"sms-invalid-phone-numbers list\" binds GET /sms/invalid_phone_numbers; streams.json stream \"sms_invalid_phone_numbers\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[65] is bound to ETL stream \"sms_invalid_phone_numbers\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"sms-invalid-phone-numbers list\" binds pinned source operation braze.rest.get.SmsInvalidPhoneNumbers65",
+        "command": {
+          "path": "sms-invalid-phone-numbers list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /sms/invalid_phone_numbers",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {
@@ -3073,25 +3229,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braze",
-          "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[72] is bound to ETL stream \"email_templates\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented ETL command \"email-templates list\" binds GET /templates/email/list; streams.json stream \"email_templates\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[72] is bound to ETL stream \"email_templates\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braze",
-        "contract": null
+        "status": "enabled; runnable ETL command \"email-templates list\" binds pinned source operation braze.rest.get.TemplatesEmailList72",
+        "command": {
+          "path": "email-templates list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /templates/email/list",
+          "source_url": "https://www.braze.com/docs/api/home/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braze/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.braze.com/docs/api/home/",
+          "citation_url": "https://www.braze.com/docs/api/home/"
+        }
       }
     },
     {

@@ -23,9 +23,9 @@
       "level": "complete_machine_readable_specification",
       "basis": "Parsed every operation in the provider-published OpenAPI 3.1.0 document at https://docs.customer.io/files/journeys-app.json."
     },
-    "enabled_operations": 10,
-    "enabled_percent": 6.02,
-    "disabled_operations": 156,
+    "enabled_operations": 26,
+    "enabled_percent": 15.66,
+    "disabled_operations": 140,
     "documented_deletes": 14,
     "enabled_deletes": 3,
     "parity_class_counts": [
@@ -56,13 +56,13 @@
     ],
     "stream_bindings": 16,
     "writes_actions": 10,
-    "terminal_commands": 0,
+    "terminal_commands": 16,
     "gap_ids": [],
     "foundation_gaps": [],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 156
+        "count": 140
       }
     ],
     "transport": {
@@ -83,22 +83,17 @@
       }
     },
     "declaration_pending_ids": [
-      "runnable-command-binding-customer-io",
       "typed-operation-contract-customer-io"
     ],
     "declaration_pending": [
-      {
-        "id": "runnable-command-binding-customer-io",
-        "count": 16
-      },
       {
         "id": "typed-operation-contract-customer-io",
         "count": 140
       }
     ],
-    "runnable_cli_surface_commands": 0,
+    "runnable_cli_surface_commands": 16,
     "typed_write_actions": 10,
-    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_cli_commands": 16,
     "endpoint_bound_typed_write_actions": 10
   },
   "ledger_dispositions": [
@@ -786,25 +781,33 @@
         "operation_id": "listActivities",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-customer-io",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[14] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/activities\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented ETL command \"activities list\" binds GET /v1/activities; streams.json stream \"activities\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[14] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/activities\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null
+        "status": "enabled; runnable ETL command \"activities list\" binds pinned source operation customer-io.rest.get.ListActivities14",
+        "command": {
+          "path": "activities list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v1/activities",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/customer-io/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://docs.customer.io/files/journeys-app.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -1007,25 +1010,33 @@
         "operation_id": "listBroadcasts",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-customer-io",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[19] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/broadcasts\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented ETL command \"broadcasts list\" binds GET /v1/broadcasts; streams.json stream \"broadcasts\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[19] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/broadcasts\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null
+        "status": "enabled; runnable ETL command \"broadcasts list\" binds pinned source operation customer-io.rest.get.ListBroadcasts19",
+        "command": {
+          "path": "broadcasts list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v1/broadcasts",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/customer-io/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://docs.customer.io/files/journeys-app.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -1498,25 +1509,33 @@
         "operation_id": "listCampaigns",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-customer-io",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[30] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/campaigns\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented ETL command \"campaigns list\" binds GET /v1/campaigns; streams.json stream \"campaigns\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[30] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/campaigns\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null
+        "status": "enabled; runnable ETL command \"campaigns list\" binds pinned source operation customer-io.rest.get.ListCampaigns30",
+        "command": {
+          "path": "campaigns list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v1/campaigns",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/customer-io/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://docs.customer.io/files/journeys-app.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -2079,25 +2098,33 @@
         "operation_id": "getCollections",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-customer-io",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[43] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/collections\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented ETL command \"collections list\" binds GET /v1/collections; streams.json stream \"collections\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[43] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/collections\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null
+        "status": "enabled; runnable ETL command \"collections list\" binds pinned source operation customer-io.rest.get.GetCollections43",
+        "command": {
+          "path": "collections list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v1/collections",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/customer-io/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://docs.customer.io/files/journeys-app.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -3065,25 +3092,33 @@
         "operation_id": "listExports",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-customer-io",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[65] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/exports\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented ETL command \"exports list\" binds GET /v1/exports; streams.json stream \"exports\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[65] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/exports\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null
+        "status": "enabled; runnable ETL command \"exports list\" binds pinned source operation customer-io.rest.get.ListExports65",
+        "command": {
+          "path": "exports list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v1/exports",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/customer-io/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://docs.customer.io/files/journeys-app.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -3331,25 +3366,33 @@
         "operation_id": "listMessages",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-customer-io",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[71] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/messages\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented ETL command \"messages list\" binds GET /v1/messages; streams.json stream \"messages\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[71] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/messages\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null
+        "status": "enabled; runnable ETL command \"messages list\" binds pinned source operation customer-io.rest.get.ListMessages71",
+        "command": {
+          "path": "messages list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v1/messages",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/customer-io/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://docs.customer.io/files/journeys-app.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -3462,25 +3505,33 @@
         "operation_id": "listNewsletters",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-customer-io",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[74] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/newsletters\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented ETL command \"newsletters list\" binds GET /v1/newsletters; streams.json stream \"newsletters\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[74] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/newsletters\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null
+        "status": "enabled; runnable ETL command \"newsletters list\" binds pinned source operation customer-io.rest.get.ListNewsletters74",
+        "command": {
+          "path": "newsletters list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v1/newsletters",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/customer-io/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://docs.customer.io/files/journeys-app.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -3998,25 +4049,33 @@
         "operation_id": "getObjectTypes",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-customer-io",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[86] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/object_types\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented ETL command \"object-types list\" binds GET /v1/object_types; streams.json stream \"object_types\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[86] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/object_types\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null
+        "status": "enabled; runnable ETL command \"object-types list\" binds pinned source operation customer-io.rest.get.GetObjectTypes86",
+        "command": {
+          "path": "object-types list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v1/object_types",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/customer-io/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://docs.customer.io/files/journeys-app.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -4174,25 +4233,33 @@
         "operation_id": "listWebhooks",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-customer-io",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[90] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/reporting_webhooks\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented ETL command \"reporting-webhooks list\" binds GET /v1/reporting_webhooks; streams.json stream \"reporting_webhooks\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[90] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/reporting_webhooks\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null
+        "status": "enabled; runnable ETL command \"reporting-webhooks list\" binds pinned source operation customer-io.rest.get.ListWebhooks90",
+        "command": {
+          "path": "reporting-webhooks list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v1/reporting_webhooks",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/customer-io/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://docs.customer.io/files/journeys-app.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -4260,25 +4327,33 @@
         "operation_id": "listSegments",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-customer-io",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[92] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/segments\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented ETL command \"segments list\" binds GET /v1/segments; streams.json stream \"segments\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[92] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/segments\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null
+        "status": "enabled; runnable ETL command \"segments list\" binds pinned source operation customer-io.rest.get.ListSegments92",
+        "command": {
+          "path": "segments list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v1/segments",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/customer-io/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://docs.customer.io/files/journeys-app.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -4481,25 +4556,33 @@
         "operation_id": "listSenders",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-customer-io",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[97] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/sender_identities\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented ETL command \"sender-identities list\" binds GET /v1/sender_identities; streams.json stream \"sender_identities\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[97] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/sender_identities\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null
+        "status": "enabled; runnable ETL command \"sender-identities list\" binds pinned source operation customer-io.rest.get.ListSenders97",
+        "command": {
+          "path": "sender-identities list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v1/sender_identities",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/customer-io/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://docs.customer.io/files/journeys-app.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -4612,25 +4695,33 @@
         "operation_id": "listSnippets",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-customer-io",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[100] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/snippets\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented ETL command \"snippets list\" binds GET /v1/snippets; streams.json stream \"snippets\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[100] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/snippets\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null
+        "status": "enabled; runnable ETL command \"snippets list\" binds pinned source operation customer-io.rest.get.ListSnippets100",
+        "command": {
+          "path": "snippets list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v1/snippets",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/customer-io/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://docs.customer.io/files/journeys-app.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -4698,25 +4789,33 @@
         "operation_id": "getChannels",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-customer-io",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[102] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/subscription_channels\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented ETL command \"subscription-channels list\" binds GET /v1/subscription_channels; streams.json stream \"subscription_channels\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[102] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/subscription_channels\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null
+        "status": "enabled; runnable ETL command \"subscription-channels list\" binds pinned source operation customer-io.rest.get.GetChannels102",
+        "command": {
+          "path": "subscription-channels list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v1/subscription_channels",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/customer-io/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://docs.customer.io/files/journeys-app.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -4739,25 +4838,33 @@
         "operation_id": "getTopics",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-customer-io",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[103] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/subscription_topics\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented ETL command \"subscription-topics list\" binds GET /v1/subscription_topics; streams.json stream \"subscription_topics\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[103] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/subscription_topics\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null
+        "status": "enabled; runnable ETL command \"subscription-topics list\" binds pinned source operation customer-io.rest.get.GetTopics103",
+        "command": {
+          "path": "subscription-topics list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v1/subscription_topics",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/customer-io/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://docs.customer.io/files/journeys-app.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -4780,25 +4887,33 @@
         "operation_id": "listTransactional",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-customer-io",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[104] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/transactional\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented ETL command \"transactional list\" binds GET /v1/transactional; streams.json stream \"transactional\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[104] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/transactional\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null
+        "status": "enabled; runnable ETL command \"transactional list\" binds pinned source operation customer-io.rest.get.ListTransactional104",
+        "command": {
+          "path": "transactional list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v1/transactional",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/customer-io/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://docs.customer.io/files/journeys-app.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -5091,25 +5206,33 @@
         "operation_id": "listWorkspaces",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-customer-io",
-          "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[111] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/workspaces\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented ETL command \"workspaces list\" binds GET /v1/workspaces; streams.json stream \"workspaces\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/customer-io/api_surface.json endpoints[111] is bound to the pinned provider operation; internal/connectors/defs/customer-io/sources/customer-io-operation-source-lock.json: .paths[\"/v1/workspaces\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-customer-io",
-        "contract": null
+        "status": "enabled; runnable ETL command \"workspaces list\" binds pinned source operation customer-io.rest.get.ListWorkspaces111",
+        "command": {
+          "path": "workspaces list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v1/workspaces",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/customer-io/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://docs.customer.io/files/journeys-app.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -7735,6 +7858,7 @@
     "An operation is enabled only when its exact refreshed method/path still resolves to an actual typed write action or runtime-preflight runnable command. Stream-only mappings remain ETL but declaration-pending.",
     "Direct writes remain direct_write operations. Reverse-ETL eligibility is separate and depends on each connector-owned source mapping and conformance record.",
     "Reverse-ETL eligibility is explicit for all 10 typed actions: update_snippet is the connector one source-bound declarative_typed_destination proof; nine ordinary typed actions are declaration-pending exact source mappings and conformance. Unauthored direct writes are declaration-pending, not foundation gaps.",
-    "Foundation 609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57 supplies persisted App/CLI dispatch; this connector still needs its installed App/CLI fixture path, and provider-live certification remains pending."
+    "Foundation 609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57 supplies persisted App/CLI dispatch; this connector still needs its installed App/CLI fixture path, and provider-live certification remains pending.",
+    "2026-08-25 declaration-first ETL command materialization: enabled 16 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists."
   ]
 }

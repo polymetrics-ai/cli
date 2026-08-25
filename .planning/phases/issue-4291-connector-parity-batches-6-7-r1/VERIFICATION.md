@@ -548,6 +548,26 @@ foundation gaps are not enabled and cannot contribute to a merge-ready verdict.
 - **Generated projection proof:** `npm --prefix website run gen:website-data` and `git diff --check`
   passed. The source-lock reader remains the only blocker to global `connectorgen validate` and
   `surface-sync --check`; this cohort does not change that shared foundation or any held lock.
+
+## V3 declaration-first ETL cohort 3 — 2026-08-25
+
+- **RED:** `braze campaigns list`, `chargebee customers list`, and `customer-io snippets list` were
+  unknown in the preceding built binary despite every stream having one exact pinned GET provider
+  operation and API-surface projection.
+- **GREEN:** the deterministic source-first generator created 69 executable ETL commands: Braze (21),
+  Chargebee (32), and Customer.io (16). The command surface and operation ledger retain the source
+  document/operation ID, canonical provider route and citation, command path, ETL lane, and
+  `streams.json` component for every provider operation.
+- **Installed binary proof:** `go build -o /tmp/cli-map-batch67-r1-v3-etl-cohort3-proof ./cmd/pm`
+  succeeded. All 69 paths in a fresh initialized temporary project exited `1` with exactly
+  `error: missing --credential`; no provider request, mutation, credential, or provider-live
+  certification occurred. The real runtime preflight sweep passed with `go test -timeout 20m
+  ./internal/connectors/commandrunner -run '^TestEveryImplementedCommandPassesRuntimePreflight$'
+  -count=1`.
+- **Generated projection proof:** `npm --prefix website run gen:website-data`, deterministic generator
+  rerun, 69-row operation-evidence assertion, and `git diff --check` all passed. The only remaining
+  global generated-check block is the shared source-lock v3 descriptor reader; no lock rewrite or
+  connector-local workaround was added.
 # Stale typed-destination gap reconciliation — increment 1 (2026-08-20)
 
 - **RED:** The operation-evidence ledger exposed 1,111 direct-write rows that still named

@@ -104,3 +104,15 @@ Copper's five apparent ETL streams are not in this increment: the checked-in exe
 misrepresent method and body semantics, so the deferred row must name the connector-owned POST-search
 stream declaration instead. That is ordinary declaration work, not a reason to omit the provider API or
 mislabel an engine gap.
+
+## Increment 8 — schema-v3 declaration-first ETL cohort 3
+
+Braze, Chargebee, and Customer.io add 69 exact source-backed ETL commands (21, 32, and 16 respectively).
+All retain operation identity, citation, canonical route, command binding, and `streams.json` component;
+all stop at credential preflight in a clean local project. Generated website catalog artifacts were
+regenerated with the source declarations.
+
+The current portfolio split is **807 enabled**, **3,119 declaration-pending**, **5 foundation-gap**, and
+**1 provider-contract-unavailable**. The pending state is not a safety, privilege, destructive, or live-
+certification exclusion. It is either connector declaration work with its exact execution component named,
+or the common schema-v3 source-projection reader prerequisite for global generated checks.

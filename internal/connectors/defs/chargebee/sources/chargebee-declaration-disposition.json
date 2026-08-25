@@ -23,9 +23,9 @@
       "level": "complete_machine_readable_specification",
       "basis": "Parsed every operation in the provider-published OpenAPI 3.1.0 document at https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json."
     },
-    "enabled_operations": 36,
-    "enabled_percent": 6.83,
-    "disabled_operations": 491,
+    "enabled_operations": 68,
+    "enabled_percent": 12.9,
+    "disabled_operations": 459,
     "documented_deletes": 0,
     "enabled_deletes": 0,
     "parity_class_counts": [
@@ -56,13 +56,13 @@
     ],
     "stream_bindings": 32,
     "writes_actions": 36,
-    "terminal_commands": 0,
+    "terminal_commands": 32,
     "gap_ids": [],
     "foundation_gaps": [],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 491
+        "count": 459
       }
     ],
     "transport": {
@@ -83,22 +83,17 @@
       }
     },
     "declaration_pending_ids": [
-      "runnable-command-binding-chargebee",
       "typed-operation-contract-chargebee"
     ],
     "declaration_pending": [
-      {
-        "id": "runnable-command-binding-chargebee",
-        "count": 32
-      },
       {
         "id": "typed-operation-contract-chargebee",
         "count": 459
       }
     ],
-    "runnable_cli_surface_commands": 0,
+    "runnable_cli_surface_commands": 32,
     "typed_write_actions": 36,
-    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_cli_commands": 32,
     "endpoint_bound_typed_write_actions": 36
   },
   "ledger_dispositions": [
@@ -302,25 +297,33 @@
         "operation_id": "list_alerts",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[4] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/alerts\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"alerts list\" binds GET /v2/alerts; streams.json stream \"alerts\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[4] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/alerts\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"alerts list\" binds pinned source operation chargebee.rest.get.ListAlerts4",
+        "command": {
+          "path": "alerts list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/alerts",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -658,25 +661,33 @@
         "operation_id": "list_comments",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[12] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/comments\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"comments list\" binds GET /v2/comments; streams.json stream \"comments\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[12] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/comments\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"comments list\" binds pinned source operation chargebee.rest.get.ListComments12",
+        "command": {
+          "path": "comments list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/comments",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -789,25 +800,33 @@
         "operation_id": "list_coupon_codes",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[15] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/coupon_codes\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"coupon-codes list\" binds GET /v2/coupon_codes; streams.json stream \"coupon_codes\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[15] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/coupon_codes\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"coupon-codes list\" binds pinned source operation chargebee.rest.get.ListCouponCodes15",
+        "command": {
+          "path": "coupon-codes list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/coupon_codes",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -875,25 +894,33 @@
         "operation_id": "list_coupon_sets",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[17] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/coupon_sets\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"coupon-sets list\" binds GET /v2/coupon_sets; streams.json stream \"coupon_sets\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[17] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/coupon_sets\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"coupon-sets list\" binds pinned source operation chargebee.rest.get.ListCouponSets17",
+        "command": {
+          "path": "coupon-sets list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/coupon_sets",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -961,25 +988,33 @@
         "operation_id": "list_coupons",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[19] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/coupons\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"coupons list\" binds GET /v2/coupons; streams.json stream \"coupons\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[19] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/coupons\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"coupons list\" binds pinned source operation chargebee.rest.get.ListCoupons19",
+        "command": {
+          "path": "coupons list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/coupons",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -1047,25 +1082,33 @@
         "operation_id": "list_credit_notes",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[21] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/credit_notes\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"credit-notes list\" binds GET /v2/credit_notes; streams.json stream \"credit_notes\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[21] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/credit_notes\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"credit-notes list\" binds pinned source operation chargebee.rest.get.ListCreditNotes21",
+        "command": {
+          "path": "credit-notes list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/credit_notes",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -1313,25 +1356,33 @@
         "operation_id": "list_customers",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[27] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/customers\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"customers list\" binds GET /v2/customers; streams.json stream \"customers\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[27] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/customers\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"customers list\" binds pinned source operation chargebee.rest.get.ListCustomers27",
+        "command": {
+          "path": "customers list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/customers",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -1894,25 +1945,33 @@
         "operation_id": "list_differential_prices",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[40] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/differential_prices\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"differential-prices list\" binds GET /v2/differential_prices; streams.json stream \"differential_prices\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[40] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/differential_prices\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"differential-prices list\" binds pinned source operation chargebee.rest.get.ListDifferentialPrices40",
+        "command": {
+          "path": "differential-prices list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/differential_prices",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -1980,25 +2039,33 @@
         "operation_id": "list_all_entitlements",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[42] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/entitlements\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"entitlements list\" binds GET /v2/entitlements; streams.json stream \"entitlements\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[42] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/entitlements\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"entitlements list\" binds pinned source operation chargebee.rest.get.ListAllEntitlements42",
+        "command": {
+          "path": "entitlements list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/entitlements",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -2021,25 +2088,33 @@
         "operation_id": "list_events",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[43] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/events\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"events list\" binds GET /v2/events; streams.json stream \"events\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[43] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/events\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"events list\" binds pinned source operation chargebee.rest.get.ListEvents43",
+        "command": {
+          "path": "events list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/events",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -2152,25 +2227,33 @@
         "operation_id": "list_features",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[46] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/features\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"features list\" binds GET /v2/features; streams.json stream \"features\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[46] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/features\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"features list\" binds pinned source operation chargebee.rest.get.ListFeatures46",
+        "command": {
+          "path": "features list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/features",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -2328,25 +2411,33 @@
         "operation_id": "list_gifts",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[50] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/gifts\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"gifts list\" binds GET /v2/gifts; streams.json stream \"gifts\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[50] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/gifts\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"gifts list\" binds pinned source operation chargebee.rest.get.ListGifts50",
+        "command": {
+          "path": "gifts list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/gifts",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -2459,25 +2550,33 @@
         "operation_id": "list_hosted_pages",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[53] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/hosted_pages\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"hosted-pages list\" binds GET /v2/hosted_pages; streams.json stream \"hosted_pages\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[53] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/hosted_pages\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"hosted-pages list\" binds pinned source operation chargebee.rest.get.ListHostedPages53",
+        "command": {
+          "path": "hosted-pages list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/hosted_pages",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -2545,25 +2644,33 @@
         "operation_id": "list_invoices",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[55] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/invoices\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"invoices list\" binds GET /v2/invoices; streams.json stream \"invoices\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[55] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/invoices\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"invoices list\" binds pinned source operation chargebee.rest.get.ListInvoices55",
+        "command": {
+          "path": "invoices list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/invoices",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -2901,25 +3008,33 @@
         "operation_id": "list_item_families",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[63] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/item_families\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"item-families list\" binds GET /v2/item_families; streams.json stream \"item_families\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[63] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/item_families\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"item-families list\" binds pinned source operation chargebee.rest.get.ListItemFamilies63",
+        "command": {
+          "path": "item-families list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/item_families",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -2987,25 +3102,33 @@
         "operation_id": "list_item_prices",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[65] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/item_prices\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"item-prices list\" binds GET /v2/item_prices; streams.json stream \"item_prices\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[65] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/item_prices\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"item-prices list\" binds pinned source operation chargebee.rest.get.ListItemPrices65",
+        "command": {
+          "path": "item-prices list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/item_prices",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -3163,25 +3286,33 @@
         "operation_id": "list_items",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[69] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/items\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"items list\" binds GET /v2/items; streams.json stream \"items\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[69] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/items\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"items list\" binds pinned source operation chargebee.rest.get.ListItems69",
+        "command": {
+          "path": "items list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/items",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -3339,25 +3470,33 @@
         "operation_id": "list_ledger_account_balances",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[73] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/ledger_account_balances\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"ledger-account-balances list\" binds GET /v2/ledger_account_balances; streams.json stream \"ledger_account_balances\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[73] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/ledger_account_balances\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"ledger-account-balances list\" binds pinned source operation chargebee.rest.get.ListLedgerAccountBalances73",
+        "command": {
+          "path": "ledger-account-balances list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/ledger_account_balances",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -3380,25 +3519,33 @@
         "operation_id": "list_ledger_operations",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[74] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/ledger_operations\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"ledger-operations list\" binds GET /v2/ledger_operations; streams.json stream \"ledger_operations\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[74] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/ledger_operations\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"ledger-operations list\" binds pinned source operation chargebee.rest.get.ListLedgerOperations74",
+        "command": {
+          "path": "ledger-operations list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/ledger_operations",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -3826,25 +3973,33 @@
         "operation_id": "list_orders",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[84] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/orders\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"orders list\" binds GET /v2/orders; streams.json stream \"orders\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[84] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/orders\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"orders list\" binds pinned source operation chargebee.rest.get.ListOrders84",
+        "command": {
+          "path": "orders list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/orders",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -4002,25 +4157,33 @@
         "operation_id": "list_payment_sources",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[88] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/payment_sources\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"payment-sources list\" binds GET /v2/payment_sources; streams.json stream \"payment_sources\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[88] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/payment_sources\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"payment-sources list\" binds pinned source operation chargebee.rest.get.ListPaymentSources88",
+        "command": {
+          "path": "payment-sources list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/payment_sources",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -4538,25 +4701,33 @@
         "operation_id": "list_plans",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[100] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/plans\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"plans list\" binds GET /v2/plans; streams.json stream \"plans\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[100] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/plans\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"plans list\" binds pinned source operation chargebee.rest.get.ListPlans100",
+        "command": {
+          "path": "plans list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/plans",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -4669,25 +4840,33 @@
         "operation_id": "list_price_variants",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[103] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/price_variants\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"price-variants list\" binds GET /v2/price_variants; streams.json stream \"price_variants\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[103] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/price_variants\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"price-variants list\" binds pinned source operation chargebee.rest.get.ListPriceVariants103",
+        "command": {
+          "path": "price-variants list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/price_variants",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -4755,25 +4934,33 @@
         "operation_id": "list_products",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[105] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/products\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"products list\" binds GET /v2/products; streams.json stream \"products\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[105] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/products\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"products list\" binds pinned source operation chargebee.rest.get.ListProducts105",
+        "command": {
+          "path": "products list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/products",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -4886,25 +5073,33 @@
         "operation_id": "list_promotional_credits",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[108] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/promotional_credits\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"promotional-credits list\" binds GET /v2/promotional_credits; streams.json stream \"promotional_credits\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[108] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/promotional_credits\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"promotional-credits list\" binds pinned source operation chargebee.rest.get.ListPromotionalCredits108",
+        "command": {
+          "path": "promotional-credits list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/promotional_credits",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -4972,25 +5167,33 @@
         "operation_id": "list_quotes",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[110] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/quotes\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"quotes list\" binds GET /v2/quotes; streams.json stream \"quotes\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[110] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/quotes\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"quotes list\" binds pinned source operation chargebee.rest.get.ListQuotes110",
+        "command": {
+          "path": "quotes list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/quotes",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -5193,25 +5396,33 @@
         "operation_id": "list_ramps",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[115] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/ramps\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"ramps list\" binds GET /v2/ramps; streams.json stream \"ramps\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[115] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/ramps\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"ramps list\" binds pinned source operation chargebee.rest.get.ListRamps115",
+        "command": {
+          "path": "ramps list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/ramps",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -5504,25 +5715,33 @@
         "operation_id": "list_subscriptions",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[122] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/subscriptions\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"subscriptions list\" binds GET /v2/subscriptions; streams.json stream \"subscriptions\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[122] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/subscriptions\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"subscriptions list\" binds pinned source operation chargebee.rest.get.ListSubscriptions122",
+        "command": {
+          "path": "subscriptions list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/subscriptions",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -6670,25 +6889,33 @@
         "operation_id": "list_transactions",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[148] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/transactions\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"transactions list\" binds GET /v2/transactions; streams.json stream \"transactions\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[148] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/transactions\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"transactions list\" binds pinned source operation chargebee.rest.get.ListTransactions148",
+        "command": {
+          "path": "transactions list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/transactions",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -6756,25 +6983,33 @@
         "operation_id": "list_unbilled_charges",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[150] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/unbilled_charges\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"unbilled-charges list\" binds GET /v2/unbilled_charges; streams.json stream \"unbilled_charges\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[150] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/unbilled_charges\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"unbilled-charges list\" binds pinned source operation chargebee.rest.get.ListUnbilledCharges150",
+        "command": {
+          "path": "unbilled-charges list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/unbilled_charges",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -7022,25 +7257,33 @@
         "operation_id": "list_virtual_bank_accounts",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[156] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/virtual_bank_accounts\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"virtual-bank-accounts list\" binds GET /v2/virtual_bank_accounts; streams.json stream \"virtual_bank_accounts\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[156] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/virtual_bank_accounts\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"virtual-bank-accounts list\" binds pinned source operation chargebee.rest.get.ListVirtualBankAccounts156",
+        "command": {
+          "path": "virtual-bank-accounts list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/virtual_bank_accounts",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -7108,25 +7351,33 @@
         "operation_id": "list_webhook_endpoints",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-chargebee",
-          "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[158] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/webhook_endpoints\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented ETL command \"webhook-endpoints list\" binds GET /v2/webhook_endpoints; streams.json stream \"webhook_endpoints\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/chargebee/api_surface.json endpoints[158] is bound to the pinned provider operation; internal/connectors/defs/chargebee/sources/chargebee-operation-source-lock.json: .paths[\"/webhook_endpoints\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-chargebee",
-        "contract": null
+        "status": "enabled; runnable ETL command \"webhook-endpoints list\" binds pinned source operation chargebee.rest.get.ListWebhookEndpoints158",
+        "command": {
+          "path": "webhook-endpoints list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/webhook_endpoints",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/chargebee/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -25098,6 +25349,7 @@
     "Complete six-class source-locked map regenerated from the provider OpenAPI 3.1.0 document; every 527 pinned operation has exactly one primary parity class.",
     "An operation is enabled only when its exact refreshed method/path still resolves to an actual typed write action or runtime-preflight runnable command. Stream-only mappings remain ETL but declaration-pending.",
     "Direct writes remain direct_write operations. Reverse-ETL eligibility is a separate attribute and remains foundation-gapped because destination execution is GitHub issue-label bound.",
-    "2026-08-20 reconciliation: source transport declares all 32 streams; update_customer is the exact typed-destination proof. Every other typed action is explicitly eligible pending closed exact-action selection. Direct writes without typed actions are declaration-pending, not foundation or safety gaps."
+    "2026-08-20 reconciliation: source transport declares all 32 streams; update_customer is the exact typed-destination proof. Every other typed action is explicitly eligible pending closed exact-action selection. Direct writes without typed actions are declaration-pending, not foundation or safety gaps.",
+    "2026-08-25 declaration-first ETL command materialization: enabled 32 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists."
   ]
 }
