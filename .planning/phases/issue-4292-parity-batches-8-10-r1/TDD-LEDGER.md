@@ -438,7 +438,7 @@
   source evidence.
 - **Green:** Cohort 02 now verifies 653 direct-write source rows: Metabase
   329 (0 existing-schema CLI-bound), dbt 26 (13), Looker 222 (0), Mode 45
-  (0), and Dremio 31 (10). All 5 connectors remain enumerable; the 590
+  (0), and Dremio 31 (10). All 5 connectors remain enumerable; the 630
   non-action-backed rows retain `declaration-pending` and no invented path.
 
 ### Declaration-first direct-write cohort 03 — 2026-08-25
@@ -483,6 +483,21 @@
   (27 existing-schema CLI-bound), PagerDuty 254 (0), Auth0 270 (8), Okta 444
   (429), and FireHydrant 204 (190). The 1,507 unbound rows are still
   declaration-pending, including elevated and destructive operations.
+
+### Declaration-first direct-write cohort 06 — 2026-08-25
+
+- **Red:** Adobe Commerce, Commercetools, Recharge, DocuSeal, and Eventbrite
+  had no final declaration-first direct-write map. Adobe Commerce is dynamic
+  and Eventbrite has no public source; neither can be represented as a zero
+  operation inventory.
+- **Green target:** generate the final Batch 10 cohort from the committed
+  provider evidence. Any exact DocuSeal action/CLI binding is retained; all
+  non-action-backed Commercetools and Recharge rows remain declaration-pending
+  without an inferred operation contract.
+- **Green:** Cohort 06 verifies 447 enumerable direct-write rows:
+  Commercetools 355 (0 existing-schema CLI-bound), Recharge 76 (0), and
+  DocuSeal 16 (6). Adobe Commerce remains dynamic and Eventbrite unavailable;
+  the 441 unbound rows retain declaration-pending with no invented contract.
 
 - The source lock carries `counts.total`, per-method and per-kind counts,
   source-document pins, and coverage basis. Dispositions use
