@@ -455,6 +455,20 @@
   51 (14); Greenhouse remains unavailable. The 188 unbound rows stay
   declaration-pending with no generated command spelling.
 
+### Declaration-first direct-write cohort 04 — 2026-08-25
+
+- **Red:** Ashby, Workable, Recruitee, HiBob, and Factorial lacked a mechanical
+  source-to-existing-schema promotion map. Existing native/action behavior is
+  not a substitute for a provider operation identity or a typed action schema.
+- **Green target:** derive the five remaining Batch 9 connectors from their
+  committed source artifacts. Rows without a typed action must retain an empty
+  intended CLI path; no native connector behavior or visible endpoint may be
+  reverse-engineered into a contract.
+- **Green:** Cohort 04 verifies 951 direct-write source rows: Ashby 113 (98
+  existing-schema CLI-bound), Workable 39 (0), Recruitee 563 (0), HiBob 142
+  (0), and Factorial 94 (0). The 853 unbound rows remain declaration-pending;
+  no native execution behavior was converted into an operation contract.
+
 - The source lock carries `counts.total`, per-method and per-kind counts,
   source-document pins, and coverage basis. Dispositions use
   `operations_found`; no generated summary has `declared_percent`.
