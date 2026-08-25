@@ -1,0 +1,1405 @@
+{
+  "schema_version": 2,
+  "connector": "dremio",
+  "source_lock": "sources/dremio-operation-source-lock.json",
+  "generated_at": "2026-08-19T16:45:09.939Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.delete-cache-authorization",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/ldap-authorization/",
+      "source_location": "rendered-document-byte-2172",
+      "operation_id": "delete-cache-authorization",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/cache/authorization",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/cache/authorization",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/ldap-authorization/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.delete-cache-authorization-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/ldap-authorization/",
+      "source_location": "rendered-document-byte-2959",
+      "operation_id": "delete-cache-authorization-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/cache/authorization/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/cache/authorization/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/ldap-authorization/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.delete-catalog-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/",
+      "source_location": "rendered-document-byte-30986",
+      "operation_id": "delete-catalog-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/catalog/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/catalog/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.delete-external-token-providers-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/",
+      "source_location": "rendered-document-byte-13714",
+      "operation_id": "delete-external-token-providers-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/external-token-providers/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/external-token-providers/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.delete-reflection-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/",
+      "source_location": "rendered-document-byte-78990",
+      "operation_id": "delete-reflection-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/reflection/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/reflection/{id}",
+          "covered_by": {
+            "write": "delete_reflection"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_reflection"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.delete-role-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/roles/",
+      "source_location": "rendered-document-byte-14094",
+      "operation_id": "delete-role-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/role/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/role/{id}",
+          "covered_by": {
+            "write": "delete_role"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_role"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.delete-scripts-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+      "source_location": "rendered-document-byte-16147",
+      "operation_id": "delete-scripts-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/scripts/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/scripts/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.delete-source-source-name-permission-cache",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/source/",
+      "source_location": "rendered-document-byte-2450",
+      "operation_id": "delete-source-source-name-permission-cache",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/source/{source-name}/permission-cache",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/source/{source-name}/permission-cache",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/source/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.delete-token",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/token/",
+      "source_location": "rendered-document-byte-1972",
+      "operation_id": "delete-token",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/token",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/token",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/token/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.delete-user-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/user/",
+      "source_location": "rendered-document-byte-15260",
+      "operation_id": "delete-user-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/user/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/user/{id}",
+          "covered_by": {
+            "write": "delete_user"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_user"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.delete-user-username-token-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/token/",
+      "source_location": "rendered-document-byte-2490",
+      "operation_id": "delete-user-username-token-id",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/user/{userName}/token/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/user/{userName}/token/{id}",
+          "covered_by": {
+            "write": "delete_personal_access_token"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_personal_access_token"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.get-catalog",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/",
+      "source_location": "rendered-document-byte-8099",
+      "operation_id": "get-catalog",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/catalog",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/catalog",
+          "covered_by": {
+            "stream": "catalog"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "catalog"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.get-catalog-by-path-path",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/",
+      "source_location": "rendered-document-byte-19415",
+      "operation_id": "get-catalog-by-path-path",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/catalog/by-path/{path}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/catalog/by-path/{path}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.get-catalog-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/",
+      "source_location": "rendered-document-byte-14433",
+      "operation_id": "get-catalog-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/catalog/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/catalog/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.get-dataset-datasetid-reflection",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/",
+      "source_location": "rendered-document-byte-55071",
+      "operation_id": "get-dataset-datasetid-reflection",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/dataset/{datasetId}/reflection",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/dataset/{datasetId}/reflection",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.get-external-token-providers",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/",
+      "source_location": "rendered-document-byte-4157",
+      "operation_id": "get-external-token-providers",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/external-token-providers",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/external-token-providers",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.get-external-token-providers-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/",
+      "source_location": "rendered-document-byte-8292",
+      "operation_id": "get-external-token-providers-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/external-token-providers/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/external-token-providers/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.get-job-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/job/",
+      "source_location": "rendered-document-byte-6169",
+      "operation_id": "get-job-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/job/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/job/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/job/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.get-nodecollections-blacklist",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/nodeCollections/",
+      "source_location": "rendered-document-byte-3401",
+      "operation_id": "get-nodecollections-blacklist",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/nodeCollections/blacklist",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/nodeCollections/blacklist",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/nodeCollections/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.get-reflection",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/",
+      "source_location": "rendered-document-byte-40058",
+      "operation_id": "get-reflection",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/reflection",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/reflection",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.get-reflection-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/",
+      "source_location": "rendered-document-byte-50838",
+      "operation_id": "get-reflection-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/reflection/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/reflection/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.get-reflection-summary",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/reflection-summary/",
+      "source_location": "rendered-document-byte-20084",
+      "operation_id": "get-reflection-summary",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/reflection-summary",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/reflection-summary",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/reflection-summary/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.get-role-by-name-name",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/roles/",
+      "source_location": "rendered-document-byte-8018",
+      "operation_id": "get-role-by-name-name",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/role/by-name/{name}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/role/by-name/{name}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/roles/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.get-role-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/roles/",
+      "source_location": "rendered-document-byte-6650",
+      "operation_id": "get-role-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/role/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/role/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/roles/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.get-scripts",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+      "source_location": "rendered-document-byte-8167",
+      "operation_id": "get-scripts",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/scripts",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/scripts",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.get-scripts-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+      "source_location": "rendered-document-byte-12758",
+      "operation_id": "get-scripts-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/scripts/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/scripts/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.get-scripts-id-grants",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+      "source_location": "rendered-document-byte-17971",
+      "operation_id": "get-scripts-id-grants",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/scripts/{id}/grants",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/scripts/{id}/grants",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.get-user-by-name-name",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/user/",
+      "source_location": "rendered-document-byte-10274",
+      "operation_id": "get-user-by-name-name",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/user/by-name/{name}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/user/by-name/{name}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/user/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.get-user-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/user/",
+      "source_location": "rendered-document-byte-8797",
+      "operation_id": "get-user-id",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/user/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/user/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/user/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.patch-external-token-providers-id-state",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/",
+      "source_location": "rendered-document-byte-12670",
+      "operation_id": "patch-external-token-providers-id-state",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/external-token-providers/{id}/state",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/external-token-providers/{id}/state",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.patch-role-id-member",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/roles/",
+      "source_location": "rendered-document-byte-12355",
+      "operation_id": "patch-role-id-member",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/role/{id}/member",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/role/{id}/member",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/roles/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.patch-scripts-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+      "source_location": "rendered-document-byte-13989",
+      "operation_id": "patch-scripts-id",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/scripts/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/scripts/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.post-catalog",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/",
+      "source_location": "rendered-document-byte-10004",
+      "operation_id": "post-catalog",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/catalog",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/catalog",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.post-dataset-id-reflection-recommendation-type",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/datasets/",
+      "source_location": "rendered-document-byte-7650",
+      "operation_id": "post-dataset-id-reflection-recommendation-type",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/dataset/{id}/reflection/recommendation/{type}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/dataset/{id}/reflection/recommendation/{type}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/datasets/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.post-external-token-providers",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/",
+      "source_location": "rendered-document-byte-5817",
+      "operation_id": "post-external-token-providers",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/external-token-providers",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/external-token-providers",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.post-nodecollections-blacklist",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/nodeCollections/",
+      "source_location": "rendered-document-byte-2283",
+      "operation_id": "post-nodecollections-blacklist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/nodeCollections/blacklist",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/nodeCollections/blacklist",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/nodeCollections/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.post-reflection",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/",
+      "source_location": "rendered-document-byte-23136",
+      "operation_id": "post-reflection",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/reflection",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/reflection",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.post-reflection-id-refresh",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/",
+      "source_location": "rendered-document-byte-60466",
+      "operation_id": "post-reflection-id-refresh",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/reflection/{id}/refresh",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/reflection/{id}/refresh",
+          "covered_by": {
+            "write": "refresh_reflection"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "refresh_reflection"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.post-role",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/roles/",
+      "source_location": "rendered-document-byte-4281",
+      "operation_id": "post-role",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/role",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/role",
+          "covered_by": {
+            "write": "create_role"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_role"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.post-scripts",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+      "source_location": "rendered-document-byte-6298",
+      "operation_id": "post-scripts",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/scripts",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/scripts",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.post-scripts-batchdelete",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+      "source_location": "rendered-document-byte-16841",
+      "operation_id": "post-scripts-batchdelete",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/scripts{batchDelete}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/scripts{batchDelete}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.post-sql",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/sql/",
+      "source_location": "rendered-document-byte-2096",
+      "operation_id": "post-sql",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/sql",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/sql",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/sql/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.post-user",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/user/",
+      "source_location": "rendered-document-byte-5482",
+      "operation_id": "post-user",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/user",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/user",
+          "covered_by": {
+            "write": "create_user"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_user"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.put-catalog-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/",
+      "source_location": "rendered-document-byte-24260",
+      "operation_id": "put-catalog-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/catalog/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/catalog/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.put-external-token-providers-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/",
+      "source_location": "rendered-document-byte-9554",
+      "operation_id": "put-external-token-providers-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/external-token-providers/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/external-token-providers/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.put-reflection-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/",
+      "source_location": "rendered-document-byte-61001",
+      "operation_id": "put-reflection-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/reflection/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/reflection/{id}",
+          "covered_by": {
+            "write": "update_reflection"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_reflection"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.put-role-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/roles/",
+      "source_location": "rendered-document-byte-9604",
+      "operation_id": "put-role-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/role/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/role/{id}",
+          "covered_by": {
+            "write": "update_role"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_role"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.put-scripts-id-grants",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+      "source_location": "rendered-document-byte-19343",
+      "operation_id": "put-scripts-id-grants",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/scripts/{id}/grants",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/scripts/{id}/grants",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dremio-operation-source-lock.json",
+      "source_id": "dremio.rendered.put-user-id",
+      "source_url": "https://docs.dremio.com/25.x/reference/api/user/",
+      "source_location": "rendered-document-byte-11652",
+      "operation_id": "put-user-id",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/user/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/user/{id}",
+          "covered_by": {
+            "write": "update_user"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_user"
+          ]
+        }
+      }
+    }
+  ]
+}

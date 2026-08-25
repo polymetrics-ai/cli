@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "recruitee",
+  "artifacts": [
+    {
+      "sha256": "ab9fdb20802e6f511ad84a501e5f3deaa231632a34f1df0d7181e30223ca3aa5",
+      "bytes": 11355255,
+      "source_url": "https://apidocs.recruitee.com/",
+      "retrieved_at": "2026-08-24T12:15:00Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

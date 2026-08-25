@@ -1,0 +1,234 @@
+{
+  "tagline": "Run Auth0's declared typed write actions.",
+  "usage": "pm auth0 <command> [flags]",
+  "groups": [
+    {
+      "id": "reverse_etl",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "create client apply",
+        "create organization apply",
+        "create role apply",
+        "create user apply",
+        "update client apply",
+        "update organization apply",
+        "update role apply",
+        "update user apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "create client apply",
+      "summary": "POST /api/v2/clients (create_client)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_client",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/clients"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; registers a new Auth0 application (client), which can obtain its own OAuth2 credentials; approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm auth0 create client apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create organization apply",
+      "summary": "POST /api/v2/organizations (create_organization)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_organization",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/organizations"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; creates a new Auth0 organization (multi-tenant scoping unit); approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm auth0 create organization apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create role apply",
+      "summary": "POST /api/v2/roles (create_role)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_role",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/roles"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; creates a new RBAC role (no permissions attached by default); approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm auth0 create role apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create user apply",
+      "summary": "POST /api/v2/users (create_user)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_user",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/users"
+        }
+      ],
+      "flags": [
+        {
+          "name": "connection",
+          "type": "string",
+          "summary": "Required connection record field.",
+          "maps_to": "record.connection",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; creates a new Auth0 user account (and, when password is set, a live credential); approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm auth0 create user apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update client apply",
+      "summary": "Typed action update_client",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_client",
+      "flags": [
+        {
+          "name": "client-id",
+          "type": "string",
+          "summary": "Required client_id record field.",
+          "maps_to": "record.client_id",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; updates an existing Auth0 application's configuration; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/v2/clients/{client_id} disagrees with covered api_surface path /api/v2/clients/{id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/v2/clients/{client_id} disagrees with covered api_surface path /api/v2/clients/{id}.",
+      "examples": [
+        "pm auth0 update client apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update organization apply",
+      "summary": "PATCH /api/v2/organizations/{id} (update_organization)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_organization",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v2/organizations/{id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; updates an existing Auth0 organization's name/display_name; approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm auth0 update organization apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update role apply",
+      "summary": "PATCH /api/v2/roles/{id} (update_role)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_role",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v2/roles/{id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; updates an existing RBAC role's name/description; approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm auth0 update role apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update user apply",
+      "summary": "Typed action update_user",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_user",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Required user_id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; updates an existing Auth0 user's profile/credential/blocked state; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/v2/users/{user_id} disagrees with covered api_surface path /api/v2/users/{id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/v2/users/{user_id} disagrees with covered api_surface path /api/v2/users/{id}.",
+      "examples": [
+        "pm auth0 update user apply --plan <plan-name>"
+      ]
+    }
+  ]
+}

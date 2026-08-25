@@ -1,0 +1,9 @@
+{
+  "schema_version": 2,
+  "connector": "eventbrite",
+  "state": "skipped",
+  "source_lock": "sources/eventbrite-operation-source-lock.json",
+  "generated_at": "2026-08-19T16:46:27.084Z",
+  "reason": "no-public-api-description",
+  "source_operations": []
+}

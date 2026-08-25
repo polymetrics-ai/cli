@@ -1,6 +1,6 @@
 {
   "tagline": "Run DocuSeal's declared streams and reverse-ETL actions.",
-  "usage": "pm docuseal \u003ccommand\u003e [flags]",
+  "usage": "pm docuseal <command> [flags]",
   "groups": [
     {
       "id": "read",
@@ -19,6 +19,7 @@
         "archive submission apply",
         "archive template apply",
         "clone template apply",
+        "create submission apply",
         "update submitter apply",
         "update template apply"
       ]
@@ -42,7 +43,7 @@
         }
       ],
       "examples": [
-        "pm docuseal archive submission apply --plan \u003cplan-name\u003e"
+        "pm docuseal archive submission apply --plan <plan-name>"
       ],
       "api_surface": [
         {
@@ -70,7 +71,7 @@
         }
       ],
       "examples": [
-        "pm docuseal archive template apply --plan \u003cplan-name\u003e"
+        "pm docuseal archive template apply --plan <plan-name>"
       ],
       "api_surface": [
         {
@@ -98,7 +99,7 @@
         }
       ],
       "examples": [
-        "pm docuseal clone template apply --plan \u003cplan-name\u003e"
+        "pm docuseal clone template apply --plan <plan-name>"
       ],
       "api_surface": [
         {
@@ -108,6 +109,41 @@
       ],
       "risk": "external mutation; creates a new live DocuSeal template by cloning an existing one; approval required",
       "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create submission apply",
+      "summary": "POST /submissions (create_submission)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_submission",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/submissions"
+        }
+      ],
+      "flags": [
+        {
+          "name": "submitters",
+          "type": "json",
+          "summary": "Required submitters record field.",
+          "maps_to": "record.submitters",
+          "required": true
+        },
+        {
+          "name": "template-id",
+          "type": "integer",
+          "summary": "Required template_id record field.",
+          "maps_to": "record.template_id",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; dispatches a live signature-request email/SMS to every listed submitter unless send_email/send_sms are explicitly set false; approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm docuseal create submission apply --plan <plan-name>"
+      ]
     },
     {
       "path": "submissions list",
@@ -194,7 +230,7 @@
         }
       ],
       "examples": [
-        "pm docuseal update submitter apply --plan \u003cplan-name\u003e"
+        "pm docuseal update submitter apply --plan <plan-name>"
       ],
       "api_surface": [
         {
@@ -222,7 +258,7 @@
         }
       ],
       "examples": [
-        "pm docuseal update template apply --plan \u003cplan-name\u003e"
+        "pm docuseal update template apply --plan <plan-name>"
       ],
       "api_surface": [
         {

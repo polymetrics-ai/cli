@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_stream_source"
+    },
+    "eligible_streams": [
+      "jobs",
+      "candidates",
+      "members",
+      "accounts",
+      "account",
+      "collaboration_permissions",
+      "departments",
+      "disqualification_reasons",
+      "legal_entities",
+      "permission_sets",
+      "recruiters",
+      "stages",
+      "subscriptions",
+      "employee_fields",
+      "employees_orgchart",
+      "employees",
+      "employee",
+      "employee_documents",
+      "review_templates",
+      "review_template",
+      "time_entries",
+      "timeoff_balances",
+      "timeoff_categories",
+      "timeoff_requests",
+      "work_schedules",
+      "candidate_activities",
+      "candidate_files",
+      "candidate_offer",
+      "custom_attributes",
+      "events",
+      "event",
+      "job_activities",
+      "job_custom_attributes",
+      "job_members",
+      "job_questions",
+      "job_stages",
+      "job",
+      "job_application_form",
+      "job_recruiters",
+      "requisitions",
+      "requisition",
+      "offer"
+    ],
+    "modes": [
+      "full_append"
+    ],
+    "delivery": {
+      "idempotency": "at_least_once",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "declarative_stream_transport_static",
+      "run_id": "workable_source_definition_v1"
+    }
+  }
+}

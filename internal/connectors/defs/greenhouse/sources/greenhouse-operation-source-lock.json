@@ -1,0 +1,27 @@
+{
+  "schema_version": 3,
+  "connector": "greenhouse",
+  "captured_at": "2026-08-19T16:45:29.021Z",
+  "rest": {
+    "retrieval": "preserved issue-4292 public capture via browser",
+    "openapi": [],
+    "coverage_confidence": {
+      "level": "unavailable",
+      "basis": "no-public-api-description: The provider's formerly public Harvest API reference was requested in Chrome without credentials and rendered the Greenhouse Recruiting sign-in page. No current public provider API description could be pinned, so this map does not reuse the old api_surface.json as a substitute source inventory."
+    },
+    "source_documents": [
+      {
+        "id": "unavailable",
+        "kind": "unavailable",
+        "unavailable_reason": "The provider's formerly public Harvest API reference was requested in Chrome without credentials and rendered the Greenhouse Recruiting sign-in page. No current public provider API description could be pinned, so this map does not reuse the old api_surface.json as a substitute source inventory.",
+        "operations": []
+      }
+    ]
+  },
+  "counts": {
+    "rest": 0,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 0
+  }
+}

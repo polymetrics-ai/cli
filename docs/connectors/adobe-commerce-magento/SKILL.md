@@ -102,6 +102,26 @@ Reads Adobe Commerce (Magento) products, orders, customers, categories, invoices
 - write risk: external mutation of live Magento catalog products/categories and cancellation of live sales orders; approval required for every write action
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run Adobe Commerce (Magento)'s declared typed write actions.
+- Usage: pm adobe-commerce-magento <command> [flags]
+- Global flags:
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
+- Reverse ETL writes
+- Other Commands
+  - cancel order apply - Typed action cancel_order [intent=reverse_etl availability=partial write=cancel_order]; approval: Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /orders/{entity_id}/cancel disagrees with covered api_surface path /rest/V1/orders/{id}/cancel.; risk: external mutation; irreversibly cancels a live Magento sales order; approval required; notes: Generated from the connector-owned typed action; declaration-pending: canonical typed action path /orders/{entity_id}/cancel disagrees with covered api_surface path /rest/V1/orders/{id}/cancel.; flags: --entity-id (required)
+  - create category apply - Typed action create_category [intent=reverse_etl availability=partial write=create_category]; approval: Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /categories disagrees with covered api_surface path /rest/V1/categories.; risk: external mutation; creates a live Magento catalog category; approval required; notes: Generated from the connector-owned typed action; declaration-pending: canonical typed action path /categories disagrees with covered api_surface path /rest/V1/categories.; flags: --name (required), --parent-id (required)
+  - update category apply - Typed action update_category [intent=reverse_etl availability=partial write=update_category]; approval: Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /categories/{id} disagrees with covered api_surface path /rest/V1/categories/{id}.; risk: external mutation; overwrites live Magento catalog category fields; approval required; notes: Generated from the connector-owned typed action; declaration-pending: canonical typed action path /categories/{id} disagrees with covered api_surface path /rest/V1/categories/{id}.; flags: --id (required)
+  - update product apply - Typed action update_product [intent=reverse_etl availability=partial write=update_product]; approval: Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /products/{sku} disagrees with covered api_surface path /rest/V1/products/{sku}.; risk: external mutation; overwrites live Magento catalog product fields; approval required; notes: Generated from the connector-owned typed action; declaration-pending: canonical typed action path /products/{sku} disagrees with covered api_surface path /rest/V1/products/{sku}.; flags: --sku (required)
+
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
+
 ## Commands
 
 ### Inspect as a manual

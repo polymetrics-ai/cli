@@ -59,6 +59,16 @@ SECURITY
   approval: none; read-only source connector
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Run Looker's declared typed write actions.
+  Usage: pm looker <command> [flags]
+
+SYNC TRANSPORT
+  Source transport: declared
+  Destination transport: unsupported
+  A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+  Source executor: declarative_api/declarative_stream_source
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect looker

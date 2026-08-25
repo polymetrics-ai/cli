@@ -1,0 +1,39 @@
+{
+  "schema_version": 3,
+  "connector": "adobe-commerce-magento",
+  "captured_at": "2026-08-19T16:46:17.504Z",
+  "rest": {
+    "retrieval": "preserved issue-4292 public capture via http",
+    "openapi": [],
+    "coverage_confidence": {
+      "level": "dynamic-instance-dependent",
+      "basis": "Adobe Commerce REST routes and schemas are generated from the modules enabled on each configured Magento instance. The official reference documents that instance-specific contract; there is no provider-global static operation total to fabricate."
+    },
+    "source_documents": [
+      {
+        "id": "document-0001",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://developer.adobe.com/commerce/webapi/rest/",
+          "sha256": "6012876bf8a0e4423f9dc151bf102d5b161f19da716e9cf3a1a6d25e950eeb42",
+          "bytes": 8292
+        },
+        "published_source": {
+          "source_url": "https://developer.adobe.com/commerce/webapi/rest/",
+          "capture_url": "https://developer.adobe.com/commerce/webapi/rest/",
+          "sha256": "6012876bf8a0e4423f9dc151bf102d5b161f19da716e9cf3a1a6d25e950eeb42",
+          "bytes": 8292,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": []
+      }
+    ]
+  },
+  "counts": {
+    "rest": 0,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 0
+  }
+}

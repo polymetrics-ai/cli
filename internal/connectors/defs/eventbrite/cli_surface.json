@@ -1,0 +1,12 @@
+{
+  "tagline": "Run Eventbrite's declared typed write actions.",
+  "usage": "pm eventbrite <command> [flags]",
+  "groups": [
+    {
+      "id": "reverse_etl",
+      "title": "Reverse ETL writes",
+      "commands": []
+    }
+  ],
+  "commands": []
+}

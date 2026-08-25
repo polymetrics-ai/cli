@@ -1,0 +1,335 @@
+{
+  "tagline": "Run Dremio's declared typed write actions.",
+  "usage": "pm dremio <command> [flags]",
+  "groups": [
+    {
+      "id": "reverse_etl",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "create personal access token apply",
+        "create role apply",
+        "create user apply",
+        "delete personal access token apply",
+        "delete reflection apply",
+        "delete role apply",
+        "delete user apply",
+        "refresh reflection apply",
+        "update reflection apply",
+        "update role apply",
+        "update user apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "create personal access token apply",
+      "summary": "Typed action create_personal_access_token",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_personal_access_token",
+      "flags": [
+        {
+          "name": "label",
+          "type": "string",
+          "summary": "Required label record field.",
+          "maps_to": "record.label",
+          "required": true
+        },
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Required user_id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "risk": "mints a new long-lived Personal Access Token credential for the named user; the response body carries the plaintext token exactly once and must never be logged; external mutation, approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /user/{user_id}/token disagrees with covered api_surface path /user/{user-id}/token.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /user/{user_id}/token disagrees with covered api_surface path /user/{user-id}/token.",
+      "examples": [
+        "pm dremio create personal access token apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create role apply",
+      "summary": "POST /role (create_role)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_role",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/role"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "creates a new Dremio role; low external mutation risk on its own until members/grants are attached",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm dremio create role apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create user apply",
+      "summary": "POST /user (create_user)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_user",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/user"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "creates a new Dremio user account with instance-wide access, scoped by whatever role assignment follows; external mutation, approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm dremio create user apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete personal access token apply",
+      "summary": "Typed action delete_personal_access_token",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_personal_access_token",
+      "flags": [
+        {
+          "name": "token-id",
+          "type": "string",
+          "summary": "Required token_id record field.",
+          "maps_to": "record.token_id",
+          "required": true
+        },
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Required user_id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "risk": "revokes a single Personal Access Token, immediately invalidating any client still using it; destructive to that credential's holders, approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /user/{user_id}/token/{token_id} disagrees with covered api_surface path /user/{userName}/token/{id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /user/{user_id}/token/{token_id} disagrees with covered api_surface path /user/{userName}/token/{id}.",
+      "examples": [
+        "pm dremio delete personal access token apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete reflection apply",
+      "summary": "DELETE /reflection/{id} (delete_reflection)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_reflection",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/reflection/{id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "permanently removes a reflection definition; any query relying on it for acceleration falls back to the raw dataset; destructive, approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm dremio delete reflection apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete role apply",
+      "summary": "DELETE /role/{id} (delete_role)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_role",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/role/{id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "permanently removes a Dremio role and its grants for every member; destructive, approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm dremio delete role apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete user apply",
+      "summary": "DELETE /user/{id} (delete_user)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/user/{id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "permanently removes a Dremio user account and revokes its access; destructive, approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm dremio delete user apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "refresh reflection apply",
+      "summary": "POST /reflection/{id}/refresh (refresh_reflection)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "refresh_reflection",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/reflection/{id}/refresh"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "forces an immediate reflection rebuild, consuming cluster compute; low external-mutation risk, no data loss, no approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm dremio refresh reflection apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update reflection apply",
+      "summary": "PUT /reflection/{id} (update_reflection)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_reflection",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/reflection/{id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "mutates an existing reflection's definition (name/enabled/tag); disabling a reflection removes its query-acceleration benefit until re-enabled and rebuilt; external mutation, approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm dremio update reflection apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update role apply",
+      "summary": "PUT /role/{id} (update_role)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_role",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/role/{id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "mutates an existing Dremio role's name/description; external mutation, approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm dremio update role apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update user apply",
+      "summary": "PUT /user/{id} (update_user)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_user",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/user/{id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "mutates an existing Dremio user account, including its active flag which can lock the user out; external mutation, approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm dremio update user apply --plan <plan-name>"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2908 @@
+{
+  "schema_version": 2,
+  "connector": "lever-hiring",
+  "source_lock": "sources/lever-hiring-operation-source-lock.json",
+  "generated_at": "2026-08-19T19:03:09.875Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.delete-feedback-templates-feedback-template",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-726429",
+      "operation_id": "delete-feedback-templates-feedback-template",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/feedback_templates/{feedback_template}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/feedback_templates/{feedback_template}",
+          "covered_by": {
+            "write": "delete_feedback_template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_feedback_template"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.delete-form-templates-form-template",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-926289",
+      "operation_id": "delete-form-templates-form-template",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/form_templates/{form_template}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/form_templates/{form_template}",
+          "covered_by": {
+            "write": "delete_form_template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_form_template"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.delete-opportunities-opportunity-feedback-feedback",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-712761",
+      "operation_id": "delete-opportunities-opportunity-feedback-feedback",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/opportunities/{opportunity}/feedback/{feedback}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/opportunities/{opportunity}/feedback/{feedback}",
+          "covered_by": {
+            "write": "delete_feedback"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_feedback"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.delete-opportunities-opportunity-files-file",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-733247",
+      "operation_id": "delete-opportunities-opportunity-files-file",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/opportunities/{opportunity}/files/{file}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/opportunities/{opportunity}/files/{file}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.delete-opportunities-opportunity-interviews-interview",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-766941",
+      "operation_id": "delete-opportunities-opportunity-interviews-interview",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/opportunities/{opportunity}/interviews/{interview}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/opportunities/{opportunity}/interviews/{interview}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.delete-opportunities-opportunity-notes-noteid",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-775186",
+      "operation_id": "delete-opportunities-opportunity-notes-noteid",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/opportunities/{opportunity}/notes/{noteId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/opportunities/{opportunity}/notes/{noteId}",
+          "covered_by": {
+            "write": "delete_note"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_note"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.delete-opportunities-opportunity-panels-panel",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-844215",
+      "operation_id": "delete-opportunities-opportunity-panels-panel",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/opportunities/{opportunity}/panels/{panel}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/opportunities/{opportunity}/panels/{panel}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.delete-requisition-fields-requisition-field",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-974424",
+      "operation_id": "delete-requisition-fields-requisition-field",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/requisition_fields/{requisition_field}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/requisition_fields/{requisition_field}",
+          "covered_by": {
+            "write": "delete_requisition_field"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_requisition_field"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.delete-requisition-fields-requisition-field-options",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-972551",
+      "operation_id": "delete-requisition-fields-requisition-field-options",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/requisition_fields/{requisition_field}/options",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/requisition_fields/{requisition_field}/options",
+          "covered_by": {
+            "write": "delete_requisition_field_options"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_requisition_field_options"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.delete-requisitions-requisition",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-961905",
+      "operation_id": "delete-requisitions-requisition",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/requisitions/{requisition}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/requisitions/{requisition}",
+          "covered_by": {
+            "write": "delete_requisition"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_requisition"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.delete-webhooks-webhookid",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-1023554",
+      "operation_id": "delete-webhooks-webhookid",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/webhooks/{webhookId}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/webhooks/{webhookId}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-applications-deleted",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-657311",
+      "operation_id": "get-applications-deleted",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/applications/deleted",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/applications/deleted",
+          "covered_by": {
+            "stream": "deleted_applications"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "deleted_applications"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-archive-reasons",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-660366",
+      "operation_id": "get-archive-reasons",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/archive_reasons",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/archive_reasons",
+          "covered_by": {
+            "stream": "archive_reasons"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "archive_reasons"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-archive-reasons-archive-reason",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-659985",
+      "operation_id": "get-archive-reasons-archive-reason",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/archive_reasons/{archive_reason}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/archive_reasons/{archive_reason}",
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-archive-reason"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-a-single-archive-reason"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-audit-events",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-664498",
+      "operation_id": "get-audit-events",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/audit_events",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/audit_events",
+          "covered_by": {
+            "stream": "audit_events"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "audit_events"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-contacts-contact",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-680300",
+      "operation_id": "get-contacts-contact",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/contacts/{contact}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/contacts/{contact}",
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-contact"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-a-single-contact"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-disposition-stages",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-683257",
+      "operation_id": "get-disposition-stages",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/disposition_stages",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/disposition_stages",
+          "covered_by": {
+            "stream": "disposition_stages"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "disposition_stages"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-feedback-templates",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-716913",
+      "operation_id": "get-feedback-templates",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/feedback_templates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/feedback_templates",
+          "covered_by": {
+            "stream": "feedback_templates"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "feedback_templates"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-feedback-templates-feedback-template",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-715738",
+      "operation_id": "get-feedback-templates-feedback-template",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/feedback_templates/{feedback_template}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/feedback_templates/{feedback_template}",
+          "covered_by": {
+            "direct_read": "direct retrieve-a-feedback-template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-a-feedback-template"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-form-templates",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-917884",
+      "operation_id": "get-form-templates",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/form_templates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/form_templates",
+          "covered_by": {
+            "stream": "form_templates"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "form_templates"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-form-templates-form-template",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-916734",
+      "operation_id": "get-form-templates-form-template",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/form_templates/{form_template}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/form_templates/{form_template}",
+          "covered_by": {
+            "direct_read": "direct retrieve-a-profile-form-template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-a-profile-form-template"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-802375",
+      "operation_id": "get-opportunities",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities",
+          "covered_by": {
+            "stream": "opportunities"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opportunities"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-800186",
+      "operation_id": "get-opportunities-opportunity",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}",
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-opportunity"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-a-single-opportunity"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-applications",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-650332",
+      "operation_id": "get-opportunities-opportunity-applications",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/applications",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/applications",
+          "covered_by": {
+            "stream": "applications"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "applications"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-applications-application",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-646233",
+      "operation_id": "get-opportunities-opportunity-applications-application",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/applications/{application}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/applications/{application}",
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-application"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-a-single-application"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-feedback",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-698133",
+      "operation_id": "get-opportunities-opportunity-feedback",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/feedback",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/feedback",
+          "covered_by": {
+            "stream": "opportunity_feedback"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opportunity_feedback"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-feedback-feedback",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-694048",
+      "operation_id": "get-opportunities-opportunity-feedback-feedback",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/feedback/{feedback}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/feedback/{feedback}",
+          "covered_by": {
+            "direct_read": "direct retrieve-a-feedback-form"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-a-feedback-form"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-file-actions",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-814203",
+      "operation_id": "get-opportunities-opportunity-file-actions",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/file_actions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/file_actions",
+          "covered_by": {
+            "stream": "opportunity_file_actions"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opportunity_file_actions"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-files",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-729746",
+      "operation_id": "get-opportunities-opportunity-files",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/files",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/files",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-files-file",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-728957",
+      "operation_id": "get-opportunities-opportunity-files-file",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/files/{file}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/files/{file}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-files-file-download",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-732619",
+      "operation_id": "get-opportunities-opportunity-files-file-download",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/files/{file}/download",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/files/{file}/download",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-forms",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-908414",
+      "operation_id": "get-opportunities-opportunity-forms",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/forms",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/forms",
+          "covered_by": {
+            "stream": "opportunity_forms"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opportunity_forms"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-forms-form",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-906305",
+      "operation_id": "get-opportunities-opportunity-forms-form",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/forms/{form}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/forms/{form}",
+          "covered_by": {
+            "direct_read": "direct retrieve-a-profile-form"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-a-profile-form"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-interviews",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-754371",
+      "operation_id": "get-opportunities-opportunity-interviews",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/interviews",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/interviews",
+          "covered_by": {
+            "stream": "opportunity_interviews"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opportunity_interviews"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-interviews-interview",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-752576",
+      "operation_id": "get-opportunities-opportunity-interviews-interview",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/interviews/{interview}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/interviews/{interview}",
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-interview"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-a-single-interview"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-notes",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-770291",
+      "operation_id": "get-opportunities-opportunity-notes",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/notes",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/notes",
+          "covered_by": {
+            "stream": "opportunity_notes"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opportunity_notes"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-notes-note",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-768856",
+      "operation_id": "get-opportunities-opportunity-notes-note",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/notes/{note}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/notes/{note}",
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-note"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-a-single-note"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-offers",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-782673",
+      "operation_id": "get-opportunities-opportunity-offers",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/offers",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/offers",
+          "covered_by": {
+            "stream": "opportunity_offers"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opportunity_offers"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-offers-offer-download",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-787920",
+      "operation_id": "get-opportunities-opportunity-offers-offer-download",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/offers/{offer}/download",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/offers/{offer}/download",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-panels",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-834546",
+      "operation_id": "get-opportunities-opportunity-panels",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/panels",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/panels",
+          "covered_by": {
+            "stream": "opportunity_panels"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opportunity_panels"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-panels-panel",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-832796",
+      "operation_id": "get-opportunities-opportunity-panels-panel",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/panels/{panel}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/panels/{panel}",
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-panel"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-a-single-panel"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-referrals",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-930822",
+      "operation_id": "get-opportunities-opportunity-referrals",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/referrals",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/referrals",
+          "covered_by": {
+            "stream": "opportunity_referrals"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opportunity_referrals"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-referrals-referral",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-928819",
+      "operation_id": "get-opportunities-opportunity-referrals-referral",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/referrals/{referral}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/referrals/{referral}",
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-referral"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-a-single-referral"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-resumes",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-981679",
+      "operation_id": "get-opportunities-opportunity-resumes",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/resumes",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/resumes",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-resumes-resume",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-977875",
+      "operation_id": "get-opportunities-opportunity-resumes-resume",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/resumes/{resume}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/resumes/{resume}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-opportunities-opportunity-resumes-resume-download",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-990925",
+      "operation_id": "get-opportunities-opportunity-resumes-resume-download",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/resumes/{resume}/download",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/opportunities/{opportunity}/resumes/{resume}/download",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-postings",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-856272",
+      "operation_id": "get-postings",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/postings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/postings",
+          "covered_by": {
+            "stream": "postings"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "postings"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-postings-posting",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-853328",
+      "operation_id": "get-postings-posting",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/postings/{posting}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/postings/{posting}",
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-posting"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-a-single-posting"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-postings-posting-apply",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-880356",
+      "operation_id": "get-postings-posting-apply",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/postings/{posting}/apply",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/postings/{posting}/apply",
+          "covered_by": {
+            "direct_read": "direct retrieve-posting-application-questions"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-posting-application-questions"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-postings-posting-users",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-890102",
+      "operation_id": "get-postings-posting-users",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/postings/{posting}/users",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/postings/{posting}/users",
+          "covered_by": {
+            "stream": "posting_users"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "posting_users"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-requisition-fields",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-965371",
+      "operation_id": "get-requisition-fields",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/requisition_fields",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/requisition_fields",
+          "covered_by": {
+            "stream": "requisition_fields"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "requisition_fields"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-requisition-fields-requisition-field",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-964711",
+      "operation_id": "get-requisition-fields-requisition-field",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/requisition_fields/{requisition_field}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/requisition_fields/{requisition_field}",
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-requisition-field"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-a-single-requisition-field"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-requisitions",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-946441",
+      "operation_id": "get-requisitions",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/requisitions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/requisitions",
+          "covered_by": {
+            "stream": "requisitions"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "requisitions"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-requisitions-requisition",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-943468",
+      "operation_id": "get-requisitions-requisition",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/requisitions/{requisition}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/requisitions/{requisition}",
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-requisition"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-a-single-requisition"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-sources",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-992497",
+      "operation_id": "get-sources",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/sources",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/sources",
+          "covered_by": {
+            "stream": "sources"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "sources"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-stages",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-993642",
+      "operation_id": "get-stages",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/stages",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/stages",
+          "covered_by": {
+            "stream": "stages"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "stages"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-stages-stage",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-993348",
+      "operation_id": "get-stages-stage",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/stages/{stage}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/stages/{stage}",
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-stage"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-a-single-stage"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-surveys-diversity-posting",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-999659",
+      "operation_id": "get-surveys-diversity-posting",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/surveys/diversity/{posting}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/surveys/diversity/{posting}",
+          "covered_by": {
+            "direct_read": "direct retrieve-a-diversity-survey"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-a-diversity-survey"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-tags",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-1002154",
+      "operation_id": "get-tags",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/tags",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/tags",
+          "covered_by": {
+            "direct_read": "direct list-all-tags"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct list-all-tags"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-users",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-1006652",
+      "operation_id": "get-users",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/users",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/users",
+          "covered_by": {
+            "stream": "users"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "users"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-users-user",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-1005826",
+      "operation_id": "get-users-user",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/users/{user}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/users/{user}",
+          "covered_by": {
+            "direct_read": "direct retrieve-a-single-user"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-a-single-user"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-v1-eeo-responses",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document: EEO Responses declaration `GET v1/eeo/responses` (provider omits the leading slash)",
+      "operation_id": "get-v1-eeo-responses",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/eeo/responses",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/eeo/responses",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-v1-eeo-responses-pii",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-688140",
+      "operation_id": "get-v1-eeo-responses-pii",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/eeo/responses/pii",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/eeo/responses/pii",
+          "covered_by": {
+            "direct_read": "direct retrieve-eeo-responses-with-pii"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "direct retrieve-eeo-responses-with-pii"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.get-webhooks",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-1017640",
+      "operation_id": "get-webhooks",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/webhooks",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/webhooks",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-feedback-templates",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-719842",
+      "operation_id": "post-feedback-templates",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/feedback_templates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/feedback_templates",
+          "covered_by": {
+            "write": "create_feedback_template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_feedback_template"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-form-templates",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-920845",
+      "operation_id": "post-form-templates",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/form_templates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/form_templates",
+          "covered_by": {
+            "write": "create_form_template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_form_template"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-opportunities",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-818163",
+      "operation_id": "post-opportunities",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-opportunities-opportunity-addlinks",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-829363",
+      "operation_id": "post-opportunities-opportunity-addlinks",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/addLinks",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/addLinks",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-opportunities-opportunity-addsources",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-830360",
+      "operation_id": "post-opportunities-opportunity-addsources",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/addSources",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/addSources",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-opportunities-opportunity-addtags",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-829874",
+      "operation_id": "post-opportunities-opportunity-addtags",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/addTags",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/addTags",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-opportunities-opportunity-feedback",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-702737",
+      "operation_id": "post-opportunities-opportunity-feedback",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/feedback",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/feedback",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-opportunities-opportunity-files",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-727679",
+      "operation_id": "post-opportunities-opportunity-files",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/files",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/files",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-opportunities-opportunity-forms",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-911242",
+      "operation_id": "post-opportunities-opportunity-forms",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/forms",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/forms",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-opportunities-opportunity-interviews",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-756642",
+      "operation_id": "post-opportunities-opportunity-interviews",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/interviews",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/interviews",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-opportunities-opportunity-notes",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-772243",
+      "operation_id": "post-opportunities-opportunity-notes",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/notes",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/notes",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-opportunities-opportunity-panels",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-836584",
+      "operation_id": "post-opportunities-opportunity-panels",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/panels",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/panels",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-opportunities-opportunity-removelinks",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-829456",
+      "operation_id": "post-opportunities-opportunity-removelinks",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/removeLinks",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/removeLinks",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-opportunities-opportunity-removesources",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-830444",
+      "operation_id": "post-opportunities-opportunity-removesources",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/removeSources",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/removeSources",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-opportunities-opportunity-removetags",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-829952",
+      "operation_id": "post-opportunities-opportunity-removetags",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opportunities/{opportunity}/removeTags",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opportunities/{opportunity}/removeTags",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-postings",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-865328",
+      "operation_id": "post-postings",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/postings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/postings",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-postings-posting",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-873088",
+      "operation_id": "post-postings-posting",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/postings/{posting}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/postings/{posting}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-postings-postingid-apply",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-853413",
+      "operation_id": "post-postings-postingid-apply",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/postings/{postingId}/apply",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/postings/{postingId}/apply",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-requisition-fields",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-967525",
+      "operation_id": "post-requisition-fields",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/requisition_fields",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/requisition_fields",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-requisition-fields-requisition-field-options",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-972442",
+      "operation_id": "post-requisition-fields-requisition-field-options",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/requisition_fields/{requisition_field}/options",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/requisition_fields/{requisition_field}/options",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-requisitions",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-952986",
+      "operation_id": "post-requisitions",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/requisitions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/requisitions",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-uploads",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-1002648",
+      "operation_id": "post-uploads",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/uploads",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/uploads",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-users",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-1010690",
+      "operation_id": "post-users",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/users",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/users",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-users-user-deactivate",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-1014269",
+      "operation_id": "post-users-user-deactivate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/users/{user}/deactivate",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/users/{user}/deactivate",
+          "covered_by": {
+            "write": "deactivate_user"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "deactivate_user"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-users-user-reactivate",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-1015116",
+      "operation_id": "post-users-user-reactivate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/users/{user}/reactivate",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/users/{user}/reactivate",
+          "covered_by": {
+            "write": "reactivate_user"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "reactivate_user"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.post-webhooks",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-1018329",
+      "operation_id": "post-webhooks",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/webhooks",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/webhooks",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.put-contacts-contact",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-680893",
+      "operation_id": "put-contacts-contact",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/contacts/{contact}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/contacts/{contact}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.put-feedback-templates-feedback-template",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-722990",
+      "operation_id": "put-feedback-templates-feedback-template",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/feedback_templates/{feedback_template}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/feedback_templates/{feedback_template}",
+          "covered_by": {
+            "write": "update_feedback_template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_feedback_template"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.put-form-templates-form-template",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-923467",
+      "operation_id": "put-form-templates-form-template",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/form_templates/{form_template}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/form_templates/{form_template}",
+          "covered_by": {
+            "write": "update_form_template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_form_template"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.put-opportunities-opportunity-archived",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-828468",
+      "operation_id": "put-opportunities-opportunity-archived",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/opportunities/{opportunity}/archived",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/opportunities/{opportunity}/archived",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.put-opportunities-opportunity-feedback-feedback",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-709764",
+      "operation_id": "put-opportunities-opportunity-feedback-feedback",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/opportunities/{opportunity}/feedback/{feedback}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/opportunities/{opportunity}/feedback/{feedback}",
+          "covered_by": {
+            "write": "update_feedback"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_feedback"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.put-opportunities-opportunity-interviews-interview",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-763467",
+      "operation_id": "put-opportunities-opportunity-interviews-interview",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/opportunities/{opportunity}/interviews/{interview}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/opportunities/{opportunity}/interviews/{interview}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.put-opportunities-opportunity-notes-note",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-775825",
+      "operation_id": "put-opportunities-opportunity-notes-note",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/opportunities/{opportunity}/notes/{note}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/opportunities/{opportunity}/notes/{note}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.put-opportunities-opportunity-panels-panel",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-841085",
+      "operation_id": "put-opportunities-opportunity-panels-panel",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/opportunities/{opportunity}/panels/{panel}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/opportunities/{opportunity}/panels/{panel}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.put-opportunities-opportunity-stage",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-827193",
+      "operation_id": "put-opportunities-opportunity-stage",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/opportunities/{opportunity}/stage",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/opportunities/{opportunity}/stage",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.put-requisition-fields-requisition-field",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-971781",
+      "operation_id": "put-requisition-fields-requisition-field",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/requisition_fields/{requisition_field}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/requisition_fields/{requisition_field}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.put-requisition-fields-requisition-field-options",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-972497",
+      "operation_id": "put-requisition-fields-requisition-field-options",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/requisition_fields/{requisition_field}/options",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/requisition_fields/{requisition_field}/options",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.put-requisitions-requisition",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-959759",
+      "operation_id": "put-requisitions-requisition",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/requisitions/{requisition}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/requisitions/{requisition}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.put-users-user",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-1013246",
+      "operation_id": "put-users-user",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/users/{user}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/users/{user}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/lever-hiring-operation-source-lock.json",
+      "source_id": "lever-hiring.rendered.put-webhooks",
+      "source_url": "https://hire.lever.co/developer/documentation?output=1",
+      "source_location": "rendered-document-byte-1020770",
+      "operation_id": "put-webhooks",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/webhooks",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/webhooks",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://hire.lever.co/developer/documentation?output=1",
+            "notes": "Named dependency: connector-local typed operation declaration (schema, fixtures, and CLI binding) derived from this pinned provider operation."
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    }
+  ]
+}

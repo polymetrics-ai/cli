@@ -63,6 +63,18 @@ Reads Looker users, groups, folders, looks, and dashboards through the Looker AP
 - approval: none; read-only source connector
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run Looker's declared typed write actions.
+- Usage: pm looker <command> [flags]
+
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
+
 ## Commands
 
 ### Inspect as a manual

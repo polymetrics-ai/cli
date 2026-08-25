@@ -1,0 +1,1450 @@
+{
+  "schema_version": 2,
+  "connector": "dbt",
+  "source_lock": "sources/dbt-operation-source-lock.json",
+  "generated_at": "2026-08-19T16:45:02.799Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.cancel-run-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/cancel/\"].post",
+      "operation_id": "Cancel Run",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/cancel/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/runs/{run_id}/cancel/",
+          "covered_by": {
+            "write": "cancel_run"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "cancel_run"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.create-environment-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/\"].post",
+      "operation_id": "Create Environment",
+      "deprecated": true,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/environments/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/environments/",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.create-job-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/\"].post",
+      "operation_id": "Create Job",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/jobs/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/jobs/",
+          "covered_by": {
+            "write": "create_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_job"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.create-notification-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/\"].post",
+      "operation_id": "Create Notification",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/notifications/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/notifications/",
+          "covered_by": {
+            "write": "create_notification"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_notification"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.create-project-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/\"].post",
+      "operation_id": "Create Project",
+      "deprecated": true,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/projects/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/projects/",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.create-repository-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/repositories/\"].post",
+      "operation_id": "Create Repository",
+      "deprecated": true,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/repositories/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/repositories/",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.create-ssh-tunnel-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/\"].post",
+      "operation_id": "Create SSH Tunnel",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/encryptions/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/encryptions/",
+          "covered_by": {
+            "write": "create_ssh_tunnel"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_ssh_tunnel"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.destroy-environment-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].delete",
+      "operation_id": "Destroy Environment",
+      "deprecated": true,
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.destroy-job-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{id}/\"].delete",
+      "operation_id": "Destroy Job",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+          "covered_by": {
+            "write": "delete_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_job"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.destroy-notification-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/{id}/\"].delete",
+      "operation_id": "Destroy Notification",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+          "covered_by": {
+            "write": "delete_notification"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_notification"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.destroy-project-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].delete",
+      "operation_id": "Destroy Project",
+      "deprecated": true,
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.destroy-repository-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/repositories/{id}/\"].delete",
+      "operation_id": "Destroy Repository",
+      "deprecated": true,
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.destroy-ssh-tunnel-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/{id}/\"].delete",
+      "operation_id": "Destroy SSH Tunnel",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+          "covered_by": {
+            "write": "delete_ssh_tunnel"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_ssh_tunnel"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.list-account-license-allocations-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/licenses/\"].get",
+      "operation_id": "List Account License Allocations",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/licenses/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/licenses/",
+          "covered_by": {
+            "stream": "licenses"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "licenses"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.list-accounts-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/\"].get",
+      "operation_id": "List Accounts",
+      "deprecated": true,
+      "method": "GET",
+      "path": "/api/v2/accounts/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.list-environments-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/\"].get",
+      "operation_id": "List Environments",
+      "deprecated": true,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/environments/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/environments/",
+          "covered_by": {
+            "stream": "environments"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "environments"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.list-invites-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/invites/\"].get",
+      "operation_id": "List Invites",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/invites/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/invites/",
+          "covered_by": {
+            "stream": "invites"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "invites"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.list-jobs-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/\"].get",
+      "operation_id": "List Jobs",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/jobs/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/jobs/",
+          "covered_by": {
+            "stream": "jobs"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "jobs"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.list-notifications-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/\"].get",
+      "operation_id": "List Notifications",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/notifications/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/notifications/",
+          "covered_by": {
+            "stream": "notifications"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "notifications"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.list-projects-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/\"].get",
+      "operation_id": "List Projects",
+      "deprecated": true,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/projects/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/projects/",
+          "covered_by": {
+            "stream": "projects"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "projects"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.list-repositories-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/repositories/\"].get",
+      "operation_id": "List Repositories",
+      "deprecated": true,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/repositories/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/repositories/",
+          "covered_by": {
+            "stream": "repositories"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "repositories"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.list-run-artifacts-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/\"].get",
+      "operation_id": "List Run Artifacts",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.list-runs-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/\"].get",
+      "operation_id": "List Runs",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/runs/",
+          "covered_by": {
+            "stream": "runs"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "runs"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.list-ssh-tunnels-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/\"].get",
+      "operation_id": "List SSH Tunnels",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/encryptions/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/encryptions/",
+          "covered_by": {
+            "stream": "ssh_tunnels"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "ssh_tunnels"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.list-users-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/users/\"].get",
+      "operation_id": "List Users",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/users/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/users/",
+          "covered_by": {
+            "stream": "users"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "users"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.partial-update-account-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/\"].patch",
+      "operation_id": "Partial Update Account",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/api/v2/accounts/{account_id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/api/v2/accounts/{account_id}/",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.retrieve-account-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/\"].get",
+      "operation_id": "Retrieve Account",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.retrieve-environment-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].get",
+      "operation_id": "Retrieve Environment",
+      "deprecated": true,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.retrieve-invite-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/invites/{id}/\"].get",
+      "operation_id": "Retrieve Invite",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/invites/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/invites/{id}/",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.retrieve-job-artifact-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}\"].get",
+      "operation_id": "Retrieve Job Artifact",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.retrieve-job-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{id}/\"].get",
+      "operation_id": "Retrieve Job",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.retrieve-notification-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/{id}/\"].get",
+      "operation_id": "Retrieve Notification",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.retrieve-project-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].get",
+      "operation_id": "Retrieve Project",
+      "deprecated": true,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.retrieve-repository-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/repositories/{id}/\"].get",
+      "operation_id": "Retrieve Repository",
+      "deprecated": true,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.retrieve-run-artifact-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}\"].get",
+      "operation_id": "Retrieve Run Artifact",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.retrieve-run-failure-details-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/retry/\"].get",
+      "operation_id": "Retrieve Run Failure Details",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.retrieve-run-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{id}/\"].get",
+      "operation_id": "Retrieve Run",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/runs/{id}/",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.retrieve-run-step-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/steps/{id}/\"].get",
+      "operation_id": "Retrieve Run Step",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/steps/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/steps/{id}/",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.retrieve-ssh-tunnel-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/{id}/\"].get",
+      "operation_id": "Retrieve SSH Tunnel",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.retrieve-user-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/users/{id}/\"].get",
+      "operation_id": "Retrieve User",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/v2/users/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/v2/users/{id}/",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.retry-failed-job-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{job_id}/rerun/\"].post",
+      "operation_id": "Retry Failed Job",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/rerun/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/rerun/",
+          "covered_by": {
+            "write": "retry_failed_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "retry_failed_job"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.retry-run-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/retry/\"].post",
+      "operation_id": "Retry Run",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+          "covered_by": {
+            "write": "retry_run"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "retry_run"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.trigger-job-run-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{job_id}/run/\"].post",
+      "operation_id": "Trigger Job Run",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/run/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/run/",
+          "covered_by": {
+            "write": "trigger_job_run"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "trigger_job_run"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.unsubscribe-from-notifications-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/notifications/unsubscribe/\"].post",
+      "operation_id": "Unsubscribe from Notifications",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/notifications/unsubscribe/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/notifications/unsubscribe/",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.update-account-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/\"].post",
+      "operation_id": "Update Account",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.update-environment-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].post",
+      "operation_id": "Update Environment",
+      "deprecated": true,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.update-job-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{id}/\"].post",
+      "operation_id": "Update Job",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+          "covered_by": {
+            "write": "update_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_job"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.update-license-permissions-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/permissions/{id}/\"].post",
+      "operation_id": "Update License Permissions",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/permissions/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/permissions/{id}/",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.update-notification-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/{id}/\"].post",
+      "operation_id": "Update Notification",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+          "covered_by": {
+            "write": "update_notification"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_notification"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.update-project-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].post",
+      "operation_id": "Update Project",
+      "deprecated": true,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.update-ssh-tunnel-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/{id}/\"].post",
+      "operation_id": "Update SSH Tunnel",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+          "covered_by": {
+            "write": "update_ssh_tunnel"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_ssh_tunnel"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/dbt-operation-source-lock.json",
+      "source_id": "dbt.rest.update-user-source-1",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "source_location": "paths[\"/api/v2/users/{id}/\"].post",
+      "operation_id": "Update User",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/api/v2/users/{id}/",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/api/v2/users/{id}/",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    }
+  ]
+}

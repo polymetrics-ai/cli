@@ -1,0 +1,2481 @@
+{
+  "schema_version": 2,
+  "connector": "dremio",
+  "generated_at": "2026-08-19T16:45:09.939Z",
+  "source_basis": {
+    "source_lock": "sources/dremio-operation-source-lock.json",
+    "source_url": "https://docs.dremio.com/25.x/reference/api/",
+    "source_bundle": {
+      "document_count": 19,
+      "sha256": "e76f0037f9bef3c79cfc071cebe010375532c4c53b0cf8177785bfd550e4e494",
+      "bytes": 2613570
+    },
+    "source_operation_count": 49,
+    "coverage_confidence": {
+      "level": "complete-rendered-reference",
+      "basis": "Dremio's official API Reference index and every linked Reference API category page are retrieved. Their formal /api/v3 method/path declarations are extracted; the version prefix is removed only because this connector's declared base URL owns it."
+    }
+  },
+  "summary": {
+    "old_api_surface_count": 63,
+    "api_surface_rows": 49,
+    "legacy_runtime_binding_rows": 5,
+    "operations_found": 49,
+    "coverage_confidence": {
+      "level": "complete-rendered-reference",
+      "basis": "Dremio's official API Reference index and every linked Reference API category page are retrieved. Their formal /api/v3 method/path declarations are extracted; the version prefix is removed only because this connector's declared base URL owns it."
+    },
+    "enabled_operations": 11,
+    "enabled_percent": 22.45,
+    "disabled_operations": 38,
+    "documented_deletes": 11,
+    "enabled_deletes": 4,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 17
+      },
+      {
+        "key": "direct_write",
+        "count": 31
+      },
+      {
+        "key": "etl",
+        "count": 1
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 1,
+    "write_actions": 10,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "count": 31,
+        "applies_to": "reverse_etl_eligibility attribute on direct_write operations"
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 38
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-dremio",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/dremio/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-dremio",
+      "sync-transport-source-definition-dremio"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-dremio",
+        "count": 38
+      }
+    ]
+  },
+  "ledger_dispositions": [
+    {
+      "method": "DELETE",
+      "path": "/cache/authorization",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/cache/authorization",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/ldap-authorization/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.delete-cache-authorization",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/ldap-authorization/",
+        "source_location": "rendered-document-byte-2172",
+        "operation_id": "delete-cache-authorization",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-2172.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-2172."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cache/authorization/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/cache/authorization/{id}",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/ldap-authorization/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.delete-cache-authorization-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/ldap-authorization/",
+        "source_location": "rendered-document-byte-2959",
+        "operation_id": "delete-cache-authorization-id",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-2959.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-2959."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/catalog/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/catalog/{id}",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.delete-catalog-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/",
+        "source_location": "rendered-document-byte-30986",
+        "operation_id": "delete-catalog-id",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-30986.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-30986."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/external-token-providers/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/external-token-providers/{id}",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.delete-external-token-providers-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/",
+        "source_location": "rendered-document-byte-13714",
+        "operation_id": "delete-external-token-providers-id",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-13714.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-13714."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/reflection/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/reflection/{id}",
+        "covered_by": {
+          "write": "delete_reflection"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.delete-reflection-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/",
+        "source_location": "rendered-document-byte-78990",
+        "operation_id": "delete-reflection-id",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dremio/writes.json: typed write action(s) [\"delete_reflection\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "delete_reflection"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"delete_reflection\"] bind the pinned provider operation",
+        "writes": [
+          "delete_reflection"
+        ]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/role/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/role/{id}",
+        "covered_by": {
+          "write": "delete_role"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.delete-role-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/roles/",
+        "source_location": "rendered-document-byte-14094",
+        "operation_id": "delete-role-id",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dremio/writes.json: typed write action(s) [\"delete_role\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "delete_role"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"delete_role\"] bind the pinned provider operation",
+        "writes": [
+          "delete_role"
+        ]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/scripts/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/scripts/{id}",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.delete-scripts-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+        "source_location": "rendered-document-byte-16147",
+        "operation_id": "delete-scripts-id",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-16147.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-16147."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/source/{source-name}/permission-cache",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/source/{source-name}/permission-cache",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/source/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.delete-source-source-name-permission-cache",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/source/",
+        "source_location": "rendered-document-byte-2450",
+        "operation_id": "delete-source-source-name-permission-cache",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-2450.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-2450."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/token",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/token",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/token/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.delete-token",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/token/",
+        "source_location": "rendered-document-byte-1972",
+        "operation_id": "delete-token",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-1972.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-1972."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/user/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/user/{id}",
+        "covered_by": {
+          "write": "delete_user"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.delete-user-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/user/",
+        "source_location": "rendered-document-byte-15260",
+        "operation_id": "delete-user-id",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dremio/writes.json: typed write action(s) [\"delete_user\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "delete_user"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"delete_user\"] bind the pinned provider operation",
+        "writes": [
+          "delete_user"
+        ]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/user/{userName}/token/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/user/{userName}/token/{id}",
+        "covered_by": {
+          "write": "delete_personal_access_token"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.delete-user-username-token-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/token/",
+        "source_location": "rendered-document-byte-2490",
+        "operation_id": "delete-user-username-token-id",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dremio/writes.json: typed write action(s) [\"delete_personal_access_token\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "delete_personal_access_token"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"delete_personal_access_token\"] bind the pinned provider operation",
+        "writes": [
+          "delete_personal_access_token"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/catalog",
+        "covered_by": {
+          "stream": "catalog"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.get-catalog",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/",
+        "source_location": "rendered-document-byte-8099",
+        "operation_id": "get-catalog",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dremio/streams.json: existing stream \"catalog\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"catalog\" binds the pinned provider operation",
+        "stream": "catalog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/by-path/{path}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/catalog/by-path/{path}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.get-catalog-by-path-path",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/",
+        "source_location": "rendered-document-byte-19415",
+        "operation_id": "get-catalog-by-path-path",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-19415.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-19415."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/catalog/{id}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.get-catalog-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/",
+        "source_location": "rendered-document-byte-14433",
+        "operation_id": "get-catalog-id",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-14433.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-14433."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dataset/{datasetId}/reflection",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/dataset/{datasetId}/reflection",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.get-dataset-datasetid-reflection",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/",
+        "source_location": "rendered-document-byte-55071",
+        "operation_id": "get-dataset-datasetid-reflection",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-55071.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-55071."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/external-token-providers",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/external-token-providers",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.get-external-token-providers",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/",
+        "source_location": "rendered-document-byte-4157",
+        "operation_id": "get-external-token-providers",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-4157.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-4157."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/external-token-providers/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/external-token-providers/{id}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.get-external-token-providers-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/",
+        "source_location": "rendered-document-byte-8292",
+        "operation_id": "get-external-token-providers-id",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-8292.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-8292."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/job/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/job/{id}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/job/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.get-job-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/job/",
+        "source_location": "rendered-document-byte-6169",
+        "operation_id": "get-job-id",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-6169.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-6169."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/nodeCollections/blacklist",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/nodeCollections/blacklist",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/nodeCollections/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.get-nodecollections-blacklist",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/nodeCollections/",
+        "source_location": "rendered-document-byte-3401",
+        "operation_id": "get-nodecollections-blacklist",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-3401.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-3401."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reflection",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/reflection",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.get-reflection",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/",
+        "source_location": "rendered-document-byte-40058",
+        "operation_id": "get-reflection",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-40058.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-40058."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reflection/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/reflection/{id}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.get-reflection-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/",
+        "source_location": "rendered-document-byte-50838",
+        "operation_id": "get-reflection-id",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-50838.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-50838."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reflection-summary",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/reflection-summary",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/reflection-summary/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.get-reflection-summary",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/reflection-summary/",
+        "source_location": "rendered-document-byte-20084",
+        "operation_id": "get-reflection-summary",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-20084.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-20084."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/role/by-name/{name}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/role/by-name/{name}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/roles/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.get-role-by-name-name",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/roles/",
+        "source_location": "rendered-document-byte-8018",
+        "operation_id": "get-role-by-name-name",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-8018.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-8018."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/role/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/role/{id}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/roles/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.get-role-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/roles/",
+        "source_location": "rendered-document-byte-6650",
+        "operation_id": "get-role-id",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-6650.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-6650."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scripts",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/scripts",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.get-scripts",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+        "source_location": "rendered-document-byte-8167",
+        "operation_id": "get-scripts",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-8167.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-8167."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scripts/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/scripts/{id}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.get-scripts-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+        "source_location": "rendered-document-byte-12758",
+        "operation_id": "get-scripts-id",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-12758.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-12758."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scripts/{id}/grants",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/scripts/{id}/grants",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.get-scripts-id-grants",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+        "source_location": "rendered-document-byte-17971",
+        "operation_id": "get-scripts-id-grants",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-17971.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-17971."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/by-name/{name}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/user/by-name/{name}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/user/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.get-user-by-name-name",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/user/",
+        "source_location": "rendered-document-byte-10274",
+        "operation_id": "get-user-by-name-name",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-10274.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-10274."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/user/{id}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/user/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.get-user-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/user/",
+        "source_location": "rendered-document-byte-8797",
+        "operation_id": "get-user-id",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-8797.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-8797."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/external-token-providers/{id}/state",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/external-token-providers/{id}/state",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.patch-external-token-providers-id-state",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/",
+        "source_location": "rendered-document-byte-12670",
+        "operation_id": "patch-external-token-providers-id-state",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-12670.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-12670."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/role/{id}/member",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/role/{id}/member",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/roles/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.patch-role-id-member",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/roles/",
+        "source_location": "rendered-document-byte-12355",
+        "operation_id": "patch-role-id-member",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-12355.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-12355."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/scripts/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/scripts/{id}",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.patch-scripts-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+        "source_location": "rendered-document-byte-13989",
+        "operation_id": "patch-scripts-id",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-13989.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-13989."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalog",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/catalog",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.post-catalog",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/",
+        "source_location": "rendered-document-byte-10004",
+        "operation_id": "post-catalog",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-10004.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-10004."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/dataset/{id}/reflection/recommendation/{type}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/dataset/{id}/reflection/recommendation/{type}",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/datasets/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.post-dataset-id-reflection-recommendation-type",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/datasets/",
+        "source_location": "rendered-document-byte-7650",
+        "operation_id": "post-dataset-id-reflection-recommendation-type",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-7650.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-7650."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/external-token-providers",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/external-token-providers",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.post-external-token-providers",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/",
+        "source_location": "rendered-document-byte-5817",
+        "operation_id": "post-external-token-providers",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-5817.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-5817."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/nodeCollections/blacklist",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/nodeCollections/blacklist",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/nodeCollections/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.post-nodecollections-blacklist",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/nodeCollections/",
+        "source_location": "rendered-document-byte-2283",
+        "operation_id": "post-nodecollections-blacklist",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-2283.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-2283."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reflection",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/reflection",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.post-reflection",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/",
+        "source_location": "rendered-document-byte-23136",
+        "operation_id": "post-reflection",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-23136.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-23136."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reflection/{id}/refresh",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/reflection/{id}/refresh",
+        "covered_by": {
+          "write": "refresh_reflection"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.post-reflection-id-refresh",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/",
+        "source_location": "rendered-document-byte-60466",
+        "operation_id": "post-reflection-id-refresh",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dremio/writes.json: typed write action(s) [\"refresh_reflection\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "refresh_reflection"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"refresh_reflection\"] bind the pinned provider operation",
+        "writes": [
+          "refresh_reflection"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/role",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/role",
+        "covered_by": {
+          "write": "create_role"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.post-role",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/roles/",
+        "source_location": "rendered-document-byte-4281",
+        "operation_id": "post-role",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dremio/writes.json: typed write action(s) [\"create_role\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "create_role"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"create_role\"] bind the pinned provider operation",
+        "writes": [
+          "create_role"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/scripts",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/scripts",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.post-scripts",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+        "source_location": "rendered-document-byte-6298",
+        "operation_id": "post-scripts",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-6298.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-6298."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/scripts{batchDelete}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/scripts{batchDelete}",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.post-scripts-batchdelete",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+        "source_location": "rendered-document-byte-16841",
+        "operation_id": "post-scripts-batchdelete",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-16841.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-16841."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sql",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/sql",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/sql/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.post-sql",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/sql/",
+        "source_location": "rendered-document-byte-2096",
+        "operation_id": "post-sql",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-2096.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-2096."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/user",
+        "covered_by": {
+          "write": "create_user"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.post-user",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/user/",
+        "source_location": "rendered-document-byte-5482",
+        "operation_id": "post-user",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dremio/writes.json: typed write action(s) [\"create_user\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "create_user"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"create_user\"] bind the pinned provider operation",
+        "writes": [
+          "create_user"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/catalog/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/catalog/{id}",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.put-catalog-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/",
+        "source_location": "rendered-document-byte-24260",
+        "operation_id": "put-catalog-id",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-24260.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-24260."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/external-token-providers/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/external-token-providers/{id}",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.put-external-token-providers-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/",
+        "source_location": "rendered-document-byte-9554",
+        "operation_id": "put-external-token-providers-id",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-9554.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-9554."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/reflection/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/reflection/{id}",
+        "covered_by": {
+          "write": "update_reflection"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.put-reflection-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/",
+        "source_location": "rendered-document-byte-61001",
+        "operation_id": "put-reflection-id",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dremio/writes.json: typed write action(s) [\"update_reflection\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "update_reflection"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"update_reflection\"] bind the pinned provider operation",
+        "writes": [
+          "update_reflection"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/role/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/role/{id}",
+        "covered_by": {
+          "write": "update_role"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.put-role-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/roles/",
+        "source_location": "rendered-document-byte-9604",
+        "operation_id": "put-role-id",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dremio/writes.json: typed write action(s) [\"update_role\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "update_role"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"update_role\"] bind the pinned provider operation",
+        "writes": [
+          "update_role"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/scripts/{id}/grants",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/scripts/{id}/grants",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.put-scripts-id-grants",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+        "source_location": "rendered-document-byte-19343",
+        "operation_id": "put-scripts-id-grants",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dremio",
+          "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-19343.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dremio-operation-source-lock.json:rendered-document-byte-19343."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dremio",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/user/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/user/{id}",
+        "covered_by": {
+          "write": "update_user"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dremio-operation-source-lock.json",
+        "source_id": "dremio.rendered.put-user-id",
+        "source_url": "https://docs.dremio.com/25.x/reference/api/user/",
+        "source_location": "rendered-document-byte-11652",
+        "operation_id": "put-user-id",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dremio/writes.json: typed write action(s) [\"update_user\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "update_user"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"update_user\"] bind the pinned provider operation",
+        "writes": [
+          "update_user"
+        ]
+      }
+    }
+  ]
+}

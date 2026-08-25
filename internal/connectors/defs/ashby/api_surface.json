@@ -1,38 +1,10 @@
 {
   "api": "Official Ashby developer ReadMe OpenAPI 3.1 schema embedded in the public reference page",
   "docs": "https://developers.ashbyhq.com/reference",
-  "reviewed_at": "2026-08-01",
+  "reviewed_at": "2026-08-19",
   "operation_ledger_version": 1,
-  "scope": "Complete public Ashby inventory: REST operations plus OpenAPI webhook events. Supported REST read/write/direct surfaces are fixed and typed; conditional side-effect reads, multipart submissions, inbound partner/webhook, and presigned external file-transfer workflows remain blocked with source-backed reasons.",
+  "scope": "Source-surface refresh 2026-08-19: 193 provider-documented REST method+path operations are derived from the pinned source-lock inventory, not from the prior api_surface.json. Every provider operation is either bound to an existing executable declaration or recorded blocked by default.",
   "endpoints": [
-    {
-      "method": "POST",
-      "path": "/candidate.list",
-      "covered_by": {
-        "stream": "candidates"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/job.list",
-      "covered_by": {
-        "stream": "jobs"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/application.list",
-      "covered_by": {
-        "stream": "applications"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/user.list",
-      "covered_by": {
-        "stream": "users"
-      }
-    },
     {
       "method": "POST",
       "path": "/apiKey.info",
@@ -42,9 +14,37 @@
     },
     {
       "method": "POST",
-      "path": "/auditLog.list",
+      "path": "/application.addHiringTeamMember",
       "covered_by": {
-        "stream": "audit_log_list"
+        "write": "add_application_hiring_team_member"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/application.change_source",
+      "covered_by": {
+        "write": "change_application_source"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/application.change_stage",
+      "covered_by": {
+        "write": "change_application_stage"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/application.changeSource",
+      "covered_by": {
+        "write": "change_application_source_2"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/application.changeStage",
+      "covered_by": {
+        "write": "change_application_stage_2"
       }
     },
     {
@@ -52,13 +52,6 @@
       "path": "/application.create",
       "covered_by": {
         "write": "create_application"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/application.update",
-      "covered_by": {
-        "write": "update_application"
       }
     },
     {
@@ -77,65 +70,16 @@
     },
     {
       "method": "POST",
-      "path": "/application.addHiringTeamMember",
+      "path": "/application.list",
       "covered_by": {
-        "write": "add_application_hiring_team_member"
+        "stream": "applications"
       }
     },
     {
       "method": "POST",
-      "path": "/application.removeHiringTeamMember",
+      "path": "/application.listCriteriaEvaluations",
       "covered_by": {
-        "write": "remove_application_hiring_team_member"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/applicationHiringTeamRole.list",
-      "covered_by": {
-        "stream": "application_hiring_team_role_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/application.change_stage",
-      "covered_by": {
-        "write": "change_application_stage"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/application.changeStage",
-      "covered_by": {
-        "write": "change_application_stage_2"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/application.change_source",
-      "covered_by": {
-        "write": "change_application_source"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/application.changeSource",
-      "covered_by": {
-        "write": "change_application_source_2"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/application.transfer",
-      "covered_by": {
-        "write": "transfer_application"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/application.updateHistory",
-      "covered_by": {
-        "write": "update_application_history"
+        "stream": "application_list_criteria_evaluations"
       }
     },
     {
@@ -147,9 +91,30 @@
     },
     {
       "method": "POST",
-      "path": "/application.listCriteriaEvaluations",
+      "path": "/application.removeHiringTeamMember",
       "covered_by": {
-        "stream": "application_list_criteria_evaluations"
+        "write": "remove_application_hiring_team_member"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/application.transfer",
+      "covered_by": {
+        "write": "transfer_application"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/application.update",
+      "covered_by": {
+        "write": "update_application"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/application.updateHistory",
+      "covered_by": {
+        "write": "update_application_history"
       }
     },
     {
@@ -177,13 +142,26 @@
       "method": "POST",
       "path": "/applicationForm.submit",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "local_workflow",
         "status": "blocked",
-        "risk": "high",
+        "risk": "medium",
         "blocked_by_default": true,
-        "reason": "requires multipart/form-data with typed file parts for application fields; blocked pending ashby-application-form-typed-multipart-foundation because the Ashby write executor is JSON-only",
-        "source_url": "https://developers.ashbyhq.com/reference/applicationformsubmit-1",
-        "notes": "applicationForm.submit"
+        "reason": "Blocked pending ashby-application-form-typed-multipart-foundation: the documented request requires multipart form data and typed file parts, which the connector-owned declaration cannot yet model.",
+        "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationformsubmit?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/applicationHiringTeamRole.list",
+      "covered_by": {
+        "stream": "application_hiring_team_role_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/approval.list",
+      "covered_by": {
+        "stream": "approval_list"
       }
     },
     {
@@ -195,16 +173,101 @@
     },
     {
       "method": "POST",
-      "path": "/candidate.search",
+      "path": "/archiveReason.list",
       "covered_by": {
-        "direct_read": "candidate search"
+        "stream": "archive_reason_list"
       }
     },
     {
       "method": "POST",
-      "path": "/candidate.info",
+      "path": "/assessment.addCompletedToCandidate",
       "covered_by": {
-        "stream": "candidate_info"
+        "write": "add_assessment_completed_to_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/assessment.cancel",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/assessmentcancel?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/assessment.list",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/assessmentlist-implemented-by-partner?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/assessment.start",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/assessmentstart?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/assessment.update",
+      "covered_by": {
+        "write": "update_assessment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auditLog.list",
+      "covered_by": {
+        "stream": "audit_log_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/brand.list",
+      "covered_by": {
+        "stream": "brand_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidate.addEmailMessage",
+      "covered_by": {
+        "write": "add_candidate_email_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidate.addProject",
+      "covered_by": {
+        "write": "add_candidate_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidate.addTag",
+      "covered_by": {
+        "write": "add_candidate_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidate.anonymize",
+      "covered_by": {
+        "write": "anonymize_candidate"
       }
     },
     {
@@ -216,30 +279,35 @@
     },
     {
       "method": "POST",
-      "path": "/candidate.uploadResume",
-      "covered_by": {
-        "write": "upload_candidate_resume"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/candidate.uploadFile",
-      "covered_by": {
-        "write": "upload_candidate_file"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/candidate.update",
-      "covered_by": {
-        "write": "update_candidate"
-      }
-    },
-    {
-      "method": "POST",
       "path": "/candidate.createNote",
       "covered_by": {
         "write": "create_candidate_note"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidate.getRecentEmailMessages",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidategetrecentemailmessages?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidate.info",
+      "covered_by": {
+        "stream": "candidate_info"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidate.list",
+      "covered_by": {
+        "stream": "candidates"
       }
     },
     {
@@ -258,58 +326,9 @@
     },
     {
       "method": "POST",
-      "path": "/candidate.setFraudStatus",
-      "covered_by": {
-        "write": "set_candidate_fraud_status"
-      }
-    },
-    {
-      "method": "POST",
       "path": "/candidate.listNotes",
       "covered_by": {
         "stream": "candidate_list_notes"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/candidate.anonymize",
-      "covered_by": {
-        "write": "anonymize_candidate"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/candidate.removeProject",
-      "covered_by": {
-        "write": "remove_candidate_project"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/candidate.addProject",
-      "covered_by": {
-        "write": "add_candidate_project"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/candidate.addEmailMessage",
-      "covered_by": {
-        "write": "add_candidate_email_message"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/candidate.addTag",
-      "covered_by": {
-        "write": "add_candidate_tag"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/candidate.removeTag",
-      "covered_by": {
-        "write": "remove_candidate_tag"
       }
     },
     {
@@ -328,9 +347,63 @@
     },
     {
       "method": "POST",
-      "path": "/candidateTag.create",
+      "path": "/candidate.removeProject",
       "covered_by": {
-        "write": "create_candidate_tag"
+        "write": "remove_candidate_project"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidate.removeTag",
+      "covered_by": {
+        "write": "remove_candidate_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidate.search",
+      "covered_by": {
+        "direct_read": "candidate search"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidate.searchSuggestions",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidatesearchsuggestions?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidate.setFraudStatus",
+      "covered_by": {
+        "write": "set_candidate_fraud_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidate.update",
+      "covered_by": {
+        "write": "update_candidate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidate.uploadFile",
+      "covered_by": {
+        "write": "upload_candidate_file"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidate.uploadResume",
+      "covered_by": {
+        "write": "upload_candidate_resume"
       }
     },
     {
@@ -342,9 +415,23 @@
     },
     {
       "method": "POST",
+      "path": "/candidateTag.create",
+      "covered_by": {
+        "write": "create_candidate_tag"
+      }
+    },
+    {
+      "method": "POST",
       "path": "/candidateTag.list",
       "covered_by": {
         "stream": "candidate_tag_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/closeReason.list",
+      "covered_by": {
+        "stream": "close_reason_list"
       }
     },
     {
@@ -356,114 +443,56 @@
     },
     {
       "method": "POST",
-      "path": "/feedbackFormDefinition.list",
+      "path": "/customField.create",
       "covered_by": {
-        "stream": "feedback_form_definition_list"
+        "write": "create_custom_field"
       }
     },
     {
       "method": "POST",
-      "path": "/feedbackFormDefinition.info",
+      "path": "/customField.info",
       "covered_by": {
-        "stream": "feedback_form_definition_info"
+        "stream": "custom_field_info"
       }
     },
     {
       "method": "POST",
-      "path": "/jobPosting.list",
+      "path": "/customField.list",
       "covered_by": {
-        "stream": "job_posting_list"
+        "stream": "custom_field_list"
       }
     },
     {
       "method": "POST",
-      "path": "/jobPosting.info",
+      "path": "/customField.setValue",
       "covered_by": {
-        "stream": "job_posting_info"
+        "write": "set_custom_field_value"
       }
     },
     {
       "method": "POST",
-      "path": "/jobPosting.updateCompensation",
+      "path": "/customField.setValues",
       "covered_by": {
-        "write": "update_job_posting_compensation"
+        "write": "set_custom_field_values"
       }
     },
     {
       "method": "POST",
-      "path": "/jobPosting.update",
+      "path": "/customField.updateSelectableValues",
       "covered_by": {
-        "write": "update_job_posting"
+        "write": "update_custom_field_selectable_values"
       }
     },
     {
       "method": "POST",
-      "path": "/jobPosting.setStatus",
-      "covered_by": {
-        "write": "set_job_posting_status"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/job.info",
-      "covered_by": {
-        "stream": "job_info"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/job.create",
-      "covered_by": {
-        "write": "create_job"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/job.update",
-      "covered_by": {
-        "write": "update_job"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/job.updateCompensation",
-      "covered_by": {
-        "write": "update_job_compensation"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/job.search",
-      "covered_by": {
-        "direct_read": "job search"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/job.setStatus",
-      "covered_by": {
-        "write": "set_job_status"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/jobBoard.list",
-      "covered_by": {
-        "stream": "job_board_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/jobInterviewPlan.info",
-      "covered_by": {
-        "stream": "job_interview_plan_info"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/jobTemplate.list",
-      "covered_by": {
-        "stream": "job_template_list"
+      "path": "/customFields.fetch",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/assessmentpartnercustomfieldsfetch?reduce=false"
       }
     },
     {
@@ -471,13 +500,6 @@
       "path": "/department.archive",
       "covered_by": {
         "write": "archive_department"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/department.restore",
-      "covered_by": {
-        "write": "restore_department"
       }
     },
     {
@@ -510,6 +532,13 @@
     },
     {
       "method": "POST",
+      "path": "/department.restore",
+      "covered_by": {
+        "write": "restore_department"
+      }
+    },
+    {
+      "method": "POST",
       "path": "/department.update",
       "covered_by": {
         "write": "update_department"
@@ -517,352 +546,42 @@
     },
     {
       "method": "POST",
-      "path": "/location.archive",
+      "path": "/emailSender.list",
       "covered_by": {
-        "write": "archive_location"
+        "stream": "email_sender_list"
       }
     },
     {
       "method": "POST",
-      "path": "/location.create",
+      "path": "/feedbackFormDefinition.info",
       "covered_by": {
-        "write": "create_location"
+        "stream": "feedback_form_definition_info"
       }
     },
     {
       "method": "POST",
-      "path": "/location.restore",
+      "path": "/feedbackFormDefinition.list",
       "covered_by": {
-        "write": "restore_location"
+        "stream": "feedback_form_definition_list"
       }
     },
     {
       "method": "POST",
-      "path": "/location.list",
-      "covered_by": {
-        "stream": "location_list"
+      "path": "/file.createFileUploadHandle",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/filecreatefileuploadhandle?reduce=false"
       }
     },
     {
       "method": "POST",
-      "path": "/location.info",
+      "path": "/file.info",
       "covered_by": {
-        "stream": "location_info"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/location.move",
-      "covered_by": {
-        "write": "move_location"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/location.updateAddress",
-      "covered_by": {
-        "write": "update_location_address"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/location.updateName",
-      "covered_by": {
-        "write": "update_location_name"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/location.updateWorkplaceType",
-      "covered_by": {
-        "write": "update_location_workplace_type"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/location.updateExternalName",
-      "covered_by": {
-        "write": "update_location_external_name"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/interviewPlan.list",
-      "covered_by": {
-        "stream": "interview_plan_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/interviewStage.list",
-      "covered_by": {
-        "stream": "interview_stage_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/interviewStageGroup.list",
-      "covered_by": {
-        "stream": "interview_stage_group_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/notetakerTranscript.info",
-      "covered_by": {
-        "direct_read": "notetaker-transcript info"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/offer.approve",
-      "covered_by": {
-        "write": "approve_offer"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/offer.create",
-      "covered_by": {
-        "write": "create_offer"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/offer.list",
-      "covered_by": {
-        "stream": "offer_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/offer.info",
-      "covered_by": {
-        "stream": "offer_info"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/offer.start",
-      "covered_by": {
-        "write": "start_offer"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/offer.startApprovalProcess",
-      "covered_by": {
-        "write": "start_offer_approval_process"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/offer.update",
-      "covered_by": {
-        "write": "update_offer"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/offer.setStatus",
-      "covered_by": {
-        "write": "set_offer_status"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/offer.setDecidedAt",
-      "covered_by": {
-        "write": "set_offer_decided_at"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/offerProcess.start",
-      "covered_by": {
-        "write": "start_offer_process"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/opening.info",
-      "covered_by": {
-        "stream": "opening_info"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/opening.create",
-      "covered_by": {
-        "write": "create_opening"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/opening.update",
-      "covered_by": {
-        "write": "update_opening"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/opening.setArchived",
-      "covered_by": {
-        "write": "set_opening_archived"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/opening.setOpeningState",
-      "covered_by": {
-        "write": "set_opening_opening_state"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/opening.addJob",
-      "covered_by": {
-        "write": "add_opening_job"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/opening.removeJob",
-      "covered_by": {
-        "write": "remove_opening_job"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/opening.addLocation",
-      "covered_by": {
-        "write": "add_opening_location"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/opening.removeLocation",
-      "covered_by": {
-        "write": "remove_opening_location"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/opening.list",
-      "covered_by": {
-        "stream": "opening_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/opening.search",
-      "covered_by": {
-        "direct_read": "opening search"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/project.info",
-      "covered_by": {
-        "stream": "project_info"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/project.list",
-      "covered_by": {
-        "stream": "project_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/project.search",
-      "covered_by": {
-        "direct_read": "project search"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/source.list",
-      "covered_by": {
-        "stream": "source_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/sourceTrackingLink.list",
-      "covered_by": {
-        "stream": "source_tracking_link_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/archiveReason.list",
-      "covered_by": {
-        "stream": "archive_reason_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/brand.list",
-      "covered_by": {
-        "stream": "brand_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/customField.list",
-      "covered_by": {
-        "stream": "custom_field_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/customField.create",
-      "covered_by": {
-        "write": "create_custom_field"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/customField.setValue",
-      "covered_by": {
-        "write": "set_custom_field_value"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/customField.info",
-      "covered_by": {
-        "stream": "custom_field_info"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/customField.setValues",
-      "covered_by": {
-        "write": "set_custom_field_values"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/customField.updateSelectableValues",
-      "covered_by": {
-        "write": "update_custom_field_selectable_values"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/assessment.update",
-      "covered_by": {
-        "write": "update_assessment"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/assessment.addCompletedToCandidate",
-      "covered_by": {
-        "write": "add_assessment_completed_to_candidate"
+        "direct_read": "file info"
       }
     },
     {
@@ -888,65 +607,540 @@
     },
     {
       "method": "POST",
-      "path": "/user.info",
+      "path": "/interview.info",
       "covered_by": {
-        "stream": "user_info"
+        "stream": "interview_info"
       }
     },
     {
       "method": "POST",
-      "path": "/user.search",
+      "path": "/interview.list",
       "covered_by": {
-        "direct_read": "user search"
+        "stream": "interview_list"
       }
     },
     {
       "method": "POST",
-      "path": "/user.interviewerSettings",
+      "path": "/interviewBriefing.info",
       "covered_by": {
-        "direct_read": "user interviewer-settings"
+        "stream": "interview_briefing_info"
       }
     },
     {
       "method": "POST",
-      "path": "/user.updateInterviewerSettings",
+      "path": "/interviewerPool.addUser",
       "covered_by": {
-        "write": "update_user_interviewer_settings"
+        "write": "add_interviewer_pool_user"
       }
     },
     {
       "method": "POST",
-      "path": "/user.createInterviewerPause",
+      "path": "/interviewerPool.archive",
       "covered_by": {
-        "write": "create_user_interviewer_pause"
+        "write": "archive_interviewer_pool"
       }
     },
     {
       "method": "POST",
-      "path": "/user.listInterviewerPauses",
+      "path": "/interviewerPool.create",
       "covered_by": {
-        "stream": "user_list_interviewer_pauses"
+        "write": "create_interviewer_pool"
       }
     },
     {
       "method": "POST",
-      "path": "/user.deleteInterviewerPause",
+      "path": "/interviewerPool.info",
       "covered_by": {
-        "write": "delete_user_interviewer_pause"
+        "stream": "interviewer_pool_info"
       }
     },
     {
       "method": "POST",
-      "path": "/user.setCustomFieldValue",
+      "path": "/interviewerPool.list",
       "covered_by": {
-        "write": "set_user_custom_field_value"
+        "stream": "interviewer_pool_list"
       }
     },
     {
       "method": "POST",
-      "path": "/user.setCustomFieldValues",
+      "path": "/interviewerPool.removeUser",
       "covered_by": {
-        "write": "set_user_custom_field_values"
+        "write": "remove_interviewer_pool_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/interviewerPool.restore",
+      "covered_by": {
+        "write": "restore_interviewer_pool"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/interviewerPool.update",
+      "covered_by": {
+        "write": "update_interviewer_pool"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/interviewEvent.list",
+      "covered_by": {
+        "stream": "interview_event_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/interviewPlan.list",
+      "covered_by": {
+        "stream": "interview_plan_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/interviewSchedule.cancel",
+      "covered_by": {
+        "write": "cancel_interview_schedule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/interviewSchedule.create",
+      "covered_by": {
+        "write": "create_interview_schedule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/interviewSchedule.list",
+      "covered_by": {
+        "stream": "interview_schedule_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/interviewSchedule.update",
+      "covered_by": {
+        "write": "update_interview_schedule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/interviewStage.info",
+      "covered_by": {
+        "stream": "interview_stage_info"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/interviewStage.list",
+      "covered_by": {
+        "stream": "interview_stage_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/interviewStageGroup.list",
+      "covered_by": {
+        "stream": "interview_stage_group_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/job.create",
+      "covered_by": {
+        "write": "create_job"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/job.info",
+      "covered_by": {
+        "stream": "job_info"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/job.list",
+      "covered_by": {
+        "stream": "jobs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/job.search",
+      "covered_by": {
+        "direct_read": "job search"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/job.setStatus",
+      "covered_by": {
+        "write": "set_job_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/job.startApprovalProcess",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobstartapprovalprocess?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/job.update",
+      "covered_by": {
+        "write": "update_job"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/job.updateCompensation",
+      "covered_by": {
+        "write": "update_job_compensation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/job.updateCompensationSettings",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobupdatecompensationsettings?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/jobBoard.list",
+      "covered_by": {
+        "stream": "job_board_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/jobInterviewPlan.info",
+      "covered_by": {
+        "stream": "job_interview_plan_info"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/jobPosting.create",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobpostingcreate?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/jobPosting.info",
+      "covered_by": {
+        "stream": "job_posting_info"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/jobPosting.list",
+      "covered_by": {
+        "stream": "job_posting_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/jobPosting.setStatus",
+      "covered_by": {
+        "write": "set_job_posting_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/jobPosting.update",
+      "covered_by": {
+        "write": "update_job_posting"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/jobPosting.updateCompensation",
+      "covered_by": {
+        "write": "update_job_posting_compensation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/jobPosting.updateCompensationSettings",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobpostingupdatecompensationsettings?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/jobTemplate.list",
+      "covered_by": {
+        "stream": "job_template_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/location.archive",
+      "covered_by": {
+        "write": "archive_location"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/location.create",
+      "covered_by": {
+        "write": "create_location"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/location.info",
+      "covered_by": {
+        "stream": "location_info"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/location.list",
+      "covered_by": {
+        "stream": "location_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/location.move",
+      "covered_by": {
+        "write": "move_location"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/location.restore",
+      "covered_by": {
+        "write": "restore_location"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/location.updateAddress",
+      "covered_by": {
+        "write": "update_location_address"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/location.updateExternalName",
+      "covered_by": {
+        "write": "update_location_external_name"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/location.updateName",
+      "covered_by": {
+        "write": "update_location_name"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/location.updateWorkplaceType",
+      "covered_by": {
+        "write": "update_location_workplace_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/notetakerTranscript.info",
+      "covered_by": {
+        "direct_read": "notetaker-transcript info"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/offer.approve",
+      "covered_by": {
+        "write": "approve_offer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/offer.create",
+      "covered_by": {
+        "write": "create_offer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/offer.info",
+      "covered_by": {
+        "stream": "offer_info"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/offer.list",
+      "covered_by": {
+        "stream": "offer_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/offer.setDecidedAt",
+      "covered_by": {
+        "write": "set_offer_decided_at"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/offer.setStatus",
+      "covered_by": {
+        "write": "set_offer_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/offer.start",
+      "covered_by": {
+        "write": "start_offer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/offer.startApprovalProcess",
+      "covered_by": {
+        "write": "start_offer_approval_process"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/offer.update",
+      "covered_by": {
+        "write": "update_offer"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/offerProcess.start",
+      "covered_by": {
+        "write": "start_offer_process"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opening.addJob",
+      "covered_by": {
+        "write": "add_opening_job"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opening.addLocation",
+      "covered_by": {
+        "write": "add_opening_location"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opening.create",
+      "covered_by": {
+        "write": "create_opening"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opening.info",
+      "covered_by": {
+        "stream": "opening_info"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opening.list",
+      "covered_by": {
+        "stream": "opening_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opening.removeJob",
+      "covered_by": {
+        "write": "remove_opening_job"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opening.removeLocation",
+      "covered_by": {
+        "write": "remove_opening_location"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opening.search",
+      "covered_by": {
+        "direct_read": "opening search"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opening.setArchived",
+      "covered_by": {
+        "write": "set_opening_archived"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opening.setOpeningState",
+      "covered_by": {
+        "write": "set_opening_opening_state"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opening.update",
+      "covered_by": {
+        "write": "update_opening"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/project.info",
+      "covered_by": {
+        "stream": "project_info"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/project.list",
+      "covered_by": {
+        "stream": "project_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/project.search",
+      "covered_by": {
+        "direct_read": "project search"
       }
     },
     {
@@ -958,22 +1152,52 @@
     },
     {
       "method": "POST",
-      "path": "/referralForm.info",
+      "path": "/referral.delete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "local_workflow",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "fetches the default referral form but conditionally creates one when absent; blocked pending ashby-referral-form-info-side-effect-foundation so an apparent read cannot mutate Ashby without a typed confirmation path",
-        "source_url": "https://developers.ashbyhq.com/reference/referralforminfo",
-        "notes": "referralForm.info"
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/referraldelete?reduce=false"
       }
     },
     {
       "method": "POST",
-      "path": "/emailSender.list",
+      "path": "/referral.list",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/referrallist?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/referralForm.info",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Blocked pending ashby-referral-form-info-side-effect-foundation: the documented operation may create a default referral form as a side effect.",
+        "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/referralforminfo?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/report.generate",
       "covered_by": {
-        "stream": "email_sender_list"
+        "direct_read": "report generate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/report.synchronous",
+      "covered_by": {
+        "stream": "report_synchronous"
       }
     },
     {
@@ -1013,16 +1237,16 @@
     },
     {
       "method": "POST",
-      "path": "/sequence.updateStage",
+      "path": "/sequence.start",
       "covered_by": {
-        "write": "update_sequence_stage"
+        "write": "start_sequence"
       }
     },
     {
       "method": "POST",
-      "path": "/sequence.start",
+      "path": "/sequence.updateStage",
       "covered_by": {
-        "write": "start_sequence"
+        "write": "update_sequence_stage"
       }
     },
     {
@@ -1041,99 +1265,16 @@
     },
     {
       "method": "POST",
-      "path": "/interviewSchedule.list",
+      "path": "/source.list",
       "covered_by": {
-        "stream": "interview_schedule_list"
+        "stream": "source_list"
       }
     },
     {
       "method": "POST",
-      "path": "/interviewSchedule.create",
+      "path": "/sourceTrackingLink.list",
       "covered_by": {
-        "write": "create_interview_schedule"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/interviewSchedule.update",
-      "covered_by": {
-        "write": "update_interview_schedule"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/interviewSchedule.cancel",
-      "covered_by": {
-        "write": "cancel_interview_schedule"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/takeHomeAssignment.list",
-      "covered_by": {
-        "stream": "take_home_assignment_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/takeHomeAssignment.info",
-      "covered_by": {
-        "stream": "take_home_assignment_info"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/interviewEvent.list",
-      "covered_by": {
-        "stream": "interview_event_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/interviewBriefing.info",
-      "covered_by": {
-        "stream": "interview_briefing_info"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/interview.info",
-      "covered_by": {
-        "stream": "interview_info"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/interview.list",
-      "covered_by": {
-        "stream": "interview_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/interviewStage.info",
-      "covered_by": {
-        "stream": "interview_stage_info"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/file.createFileUploadHandle",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "creates a presigned upload workflow whose useful result is an external file-transfer URL; blocked until a reviewed bounded binary/file workflow can return and consume the handle without exposing raw file passthrough",
-        "source_url": "https://developers.ashbyhq.com/reference/filecreatefileuploadhandle",
-        "notes": "file.createFileUploadHandle"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/file.info",
-      "covered_by": {
-        "direct_read": "file info"
+        "stream": "source_tracking_link_list"
       }
     },
     {
@@ -1180,9 +1321,100 @@
     },
     {
       "method": "POST",
+      "path": "/takeHomeAssignment.info",
+      "covered_by": {
+        "stream": "take_home_assignment_info"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/takeHomeAssignment.list",
+      "covered_by": {
+        "stream": "take_home_assignment_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user.createInterviewerPause",
+      "covered_by": {
+        "write": "create_user_interviewer_pause"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user.deleteInterviewerPause",
+      "covered_by": {
+        "write": "delete_user_interviewer_pause"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user.info",
+      "covered_by": {
+        "stream": "user_info"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user.interviewerSettings",
+      "covered_by": {
+        "direct_read": "user interviewer-settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user.list",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user.listInterviewerPauses",
+      "covered_by": {
+        "stream": "user_list_interviewer_pauses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user.search",
+      "covered_by": {
+        "direct_read": "user search"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user.setCustomFieldValue",
+      "covered_by": {
+        "write": "set_user_custom_field_value"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user.setCustomFieldValues",
+      "covered_by": {
+        "write": "set_user_custom_field_values"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user.updateInterviewerSettings",
+      "covered_by": {
+        "write": "update_user_interviewer_settings"
+      }
+    },
+    {
+      "method": "POST",
       "path": "/webhook.create",
       "covered_by": {
         "write": "create_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhook.delete",
+      "covered_by": {
+        "write": "delete_webhook"
       }
     },
     {
@@ -1197,500 +1429,6 @@
       "path": "/webhook.update",
       "covered_by": {
         "write": "update_webhook"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/webhook.delete",
-      "covered_by": {
-        "write": "delete_webhook"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/interviewerPool.list",
-      "covered_by": {
-        "stream": "interviewer_pool_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/interviewerPool.info",
-      "covered_by": {
-        "stream": "interviewer_pool_info"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/interviewerPool.archive",
-      "covered_by": {
-        "write": "archive_interviewer_pool"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/interviewerPool.restore",
-      "covered_by": {
-        "write": "restore_interviewer_pool"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/interviewerPool.create",
-      "covered_by": {
-        "write": "create_interviewer_pool"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/interviewerPool.update",
-      "covered_by": {
-        "write": "update_interviewer_pool"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/interviewerPool.addUser",
-      "covered_by": {
-        "write": "add_interviewer_pool_user"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/interviewerPool.removeUser",
-      "covered_by": {
-        "write": "remove_interviewer_pool_user"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/closeReason.list",
-      "covered_by": {
-        "stream": "close_reason_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/report.generate",
-      "covered_by": {
-        "direct_read": "report generate"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/report.synchronous",
-      "covered_by": {
-        "stream": "report_synchronous"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/approval.list",
-      "covered_by": {
-        "stream": "approval_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/assessment.list",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI marks this as implemented by an assessment partner and called by Ashby; the CLI connector is a client of Ashby, not an inbound partner API server",
-        "source_url": "https://developers.ashbyhq.com/reference/assessmentlist",
-        "notes": "assessment.list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/assessment.start",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI marks this as implemented by an assessment partner and called by Ashby; the CLI connector is a client of Ashby, not an inbound partner API server",
-        "source_url": "https://developers.ashbyhq.com/reference/assessmentstart",
-        "notes": "assessment.start"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/assessment.cancel",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI marks this as implemented by an assessment partner and called by Ashby; the CLI connector is a client of Ashby, not an inbound partner API server",
-        "source_url": "https://developers.ashbyhq.com/reference/assessmentcancel",
-        "notes": "assessment.cancel"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/customFields.fetch",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI marks this as implemented by an assessment partner and called by Ashby; the CLI connector is a client of Ashby, not an inbound partner API server",
-        "source_url": "https://developers.ashbyhq.com/reference/assessmentpartnercustomfieldsfetch",
-        "notes": "customFields.fetch"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:applicationSubmit",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/applicationsubmitwebhook",
-        "notes": "applicationSubmit"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:applicationUpdate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/applicationupdatewebhook",
-        "notes": "applicationUpdate"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:candidateHire",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidatehirewebhook",
-        "notes": "candidateHire"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:candidateStageChange",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidatestagechangewebhook",
-        "notes": "candidateStageChange"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:candidateDelete",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidatedeletewebhook",
-        "notes": "candidateDelete"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:candidateMerge",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidatemergewebhook",
-        "notes": "candidateMerge"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:interviewPlanTransition",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/interviewplantransitionwebhook",
-        "notes": "interviewPlanTransition"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:interviewScheduleCreate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/interviewschedulecreatewebhook",
-        "notes": "interviewScheduleCreate"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:interviewScheduleUpdate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/interviewscheduleupdatewebhook",
-        "notes": "interviewScheduleUpdate"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:jobCreate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/jobcreatewebhook",
-        "notes": "jobCreate"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:jobUpdate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/jobupdatewebhook",
-        "notes": "jobUpdate"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:jobPostingDelete",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/jobpostingdeletewebhook",
-        "notes": "jobPostingDelete"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:jobPostingUpdate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/jobpostingupdatewebhook",
-        "notes": "jobPostingUpdate"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:jobPostingPublish",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/jobpostingpublishwebhook",
-        "notes": "jobPostingPublish"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:jobPostingUnpublish",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/jobpostingunpublishwebhook",
-        "notes": "jobPostingUnpublish"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:offerCreate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/offercreatewebhook",
-        "notes": "offerCreate"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:offerDelete",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/offerdeletewebhook",
-        "notes": "offerDelete"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:offerUpdate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/offerupdatewebhook",
-        "notes": "offerUpdate"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:openingCreate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/openingcreatewebhook",
-        "notes": "openingCreate"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:pushToHRIS",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/pushtohriswebhook",
-        "notes": "pushToHRIS"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:ping",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/pingwebhook",
-        "notes": "ping"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:signatureRequestUpdate",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/signaturerequestupdatewebhook",
-        "notes": "signatureRequestUpdate"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:surveySubmit",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/surveysubmitwebhook",
-        "notes": "surveySubmit"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:takeHomeAssignmentAssigned",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/takehomeassignmentassignedwebhook",
-        "notes": "takeHomeAssignmentAssigned"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:takeHomeAssignmentCancelled",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/takehomeassignmentcancelledwebhook",
-        "notes": "takeHomeAssignmentCancelled"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:takeHomeAssignmentCompleted",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/takehomeassignmentcompletedwebhook",
-        "notes": "takeHomeAssignmentCompleted"
-      }
-    },
-    {
-      "method": "WEBHOOK",
-      "path": "webhook:takeHomeAssignmentSubmitted",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/takehomeassignmentsubmittedwebhook",
-        "notes": "takeHomeAssignmentSubmitted"
       }
     }
   ]

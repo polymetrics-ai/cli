@@ -1,0 +1,9 @@
+{
+  "schema_version": 2,
+  "connector": "adobe-commerce-magento",
+  "state": "dynamic",
+  "source_lock": "sources/adobe-commerce-magento-operation-source-lock.json",
+  "generated_at": "2026-08-19T16:46:17.504Z",
+  "reason": "dynamic-instance-dependent",
+  "source_operations": []
+}

@@ -1,0 +1,113 @@
+{
+  "tagline": "Run Adobe Commerce (Magento)'s declared typed write actions.",
+  "usage": "pm adobe-commerce-magento <command> [flags]",
+  "groups": [
+    {
+      "id": "reverse_etl",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "cancel order apply",
+        "create category apply",
+        "update category apply",
+        "update product apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "cancel order apply",
+      "summary": "Typed action cancel_order",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "cancel_order",
+      "flags": [
+        {
+          "name": "entity-id",
+          "type": "integer",
+          "summary": "Required entity_id record field.",
+          "maps_to": "record.entity_id",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; irreversibly cancels a live Magento sales order; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /orders/{entity_id}/cancel disagrees with covered api_surface path /rest/V1/orders/{id}/cancel.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /orders/{entity_id}/cancel disagrees with covered api_surface path /rest/V1/orders/{id}/cancel.",
+      "examples": [
+        "pm adobe-commerce-magento cancel order apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create category apply",
+      "summary": "Typed action create_category",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_category",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "parent-id",
+          "type": "integer",
+          "summary": "Required parent_id record field.",
+          "maps_to": "record.parent_id",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; creates a live Magento catalog category; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /categories disagrees with covered api_surface path /rest/V1/categories.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /categories disagrees with covered api_surface path /rest/V1/categories.",
+      "examples": [
+        "pm adobe-commerce-magento create category apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update category apply",
+      "summary": "Typed action update_category",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_category",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; overwrites live Magento catalog category fields; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /categories/{id} disagrees with covered api_surface path /rest/V1/categories/{id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /categories/{id} disagrees with covered api_surface path /rest/V1/categories/{id}.",
+      "examples": [
+        "pm adobe-commerce-magento update category apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update product apply",
+      "summary": "Typed action update_product",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_product",
+      "flags": [
+        {
+          "name": "sku",
+          "type": "string",
+          "summary": "Required sku record field.",
+          "maps_to": "record.sku",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; overwrites live Magento catalog product fields; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /products/{sku} disagrees with covered api_surface path /rest/V1/products/{sku}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /products/{sku} disagrees with covered api_surface path /rest/V1/products/{sku}.",
+      "examples": [
+        "pm adobe-commerce-magento update product apply --plan <plan-name>"
+      ]
+    }
+  ]
+}

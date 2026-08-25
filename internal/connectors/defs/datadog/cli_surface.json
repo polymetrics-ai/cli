@@ -1,0 +1,860 @@
+{
+  "tagline": "Run Datadog's declared typed write actions.",
+  "usage": "pm datadog <command> [flags]",
+  "groups": [
+    {
+      "id": "reverse_etl",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "cancel downtime apply",
+        "create api key apply",
+        "create dashboard apply",
+        "create dashboard list apply",
+        "create downtime apply",
+        "create event apply",
+        "create monitor apply",
+        "create notebook apply",
+        "create slo apply",
+        "create synthetics api test apply",
+        "create user apply",
+        "delete api key apply",
+        "delete dashboard apply",
+        "delete dashboard list apply",
+        "delete monitor apply",
+        "delete notebook apply",
+        "delete slo apply",
+        "disable user apply",
+        "update api key apply",
+        "update dashboard apply",
+        "update dashboard list apply",
+        "update downtime apply",
+        "update monitor apply",
+        "update notebook apply",
+        "update slo apply",
+        "update synthetics api test apply",
+        "update user apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "cancel downtime apply",
+      "summary": "Typed action cancel_downtime",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "cancel_downtime",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "cancels a scheduled/active downtime; alerting resumes immediately for its scope, approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/v1/downtime/{id} disagrees with covered api_surface path /api/v1/downtime/{downtime_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/v1/downtime/{id} disagrees with covered api_surface path /api/v1/downtime/{downtime_id}.",
+      "examples": [
+        "pm datadog cancel downtime apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create api key apply",
+      "summary": "POST /api/v1/api_key (create_api_key)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_api_key",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/api_key"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "creates a new organization API key with full agent-submission scope; a newly-minted long-lived credential, approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm datadog create api key apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create dashboard apply",
+      "summary": "POST /api/v1/dashboard (create_dashboard)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_dashboard",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/dashboard"
+        }
+      ],
+      "flags": [
+        {
+          "name": "layout-type",
+          "type": "string",
+          "summary": "Required layout_type record field.",
+          "maps_to": "record.layout_type",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        },
+        {
+          "name": "widgets",
+          "type": "json",
+          "summary": "Required widgets record field.",
+          "maps_to": "record.widgets",
+          "required": true
+        }
+      ],
+      "risk": "creates a new dashboard; low-risk external mutation, no approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm datadog create dashboard apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create dashboard list apply",
+      "summary": "POST /api/v1/dashboard/lists/manual (create_dashboard_list)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_dashboard_list",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/dashboard/lists/manual"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "creates a new dashboard list (folder); low-risk external mutation, no approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm datadog create dashboard list apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create downtime apply",
+      "summary": "POST /api/v1/downtime (create_downtime)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_downtime",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/downtime"
+        }
+      ],
+      "flags": [
+        {
+          "name": "scope",
+          "type": "json",
+          "summary": "Required scope record field.",
+          "maps_to": "record.scope",
+          "required": true
+        }
+      ],
+      "risk": "schedules a downtime that silences monitor alerts for the given scope; suppresses real alerting during the window, approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm datadog create downtime apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create event apply",
+      "summary": "POST /api/v1/events (create_event)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_event",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/events"
+        }
+      ],
+      "flags": [
+        {
+          "name": "text",
+          "type": "string",
+          "summary": "Required text record field.",
+          "maps_to": "record.text",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "risk": "posts a custom event into the Datadog event stream; low-risk external mutation, no approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm datadog create event apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create monitor apply",
+      "summary": "POST /api/v1/monitor (create_monitor)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_monitor",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/monitor"
+        }
+      ],
+      "flags": [
+        {
+          "name": "message",
+          "type": "string",
+          "summary": "Required message record field.",
+          "maps_to": "record.message",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "summary": "Required query record field.",
+          "maps_to": "record.query",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "risk": "creates a new alerting monitor; low-risk external mutation, no approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm datadog create monitor apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create notebook apply",
+      "summary": "POST /api/v1/notebooks (create_notebook)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_notebook",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/notebooks"
+        }
+      ],
+      "flags": [
+        {
+          "name": "cells",
+          "type": "json",
+          "summary": "Required cells record field.",
+          "maps_to": "record.cells",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "time",
+          "type": "json",
+          "summary": "Required time record field.",
+          "maps_to": "record.time",
+          "required": true
+        }
+      ],
+      "risk": "creates a new notebook; low-risk external mutation, no approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm datadog create notebook apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create slo apply",
+      "summary": "POST /api/v1/slo (create_slo)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_slo",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/slo"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "thresholds",
+          "type": "json",
+          "summary": "Required thresholds record field.",
+          "maps_to": "record.thresholds",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "risk": "creates a new SLO target; low-risk external mutation, no approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm datadog create slo apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create synthetics api test apply",
+      "summary": "POST /api/v1/synthetics/tests/api (create_synthetics_api_test)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_synthetics_api_test",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/synthetics/tests/api"
+        }
+      ],
+      "flags": [
+        {
+          "name": "config",
+          "type": "json",
+          "summary": "Required config record field.",
+          "maps_to": "record.config",
+          "required": true
+        },
+        {
+          "name": "locations",
+          "type": "json",
+          "summary": "Required locations record field.",
+          "maps_to": "record.locations",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "risk": "creates a new Synthetics API test that begins actively probing the configured URL/host on a schedule; low-risk external mutation, no approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm datadog create synthetics api test apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create user apply",
+      "summary": "POST /api/v1/user (create_user)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_user",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/user"
+        }
+      ],
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        }
+      ],
+      "risk": "invites a new user into the Datadog organization with the given role; approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm datadog create user apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete api key apply",
+      "summary": "DELETE /api/v1/api_key/{key} (delete_api_key)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_api_key",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/api_key/{key}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "key",
+          "type": "string",
+          "summary": "Required key record field.",
+          "maps_to": "record.key",
+          "required": true
+        }
+      ],
+      "risk": "irreversibly revokes an organization API key; every agent/integration still using it immediately loses ingest access, approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm datadog delete api key apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete dashboard apply",
+      "summary": "Typed action delete_dashboard",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_dashboard",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "irreversibly removes a dashboard; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/v1/dashboard/{id} disagrees with covered api_surface path /api/v1/dashboard/{dashboard_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/v1/dashboard/{id} disagrees with covered api_surface path /api/v1/dashboard/{dashboard_id}.",
+      "examples": [
+        "pm datadog delete dashboard apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete dashboard list apply",
+      "summary": "Typed action delete_dashboard_list",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_dashboard_list",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "irreversibly removes a dashboard list (folder); the dashboards themselves are unaffected, approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/v1/dashboard/lists/manual/{id} disagrees with covered api_surface path /api/v1/dashboard/lists/manual/{list_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/v1/dashboard/lists/manual/{id} disagrees with covered api_surface path /api/v1/dashboard/lists/manual/{list_id}.",
+      "examples": [
+        "pm datadog delete dashboard list apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete monitor apply",
+      "summary": "Typed action delete_monitor",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_monitor",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "irreversibly removes a monitor and its alerting history reference; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/v1/monitor/{id} disagrees with covered api_surface path /api/v1/monitor/{monitor_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/v1/monitor/{id} disagrees with covered api_surface path /api/v1/monitor/{monitor_id}.",
+      "examples": [
+        "pm datadog delete monitor apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete notebook apply",
+      "summary": "Typed action delete_notebook",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_notebook",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "irreversibly removes a notebook; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/v1/notebooks/{id} disagrees with covered api_surface path /api/v1/notebooks/{notebook_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/v1/notebooks/{id} disagrees with covered api_surface path /api/v1/notebooks/{notebook_id}.",
+      "examples": [
+        "pm datadog delete notebook apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete slo apply",
+      "summary": "Typed action delete_slo",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_slo",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "irreversibly removes an SLO and its historical error-budget tracking; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/v1/slo/{id} disagrees with covered api_surface path /api/v1/slo/{slo_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/v1/slo/{id} disagrees with covered api_surface path /api/v1/slo/{slo_id}.",
+      "examples": [
+        "pm datadog delete slo apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "disable user apply",
+      "summary": "Typed action disable_user",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "disable_user",
+      "flags": [
+        {
+          "name": "handle",
+          "type": "string",
+          "summary": "Required handle record field.",
+          "maps_to": "record.handle",
+          "required": true
+        }
+      ],
+      "risk": "disables a user's access to the Datadog organization; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/v1/user/{handle} disagrees with covered api_surface path /api/v1/user/{user_handle}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/v1/user/{handle} disagrees with covered api_surface path /api/v1/user/{user_handle}.",
+      "examples": [
+        "pm datadog disable user apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update api key apply",
+      "summary": "PUT /api/v1/api_key/{key} (update_api_key)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_api_key",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/api_key/{key}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "key",
+          "type": "string",
+          "summary": "Required key record field.",
+          "maps_to": "record.key",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "renames an existing API key; low-risk external mutation, no approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm datadog update api key apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update dashboard apply",
+      "summary": "Typed action update_dashboard",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_dashboard",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "layout-type",
+          "type": "string",
+          "summary": "Required layout_type record field.",
+          "maps_to": "record.layout_type",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        },
+        {
+          "name": "widgets",
+          "type": "json",
+          "summary": "Required widgets record field.",
+          "maps_to": "record.widgets",
+          "required": true
+        }
+      ],
+      "risk": "replaces an existing dashboard's full widget layout; external mutation, approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/v1/dashboard/{id} disagrees with covered api_surface path /api/v1/dashboard/{dashboard_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/v1/dashboard/{id} disagrees with covered api_surface path /api/v1/dashboard/{dashboard_id}.",
+      "examples": [
+        "pm datadog update dashboard apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update dashboard list apply",
+      "summary": "Typed action update_dashboard_list",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_dashboard_list",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "renames an existing dashboard list; external mutation, approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/v1/dashboard/lists/manual/{id} disagrees with covered api_surface path /api/v1/dashboard/lists/manual/{list_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/v1/dashboard/lists/manual/{id} disagrees with covered api_surface path /api/v1/dashboard/lists/manual/{list_id}.",
+      "examples": [
+        "pm datadog update dashboard list apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update downtime apply",
+      "summary": "Typed action update_downtime",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_downtime",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "mutates an existing downtime's window/scope; changes which alerts are currently suppressed, approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/v1/downtime/{id} disagrees with covered api_surface path /api/v1/downtime/{downtime_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/v1/downtime/{id} disagrees with covered api_surface path /api/v1/downtime/{downtime_id}.",
+      "examples": [
+        "pm datadog update downtime apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update monitor apply",
+      "summary": "Typed action update_monitor",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_monitor",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "mutates an existing monitor's alert condition/notification message; a changed query/threshold affects live alerting behavior, approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/v1/monitor/{id} disagrees with covered api_surface path /api/v1/monitor/{monitor_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/v1/monitor/{id} disagrees with covered api_surface path /api/v1/monitor/{monitor_id}.",
+      "examples": [
+        "pm datadog update monitor apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update notebook apply",
+      "summary": "Typed action update_notebook",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_notebook",
+      "flags": [
+        {
+          "name": "cells",
+          "type": "json",
+          "summary": "Required cells record field.",
+          "maps_to": "record.cells",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "time",
+          "type": "json",
+          "summary": "Required time record field.",
+          "maps_to": "record.time",
+          "required": true
+        }
+      ],
+      "risk": "replaces an existing notebook's content; external mutation, approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/v1/notebooks/{id} disagrees with covered api_surface path /api/v1/notebooks/{notebook_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/v1/notebooks/{id} disagrees with covered api_surface path /api/v1/notebooks/{notebook_id}.",
+      "examples": [
+        "pm datadog update notebook apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update slo apply",
+      "summary": "Typed action update_slo",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_slo",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "mutates an existing SLO's target thresholds; affects SLO burn-rate alerting, approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/v1/slo/{id} disagrees with covered api_surface path /api/v1/slo/{slo_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/v1/slo/{id} disagrees with covered api_surface path /api/v1/slo/{slo_id}.",
+      "examples": [
+        "pm datadog update slo apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update synthetics api test apply",
+      "summary": "PUT /api/v1/synthetics/tests/api/{public_id} (update_synthetics_api_test)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_synthetics_api_test",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/synthetics/tests/api/{public_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "public-id",
+          "type": "string",
+          "summary": "Required public_id record field.",
+          "maps_to": "record.public_id",
+          "required": true
+        }
+      ],
+      "risk": "mutates an existing Synthetics API test's request target/assertions; changes what is actively probed, approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm datadog update synthetics api test apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update user apply",
+      "summary": "Typed action update_user",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_user",
+      "flags": [
+        {
+          "name": "handle",
+          "type": "string",
+          "summary": "Required handle record field.",
+          "maps_to": "record.handle",
+          "required": true
+        }
+      ],
+      "risk": "mutates an existing user's role/profile; a changed access_role directly changes that user's permissions, approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/v1/user/{handle} disagrees with covered api_surface path /api/v1/user/{user_handle}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/v1/user/{handle} disagrees with covered api_surface path /api/v1/user/{user_handle}.",
+      "examples": [
+        "pm datadog update user apply --plan <plan-name>"
+      ]
+    }
+  ]
+}

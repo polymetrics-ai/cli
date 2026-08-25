@@ -1,28 +1,539 @@
 {
   "api": "Workable SPI v3 API Reference",
   "docs": "https://workable.readme.io/reference",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B reviewed the official Workable ReadMe endpoint index. Authenticated SPI v3 GET list/detail endpoints are represented as streams; JSON-expressible mutations are represented as write actions. Public careers API duplication and multipart document upload are explicitly excluded.",
+  "reviewed_at": "2026-08-19",
+  "scope": "Source-surface refresh 2026-08-19: 84 provider-documented REST method+path operations are derived from the pinned source-lock inventory, not from the prior api_surface.json. Every provider operation is either bound to an existing executable declaration or recorded blocked by default.  80 legacy runtime-binding row(s) are retained only to preserve current conformance and are excluded from the provider operation total.",
   "endpoints": [
     {
-      "method": "GET",
-      "path": "/spi/v3/jobs",
+      "method": "DELETE",
+      "path": "/departments/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-delete?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/members/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-delete?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spi/v3/departments/{id}",
       "covered_by": {
-        "stream": "jobs"
+        "write": "delete_department"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spi/v3/members/{id}",
+      "covered_by": {
+        "write": "deactivate_member"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spi/v3/subscriptions/{id}",
+      "covered_by": {
+        "write": "delete_subscription"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spi/v3/time-tracking/employees/{id}/time-entries/{uuid}",
+      "covered_by": {
+        "write": "archive_time_entry"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/subscriptions/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/subscriptionsid?reduce=false"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/time-tracking/employees/{key}/time-entries/{uuid}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-archive-entry?reduce=false"
       }
     },
     {
       "method": "GET",
-      "path": "/spi/v3/candidates",
-      "covered_by": {
-        "stream": "candidates"
+      "path": "/accounts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/accounts?reduce=false"
       }
     },
     {
       "method": "GET",
-      "path": "/spi/v3/members",
-      "covered_by": {
-        "stream": "members"
+      "path": "/accounts/{subdomain}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/accountssubdomain?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{subdomain}/departments",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/apiaccountssubdomaindepartments?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{subdomain}/locations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/apiaccountssubdomainlocations?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/candidates",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-index?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/candidates/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-show?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/candidates/{id}/activities",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidate-activities?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/candidates/{id}/files",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidate-files?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/candidates/{id}/offer",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidatesidoffer?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collaboration_permissions",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/collaboration_permissions?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_attributes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/custom_attributes?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/departments",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/disqualification_reasons",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/disqualification_reasons?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/employee_fields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employee_fields?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/employees",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employees?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/employees/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesid?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/employees/{id}/documents",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesiddocuments?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/employees/orgchart",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employees-orgchart?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/events?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/events-show?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobs?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{shortcode}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobsshortcode?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{shortcode}/activities",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-activities?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{shortcode}/application_form",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobsshortcodeapplication_form?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{shortcode}/custom_attributes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-custom-attributes?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{shortcode}/members",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-members?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{shortcode}/questions",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-questions?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{shortcode}/recruiters",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/new-jobsshortcoderecruiters?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{shortcode}/stages",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-stages?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/legal_entities",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/legal_entities?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/members",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/offers/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitionscode-copy-1?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/permission_sets",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/permission-sets?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recruiters",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/recruiters?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/requisitions",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/requisitions/{code}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitionscode?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/review-cycles/templates",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-list?reduce=false"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/review-cycles/templates/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-get?reduce=false"
       }
     },
     {
@@ -41,9 +552,44 @@
     },
     {
       "method": "GET",
+      "path": "/spi/v3/candidates",
+      "covered_by": {
+        "stream": "candidates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/candidates/{id}/activities",
+      "covered_by": {
+        "stream": "candidate_activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/candidates/{id}/files",
+      "covered_by": {
+        "stream": "candidate_files"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/candidates/{id}/offer",
+      "covered_by": {
+        "stream": "candidate_offer"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/spi/v3/collaboration_permissions",
       "covered_by": {
         "stream": "collaboration_permissions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/custom_attributes",
+      "covered_by": {
+        "stream": "custom_attributes"
       }
     },
     {
@@ -62,51 +608,9 @@
     },
     {
       "method": "GET",
-      "path": "/spi/v3/legal_entities",
-      "covered_by": {
-        "stream": "legal_entities"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spi/v3/permission_sets",
-      "covered_by": {
-        "stream": "permission_sets"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spi/v3/recruiters",
-      "covered_by": {
-        "stream": "recruiters"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spi/v3/stages",
-      "covered_by": {
-        "stream": "stages"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spi/v3/subscriptions",
-      "covered_by": {
-        "stream": "subscriptions"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/spi/v3/employee_fields",
       "covered_by": {
         "stream": "employee_fields"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spi/v3/employees/orgchart",
-      "covered_by": {
-        "stream": "employees_orgchart"
       }
     },
     {
@@ -132,6 +636,139 @@
     },
     {
       "method": "GET",
+      "path": "/spi/v3/employees/orgchart",
+      "covered_by": {
+        "stream": "employees_orgchart"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/events",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/events/{id}",
+      "covered_by": {
+        "stream": "event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs",
+      "covered_by": {
+        "stream": "jobs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}",
+      "covered_by": {
+        "stream": "job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/activities",
+      "covered_by": {
+        "stream": "job_activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/application_form",
+      "covered_by": {
+        "stream": "job_application_form"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/custom_attributes",
+      "covered_by": {
+        "stream": "job_custom_attributes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/members",
+      "covered_by": {
+        "stream": "job_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/questions",
+      "covered_by": {
+        "stream": "job_questions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/recruiters",
+      "covered_by": {
+        "stream": "job_recruiters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/jobs/{shortcode}/stages",
+      "covered_by": {
+        "stream": "job_stages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/legal_entities",
+      "covered_by": {
+        "stream": "legal_entities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/members",
+      "covered_by": {
+        "stream": "members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/offers/{id}",
+      "covered_by": {
+        "stream": "offer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/permission_sets",
+      "covered_by": {
+        "stream": "permission_sets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/recruiters",
+      "covered_by": {
+        "stream": "recruiters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/requisitions",
+      "covered_by": {
+        "stream": "requisitions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/requisitions/{code}",
+      "covered_by": {
+        "stream": "requisition"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/spi/v3/review-cycles/templates",
       "covered_by": {
         "stream": "review_templates"
@@ -142,6 +779,20 @@
       "path": "/spi/v3/review-cycles/templates/{id}",
       "covered_by": {
         "stream": "review_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/stages",
+      "covered_by": {
+        "stream": "stages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spi/v3/subscriptions",
+      "covered_by": {
+        "stream": "subscriptions"
       }
     },
     {
@@ -181,206 +832,196 @@
     },
     {
       "method": "GET",
-      "path": "/spi/v3/candidates/{id}/activities",
-      "covered_by": {
-        "stream": "candidate_activities"
+      "path": "/stages",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/stages?reduce=false"
       }
     },
     {
       "method": "GET",
-      "path": "/spi/v3/candidates/{id}/files",
-      "covered_by": {
-        "stream": "candidate_files"
+      "path": "/subscriptions",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/subscriptions?reduce=false"
       }
     },
     {
       "method": "GET",
-      "path": "/spi/v3/candidates/{id}/offer",
-      "covered_by": {
-        "stream": "candidate_offer"
+      "path": "/time-tracking/time-entries",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-list-entries?reduce=false"
       }
     },
     {
       "method": "GET",
-      "path": "/spi/v3/custom_attributes",
-      "covered_by": {
-        "stream": "custom_attributes"
+      "path": "/timeoff/balances",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffbalances?reduce=false"
       }
     },
     {
       "method": "GET",
-      "path": "/spi/v3/events",
-      "covered_by": {
-        "stream": "events"
+      "path": "/timeoff/categories",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffcategories?reduce=false"
       }
     },
     {
       "method": "GET",
-      "path": "/spi/v3/events/{id}",
-      "covered_by": {
-        "stream": "event"
+      "path": "/timeoff/requests",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffrequests-1?reduce=false"
       }
     },
     {
       "method": "GET",
-      "path": "/spi/v3/jobs/{shortcode}/activities",
-      "covered_by": {
-        "stream": "job_activities"
+      "path": "/work_schedules",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/work_schedules?reduce=false"
       }
     },
     {
-      "method": "GET",
-      "path": "/spi/v3/jobs/{shortcode}/custom_attributes",
-      "covered_by": {
-        "stream": "job_custom_attributes"
+      "method": "PATCH",
+      "path": "/candidates/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-candidate?reduce=false"
       }
     },
     {
-      "method": "GET",
-      "path": "/spi/v3/jobs/{shortcode}/members",
-      "covered_by": {
-        "stream": "job_members"
+      "method": "PATCH",
+      "path": "/candidates/{id}/update_custom_attribute_value",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidatesidupdate_custom_attribute_value?reduce=false"
       }
     },
     {
-      "method": "GET",
-      "path": "/spi/v3/jobs/{shortcode}/questions",
-      "covered_by": {
-        "stream": "job_questions"
+      "method": "PATCH",
+      "path": "/employees/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-employee?reduce=false"
       }
     },
     {
-      "method": "GET",
-      "path": "/spi/v3/jobs/{shortcode}/stages",
-      "covered_by": {
-        "stream": "job_stages"
+      "method": "PATCH",
+      "path": "/offers/{id}/approve (COPY)",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/offersidapprove-copy?reduce=false"
       }
     },
     {
-      "method": "GET",
-      "path": "/spi/v3/jobs/{shortcode}",
-      "covered_by": {
-        "stream": "job"
+      "method": "PATCH",
+      "path": "/offers/{id}/reject",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/offersidapprove-copy-1?reduce=false"
       }
     },
     {
-      "method": "GET",
-      "path": "/spi/v3/jobs/{shortcode}/application_form",
-      "covered_by": {
-        "stream": "job_application_form"
+      "method": "PATCH",
+      "path": "/requisitions/{code}/approve",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-approve?reduce=false"
       }
     },
     {
-      "method": "GET",
-      "path": "/spi/v3/jobs/{shortcode}/recruiters",
-      "covered_by": {
-        "stream": "job_recruiters"
+      "method": "PATCH",
+      "path": "/requisitions/{code}/reject",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-reject?reduce=false"
       }
     },
     {
-      "method": "GET",
-      "path": "/spi/v3/requisitions",
-      "covered_by": {
-        "stream": "requisitions"
+      "method": "PATCH",
+      "path": "/requisitions/{id}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-patch?reduce=false"
       }
     },
     {
-      "method": "GET",
-      "path": "/spi/v3/requisitions/{code}",
+      "method": "PATCH",
+      "path": "/spi/v3/candidates/{id}",
       "covered_by": {
-        "stream": "requisition"
+        "write": "update_candidate"
       }
     },
     {
-      "method": "GET",
-      "path": "/spi/v3/offers/{id}",
+      "method": "PATCH",
+      "path": "/spi/v3/candidates/{id}/update_custom_attribute_value",
       "covered_by": {
-        "stream": "offer"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/accounts/{subdomain}",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "Public careers-site jobs are served from Workable public API rather than the configured SPI v3 base URL and duplicate the authenticated jobs data surface."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/spi/v3/departments",
-      "covered_by": {
-        "write": "create_department"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/spi/v3/departments",
-      "covered_by": {
-        "write": "update_department"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/spi/v3/departments/{id}/merge",
-      "covered_by": {
-        "write": "merge_department"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/spi/v3/departments/{id}",
-      "covered_by": {
-        "write": "delete_department"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/spi/v3/members/invite",
-      "covered_by": {
-        "write": "invite_member"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/spi/v3/members",
-      "covered_by": {
-        "write": "update_member"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/spi/v3/members/{id}",
-      "covered_by": {
-        "write": "deactivate_member"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/spi/v3/members/{id}/enable",
-      "covered_by": {
-        "write": "enable_member"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/spi/v3/subscriptions",
-      "covered_by": {
-        "write": "create_subscription"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/spi/v3/subscriptions/{id}",
-      "covered_by": {
-        "write": "delete_subscription"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/spi/v3/employees",
-      "covered_by": {
-        "write": "create_employee"
+        "write": "update_candidate_custom_attribute"
       }
     },
     {
@@ -391,32 +1032,38 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/spi/v3/employees/{id}/documents",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Document upload is multipart/binary and outside the declarative JSON write dialect."
+      "method": "PATCH",
+      "path": "/spi/v3/offers/{id}/approve",
+      "covered_by": {
+        "write": "approve_offer"
       }
     },
     {
-      "method": "POST",
-      "path": "/spi/v3/review-cycles/templates",
+      "method": "PATCH",
+      "path": "/spi/v3/offers/{id}/reject",
       "covered_by": {
-        "write": "create_review_template"
+        "write": "reject_offer"
       }
     },
     {
-      "method": "POST",
-      "path": "/spi/v3/time-tracking/time-entries",
+      "method": "PATCH",
+      "path": "/spi/v3/requisitions/{code}/approve",
       "covered_by": {
-        "write": "bulk_create_time_entries"
+        "write": "approve_requisition"
       }
     },
     {
-      "method": "POST",
-      "path": "/spi/v3/time-tracking/employees/{id}/time-entries",
+      "method": "PATCH",
+      "path": "/spi/v3/requisitions/{code}/reject",
       "covered_by": {
-        "write": "create_time_entry"
+        "write": "reject_requisition"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spi/v3/requisitions/{id}",
+      "covered_by": {
+        "write": "update_requisition"
       }
     },
     {
@@ -427,13 +1074,6 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/spi/v3/time-tracking/employees/{id}/time-entries/{uuid}",
-      "covered_by": {
-        "write": "archive_time_entry"
-      }
-    },
-    {
       "method": "PATCH",
       "path": "/spi/v3/timeoff/approvals/{key}",
       "covered_by": {
@@ -441,17 +1081,219 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/spi/v3/timeoff/requests",
-      "covered_by": {
-        "write": "create_timeoff_request"
+      "method": "PATCH",
+      "path": "/time-tracking/employees/{key}/time-entries/{uuid}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-update-entry?reduce=false"
       }
     },
     {
       "method": "PATCH",
-      "path": "/spi/v3/candidates/{id}/update_custom_attribute_value",
-      "covered_by": {
-        "write": "update_candidate_custom_attribute"
+      "path": "/timeoff/approvals/{key}",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffapprovals?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidates/{id}/comments",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/comment-on-candidate?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidates/{id}/copy",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/copy-candidate?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidates/{id}/disqualify",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/disqualify-candidate?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidates/{id}/move",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/move-candidate?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidates/{id}/ratings",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/rate-candidate?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidates/{id}/relocate",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/relocate-candidates?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/candidates/{id}/revert",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/revert-disqualification-candidate?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/departments",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-post?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/departments/{id}/merge",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-merge?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/employees",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/create-employee?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/employees/{id}/documents",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesiddocuments-1?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/jobs/{shortcode}/candidates",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-create?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/members/{id}/enable",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-enable?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/members/invite",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-invite?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/requisitions",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-post?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/review-cycles/templates",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-create?reduce=false"
       }
     },
     {
@@ -477,16 +1319,16 @@
     },
     {
       "method": "POST",
-      "path": "/spi/v3/jobs/{shortcode}/candidates",
+      "path": "/spi/v3/candidates/{id}/move",
       "covered_by": {
-        "write": "create_job_candidate"
+        "write": "move_candidate"
       }
     },
     {
       "method": "POST",
-      "path": "/spi/v3/candidates/{id}/move",
+      "path": "/spi/v3/candidates/{id}/ratings",
       "covered_by": {
-        "write": "move_candidate"
+        "write": "rate_candidate"
       }
     },
     {
@@ -504,45 +1346,45 @@
       }
     },
     {
-      "method": "PUT",
-      "path": "/spi/v3/candidates/{id}/tags",
+      "method": "POST",
+      "path": "/spi/v3/departments",
       "covered_by": {
-        "write": "update_candidate_tags"
+        "write": "create_department"
       }
     },
     {
       "method": "POST",
-      "path": "/spi/v3/candidates/{id}/ratings",
+      "path": "/spi/v3/departments/{id}/merge",
       "covered_by": {
-        "write": "rate_candidate"
+        "write": "merge_department"
       }
     },
     {
-      "method": "PUT",
-      "path": "/spi/v3/candidates/{id}/ratings",
+      "method": "POST",
+      "path": "/spi/v3/employees",
       "covered_by": {
-        "write": "update_candidate_rating"
+        "write": "create_employee"
       }
     },
     {
-      "method": "PATCH",
-      "path": "/spi/v3/candidates/{id}",
+      "method": "POST",
+      "path": "/spi/v3/jobs/{shortcode}/candidates",
       "covered_by": {
-        "write": "update_candidate"
+        "write": "create_job_candidate"
       }
     },
     {
-      "method": "PATCH",
-      "path": "/spi/v3/offers/{id}/approve",
+      "method": "POST",
+      "path": "/spi/v3/members/{id}/enable",
       "covered_by": {
-        "write": "approve_offer"
+        "write": "enable_member"
       }
     },
     {
-      "method": "PATCH",
-      "path": "/spi/v3/offers/{id}/reject",
+      "method": "POST",
+      "path": "/spi/v3/members/invite",
       "covered_by": {
-        "write": "reject_offer"
+        "write": "invite_member"
       }
     },
     {
@@ -553,24 +1395,17 @@
       }
     },
     {
-      "method": "PATCH",
-      "path": "/spi/v3/requisitions/{id}",
+      "method": "POST",
+      "path": "/spi/v3/review-cycles/templates",
       "covered_by": {
-        "write": "update_requisition"
+        "write": "create_review_template"
       }
     },
     {
-      "method": "PATCH",
-      "path": "/spi/v3/requisitions/{code}/approve",
+      "method": "POST",
+      "path": "/spi/v3/subscriptions",
       "covered_by": {
-        "write": "approve_requisition"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/spi/v3/requisitions/{code}/reject",
-      "covered_by": {
-        "write": "reject_requisition"
+        "write": "create_subscription"
       }
     },
     {
@@ -579,6 +1414,164 @@
       "covered_by": {
         "write": "create_talent_pool_candidate"
       }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/time-tracking/employees/{id}/time-entries",
+      "covered_by": {
+        "write": "create_time_entry"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/time-tracking/time-entries",
+      "covered_by": {
+        "write": "bulk_create_time_entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spi/v3/timeoff/requests",
+      "covered_by": {
+        "write": "create_timeoff_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/webhook-subscriptions?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/talent_pool/{stage}/candidates",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/talent-pool-candidates-create?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/time-tracking/employees/{key}/time-entries",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-create-entry?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/time-tracking/time-entries",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-bulk-create?reduce=false"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/timeoff/requests",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffrequests?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/candidates/{id}/ratings",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-candidate-rating?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/candidates/{id}/tags",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/tag-candidate?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/departments",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-put?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/members",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-put?reduce=false"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/spi/v3/candidates/{id}/ratings",
+      "covered_by": {
+        "write": "update_candidate_rating"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/spi/v3/candidates/{id}/tags",
+      "covered_by": {
+        "write": "update_candidate_tags"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/spi/v3/departments",
+      "covered_by": {
+        "write": "update_department"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/spi/v3/members",
+      "covered_by": {
+        "write": "update_member"
+      }
     }
-  ]
+  ],
+  "operation_ledger_version": 1
 }

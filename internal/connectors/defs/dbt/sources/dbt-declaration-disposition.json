@@ -1,0 +1,2420 @@
+{
+  "schema_version": 2,
+  "connector": "dbt",
+  "generated_at": "2026-08-19T16:45:02.799Z",
+  "source_basis": {
+    "source_lock": "sources/dbt-operation-source-lock.json",
+    "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+    "source_bundle": {
+      "document_count": 1,
+      "sha256": "73b2b946693913ab1ce5127838847598484cc87dac0d2c96c6f24b645d5709a5",
+      "bytes": 167519
+    },
+    "source_operation_count": 52,
+    "coverage_confidence": {
+      "level": "machine-readable",
+      "basis": "dbt Labs publishes the dbt Cloud v2 OpenAPI document in its official repository; every HTTP path item is extracted."
+    }
+  },
+  "summary": {
+    "old_api_surface_count": 52,
+    "api_surface_rows": 52,
+    "legacy_runtime_binding_rows": 0,
+    "operations_found": 52,
+    "coverage_confidence": {
+      "level": "machine-readable",
+      "basis": "dbt Labs publishes the dbt Cloud v2 OpenAPI document in its official repository; every HTTP path item is extracted."
+    },
+    "enabled_operations": 23,
+    "enabled_percent": 44.23,
+    "disabled_operations": 29,
+    "documented_deletes": 6,
+    "enabled_deletes": 3,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 16
+      },
+      {
+        "key": "direct_write",
+        "count": 26
+      },
+      {
+        "key": "etl",
+        "count": 10
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 10,
+    "write_actions": 13,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "count": 26,
+        "applies_to": "reverse_etl_eligibility attribute on direct_write operations"
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 29
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-dbt",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/dbt/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-dbt",
+      "sync-transport-source-definition-dbt"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-dbt",
+        "count": 29
+      }
+    ]
+  },
+  "ledger_dispositions": [
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/cancel/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/cancel/",
+        "covered_by": {
+          "write": "cancel_run"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.cancel-run-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/cancel/\"].post",
+        "operation_id": "Cancel Run",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/writes.json: typed write action(s) [\"cancel_run\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "cancel_run"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"cancel_run\"] bind the pinned provider operation",
+        "writes": [
+          "cancel_run"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/environments/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/environments/",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.create-environment-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/\"].post",
+        "operation_id": "Create Environment",
+        "deprecated": true
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/environments/\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/environments/\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/jobs/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/jobs/",
+        "covered_by": {
+          "write": "create_job"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.create-job-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/\"].post",
+        "operation_id": "Create Job",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/writes.json: typed write action(s) [\"create_job\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "create_job"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"create_job\"] bind the pinned provider operation",
+        "writes": [
+          "create_job"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/notifications/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/notifications/",
+        "covered_by": {
+          "write": "create_notification"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.create-notification-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/\"].post",
+        "operation_id": "Create Notification",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/writes.json: typed write action(s) [\"create_notification\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "create_notification"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"create_notification\"] bind the pinned provider operation",
+        "writes": [
+          "create_notification"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/projects/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/projects/",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.create-project-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/\"].post",
+        "operation_id": "Create Project",
+        "deprecated": true
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/projects/\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/projects/\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/repositories/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/repositories/",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.create-repository-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/repositories/\"].post",
+        "operation_id": "Create Repository",
+        "deprecated": true
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/repositories/\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/repositories/\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/encryptions/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/encryptions/",
+        "covered_by": {
+          "write": "create_ssh_tunnel"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.create-ssh-tunnel-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/\"].post",
+        "operation_id": "Create SSH Tunnel",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/writes.json: typed write action(s) [\"create_ssh_tunnel\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "create_ssh_tunnel"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"create_ssh_tunnel\"] bind the pinned provider operation",
+        "writes": [
+          "create_ssh_tunnel"
+        ]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.destroy-environment-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].delete",
+        "operation_id": "Destroy Environment",
+        "deprecated": true
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].delete.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].delete."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+        "covered_by": {
+          "write": "delete_job"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.destroy-job-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{id}/\"].delete",
+        "operation_id": "Destroy Job",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/writes.json: typed write action(s) [\"delete_job\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "delete_job"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"delete_job\"] bind the pinned provider operation",
+        "writes": [
+          "delete_job"
+        ]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+        "covered_by": {
+          "write": "delete_notification"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.destroy-notification-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/{id}/\"].delete",
+        "operation_id": "Destroy Notification",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/writes.json: typed write action(s) [\"delete_notification\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "delete_notification"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"delete_notification\"] bind the pinned provider operation",
+        "writes": [
+          "delete_notification"
+        ]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.destroy-project-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].delete",
+        "operation_id": "Destroy Project",
+        "deprecated": true
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].delete.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].delete."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.destroy-repository-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/repositories/{id}/\"].delete",
+        "operation_id": "Destroy Repository",
+        "deprecated": true
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/repositories/{id}/\"].delete.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/repositories/{id}/\"].delete."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+        "covered_by": {
+          "write": "delete_ssh_tunnel"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.destroy-ssh-tunnel-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/{id}/\"].delete",
+        "operation_id": "Destroy SSH Tunnel",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/writes.json: typed write action(s) [\"delete_ssh_tunnel\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "delete_ssh_tunnel"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"delete_ssh_tunnel\"] bind the pinned provider operation",
+        "writes": [
+          "delete_ssh_tunnel"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/licenses/",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/licenses/",
+        "covered_by": {
+          "stream": "licenses"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.list-account-license-allocations-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/licenses/\"].get",
+        "operation_id": "List Account License Allocations",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/streams.json: existing stream \"licenses\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"licenses\" binds the pinned provider operation",
+        "stream": "licenses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.list-accounts-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/\"].get",
+        "operation_id": "List Accounts",
+        "deprecated": true
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/environments/",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/environments/",
+        "covered_by": {
+          "stream": "environments"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.list-environments-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/\"].get",
+        "operation_id": "List Environments",
+        "deprecated": true
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/streams.json: existing stream \"environments\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"environments\" binds the pinned provider operation",
+        "stream": "environments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/invites/",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/invites/",
+        "covered_by": {
+          "stream": "invites"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.list-invites-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/invites/\"].get",
+        "operation_id": "List Invites",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/streams.json: existing stream \"invites\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"invites\" binds the pinned provider operation",
+        "stream": "invites"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/jobs/",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/jobs/",
+        "covered_by": {
+          "stream": "jobs"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.list-jobs-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/\"].get",
+        "operation_id": "List Jobs",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/streams.json: existing stream \"jobs\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"jobs\" binds the pinned provider operation",
+        "stream": "jobs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/notifications/",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/notifications/",
+        "covered_by": {
+          "stream": "notifications"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.list-notifications-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/\"].get",
+        "operation_id": "List Notifications",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/streams.json: existing stream \"notifications\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"notifications\" binds the pinned provider operation",
+        "stream": "notifications"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/projects/",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/projects/",
+        "covered_by": {
+          "stream": "projects"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.list-projects-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/\"].get",
+        "operation_id": "List Projects",
+        "deprecated": true
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/streams.json: existing stream \"projects\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"projects\" binds the pinned provider operation",
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/repositories/",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/repositories/",
+        "covered_by": {
+          "stream": "repositories"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.list-repositories-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/repositories/\"].get",
+        "operation_id": "List Repositories",
+        "deprecated": true
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/streams.json: existing stream \"repositories\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"repositories\" binds the pinned provider operation",
+        "stream": "repositories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.list-run-artifacts-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/\"].get",
+        "operation_id": "List Run Artifacts",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/runs/",
+        "covered_by": {
+          "stream": "runs"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.list-runs-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/\"].get",
+        "operation_id": "List Runs",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/streams.json: existing stream \"runs\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"runs\" binds the pinned provider operation",
+        "stream": "runs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/encryptions/",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/encryptions/",
+        "covered_by": {
+          "stream": "ssh_tunnels"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.list-ssh-tunnels-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/\"].get",
+        "operation_id": "List SSH Tunnels",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/streams.json: existing stream \"ssh_tunnels\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"ssh_tunnels\" binds the pinned provider operation",
+        "stream": "ssh_tunnels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/users/",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/users/",
+        "covered_by": {
+          "stream": "users"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.list-users-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/users/\"].get",
+        "operation_id": "List Users",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/streams.json: existing stream \"users\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"users\" binds the pinned provider operation",
+        "stream": "users"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v2/accounts/{account_id}/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/api/v2/accounts/{account_id}/",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.partial-update-account-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/\"].patch",
+        "operation_id": "Partial Update Account",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/\"].patch.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/\"].patch."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.retrieve-account-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/\"].get",
+        "operation_id": "Retrieve Account",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.retrieve-environment-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].get",
+        "operation_id": "Retrieve Environment",
+        "deprecated": true
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/invites/{id}/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/invites/{id}/",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.retrieve-invite-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/invites/{id}/\"].get",
+        "operation_id": "Retrieve Invite",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/invites/{id}/\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/invites/{id}/\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.retrieve-job-artifact-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}\"].get",
+        "operation_id": "Retrieve Job Artifact",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.retrieve-job-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{id}/\"].get",
+        "operation_id": "Retrieve Job",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/jobs/{id}/\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/jobs/{id}/\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.retrieve-notification-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/{id}/\"].get",
+        "operation_id": "Retrieve Notification",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/notifications/{id}/\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/notifications/{id}/\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.retrieve-project-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].get",
+        "operation_id": "Retrieve Project",
+        "deprecated": true
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.retrieve-repository-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/repositories/{id}/\"].get",
+        "operation_id": "Retrieve Repository",
+        "deprecated": true
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/repositories/{id}/\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/repositories/{id}/\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.retrieve-run-artifact-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}\"].get",
+        "operation_id": "Retrieve Run Artifact",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.retrieve-run-failure-details-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/retry/\"].get",
+        "operation_id": "Retrieve Run Failure Details",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/retry/\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/retry/\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/runs/{id}/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/runs/{id}/",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.retrieve-run-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{id}/\"].get",
+        "operation_id": "Retrieve Run",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/runs/{id}/\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/runs/{id}/\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/steps/{id}/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/steps/{id}/",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.retrieve-run-step-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/steps/{id}/\"].get",
+        "operation_id": "Retrieve Run Step",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/steps/{id}/\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/steps/{id}/\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.retrieve-ssh-tunnel-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/{id}/\"].get",
+        "operation_id": "Retrieve SSH Tunnel",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/encryptions/{id}/\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/encryptions/{id}/\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/users/{id}/",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/v2/users/{id}/",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.retrieve-user-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/users/{id}/\"].get",
+        "operation_id": "Retrieve User",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/users/{id}/\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/users/{id}/\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/rerun/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/rerun/",
+        "covered_by": {
+          "write": "retry_failed_job"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.retry-failed-job-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{job_id}/rerun/\"].post",
+        "operation_id": "Retry Failed Job",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/writes.json: typed write action(s) [\"retry_failed_job\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "retry_failed_job"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"retry_failed_job\"] bind the pinned provider operation",
+        "writes": [
+          "retry_failed_job"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+        "covered_by": {
+          "write": "retry_run"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.retry-run-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/retry/\"].post",
+        "operation_id": "Retry Run",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/writes.json: typed write action(s) [\"retry_run\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "retry_run"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"retry_run\"] bind the pinned provider operation",
+        "writes": [
+          "retry_run"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/run/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/run/",
+        "covered_by": {
+          "write": "trigger_job_run"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.trigger-job-run-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{job_id}/run/\"].post",
+        "operation_id": "Trigger Job Run",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/writes.json: typed write action(s) [\"trigger_job_run\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "trigger_job_run"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"trigger_job_run\"] bind the pinned provider operation",
+        "writes": [
+          "trigger_job_run"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/notifications/unsubscribe/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/v2/notifications/unsubscribe/",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.unsubscribe-from-notifications-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/notifications/unsubscribe/\"].post",
+        "operation_id": "Unsubscribe from Notifications",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/notifications/unsubscribe/\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/notifications/unsubscribe/\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.update-account-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/\"].post",
+        "operation_id": "Update Account",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.update-environment-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].post",
+        "operation_id": "Update Environment",
+        "deprecated": true
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+        "covered_by": {
+          "write": "update_job"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.update-job-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{id}/\"].post",
+        "operation_id": "Update Job",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/writes.json: typed write action(s) [\"update_job\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "update_job"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"update_job\"] bind the pinned provider operation",
+        "writes": [
+          "update_job"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/permissions/{id}/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/permissions/{id}/",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.update-license-permissions-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/permissions/{id}/\"].post",
+        "operation_id": "Update License Permissions",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/permissions/{id}/\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/permissions/{id}/\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+        "covered_by": {
+          "write": "update_notification"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.update-notification-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/{id}/\"].post",
+        "operation_id": "Update Notification",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/writes.json: typed write action(s) [\"update_notification\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "update_notification"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"update_notification\"] bind the pinned provider operation",
+        "writes": [
+          "update_notification"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.update-project-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].post",
+        "operation_id": "Update Project",
+        "deprecated": true
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+        "covered_by": {
+          "write": "update_ssh_tunnel"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.update-ssh-tunnel-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/{id}/\"].post",
+        "operation_id": "Update SSH Tunnel",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/dbt/writes.json: typed write action(s) [\"update_ssh_tunnel\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "update_ssh_tunnel"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"update_ssh_tunnel\"] bind the pinned provider operation",
+        "writes": [
+          "update_ssh_tunnel"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/users/{id}/",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/v2/users/{id}/",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dbt-operation-source-lock.json",
+        "source_id": "dbt.rest.update-user-source-1",
+        "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "source_location": "paths[\"/api/v2/users/{id}/\"].post",
+        "operation_id": "Update User",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-dbt",
+          "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/users/{id}/\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/dbt-operation-source-lock.json:paths[\"/api/v2/users/{id}/\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-dbt",
+        "contract": null
+      }
+    }
+  ]
+}

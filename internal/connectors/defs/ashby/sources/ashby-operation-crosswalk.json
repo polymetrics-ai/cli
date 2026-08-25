@@ -1,0 +1,5107 @@
+{
+  "schema_version": 2,
+  "connector": "ashby",
+  "source_lock": "sources/ashby-operation-source-lock.json",
+  "generated_at": "2026-08-19T16:48:08.213Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.apikeyinfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/apikeyinfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "apikeyinfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/apiKey.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/apiKey.info",
+          "covered_by": {
+            "stream": "api_key_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "api_key_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationaddhiringteammember-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationaddhiringteammember-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationaddhiringteammember-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/application.addHiringTeamMember",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/application.addHiringTeamMember",
+          "covered_by": {
+            "write": "add_application_hiring_team_member"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "add_application_hiring_team_member"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationchange_source",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationchange_source?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationchange_source",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/application.change_source",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/application.change_source",
+          "covered_by": {
+            "write": "change_application_source"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "change_application_source"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationchange_stage",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationchange_stage?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationchange_stage",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/application.change_stage",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/application.change_stage",
+          "covered_by": {
+            "write": "change_application_stage"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "change_application_stage"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationchangesource",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationchangesource?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationchangesource",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/application.changeSource",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/application.changeSource",
+          "covered_by": {
+            "write": "change_application_source_2"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "change_application_source_2"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationchangestage",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationchangestage?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationchangestage",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/application.changeStage",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/application.changeStage",
+          "covered_by": {
+            "write": "change_application_stage_2"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "change_application_stage_2"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationcreate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationcreate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationcreate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/application.create",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/application.create",
+          "covered_by": {
+            "write": "create_application"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_application"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationdelete",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationdelete?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationdelete",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/application.delete",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/application.delete",
+          "covered_by": {
+            "write": "delete_application"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_application"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationfeedbacklist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationfeedbacklist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationfeedbacklist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/applicationFeedback.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/applicationFeedback.list",
+          "covered_by": {
+            "stream": "application_feedback_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "application_feedback_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationfeedbackrequestcreate-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationfeedbackrequestcreate-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationfeedbackrequestcreate-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/applicationFeedbackRequest.create",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/applicationFeedbackRequest.create",
+          "covered_by": {
+            "write": "create_application_feedback_request"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_application_feedback_request"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationfeedbacksubmit-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationfeedbacksubmit-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationfeedbacksubmit-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/applicationFeedback.submit",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/applicationFeedback.submit",
+          "covered_by": {
+            "write": "submit_application_feedback"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "submit_application_feedback"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationformsubmit",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationformsubmit?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationformsubmit",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/applicationForm.submit",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/applicationForm.submit",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Blocked pending ashby-application-form-typed-multipart-foundation: the documented request requires multipart form data and typed file parts, which the connector-owned declaration cannot yet model.",
+            "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationformsubmit?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationhiringteamrolelist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationhiringteamrolelist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationhiringteamrolelist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/applicationHiringTeamRole.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/applicationHiringTeamRole.list",
+          "covered_by": {
+            "stream": "application_hiring_team_role_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "application_hiring_team_role_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationinfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationinfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationinfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/application.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/application.info",
+          "covered_by": {
+            "stream": "application_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "application_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationlist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationlist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationlist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/application.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/application.list",
+          "covered_by": {
+            "stream": "applications"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "applications"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationlistcriteriaevaluations",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationlistcriteriaevaluations?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationlistcriteriaevaluations",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/application.listCriteriaEvaluations",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/application.listCriteriaEvaluations",
+          "covered_by": {
+            "stream": "application_list_criteria_evaluations"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "application_list_criteria_evaluations"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationlisthistory",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationlisthistory?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationlisthistory",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/application.listHistory",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/application.listHistory",
+          "covered_by": {
+            "stream": "application_list_history"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "application_list_history"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationremovehiringteammember-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationremovehiringteammember-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationremovehiringteammember-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/application.removeHiringTeamMember",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/application.removeHiringTeamMember",
+          "covered_by": {
+            "write": "remove_application_hiring_team_member"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "remove_application_hiring_team_member"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationtransfer",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationtransfer?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationtransfer",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/application.transfer",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/application.transfer",
+          "covered_by": {
+            "write": "transfer_application"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "transfer_application"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationupdate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationupdate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationupdate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/application.update",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/application.update",
+          "covered_by": {
+            "write": "update_application"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_application"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.applicationupdatehistory",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationupdatehistory?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "applicationupdatehistory",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/application.updateHistory",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/application.updateHistory",
+          "covered_by": {
+            "write": "update_application_history"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_application_history"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.approvaldefinitionupdate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/approvaldefinitionupdate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "approvaldefinitionupdate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/approvalDefinition.update",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/approvalDefinition.update",
+          "covered_by": {
+            "write": "update_approval_definition"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_approval_definition"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.approvallist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/approvallist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "approvallist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/approval.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/approval.list",
+          "covered_by": {
+            "stream": "approval_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "approval_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.archivereasonlist-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/archivereasonlist-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "archivereasonlist-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/archiveReason.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/archiveReason.list",
+          "covered_by": {
+            "stream": "archive_reason_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "archive_reason_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.assessmentaddcompletedtocandidate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/assessmentaddcompletedtocandidate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "assessmentaddcompletedtocandidate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/assessment.addCompletedToCandidate",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/assessment.addCompletedToCandidate",
+          "covered_by": {
+            "write": "add_assessment_completed_to_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "add_assessment_completed_to_candidate"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.assessmentcancel",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/assessmentcancel?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "assessmentcancel",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/assessment.cancel",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/assessment.cancel",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/assessmentcancel?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.assessmentlist-implemented-by-partner",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/assessmentlist-implemented-by-partner?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "assessmentlist-implemented-by-partner",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/assessment.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/assessment.list",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/assessmentlist-implemented-by-partner?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.assessmentpartnercustomfieldsfetch",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/assessmentpartnercustomfieldsfetch?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "assessmentpartnercustomfieldsfetch",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/customFields.fetch",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/customFields.fetch",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/assessmentpartnercustomfieldsfetch?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.assessmentstart",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/assessmentstart?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "assessmentstart",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/assessment.start",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/assessment.start",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/assessmentstart?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.assessmentupdate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/assessmentupdate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "assessmentupdate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/assessment.update",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/assessment.update",
+          "covered_by": {
+            "write": "update_assessment"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_assessment"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.auditloglist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/auditloglist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "auditloglist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/auditLog.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/auditLog.list",
+          "covered_by": {
+            "stream": "audit_log_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "audit_log_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.brandlist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/brandlist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "brandlist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/brand.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/brand.list",
+          "covered_by": {
+            "stream": "brand_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "brand_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidateaddemailmessage",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidateaddemailmessage?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidateaddemailmessage",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.addEmailMessage",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.addEmailMessage",
+          "covered_by": {
+            "write": "add_candidate_email_message"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "add_candidate_email_message"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidateaddproject-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidateaddproject-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidateaddproject-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.addProject",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.addProject",
+          "covered_by": {
+            "write": "add_candidate_project"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "add_candidate_project"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidateaddtag",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidateaddtag?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidateaddtag",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.addTag",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.addTag",
+          "covered_by": {
+            "write": "add_candidate_tag"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "add_candidate_tag"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidateanonymize",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidateanonymize?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidateanonymize",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.anonymize",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.anonymize",
+          "covered_by": {
+            "write": "anonymize_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "anonymize_candidate"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidatecreate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidatecreate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidatecreate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.create",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.create",
+          "covered_by": {
+            "write": "create_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_candidate"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidatecreatenote",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidatecreatenote?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidatecreatenote",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.createNote",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.createNote",
+          "covered_by": {
+            "write": "create_candidate_note"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_candidate_note"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidategetrecentemailmessages",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidategetrecentemailmessages?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidategetrecentemailmessages",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.getRecentEmailMessages",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.getRecentEmailMessages",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidategetrecentemailmessages?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidateinfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidateinfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidateinfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.info",
+          "covered_by": {
+            "stream": "candidate_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "candidate_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidatelist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidatelist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidatelist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.list",
+          "covered_by": {
+            "stream": "candidates"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "candidates"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidatelistclientinfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidatelistclientinfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidatelistclientinfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.listClientInfo",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.listClientInfo",
+          "covered_by": {
+            "stream": "candidate_list_client_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "candidate_list_client_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidatelistfraudchecks",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidatelistfraudchecks?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidatelistfraudchecks",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.listFraudChecks",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.listFraudChecks",
+          "covered_by": {
+            "stream": "candidate_list_fraud_checks"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "candidate_list_fraud_checks"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidatelistnotes",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidatelistnotes?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidatelistnotes",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.listNotes",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.listNotes",
+          "covered_by": {
+            "stream": "candidate_list_notes"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "candidate_list_notes"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidatelistprojects",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidatelistprojects?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidatelistprojects",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.listProjects",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.listProjects",
+          "covered_by": {
+            "stream": "candidate_list_projects"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "candidate_list_projects"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidatepushtohris",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidatepushtohris?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidatepushtohris",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.pushToHris",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.pushToHris",
+          "covered_by": {
+            "write": "push_candidate_to_hris"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "push_candidate_to_hris"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidateremoveproject-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidateremoveproject-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidateremoveproject-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.removeProject",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.removeProject",
+          "covered_by": {
+            "write": "remove_candidate_project"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "remove_candidate_project"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidateremovetag",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidateremovetag?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidateremovetag",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.removeTag",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.removeTag",
+          "covered_by": {
+            "write": "remove_candidate_tag"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "remove_candidate_tag"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidatesearch",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidatesearch?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidatesearch",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.search",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.search",
+          "covered_by": {
+            "direct_read": "candidate search"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "candidate search"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidatesearchsuggestions",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidatesearchsuggestions?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidatesearchsuggestions",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.searchSuggestions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.searchSuggestions",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidatesearchsuggestions?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidatesetfraudstatus",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidatesetfraudstatus?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidatesetfraudstatus",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.setFraudStatus",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.setFraudStatus",
+          "covered_by": {
+            "write": "set_candidate_fraud_status"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "set_candidate_fraud_status"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidatetagarchive",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidatetagarchive?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidatetagarchive",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidateTag.archive",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidateTag.archive",
+          "covered_by": {
+            "write": "archive_candidate_tag"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "archive_candidate_tag"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidatetagcreate-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidatetagcreate-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidatetagcreate-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidateTag.create",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidateTag.create",
+          "covered_by": {
+            "write": "create_candidate_tag"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_candidate_tag"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidatetaglist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidatetaglist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidatetaglist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidateTag.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidateTag.list",
+          "covered_by": {
+            "stream": "candidate_tag_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "candidate_tag_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidateupdate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidateupdate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidateupdate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.update",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.update",
+          "covered_by": {
+            "write": "update_candidate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_candidate"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidateuploadfile",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidateuploadfile?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidateuploadfile",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.uploadFile",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.uploadFile",
+          "covered_by": {
+            "write": "upload_candidate_file"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "upload_candidate_file"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.candidateuploadresume",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/candidateuploadresume?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidateuploadresume",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidate.uploadResume",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidate.uploadResume",
+          "covered_by": {
+            "write": "upload_candidate_resume"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "upload_candidate_resume"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.closereasonlist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/closereasonlist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "closereasonlist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/closeReason.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/closeReason.list",
+          "covered_by": {
+            "stream": "close_reason_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "close_reason_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.communicationtemplatelist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/communicationtemplatelist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "communicationtemplatelist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/communicationTemplate.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/communicationTemplate.list",
+          "covered_by": {
+            "stream": "communication_template_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "communication_template_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.customfieldcreate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/customfieldcreate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "customfieldcreate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/customField.create",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/customField.create",
+          "covered_by": {
+            "write": "create_custom_field"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_custom_field"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.customfieldinfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/customfieldinfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "customfieldinfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/customField.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/customField.info",
+          "covered_by": {
+            "stream": "custom_field_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "custom_field_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.customfieldlist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/customfieldlist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "customfieldlist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/customField.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/customField.list",
+          "covered_by": {
+            "stream": "custom_field_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "custom_field_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.customfieldsetvalue",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/customfieldsetvalue?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "customfieldsetvalue",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/customField.setValue",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/customField.setValue",
+          "covered_by": {
+            "write": "set_custom_field_value"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "set_custom_field_value"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.customfieldsetvalues",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/customfieldsetvalues?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "customfieldsetvalues",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/customField.setValues",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/customField.setValues",
+          "covered_by": {
+            "write": "set_custom_field_values"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "set_custom_field_values"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.customfieldupdateselectablevalues",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/customfieldupdateselectablevalues?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "customfieldupdateselectablevalues",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/customField.updateSelectableValues",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/customField.updateSelectableValues",
+          "covered_by": {
+            "write": "update_custom_field_selectable_values"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_custom_field_selectable_values"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.departmentarchive-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/departmentarchive-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "departmentarchive-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/department.archive",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/department.archive",
+          "covered_by": {
+            "write": "archive_department"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "archive_department"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.departmentcreate-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/departmentcreate-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "departmentcreate-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/department.create",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/department.create",
+          "covered_by": {
+            "write": "create_department"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_department"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.departmentinfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/departmentinfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "departmentinfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/department.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/department.info",
+          "covered_by": {
+            "stream": "department_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "department_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.departmentlist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/departmentlist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "departmentlist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/department.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/department.list",
+          "covered_by": {
+            "stream": "department_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "department_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.departmentmove-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/departmentmove-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "departmentmove-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/department.move",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/department.move",
+          "covered_by": {
+            "write": "move_department"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "move_department"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.departmentrestore-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/departmentrestore-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "departmentrestore-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/department.restore",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/department.restore",
+          "covered_by": {
+            "write": "restore_department"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "restore_department"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.departmentupdate-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/departmentupdate-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "departmentupdate-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/department.update",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/department.update",
+          "covered_by": {
+            "write": "update_department"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_department"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.emailsenderlist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/emailsenderlist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "emailsenderlist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/emailSender.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/emailSender.list",
+          "covered_by": {
+            "stream": "email_sender_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "email_sender_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.feedbackformdefinitioninfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/feedbackformdefinitioninfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "feedbackformdefinitioninfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/feedbackFormDefinition.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/feedbackFormDefinition.info",
+          "covered_by": {
+            "stream": "feedback_form_definition_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "feedback_form_definition_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.feedbackformdefinitionlist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/feedbackformdefinitionlist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "feedbackformdefinitionlist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/feedbackFormDefinition.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/feedbackFormDefinition.list",
+          "covered_by": {
+            "stream": "feedback_form_definition_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "feedback_form_definition_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.filecreatefileuploadhandle",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/filecreatefileuploadhandle?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "filecreatefileuploadhandle",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/file.createFileUploadHandle",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/file.createFileUploadHandle",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/filecreatefileuploadhandle?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.fileinfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/fileinfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "fileinfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/file.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/file.info",
+          "covered_by": {
+            "direct_read": "file info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "file info"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.hiringteamaddmember-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/hiringteamaddmember-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "hiringteamaddmember-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/hiringTeam.addMember",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/hiringTeam.addMember",
+          "covered_by": {
+            "write": "add_hiring_team_member"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "add_hiring_team_member"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.hiringteamremovemember-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/hiringteamremovemember-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "hiringteamremovemember-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/hiringTeam.removeMember",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/hiringTeam.removeMember",
+          "covered_by": {
+            "write": "remove_hiring_team_member"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "remove_hiring_team_member"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.hiringteamrolelist-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/hiringteamrolelist-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "hiringteamrolelist-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/hiringTeamRole.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/hiringTeamRole.list",
+          "covered_by": {
+            "stream": "hiring_team_role_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "hiring_team_role_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.interviewbriefinginfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/interviewbriefinginfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "interviewbriefinginfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interviewBriefing.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interviewBriefing.info",
+          "covered_by": {
+            "stream": "interview_briefing_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "interview_briefing_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.interviewerpooladduser",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/interviewerpooladduser?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "interviewerpooladduser",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interviewerPool.addUser",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interviewerPool.addUser",
+          "covered_by": {
+            "write": "add_interviewer_pool_user"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "add_interviewer_pool_user"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.interviewerpoolarchive",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/interviewerpoolarchive?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "interviewerpoolarchive",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interviewerPool.archive",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interviewerPool.archive",
+          "covered_by": {
+            "write": "archive_interviewer_pool"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "archive_interviewer_pool"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.interviewerpoolcreate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/interviewerpoolcreate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "interviewerpoolcreate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interviewerPool.create",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interviewerPool.create",
+          "covered_by": {
+            "write": "create_interviewer_pool"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_interviewer_pool"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.interviewerpoolinfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/interviewerpoolinfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "interviewerpoolinfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interviewerPool.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interviewerPool.info",
+          "covered_by": {
+            "stream": "interviewer_pool_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "interviewer_pool_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.interviewerpoollist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/interviewerpoollist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "interviewerpoollist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interviewerPool.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interviewerPool.list",
+          "covered_by": {
+            "stream": "interviewer_pool_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "interviewer_pool_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.interviewerpoolremoveuser",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/interviewerpoolremoveuser?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "interviewerpoolremoveuser",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interviewerPool.removeUser",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interviewerPool.removeUser",
+          "covered_by": {
+            "write": "remove_interviewer_pool_user"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "remove_interviewer_pool_user"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.interviewerpoolrestore-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/interviewerpoolrestore-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "interviewerpoolrestore-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interviewerPool.restore",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interviewerPool.restore",
+          "covered_by": {
+            "write": "restore_interviewer_pool"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "restore_interviewer_pool"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.interviewerpoolupdate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/interviewerpoolupdate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "interviewerpoolupdate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interviewerPool.update",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interviewerPool.update",
+          "covered_by": {
+            "write": "update_interviewer_pool"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_interviewer_pool"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.intervieweventlist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/intervieweventlist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "intervieweventlist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interviewEvent.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interviewEvent.list",
+          "covered_by": {
+            "stream": "interview_event_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "interview_event_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.interviewinfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/interviewinfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "interviewinfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interview.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interview.info",
+          "covered_by": {
+            "stream": "interview_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "interview_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.interviewlist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/interviewlist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "interviewlist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interview.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interview.list",
+          "covered_by": {
+            "stream": "interview_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "interview_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.interviewplanlist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/interviewplanlist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "interviewplanlist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interviewPlan.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interviewPlan.list",
+          "covered_by": {
+            "stream": "interview_plan_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "interview_plan_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.interviewschedulecancel",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/interviewschedulecancel?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "interviewschedulecancel",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interviewSchedule.cancel",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interviewSchedule.cancel",
+          "covered_by": {
+            "write": "cancel_interview_schedule"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "cancel_interview_schedule"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.interviewschedulecreate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/interviewschedulecreate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "interviewschedulecreate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interviewSchedule.create",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interviewSchedule.create",
+          "covered_by": {
+            "write": "create_interview_schedule"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_interview_schedule"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.interviewschedulelist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/interviewschedulelist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "interviewschedulelist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interviewSchedule.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interviewSchedule.list",
+          "covered_by": {
+            "stream": "interview_schedule_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "interview_schedule_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.interviewscheduleupdate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/interviewscheduleupdate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "interviewscheduleupdate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interviewSchedule.update",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interviewSchedule.update",
+          "covered_by": {
+            "write": "update_interview_schedule"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_interview_schedule"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.interviewstagegrouplist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/interviewstagegrouplist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "interviewstagegrouplist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interviewStageGroup.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interviewStageGroup.list",
+          "covered_by": {
+            "stream": "interview_stage_group_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "interview_stage_group_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.interviewstageinfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/interviewstageinfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "interviewstageinfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interviewStage.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interviewStage.info",
+          "covered_by": {
+            "stream": "interview_stage_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "interview_stage_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.interviewstagelist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/interviewstagelist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "interviewstagelist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/interviewStage.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/interviewStage.list",
+          "covered_by": {
+            "stream": "interview_stage_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "interview_stage_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.jobboardlist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobboardlist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobboardlist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/jobBoard.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/jobBoard.list",
+          "covered_by": {
+            "stream": "job_board_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_board_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.jobcreate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobcreate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobcreate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/job.create",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/job.create",
+          "covered_by": {
+            "write": "create_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_job"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.jobinfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobinfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobinfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/job.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/job.info",
+          "covered_by": {
+            "stream": "job_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.jobinterviewplaninfo-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobinterviewplaninfo-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobinterviewplaninfo-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/jobInterviewPlan.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/jobInterviewPlan.info",
+          "covered_by": {
+            "stream": "job_interview_plan_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_interview_plan_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.joblist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/joblist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "joblist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/job.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/job.list",
+          "covered_by": {
+            "stream": "jobs"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "jobs"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.jobpostingcreate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobpostingcreate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobpostingcreate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/jobPosting.create",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/jobPosting.create",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobpostingcreate?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.jobpostinginfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobpostinginfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobpostinginfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/jobPosting.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/jobPosting.info",
+          "covered_by": {
+            "stream": "job_posting_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_posting_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.jobpostinglist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobpostinglist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobpostinglist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/jobPosting.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/jobPosting.list",
+          "covered_by": {
+            "stream": "job_posting_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_posting_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.jobpostingsetstatus",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobpostingsetstatus?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobpostingsetstatus",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/jobPosting.setStatus",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/jobPosting.setStatus",
+          "covered_by": {
+            "write": "set_job_posting_status"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "set_job_posting_status"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.jobpostingupdate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobpostingupdate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobpostingupdate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/jobPosting.update",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/jobPosting.update",
+          "covered_by": {
+            "write": "update_job_posting"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_job_posting"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.jobpostingupdatecompensation",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobpostingupdatecompensation?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobpostingupdatecompensation",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/jobPosting.updateCompensation",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/jobPosting.updateCompensation",
+          "covered_by": {
+            "write": "update_job_posting_compensation"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_job_posting_compensation"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.jobpostingupdatecompensationsettings",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobpostingupdatecompensationsettings?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobpostingupdatecompensationsettings",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/jobPosting.updateCompensationSettings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/jobPosting.updateCompensationSettings",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobpostingupdatecompensationsettings?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.jobsearch",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobsearch?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobsearch",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/job.search",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/job.search",
+          "covered_by": {
+            "direct_read": "job search"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "job search"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.jobsetstatus",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobsetstatus?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobsetstatus",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/job.setStatus",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/job.setStatus",
+          "covered_by": {
+            "write": "set_job_status"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "set_job_status"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.jobstartapprovalprocess",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobstartapprovalprocess?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobstartapprovalprocess",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/job.startApprovalProcess",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/job.startApprovalProcess",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobstartapprovalprocess?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.jobtemplatelist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobtemplatelist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobtemplatelist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/jobTemplate.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/jobTemplate.list",
+          "covered_by": {
+            "stream": "job_template_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "job_template_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.jobupdate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobupdate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobupdate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/job.update",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/job.update",
+          "covered_by": {
+            "write": "update_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_job"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.jobupdatecompensation",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobupdatecompensation?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobupdatecompensation",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/job.updateCompensation",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/job.updateCompensation",
+          "covered_by": {
+            "write": "update_job_compensation"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_job_compensation"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.jobupdatecompensationsettings",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobupdatecompensationsettings?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobupdatecompensationsettings",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/job.updateCompensationSettings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/job.updateCompensationSettings",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/jobupdatecompensationsettings?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.locationarchive-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/locationarchive-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "locationarchive-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/location.archive",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/location.archive",
+          "covered_by": {
+            "write": "archive_location"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "archive_location"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.locationcreate-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/locationcreate-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "locationcreate-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/location.create",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/location.create",
+          "covered_by": {
+            "write": "create_location"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_location"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.locationinfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/locationinfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "locationinfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/location.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/location.info",
+          "covered_by": {
+            "stream": "location_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "location_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.locationlist-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/locationlist-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "locationlist-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/location.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/location.list",
+          "covered_by": {
+            "stream": "location_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "location_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.locationmove-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/locationmove-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "locationmove-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/location.move",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/location.move",
+          "covered_by": {
+            "write": "move_location"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "move_location"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.locationrestore-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/locationrestore-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "locationrestore-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/location.restore",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/location.restore",
+          "covered_by": {
+            "write": "restore_location"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "restore_location"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.locationupdateaddress-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/locationupdateaddress-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "locationupdateaddress-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/location.updateAddress",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/location.updateAddress",
+          "covered_by": {
+            "write": "update_location_address"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_location_address"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.locationupdateexternalname-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/locationupdateexternalname-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "locationupdateexternalname-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/location.updateExternalName",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/location.updateExternalName",
+          "covered_by": {
+            "write": "update_location_external_name"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_location_external_name"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.locationupdatename-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/locationupdatename-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "locationupdatename-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/location.updateName",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/location.updateName",
+          "covered_by": {
+            "write": "update_location_name"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_location_name"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.locationupdateworkplacetype-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/locationupdateworkplacetype-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "locationupdateworkplacetype-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/location.updateWorkplaceType",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/location.updateWorkplaceType",
+          "covered_by": {
+            "write": "update_location_workplace_type"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_location_workplace_type"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.notetakertranscriptinfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/notetakertranscriptinfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "notetakertranscriptinfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/notetakerTranscript.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/notetakerTranscript.info",
+          "covered_by": {
+            "direct_read": "notetaker-transcript info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "notetaker-transcript info"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.offerapprove",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/offerapprove?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "offerapprove",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/offer.approve",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/offer.approve",
+          "covered_by": {
+            "write": "approve_offer"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "approve_offer"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.offercreate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/offercreate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "offercreate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/offer.create",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/offer.create",
+          "covered_by": {
+            "write": "create_offer"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_offer"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.offerinfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/offerinfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "offerinfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/offer.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/offer.info",
+          "covered_by": {
+            "stream": "offer_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "offer_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.offerlist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/offerlist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "offerlist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/offer.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/offer.list",
+          "covered_by": {
+            "stream": "offer_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "offer_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.offerprocessstart-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/offerprocessstart-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "offerprocessstart-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/offerProcess.start",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/offerProcess.start",
+          "covered_by": {
+            "write": "start_offer_process"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "start_offer_process"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.offersetdecidedat",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/offersetdecidedat?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "offersetdecidedat",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/offer.setDecidedAt",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/offer.setDecidedAt",
+          "covered_by": {
+            "write": "set_offer_decided_at"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "set_offer_decided_at"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.offersetstatus",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/offersetstatus?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "offersetstatus",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/offer.setStatus",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/offer.setStatus",
+          "covered_by": {
+            "write": "set_offer_status"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "set_offer_status"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.offerstart",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/offerstart?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "offerstart",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/offer.start",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/offer.start",
+          "covered_by": {
+            "write": "start_offer"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "start_offer"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.offerstartapprovalprocess",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/offerstartapprovalprocess?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "offerstartapprovalprocess",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/offer.startApprovalProcess",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/offer.startApprovalProcess",
+          "covered_by": {
+            "write": "start_offer_approval_process"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "start_offer_approval_process"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.offerupdate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/offerupdate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "offerupdate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/offer.update",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/offer.update",
+          "covered_by": {
+            "write": "update_offer"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_offer"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.openingaddjob-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/openingaddjob-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "openingaddjob-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opening.addJob",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opening.addJob",
+          "covered_by": {
+            "write": "add_opening_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "add_opening_job"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.openingaddlocation-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/openingaddlocation-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "openingaddlocation-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opening.addLocation",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opening.addLocation",
+          "covered_by": {
+            "write": "add_opening_location"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "add_opening_location"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.openingcreate-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/openingcreate-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "openingcreate-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opening.create",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opening.create",
+          "covered_by": {
+            "write": "create_opening"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_opening"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.openinginfo-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/openinginfo-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "openinginfo-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opening.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opening.info",
+          "covered_by": {
+            "stream": "opening_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opening_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.openinglist-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/openinglist-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "openinglist-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opening.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opening.list",
+          "covered_by": {
+            "stream": "opening_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "opening_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.openingremovejob-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/openingremovejob-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "openingremovejob-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opening.removeJob",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opening.removeJob",
+          "covered_by": {
+            "write": "remove_opening_job"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "remove_opening_job"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.openingremovelocation-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/openingremovelocation-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "openingremovelocation-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opening.removeLocation",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opening.removeLocation",
+          "covered_by": {
+            "write": "remove_opening_location"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "remove_opening_location"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.openingsearch-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/openingsearch-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "openingsearch-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opening.search",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opening.search",
+          "covered_by": {
+            "direct_read": "opening search"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "opening search"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.openingsetarchived-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/openingsetarchived-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "openingsetarchived-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opening.setArchived",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opening.setArchived",
+          "covered_by": {
+            "write": "set_opening_archived"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "set_opening_archived"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.openingsetopeningstate-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/openingsetopeningstate-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "openingsetopeningstate-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opening.setOpeningState",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opening.setOpeningState",
+          "covered_by": {
+            "write": "set_opening_opening_state"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "set_opening_opening_state"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.openingupdate-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/openingupdate-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "openingupdate-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/opening.update",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/opening.update",
+          "covered_by": {
+            "write": "update_opening"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_opening"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.projectinfo-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/projectinfo-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "projectinfo-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/project.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/project.info",
+          "covered_by": {
+            "stream": "project_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "project_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.projectlist-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/projectlist-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "projectlist-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/project.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/project.list",
+          "covered_by": {
+            "stream": "project_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "project_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.projectsearch",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/projectsearch?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "projectsearch",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/project.search",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/project.search",
+          "covered_by": {
+            "direct_read": "project search"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "project search"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.referralcreate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/referralcreate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "referralcreate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/referral.create",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/referral.create",
+          "covered_by": {
+            "write": "create_referral"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_referral"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.referraldelete",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/referraldelete?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "referraldelete",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/referral.delete",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/referral.delete",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/referraldelete?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.referralforminfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/referralforminfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "referralforminfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/referralForm.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/referralForm.info",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Blocked pending ashby-referral-form-info-side-effect-foundation: the documented operation may create a default referral form as a side effect.",
+            "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/referralforminfo?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.referrallist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/referrallist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "referrallist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/referral.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/referral.list",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/referrallist?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.reportgenerate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/reportgenerate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "reportgenerate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/report.generate",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/report.generate",
+          "covered_by": {
+            "direct_read": "report generate"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "report generate"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.reportsynchronous",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/reportsynchronous?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "reportsynchronous",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/report.synchronous",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/report.synchronous",
+          "covered_by": {
+            "stream": "report_synchronous"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "report_synchronous"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.sequenceadd",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/sequenceadd?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "sequenceadd",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/sequence.add",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/sequence.add",
+          "covered_by": {
+            "write": "add_sequence"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "add_sequence"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.sequencecancel",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/sequencecancel?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "sequencecancel",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/sequence.cancel",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/sequence.cancel",
+          "covered_by": {
+            "write": "cancel_sequence"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "cancel_sequence"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.sequencediscard",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/sequencediscard?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "sequencediscard",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/sequence.discard",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/sequence.discard",
+          "covered_by": {
+            "write": "discard_sequence"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "discard_sequence"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.sequenceinfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/sequenceinfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "sequenceinfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/sequence.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/sequence.info",
+          "covered_by": {
+            "stream": "sequence_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "sequence_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.sequencelist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/sequencelist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "sequencelist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/sequence.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/sequence.list",
+          "covered_by": {
+            "stream": "sequence_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "sequence_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.sequencestart",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/sequencestart?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "sequencestart",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/sequence.start",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/sequence.start",
+          "covered_by": {
+            "write": "start_sequence"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "start_sequence"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.sequencetemplateinfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/sequencetemplateinfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "sequencetemplateinfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/sequenceTemplate.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/sequenceTemplate.info",
+          "covered_by": {
+            "stream": "sequence_template_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "sequence_template_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.sequencetemplatelist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/sequencetemplatelist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "sequencetemplatelist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/sequenceTemplate.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/sequenceTemplate.list",
+          "covered_by": {
+            "stream": "sequence_template_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "sequence_template_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.sequenceupdatestage",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/sequenceupdatestage?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "sequenceupdatestage",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/sequence.updateStage",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/sequence.updateStage",
+          "covered_by": {
+            "write": "update_sequence_stage"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_sequence_stage"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.sourcelist-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/sourcelist-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "sourcelist-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/source.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/source.list",
+          "covered_by": {
+            "stream": "source_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "source_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.sourcetrackinglinklist-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/sourcetrackinglinklist-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "sourcetrackinglinklist-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/sourceTrackingLink.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/sourceTrackingLink.list",
+          "covered_by": {
+            "stream": "source_tracking_link_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "source_tracking_link_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.surveyformdefinitioninfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/surveyformdefinitioninfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "surveyformdefinitioninfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/surveyFormDefinition.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/surveyFormDefinition.info",
+          "covered_by": {
+            "stream": "survey_form_definition_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "survey_form_definition_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.surveyformdefinitionlist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/surveyformdefinitionlist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "surveyformdefinitionlist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/surveyFormDefinition.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/surveyFormDefinition.list",
+          "covered_by": {
+            "stream": "survey_form_definition_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "survey_form_definition_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.surveyrequestcreate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/surveyrequestcreate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "surveyrequestcreate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/surveyRequest.create",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/surveyRequest.create",
+          "covered_by": {
+            "write": "create_survey_request"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_survey_request"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.surveyrequestlist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/surveyrequestlist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "surveyrequestlist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/surveyRequest.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/surveyRequest.list",
+          "covered_by": {
+            "stream": "survey_request_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "survey_request_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.surveysubmissioncreate",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/surveysubmissioncreate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "surveysubmissioncreate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/surveySubmission.create",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/surveySubmission.create",
+          "covered_by": {
+            "write": "create_survey_submission"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_survey_submission"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.surveysubmissionlist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/surveysubmissionlist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "surveysubmissionlist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/surveySubmission.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/surveySubmission.list",
+          "covered_by": {
+            "stream": "survey_submission_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "survey_submission_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.takehomeassignmentinfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/takehomeassignmentinfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "takehomeassignmentinfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/takeHomeAssignment.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/takeHomeAssignment.info",
+          "covered_by": {
+            "stream": "take_home_assignment_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "take_home_assignment_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.takehomeassignmentlist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/takehomeassignmentlist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "takehomeassignmentlist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/takeHomeAssignment.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/takeHomeAssignment.list",
+          "covered_by": {
+            "stream": "take_home_assignment_list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "take_home_assignment_list"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.usercreateinterviewerpause",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/usercreateinterviewerpause?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "usercreateinterviewerpause",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/user.createInterviewerPause",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/user.createInterviewerPause",
+          "covered_by": {
+            "write": "create_user_interviewer_pause"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_user_interviewer_pause"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.userdeleteinterviewerpause",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/userdeleteinterviewerpause?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "userdeleteinterviewerpause",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/user.deleteInterviewerPause",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/user.deleteInterviewerPause",
+          "covered_by": {
+            "write": "delete_user_interviewer_pause"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_user_interviewer_pause"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.userinfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/userinfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "userinfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/user.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/user.info",
+          "covered_by": {
+            "stream": "user_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "user_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.userinterviewersettings",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/userinterviewersettings?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "userinterviewersettings",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/user.interviewerSettings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/user.interviewerSettings",
+          "covered_by": {
+            "direct_read": "user interviewer-settings"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "user interviewer-settings"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.userlist",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/userlist?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "userlist",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/user.list",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/user.list",
+          "covered_by": {
+            "stream": "users"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "users"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.userlistinterviewerpauses",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/userlistinterviewerpauses?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "userlistinterviewerpauses",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/user.listInterviewerPauses",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/user.listInterviewerPauses",
+          "covered_by": {
+            "stream": "user_list_interviewer_pauses"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "user_list_interviewer_pauses"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.usersearch",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/usersearch?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "usersearch",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/user.search",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/user.search",
+          "covered_by": {
+            "direct_read": "user search"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_read",
+          "id": [
+            "user search"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.usersetcustomfieldvalue",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/usersetcustomfieldvalue?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "usersetcustomfieldvalue",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/user.setCustomFieldValue",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/user.setCustomFieldValue",
+          "covered_by": {
+            "write": "set_user_custom_field_value"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "set_user_custom_field_value"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.usersetcustomfieldvalues",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/usersetcustomfieldvalues?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "usersetcustomfieldvalues",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/user.setCustomFieldValues",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/user.setCustomFieldValues",
+          "covered_by": {
+            "write": "set_user_custom_field_values"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "set_user_custom_field_values"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.userupdateinterviewersettings",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/userupdateinterviewersettings?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "userupdateinterviewersettings",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/user.updateInterviewerSettings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/user.updateInterviewerSettings",
+          "covered_by": {
+            "write": "update_user_interviewer_settings"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_user_interviewer_settings"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.webhookcreate-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/webhookcreate-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "webhookcreate-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/webhook.create",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/webhook.create",
+          "covered_by": {
+            "write": "create_webhook"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_webhook"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.webhookdelete-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/webhookdelete-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "webhookdelete-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/webhook.delete",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/webhook.delete",
+          "covered_by": {
+            "write": "delete_webhook"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_webhook"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.webhookinfo",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/webhookinfo?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "webhookinfo",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/webhook.info",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/webhook.info",
+          "covered_by": {
+            "stream": "webhook_info"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "webhook_info"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/ashby-operation-source-lock.json",
+      "source_id": "ashby.rendered.webhookupdate-1",
+      "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/webhookupdate-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "webhookupdate-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/webhook.update",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/webhook.update",
+          "covered_by": {
+            "write": "update_webhook"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_webhook"
+          ]
+        }
+      }
+    }
+  ]
+}

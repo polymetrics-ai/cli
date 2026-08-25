@@ -1,0 +1,1713 @@
+{
+  "schema_version": 2,
+  "connector": "calendly",
+  "source_lock": "sources/calendly-operation-source-lock.json",
+  "generated_at": "2026-08-19T16:45:23.176Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.create-contact-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/contacts\"].post",
+      "operation_id": "create-contact",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/contacts",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/contacts",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.create-event-type-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/event_types\"].post",
+      "operation_id": "create-event-type",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/event_types",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/event_types",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.create-invitee-no-show-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/invitee_no_shows\"].post",
+      "operation_id": "create-invitee-no-show",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/invitee_no_shows",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/invitee_no_shows",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.create-one-off-event-type-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/one_off_event_types\"].post",
+      "operation_id": "create-one-off-event-type",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/one_off_event_types",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/one_off_event_types",
+          "covered_by": {
+            "write": "create_one_off_event_type"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_one_off_event_type"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.create-organization-invitation-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/organizations/{uuid}/invitations\"].post",
+      "operation_id": "create-organization-invitation",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/organizations/{uuid}/invitations",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/organizations/{uuid}/invitations",
+          "covered_by": {
+            "write": "invite_user_to_organization"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "invite_user_to_organization"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.create-scheduled-event-cancellation-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/scheduled_events/{uuid}/cancellation\"].post",
+      "operation_id": "create-scheduled-event-cancellation",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/scheduled_events/{uuid}/cancellation",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/scheduled_events/{uuid}/cancellation",
+          "covered_by": {
+            "write": "cancel_scheduled_event"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "cancel_scheduled_event"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.create-scheduling-link-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/scheduling_links\"].post",
+      "operation_id": "create-scheduling-link",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/scheduling_links",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/scheduling_links",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.create-share-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/shares\"].post",
+      "operation_id": "create-share",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/shares",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/shares",
+          "covered_by": {
+            "write": "create_share"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_share"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.createwebhooks-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/webhook_subscriptions\"].post",
+      "operation_id": "createwebhooks",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/webhook_subscriptions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/webhook_subscriptions",
+          "covered_by": {
+            "write": "create_webhook_subscription"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_webhook_subscription"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.delete-contacts-uuid-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/contacts/{uuid}\"].delete",
+      "operation_id": "delete-contacts-uuid",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/contacts/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/contacts/{uuid}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.delete-invitee-data-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/data_compliance/deletion/invitees\"].post",
+      "operation_id": "delete-invitee-data",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/data_compliance/deletion/invitees",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/data_compliance/deletion/invitees",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.delete-invitee-no-show-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/invitee_no_shows/{uuid}\"].delete",
+      "operation_id": "delete-invitee-no-show",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/invitee_no_shows/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/invitee_no_shows/{uuid}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.delete-meeting-recaps-uuid-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/meeting_recaps/{uuid}\"].delete",
+      "operation_id": "delete-meeting-recaps-uuid",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/meeting_recaps/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/meeting_recaps/{uuid}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.delete-organization-membership-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/organization_memberships/{uuid}\"].delete",
+      "operation_id": "delete-organization-membership",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/organization_memberships/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/organization_memberships/{uuid}",
+          "covered_by": {
+            "write": "remove_organization_membership"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "remove_organization_membership"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.delete-scheduled-event-data-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/data_compliance/deletion/events\"].post",
+      "operation_id": "delete-scheduled-event-data",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/data_compliance/deletion/events",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/data_compliance/deletion/events",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.delete-webhook-subscription-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/webhook_subscriptions/{webhook_uuid}\"].delete",
+      "operation_id": "delete-webhook-subscription",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/webhook_subscriptions/{webhook_uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/webhook_subscriptions/{webhook_uuid}",
+          "covered_by": {
+            "write": "delete_webhook_subscription"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "delete_webhook_subscription"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-contact-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/contacts/{uuid}\"].get",
+      "operation_id": "get-contact",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/contacts/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/contacts/{uuid}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-current-user-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/users/me\"].get",
+      "operation_id": "get-current-user",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/users/me",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/users/me",
+          "covered_by": {
+            "stream": "users"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "users"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-event-type-availability-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/event_type_availability_schedules\"].get",
+      "operation_id": "get-event-type-availability",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/event_type_availability_schedules",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/event_type_availability_schedules",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-event-type-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/event_types/{uuid}\"].get",
+      "operation_id": "get-event-type",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/event_types/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/event_types/{uuid}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-group-relationship-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/group_relationships/{uuid}\"].get",
+      "operation_id": "get-group-relationship",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/group_relationships/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/group_relationships/{uuid}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-group-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/groups/{uuid}\"].get",
+      "operation_id": "get-group",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/groups/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/groups/{uuid}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-groups-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/groups\"].get",
+      "operation_id": "get-groups",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/groups",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/groups",
+          "covered_by": {
+            "stream": "groups"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "groups"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-invitee-no-show-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/invitee_no_shows/{uuid}\"].get",
+      "operation_id": "get-invitee-no-show",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/invitee_no_shows/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/invitee_no_shows/{uuid}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-meeting-recaps-uuid-recap-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/meeting_recaps/{uuid}\"].get",
+      "operation_id": "get-meeting-recaps-uuid-recap",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/meeting_recaps/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/meeting_recaps/{uuid}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-organization-invitation-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/organizations/{org_uuid}/invitations/{uuid}\"].get",
+      "operation_id": "get-organization-invitation",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/organizations/{org_uuid}/invitations/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/organizations/{org_uuid}/invitations/{uuid}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-organization-membership-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/organization_memberships/{uuid}\"].get",
+      "operation_id": "get-organization-membership",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/organization_memberships/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/organization_memberships/{uuid}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-organization-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/organizations/{uuid}\"].get",
+      "operation_id": "get-organization",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/organizations/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/organizations/{uuid}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-outgoing-communications-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/outgoing_communications\"].get",
+      "operation_id": "get-outgoing-communications",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/outgoing_communications",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/outgoing_communications",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-routing-form-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/routing_forms/{uuid}\"].get",
+      "operation_id": "get-routing-form",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/routing_forms/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/routing_forms/{uuid}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-routing-form-submission-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/routing_form_submissions/{uuid}\"].get",
+      "operation_id": "get-routing-form-submission",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/routing_form_submissions/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/routing_form_submissions/{uuid}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-sample-webhook-data-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/sample_webhook_data\"].get",
+      "operation_id": "get-sample-webhook-data",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/sample_webhook_data",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/sample_webhook_data",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-scheduled-event-invitees-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/scheduled_events/{event_uuid}/invitees/{invitee_uuid}\"].get",
+      "operation_id": "get-scheduled-event-invitees",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/scheduled_events/{event_uuid}/invitees/{invitee_uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/scheduled_events/{event_uuid}/invitees/{invitee_uuid}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-scheduled-event-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/scheduled_events/{uuid}\"].get",
+      "operation_id": "get-scheduled-event",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/scheduled_events/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/scheduled_events/{uuid}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-transcript-meeting-recaps-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/meeting_recaps/{uuid}/transcript\"].get",
+      "operation_id": "get-transcript-meeting-recaps",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/meeting_recaps/{uuid}/transcript",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/meeting_recaps/{uuid}/transcript",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-user-availability-schedule-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/user_availability_schedules/{uuid}\"].get",
+      "operation_id": "get-user-availability-schedule",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/user_availability_schedules/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/user_availability_schedules/{uuid}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-user-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/users/{uuid}\"].get",
+      "operation_id": "get-user",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/users/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/users/{uuid}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.get-webhook-subscription-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/webhook_subscriptions/{webhook_uuid}\"].get",
+      "operation_id": "get-webhook-subscription",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/webhook_subscriptions/{webhook_uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/webhook_subscriptions/{webhook_uuid}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.list-activity-log-entries-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/activity_log_entries\"].get",
+      "operation_id": "list-activity-log-entries",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/activity_log_entries",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/activity_log_entries",
+          "covered_by": {
+            "stream": "activity_log_entries"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "activity_log_entries"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.list-contacts-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/contacts\"].get",
+      "operation_id": "list-contacts",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/contacts",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/contacts",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.list-event-invitees-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/scheduled_events/{uuid}/invitees\"].get",
+      "operation_id": "list-event-invitees",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/scheduled_events/{uuid}/invitees",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/scheduled_events/{uuid}/invitees",
+          "covered_by": {
+            "stream": "invitees"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "invitees"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.list-event-type-available-times-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/event_type_available_times\"].get",
+      "operation_id": "list-event-type-available-times",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/event_type_available_times",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/event_type_available_times",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.list-event-type-memberships-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/event_type_memberships\"].get",
+      "operation_id": "list-event-type-memberships",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/event_type_memberships",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/event_type_memberships",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.list-event-types-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/event_types\"].get",
+      "operation_id": "list-event-types",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/event_types",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/event_types",
+          "covered_by": {
+            "stream": "event_types"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "event_types"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.list-group-relationships-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/group_relationships\"].get",
+      "operation_id": "list-group-relationships",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/group_relationships",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/group_relationships",
+          "covered_by": {
+            "stream": "group_relationships"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "group_relationships"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.list-meeting-recaps-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/meeting_recaps\"].get",
+      "operation_id": "list-meeting-recaps",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/meeting_recaps",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/meeting_recaps",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.list-organization-invitations-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/organizations/{uuid}/invitations\"].get",
+      "operation_id": "list-organization-invitations",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/organizations/{uuid}/invitations",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/organizations/{uuid}/invitations",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.list-organization-memberships-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/organization_memberships\"].get",
+      "operation_id": "list-organization-memberships",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/organization_memberships",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/organization_memberships",
+          "covered_by": {
+            "stream": "organization_memberships"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "organization_memberships"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.list-routing-form-submissions-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/routing_form_submissions\"].get",
+      "operation_id": "list-routing-form-submissions",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/routing_form_submissions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/routing_form_submissions",
+          "covered_by": {
+            "stream": "routing_form_submissions"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "routing_form_submissions"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.list-routing-forms-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/routing_forms\"].get",
+      "operation_id": "list-routing-forms",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/routing_forms",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/routing_forms",
+          "covered_by": {
+            "stream": "routing_forms"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "routing_forms"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.list-scheduled-events-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/scheduled_events\"].get",
+      "operation_id": "list-scheduled-events",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/scheduled_events",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/scheduled_events",
+          "covered_by": {
+            "stream": "scheduled_events"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "scheduled_events"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.list-user-availability-schedules-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/user_availability_schedules\"].get",
+      "operation_id": "list-user-availability-schedules",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/user_availability_schedules",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/user_availability_schedules",
+          "covered_by": {
+            "stream": "user_availability_schedules"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "user_availability_schedules"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.list-user-busy-times-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/user_busy_times\"].get",
+      "operation_id": "list-user-busy-times",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/user_busy_times",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/user_busy_times",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.list-user-locations-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/locations\"].get",
+      "operation_id": "list-user-locations",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/locations",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/locations",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.list-webhook-subscriptions-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/webhook_subscriptions\"].get",
+      "operation_id": "list-webhook-subscriptions",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/webhook_subscriptions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/webhook_subscriptions",
+          "covered_by": {
+            "stream": "webhook_subscriptions"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "webhook_subscriptions"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.patch-contacts-uuid-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/contacts/{uuid}\"].patch",
+      "operation_id": "patch-contacts-uuid",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/contacts/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/contacts/{uuid}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.post-invitee-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/invitees\"].post",
+      "operation_id": "post-invitee",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/invitees",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/invitees",
+          "covered_by": {
+            "write": "create_invitee"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_invitee"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.revoke-organization-invitation-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/organizations/{org_uuid}/invitations/{uuid}\"].delete",
+      "operation_id": "revoke-organization-invitation",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/organizations/{org_uuid}/invitations/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/organizations/{org_uuid}/invitations/{uuid}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.update-event-type-availability-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/event_type_availability_schedules\"].patch",
+      "operation_id": "update-event-type-availability",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/event_type_availability_schedules",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/event_type_availability_schedules",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.update-event-type-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/event_types/{uuid}\"].patch",
+      "operation_id": "update-event-type",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/event_types/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/event_types/{uuid}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/calendly-operation-source-lock.json",
+      "source_id": "calendly.rest.update-meeting-recaps-uuid-source-1",
+      "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation",
+      "source_location": "paths[\"/meeting_recaps/{uuid}\"].patch",
+      "operation_id": "update-meeting-recaps-uuid",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/meeting_recaps/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/meeting_recaps/{uuid}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://stoplight.io/api/v1/projects/calendly/api-docs/nodes/fern/apis/public-api/openapi.yaml?fromExportButton=true&snapshotType=http_operation"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    }
+  ]
+}

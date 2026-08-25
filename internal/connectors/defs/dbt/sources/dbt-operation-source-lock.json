@@ -1,0 +1,506 @@
+{
+  "schema_version": 3,
+  "connector": "dbt",
+  "captured_at": "2026-08-19T16:45:02.799Z",
+  "rest": {
+    "retrieval": "preserved issue-4292 public capture via http",
+    "openapi": [],
+    "coverage_confidence": {
+      "level": "machine-readable",
+      "basis": "dbt Labs publishes the dbt Cloud v2 OpenAPI document in its official repository; every HTTP path item is extracted."
+    },
+    "source_documents": [
+      {
+        "id": "document-0001",
+        "artifact": {
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+          "sha256": "733481d6d3a894c6c7b0fe828db2d2d4d80090769f458f1a56e9681b6c9045b8",
+          "bytes": 167519
+        },
+        "published_source": {
+          "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+          "capture_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+          "sha256": "733481d6d3a894c6c7b0fe828db2d2d4d80090769f458f1a56e9681b6c9045b8",
+          "bytes": 167519,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "dbt.rest.cancel-run-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/v2/accounts/{account_id}/runs/{run_id}/cancel/",
+            "operation_id": "Cancel Run",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/cancel/\"].post"
+          },
+          {
+            "id": "dbt.rest.create-environment-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/v2/accounts/{account_id}/environments/",
+            "operation_id": "Create Environment",
+            "deprecated": true,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/\"].post"
+          },
+          {
+            "id": "dbt.rest.create-job-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/v2/accounts/{account_id}/jobs/",
+            "operation_id": "Create Job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/\"].post"
+          },
+          {
+            "id": "dbt.rest.create-notification-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/v2/accounts/{account_id}/notifications/",
+            "operation_id": "Create Notification",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/\"].post"
+          },
+          {
+            "id": "dbt.rest.create-project-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/v2/accounts/{account_id}/projects/",
+            "operation_id": "Create Project",
+            "deprecated": true,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/\"].post"
+          },
+          {
+            "id": "dbt.rest.create-repository-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/v2/accounts/{account_id}/repositories/",
+            "operation_id": "Create Repository",
+            "deprecated": true,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/repositories/\"].post"
+          },
+          {
+            "id": "dbt.rest.create-ssh-tunnel-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/v2/accounts/{account_id}/encryptions/",
+            "operation_id": "Create SSH Tunnel",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/\"].post"
+          },
+          {
+            "id": "dbt.rest.destroy-environment-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+            "operation_id": "Destroy Environment",
+            "deprecated": true,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].delete"
+          },
+          {
+            "id": "dbt.rest.destroy-job-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+            "operation_id": "Destroy Job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{id}/\"].delete"
+          },
+          {
+            "id": "dbt.rest.destroy-notification-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+            "operation_id": "Destroy Notification",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/{id}/\"].delete"
+          },
+          {
+            "id": "dbt.rest.destroy-project-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+            "operation_id": "Destroy Project",
+            "deprecated": true,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].delete"
+          },
+          {
+            "id": "dbt.rest.destroy-repository-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+            "operation_id": "Destroy Repository",
+            "deprecated": true,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/repositories/{id}/\"].delete"
+          },
+          {
+            "id": "dbt.rest.destroy-ssh-tunnel-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+            "operation_id": "Destroy SSH Tunnel",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/{id}/\"].delete"
+          },
+          {
+            "id": "dbt.rest.list-account-license-allocations-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/licenses/",
+            "operation_id": "List Account License Allocations",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/licenses/\"].get"
+          },
+          {
+            "id": "dbt.rest.list-accounts-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/",
+            "operation_id": "List Accounts",
+            "deprecated": true,
+            "source_location": "paths[\"/api/v2/accounts/\"].get"
+          },
+          {
+            "id": "dbt.rest.list-environments-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/environments/",
+            "operation_id": "List Environments",
+            "deprecated": true,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/\"].get"
+          },
+          {
+            "id": "dbt.rest.list-invites-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/invites/",
+            "operation_id": "List Invites",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/invites/\"].get"
+          },
+          {
+            "id": "dbt.rest.list-jobs-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/jobs/",
+            "operation_id": "List Jobs",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/\"].get"
+          },
+          {
+            "id": "dbt.rest.list-notifications-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/notifications/",
+            "operation_id": "List Notifications",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/\"].get"
+          },
+          {
+            "id": "dbt.rest.list-projects-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/projects/",
+            "operation_id": "List Projects",
+            "deprecated": true,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/\"].get"
+          },
+          {
+            "id": "dbt.rest.list-repositories-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/repositories/",
+            "operation_id": "List Repositories",
+            "deprecated": true,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/repositories/\"].get"
+          },
+          {
+            "id": "dbt.rest.list-run-artifacts-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/",
+            "operation_id": "List Run Artifacts",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/\"].get"
+          },
+          {
+            "id": "dbt.rest.list-runs-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/runs/",
+            "operation_id": "List Runs",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/\"].get"
+          },
+          {
+            "id": "dbt.rest.list-ssh-tunnels-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/encryptions/",
+            "operation_id": "List SSH Tunnels",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/\"].get"
+          },
+          {
+            "id": "dbt.rest.list-users-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/users/",
+            "operation_id": "List Users",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/users/\"].get"
+          },
+          {
+            "id": "dbt.rest.partial-update-account-source-1",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/v2/accounts/{account_id}/",
+            "operation_id": "Partial Update Account",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/\"].patch"
+          },
+          {
+            "id": "dbt.rest.retrieve-account-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/",
+            "operation_id": "Retrieve Account",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/\"].get"
+          },
+          {
+            "id": "dbt.rest.retrieve-environment-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+            "operation_id": "Retrieve Environment",
+            "deprecated": true,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].get"
+          },
+          {
+            "id": "dbt.rest.retrieve-invite-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/invites/{id}/",
+            "operation_id": "Retrieve Invite",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/invites/{id}/\"].get"
+          },
+          {
+            "id": "dbt.rest.retrieve-job-artifact-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}",
+            "operation_id": "Retrieve Job Artifact",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}\"].get"
+          },
+          {
+            "id": "dbt.rest.retrieve-job-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+            "operation_id": "Retrieve Job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{id}/\"].get"
+          },
+          {
+            "id": "dbt.rest.retrieve-notification-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+            "operation_id": "Retrieve Notification",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/{id}/\"].get"
+          },
+          {
+            "id": "dbt.rest.retrieve-project-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+            "operation_id": "Retrieve Project",
+            "deprecated": true,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].get"
+          },
+          {
+            "id": "dbt.rest.retrieve-repository-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+            "operation_id": "Retrieve Repository",
+            "deprecated": true,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/repositories/{id}/\"].get"
+          },
+          {
+            "id": "dbt.rest.retrieve-run-artifact-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}",
+            "operation_id": "Retrieve Run Artifact",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}\"].get"
+          },
+          {
+            "id": "dbt.rest.retrieve-run-failure-details-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+            "operation_id": "Retrieve Run Failure Details",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/retry/\"].get"
+          },
+          {
+            "id": "dbt.rest.retrieve-run-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/runs/{id}/",
+            "operation_id": "Retrieve Run",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{id}/\"].get"
+          },
+          {
+            "id": "dbt.rest.retrieve-run-step-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/steps/{id}/",
+            "operation_id": "Retrieve Run Step",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/steps/{id}/\"].get"
+          },
+          {
+            "id": "dbt.rest.retrieve-ssh-tunnel-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+            "operation_id": "Retrieve SSH Tunnel",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/{id}/\"].get"
+          },
+          {
+            "id": "dbt.rest.retrieve-user-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/v2/users/{id}/",
+            "operation_id": "Retrieve User",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/users/{id}/\"].get"
+          },
+          {
+            "id": "dbt.rest.retry-failed-job-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/rerun/",
+            "operation_id": "Retry Failed Job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{job_id}/rerun/\"].post"
+          },
+          {
+            "id": "dbt.rest.retry-run-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+            "operation_id": "Retry Run",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/runs/{run_id}/retry/\"].post"
+          },
+          {
+            "id": "dbt.rest.trigger-job-run-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/run/",
+            "operation_id": "Trigger Job Run",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{job_id}/run/\"].post"
+          },
+          {
+            "id": "dbt.rest.unsubscribe-from-notifications-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/v2/notifications/unsubscribe/",
+            "operation_id": "Unsubscribe from Notifications",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/notifications/unsubscribe/\"].post"
+          },
+          {
+            "id": "dbt.rest.update-account-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/v2/accounts/{account_id}/",
+            "operation_id": "Update Account",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/\"].post"
+          },
+          {
+            "id": "dbt.rest.update-environment-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+            "operation_id": "Update Environment",
+            "deprecated": true,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/environments/{id}/\"].post"
+          },
+          {
+            "id": "dbt.rest.update-job-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+            "operation_id": "Update Job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/jobs/{id}/\"].post"
+          },
+          {
+            "id": "dbt.rest.update-license-permissions-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/v2/accounts/{account_id}/permissions/{id}/",
+            "operation_id": "Update License Permissions",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/permissions/{id}/\"].post"
+          },
+          {
+            "id": "dbt.rest.update-notification-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+            "operation_id": "Update Notification",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/notifications/{id}/\"].post"
+          },
+          {
+            "id": "dbt.rest.update-project-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+            "operation_id": "Update Project",
+            "deprecated": true,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/projects/{id}/\"].post"
+          },
+          {
+            "id": "dbt.rest.update-ssh-tunnel-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+            "operation_id": "Update SSH Tunnel",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/accounts/{account_id}/encryptions/{id}/\"].post"
+          },
+          {
+            "id": "dbt.rest.update-user-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/v2/users/{id}/",
+            "operation_id": "Update User",
+            "deprecated": false,
+            "source_location": "paths[\"/api/v2/users/{id}/\"].post"
+          }
+        ]
+      }
+    ]
+  },
+  "counts": {
+    "rest": 52,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 52
+  }
+}

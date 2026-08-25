@@ -1,0 +1,26 @@
+{
+  "schema_version": 2,
+  "connector": "greenhouse",
+  "generated_at": "2026-08-19T16:45:29.021Z",
+  "source_basis": {
+    "state": "skipped",
+    "source_lock": "sources/greenhouse-operation-source-lock.json",
+    "reason": "no-public-api-description",
+    "coverage_confidence": {
+      "level": "unavailable",
+      "basis": "no-public-api-description: The provider's formerly public Harvest API reference was requested in Chrome without credentials and rendered the Greenhouse Recruiting sign-in page. No current public provider API description could be pinned, so this map does not reuse the old api_surface.json as a substitute source inventory."
+    }
+  },
+  "summary": {
+    "state": "skipped",
+    "old_api_surface_count": 138,
+    "operations_found": null,
+    "coverage_confidence": {
+      "level": "unavailable",
+      "basis": "no-public-api-description: The provider's formerly public Harvest API reference was requested in Chrome without credentials and rendered the Greenhouse Recruiting sign-in page. No current public provider API description could be pinned, so this map does not reuse the old api_surface.json as a substitute source inventory."
+    },
+    "reason": "no-public-api-description",
+    "live_certification": "pending"
+  },
+  "ledger_dispositions": []
+}

@@ -1,0 +1,1174 @@
+{
+  "schema_version": 2,
+  "connector": "docuseal",
+  "generated_at": "2026-08-19T16:46:25.967Z",
+  "source_basis": {
+    "source_lock": "sources/docuseal-operation-source-lock.json",
+    "source_url": "https://console.docuseal.com/openapi.yml",
+    "source_bundle": {
+      "document_count": 1,
+      "sha256": "ed119c5de6d5eb9f2691bb324d7474cfafe3cc034afaf85c2e33ea7669afb0cc",
+      "bytes": 192929
+    },
+    "source_operation_count": 23,
+    "coverage_confidence": {
+      "level": "machine-readable",
+      "basis": "DocuSeal publishes its OpenAPI document at this official console URL; every HTTP path item is extracted."
+    }
+  },
+  "summary": {
+    "old_api_surface_count": 23,
+    "api_surface_rows": 23,
+    "legacy_runtime_binding_rows": 0,
+    "operations_found": 23,
+    "coverage_confidence": {
+      "level": "machine-readable",
+      "basis": "DocuSeal publishes its OpenAPI document at this official console URL; every HTTP path item is extracted."
+    },
+    "enabled_operations": 10,
+    "enabled_percent": 43.48,
+    "disabled_operations": 13,
+    "documented_deletes": 2,
+    "enabled_deletes": 2,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 3
+      },
+      {
+        "key": "direct_write",
+        "count": 16
+      },
+      {
+        "key": "etl",
+        "count": 4
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 4,
+    "write_actions": 6,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "count": 16,
+        "applies_to": "reverse_etl_eligibility attribute on direct_write operations"
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 13
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-docuseal",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/docuseal/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "typed-operation-contract-docuseal",
+      "sync-transport-source-definition-docuseal"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-docuseal",
+        "count": 13
+      }
+    ]
+  },
+  "ledger_dispositions": [
+    {
+      "method": "DELETE",
+      "path": "/submissions/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/submissions/{id}",
+        "covered_by": {
+          "write": "archive_submission"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.archivesubmission-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/submissions/{id}\"].delete",
+        "operation_id": "archiveSubmission",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/docuseal/writes.json: typed write action(s) [\"archive_submission\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "archive_submission"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"archive_submission\"] bind the pinned provider operation",
+        "writes": [
+          "archive_submission"
+        ]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/templates/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/templates/{id}",
+        "covered_by": {
+          "write": "archive_template"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.archivetemplate-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/templates/{id}\"].delete",
+        "operation_id": "archiveTemplate",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/docuseal/writes.json: typed write action(s) [\"archive_template\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "archive_template"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"archive_template\"] bind the pinned provider operation",
+        "writes": [
+          "archive_template"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/{id}/clone",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/templates/{id}/clone",
+        "covered_by": {
+          "write": "clone_template"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.clonetemplate-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/templates/{id}/clone\"].post",
+        "operation_id": "cloneTemplate",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/docuseal/writes.json: typed write action(s) [\"clone_template\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "clone_template"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"clone_template\"] bind the pinned provider operation",
+        "writes": [
+          "clone_template"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/submissions",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/submissions",
+        "covered_by": {
+          "write": "create_submission"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.createsubmission-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/submissions\"].post",
+        "operation_id": "createSubmission",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/docuseal/writes.json: typed write action(s) [\"create_submission\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "create_submission"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"create_submission\"] bind the pinned provider operation",
+        "writes": [
+          "create_submission"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/submissions/docx",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/submissions/docx",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://console.docuseal.com/openapi.yml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.createsubmissionfromdocx-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/submissions/docx\"].post",
+        "operation_id": "createSubmissionFromDocx",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-docuseal",
+          "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/submissions/docx\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/submissions/docx\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-docuseal",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/submissions/html",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/submissions/html",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://console.docuseal.com/openapi.yml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.createsubmissionfromhtml-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/submissions/html\"].post",
+        "operation_id": "createSubmissionFromHtml",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-docuseal",
+          "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/submissions/html\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/submissions/html\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-docuseal",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/submissions/pdf",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/submissions/pdf",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://console.docuseal.com/openapi.yml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.createsubmissionfrompdf-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/submissions/pdf\"].post",
+        "operation_id": "createSubmissionFromPdf",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-docuseal",
+          "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/submissions/pdf\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/submissions/pdf\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-docuseal",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/submissions/emails",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/submissions/emails",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://console.docuseal.com/openapi.yml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.createsubmissionsfromemails-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/submissions/emails\"].post",
+        "operation_id": "createSubmissionsFromEmails",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-docuseal",
+          "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/submissions/emails\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/submissions/emails\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-docuseal",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/docx",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/templates/docx",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://console.docuseal.com/openapi.yml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.createtemplatefromdocx-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/templates/docx\"].post",
+        "operation_id": "createTemplateFromDocx",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-docuseal",
+          "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/templates/docx\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/templates/docx\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-docuseal",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/html",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/templates/html",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://console.docuseal.com/openapi.yml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.createtemplatefromhtml-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/templates/html\"].post",
+        "operation_id": "createTemplateFromHtml",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-docuseal",
+          "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/templates/html\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/templates/html\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-docuseal",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/pdf",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/templates/pdf",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://console.docuseal.com/openapi.yml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.createtemplatefrompdf-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/templates/pdf\"].post",
+        "operation_id": "createTemplateFromPdf",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-docuseal",
+          "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/templates/pdf\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/templates/pdf\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-docuseal",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/submissions/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/submissions/{id}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://console.docuseal.com/openapi.yml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.getsubmission-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/submissions/{id}\"].get",
+        "operation_id": "getSubmission",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-docuseal",
+          "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/submissions/{id}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/submissions/{id}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-docuseal",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/submissions/{id}/documents",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/submissions/{id}/documents",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://console.docuseal.com/openapi.yml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.getsubmissiondocuments-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/submissions/{id}/documents\"].get",
+        "operation_id": "getSubmissionDocuments",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-docuseal",
+          "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/submissions/{id}/documents\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/submissions/{id}/documents\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-docuseal",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/submissions",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/submissions",
+        "covered_by": {
+          "stream": "submissions"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.getsubmissions-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/submissions\"].get",
+        "operation_id": "getSubmissions",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/docuseal/streams.json: existing stream \"submissions\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"submissions\" binds the pinned provider operation",
+        "stream": "submissions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/submitters/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/submitters/{id}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+          "source_url": "https://console.docuseal.com/openapi.yml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.getsubmitter-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/submitters/{id}\"].get",
+        "operation_id": "getSubmitter",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-docuseal",
+          "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/submitters/{id}\"].get.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/submitters/{id}\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-docuseal",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/submitters",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/submitters",
+        "covered_by": {
+          "stream": "submitters"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.getsubmitters-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/submitters\"].get",
+        "operation_id": "getSubmitters",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/docuseal/streams.json: existing stream \"submitters\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"submitters\" binds the pinned provider operation",
+        "stream": "submitters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/templates/{id}",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/templates/{id}",
+        "covered_by": {
+          "stream": "template_detail"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.gettemplate-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/templates/{id}\"].get",
+        "operation_id": "getTemplate",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/docuseal/streams.json: existing stream \"template_detail\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"template_detail\" binds the pinned provider operation",
+        "stream": "template_detail"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/templates",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/templates",
+        "covered_by": {
+          "stream": "templates"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.gettemplates-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/templates\"].get",
+        "operation_id": "getTemplates",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/docuseal/streams.json: existing stream \"templates\" binds this provider operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing etl stream \"templates\" binds the pinned provider operation",
+        "stream": "templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/merge",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/templates/merge",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://console.docuseal.com/openapi.yml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.mergetemplate-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/templates/merge\"].post",
+        "operation_id": "mergeTemplate",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-docuseal",
+          "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/templates/merge\"].post.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/templates/merge\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-docuseal",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/submissions/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/submissions/{id}",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://console.docuseal.com/openapi.yml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.updatesubmission-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/submissions/{id}\"].put",
+        "operation_id": "updateSubmission",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-docuseal",
+          "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/submissions/{id}\"].put.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/submissions/{id}\"].put."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-docuseal",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/submitters/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/submitters/{id}",
+        "covered_by": {
+          "write": "update_submitter"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.updatesubmitter-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/submitters/{id}\"].put",
+        "operation_id": "updateSubmitter",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/docuseal/writes.json: typed write action(s) [\"update_submitter\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "update_submitter"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"update_submitter\"] bind the pinned provider operation",
+        "writes": [
+          "update_submitter"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/templates/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/templates/{id}",
+        "covered_by": {
+          "write": "update_template"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.updatetemplate-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/templates/{id}\"].put",
+        "operation_id": "updateTemplate",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/docuseal/writes.json: typed write action(s) [\"update_template\"] bind this provider operation.",
+        "contract": {
+          "kind": "typed_write_action",
+          "ids": [
+            "update_template"
+          ]
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed direct_write action(s) [\"update_template\"] bind the pinned provider operation",
+        "writes": [
+          "update_template"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/templates/{id}/documents",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/templates/{id}/documents",
+        "operation": {
+          "model": "local_workflow",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+          "source_url": "https://console.docuseal.com/openapi.yml"
+        }
+      },
+      "source": {
+        "source_lock": "sources/docuseal-operation-source-lock.json",
+        "source_id": "docuseal.rest.updatetemplatedocuments-source-1",
+        "source_url": "https://console.docuseal.com/openapi.yml",
+        "source_location": "paths[\"/templates/{id}/documents\"].put",
+        "operation_id": "updateTemplateDocuments",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-docuseal",
+          "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/templates/{id}/documents\"].put.",
+          "minimal_change": "Add a bounded connector-owned operation contract and runnable command from the pinned provider document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 (acb85dc03): issueLabelDestinationReference is the only destination factory and BuildDestination enforces the GitHub issue-label contract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this provider operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "sources/docuseal-operation-source-lock.json:paths[\"/templates/{id}/documents\"].put."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-docuseal",
+        "contract": null
+      }
+    }
+  ]
+}

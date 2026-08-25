@@ -1,0 +1,26 @@
+{
+  "schema_version": 2,
+  "connector": "testrail",
+  "generated_at": "2026-08-19T16:47:01.132Z",
+  "source_basis": {
+    "state": "skipped",
+    "source_lock": "sources/testrail-operation-source-lock.json",
+    "reason": "no-public-api-description",
+    "coverage_confidence": {
+      "level": "unavailable",
+      "basis": "no-public-api-description: The official rendered reference was requested in Chrome without credentials and returned a Cloudflare security-verification page rather than the published API reference. Per issue #4292 decision, no source pin or operation ledger is fabricated."
+    }
+  },
+  "summary": {
+    "state": "skipped",
+    "old_api_surface_count": 106,
+    "operations_found": null,
+    "coverage_confidence": {
+      "level": "unavailable",
+      "basis": "no-public-api-description: The official rendered reference was requested in Chrome without credentials and returned a Cloudflare security-verification page rather than the published API reference. Per issue #4292 decision, no source pin or operation ledger is fabricated."
+    },
+    "reason": "no-public-api-description",
+    "live_certification": "pending"
+  },
+  "ledger_dispositions": []
+}

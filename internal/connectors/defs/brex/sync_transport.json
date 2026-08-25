@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_stream_source"
+    },
+    "eligible_streams": [
+      "transactions",
+      "users",
+      "expenses",
+      "vendors",
+      "budgets",
+      "departments",
+      "locations",
+      "titles",
+      "legal_entities",
+      "cards",
+      "accounts_card",
+      "accounts_cash",
+      "card_statements",
+      "linked_accounts",
+      "transfers",
+      "webhooks"
+    ],
+    "modes": [
+      "full_append"
+    ],
+    "delivery": {
+      "idempotency": "at_least_once",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "declarative_stream_transport_static",
+      "run_id": "brex_source_definition_v1"
+    }
+  }
+}

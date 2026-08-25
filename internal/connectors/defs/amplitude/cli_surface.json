@@ -1,0 +1,359 @@
+{
+  "tagline": "Run Amplitude's declared typed write actions.",
+  "usage": "pm amplitude <command> [flags]",
+  "groups": [
+    {
+      "id": "reverse_etl",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "create annotation apply",
+        "create annotation category apply",
+        "create taxonomy category apply",
+        "create taxonomy event apply",
+        "delete annotation apply",
+        "delete annotation category apply",
+        "delete taxonomy category apply",
+        "delete taxonomy event apply",
+        "update annotation apply",
+        "update annotation category apply",
+        "update taxonomy category apply",
+        "update taxonomy event apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "create annotation apply",
+      "summary": "POST /api/3/annotations (create_annotation)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_annotation",
+      "flags": [
+        {
+          "name": "label",
+          "type": "string",
+          "summary": "Required label record field.",
+          "maps_to": "record.label",
+          "required": true
+        },
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Required start record field.",
+          "maps_to": "record.start",
+          "required": true
+        }
+      ],
+      "risk": "creates a chart annotation visible to every Amplitude project user",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm amplitude create annotation apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/annotations"
+        }
+      ]
+    },
+    {
+      "path": "create annotation category apply",
+      "summary": "POST /api/3/annotation-categories (create_annotation_category)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_annotation_category",
+      "flags": [
+        {
+          "name": "category",
+          "type": "string",
+          "summary": "Required category record field.",
+          "maps_to": "record.category",
+          "required": true
+        }
+      ],
+      "risk": "creates a new annotation category shared across the Amplitude project",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm amplitude create annotation category apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/annotation-categories"
+        }
+      ]
+    },
+    {
+      "path": "create taxonomy category apply",
+      "summary": "POST /api/2/taxonomy/category (create_taxonomy_category)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_taxonomy_category",
+      "flags": [
+        {
+          "name": "category-name",
+          "type": "string",
+          "summary": "Required category_name record field.",
+          "maps_to": "record.category_name",
+          "required": true
+        }
+      ],
+      "risk": "creates a new event category in the Amplitude project's governed taxonomy",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm amplitude create taxonomy category apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/2/taxonomy/category"
+        }
+      ]
+    },
+    {
+      "path": "create taxonomy event apply",
+      "summary": "POST /api/2/taxonomy/event (create_taxonomy_event)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_taxonomy_event",
+      "flags": [
+        {
+          "name": "event-type",
+          "type": "string",
+          "summary": "Required event_type record field.",
+          "maps_to": "record.event_type",
+          "required": true
+        }
+      ],
+      "risk": "registers a new governed event type in the Amplitude project's taxonomy",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm amplitude create taxonomy event apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/2/taxonomy/event"
+        }
+      ]
+    },
+    {
+      "path": "delete annotation apply",
+      "summary": "Typed action delete_annotation",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_annotation",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "permanently deletes a chart annotation",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/3/annotations/{id} disagrees with covered api_surface path /api/3/annotations/{annotation_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/3/annotations/{id} disagrees with covered api_surface path /api/3/annotations/{annotation_id}.",
+      "examples": [
+        "pm amplitude delete annotation apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete annotation category apply",
+      "summary": "Typed action delete_annotation_category",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_annotation_category",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "permanently deletes an annotation category shared across the Amplitude project",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/3/annotation-categories/{id} disagrees with covered api_surface path /api/3/annotation-categories/{category_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/3/annotation-categories/{id} disagrees with covered api_surface path /api/3/annotation-categories/{category_id}.",
+      "examples": [
+        "pm amplitude delete annotation category apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete taxonomy category apply",
+      "summary": "DELETE /api/2/taxonomy/category/{category_id} (delete_taxonomy_category)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_taxonomy_category",
+      "flags": [
+        {
+          "name": "category-id",
+          "type": "integer",
+          "summary": "Required category_id record field.",
+          "maps_to": "record.category_id",
+          "required": true
+        }
+      ],
+      "risk": "permanently deletes an event category from the Amplitude project's governed taxonomy",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm amplitude delete taxonomy category apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/2/taxonomy/category/{category_id}"
+        }
+      ]
+    },
+    {
+      "path": "delete taxonomy event apply",
+      "summary": "DELETE /api/2/taxonomy/event/{event_type} (delete_taxonomy_event)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_taxonomy_event",
+      "flags": [
+        {
+          "name": "event-type",
+          "type": "string",
+          "summary": "Required event_type record field.",
+          "maps_to": "record.event_type",
+          "required": true
+        }
+      ],
+      "risk": "soft-deletes a governed event type from the Amplitude project's taxonomy (recoverable via the restore endpoint, not modeled as a separate write action)",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm amplitude delete taxonomy event apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/2/taxonomy/event/{event_type}"
+        }
+      ]
+    },
+    {
+      "path": "update annotation apply",
+      "summary": "Typed action update_annotation",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_annotation",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "mutates an existing chart annotation visible to every Amplitude project user",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/3/annotations/{id} disagrees with covered api_surface path /api/3/annotations/{annotation_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/3/annotations/{id} disagrees with covered api_surface path /api/3/annotations/{annotation_id}.",
+      "examples": [
+        "pm amplitude update annotation apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update annotation category apply",
+      "summary": "Typed action update_annotation_category",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_annotation_category",
+      "flags": [
+        {
+          "name": "category",
+          "type": "string",
+          "summary": "Required category record field.",
+          "maps_to": "record.category",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "renames an existing annotation category shared across the Amplitude project",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/3/annotation-categories/{id} disagrees with covered api_surface path /api/3/annotation-categories/{category_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/3/annotation-categories/{id} disagrees with covered api_surface path /api/3/annotation-categories/{category_id}.",
+      "examples": [
+        "pm amplitude update annotation category apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update taxonomy category apply",
+      "summary": "PUT /api/2/taxonomy/category/{category_id} (update_taxonomy_category)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_taxonomy_category",
+      "flags": [
+        {
+          "name": "category-id",
+          "type": "integer",
+          "summary": "Required category_id record field.",
+          "maps_to": "record.category_id",
+          "required": true
+        },
+        {
+          "name": "category-name",
+          "type": "string",
+          "summary": "Required category_name record field.",
+          "maps_to": "record.category_name",
+          "required": true
+        }
+      ],
+      "risk": "renames an existing event category in the Amplitude project's governed taxonomy",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm amplitude update taxonomy category apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/2/taxonomy/category/{category_id}"
+        }
+      ]
+    },
+    {
+      "path": "update taxonomy event apply",
+      "summary": "PUT /api/2/taxonomy/event/{event_type} (update_taxonomy_event)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_taxonomy_event",
+      "flags": [
+        {
+          "name": "event-type",
+          "type": "string",
+          "summary": "Required event_type record field.",
+          "maps_to": "record.event_type",
+          "required": true
+        }
+      ],
+      "risk": "mutates an existing governed event type's taxonomy metadata",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm amplitude update taxonomy event apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/2/taxonomy/event/{event_type}"
+        }
+      ]
+    }
+  ]
+}

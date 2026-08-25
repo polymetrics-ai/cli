@@ -1,0 +1,522 @@
+{
+  "tagline": "Run ClickUp's declared typed write actions.",
+  "usage": "pm clickup-api <command> [flags]",
+  "groups": [
+    {
+      "id": "reverse_etl",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add tag to task apply",
+        "create folder apply",
+        "create goal apply",
+        "create list apply",
+        "create space apply",
+        "create task apply",
+        "create task comment apply",
+        "create webhook apply",
+        "delete folder apply",
+        "delete list apply",
+        "delete space apply",
+        "delete task apply",
+        "delete webhook apply",
+        "remove tag from task apply",
+        "set custom field value apply",
+        "update folder apply",
+        "update list apply",
+        "update space apply",
+        "update task apply",
+        "update webhook apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "add tag to task apply",
+      "summary": "Typed action add_tag_to_task",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "add_tag_to_task",
+      "flags": [
+        {
+          "name": "tag-name",
+          "type": "string",
+          "summary": "Required tag_name record field.",
+          "maps_to": "record.tag_name",
+          "required": true
+        },
+        {
+          "name": "task-id",
+          "type": "string",
+          "summary": "Required task_id record field.",
+          "maps_to": "record.task_id",
+          "required": true
+        }
+      ],
+      "risk": "attaches an existing Space Tag to a task; low-risk",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /task/{task_id}/tag/{tag_name} disagrees with covered api_surface path /v2/task/{task_id}/tag/{tag_name}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /task/{task_id}/tag/{tag_name} disagrees with covered api_surface path /v2/task/{task_id}/tag/{tag_name}.",
+      "examples": [
+        "pm clickup-api add tag to task apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create folder apply",
+      "summary": "Typed action create_folder",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_folder",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "creates a new Folder in the configured space; low-risk (additive)",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.space_id }}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.space_id }}.",
+      "examples": [
+        "pm clickup-api create folder apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create goal apply",
+      "summary": "Typed action create_goal",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_goal",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "creates a new ClickUp Goal in the configured team/workspace; low-risk (additive)",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.team_id }}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.team_id }}.",
+      "examples": [
+        "pm clickup-api create goal apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create list apply",
+      "summary": "Typed action create_list",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_list",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "creates a new List in the configured Folder; low-risk (additive)",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.folder_id }}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.folder_id }}.",
+      "examples": [
+        "pm clickup-api create list apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create space apply",
+      "summary": "Typed action create_space",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_space",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "creates a new Space in the configured Workspace; low-risk (additive)",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.team_id }}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.team_id }}.",
+      "examples": [
+        "pm clickup-api create space apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create task apply",
+      "summary": "Typed action create_task",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_task",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "creates a new ClickUp task in the configured list; low-risk (additive)",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.list_id }}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.list_id }}.",
+      "examples": [
+        "pm clickup-api create task apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create task comment apply",
+      "summary": "Typed action create_task_comment",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_task_comment",
+      "flags": [
+        {
+          "name": "comment-text",
+          "type": "string",
+          "summary": "Required comment_text record field.",
+          "maps_to": "record.comment_text",
+          "required": true
+        },
+        {
+          "name": "notify-all",
+          "type": "boolean",
+          "summary": "Required notify_all record field.",
+          "maps_to": "record.notify_all",
+          "required": true
+        },
+        {
+          "name": "task-id",
+          "type": "string",
+          "summary": "Required task_id record field.",
+          "maps_to": "record.task_id",
+          "required": true
+        }
+      ],
+      "risk": "adds a new comment to a ClickUp task, visible to all task watchers when notify_all is true; low-risk",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /task/{task_id}/comment disagrees with covered api_surface path /v2/task/{task_id}/comment.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /task/{task_id}/comment disagrees with covered api_surface path /v2/task/{task_id}/comment.",
+      "examples": [
+        "pm clickup-api create task comment apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create webhook apply",
+      "summary": "Typed action create_webhook",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_webhook",
+      "flags": [
+        {
+          "name": "endpoint",
+          "type": "string",
+          "summary": "Required endpoint record field.",
+          "maps_to": "record.endpoint",
+          "required": true
+        },
+        {
+          "name": "events",
+          "type": "json",
+          "summary": "Required events record field.",
+          "maps_to": "record.events",
+          "required": true
+        }
+      ],
+      "risk": "registers or repoints an outbound event-delivery URL of the caller's choosing; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.team_id }}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.team_id }}.",
+      "examples": [
+        "pm clickup-api create webhook apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete folder apply",
+      "summary": "Typed action delete_folder",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_folder",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "permanently deletes a ClickUp Folder and every List/task inside it; irreversible; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /folder/{id} disagrees with covered api_surface path /v2/folder/{folder_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /folder/{id} disagrees with covered api_surface path /v2/folder/{folder_id}.",
+      "examples": [
+        "pm clickup-api delete folder apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete list apply",
+      "summary": "Typed action delete_list",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_list",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "permanently deletes a ClickUp List and every task inside it; irreversible; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /list/{id} disagrees with covered api_surface path /v2/list/{list_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /list/{id} disagrees with covered api_surface path /v2/list/{list_id}.",
+      "examples": [
+        "pm clickup-api delete list apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete space apply",
+      "summary": "Typed action delete_space",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_space",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "permanently deletes a ClickUp Space and every Folder/List/task inside it; irreversible; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /space/{id} disagrees with covered api_surface path /v2/space/{space_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /space/{id} disagrees with covered api_surface path /v2/space/{space_id}.",
+      "examples": [
+        "pm clickup-api delete space apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete task apply",
+      "summary": "Typed action delete_task",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_task",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "permanently deletes a ClickUp task; irreversible; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /task/{id} disagrees with covered api_surface path /v2/task/{task_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /task/{id} disagrees with covered api_surface path /v2/task/{task_id}.",
+      "examples": [
+        "pm clickup-api delete task apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete webhook apply",
+      "summary": "Typed action delete_webhook",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_webhook",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "stops event delivery to a registered webhook endpoint; approval required (irreversible without re-registering)",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /webhook/{id} disagrees with covered api_surface path /v2/webhook/{webhook_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /webhook/{id} disagrees with covered api_surface path /v2/webhook/{webhook_id}.",
+      "examples": [
+        "pm clickup-api delete webhook apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "remove tag from task apply",
+      "summary": "Typed action remove_tag_from_task",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "remove_tag_from_task",
+      "flags": [
+        {
+          "name": "tag-name",
+          "type": "string",
+          "summary": "Required tag_name record field.",
+          "maps_to": "record.tag_name",
+          "required": true
+        },
+        {
+          "name": "task-id",
+          "type": "string",
+          "summary": "Required task_id record field.",
+          "maps_to": "record.task_id",
+          "required": true
+        }
+      ],
+      "risk": "removes a tag from a task (does not delete the tag from the Space); low-risk",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /task/{task_id}/tag/{tag_name} disagrees with covered api_surface path /v2/task/{task_id}/tag/{tag_name}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /task/{task_id}/tag/{tag_name} disagrees with covered api_surface path /v2/task/{task_id}/tag/{tag_name}.",
+      "examples": [
+        "pm clickup-api remove tag from task apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "set custom field value apply",
+      "summary": "Typed action set_custom_field_value",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "set_custom_field_value",
+      "flags": [],
+      "risk": "sets a Custom Field value on a task; the accepted value shape varies by the field's type (text/number/date/dropdown/label/people/task-relationship/manual-progress/location/button); approval required since an incorrectly-typed value can silently fail or corrupt a differently-typed field",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: the closed CLI flag set cannot faithfully represent required record field value.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: the closed CLI flag set cannot faithfully represent required record field value.",
+      "examples": [
+        "pm clickup-api set custom field value apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update folder apply",
+      "summary": "Typed action update_folder",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_folder",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "renames an existing ClickUp Folder; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /folder/{id} disagrees with covered api_surface path /v2/folder/{folder_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /folder/{id} disagrees with covered api_surface path /v2/folder/{folder_id}.",
+      "examples": [
+        "pm clickup-api update folder apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update list apply",
+      "summary": "Typed action update_list",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_list",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "updates an existing ClickUp List's name/description/due date/priority/assignee/color; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /list/{id} disagrees with covered api_surface path /v2/list/{list_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /list/{id} disagrees with covered api_surface path /v2/list/{list_id}.",
+      "examples": [
+        "pm clickup-api update list apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update space apply",
+      "summary": "Typed action update_space",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_space",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "updates an existing ClickUp Space's name/color/privacy/ClickApp feature toggles; ClickUp's own docs mark every body field required (a partial update still needs the full current feature set re-sent to avoid resetting unspecified features); approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /space/{id} disagrees with covered api_surface path /v2/space/{space_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /space/{id} disagrees with covered api_surface path /v2/space/{space_id}.",
+      "examples": [
+        "pm clickup-api update space apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update task apply",
+      "summary": "Typed action update_task",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_task",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "updates fields on an existing ClickUp task (name, description, status, dates, priority, archived); approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /task/{id} disagrees with covered api_surface path /v2/task/{task_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /task/{id} disagrees with covered api_surface path /v2/task/{task_id}.",
+      "examples": [
+        "pm clickup-api update task apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update webhook apply",
+      "summary": "Typed action update_webhook",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_webhook",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "changes which events are delivered to (or repoints) an existing outbound webhook; approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /webhook/{id} disagrees with covered api_surface path /v2/webhook/{webhook_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path /webhook/{id} disagrees with covered api_surface path /v2/webhook/{webhook_id}.",
+      "examples": [
+        "pm clickup-api update webhook apply --plan <plan-name>"
+      ]
+    }
+  ]
+}

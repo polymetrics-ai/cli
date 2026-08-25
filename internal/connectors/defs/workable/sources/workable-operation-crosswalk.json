@@ -1,0 +1,2444 @@
+{
+  "schema_version": 2,
+  "connector": "workable",
+  "source_lock": "sources/workable-operation-source-lock.json",
+  "generated_at": "2026-08-19T16:45:42.646Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.accounts",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/accounts?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "accounts",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/accounts",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/accounts",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/accounts?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.accountssubdomain",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/accountssubdomain?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "accountssubdomain",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/accounts/{subdomain}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/accounts/{subdomain}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/accountssubdomain?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.apiaccountssubdomaindepartments",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/apiaccountssubdomaindepartments?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "apiaccountssubdomaindepartments",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/accounts/{subdomain}/departments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/accounts/{subdomain}/departments",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/apiaccountssubdomaindepartments?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.apiaccountssubdomainlocations",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/apiaccountssubdomainlocations?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "apiaccountssubdomainlocations",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/accounts/{subdomain}/locations",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/accounts/{subdomain}/locations",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/apiaccountssubdomainlocations?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.candidate-activities",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidate-activities?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidate-activities",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/candidates/{id}/activities",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/candidates/{id}/activities",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidate-activities?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.candidate-files",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidate-files?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidate-files",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/candidates/{id}/files",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/candidates/{id}/files",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidate-files?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.candidatesidoffer",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidatesidoffer?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidatesidoffer",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/candidates/{id}/offer",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/candidates/{id}/offer",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidatesidoffer?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.candidatesidupdate_custom_attribute_value",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidatesidupdate_custom_attribute_value?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "candidatesidupdate_custom_attribute_value",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/candidates/{id}/update_custom_attribute_value",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/candidates/{id}/update_custom_attribute_value",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidatesidupdate_custom_attribute_value?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.collaboration_permissions",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/collaboration_permissions?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "collaboration_permissions",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/collaboration_permissions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/collaboration_permissions",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/collaboration_permissions?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.comment-on-candidate",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/comment-on-candidate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "comment-on-candidate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidates/{id}/comments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidates/{id}/comments",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/comment-on-candidate?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.copy-candidate",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/copy-candidate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "copy-candidate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidates/{id}/copy",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidates/{id}/copy",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/copy-candidate?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.create-employee",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/create-employee?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "create-employee",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/employees",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/employees",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/create-employee?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.custom_attributes",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/custom_attributes?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "custom_attributes",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/custom_attributes",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/custom_attributes",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/custom_attributes?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.departments",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "departments",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/departments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/departments",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.departments-delete",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-delete?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "departments-delete",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/departments/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/departments/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-delete?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.departments-merge",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-merge?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "departments-merge",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/departments/{id}/merge",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/departments/{id}/merge",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-merge?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.departments-post",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-post?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "departments-post",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/departments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/departments",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-post?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.departments-put",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-put?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "departments-put",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/departments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/departments",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-put?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.disqualification_reasons",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/disqualification_reasons?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "disqualification_reasons",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/disqualification_reasons",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/disqualification_reasons",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/disqualification_reasons?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.disqualify-candidate",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/disqualify-candidate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "disqualify-candidate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidates/{id}/disqualify",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidates/{id}/disqualify",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/disqualify-candidate?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.employee_fields",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employee_fields?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "employee_fields",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/employee_fields",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/employee_fields",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employee_fields?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.employees",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employees?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "employees",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/employees",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/employees",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employees?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.employees-orgchart",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employees-orgchart?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "employees-orgchart",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/employees/orgchart",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/employees/orgchart",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employees-orgchart?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.employeesid",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesid?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "employeesid",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/employees/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/employees/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesid?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.employeesiddocuments",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesiddocuments?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "employeesiddocuments",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/employees/{id}/documents",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/employees/{id}/documents",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesiddocuments?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.employeesiddocuments-1",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesiddocuments-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "employeesiddocuments-1",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/employees/{id}/documents",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/employees/{id}/documents",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesiddocuments-1?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.events",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/events?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "events",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/events",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/events",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/events?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.events-show",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/events-show?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "events-show",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/events/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/events/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/events-show?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.job-activities",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-activities?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "job-activities",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/jobs/{shortcode}/activities",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/jobs/{shortcode}/activities",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-activities?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.job-candidates-create",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-create?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "job-candidates-create",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/jobs/{shortcode}/candidates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/jobs/{shortcode}/candidates",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-create?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.job-candidates-index",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-index?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "job-candidates-index",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/candidates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/candidates",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-index?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.job-candidates-show",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-show?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "job-candidates-show",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/candidates/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/candidates/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-show?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.job-custom-attributes",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-custom-attributes?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "job-custom-attributes",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/jobs/{shortcode}/custom_attributes",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/jobs/{shortcode}/custom_attributes",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-custom-attributes?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.job-members",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-members?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "job-members",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/jobs/{shortcode}/members",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/jobs/{shortcode}/members",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-members?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.job-questions",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-questions?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "job-questions",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/jobs/{shortcode}/questions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/jobs/{shortcode}/questions",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-questions?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.job-stages",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-stages?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "job-stages",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/jobs/{shortcode}/stages",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/jobs/{shortcode}/stages",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-stages?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.jobs",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobs?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobs",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/jobs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/jobs",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobs?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.jobsshortcode",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobsshortcode?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobsshortcode",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/jobs/{shortcode}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/jobs/{shortcode}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobsshortcode?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.jobsshortcodeapplication_form",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobsshortcodeapplication_form?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "jobsshortcodeapplication_form",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/jobs/{shortcode}/application_form",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/jobs/{shortcode}/application_form",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobsshortcodeapplication_form?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.legal_entities",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/legal_entities?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "legal_entities",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/legal_entities",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/legal_entities",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/legal_entities?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.members",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "members",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/members",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/members",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.members-delete",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-delete?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "members-delete",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/members/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/members/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-delete?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.members-enable",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-enable?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "members-enable",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/members/{id}/enable",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/members/{id}/enable",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-enable?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.members-invite",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-invite?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "members-invite",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/members/invite",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/members/invite",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-invite?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.members-put",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-put?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "members-put",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/members",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/members",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-put?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.move-candidate",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/move-candidate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "move-candidate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidates/{id}/move",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidates/{id}/move",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/move-candidate?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.new-jobsshortcoderecruiters",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/new-jobsshortcoderecruiters?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "new-jobsshortcoderecruiters",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/jobs/{shortcode}/recruiters",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/jobs/{shortcode}/recruiters",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/new-jobsshortcoderecruiters?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.offersidapprove-copy",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/offersidapprove-copy?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "offersidapprove-copy",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/offers/{id}/approve (COPY)",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/offers/{id}/approve (COPY)",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/offersidapprove-copy?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.offersidapprove-copy-1",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/offersidapprove-copy-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "offersidapprove-copy-1",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/offers/{id}/reject",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/offers/{id}/reject",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/offersidapprove-copy-1?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.performance-review-templates-create",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-create?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "performance-review-templates-create",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/review-cycles/templates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/review-cycles/templates",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-create?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.performance-review-templates-get",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-get?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "performance-review-templates-get",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/review-cycles/templates/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/review-cycles/templates/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-get?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.performance-review-templates-list",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-list?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "performance-review-templates-list",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/review-cycles/templates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/review-cycles/templates",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-list?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.permission-sets",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/permission-sets?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "permission-sets",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/permission_sets",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/permission_sets",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/permission-sets?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.rate-candidate",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/rate-candidate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "rate-candidate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidates/{id}/ratings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidates/{id}/ratings",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/rate-candidate?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.recruiters",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/recruiters?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "recruiters",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/recruiters",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/recruiters",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/recruiters?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.relocate-candidates",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/relocate-candidates?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "relocate-candidates",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidates/{id}/relocate",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidates/{id}/relocate",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/relocate-candidates?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.requisitions",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "requisitions",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/requisitions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/requisitions",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.requisitions-approve",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-approve?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "requisitions-approve",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/requisitions/{code}/approve",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/requisitions/{code}/approve",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-approve?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.requisitions-patch",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-patch?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "requisitions-patch",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/requisitions/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/requisitions/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-patch?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.requisitions-post",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-post?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "requisitions-post",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/requisitions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/requisitions",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-post?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.requisitions-reject",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-reject?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "requisitions-reject",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/requisitions/{code}/reject",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/requisitions/{code}/reject",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-reject?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.requisitionscode",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitionscode?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "requisitionscode",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/requisitions/{code}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/requisitions/{code}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitionscode?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.requisitionscode-copy-1",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitionscode-copy-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "requisitionscode-copy-1",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/offers/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/offers/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitionscode-copy-1?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.revert-disqualification-candidate",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/revert-disqualification-candidate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "revert-disqualification-candidate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/candidates/{id}/revert",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/candidates/{id}/revert",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/revert-disqualification-candidate?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.stages",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/stages?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "stages",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/stages",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/stages",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/stages?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.subscriptions",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/subscriptions?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "subscriptions",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/subscriptions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/subscriptions",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/subscriptions?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.subscriptionsid",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/subscriptionsid?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "subscriptionsid",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/subscriptions/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/subscriptions/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/subscriptionsid?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.tag-candidate",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/tag-candidate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "tag-candidate",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/candidates/{id}/tags",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/candidates/{id}/tags",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/tag-candidate?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.talent-pool-candidates-create",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/talent-pool-candidates-create?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "talent-pool-candidates-create",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/talent_pool/{stage}/candidates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/talent_pool/{stage}/candidates",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/talent-pool-candidates-create?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.time-tracking-archive-entry",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-archive-entry?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "time-tracking-archive-entry",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/time-tracking/employees/{key}/time-entries/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/time-tracking/employees/{key}/time-entries/{uuid}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-archive-entry?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.time-tracking-bulk-create",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-bulk-create?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "time-tracking-bulk-create",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/time-tracking/time-entries",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/time-tracking/time-entries",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-bulk-create?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.time-tracking-create-entry",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-create-entry?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "time-tracking-create-entry",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/time-tracking/employees/{key}/time-entries",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/time-tracking/employees/{key}/time-entries",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-create-entry?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.time-tracking-list-entries",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-list-entries?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "time-tracking-list-entries",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/time-tracking/time-entries",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/time-tracking/time-entries",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-list-entries?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.time-tracking-update-entry",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-update-entry?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "time-tracking-update-entry",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/time-tracking/employees/{key}/time-entries/{uuid}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/time-tracking/employees/{key}/time-entries/{uuid}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-update-entry?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.timeoffapprovals",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffapprovals?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "timeoffapprovals",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/timeoff/approvals/{key}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/timeoff/approvals/{key}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffapprovals?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.timeoffbalances",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffbalances?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "timeoffbalances",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/timeoff/balances",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/timeoff/balances",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffbalances?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.timeoffcategories",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffcategories?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "timeoffcategories",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/timeoff/categories",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/timeoff/categories",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffcategories?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.timeoffrequests",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffrequests?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "timeoffrequests",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/timeoff/requests",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/timeoff/requests",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffrequests?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.timeoffrequests-1",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffrequests-1?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "timeoffrequests-1",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/timeoff/requests",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/timeoff/requests",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffrequests-1?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.update-candidate",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-candidate?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "update-candidate",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/candidates/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/candidates/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-candidate?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.update-candidate-rating",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-candidate-rating?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "update-candidate-rating",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/candidates/{id}/ratings",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/candidates/{id}/ratings",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-candidate-rating?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.update-employee",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-employee?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "update-employee",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/employees/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/employees/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-employee?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.webhook-subscriptions",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/webhook-subscriptions?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "webhook-subscriptions",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/subscriptions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/subscriptions",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/webhook-subscriptions?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/workable-operation-source-lock.json",
+      "source_id": "workable.rendered.work_schedules",
+      "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/work_schedules?reduce=false",
+      "source_location": "$data.api",
+      "operation_id": "work_schedules",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/work_schedules",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/work_schedules",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/work_schedules?reduce=false"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    }
+  ]
+}

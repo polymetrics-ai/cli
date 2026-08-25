@@ -2049,6 +2049,38 @@
       "write": true,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "products",
+          "orders",
+          "customers",
+          "categories",
+          "invoices",
+          "shipments",
+          "creditmemos",
+          "customer_groups",
+          "store_websites",
+          "store_views"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "adobe-commerce-magento_source_definition_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Adobe Commerce (Magento) Connection Specification",
@@ -6775,6 +6807,38 @@
       "write": true,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "cohorts",
+          "cohorts_usage",
+          "annotations",
+          "annotation_categories",
+          "events_list",
+          "taxonomy_categories",
+          "taxonomy_events",
+          "taxonomy_event_properties",
+          "taxonomy_user_properties",
+          "taxonomy_group_properties"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "amplitude_source_definition_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Amplitude Connection Specification",
@@ -9194,6 +9258,99 @@
       "write": true,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "candidates",
+          "jobs",
+          "applications",
+          "users",
+          "api_key_info",
+          "audit_log_list",
+          "application_info",
+          "application_hiring_team_role_list",
+          "application_list_history",
+          "application_list_criteria_evaluations",
+          "application_feedback_list",
+          "candidate_info",
+          "candidate_list_client_info",
+          "candidate_list_fraud_checks",
+          "candidate_list_notes",
+          "candidate_list_projects",
+          "candidate_tag_list",
+          "communication_template_list",
+          "feedback_form_definition_list",
+          "feedback_form_definition_info",
+          "job_posting_list",
+          "job_posting_info",
+          "job_info",
+          "job_board_list",
+          "job_interview_plan_info",
+          "job_template_list",
+          "department_info",
+          "department_list",
+          "location_list",
+          "location_info",
+          "interview_plan_list",
+          "interview_stage_list",
+          "interview_stage_group_list",
+          "offer_list",
+          "offer_info",
+          "opening_info",
+          "opening_list",
+          "project_info",
+          "project_list",
+          "source_list",
+          "source_tracking_link_list",
+          "archive_reason_list",
+          "brand_list",
+          "custom_field_list",
+          "custom_field_info",
+          "hiring_team_role_list",
+          "user_info",
+          "user_list_interviewer_pauses",
+          "email_sender_list",
+          "sequence_info",
+          "sequence_list",
+          "sequence_template_info",
+          "sequence_template_list",
+          "interview_schedule_list",
+          "take_home_assignment_list",
+          "take_home_assignment_info",
+          "interview_event_list",
+          "interview_briefing_info",
+          "interview_info",
+          "interview_list",
+          "interview_stage_info",
+          "survey_form_definition_info",
+          "survey_form_definition_list",
+          "survey_request_list",
+          "survey_submission_list",
+          "webhook_info",
+          "interviewer_pool_list",
+          "interviewer_pool_info",
+          "close_reason_list",
+          "report_synchronous",
+          "approval_list"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "ashby_source_definition_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Ashby Connection Specification",
@@ -10859,6 +11016,35 @@
       "read": true,
       "write": true,
       "query": false
+    },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "users",
+          "clients",
+          "connections",
+          "roles",
+          "organizations",
+          "role_users",
+          "organization_members"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "auth0_source_definition_v1"
+        }
+      }
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -19463,6 +19649,44 @@
       "write": true,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "transactions",
+          "users",
+          "expenses",
+          "vendors",
+          "budgets",
+          "departments",
+          "locations",
+          "titles",
+          "legal_entities",
+          "cards",
+          "accounts_card",
+          "accounts_cash",
+          "card_statements",
+          "linked_accounts",
+          "transfers",
+          "webhooks"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "brex_source_definition_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Brex Connection Specification",
@@ -20634,6 +20858,40 @@
       "read": true,
       "write": true,
       "query": false
+    },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "scheduled_events",
+          "event_types",
+          "organization_memberships",
+          "groups",
+          "users",
+          "routing_forms",
+          "routing_form_submissions",
+          "webhook_subscriptions",
+          "user_availability_schedules",
+          "group_relationships",
+          "activity_log_entries",
+          "invitees"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "calendly_source_definition_v1"
+        }
+      }
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -26978,6 +27236,36 @@
       "write": true,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "tasks",
+          "teams",
+          "spaces",
+          "folders",
+          "lists",
+          "goals",
+          "space_tags",
+          "webhooks"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "clickup-api_source_definition_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "ClickUp Connection Specification",
@@ -28980,6 +29268,35 @@
       "write": true,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "docs",
+          "tables",
+          "pages",
+          "formulas",
+          "controls",
+          "columns",
+          "rows"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "coda_source_definition_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Coda Connection Specification",
@@ -30580,6 +30897,31 @@
       "read": true,
       "write": false,
       "query": false
+    },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "customers",
+          "orders",
+          "products"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "commercetools_source_definition_v1"
+        }
+      }
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -33325,6 +33667,43 @@
       "write": true,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "monitors",
+          "dashboards",
+          "users",
+          "slo",
+          "downtimes",
+          "dashboard_lists",
+          "notebooks",
+          "organizations",
+          "hosts",
+          "slo_corrections",
+          "synthetics_tests",
+          "synthetics_locations",
+          "synthetics_variables",
+          "api_keys",
+          "application_keys"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "datadog_source_definition_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Datadog Connection Specification",
@@ -33936,6 +34315,38 @@
       "read": true,
       "write": true,
       "query": false
+    },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "projects",
+          "runs",
+          "repositories",
+          "users",
+          "environments",
+          "jobs",
+          "invites",
+          "licenses",
+          "notifications",
+          "ssh_tunnels"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "dbt_source_definition_v1"
+        }
+      }
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -35751,6 +36162,32 @@
       "write": true,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "templates",
+          "submissions",
+          "submitters",
+          "template_detail"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "docuseal_source_definition_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "DocuSeal Connection Specification",
@@ -36244,6 +36681,33 @@
       "read": true,
       "write": true,
       "query": false
+    },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "catalog",
+          "reflections",
+          "sources",
+          "users",
+          "roles"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "dremio_source_definition_v1"
+        }
+      }
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -40335,6 +40799,33 @@
       "write": false,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "organizations",
+          "events",
+          "attendees",
+          "orders",
+          "ticket_classes"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "eventbrite_source_definition_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Eventbrite Connection Specification",
@@ -41807,6 +42298,33 @@
       "write": false,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "employees",
+          "teams",
+          "leaves",
+          "leave_types",
+          "locations"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "factorial_source_definition_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Factorial Connection Specification",
@@ -43053,6 +43571,233 @@
       "read": true,
       "write": true,
       "query": false
+    },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "incidents",
+          "services",
+          "teams",
+          "environments",
+          "functionalities",
+          "append_form_data_on_selected_value_get",
+          "get_ai_incident_summary_vote_status",
+          "get_ai_preferences",
+          "get_alert",
+          "get_audience",
+          "get_audience_summary",
+          "get_audit_event",
+          "get_aws_cloudtrail_batch",
+          "get_aws_connection",
+          "get_bootstrap",
+          "get_call_route",
+          "get_change_event",
+          "get_checklist_template",
+          "get_comment",
+          "get_conference_bridge_translation",
+          "get_configuration_options",
+          "get_current_user",
+          "get_environment",
+          "get_form_configuration",
+          "get_functionality",
+          "get_inbound_field_map",
+          "get_incident",
+          "get_incident_channel",
+          "get_incident_event",
+          "get_incident_relationships",
+          "get_incident_retrospective_field",
+          "get_incident_role",
+          "get_incident_task",
+          "get_incident_type",
+          "get_incident_user",
+          "get_integration",
+          "get_lifecycle_measurement_definition",
+          "get_mean_time_report",
+          "get_member_default_audience",
+          "get_notification_policy",
+          "get_nunc_connection",
+          "get_on_call_schedule_rotation",
+          "get_on_call_shift",
+          "get_options_for_field",
+          "get_post_mortem_question",
+          "get_post_mortem_report",
+          "get_priority",
+          "get_retrospective_template",
+          "get_role",
+          "get_runbook",
+          "get_runbook_action_field_options",
+          "get_runbook_execution",
+          "get_runbook_execution_step_script",
+          "get_saved_search",
+          "get_scheduled_maintenance",
+          "get_service",
+          "get_service_dependencies",
+          "get_service_dependency",
+          "get_severity",
+          "get_severity_matrix",
+          "get_severity_matrix_condition",
+          "get_signals_alert_grouping_configuration",
+          "get_signals_email_target",
+          "get_signals_event_source",
+          "get_signals_grouped_metrics",
+          "get_signals_hacker_mode",
+          "get_signals_heartbeat_endpoint_configuration",
+          "get_signals_ingest_url",
+          "get_signals_mttx_analytics",
+          "get_signals_noise_analytics",
+          "get_signals_timeseries_analytics",
+          "get_signals_webhook_target",
+          "get_slack_emoji_action",
+          "get_status_update_template",
+          "get_statuspage_connection",
+          "get_support_hours_schedule",
+          "get_task_list",
+          "get_team",
+          "get_team_escalation_policy",
+          "get_team_on_call_schedule",
+          "get_team_signal_rule",
+          "get_ticket",
+          "get_ticketing_field_map",
+          "get_ticketing_form_configuration",
+          "get_ticketing_priority",
+          "get_ticketing_project",
+          "get_ticketing_project_config",
+          "get_user",
+          "get_vote_status",
+          "get_webhook",
+          "get_zendesk_customer_support_issue",
+          "list_alerts",
+          "list_audience_summaries",
+          "list_audiences",
+          "list_audit_events",
+          "list_authed_providers",
+          "list_available_inbound_field_maps",
+          "list_available_ticketing_field_maps",
+          "list_aws_cloudtrail_batch_events",
+          "list_aws_cloudtrail_batches",
+          "list_aws_connections",
+          "list_call_routes",
+          "list_change_events",
+          "list_change_identities",
+          "list_change_types",
+          "list_changes",
+          "list_checklist_templates",
+          "list_comment_reactions",
+          "list_comments",
+          "list_connection_statuses",
+          "list_connection_statuses_by_slug",
+          "list_connection_statuses_by_slug_and_id",
+          "list_connections",
+          "list_current_user_permissions",
+          "list_custom_field_definitions",
+          "list_custom_field_select_options",
+          "list_email_subscribers",
+          "list_entitlements",
+          "list_environment_functionalities",
+          "list_environment_services",
+          "list_field_map_available_fields",
+          "list_functionality_environments",
+          "list_functionality_services",
+          "list_inbound_field_maps",
+          "list_incident_alerts",
+          "list_incident_attachments",
+          "list_incident_change_events",
+          "list_incident_conference_bridges",
+          "list_incident_events",
+          "list_incident_impacts",
+          "list_incident_links",
+          "list_incident_metrics",
+          "list_incident_milestones",
+          "list_incident_retrospectives",
+          "list_incident_role_assignments",
+          "list_incident_roles",
+          "list_incident_status_pages",
+          "list_incident_tags",
+          "list_incident_tasks",
+          "list_incident_types",
+          "list_infrastructure_metrics",
+          "list_infrastructure_type_metrics",
+          "list_infrastructures",
+          "list_integrations",
+          "list_lifecycle_measurement_definitions",
+          "list_lifecycle_phases",
+          "list_notification_policy_settings",
+          "list_nunc_connections",
+          "list_organization_on_call_schedules",
+          "list_permissions",
+          "list_post_mortem_questions",
+          "list_post_mortem_reasons",
+          "list_post_mortem_reports",
+          "list_priorities",
+          "list_processing_log_entries",
+          "list_retrospective_metrics",
+          "list_retrospective_templates",
+          "list_retrospectives",
+          "list_roles",
+          "list_runbook_actions",
+          "list_runbook_executions",
+          "list_runbooks",
+          "list_saved_searches",
+          "list_scheduled_maintenances",
+          "list_schedules",
+          "list_service_available_downstream_dependencies",
+          "list_service_available_upstream_dependencies",
+          "list_service_environments",
+          "list_severities",
+          "list_severity_matrix_conditions",
+          "list_severity_matrix_impacts",
+          "list_signals_alert_grouping_configurations",
+          "list_signals_email_targets",
+          "list_signals_event_sources",
+          "list_signals_heartbeat_endpoint_configurations",
+          "list_signals_transposers",
+          "list_signals_webhook_targets",
+          "list_similar_incidents",
+          "list_slack_emoji_actions",
+          "list_slack_usergroups",
+          "list_slack_workspaces",
+          "list_status_update_templates",
+          "list_statuspage_connection_pages",
+          "list_statuspage_connections",
+          "list_task_lists",
+          "list_team_call_routes",
+          "list_team_escalation_policies",
+          "list_team_on_call_schedules",
+          "list_team_permissions",
+          "list_team_signal_rules",
+          "list_ticket_tags",
+          "list_ticketing_custom_definitions",
+          "list_ticketing_priorities",
+          "list_ticketing_projects",
+          "list_tickets",
+          "list_transcript_entries",
+          "list_user_involvement_metrics",
+          "list_user_notification_settings_by_user_id",
+          "list_user_owned_services",
+          "list_users",
+          "list_webhook_deliveries",
+          "list_webhooks",
+          "search_confluence_spaces",
+          "search_slack_channels",
+          "search_zendesk_tickets"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "firehydrant_source_definition_v1"
+        }
+      }
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -69496,6 +70241,97 @@
       "write": true,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "candidates",
+          "applications",
+          "jobs",
+          "offers",
+          "users",
+          "activity_feed",
+          "application",
+          "approvals_for_job",
+          "approval_flow",
+          "pending_approvals_for_user",
+          "candidate",
+          "close_reasons",
+          "custom_fields",
+          "custom_field",
+          "custom_field_options",
+          "demographic_question_sets",
+          "demographic_question_set",
+          "demographic_questions",
+          "demographic_questions_for_demographic_question_set",
+          "demographic_question",
+          "demographic_answer_options",
+          "demographic_answer_options_for_demographic_question",
+          "demographic_answer_option",
+          "demographic_answers",
+          "demographic_answers_for_application",
+          "demographic_answer",
+          "departments",
+          "department",
+          "degrees",
+          "disciplines",
+          "schools",
+          "eeoc",
+          "eeoc_data_for_application",
+          "email_templates",
+          "email_template",
+          "job_openings",
+          "opening_for_job",
+          "job_posts",
+          "job_post",
+          "job_posts_for_job",
+          "job_post_for_job",
+          "custom_locations_for_job_post",
+          "job_stages",
+          "job_stages_for_job",
+          "job_stage",
+          "job",
+          "hiring_team",
+          "offers_for_application",
+          "current_offer_for_application",
+          "offer",
+          "offices",
+          "office",
+          "prospect_pools",
+          "prospect_pool",
+          "rejection_reasons",
+          "scheduled_interviews",
+          "scheduled_interviews_for_application",
+          "scheduled_interview",
+          "scorecards",
+          "scorecards_for_application",
+          "scorecard",
+          "sources",
+          "candidate_tags",
+          "tags_applied_to_candidate",
+          "tracking_link_data_for_token",
+          "user",
+          "job_permissions",
+          "future_job_permissions",
+          "user_roles"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "greenhouse_source_definition_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Greenhouse Connection Specification",
@@ -72328,6 +73164,31 @@
       "read": true,
       "write": false,
       "query": false
+    },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "profiles",
+          "named_lists",
+          "company_lists"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "hibob_source_definition_v1"
+        }
+      }
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -83167,6 +84028,53 @@
       "write": true,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "opportunities",
+          "postings",
+          "users",
+          "requisitions",
+          "stages",
+          "deleted_applications",
+          "archive_reasons",
+          "audit_events",
+          "disposition_stages",
+          "feedback_templates",
+          "deleted_opportunities",
+          "deleted_postings",
+          "form_templates",
+          "requisition_fields",
+          "sources",
+          "applications",
+          "opportunity_feedback",
+          "opportunity_interviews",
+          "opportunity_notes",
+          "opportunity_offers",
+          "opportunity_file_actions",
+          "opportunity_panels",
+          "opportunity_forms",
+          "opportunity_referrals",
+          "posting_users"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "lever-hiring_source_definition_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Lever Hiring Connection Specification",
@@ -84412,6 +85320,33 @@
       "read": true,
       "write": false,
       "query": false
+    },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "users",
+          "groups",
+          "folders",
+          "looks",
+          "dashboards"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "looker_source_definition_v1"
+        }
+      }
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -91520,6 +92455,33 @@
       "write": false,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "cards",
+          "dashboards",
+          "collections",
+          "databases",
+          "users"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "metabase_source_definition_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Metabase Connection Specification",
@@ -94397,6 +95359,33 @@
       "read": true,
       "write": false,
       "query": false
+    },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "spaces",
+          "reports",
+          "data_sources",
+          "groups",
+          "memberships"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "mode_source_definition_v1"
+        }
+      }
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -99451,6 +100440,312 @@
       "read": true,
       "write": true,
       "query": false
+    },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "users",
+          "groups",
+          "system_logs",
+          "well_known_app_authenticator_configuration",
+          "well_known_apple_app_site_association",
+          "well_known_assetlinks_json",
+          "well_known_okta_organization",
+          "well_known_ssf_configuration",
+          "well_known_webauthn",
+          "api_v1_agent_pools",
+          "api_v1_agent_pools_pool_id_updates",
+          "api_v1_agent_pools_pool_id_updates_settings",
+          "api_v1_agent_pools_pool_id_updates_update_id",
+          "api_v1_api_tokens",
+          "api_v1_api_tokens_api_token_id",
+          "api_v1_apps",
+          "api_v1_apps_app_id",
+          "api_v1_apps_app_id_connections_default",
+          "api_v1_apps_app_id_connections_default_jwks",
+          "api_v1_apps_app_id_credentials_csrs",
+          "api_v1_apps_app_id_credentials_csrs_csr_id",
+          "api_v1_apps_app_id_credentials_jwks",
+          "api_v1_apps_app_id_credentials_jwks_key_id",
+          "api_v1_apps_app_id_credentials_keys",
+          "api_v1_apps_app_id_credentials_keys_key_id",
+          "api_v1_apps_app_id_credentials_secrets",
+          "api_v1_apps_app_id_credentials_secrets_secret_id",
+          "api_v1_apps_app_id_cwo_connections",
+          "api_v1_apps_app_id_cwo_connections_connection_id",
+          "api_v1_apps_app_id_features",
+          "api_v1_apps_app_id_features_feature_name",
+          "api_v1_apps_app_id_federated_claims",
+          "api_v1_apps_app_id_federated_claims_claim_id",
+          "api_v1_apps_app_id_grants",
+          "api_v1_apps_app_id_grants_grant_id",
+          "api_v1_apps_app_id_group_push_mappings",
+          "api_v1_apps_app_id_group_push_mappings_mapping_id",
+          "api_v1_apps_app_id_groups",
+          "api_v1_apps_app_id_groups_group_id",
+          "api_v1_apps_app_id_tokens",
+          "api_v1_apps_app_id_tokens_token_id",
+          "api_v1_apps_app_id_users",
+          "api_v1_apps_app_id_users_user_id",
+          "api_v1_authenticators",
+          "api_v1_authenticators_authenticator_id",
+          "api_v1_authenticators_authenticator_id_aaguids",
+          "api_v1_authenticators_authenticator_id_aaguids_aaguid",
+          "api_v1_authenticators_authenticator_id_methods",
+          "api_v1_authenticators_authenticator_id_methods_method_type",
+          "api_v1_authorization_servers",
+          "api_v1_authorization_servers_auth_server_id",
+          "api_v1_authorization_servers_auth_server_id_associated_servers",
+          "api_v1_authorization_servers_auth_server_id_claims",
+          "api_v1_authorization_servers_auth_server_id_claims_claim_id",
+          "api_v1_authorization_servers_auth_server_id_clients",
+          "api_v1_authorization_servers_auth_server_id_clients_client_id_tokens",
+          "api_v1_authorization_servers_auth_server_id_clients_client_id_tokens_token_id",
+          "api_v1_authorization_servers_auth_server_id_credentials_keys",
+          "api_v1_authorization_servers_auth_server_id_credentials_keys_key_id",
+          "api_v1_authorization_servers_auth_server_id_policies",
+          "api_v1_authorization_servers_auth_server_id_policies_policy_id",
+          "api_v1_authorization_servers_auth_server_id_policies_policy_id_rules",
+          "api_v1_authorization_servers_auth_server_id_policies_policy_id_rules_rule_id",
+          "api_v1_authorization_servers_auth_server_id_resourceservercredentials_keys",
+          "api_v1_authorization_servers_auth_server_id_resourceservercredentials_keys_key_id",
+          "api_v1_authorization_servers_auth_server_id_scopes",
+          "api_v1_authorization_servers_auth_server_id_scopes_scope_id",
+          "api_v1_behaviors",
+          "api_v1_behaviors_behavior_id",
+          "api_v1_bot_protection_configuration",
+          "api_v1_brands",
+          "api_v1_brands_brand_id",
+          "api_v1_brands_brand_id_domains",
+          "api_v1_brands_brand_id_pages_error",
+          "api_v1_brands_brand_id_pages_error_customized",
+          "api_v1_brands_brand_id_pages_error_default",
+          "api_v1_brands_brand_id_pages_error_preview",
+          "api_v1_brands_brand_id_pages_sign_in",
+          "api_v1_brands_brand_id_pages_sign_in_customized",
+          "api_v1_brands_brand_id_pages_sign_in_default",
+          "api_v1_brands_brand_id_pages_sign_in_preview",
+          "api_v1_brands_brand_id_pages_sign_out_customized",
+          "api_v1_brands_brand_id_templates_email",
+          "api_v1_brands_brand_id_templates_email_template_name",
+          "api_v1_brands_brand_id_templates_email_template_name_customizations",
+          "api_v1_brands_brand_id_templates_email_template_name_customizations_customization_id",
+          "api_v1_brands_brand_id_templates_email_template_name_customizations_customization_id_preview",
+          "api_v1_brands_brand_id_templates_email_template_name_default_content",
+          "api_v1_brands_brand_id_templates_email_template_name_default_content_preview",
+          "api_v1_brands_brand_id_templates_email_template_name_settings",
+          "api_v1_brands_brand_id_themes",
+          "api_v1_brands_brand_id_themes_theme_id",
+          "api_v1_brands_brand_id_well_known_uris",
+          "api_v1_brands_brand_id_well_known_uris_path",
+          "api_v1_brands_brand_id_well_known_uris_path_customized",
+          "api_v1_captchas",
+          "api_v1_captchas_captcha_id",
+          "api_v1_device_assurances",
+          "api_v1_device_assurances_device_assurance_id",
+          "api_v1_device_integrations",
+          "api_v1_device_integrations_device_integration_id",
+          "api_v1_device_posture_checks",
+          "api_v1_device_posture_checks_default",
+          "api_v1_device_posture_checks_posture_check_id",
+          "api_v1_devices",
+          "api_v1_devices_device_id",
+          "api_v1_devices_device_id_users",
+          "api_v1_directories_app_instance_id_groups_group_id_query_result_id",
+          "api_v1_domains",
+          "api_v1_domains_domain_id",
+          "api_v1_dr_status",
+          "api_v1_dr_status_domain",
+          "api_v1_email_domains",
+          "api_v1_email_domains_email_domain_id",
+          "api_v1_email_servers",
+          "api_v1_email_servers_email_server_id",
+          "api_v1_event_hooks",
+          "api_v1_event_hooks_event_hook_id",
+          "api_v1_features",
+          "api_v1_features_feature_id",
+          "api_v1_features_feature_id_dependencies",
+          "api_v1_features_feature_id_dependents",
+          "api_v1_first_party_app_settings_app_name",
+          "api_v1_groups_rules",
+          "api_v1_groups_rules_group_rule_id",
+          "api_v1_groups_group_id",
+          "api_v1_groups_group_id_apps",
+          "api_v1_groups_group_id_owners",
+          "api_v1_groups_group_id_roles",
+          "api_v1_groups_group_id_roles_role_assignment_id",
+          "api_v1_groups_group_id_roles_role_assignment_id_targets_catalog_apps",
+          "api_v1_groups_group_id_roles_role_assignment_id_targets_groups",
+          "api_v1_groups_group_id_users",
+          "api_v1_hook_keys",
+          "api_v1_hook_keys_public_key_id",
+          "api_v1_hook_keys_id",
+          "api_v1_iam_assignees_users",
+          "api_v1_iam_governance_bundles",
+          "api_v1_iam_governance_bundles_bundle_id",
+          "api_v1_iam_governance_bundles_bundle_id_entitlements",
+          "api_v1_iam_governance_bundles_bundle_id_entitlements_entitlement_id_values",
+          "api_v1_iam_governance_opt_in",
+          "api_v1_iam_resource_sets",
+          "api_v1_iam_resource_sets_resource_set_id_or_label",
+          "api_v1_iam_resource_sets_resource_set_id_or_label_bindings",
+          "api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label",
+          "api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label_members",
+          "api_v1_iam_resource_sets_resource_set_id_or_label_bindings_role_id_or_label_members_member_id",
+          "api_v1_iam_resource_sets_resource_set_id_or_label_resources",
+          "api_v1_iam_resource_sets_resource_set_id_or_label_resources_resource_id",
+          "api_v1_iam_roles",
+          "api_v1_iam_roles_role_id_or_label",
+          "api_v1_iam_roles_role_id_or_label_permissions",
+          "api_v1_iam_roles_role_id_or_label_permissions_permission_type",
+          "api_v1_identity_sources_identity_source_id_groups_group_or_external_id",
+          "api_v1_identity_sources_identity_source_id_groups_group_or_external_id_membership",
+          "api_v1_identity_sources_identity_source_id_sessions",
+          "api_v1_identity_sources_identity_source_id_sessions_session_id",
+          "api_v1_identity_sources_identity_source_id_users_external_id",
+          "api_v1_idps",
+          "api_v1_idps_credentials_keys",
+          "api_v1_idps_credentials_keys_kid",
+          "api_v1_idps_idp_id",
+          "api_v1_idps_idp_id_credentials_csrs",
+          "api_v1_idps_idp_id_credentials_csrs_idp_csr_id",
+          "api_v1_idps_idp_id_credentials_keys",
+          "api_v1_idps_idp_id_credentials_keys_active",
+          "api_v1_idps_idp_id_credentials_keys_kid",
+          "api_v1_idps_idp_id_users",
+          "api_v1_idps_idp_id_users_user_id",
+          "api_v1_idps_idp_id_users_user_id_credentials_tokens",
+          "api_v1_inline_hooks",
+          "api_v1_inline_hooks_inline_hook_id",
+          "api_v1_log_streams",
+          "api_v1_log_streams_log_stream_id",
+          "api_v1_mappings",
+          "api_v1_mappings_mapping_id",
+          "api_v1_meta_schemas_apps_app_id_default",
+          "api_v1_meta_schemas_group_default",
+          "api_v1_meta_schemas_log_stream",
+          "api_v1_meta_schemas_log_stream_log_stream_type",
+          "api_v1_meta_schemas_user_linked_objects",
+          "api_v1_meta_schemas_user_linked_objects_linked_object_name",
+          "api_v1_meta_schemas_user_schema_id",
+          "api_v1_meta_types_user",
+          "api_v1_meta_types_user_type_id",
+          "api_v1_meta_uischemas",
+          "api_v1_meta_uischemas_id",
+          "api_v1_org",
+          "api_v1_org_captcha",
+          "api_v1_org_contacts",
+          "api_v1_org_contacts_contact_type",
+          "api_v1_org_factors_yubikey_token_tokens",
+          "api_v1_org_factors_yubikey_token_tokens_token_id",
+          "api_v1_org_org_settings_third_party_admin_setting",
+          "api_v1_org_preferences",
+          "api_v1_org_privacy_aerial",
+          "api_v1_org_privacy_okta_communication",
+          "api_v1_org_privacy_okta_support",
+          "api_v1_org_privacy_okta_support_cases",
+          "api_v1_org_settings_auto_assign_admin_app_setting",
+          "api_v1_org_settings_client_privileges_setting",
+          "api_v1_policies",
+          "api_v1_policies_policy_id",
+          "api_v1_policies_policy_id_app",
+          "api_v1_policies_policy_id_mappings",
+          "api_v1_policies_policy_id_mappings_mapping_id",
+          "api_v1_policies_policy_id_rules",
+          "api_v1_policies_policy_id_rules_rule_id",
+          "api_v1_principal_rate_limits",
+          "api_v1_principal_rate_limits_principal_rate_limit_id",
+          "api_v1_push_providers",
+          "api_v1_push_providers_push_provider_id",
+          "api_v1_rate_limit_settings_admin_notifications",
+          "api_v1_rate_limit_settings_per_client",
+          "api_v1_rate_limit_settings_warning_threshold",
+          "api_v1_realm_assignments",
+          "api_v1_realm_assignments_operations",
+          "api_v1_realm_assignments_assignment_id",
+          "api_v1_realms",
+          "api_v1_realms_realm_id",
+          "api_v1_roles_role_ref_subscriptions",
+          "api_v1_roles_role_ref_subscriptions_notification_type",
+          "api_v1_security_events_providers",
+          "api_v1_security_events_providers_security_event_provider_id",
+          "api_v1_sessions_session_id",
+          "api_v1_ssf_stream",
+          "api_v1_ssf_stream_status",
+          "api_v1_telephony_providers",
+          "api_v1_telephony_providers_custom_telephony_provider_id",
+          "api_v1_templates_sms",
+          "api_v1_templates_sms_template_id",
+          "api_v1_threats_configuration",
+          "api_v1_trusted_origins",
+          "api_v1_trusted_origins_trusted_origin_id",
+          "api_v1_users_id",
+          "api_v1_users_id_app_links",
+          "api_v1_users_id_blocks",
+          "api_v1_users_id_groups",
+          "api_v1_users_id_idps",
+          "api_v1_users_user_id_or_login_linked_objects_relationship_name",
+          "api_v1_users_user_id_authenticator_enrollments",
+          "api_v1_users_user_id_authenticator_enrollments_enrollment_id",
+          "api_v1_users_user_id_classification",
+          "api_v1_users_user_id_clients",
+          "api_v1_users_user_id_clients_client_id_grants",
+          "api_v1_users_user_id_clients_client_id_tokens",
+          "api_v1_users_user_id_clients_client_id_tokens_token_id",
+          "api_v1_users_user_id_devices",
+          "api_v1_users_user_id_factors",
+          "api_v1_users_user_id_factors_catalog",
+          "api_v1_users_user_id_factors_questions",
+          "api_v1_users_user_id_factors_factor_id",
+          "api_v1_users_user_id_factors_factor_id_transactions_transaction_id",
+          "api_v1_users_user_id_grants",
+          "api_v1_users_user_id_grants_grant_id",
+          "api_v1_users_user_id_risk",
+          "api_v1_users_user_id_roles",
+          "api_v1_users_user_id_roles_role_assignment_id",
+          "api_v1_users_user_id_roles_role_assignment_id_governance",
+          "api_v1_users_user_id_roles_role_assignment_id_governance_grant_id",
+          "api_v1_users_user_id_roles_role_assignment_id_governance_grant_id_resources",
+          "api_v1_users_user_id_roles_role_assignment_id_targets_catalog_apps",
+          "api_v1_users_user_id_roles_role_assignment_id_targets_groups",
+          "api_v1_users_user_id_roles_role_id_or_encoded_role_id_targets",
+          "api_v1_users_user_id_subscriptions",
+          "api_v1_users_user_id_subscriptions_notification_type",
+          "api_v1_zones",
+          "api_v1_zones_zone_id",
+          "attack_protection_api_v1_authenticator_settings",
+          "attack_protection_api_v1_user_lockout_settings",
+          "integrations_api_v1_api_services",
+          "integrations_api_v1_api_services_api_service_id",
+          "integrations_api_v1_api_services_api_service_id_credentials_secrets",
+          "oauth2_v1_clients_client_id_roles",
+          "oauth2_v1_clients_client_id_roles_role_assignment_id",
+          "oauth2_v1_clients_client_id_roles_role_assignment_id_targets_catalog_apps",
+          "oauth2_v1_clients_client_id_roles_role_assignment_id_targets_groups",
+          "okta_personal_settings_api_v1_export_blocklists",
+          "privileged_access_api_v1_okta_service_accounts",
+          "privileged_access_api_v1_okta_service_accounts_id",
+          "privileged_access_api_v1_service_accounts",
+          "privileged_access_api_v1_service_accounts_id",
+          "webauthn_registration_api_v1_users_user_id_enrollments"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "okta_source_definition_v1"
+        }
+      }
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -112098,6 +113393,32 @@
       "write": false,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "incidents",
+          "users",
+          "services",
+          "teams"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "pagerduty_source_definition_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "PagerDuty Connection Specification",
@@ -122192,6 +123513,30 @@
       "write": false,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "events",
+          "persons"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "posthog_source_definition_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "PostHog Connection Specification",
@@ -125935,6 +127280,31 @@
       "write": false,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "customers",
+          "subscriptions",
+          "orders"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "recharge_source_definition_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Recharge Connection Specification",
@@ -126124,6 +127494,33 @@
       "read": true,
       "write": false,
       "query": false
+    },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "offers",
+          "candidates",
+          "departments",
+          "sources",
+          "tags"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "recruitee_source_definition_v1"
+        }
+      }
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -150165,6 +151562,41 @@
       "write": true,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "projects",
+          "users",
+          "case_types",
+          "case_fields",
+          "priorities",
+          "statuses",
+          "result_fields",
+          "templates",
+          "suites",
+          "milestones",
+          "cases",
+          "plans",
+          "runs"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "testrail_source_definition_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "TestRail Connection Specification",
@@ -164430,6 +165862,70 @@
       "write": true,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "jobs",
+          "candidates",
+          "members",
+          "accounts",
+          "account",
+          "collaboration_permissions",
+          "departments",
+          "disqualification_reasons",
+          "legal_entities",
+          "permission_sets",
+          "recruiters",
+          "stages",
+          "subscriptions",
+          "employee_fields",
+          "employees_orgchart",
+          "employees",
+          "employee",
+          "employee_documents",
+          "review_templates",
+          "review_template",
+          "time_entries",
+          "timeoff_balances",
+          "timeoff_categories",
+          "timeoff_requests",
+          "work_schedules",
+          "candidate_activities",
+          "candidate_files",
+          "candidate_offer",
+          "custom_attributes",
+          "events",
+          "event",
+          "job_activities",
+          "job_custom_attributes",
+          "job_members",
+          "job_questions",
+          "job_stages",
+          "job",
+          "job_application_form",
+          "job_recruiters",
+          "requisitions",
+          "requisition",
+          "offer"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "workable_source_definition_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Workable Connection Specification",
@@ -173696,6 +175192,202 @@
       "read": true,
       "write": true,
       "query": false
+    },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "contacts",
+          "invoices",
+          "items",
+          "list_bank_accounts",
+          "get_bank_account",
+          "get_last_imported_bank_statement",
+          "list_bank_account_rules",
+          "get_bank_account_rule",
+          "list_bank_transactions",
+          "get_matching_bank_transactions",
+          "get_bank_transaction",
+          "list_base_currency_adjustments",
+          "list_base_currency_adjustment_accounts",
+          "list_base_currency_adjustment_contacts",
+          "get_base_currency_adjustment",
+          "list_bills",
+          "convert_purchase_order_to_bill",
+          "get_bill",
+          "get_bill_comments",
+          "list_bill_payments",
+          "list_chart_of_accounts",
+          "list_chart_of_account_transactions",
+          "get_chart_of_account",
+          "list_contact_persons",
+          "get_contact_person",
+          "get_contact",
+          "get_contact_address",
+          "list_contact_autobill_recurring_invoices",
+          "list_contact_comments",
+          "get_unused_retainer_payments",
+          "list_contact_credit_note_refunds",
+          "get_contact_statement_mail",
+          "list_credit_notes",
+          "list_credit_note_refunds_of_all_credit_notes",
+          "get_credit_note_refund_by_id",
+          "list_credit_note_templates",
+          "get_credit_note",
+          "list_credit_note_comments",
+          "get_credit_note_custom_fields",
+          "get_credit_note_email",
+          "get_credit_note_email_history",
+          "list_invoices_of_credit_note",
+          "list_credit_note_refunds_of_a_credit_note",
+          "get_credit_note_refund",
+          "list_currencies",
+          "get_currency",
+          "list_exchange_rates",
+          "get_exchange_rate",
+          "list_custom_modules",
+          "get_custom_module",
+          "list_custom_module_records",
+          "get_custom_module_record",
+          "get_customer_debit_note",
+          "list_customer_payments",
+          "list_customer_payment_refunds",
+          "get_customer_payment_refund",
+          "get_customer_payment",
+          "list_delivery_challans",
+          "list_delivery_challan_templates",
+          "get_delivery_challan",
+          "list_estimates",
+          "list_estimate_templates",
+          "get_estimate",
+          "list_estimate_comments",
+          "get_estimate_email",
+          "list_employees",
+          "get_employee",
+          "list_expenses",
+          "get_expense",
+          "list_expense_comments",
+          "list_fixed_assets",
+          "get_fixed_asset",
+          "get_fixed_asset_forecast",
+          "get_fixed_asset_history",
+          "get_fixed_asset_type_list",
+          "list_invoice_templates",
+          "get_invoice",
+          "list_invoice_comments",
+          "list_invoice_credits_applied",
+          "get_invoice_document_details",
+          "get_invoice_email",
+          "get_payment_reminder_mail_content_for_invoice",
+          "list_invoice_payments",
+          "generate_invoice_payment_link",
+          "list_item_details",
+          "get_item",
+          "list_journals",
+          "get_journal",
+          "list_journal_credits",
+          "list_recurring_journals",
+          "get_recurring_journal",
+          "list_child_journals",
+          "get_transaction_journal_view",
+          "list_locations",
+          "list_opening_balance_transactions",
+          "list_opening_balance_details",
+          "get_opening_balance",
+          "list_organizations",
+          "list_organizations_for_user",
+          "get_organization",
+          "list_pricebooks",
+          "list_projects",
+          "get_project",
+          "list_project_comments",
+          "list_project_invoices",
+          "list_project_tasks",
+          "get_project_task",
+          "list_project_users",
+          "get_project_user",
+          "list_purchase_orders",
+          "list_purchase_order_templates",
+          "get_purchase_order",
+          "list_purchase_order_comments",
+          "get_recurring_bill",
+          "list_recurring_bills",
+          "list_recurring_expenses",
+          "get_recurring_expense",
+          "list_recurring_expense_history",
+          "list_child_expenses_of_recurring_expense",
+          "list_recurring_invoices",
+          "get_recurring_invoice",
+          "list_recurring_invoice_history",
+          "list_recurring_invoice_child_invoices",
+          "get_register_budget_vs_actuals",
+          "list_register_bulk_action_history",
+          "get_register_bulk_action_history",
+          "get_register_bulk_update_editpage",
+          "list_register_transactions",
+          "get_tags",
+          "all_tag_options",
+          "get_all_tag_options",
+          "list_retainer_invoices",
+          "list_retainer_invoice_templates",
+          "get_retainer_invoice",
+          "list_retainer_invoice",
+          "get_retainer_invoice_email",
+          "list_sales_orders",
+          "list_sales_order_templates",
+          "get_sales_order",
+          "get_sales_order_email",
+          "list_sales_receipts",
+          "get_sales_receipt",
+          "list_tasks",
+          "get_task",
+          "list_task_comments",
+          "get_task_document",
+          "list_tax_authorities",
+          "get_tax_authority",
+          "list_taxes",
+          "get_tax",
+          "list_tax_exemptions",
+          "get_tax_exemption",
+          "get_tax_group",
+          "list_time_entries",
+          "get_running_timer",
+          "get_time_entry",
+          "get_accounting_period_transaction_lock",
+          "get_transaction_lock",
+          "list_transaction_locks",
+          "list_users",
+          "get_current_user",
+          "get_user",
+          "list_vendor_credits",
+          "list_vendor_credit_refunds_of_all_vendor_credits",
+          "get_vendor_credit",
+          "list_bills_credited",
+          "list_vendor_credit_comments",
+          "list_vendor_credit_refunds_of_a_vendor_credit",
+          "get_vendor_credit_refund",
+          "list_vendor_payments",
+          "get_vendor_payment",
+          "get_vendor_payment_email_content",
+          "list_vendor_payment_refunds",
+          "get_vendor_payment_refund"
+        ],
+        "modes": [
+          "full_append"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "declarative_stream_transport_static",
+          "run_id": "zoho-books_source_definition_v1"
+        }
+      }
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",

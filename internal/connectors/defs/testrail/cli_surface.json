@@ -1,0 +1,286 @@
+{
+  "tagline": "Run TestRail's declared typed write actions.",
+  "usage": "pm testrail <command> [flags]",
+  "groups": [
+    {
+      "id": "reverse_etl",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add case apply",
+        "add milestone apply",
+        "add plan apply",
+        "add project apply",
+        "add result for case apply",
+        "add run apply",
+        "add suite apply",
+        "close run apply",
+        "delete run apply",
+        "update case apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "add case apply",
+      "summary": "Typed action add_case",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "add_case",
+      "flags": [
+        {
+          "name": "section-id",
+          "type": "integer",
+          "summary": "Required section_id record field.",
+          "maps_to": "record.section_id",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "risk": "creates a new test case in the target section; low-risk external mutation, no approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/add_case/{section_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/add_case/{section_id}.",
+      "examples": [
+        "pm testrail add case apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "add milestone apply",
+      "summary": "Typed action add_milestone",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "add_milestone",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "project-id",
+          "type": "integer",
+          "summary": "Required project_id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        }
+      ],
+      "risk": "creates a new milestone under the target project; low-risk external mutation, no approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/add_milestone/{project_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/add_milestone/{project_id}.",
+      "examples": [
+        "pm testrail add milestone apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "add plan apply",
+      "summary": "Typed action add_plan",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "add_plan",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "project-id",
+          "type": "integer",
+          "summary": "Required project_id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        }
+      ],
+      "risk": "creates a new test plan under the target project; low-risk external mutation, no approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/add_plan/{project_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/add_plan/{project_id}.",
+      "examples": [
+        "pm testrail add plan apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "add project apply",
+      "summary": "Typed action add_project",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "add_project",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "creates a new top-level TestRail project; low-risk external mutation, no approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/add_project.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/add_project.",
+      "examples": [
+        "pm testrail add project apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "add result for case apply",
+      "summary": "Typed action add_result_for_case",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "add_result_for_case",
+      "flags": [
+        {
+          "name": "case-id",
+          "type": "integer",
+          "summary": "Required case_id record field.",
+          "maps_to": "record.case_id",
+          "required": true
+        },
+        {
+          "name": "run-id",
+          "type": "integer",
+          "summary": "Required run_id record field.",
+          "maps_to": "record.run_id",
+          "required": true
+        }
+      ],
+      "risk": "records a new test result (pass/fail/etc.) against a case within a run; appends to result history, does not overwrite prior results",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/add_result_for_case/{run_id}/{case_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/add_result_for_case/{run_id}/{case_id}.",
+      "examples": [
+        "pm testrail add result for case apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "add run apply",
+      "summary": "Typed action add_run",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "add_run",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "project-id",
+          "type": "integer",
+          "summary": "Required project_id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        }
+      ],
+      "risk": "creates a new test run under the target project, selecting test cases into it for execution; low-risk external mutation, no approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/add_run/{project_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/add_run/{project_id}.",
+      "examples": [
+        "pm testrail add run apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "add suite apply",
+      "summary": "Typed action add_suite",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "add_suite",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "project-id",
+          "type": "integer",
+          "summary": "Required project_id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        }
+      ],
+      "risk": "creates a new test suite under the target project; low-risk external mutation, no approval required",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/add_suite/{project_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/add_suite/{project_id}.",
+      "examples": [
+        "pm testrail add suite apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "close run apply",
+      "summary": "Typed action close_run",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "close_run",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "closes and archives an existing test run; no further results can be added to it after closing",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/close_run/{run_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/close_run/{run_id}.",
+      "examples": [
+        "pm testrail close run apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete run apply",
+      "summary": "Typed action delete_run",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_run",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "permanently deletes a test run and all of its tests and results; irreversible",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/delete_run/{run_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/delete_run/{run_id}.",
+      "examples": [
+        "pm testrail delete run apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update case apply",
+      "summary": "Typed action update_case",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_case",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "mutates an existing test case's title, type, priority, milestone, estimate, or references",
+      "approval": "Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/update_case/{case_id}.",
+      "notes": "Generated from the connector-owned typed action; declaration-pending: canonical typed action path index.php disagrees with covered api_surface path /index.php?/api/v2/update_case/{case_id}.",
+      "examples": [
+        "pm testrail update case apply --plan <plan-name>"
+      ]
+    }
+  ]
+}

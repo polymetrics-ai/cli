@@ -1,0 +1,2734 @@
+{
+  "schema_version": 2,
+  "connector": "mode",
+  "source_lock": "sources/mode-operation-source-lock.json",
+  "generated_at": "2026-08-19T16:45:09.643Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.archivereport-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/archive\"].patch",
+      "operation_id": "archiveReport",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/{account}/reports/{report}/archive",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/{account}/reports/{report}/archive",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.bulkdeletereportschedule-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/reports/schedules/v1/bulk_delete\"].delete",
+      "operation_id": "bulkDeleteReportSchedule",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/{workspace}/reports/schedules/v1/bulk_delete",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/{workspace}/reports/schedules/v1/bulk_delete",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.clonereportrun-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/runs/{run}/clone\"].post",
+      "operation_id": "cloneReportRun",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/{account}/reports/{report}/runs/{run}/clone",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/{account}/reports/{report}/runs/{run}/clone",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.createcollection-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/spaces\"].post",
+      "operation_id": "createCollection",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/{workspace}/spaces",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/{workspace}/spaces",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.createdatasetfielddescriptions-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/datasets/{dataset}/field_descriptions\"].post",
+      "operation_id": "createDatasetFieldDescriptions",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/{account}/datasets/{dataset}/field_descriptions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/{account}/datasets/{dataset}/field_descriptions",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.createdatasourceschemaupdate-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/data_sources/{data_source}/schema_updates\"].post",
+      "operation_id": "createDataSourceSchemaUpdate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/{account}/data_sources/{data_source}/schema_updates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/{account}/data_sources/{data_source}/schema_updates",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.createdefinition-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/definitions\"].post",
+      "operation_id": "createDefinition",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/{workspace}/definitions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/{workspace}/definitions",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.creategroup-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/groups\"].post",
+      "operation_id": "createGroup",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/{workspace}/groups",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/{workspace}/groups",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.creategroupmembership-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/groups/{group_token}/memberships\"].post",
+      "operation_id": "createGroupMembership",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/{workspace}/groups/{group_token}/memberships",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/{workspace}/groups/{group_token}/memberships",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.createorganizationinvite-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/invites\"].post",
+      "operation_id": "createOrganizationInvite",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/{workspace}/invites",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/{workspace}/invites",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.createqueryinreport-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/queries\"].post",
+      "operation_id": "createQueryInReport",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/{account}/reports/{report}/queries",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/{account}/reports/{report}/queries",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.createreportfilter-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/filters\"].post",
+      "operation_id": "createReportFilter",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/{account}/reports/{report}/filters",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/{account}/reports/{report}/filters",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.createreportschedule-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/reports/{report}/schedules\"].post",
+      "operation_id": "createReportSchedule",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/{workspace}/reports/{report}/schedules",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/{workspace}/reports/{report}/schedules",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.createspacememberships-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/spaces/{space}/memberships\"].post",
+      "operation_id": "createSpaceMemberships",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/{account}/spaces/{space}/memberships",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/{account}/spaces/{space}/memberships",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.createsubscriptionforreport-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/subscriptions\"].post",
+      "operation_id": "createSubscriptionForReport",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/{account}/reports/{report}/subscriptions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/{account}/reports/{report}/subscriptions",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.deletecollection-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/spaces/{space}\"].delete",
+      "operation_id": "deleteCollection",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/{workspace}/spaces/{space}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/{workspace}/spaces/{space}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.deletedataset-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/datasets/{dataset}\"].delete",
+      "operation_id": "deleteDataset",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/{account}/datasets/{dataset}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/{account}/datasets/{dataset}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.deletedatasetfielddescription-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/datasets/{dataset}/field_descriptions/{field_description}\"].delete",
+      "operation_id": "deleteDatasetFieldDescription",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/{account}/datasets/{dataset}/field_descriptions/{field_description}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/{account}/datasets/{dataset}/field_descriptions/{field_description}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.deletedefinition-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/definitions/{definition}\"].delete",
+      "operation_id": "deleteDefinition",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/{workspace}/definitions/{definition}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/{workspace}/definitions/{definition}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.deletegroup-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/groups/{group_token}\"].delete",
+      "operation_id": "deleteGroup",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/{workspace}/groups/{group_token}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/{workspace}/groups/{group_token}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.deletegroupmembership-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/groups/{group_token}/memberships/{membership_token}\"].delete",
+      "operation_id": "deleteGroupMembership",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/{workspace}/groups/{group_token}/memberships/{membership_token}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/{workspace}/groups/{group_token}/memberships/{membership_token}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.deletemembership-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/memberships/{membership}\"].delete",
+      "operation_id": "deleteMembership",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/{workspace}/memberships/{membership}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/{workspace}/memberships/{membership}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.deletequeryinreport-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/queries/{query}\"].delete",
+      "operation_id": "deleteQueryInReport",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/{account}/reports/{report}/queries/{query}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/{account}/reports/{report}/queries/{query}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.deletereport-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}\"].delete",
+      "operation_id": "deleteReport",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/{account}/reports/{report}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/{account}/reports/{report}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.deletereportfilter-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/filters/{filter}\"].delete",
+      "operation_id": "deleteReportFilter",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/{account}/reports/{report}/filters/{filter}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/{account}/reports/{report}/filters/{filter}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.deletereportschedule-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/reports/{report}/schedules/{schedule}\"].delete",
+      "operation_id": "deleteReportSchedule",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/{workspace}/reports/{report}/schedules/{schedule}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/{workspace}/reports/{report}/schedules/{schedule}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.deletespacemembership-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/spaces/{space}/memberships/{space_membership}\"].delete",
+      "operation_id": "deleteSpaceMembership",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/{account}/spaces/{space}/memberships/{space_membership}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/{account}/spaces/{space}/memberships/{space_membership}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.deletesubscriptionforreport-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/subscriptions/{subscription}\"].delete",
+      "operation_id": "deleteSubscriptionForReport",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/{account}/reports/{report}/subscriptions/{subscription}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/{account}/reports/{report}/subscriptions/{subscription}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.duplicatereportrun-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/runs/{run}/duplicates\"].post",
+      "operation_id": "duplicateReportRun",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/{account}/reports/{report}/runs/{run}/duplicates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/{account}/reports/{report}/runs/{run}/duplicates",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getauditlogs-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/audit_logs\"].get",
+      "operation_id": "getAuditLogs",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{workspace}/audit_logs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{workspace}/audit_logs",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getchart-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/queries/{query}/charts/{chart}\"].get",
+      "operation_id": "getChart",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/reports/{report}/queries/{query}/charts/{chart}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/reports/{report}/queries/{query}/charts/{chart}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getcollection-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/spaces/{space}\"].get",
+      "operation_id": "getCollection",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{workspace}/spaces/{space}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{workspace}/spaces/{space}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getcurrentuser-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/account\"].get",
+      "operation_id": "getCurrentUser",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/account",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/account",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getdataset-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/datasets/{dataset}\"].get",
+      "operation_id": "getDataset",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/datasets/{dataset}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/datasets/{dataset}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getdatasetfielddescriptions-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/datasets/{dataset}/field_descriptions\"].get",
+      "operation_id": "getDatasetFieldDescriptions",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/datasets/{dataset}/field_descriptions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/datasets/{dataset}/field_descriptions",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getdatasetfields-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/datasets/{dataset}/fields\"].get",
+      "operation_id": "getDatasetFields",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/datasets/{dataset}/fields",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/datasets/{dataset}/fields",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getdatasetreports-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/datasets/{dataset}/reports\"].get",
+      "operation_id": "getDatasetReports",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/datasets/{dataset}/reports",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/datasets/{dataset}/reports",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getdatasetrun-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/datasets/{dataset}/runs/{run}\"].get",
+      "operation_id": "getDatasetRun",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/datasets/{dataset}/runs/{run}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/datasets/{dataset}/runs/{run}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getdatasource-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/data_sources/{data_source}\"].get",
+      "operation_id": "getDataSource",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{workspace}/data_sources/{data_source}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{workspace}/data_sources/{data_source}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getdefinition-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/definitions/{definition}\"].get",
+      "operation_id": "getDefinition",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{workspace}/definitions/{definition}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{workspace}/definitions/{definition}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getgroup-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/groups/{group_token}\"].get",
+      "operation_id": "getGroup",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{workspace}/groups/{group_token}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{workspace}/groups/{group_token}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getgroupmembership-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/groups/{group_token}/memberships/{membership_token}\"].get",
+      "operation_id": "getGroupMembership",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{workspace}/groups/{group_token}/memberships/{membership_token}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{workspace}/groups/{group_token}/memberships/{membership_token}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getmembership-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/memberships/{membership}\"].get",
+      "operation_id": "getMembership",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{workspace}/memberships/{membership}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{workspace}/memberships/{membership}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getqueryinreport-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/queries/{query}\"].get",
+      "operation_id": "getQueryInReport",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/reports/{report}/queries/{query}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/reports/{report}/queries/{query}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getqueryruncontent-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/runs/{run}/query_runs/{query_run}/results/content(.csv, .json)\"].get",
+      "operation_id": "getQueryRunContent",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/reports/{report}/runs/{run}/query_runs/{query_run}/results/content(.csv, .json)",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/reports/{report}/runs/{run}/query_runs/{query_run}/results/content(.csv, .json)",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getqueryrunforreportrun-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/runs/{run}/query_runs/{query_run}\"].get",
+      "operation_id": "getQueryRunForReportRun",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/reports/{report}/runs/{run}/query_runs/{query_run}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/reports/{report}/runs/{run}/query_runs/{query_run}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getreport-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}\"].get",
+      "operation_id": "getReport",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/reports/{report}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/reports/{report}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getreportfilter-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/filters/{filter}\"].get",
+      "operation_id": "getReportFilter",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/reports/{report}/filters/{filter}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/reports/{report}/filters/{filter}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getreportrun-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/runs/{run}\"].get",
+      "operation_id": "getReportRun",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/reports/{report}/runs/{run}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/reports/{report}/runs/{run}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getreportruncontent-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/runs/{run}/results/content(.csv, .json)\"].get",
+      "operation_id": "getReportRunContent",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/reports/{report}/runs/{run}/results/content(.csv, .json)",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/reports/{report}/runs/{run}/results/content(.csv, .json)",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getreportrunduplicate-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/runs/{run}/duplicates/{duplicate}\"].get",
+      "operation_id": "getReportRunDuplicate",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/reports/{report}/runs/{run}/duplicates/{duplicate}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/reports/{report}/runs/{run}/duplicates/{duplicate}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getreportrunexport-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/exports/runs/{run}/pdf/download\"].get",
+      "operation_id": "getReportRunExport",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/reports/{report}/exports/runs/{run}/pdf/download",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/reports/{report}/exports/runs/{run}/pdf/download",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getreportschedule-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/reports/{report}/schedules/{schedule}\"].get",
+      "operation_id": "getReportSchedule",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{workspace}/reports/{report}/schedules/{schedule}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{workspace}/reports/{report}/schedules/{schedule}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getspacemembership-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/spaces/{space}/memberships/{space_membership}\"].get",
+      "operation_id": "getSpaceMembership",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/spaces/{space}/memberships/{space_membership}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/spaces/{space}/memberships/{space_membership}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.getsubscriptionforreport-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/subscriptions/{subscription}\"].get",
+      "operation_id": "getSubscriptionForReport",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/reports/{report}/subscriptions/{subscription}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/reports/{report}/subscriptions/{subscription}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listchartsinquery-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/queries/{query}/charts\"].get",
+      "operation_id": "listChartsInQuery",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/reports/{report}/queries/{query}/charts",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/reports/{report}/queries/{query}/charts",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listcollections-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/spaces\"].get",
+      "operation_id": "listCollections",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{workspace}/spaces",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{workspace}/spaces",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listdatasetruns-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/datasets/{dataset}/runs\"].get",
+      "operation_id": "listDatasetRuns",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/datasets/{dataset}/runs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/datasets/{dataset}/runs",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listdatasetschedules-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/datasets/{dataset}/schedules\"].get",
+      "operation_id": "listDatasetSchedules",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{workspace}/datasets/{dataset}/schedules",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{workspace}/datasets/{dataset}/schedules",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listdatasetsinspace-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/spaces/{space}/datasets\"].get",
+      "operation_id": "listDatasetsInSpace",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/spaces/{space}/datasets",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/spaces/{space}/datasets",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listdatasetsusingdatasource-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/data_sources/{data_source}/datasets\"].get",
+      "operation_id": "listDatasetsUsingDataSource",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/data_sources/{data_source}/datasets",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/data_sources/{data_source}/datasets",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listdatasources-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/data_sources\"].get",
+      "operation_id": "listDataSources",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{workspace}/data_sources",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{workspace}/data_sources",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listdefinitions-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/definitions\"].get",
+      "operation_id": "listDefinitions",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{workspace}/definitions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{workspace}/definitions",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listformfields-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/runs/{run}/options\"].get",
+      "operation_id": "listFormFields",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/reports/{report}/runs/{run}/options",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/reports/{report}/runs/{run}/options",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listgroupmemberships-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/groups/{group_token}/memberships\"].get",
+      "operation_id": "listGroupMemberships",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{workspace}/groups/{group_token}/memberships",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{workspace}/groups/{group_token}/memberships",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listgroups-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/groups\"].get",
+      "operation_id": "listGroups",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{workspace}/groups",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{workspace}/groups",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listmemberships-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/memberships\"].get",
+      "operation_id": "listMemberships",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{workspace}/memberships",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{workspace}/memberships",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listqueriesinreport-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/queries\"].get",
+      "operation_id": "listQueriesInReport",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/reports/{report}/queries",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/reports/{report}/queries",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listqueryrunsforreportrun-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/runs/{run}/query_runs\"].get",
+      "operation_id": "listQueryRunsForReportRun",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/reports/{report}/runs/{run}/query_runs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/reports/{report}/runs/{run}/query_runs",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listreportfilters-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/filters\"].get",
+      "operation_id": "listReportFilters",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/reports/{report}/filters",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/reports/{report}/filters",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listreportruns-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/runs\"].get",
+      "operation_id": "listReportRuns",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/reports/{report}/runs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/reports/{report}/runs",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listreportschedules-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/reports/{report}/schedules\"].get",
+      "operation_id": "listReportSchedules",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{workspace}/reports/{report}/schedules",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{workspace}/reports/{report}/schedules",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listreportsinspace-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/spaces/{space}/reports\"].get",
+      "operation_id": "listReportsInSpace",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/spaces/{space}/reports",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/spaces/{space}/reports",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listreportsusingdatasource-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/data_sources/{data_source}/reports\"].get",
+      "operation_id": "listReportsUsingDataSource",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/data_sources/{data_source}/reports",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/data_sources/{data_source}/reports",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listspacememberships-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/spaces/{space}/memberships\"].get",
+      "operation_id": "listSpaceMemberships",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/spaces/{space}/memberships",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/spaces/{space}/memberships",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listsubscriptionsforreport-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/subscriptions\"].get",
+      "operation_id": "listSubscriptionsForReport",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/reports/{report}/subscriptions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/reports/{report}/subscriptions",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.listsubscriptionsforreportschedule-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/schedules/{schedule}/subscriptions\"].get",
+      "operation_id": "listSubscriptionsForReportSchedule",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/{account}/reports/{report}/schedules/{schedule}/subscriptions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/{account}/reports/{report}/schedules/{schedule}/subscriptions",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.purgeallreports-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/purge\"].post",
+      "operation_id": "purgeAllReports",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/{account}/reports/purge",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/{account}/reports/purge",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.purgefordatasource-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/data_sources/{data_source}/purge\"].post",
+      "operation_id": "purgeForDataSource",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/{workspace}/data_sources/{data_source}/purge",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/{workspace}/data_sources/{data_source}/purge",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.refreshdataset-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/runs\"].post",
+      "operation_id": "refreshDataset",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/{account}/reports/{report}/runs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/{account}/reports/{report}/runs",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.rundataset-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/datasets/{dataset}/runs\"].post",
+      "operation_id": "runDataset",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/{account}/datasets/{dataset}/runs",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/{account}/datasets/{dataset}/runs",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.unarchivereport-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/unarchive\"].patch",
+      "operation_id": "unarchiveReport",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/{account}/reports/{report}/unarchive",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/{account}/reports/{report}/unarchive",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.updatecollection-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/spaces/{space}\"].post",
+      "operation_id": "updateCollection",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/{workspace}/spaces/{space}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/{workspace}/spaces/{space}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.updatedataset-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/datasets/{dataset}\"].patch",
+      "operation_id": "updateDataset",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/{account}/datasets/{dataset}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/{account}/datasets/{dataset}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.updatedatasetfielddescription-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/datasets/{dataset}/field_descriptions/{field_description}\"].patch",
+      "operation_id": "updateDatasetFieldDescription",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/{account}/datasets/{dataset}/field_descriptions/{field_description}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/{account}/datasets/{dataset}/field_descriptions/{field_description}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.updatedatasource-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/data_sources/{data_source}\"].patch",
+      "operation_id": "updateDataSource",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/{workspace}/data_sources/{data_source}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/{workspace}/data_sources/{data_source}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.updatedefinition-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/definitions/{definition}\"].patch",
+      "operation_id": "updateDefinition",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/{workspace}/definitions/{definition}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/{workspace}/definitions/{definition}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.updategroup-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/groups/{group_token}\"].patch",
+      "operation_id": "updateGroup",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/{workspace}/groups/{group_token}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/{workspace}/groups/{group_token}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.updatequeryinreport-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/queries/{query}\"].patch",
+      "operation_id": "updateQueryInReport",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/{account}/reports/{report}/queries/{query}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/{account}/reports/{report}/queries/{query}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.updatereport-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}\"].patch",
+      "operation_id": "updateReport",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/{account}/reports/{report}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/{account}/reports/{report}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.updatereportfilter-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/filters/{filter}\"].patch",
+      "operation_id": "updateReportFilter",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/{account}/reports/{report}/filters/{filter}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/{account}/reports/{report}/filters/{filter}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.updatereportschedule-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{workspace}/reports/{report}/schedules/{schedule}\"].patch",
+      "operation_id": "updateReportSchedule",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/{workspace}/reports/{report}/schedules/{schedule}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/{workspace}/reports/{report}/schedules/{schedule}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.updatesubscriptionforreport-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/{account}/reports/{report}/subscriptions/{subscription}\"].patch",
+      "operation_id": "updateSubscriptionForReport",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/{account}/reports/{report}/subscriptions/{subscription}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/{account}/reports/{report}/subscriptions/{subscription}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/mode-operation-source-lock.json",
+      "source_id": "mode.rest.verifycurrentuser-source-1",
+      "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json",
+      "source_location": "paths[\"/api/verify\"].get",
+      "operation_id": "verifyCurrentUser",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/api/verify",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/api/verify",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://raw.githubusercontent.com/mode/api-swagger/master/swagger.json"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    }
+  ]
+}

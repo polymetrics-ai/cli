@@ -189,6 +189,7 @@ Reads Lever Hiring opportunities, postings, users, requisitions, stages, and rel
 - Read Lever Hiring records and safely plan typed Lever mutations.
 - Usage: pm lever-hiring <command> [flags]
 - Source CLI: Lever API (Lever Developer documentation fetched 2026-08-01)
+- PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
 - Global flags:
   - --credential (string): Credential name to use for the Lever request.
   - --connection (string): Alias for --credential.
@@ -226,27 +227,27 @@ Reads Lever Hiring opportunities, postings, users, requisitions, stages, and rel
   - stages list - Read Lever Hiring stages as ETL records. [intent=etl availability=implemented stream=stages]
   - users list - Read Lever Hiring users as ETL records. [intent=etl availability=implemented stream=users]
 - Bounded direct reads
-  - direct retrieve-a-single-application - Retrieve a single application [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_application]; flags: --page, --page-cursor
-  - direct retrieve-a-single-archive-reason - Retrieve a single archive reason [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_archive_reason]; flags: --page, --page-cursor
-  - direct retrieve-a-single-contact - Retrieve a single contact [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_contact]; flags: --page, --page-cursor
-  - direct retrieve-eeo-responses-with-pii - Retrieve EEO responses with PII [intent=direct_read availability=implemented operation=lever-hiring.retrieve_eeo_responses_with_pii]; flags: --page, --page-cursor
-  - direct retrieve-a-feedback-form - Retrieve a feedback form [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_feedback_form]; flags: --page, --page-cursor
-  - direct retrieve-a-feedback-template - Retrieve a feedback template [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_feedback_template]; flags: --page, --page-cursor
-  - direct retrieve-a-single-interview - Retrieve a single interview [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_interview]; flags: --page, --page-cursor
-  - direct retrieve-a-single-note - Retrieve a single note [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_note]; flags: --page, --page-cursor
-  - direct retrieve-a-single-opportunity - Retrieve a single opportunity [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_opportunity]; flags: --page, --page-cursor
-  - direct retrieve-a-single-panel - Retrieve a single panel [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_panel]; flags: --page, --page-cursor
-  - direct retrieve-a-single-posting - Retrieve a single posting [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_posting]; flags: --page, --page-cursor
-  - direct retrieve-posting-application-questions - Retrieve posting application questions [intent=direct_read availability=implemented operation=lever-hiring.retrieve_posting_application_questions]; flags: --page, --page-cursor
-  - direct retrieve-a-profile-form - Retrieve a profile form [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_profile_form]; flags: --page, --page-cursor
-  - direct retrieve-a-profile-form-template - Retrieve a profile form template [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_profile_form_template]; flags: --page, --page-cursor
-  - direct retrieve-a-single-referral - Retrieve a single referral [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_referral]; flags: --page, --page-cursor
-  - direct retrieve-a-single-requisition - Retrieve a single requisition [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_requisition]; flags: --page, --page-cursor
-  - direct retrieve-a-single-requisition-field - Retrieve a single requisition field [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_requisition_field]; flags: --page, --page-cursor
-  - direct retrieve-a-single-stage - Retrieve a single stage [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_stage]; flags: --page, --page-cursor
-  - direct retrieve-a-diversity-survey - Retrieve a diversity survey [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_diversity_survey]; flags: --page, --page-cursor
   - direct list-all-tags - List all tags [intent=direct_read availability=implemented operation=lever-hiring.list_all_tags]; flags: --page, --page-cursor
-  - direct retrieve-a-single-user - Retrieve a single user [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_user]; flags: --page, --page-cursor
+  - direct retrieve-a-diversity-survey - Retrieve a diversity survey [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_diversity_survey]; flags: --posting (non-empty, max 4096 bytes), --page, --page-cursor
+  - direct retrieve-a-feedback-form - Retrieve a feedback form [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_feedback_form]; flags: --opportunity (non-empty, max 4096 bytes), --feedback (non-empty, max 4096 bytes), --page, --page-cursor
+  - direct retrieve-a-feedback-template - Retrieve a feedback template [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_feedback_template]; flags: --feedback-template (non-empty, max 4096 bytes), --page, --page-cursor
+  - direct retrieve-a-profile-form - Retrieve a profile form [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_profile_form]; flags: --opportunity (non-empty, max 4096 bytes), --form (non-empty, max 4096 bytes), --page, --page-cursor
+  - direct retrieve-a-profile-form-template - Retrieve a profile form template [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_profile_form_template]; flags: --form-template (non-empty, max 4096 bytes), --page, --page-cursor
+  - direct retrieve-a-single-application - Retrieve a single application [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_application]; flags: --opportunity (non-empty, max 4096 bytes), --application (non-empty, max 4096 bytes), --page, --page-cursor
+  - direct retrieve-a-single-archive-reason - Retrieve a single archive reason [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_archive_reason]; flags: --archive-reason (non-empty, max 4096 bytes), --page, --page-cursor
+  - direct retrieve-a-single-contact - Retrieve a single contact [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_contact]; flags: --contact (non-empty, max 4096 bytes), --page, --page-cursor
+  - direct retrieve-a-single-interview - Retrieve a single interview [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_interview]; flags: --opportunity (non-empty, max 4096 bytes), --interview (non-empty, max 4096 bytes), --page, --page-cursor
+  - direct retrieve-a-single-note - Retrieve a single note [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_note]; flags: --opportunity (non-empty, max 4096 bytes), --note (non-empty, max 4096 bytes), --page, --page-cursor
+  - direct retrieve-a-single-opportunity - Retrieve a single opportunity [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_opportunity]; flags: --opportunity (non-empty, max 4096 bytes), --page, --page-cursor
+  - direct retrieve-a-single-panel - Retrieve a single panel [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_panel]; flags: --opportunity (non-empty, max 4096 bytes), --panel (non-empty, max 4096 bytes), --page, --page-cursor
+  - direct retrieve-a-single-posting - Retrieve a single posting [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_posting]; flags: --posting (non-empty, max 4096 bytes), --page, --page-cursor
+  - direct retrieve-a-single-referral - Retrieve a single referral [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_referral]; flags: --opportunity (non-empty, max 4096 bytes), --referral (non-empty, max 4096 bytes), --page, --page-cursor
+  - direct retrieve-a-single-requisition - Retrieve a single requisition [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_requisition]; flags: --requisition (non-empty, max 4096 bytes), --page, --page-cursor
+  - direct retrieve-a-single-requisition-field - Retrieve a single requisition field [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_requisition_field]; flags: --requisition-field (non-empty, max 4096 bytes), --page, --page-cursor
+  - direct retrieve-a-single-stage - Retrieve a single stage [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_stage]; flags: --stage (non-empty, max 4096 bytes), --page, --page-cursor
+  - direct retrieve-a-single-user - Retrieve a single user [intent=direct_read availability=implemented operation=lever-hiring.retrieve_a_single_user]; flags: --user (non-empty, max 4096 bytes), --page, --page-cursor
+  - direct retrieve-eeo-responses-with-pii - Retrieve EEO responses with PII [intent=direct_read availability=implemented operation=lever-hiring.retrieve_eeo_responses_with_pii]; flags: --page, --page-cursor
+  - direct retrieve-posting-application-questions - Retrieve posting application questions [intent=direct_read availability=implemented operation=lever-hiring.retrieve_posting_application_questions]; flags: --posting (non-empty, max 4096 bytes), --page, --page-cursor
 - Reverse ETL write plans
   - create-feedback-template plan - Creates a feedback template. [intent=reverse_etl availability=implemented write=create_feedback_template]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Creates a feedback template. Reverse ETL writes require plan, preview, explicit approval, and execute.; flags: --text (non-empty), --instructions (non-empty), --group (non-empty), --field-id (non-empty), --field-type (non-empty), --field-text (non-empty), --field-required, --field-description (non-empty), --field-prompt (non-empty)
   - create-form-template plan - Creates a profile form template. [intent=reverse_etl availability=implemented write=create_form_template]; approval: reverse ETL writes require plan, preview, explicit approval, then execute.; risk: Creates a profile form template. Reverse ETL writes require plan, preview, explicit approval, and execute.; flags: --text (non-empty), --instructions (non-empty), --group (non-empty), --secretbydefault, --field-id (non-empty), --field-type (non-empty), --field-text (non-empty), --field-required, --field-description (non-empty), --field-prompt (non-empty)
@@ -265,6 +266,13 @@ Reads Lever Hiring opportunities, postings, users, requisitions, stages, and rel
 - Help topics:
   - operation-ledger - Lever operation ledger covers 107 HTTP operations and 10 webhook events from the official documentation.
   - write-safety - Lever write commands use reverse ETL plan -> preview -> approval -> execute; destructive actions require typed confirmation.
+
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
 
 ## Commands
 

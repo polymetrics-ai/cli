@@ -1,0 +1,27 @@
+{
+  "schema_version": 3,
+  "connector": "testrail",
+  "captured_at": "2026-08-19T16:47:01.132Z",
+  "rest": {
+    "retrieval": "preserved issue-4292 public capture via browser",
+    "openapi": [],
+    "coverage_confidence": {
+      "level": "unavailable",
+      "basis": "no-public-api-description: The official rendered reference was requested in Chrome without credentials and returned a Cloudflare security-verification page rather than the published API reference. Per issue #4292 decision, no source pin or operation ledger is fabricated."
+    },
+    "source_documents": [
+      {
+        "id": "unavailable",
+        "kind": "unavailable",
+        "unavailable_reason": "The official rendered reference was requested in Chrome without credentials and returned a Cloudflare security-verification page rather than the published API reference. Per issue #4292 decision, no source pin or operation ledger is fabricated.",
+        "operations": []
+      }
+    ]
+  },
+  "counts": {
+    "rest": 0,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 0
+  }
+}

@@ -1,0 +1,647 @@
+{
+  "schema_version": 2,
+  "connector": "docuseal",
+  "source_lock": "sources/docuseal-operation-source-lock.json",
+  "generated_at": "2026-08-19T16:46:25.967Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.archivesubmission-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/submissions/{id}\"].delete",
+      "operation_id": "archiveSubmission",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/submissions/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/submissions/{id}",
+          "covered_by": {
+            "write": "archive_submission"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "archive_submission"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.archivetemplate-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/templates/{id}\"].delete",
+      "operation_id": "archiveTemplate",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/templates/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/templates/{id}",
+          "covered_by": {
+            "write": "archive_template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "archive_template"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.clonetemplate-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/templates/{id}/clone\"].post",
+      "operation_id": "cloneTemplate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/templates/{id}/clone",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/templates/{id}/clone",
+          "covered_by": {
+            "write": "clone_template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "clone_template"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.createsubmission-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/submissions\"].post",
+      "operation_id": "createSubmission",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/submissions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/submissions",
+          "covered_by": {
+            "write": "create_submission"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "create_submission"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.createsubmissionfromdocx-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/submissions/docx\"].post",
+      "operation_id": "createSubmissionFromDocx",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/submissions/docx",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/submissions/docx",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://console.docuseal.com/openapi.yml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.createsubmissionfromhtml-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/submissions/html\"].post",
+      "operation_id": "createSubmissionFromHtml",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/submissions/html",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/submissions/html",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://console.docuseal.com/openapi.yml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.createsubmissionfrompdf-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/submissions/pdf\"].post",
+      "operation_id": "createSubmissionFromPdf",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/submissions/pdf",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/submissions/pdf",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://console.docuseal.com/openapi.yml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.createsubmissionsfromemails-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/submissions/emails\"].post",
+      "operation_id": "createSubmissionsFromEmails",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/submissions/emails",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/submissions/emails",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://console.docuseal.com/openapi.yml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.createtemplatefromdocx-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/templates/docx\"].post",
+      "operation_id": "createTemplateFromDocx",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/templates/docx",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/templates/docx",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://console.docuseal.com/openapi.yml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.createtemplatefromhtml-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/templates/html\"].post",
+      "operation_id": "createTemplateFromHtml",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/templates/html",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/templates/html",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://console.docuseal.com/openapi.yml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.createtemplatefrompdf-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/templates/pdf\"].post",
+      "operation_id": "createTemplateFromPdf",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/templates/pdf",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/templates/pdf",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://console.docuseal.com/openapi.yml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.getsubmission-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/submissions/{id}\"].get",
+      "operation_id": "getSubmission",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/submissions/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/submissions/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://console.docuseal.com/openapi.yml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.getsubmissiondocuments-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/submissions/{id}/documents\"].get",
+      "operation_id": "getSubmissionDocuments",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/submissions/{id}/documents",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/submissions/{id}/documents",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://console.docuseal.com/openapi.yml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.getsubmissions-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/submissions\"].get",
+      "operation_id": "getSubmissions",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/submissions",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/submissions",
+          "covered_by": {
+            "stream": "submissions"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "submissions"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.getsubmitter-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/submitters/{id}\"].get",
+      "operation_id": "getSubmitter",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/submitters/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/submitters/{id}",
+          "operation": {
+            "model": "direct_read",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published read operation has no connector-owned typed stream or bounded direct-read contract; it remains blocked until that declaration, schema, fixtures, and command or stream binding are added.",
+            "source_url": "https://console.docuseal.com/openapi.yml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.getsubmitters-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/submitters\"].get",
+      "operation_id": "getSubmitters",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/submitters",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/submitters",
+          "covered_by": {
+            "stream": "submitters"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "submitters"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.gettemplate-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/templates/{id}\"].get",
+      "operation_id": "getTemplate",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/templates/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/templates/{id}",
+          "covered_by": {
+            "stream": "template_detail"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "template_detail"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.gettemplates-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/templates\"].get",
+      "operation_id": "getTemplates",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/templates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/templates",
+          "covered_by": {
+            "stream": "templates"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "etl",
+          "id": "templates"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.mergetemplate-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/templates/merge\"].post",
+      "operation_id": "mergeTemplate",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/templates/merge",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/templates/merge",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://console.docuseal.com/openapi.yml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.updatesubmission-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/submissions/{id}\"].put",
+      "operation_id": "updateSubmission",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/submissions/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/submissions/{id}",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://console.docuseal.com/openapi.yml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.updatesubmitter-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/submitters/{id}\"].put",
+      "operation_id": "updateSubmitter",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/submitters/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/submitters/{id}",
+          "covered_by": {
+            "write": "update_submitter"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_submitter"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.updatetemplate-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/templates/{id}\"].put",
+      "operation_id": "updateTemplate",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/templates/{id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/templates/{id}",
+          "covered_by": {
+            "write": "update_template"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "direct_write",
+          "id": [
+            "update_template"
+          ]
+        }
+      }
+    },
+    {
+      "source_lock": "sources/docuseal-operation-source-lock.json",
+      "source_id": "docuseal.rest.updatetemplatedocuments-source-1",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "source_location": "paths[\"/templates/{id}/documents\"].put",
+      "operation_id": "updateTemplateDocuments",
+      "deprecated": false,
+      "method": "PUT",
+      "path": "/templates/{id}/documents",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/templates/{id}/documents",
+          "operation": {
+            "model": "local_workflow",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+            "source_url": "https://console.docuseal.com/openapi.yml"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "declaration-pending"
+        }
+      }
+    }
+  ]
+}

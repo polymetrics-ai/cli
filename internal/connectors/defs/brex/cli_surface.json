@@ -1,0 +1,455 @@
+{
+  "tagline": "Run Brex's declared typed write actions.",
+  "usage": "pm brex <command> [flags]",
+  "groups": [
+    {
+      "id": "reverse_etl",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "create department apply",
+        "create location apply",
+        "create title apply",
+        "create user apply",
+        "delete vendor apply",
+        "delete webhook apply",
+        "lock card apply",
+        "terminate card apply",
+        "unlock card apply",
+        "update card apply",
+        "update expense apply",
+        "update user apply",
+        "update vendor apply",
+        "update webhook apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "create department apply",
+      "summary": "POST /v2/departments (create_department)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_department",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "creates a new organizational department; low-risk external mutation, no approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm brex create department apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/departments"
+        }
+      ]
+    },
+    {
+      "path": "create location apply",
+      "summary": "POST /v2/locations (create_location)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_location",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "creates a new organizational location; low-risk external mutation, no approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm brex create location apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/locations"
+        }
+      ]
+    },
+    {
+      "path": "create title apply",
+      "summary": "POST /v2/titles (create_title)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_title",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "creates a new job title; low-risk external mutation, no approval required",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm brex create title apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/titles"
+        }
+      ]
+    },
+    {
+      "path": "create user apply",
+      "summary": "POST /v2/users (create_user)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_user",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "first-name",
+          "type": "string",
+          "summary": "Required first_name record field.",
+          "maps_to": "record.first_name",
+          "required": true
+        },
+        {
+          "name": "last-name",
+          "type": "string",
+          "summary": "Required last_name record field.",
+          "maps_to": "record.last_name",
+          "required": true
+        }
+      ],
+      "risk": "invites a new user to the Brex account; sends a real invitation email to the target address",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm brex create user apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/users"
+        }
+      ]
+    },
+    {
+      "path": "delete vendor apply",
+      "summary": "DELETE /v1/vendors/{id} (delete_vendor)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_vendor",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "permanently removes a vendor record; any transfer still referencing it as counterparty will fail to resolve",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm brex delete vendor apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/vendors/{id}"
+        }
+      ]
+    },
+    {
+      "path": "delete webhook apply",
+      "summary": "DELETE /v1/webhooks/{id} (delete_webhook)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "permanently removes a webhook subscription; irreversible",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm brex delete webhook apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/webhooks/{id}"
+        }
+      ]
+    },
+    {
+      "path": "lock card apply",
+      "summary": "POST /v2/cards/{id}/lock (lock_card)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "lock_card",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "immediately blocks all new transactions on the card until unlocked; does not affect already-authorized/pending transactions",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm brex lock card apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/cards/{id}/lock"
+        }
+      ]
+    },
+    {
+      "path": "terminate card apply",
+      "summary": "POST /v2/cards/{id}/terminate (terminate_card)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "terminate_card",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "permanently deactivates a card; irreversible, the card can never be unlocked or reused after termination",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm brex terminate card apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/cards/{id}/terminate"
+        }
+      ]
+    },
+    {
+      "path": "unlock card apply",
+      "summary": "POST /v2/cards/{id}/unlock (unlock_card)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "unlock_card",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "immediately re-enables new transactions on a previously locked card",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm brex unlock card apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/cards/{id}/unlock"
+        }
+      ]
+    },
+    {
+      "path": "update card apply",
+      "summary": "PUT /v2/cards/{id} (update_card)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_card",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "mutates an existing card's spend controls (limit amount/category/merchant restrictions); takes effect on the physical/virtual card immediately",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm brex update card apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/cards/{id}"
+        }
+      ]
+    },
+    {
+      "path": "update expense apply",
+      "summary": "PUT /v1/expenses/card/{expense_id} (update_expense)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_expense",
+      "flags": [
+        {
+          "name": "expense-id",
+          "type": "string",
+          "summary": "Required expense_id record field.",
+          "maps_to": "record.expense_id",
+          "required": true
+        }
+      ],
+      "risk": "mutates an existing card expense's memo; low-risk metadata-only external mutation",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm brex update expense apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/expenses/card/{expense_id}"
+        }
+      ]
+    },
+    {
+      "path": "update user apply",
+      "summary": "PUT /v2/users/{id} (update_user)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_user",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "mutates an existing user's status, manager, department, location, or title; setting status to a terminated/suspended state revokes account access",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm brex update user apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/users/{id}"
+        }
+      ]
+    },
+    {
+      "path": "update vendor apply",
+      "summary": "PUT /v1/vendors/{id} (update_vendor)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_vendor",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "mutates an existing vendor's name, contact details, or payment accounts; affects future transfer counterparty resolution",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm brex update vendor apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/vendors/{id}"
+        }
+      ]
+    },
+    {
+      "path": "update webhook apply",
+      "summary": "PUT /v1/webhooks/{id} (update_webhook)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_webhook",
+      "flags": [
+        {
+          "name": "event-types",
+          "type": "json",
+          "summary": "Required event_types record field.",
+          "maps_to": "record.event_types",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Required status record field.",
+          "maps_to": "record.status",
+          "required": true
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "summary": "Required url record field.",
+          "maps_to": "record.url",
+          "required": true
+        }
+      ],
+      "risk": "re-points an already-registered webhook's delivery URL, event set, or active status; redirects live event delivery immediately",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "examples": [
+        "pm brex update webhook apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/webhooks/{id}"
+        }
+      ]
+    }
+  ]
+}

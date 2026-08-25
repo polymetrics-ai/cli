@@ -1,0 +1,868 @@
+{
+  "schema_version": 3,
+  "connector": "dremio",
+  "captured_at": "2026-08-19T16:45:09.939Z",
+  "rest": {
+    "retrieval": "preserved issue-4292 public capture via http",
+    "openapi": [],
+    "coverage_confidence": {
+      "level": "complete-rendered-reference",
+      "basis": "Dremio's official API Reference index and every linked Reference API category page are retrieved. Their formal /api/v3 method/path declarations are extracted; the version prefix is removed only because this connector's declared base URL owns it."
+    },
+    "source_documents": [
+      {
+        "id": "document-0001",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/",
+          "sha256": "44e860f19fb2c943a36bf2350f3b0fb8cdabbab70611ff076609370d6da7e487",
+          "bytes": 102674
+        },
+        "published_source": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/",
+          "capture_url": "https://docs.dremio.com/25.x/reference/api/",
+          "sha256": "44e860f19fb2c943a36bf2350f3b0fb8cdabbab70611ff076609370d6da7e487",
+          "bytes": 102674,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": []
+      },
+      {
+        "id": "document-0002",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/",
+          "sha256": "09eb625f4393e7bec16015abb775ac7cc3d6ad88db84a2272d7e8e52b4d29d85",
+          "bytes": 85837
+        },
+        "published_source": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/",
+          "capture_url": "https://docs.dremio.com/25.x/reference/api/catalog/",
+          "sha256": "09eb625f4393e7bec16015abb775ac7cc3d6ad88db84a2272d7e8e52b4d29d85",
+          "bytes": 85837,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "dremio.rendered.get-catalog",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/catalog",
+            "operation_id": "get-catalog",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-8099",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/catalog/"
+          }
+        ]
+      },
+      {
+        "id": "document-0003",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/",
+          "sha256": "ad2dabb792ce9cdfda8f54acfb307a691736754685e377d2987785d045a03b37",
+          "bytes": 199090
+        },
+        "published_source": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/",
+          "capture_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/",
+          "sha256": "ad2dabb792ce9cdfda8f54acfb307a691736754685e377d2987785d045a03b37",
+          "bytes": 199090,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "dremio.rendered.delete-catalog-id",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/catalog/{id}",
+            "operation_id": "delete-catalog-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-30986",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
+          },
+          {
+            "id": "dremio.rendered.get-catalog-by-path-path",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/catalog/by-path/{path}",
+            "operation_id": "get-catalog-by-path-path",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-19415",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
+          },
+          {
+            "id": "dremio.rendered.get-catalog-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/catalog/{id}",
+            "operation_id": "get-catalog-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-14433",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
+          },
+          {
+            "id": "dremio.rendered.post-catalog",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/catalog",
+            "operation_id": "post-catalog",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-10004",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
+          },
+          {
+            "id": "dremio.rendered.put-catalog-id",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/catalog/{id}",
+            "operation_id": "put-catalog-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-24260",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-folder/"
+          }
+        ]
+      },
+      {
+        "id": "document-0004",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-space/",
+          "sha256": "a3be1d93ac4c9ce82f20d1a0281a716db121d29177a802b96792659dd31b4b71",
+          "bytes": 200908
+        },
+        "published_source": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-space/",
+          "capture_url": "https://docs.dremio.com/25.x/reference/api/catalog/container-space/",
+          "sha256": "a3be1d93ac4c9ce82f20d1a0281a716db121d29177a802b96792659dd31b4b71",
+          "bytes": 200908,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": []
+      },
+      {
+        "id": "document-0005",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/source/",
+          "sha256": "65f94054458f44e408cb39c84e76c70baf8063282f400528bdd4b52867d1b309",
+          "bytes": 369337
+        },
+        "published_source": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/catalog/source/",
+          "capture_url": "https://docs.dremio.com/25.x/reference/api/catalog/source/",
+          "sha256": "65f94054458f44e408cb39c84e76c70baf8063282f400528bdd4b52867d1b309",
+          "bytes": 369337,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": []
+      },
+      {
+        "id": "document-0006",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/datasets/",
+          "sha256": "6b119b548436a80bca2c76427759091cf0f5d25fda1ed55408ede09968fe9066",
+          "bytes": 123314
+        },
+        "published_source": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/datasets/",
+          "capture_url": "https://docs.dremio.com/25.x/reference/api/datasets/",
+          "sha256": "6b119b548436a80bca2c76427759091cf0f5d25fda1ed55408ede09968fe9066",
+          "bytes": 123314,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "dremio.rendered.post-dataset-id-reflection-recommendation-type",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/dataset/{id}/reflection/recommendation/{type}",
+            "operation_id": "post-dataset-id-reflection-recommendation-type",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-7650",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/datasets/"
+          }
+        ]
+      },
+      {
+        "id": "document-0007",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/",
+          "sha256": "adf478a9d71f436a285fda1a07ac363856fe0186e75c09f5f61fa143306ae934",
+          "bytes": 102447
+        },
+        "published_source": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/",
+          "capture_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/",
+          "sha256": "adf478a9d71f436a285fda1a07ac363856fe0186e75c09f5f61fa143306ae934",
+          "bytes": 102447,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "dremio.rendered.delete-external-token-providers-id",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/external-token-providers/{id}",
+            "operation_id": "delete-external-token-providers-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-13714",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+          },
+          {
+            "id": "dremio.rendered.get-external-token-providers",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/external-token-providers",
+            "operation_id": "get-external-token-providers",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-4157",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+          },
+          {
+            "id": "dremio.rendered.get-external-token-providers-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/external-token-providers/{id}",
+            "operation_id": "get-external-token-providers-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-8292",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+          },
+          {
+            "id": "dremio.rendered.patch-external-token-providers-id-state",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/external-token-providers/{id}/state",
+            "operation_id": "patch-external-token-providers-id-state",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-12670",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+          },
+          {
+            "id": "dremio.rendered.post-external-token-providers",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/external-token-providers",
+            "operation_id": "post-external-token-providers",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-5817",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+          },
+          {
+            "id": "dremio.rendered.put-external-token-providers-id",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/external-token-providers/{id}",
+            "operation_id": "put-external-token-providers-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-9554",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/external-token-providers/"
+          }
+        ]
+      },
+      {
+        "id": "document-0008",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/job/",
+          "sha256": "b91b9abf1a8bf29d6f8778709bc085bedbbf195a72a1562ed8346c1b67486a9a",
+          "bytes": 87543
+        },
+        "published_source": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/job/",
+          "capture_url": "https://docs.dremio.com/25.x/reference/api/job/",
+          "sha256": "b91b9abf1a8bf29d6f8778709bc085bedbbf195a72a1562ed8346c1b67486a9a",
+          "bytes": 87543,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "dremio.rendered.get-job-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/job/{id}",
+            "operation_id": "get-job-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-6169",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/job/"
+          }
+        ]
+      },
+      {
+        "id": "document-0009",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/ldap-authorization/",
+          "sha256": "4ba47b3436a4422f8447a93bb6fb14300d6d784d118fea552f464161f6c0b284",
+          "bytes": 47571
+        },
+        "published_source": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/ldap-authorization/",
+          "capture_url": "https://docs.dremio.com/25.x/reference/api/ldap-authorization/",
+          "sha256": "4ba47b3436a4422f8447a93bb6fb14300d6d784d118fea552f464161f6c0b284",
+          "bytes": 47571,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "dremio.rendered.delete-cache-authorization",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/cache/authorization",
+            "operation_id": "delete-cache-authorization",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-2172",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/ldap-authorization/"
+          },
+          {
+            "id": "dremio.rendered.delete-cache-authorization-id",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/cache/authorization/{id}",
+            "operation_id": "delete-cache-authorization-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-2959",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/ldap-authorization/"
+          }
+        ]
+      },
+      {
+        "id": "document-0010",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/nodeCollections/",
+          "sha256": "6ea28f1ac067d434dd554e56dd806ba302f27043c427a6e5b9cfaffdd03249d9",
+          "bytes": 44529
+        },
+        "published_source": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/nodeCollections/",
+          "capture_url": "https://docs.dremio.com/25.x/reference/api/nodeCollections/",
+          "sha256": "6ea28f1ac067d434dd554e56dd806ba302f27043c427a6e5b9cfaffdd03249d9",
+          "bytes": 44529,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "dremio.rendered.get-nodecollections-blacklist",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/nodeCollections/blacklist",
+            "operation_id": "get-nodecollections-blacklist",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-3401",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/nodeCollections/"
+          },
+          {
+            "id": "dremio.rendered.post-nodecollections-blacklist",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/nodeCollections/blacklist",
+            "operation_id": "post-nodecollections-blacklist",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-2283",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/nodeCollections/"
+          }
+        ]
+      },
+      {
+        "id": "document-0011",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/",
+          "sha256": "61c4215d2ab2b7452aed851d6280f08fb66f464bc5fa84be1034222e2f41aa8e",
+          "bytes": 512490
+        },
+        "published_source": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/",
+          "capture_url": "https://docs.dremio.com/25.x/reference/api/reflections/",
+          "sha256": "61c4215d2ab2b7452aed851d6280f08fb66f464bc5fa84be1034222e2f41aa8e",
+          "bytes": 512490,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "dremio.rendered.delete-reflection-id",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/reflection/{id}",
+            "operation_id": "delete-reflection-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-78990",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+          },
+          {
+            "id": "dremio.rendered.get-dataset-datasetid-reflection",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/dataset/{datasetId}/reflection",
+            "operation_id": "get-dataset-datasetid-reflection",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-55071",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+          },
+          {
+            "id": "dremio.rendered.get-reflection",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/reflection",
+            "operation_id": "get-reflection",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-40058",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+          },
+          {
+            "id": "dremio.rendered.get-reflection-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/reflection/{id}",
+            "operation_id": "get-reflection-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-50838",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+          },
+          {
+            "id": "dremio.rendered.post-reflection",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/reflection",
+            "operation_id": "post-reflection",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-23136",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+          },
+          {
+            "id": "dremio.rendered.post-reflection-id-refresh",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/reflection/{id}/refresh",
+            "operation_id": "post-reflection-id-refresh",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-60466",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+          },
+          {
+            "id": "dremio.rendered.put-reflection-id",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/reflection/{id}",
+            "operation_id": "put-reflection-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-61001",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/reflections/"
+          }
+        ]
+      },
+      {
+        "id": "document-0012",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/reflection-summary/",
+          "sha256": "41b8309834476e910862ad672de23af1a1bb80c812ea7f8b6e9fd17d5a09876a",
+          "bytes": 191734
+        },
+        "published_source": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/reflections/reflection-summary/",
+          "capture_url": "https://docs.dremio.com/25.x/reference/api/reflections/reflection-summary/",
+          "sha256": "41b8309834476e910862ad672de23af1a1bb80c812ea7f8b6e9fd17d5a09876a",
+          "bytes": 191734,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "dremio.rendered.get-reflection-summary",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/reflection-summary",
+            "operation_id": "get-reflection-summary",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-20084",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/reflections/reflection-summary/"
+          }
+        ]
+      },
+      {
+        "id": "document-0013",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/roles/",
+          "sha256": "96c42df6444df6aa6ce9f9f4ba3a58bbd776d8f0256691a06d3e7ce00f47d72b",
+          "bytes": 115855
+        },
+        "published_source": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/roles/",
+          "capture_url": "https://docs.dremio.com/25.x/reference/api/roles/",
+          "sha256": "96c42df6444df6aa6ce9f9f4ba3a58bbd776d8f0256691a06d3e7ce00f47d72b",
+          "bytes": 115855,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "dremio.rendered.delete-role-id",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/role/{id}",
+            "operation_id": "delete-role-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-14094",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/roles/"
+          },
+          {
+            "id": "dremio.rendered.get-role-by-name-name",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/role/by-name/{name}",
+            "operation_id": "get-role-by-name-name",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-8018",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/roles/"
+          },
+          {
+            "id": "dremio.rendered.get-role-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/role/{id}",
+            "operation_id": "get-role-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-6650",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/roles/"
+          },
+          {
+            "id": "dremio.rendered.patch-role-id-member",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/role/{id}/member",
+            "operation_id": "patch-role-id-member",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-12355",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/roles/"
+          },
+          {
+            "id": "dremio.rendered.post-role",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/role",
+            "operation_id": "post-role",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-4281",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/roles/"
+          },
+          {
+            "id": "dremio.rendered.put-role-id",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/role/{id}",
+            "operation_id": "put-role-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-9604",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/roles/"
+          }
+        ]
+      },
+      {
+        "id": "document-0014",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+          "sha256": "a80a1ff24843852ea58309501a674820ff87e98a0c6494318b02800feb76f3b5",
+          "bytes": 165380
+        },
+        "published_source": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+          "capture_url": "https://docs.dremio.com/25.x/reference/api/scripts/",
+          "sha256": "a80a1ff24843852ea58309501a674820ff87e98a0c6494318b02800feb76f3b5",
+          "bytes": 165380,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "dremio.rendered.delete-scripts-id",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/scripts/{id}",
+            "operation_id": "delete-scripts-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-16147",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+          },
+          {
+            "id": "dremio.rendered.get-scripts",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/scripts",
+            "operation_id": "get-scripts",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-8167",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+          },
+          {
+            "id": "dremio.rendered.get-scripts-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/scripts/{id}",
+            "operation_id": "get-scripts-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-12758",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+          },
+          {
+            "id": "dremio.rendered.get-scripts-id-grants",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/scripts/{id}/grants",
+            "operation_id": "get-scripts-id-grants",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-17971",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+          },
+          {
+            "id": "dremio.rendered.patch-scripts-id",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/scripts/{id}",
+            "operation_id": "patch-scripts-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-13989",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+          },
+          {
+            "id": "dremio.rendered.post-scripts",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/scripts",
+            "operation_id": "post-scripts",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-6298",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+          },
+          {
+            "id": "dremio.rendered.post-scripts-batchdelete",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/scripts{batchDelete}",
+            "operation_id": "post-scripts-batchdelete",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-16841",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+          },
+          {
+            "id": "dremio.rendered.put-scripts-id-grants",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/scripts/{id}/grants",
+            "operation_id": "put-scripts-id-grants",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-19343",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/scripts/"
+          }
+        ]
+      },
+      {
+        "id": "document-0015",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/source/",
+          "sha256": "644feeb8db47ec44de13c7e9ff2597f7afca55f4a0430fa7b859c8721a713f92",
+          "bytes": 34164
+        },
+        "published_source": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/source/",
+          "capture_url": "https://docs.dremio.com/25.x/reference/api/source/",
+          "sha256": "644feeb8db47ec44de13c7e9ff2597f7afca55f4a0430fa7b859c8721a713f92",
+          "bytes": 34164,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "dremio.rendered.delete-source-source-name-permission-cache",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/source/{source-name}/permission-cache",
+            "operation_id": "delete-source-source-name-permission-cache",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-2450",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/source/"
+          }
+        ]
+      },
+      {
+        "id": "document-0016",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/sql/",
+          "sha256": "d5598d8f0b62ed8cc27b17bae5ba3b639c76f9276a4faeb167c595fabdfa2496",
+          "bytes": 44013
+        },
+        "published_source": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/sql/",
+          "capture_url": "https://docs.dremio.com/25.x/reference/api/sql/",
+          "sha256": "d5598d8f0b62ed8cc27b17bae5ba3b639c76f9276a4faeb167c595fabdfa2496",
+          "bytes": 44013,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "dremio.rendered.post-sql",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/sql",
+            "operation_id": "post-sql",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-2096",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/sql/"
+          }
+        ]
+      },
+      {
+        "id": "document-0017",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/token/",
+          "sha256": "17e077eeda43edfc2cdeb89d9458467da15856e70e1c1a32a622b64de8efd663",
+          "bytes": 38108
+        },
+        "published_source": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/token/",
+          "capture_url": "https://docs.dremio.com/25.x/reference/api/token/",
+          "sha256": "17e077eeda43edfc2cdeb89d9458467da15856e70e1c1a32a622b64de8efd663",
+          "bytes": 38108,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "dremio.rendered.delete-token",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/token",
+            "operation_id": "delete-token",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-1972",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/token/"
+          },
+          {
+            "id": "dremio.rendered.delete-user-username-token-id",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/user/{userName}/token/{id}",
+            "operation_id": "delete-user-username-token-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-2490",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/token/"
+          }
+        ]
+      },
+      {
+        "id": "document-0018",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/user/",
+          "sha256": "94b16f62c2b9168bc398783eaa7d9ed482d92037ea786c819375ed6fe0114a24",
+          "bytes": 121059
+        },
+        "published_source": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/user/",
+          "capture_url": "https://docs.dremio.com/25.x/reference/api/user/",
+          "sha256": "94b16f62c2b9168bc398783eaa7d9ed482d92037ea786c819375ed6fe0114a24",
+          "bytes": 121059,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "dremio.rendered.delete-user-id",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/user/{id}",
+            "operation_id": "delete-user-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-15260",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/user/"
+          },
+          {
+            "id": "dremio.rendered.get-user-by-name-name",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/user/by-name/{name}",
+            "operation_id": "get-user-by-name-name",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-10274",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/user/"
+          },
+          {
+            "id": "dremio.rendered.get-user-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/user/{id}",
+            "operation_id": "get-user-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-8797",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/user/"
+          },
+          {
+            "id": "dremio.rendered.post-user",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/user",
+            "operation_id": "post-user",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-5482",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/user/"
+          },
+          {
+            "id": "dremio.rendered.put-user-id",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/user/{id}",
+            "operation_id": "put-user-id",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-11652",
+            "citation_url": "https://docs.dremio.com/25.x/reference/api/user/"
+          }
+        ]
+      },
+      {
+        "id": "document-0019",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/wlm/",
+          "sha256": "152afe9ca56083262f613495eb354094370120c7d2bbe65f10829d74ea4e435b",
+          "bytes": 27517
+        },
+        "published_source": {
+          "source_url": "https://docs.dremio.com/25.x/reference/api/wlm/",
+          "capture_url": "https://docs.dremio.com/25.x/reference/api/wlm/",
+          "sha256": "152afe9ca56083262f613495eb354094370120c7d2bbe65f10829d74ea4e435b",
+          "bytes": 27517,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": []
+      }
+    ]
+  },
+  "counts": {
+    "rest": 49,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 49
+  }
+}

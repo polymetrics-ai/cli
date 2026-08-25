@@ -1,0 +1,1154 @@
+{
+  "schema_version": 3,
+  "connector": "coda",
+  "captured_at": "2026-08-19T16:45:19.029Z",
+  "rest": {
+    "retrieval": "preserved issue-4292 public capture via http",
+    "openapi": [],
+    "coverage_confidence": {
+      "level": "machine-readable",
+      "basis": "Coda publishes the complete v1 OpenAPI document at this URL; every HTTP path item is extracted."
+    },
+    "source_documents": [
+      {
+        "id": "document-0001",
+        "artifact": {
+          "source_url": "https://coda.io/apis/v1/openapi.json",
+          "sha256": "22273737ad505dba178d108cd94f710e5abf3d72b84417a6f2f202154d2160ee",
+          "bytes": 454911
+        },
+        "published_source": {
+          "source_url": "https://coda.io/apis/v1/openapi.json",
+          "capture_url": "https://coda.io/apis/v1/openapi.json",
+          "sha256": "22273737ad505dba178d108cd94f710e5abf3d72b84417a6f2f202154d2160ee",
+          "bytes": 454911,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "coda.rest.addcustomdocdomain-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/docs/${docId}/domains",
+            "operation_id": "addCustomDocDomain",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/${docId}/domains\"].post"
+          },
+          {
+            "id": "coda.rest.addgolink-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/organizations/{organizationId}/goLinks",
+            "operation_id": "addGoLink",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{organizationId}/goLinks\"].post"
+          },
+          {
+            "id": "coda.rest.addpackcategory-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/packs/{packId}/category",
+            "operation_id": "addPackCategory",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/category\"].post"
+          },
+          {
+            "id": "coda.rest.addpackmaker-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/packs/{packId}/maker",
+            "operation_id": "addPackMaker",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/maker\"].post"
+          },
+          {
+            "id": "coda.rest.addpackpermission-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/packs/{packId}/permissions",
+            "operation_id": "addPackPermission",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/permissions\"].post"
+          },
+          {
+            "id": "coda.rest.addpermission-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/docs/{docId}/acl/permissions",
+            "operation_id": "addPermission",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/acl/permissions\"].post"
+          },
+          {
+            "id": "coda.rest.beginpagecontentexport-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/docs/{docId}/pages/{pageIdOrName}/export",
+            "operation_id": "beginPageContentExport",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/pages/{pageIdOrName}/export\"].post"
+          },
+          {
+            "id": "coda.rest.cancelpackreview-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/packs/{packId}/reviews/pending/cancel",
+            "operation_id": "cancelPackReview",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/reviews/pending/cancel\"].post"
+          },
+          {
+            "id": "coda.rest.changeuserrole-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/workspaces/{workspaceId}/users/role",
+            "operation_id": "changeUserRole",
+            "deprecated": false,
+            "source_location": "paths[\"/workspaces/{workspaceId}/users/role\"].post"
+          },
+          {
+            "id": "coda.rest.createdoc-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/docs",
+            "operation_id": "createDoc",
+            "deprecated": false,
+            "source_location": "paths[\"/docs\"].post"
+          },
+          {
+            "id": "coda.rest.createfolder-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/folders",
+            "operation_id": "createFolder",
+            "deprecated": false,
+            "source_location": "paths[\"/folders\"].post"
+          },
+          {
+            "id": "coda.rest.createpack-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/packs",
+            "operation_id": "createPack",
+            "deprecated": false,
+            "source_location": "paths[\"/packs\"].post"
+          },
+          {
+            "id": "coda.rest.createpackinvitation-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/packs/{packId}/invitations",
+            "operation_id": "createPackInvitation",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/invitations\"].post"
+          },
+          {
+            "id": "coda.rest.createpackrelease-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/packs/{packId}/releases",
+            "operation_id": "createPackRelease",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/releases\"].post"
+          },
+          {
+            "id": "coda.rest.createpackreview-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/packs/{packId}/reviews",
+            "operation_id": "createPackReview",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/reviews\"].post"
+          },
+          {
+            "id": "coda.rest.createpage-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/docs/{docId}/pages",
+            "operation_id": "createPage",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/pages\"].post"
+          },
+          {
+            "id": "coda.rest.deletecustomdocdomain-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/docs/{docId}/domains/{customDocDomain}",
+            "operation_id": "deleteCustomDocDomain",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/domains/{customDocDomain}\"].delete"
+          },
+          {
+            "id": "coda.rest.deletedoc-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/docs/{docId}",
+            "operation_id": "deleteDoc",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}\"].delete"
+          },
+          {
+            "id": "coda.rest.deletefolder-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/folders/{folderId}",
+            "operation_id": "deleteFolder",
+            "deprecated": false,
+            "source_location": "paths[\"/folders/{folderId}\"].delete"
+          },
+          {
+            "id": "coda.rest.deletepack-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/packs/{packId}",
+            "operation_id": "deletePack",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}\"].delete"
+          },
+          {
+            "id": "coda.rest.deletepackcategory-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/packs/{packId}/category/{categoryName}",
+            "operation_id": "deletePackCategory",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/category/{categoryName}\"].delete"
+          },
+          {
+            "id": "coda.rest.deletepackinvitation-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/packs/{packId}/invitations/{invitationId}",
+            "operation_id": "deletePackInvitation",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/invitations/{invitationId}\"].delete"
+          },
+          {
+            "id": "coda.rest.deletepacklistingdraft-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/packs/{packId}/listingDraft",
+            "operation_id": "deletePackListingDraft",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/listingDraft\"].delete"
+          },
+          {
+            "id": "coda.rest.deletepackmaker-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/packs/{packId}/maker/{loginId}",
+            "operation_id": "deletePackMaker",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/maker/{loginId}\"].delete"
+          },
+          {
+            "id": "coda.rest.deletepackpermission-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/packs/{packId}/permissions/{permissionId}",
+            "operation_id": "deletePackPermission",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/permissions/{permissionId}\"].delete"
+          },
+          {
+            "id": "coda.rest.deletepage-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/docs/{docId}/pages/{pageIdOrName}",
+            "operation_id": "deletePage",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/pages/{pageIdOrName}\"].delete"
+          },
+          {
+            "id": "coda.rest.deletepagecontent-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/docs/{docId}/pages/{pageIdOrName}/content",
+            "operation_id": "deletePageContent",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/pages/{pageIdOrName}/content\"].delete"
+          },
+          {
+            "id": "coda.rest.deletepermission-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/docs/{docId}/acl/permissions/{permissionId}",
+            "operation_id": "deletePermission",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/acl/permissions/{permissionId}\"].delete"
+          },
+          {
+            "id": "coda.rest.deleterow-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+            "operation_id": "deleteRow",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}\"].delete"
+          },
+          {
+            "id": "coda.rest.deleterows-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+            "operation_id": "deleteRows",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows\"].delete"
+          },
+          {
+            "id": "coda.rest.deleteuserpackpermission-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/packs/{packId}/permissions",
+            "operation_id": "deleteUserPackPermission",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/permissions\"].delete"
+          },
+          {
+            "id": "coda.rest.getaclsettings-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/{docId}/acl/settings",
+            "operation_id": "getAclSettings",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/acl/settings\"].get"
+          },
+          {
+            "id": "coda.rest.getagentpacklogdetails-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs/{logId}",
+            "operation_id": "getAgentPackLogDetails",
+            "deprecated": false,
+            "source_location": "paths[\"/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs/{logId}\"].get"
+          },
+          {
+            "id": "coda.rest.getanalyticslastupdated-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/analytics/updated",
+            "operation_id": "getAnalyticsLastUpdated",
+            "deprecated": false,
+            "source_location": "paths[\"/analytics/updated\"].get"
+          },
+          {
+            "id": "coda.rest.getcolumn-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}",
+            "operation_id": "getColumn",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}\"].get"
+          },
+          {
+            "id": "coda.rest.getcontrol-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/{docId}/controls/{controlIdOrName}",
+            "operation_id": "getControl",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/controls/{controlIdOrName}\"].get"
+          },
+          {
+            "id": "coda.rest.getcustomdocdomainprovider-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/domains/provider/{customDocDomain}",
+            "operation_id": "getCustomDocDomainProvider",
+            "deprecated": false,
+            "source_location": "paths[\"/domains/provider/{customDocDomain}\"].get"
+          },
+          {
+            "id": "coda.rest.getdoc-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/{docId}",
+            "operation_id": "getDoc",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}\"].get"
+          },
+          {
+            "id": "coda.rest.getfolder-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/folders/{folderId}",
+            "operation_id": "getFolder",
+            "deprecated": false,
+            "source_location": "paths[\"/folders/{folderId}\"].get"
+          },
+          {
+            "id": "coda.rest.getformula-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/{docId}/formulas/{formulaIdOrName}",
+            "operation_id": "getFormula",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/formulas/{formulaIdOrName}\"].get"
+          },
+          {
+            "id": "coda.rest.getmutationstatus-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/mutationStatus/{requestId}",
+            "operation_id": "getMutationStatus",
+            "deprecated": false,
+            "source_location": "paths[\"/mutationStatus/{requestId}\"].get"
+          },
+          {
+            "id": "coda.rest.getnextpackversion-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/packs/{packId}/nextVersion",
+            "operation_id": "getNextPackVersion",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/nextVersion\"].post"
+          },
+          {
+            "id": "coda.rest.getpack-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}",
+            "operation_id": "getPack",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}\"].get"
+          },
+          {
+            "id": "coda.rest.getpackconfigurationschema-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/configurations/schema",
+            "operation_id": "getPackConfigurationSchema",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/configurations/schema\"].get"
+          },
+          {
+            "id": "coda.rest.getpacklisting-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/listing",
+            "operation_id": "getPackListing",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/listing\"].get"
+          },
+          {
+            "id": "coda.rest.getpacklistingdraft-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/listingDraft",
+            "operation_id": "getPackListingDraft",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/listingDraft\"].get"
+          },
+          {
+            "id": "coda.rest.getpacklogdetails-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs/{logId}",
+            "operation_id": "getPackLogDetails",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs/{logId}\"].get"
+          },
+          {
+            "id": "coda.rest.getpackoauthconfig-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/oauthConfig",
+            "operation_id": "getPackOauthConfig",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/oauthConfig\"].get"
+          },
+          {
+            "id": "coda.rest.getpackpermissions-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/permissions",
+            "operation_id": "getPackPermissions",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/permissions\"].get"
+          },
+          {
+            "id": "coda.rest.getpacksourcecode-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/versions/{packVersion}/sourceCode",
+            "operation_id": "getPackSourceCode",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/versions/{packVersion}/sourceCode\"].get"
+          },
+          {
+            "id": "coda.rest.getpacksystemconnection-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/systemConnection",
+            "operation_id": "getPackSystemConnection",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/systemConnection\"].get"
+          },
+          {
+            "id": "coda.rest.getpackversiondiffs-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/versions/{basePackVersion}/diff/{targetPackVersion}",
+            "operation_id": "getPackVersionDiffs",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/versions/{basePackVersion}/diff/{targetPackVersion}\"].get"
+          },
+          {
+            "id": "coda.rest.getpage-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/{docId}/pages/{pageIdOrName}",
+            "operation_id": "getPage",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/pages/{pageIdOrName}\"].get"
+          },
+          {
+            "id": "coda.rest.getpagecontentexportstatus-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/{docId}/pages/{pageIdOrName}/export/{requestId}",
+            "operation_id": "getPageContentExportStatus",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/pages/{pageIdOrName}/export/{requestId}\"].get"
+          },
+          {
+            "id": "coda.rest.getpermissions-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/{docId}/acl/permissions",
+            "operation_id": "getPermissions",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/acl/permissions\"].get"
+          },
+          {
+            "id": "coda.rest.getrow-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+            "operation_id": "getRow",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}\"].get"
+          },
+          {
+            "id": "coda.rest.getsharingmetadata-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/{docId}/acl/metadata",
+            "operation_id": "getSharingMetadata",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/acl/metadata\"].get"
+          },
+          {
+            "id": "coda.rest.gettable-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/{docId}/tables/{tableIdOrName}",
+            "operation_id": "getTable",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}\"].get"
+          },
+          {
+            "id": "coda.rest.listagentlogs-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs",
+            "operation_id": "listAgentLogs",
+            "deprecated": false,
+            "source_location": "paths[\"/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs\"].get"
+          },
+          {
+            "id": "coda.rest.listagentsessionids-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/agentSessionIds",
+            "operation_id": "listAgentSessionIds",
+            "deprecated": false,
+            "source_location": "paths[\"/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/agentSessionIds\"].get"
+          },
+          {
+            "id": "coda.rest.listcategories-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/categories",
+            "operation_id": "listCategories",
+            "deprecated": false,
+            "source_location": "paths[\"/categories\"].get"
+          },
+          {
+            "id": "coda.rest.listcolumns-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/{docId}/tables/{tableIdOrName}/columns",
+            "operation_id": "listColumns",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}/columns\"].get"
+          },
+          {
+            "id": "coda.rest.listcontrols-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/{docId}/controls",
+            "operation_id": "listControls",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/controls\"].get"
+          },
+          {
+            "id": "coda.rest.listcustomdocdomains-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/${docId}/domains",
+            "operation_id": "listCustomDocDomains",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/${docId}/domains\"].get"
+          },
+          {
+            "id": "coda.rest.listdocanalytics-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/analytics/docs",
+            "operation_id": "listDocAnalytics",
+            "deprecated": false,
+            "source_location": "paths[\"/analytics/docs\"].get"
+          },
+          {
+            "id": "coda.rest.listdocanalyticssummary-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/analytics/docs/summary",
+            "operation_id": "listDocAnalyticsSummary",
+            "deprecated": false,
+            "source_location": "paths[\"/analytics/docs/summary\"].get"
+          },
+          {
+            "id": "coda.rest.listdocs-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs",
+            "operation_id": "listDocs",
+            "deprecated": false,
+            "source_location": "paths[\"/docs\"].get"
+          },
+          {
+            "id": "coda.rest.listfolders-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/folders",
+            "operation_id": "listFolders",
+            "deprecated": false,
+            "source_location": "paths[\"/folders\"].get"
+          },
+          {
+            "id": "coda.rest.listformulas-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/{docId}/formulas",
+            "operation_id": "listFormulas",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/formulas\"].get"
+          },
+          {
+            "id": "coda.rest.listgroupedingestionlogs-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/groupedLogs",
+            "operation_id": "listGroupedIngestionLogs",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/groupedLogs\"].get"
+          },
+          {
+            "id": "coda.rest.listgroupedpacklogs-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/docs/{docId}/groupedLogs",
+            "operation_id": "listGroupedPackLogs",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/docs/{docId}/groupedLogs\"].get"
+          },
+          {
+            "id": "coda.rest.listingestionbatchexecutions-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions",
+            "operation_id": "listIngestionBatchExecutions",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions\"].get"
+          },
+          {
+            "id": "coda.rest.listingestionlogs-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs",
+            "operation_id": "listIngestionLogs",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs\"].get"
+          },
+          {
+            "id": "coda.rest.listingestionparentitems-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions/{ingestionExecutionId}/parentItems",
+            "operation_id": "listIngestionParentItems",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions/{ingestionExecutionId}/parentItems\"].get"
+          },
+          {
+            "id": "coda.rest.listpackanalytics-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/analytics/packs",
+            "operation_id": "listPackAnalytics",
+            "deprecated": false,
+            "source_location": "paths[\"/analytics/packs\"].get"
+          },
+          {
+            "id": "coda.rest.listpackanalyticssummary-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/analytics/packs/summary",
+            "operation_id": "listPackAnalyticsSummary",
+            "deprecated": false,
+            "source_location": "paths[\"/analytics/packs/summary\"].get"
+          },
+          {
+            "id": "coda.rest.listpackcategories-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/categories",
+            "operation_id": "listPackCategories",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/categories\"].get"
+          },
+          {
+            "id": "coda.rest.listpackfeatureddocs-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/featuredDocs",
+            "operation_id": "listPackFeaturedDocs",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/featuredDocs\"].get"
+          },
+          {
+            "id": "coda.rest.listpackformulaanalytics-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/analytics/packs/{packId}/formulas",
+            "operation_id": "listPackFormulaAnalytics",
+            "deprecated": false,
+            "source_location": "paths[\"/analytics/packs/{packId}/formulas\"].get"
+          },
+          {
+            "id": "coda.rest.listpackinvitations-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/invitations",
+            "operation_id": "listPackInvitations",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/invitations\"].get"
+          },
+          {
+            "id": "coda.rest.listpacklistings-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/listings",
+            "operation_id": "listPackListings",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/listings\"].get"
+          },
+          {
+            "id": "coda.rest.listpacklogs-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/docs/{docId}/logs",
+            "operation_id": "listPackLogs",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/docs/{docId}/logs\"].get"
+          },
+          {
+            "id": "coda.rest.listpackmakers-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/makers",
+            "operation_id": "listPackMakers",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/makers\"].get"
+          },
+          {
+            "id": "coda.rest.listpackreleases-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/releases",
+            "operation_id": "listPackReleases",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/releases\"].get"
+          },
+          {
+            "id": "coda.rest.listpackreviews-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/reviews",
+            "operation_id": "listPackReviews",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/reviews\"].get"
+          },
+          {
+            "id": "coda.rest.listpacks-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs",
+            "operation_id": "listPacks",
+            "deprecated": false,
+            "source_location": "paths[\"/packs\"].get"
+          },
+          {
+            "id": "coda.rest.listpackversions-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/{packId}/versions",
+            "operation_id": "listPackVersions",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/versions\"].get"
+          },
+          {
+            "id": "coda.rest.listpageanalytics-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/analytics/docs/{docId}/pages",
+            "operation_id": "listPageAnalytics",
+            "deprecated": false,
+            "source_location": "paths[\"/analytics/docs/{docId}/pages\"].get"
+          },
+          {
+            "id": "coda.rest.listpagecontent-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/{docId}/pages/{pageIdOrName}/content",
+            "operation_id": "listPageContent",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/pages/{pageIdOrName}/content\"].get"
+          },
+          {
+            "id": "coda.rest.listpages-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/{docId}/pages",
+            "operation_id": "listPages",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/pages\"].get"
+          },
+          {
+            "id": "coda.rest.listrows-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+            "operation_id": "listRows",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows\"].get"
+          },
+          {
+            "id": "coda.rest.listtables-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/{docId}/tables",
+            "operation_id": "listTables",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/tables\"].get"
+          },
+          {
+            "id": "coda.rest.listuserpackinvitations-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/packs/invitations",
+            "operation_id": "listUserPackInvitations",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/invitations\"].get"
+          },
+          {
+            "id": "coda.rest.listworkspacemembers-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/workspaces/{workspaceId}/users",
+            "operation_id": "listWorkspaceMembers",
+            "deprecated": false,
+            "source_location": "paths[\"/workspaces/{workspaceId}/users\"].get"
+          },
+          {
+            "id": "coda.rest.listworkspaceroleactivity-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/workspaces/{workspaceId}/roles",
+            "operation_id": "listWorkspaceRoleActivity",
+            "deprecated": false,
+            "source_location": "paths[\"/workspaces/{workspaceId}/roles\"].get"
+          },
+          {
+            "id": "coda.rest.packassetuploadcomplete-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/packs/{packId}/assets/{packAssetId}/assetType/{packAssetType}/uploadComplete",
+            "operation_id": "packAssetUploadComplete",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/assets/{packAssetId}/assetType/{packAssetType}/uploadComplete\"].post"
+          },
+          {
+            "id": "coda.rest.packsourcecodeuploadcomplete-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/packs/{packId}/versions/{packVersion}/sourceCode/uploadComplete",
+            "operation_id": "packSourceCodeUploadComplete",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/versions/{packVersion}/sourceCode/uploadComplete\"].post"
+          },
+          {
+            "id": "coda.rest.packversionuploadcomplete-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/packs/{packId}/versions/{packVersion}/uploadComplete",
+            "operation_id": "packVersionUploadComplete",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/versions/{packVersion}/uploadComplete\"].post"
+          },
+          {
+            "id": "coda.rest.patchpacksystemconnection-source-1",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/packs/{packId}/systemConnection",
+            "operation_id": "patchPackSystemConnection",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/systemConnection\"].patch"
+          },
+          {
+            "id": "coda.rest.publishdoc-source-1",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/docs/{docId}/publish",
+            "operation_id": "publishDoc",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/publish\"].put"
+          },
+          {
+            "id": "coda.rest.pushbutton-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}/buttons/{columnIdOrName}",
+            "operation_id": "pushButton",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}/buttons/{columnIdOrName}\"].post"
+          },
+          {
+            "id": "coda.rest.registerpackversion-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/packs/{packId}/versions/{packVersion}/register",
+            "operation_id": "registerPackVersion",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/versions/{packVersion}/register\"].post"
+          },
+          {
+            "id": "coda.rest.replytopackinvitation-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/packs/invitations/{invitationId}/reply",
+            "operation_id": "replyToPackInvitation",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/invitations/{invitationId}/reply\"].post"
+          },
+          {
+            "id": "coda.rest.resolvebrowserlink-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/resolveBrowserLink",
+            "operation_id": "resolveBrowserLink",
+            "deprecated": false,
+            "source_location": "paths[\"/resolveBrowserLink\"].get"
+          },
+          {
+            "id": "coda.rest.searchprincipals-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/docs/{docId}/acl/principals/search",
+            "operation_id": "searchPrincipals",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/acl/principals/search\"].get"
+          },
+          {
+            "id": "coda.rest.setpackoauthconfig-source-1",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/packs/{packId}/oauthConfig",
+            "operation_id": "setPackOauthConfig",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/oauthConfig\"].put"
+          },
+          {
+            "id": "coda.rest.setpacksystemconnection-source-1",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/packs/{packId}/systemConnection",
+            "operation_id": "setPackSystemConnection",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/systemConnection\"].put"
+          },
+          {
+            "id": "coda.rest.triggerwebhookautomation-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/docs/{docId}/hooks/automation/{ruleId}",
+            "operation_id": "triggerWebhookAutomation",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/hooks/automation/{ruleId}\"].post"
+          },
+          {
+            "id": "coda.rest.unpublishdoc-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/docs/{docId}/publish",
+            "operation_id": "unpublishDoc",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/publish\"].delete"
+          },
+          {
+            "id": "coda.rest.updateaclsettings-source-1",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/docs/{docId}/acl/settings",
+            "operation_id": "updateAclSettings",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/acl/settings\"].patch"
+          },
+          {
+            "id": "coda.rest.updatecustomdocdomain-source-1",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/docs/{docId}/domains/{customDocDomain}",
+            "operation_id": "updateCustomDocDomain",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/domains/{customDocDomain}\"].patch"
+          },
+          {
+            "id": "coda.rest.updatedoc-source-1",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/docs/{docId}",
+            "operation_id": "updateDoc",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}\"].patch"
+          },
+          {
+            "id": "coda.rest.updatefolder-source-1",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/folders/{folderId}",
+            "operation_id": "updateFolder",
+            "deprecated": false,
+            "source_location": "paths[\"/folders/{folderId}\"].patch"
+          },
+          {
+            "id": "coda.rest.updatepack-source-1",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/packs/{packId}",
+            "operation_id": "updatePack",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}\"].patch"
+          },
+          {
+            "id": "coda.rest.updatepackfeatureddocs-source-1",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/packs/{packId}/featuredDocs",
+            "operation_id": "updatePackFeaturedDocs",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/featuredDocs\"].put"
+          },
+          {
+            "id": "coda.rest.updatepackinvitation-source-1",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/packs/{packId}/invitations/{invitationId}",
+            "operation_id": "updatePackInvitation",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/invitations/{invitationId}\"].put"
+          },
+          {
+            "id": "coda.rest.updatepackrelease-source-1",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/packs/{packId}/releases/{packReleaseId}",
+            "operation_id": "updatePackRelease",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/releases/{packReleaseId}\"].put"
+          },
+          {
+            "id": "coda.rest.updatepage-source-1",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/docs/{docId}/pages/{pageIdOrName}",
+            "operation_id": "updatePage",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/pages/{pageIdOrName}\"].put"
+          },
+          {
+            "id": "coda.rest.updaterow-source-1",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+            "operation_id": "updateRow",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}\"].put"
+          },
+          {
+            "id": "coda.rest.uploadpackasset-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/packs/{packId}/uploadAsset",
+            "operation_id": "uploadPackAsset",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/uploadAsset\"].post"
+          },
+          {
+            "id": "coda.rest.uploadpacksourcecode-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/packs/{packId}/uploadSourceCode",
+            "operation_id": "uploadPackSourceCode",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/uploadSourceCode\"].post"
+          },
+          {
+            "id": "coda.rest.upsertpacklistingdraft-source-1",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/packs/{packId}/listingDraft",
+            "operation_id": "upsertPackListingDraft",
+            "deprecated": false,
+            "source_location": "paths[\"/packs/{packId}/listingDraft\"].put"
+          },
+          {
+            "id": "coda.rest.upsertrows-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+            "operation_id": "upsertRows",
+            "deprecated": false,
+            "source_location": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows\"].post"
+          },
+          {
+            "id": "coda.rest.whoami-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/whoami",
+            "operation_id": "whoami",
+            "deprecated": false,
+            "source_location": "paths[\"/whoami\"].get"
+          }
+        ]
+      }
+    ]
+  },
+  "counts": {
+    "rest": 124,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 124
+  }
+}

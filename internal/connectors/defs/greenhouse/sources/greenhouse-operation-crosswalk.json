@@ -1,0 +1,9 @@
+{
+  "schema_version": 2,
+  "connector": "greenhouse",
+  "state": "skipped",
+  "source_lock": "sources/greenhouse-operation-source-lock.json",
+  "generated_at": "2026-08-19T16:45:29.021Z",
+  "reason": "no-public-api-description",
+  "source_operations": []
+}

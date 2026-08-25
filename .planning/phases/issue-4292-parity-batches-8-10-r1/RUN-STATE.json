@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "issue": 4292,
+  "state": "reconciliation",
+  "delivery": "direct-pr",
+  "base_branch": "fm/cli-reverse-etl-destination-r1",
+  "working_branch": "fm/cli-map-batch8910-r1",
+  "batches": {
+    "8": "source inventory verified; seven-surface reconciliation pending",
+    "9": "source inventory verified; Lever source-map repair green; seven-surface reconciliation pending",
+    "10": "source inventory verified; seven-surface reconciliation pending"
+  },
+  "live_provider_calls": false,
+  "credentials": false,
+  "reverse_etl_disposition": "connector-local declaration permitted; application dispatch pending latest #4304 foundation integration",
+  "source_surface_report": "SOURCE-SURFACE-REPORT.md",
+  "foundation_merged_sha": "c6f03c937c1f4e516d339b48e8c2143726179fdf",
+  "final_push_requirement": "fetch and merge latest origin/fm/cli-reverse-etl-destination-r1; prove its SHA is an ancestor; exercise installed App/CLI dispatch without credentials"
+}

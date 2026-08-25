@@ -137,6 +137,30 @@ Reads Calendly scheduled events (and their invitees), event types, organization 
 - approval: required for every write action
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run Calendly's declared typed write actions.
+- Usage: pm calendly <command> [flags]
+- Global flags:
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
+- Reverse ETL writes
+- Other Commands
+  - cancel scheduled event apply - POST /scheduled_events/{uuid}/cancellation (cancel_scheduled_event) [intent=reverse_etl availability=implemented write=cancel_scheduled_event]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: external mutation; cancels a real scheduled event and notifies invitees; approval required; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --uuid (required)
+  - create invitee apply - POST /invitees (create_invitee) [intent=reverse_etl availability=implemented write=create_invitee]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: external mutation; books a real meeting slot on the target event type and notifies the invitee; approval required; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --event-type (required), --invitee-email (required), --invitee-name (required), --start-time (required)
+  - create one off event type apply - POST /one_off_event_types (create_one_off_event_type) [intent=reverse_etl availability=implemented write=create_one_off_event_type]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: external mutation; publishes a new one-off publicly-bookable event type; approval required; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --date-setting (required), --duration (required), --host (required), --name (required)
+  - create share apply - POST /shares (create_share) [intent=reverse_etl availability=implemented write=create_share]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: external mutation; creates a new shareable booking link with its own spot limit for an event type; approval required; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --event-type (required)
+  - create webhook subscription apply - POST /webhook_subscriptions (create_webhook_subscription) [intent=reverse_etl availability=implemented write=create_webhook_subscription]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: external mutation; registers a new webhook endpoint that will receive live invitee/routing-form event payloads; approval required; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --events (required), --organization (required), --scope (required), --url (required)
+  - delete webhook subscription apply - Typed action delete_webhook_subscription [intent=reverse_etl availability=partial write=delete_webhook_subscription]; approval: Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /webhook_subscriptions/{uuid} disagrees with covered api_surface path /webhook_subscriptions/{webhook_uuid}.; risk: destructive; permanently deletes a webhook subscription; approval required; notes: Generated from the connector-owned typed action; declaration-pending: canonical typed action path /webhook_subscriptions/{uuid} disagrees with covered api_surface path /webhook_subscriptions/{webhook_uuid}.; flags: --uuid (required)
+  - invite user to organization apply - Typed action invite_user_to_organization [intent=reverse_etl availability=partial write=invite_user_to_organization]; approval: Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /organizations/{organization_uuid}/invitations disagrees with covered api_surface path /organizations/{uuid}/invitations.; risk: external mutation; sends a real organization-invitation email to the given address; approval required; notes: Generated from the connector-owned typed action; declaration-pending: canonical typed action path /organizations/{organization_uuid}/invitations disagrees with covered api_surface path /organizations/{uuid}/invitations.; flags: --email (required), --organization-uuid (required)
+  - remove organization membership apply - DELETE /organization_memberships/{uuid} (remove_organization_membership) [intent=reverse_etl availability=implemented write=remove_organization_membership]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: destructive; permanently removes a user's membership from the organization, revoking their access; approval required; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --uuid (required)
+
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
+
 ## Commands
 
 ### Inspect as a manual

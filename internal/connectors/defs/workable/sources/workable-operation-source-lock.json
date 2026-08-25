@@ -1,0 +1,2579 @@
+{
+  "schema_version": 3,
+  "connector": "workable",
+  "captured_at": "2026-08-19T16:45:42.646Z",
+  "rest": {
+    "retrieval": "preserved issue-4292 public capture via http",
+    "openapi": [],
+    "coverage_confidence": {
+      "level": "complete-rendered-reference",
+      "basis": "Workable's official public ReadMe reference sidebar and every public REST endpoint document are retrieved; each endpoint document supplies its rendered method and path."
+    },
+    "source_documents": [
+      {
+        "id": "document-0001",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/sidebar?page_type=reference",
+          "sha256": "77e6855f2240b91272fc6842d7c50839f185ad9f88b3a4d353354975f2e20490",
+          "bytes": 44481,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/sidebar?page_type=reference",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/sidebar",
+          "sha256": "77e6855f2240b91272fc6842d7c50839f185ad9f88b3a4d353354975f2e20490",
+          "bytes": 44481,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": []
+      },
+      {
+        "id": "document-0002",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/accounts?reduce=false",
+          "sha256": "93caad63f8beacdbf98c8cc2bc11a57ef5960555508a0a89d1d320ffff003a4a",
+          "bytes": 13880,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/accounts?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/accounts",
+          "sha256": "93caad63f8beacdbf98c8cc2bc11a57ef5960555508a0a89d1d320ffff003a4a",
+          "bytes": 13880,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.accounts",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/accounts",
+            "operation_id": "accounts",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/accounts?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0003",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/accountssubdomain?reduce=false",
+          "sha256": "7980d10adc9222af6f18de2d5c98b1bc8c08121ef1ec5a5f26860ba780ae6521",
+          "bytes": 13940,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/accountssubdomain?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/accountssubdomain",
+          "sha256": "7980d10adc9222af6f18de2d5c98b1bc8c08121ef1ec5a5f26860ba780ae6521",
+          "bytes": 13940,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.accountssubdomain",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/accounts/{subdomain}",
+            "operation_id": "accountssubdomain",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/accountssubdomain?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0004",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/apiaccountssubdomaindepartments?reduce=false",
+          "sha256": "c8cd87e8ad42e86913f33721d1fd1255c44fd8bfe48c515be8f009d209cce235",
+          "bytes": 20421,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/apiaccountssubdomaindepartments?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/apiaccountssubdomaindepartments",
+          "sha256": "c8cd87e8ad42e86913f33721d1fd1255c44fd8bfe48c515be8f009d209cce235",
+          "bytes": 20421,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.apiaccountssubdomaindepartments",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/accounts/{subdomain}/departments",
+            "operation_id": "apiaccountssubdomaindepartments",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/apiaccountssubdomaindepartments?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0005",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/apiaccountssubdomainlocations?reduce=false",
+          "sha256": "9cd701cdc718ec304d3e16d1391bd9ba0701f004b4840fa39b4b8597acc11acc",
+          "bytes": 20661,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/apiaccountssubdomainlocations?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/apiaccountssubdomainlocations",
+          "sha256": "9cd701cdc718ec304d3e16d1391bd9ba0701f004b4840fa39b4b8597acc11acc",
+          "bytes": 20661,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.apiaccountssubdomainlocations",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/accounts/{subdomain}/locations",
+            "operation_id": "apiaccountssubdomainlocations",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/apiaccountssubdomainlocations?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0006",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidate-activities?reduce=false",
+          "sha256": "5f3fc16ae48aeb6decdf2d128133c896d90979712392de4c4c6bfe13f612346a",
+          "bytes": 424277,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidate-activities?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidate-activities",
+          "sha256": "5f3fc16ae48aeb6decdf2d128133c896d90979712392de4c4c6bfe13f612346a",
+          "bytes": 424277,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.candidate-activities",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/candidates/{id}/activities",
+            "operation_id": "candidate-activities",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidate-activities?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0007",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidate-files?reduce=false",
+          "sha256": "07bd2a9bdd19ecdf85976ecb53171e4b06858b2657c59edbc86d61a12a07e46a",
+          "bytes": 421565,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidate-files?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidate-files",
+          "sha256": "07bd2a9bdd19ecdf85976ecb53171e4b06858b2657c59edbc86d61a12a07e46a",
+          "bytes": 421565,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.candidate-files",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/candidates/{id}/files",
+            "operation_id": "candidate-files",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidate-files?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0008",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidatesidoffer?reduce=false",
+          "sha256": "712798ca51e0f5558ccfe273d0d63ac706769375eb7d8a46b972c3d2921c09f3",
+          "bytes": 424757,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidatesidoffer?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidatesidoffer",
+          "sha256": "712798ca51e0f5558ccfe273d0d63ac706769375eb7d8a46b972c3d2921c09f3",
+          "bytes": 424757,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.candidatesidoffer",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/candidates/{id}/offer",
+            "operation_id": "candidatesidoffer",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidatesidoffer?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0009",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidatesidupdate_custom_attribute_value?reduce=false",
+          "sha256": "5a2e52b9f7a1b20a5b574a67ff1b46eb52e92939a184a90f327ec407227e762a",
+          "bytes": 429133,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidatesidupdate_custom_attribute_value?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidatesidupdate_custom_attribute_value",
+          "sha256": "5a2e52b9f7a1b20a5b574a67ff1b46eb52e92939a184a90f327ec407227e762a",
+          "bytes": 429133,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.candidatesidupdate_custom_attribute_value",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/candidates/{id}/update_custom_attribute_value",
+            "operation_id": "candidatesidupdate_custom_attribute_value",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/candidatesidupdate_custom_attribute_value?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0010",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/collaboration_permissions?reduce=false",
+          "sha256": "650263b9badf013745483647e70c2e1a0c7d16aaf4be9d7d907bdc0329809c54",
+          "bytes": 428246,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/collaboration_permissions?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/collaboration_permissions",
+          "sha256": "650263b9badf013745483647e70c2e1a0c7d16aaf4be9d7d907bdc0329809c54",
+          "bytes": 428246,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.collaboration_permissions",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/collaboration_permissions",
+            "operation_id": "collaboration_permissions",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/collaboration_permissions?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0011",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/comment-on-candidate?reduce=false",
+          "sha256": "2c86b9f4e08b966d4f23f3740e82071e3414e864c84085fbab2efdd0169034b0",
+          "bytes": 430852,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/comment-on-candidate?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/comment-on-candidate",
+          "sha256": "2c86b9f4e08b966d4f23f3740e82071e3414e864c84085fbab2efdd0169034b0",
+          "bytes": 430852,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.comment-on-candidate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/candidates/{id}/comments",
+            "operation_id": "comment-on-candidate",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/comment-on-candidate?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0012",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/copy-candidate?reduce=false",
+          "sha256": "0a1c0bd4620b0b166bbc916e3665c5c1dd57d821007579da5b0e832e6a9bc0e5",
+          "bytes": 420697,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/copy-candidate?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/copy-candidate",
+          "sha256": "0a1c0bd4620b0b166bbc916e3665c5c1dd57d821007579da5b0e832e6a9bc0e5",
+          "bytes": 420697,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.copy-candidate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/candidates/{id}/copy",
+            "operation_id": "copy-candidate",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/copy-candidate?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0013",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/create-employee?reduce=false",
+          "sha256": "e69096730933e582028754d8192c75519540ff47808e3bc270f6d3b0381c0e8e",
+          "bytes": 428553,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/create-employee?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/create-employee",
+          "sha256": "e69096730933e582028754d8192c75519540ff47808e3bc270f6d3b0381c0e8e",
+          "bytes": 428553,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.create-employee",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/employees",
+            "operation_id": "create-employee",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/create-employee?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0014",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/custom_attributes?reduce=false",
+          "sha256": "af5bb461a5c92db1e153ed08f39a38e62436e02cd77d082acb6aef74677f22d7",
+          "bytes": 423103,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/custom_attributes?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/custom_attributes",
+          "sha256": "af5bb461a5c92db1e153ed08f39a38e62436e02cd77d082acb6aef74677f22d7",
+          "bytes": 423103,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.custom_attributes",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_attributes",
+            "operation_id": "custom_attributes",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/custom_attributes?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0015",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-delete?reduce=false",
+          "sha256": "2c436918e12ffb834dc9a20345e78f7a3791d73e8fcdc82fdfdfd6b69c7b1bb5",
+          "bytes": 420851,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-delete?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-delete",
+          "sha256": "2c436918e12ffb834dc9a20345e78f7a3791d73e8fcdc82fdfdfd6b69c7b1bb5",
+          "bytes": 420851,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.departments-delete",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/departments/{id}",
+            "operation_id": "departments-delete",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-delete?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0016",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-merge?reduce=false",
+          "sha256": "5ba3f34f187f6427cb91d7be1cbf9593407ab7c6151460926d8186d016d99bdc",
+          "bytes": 421825,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-merge?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-merge",
+          "sha256": "5ba3f34f187f6427cb91d7be1cbf9593407ab7c6151460926d8186d016d99bdc",
+          "bytes": 421825,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.departments-merge",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/departments/{id}/merge",
+            "operation_id": "departments-merge",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-merge?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0017",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-post?reduce=false",
+          "sha256": "2807ec18b6f7d3f590a98b41aa1adca37d5f69a8242177ffd02241faa046d129",
+          "bytes": 421546,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-post?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-post",
+          "sha256": "2807ec18b6f7d3f590a98b41aa1adca37d5f69a8242177ffd02241faa046d129",
+          "bytes": 421546,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.departments-post",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/departments",
+            "operation_id": "departments-post",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-post?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0018",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-put?reduce=false",
+          "sha256": "de1210152c8cc9f95c746c0dd4f89f689d57bcab3eb2ba22121c472e0403ca0a",
+          "bytes": 421921,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-put?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-put",
+          "sha256": "de1210152c8cc9f95c746c0dd4f89f689d57bcab3eb2ba22121c472e0403ca0a",
+          "bytes": 421921,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.departments-put",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/departments",
+            "operation_id": "departments-put",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments-put?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0019",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments?reduce=false",
+          "sha256": "6b66ca0d25c7c62c7cc7589ccb0f59f70d55709c76f225420e60ee7d3cedd8b1",
+          "bytes": 422909,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments",
+          "sha256": "6b66ca0d25c7c62c7cc7589ccb0f59f70d55709c76f225420e60ee7d3cedd8b1",
+          "bytes": 422909,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.departments",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/departments",
+            "operation_id": "departments",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/departments?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0020",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/disqualification_reasons?reduce=false",
+          "sha256": "b294ebbd85fbf8598bbe76567fdc6465c95213febee1c4c721c3aeecab7e722a",
+          "bytes": 421529,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/disqualification_reasons?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/disqualification_reasons",
+          "sha256": "b294ebbd85fbf8598bbe76567fdc6465c95213febee1c4c721c3aeecab7e722a",
+          "bytes": 421529,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.disqualification_reasons",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/disqualification_reasons",
+            "operation_id": "disqualification_reasons",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/disqualification_reasons?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0021",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/disqualify-candidate?reduce=false",
+          "sha256": "760a624aa0983d4c9c7fd72c1e1cac7479d69258417a1bfb8058bd689214b7e0",
+          "bytes": 420496,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/disqualify-candidate?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/disqualify-candidate",
+          "sha256": "760a624aa0983d4c9c7fd72c1e1cac7479d69258417a1bfb8058bd689214b7e0",
+          "bytes": 420496,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.disqualify-candidate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/candidates/{id}/disqualify",
+            "operation_id": "disqualify-candidate",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/disqualify-candidate?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0022",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employee_fields?reduce=false",
+          "sha256": "43d5f5013441e5a4e5045dbde26258b19520e3ef9384bdeaf354ec6b7c5adc02",
+          "bytes": 497564,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employee_fields?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employee_fields",
+          "sha256": "43d5f5013441e5a4e5045dbde26258b19520e3ef9384bdeaf354ec6b7c5adc02",
+          "bytes": 497564,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.employee_fields",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/employee_fields",
+            "operation_id": "employee_fields",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employee_fields?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0023",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employees-orgchart?reduce=false",
+          "sha256": "fef17fb66df5b6f569562a07c0f16ede425c6ce58c5663d98812c48cb2400b9c",
+          "bytes": 425251,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employees-orgchart?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employees-orgchart",
+          "sha256": "fef17fb66df5b6f569562a07c0f16ede425c6ce58c5663d98812c48cb2400b9c",
+          "bytes": 425251,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.employees-orgchart",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/employees/orgchart",
+            "operation_id": "employees-orgchart",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employees-orgchart?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0024",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employees?reduce=false",
+          "sha256": "a54ca509906b726ada5e3d086c8561878193fd8d778faae54097fb850da542e7",
+          "bytes": 432457,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employees?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employees",
+          "sha256": "a54ca509906b726ada5e3d086c8561878193fd8d778faae54097fb850da542e7",
+          "bytes": 432457,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.employees",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/employees",
+            "operation_id": "employees",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employees?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0025",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesid?reduce=false",
+          "sha256": "bd2f8d9c1698a9a7f5054f03fd0e923bc4e80d910b2481391b943b82ca330bbf",
+          "bytes": 469900,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesid?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesid",
+          "sha256": "bd2f8d9c1698a9a7f5054f03fd0e923bc4e80d910b2481391b943b82ca330bbf",
+          "bytes": 469900,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.employeesid",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/employees/{id}",
+            "operation_id": "employeesid",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesid?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0026",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesiddocuments-1?reduce=false",
+          "sha256": "029d2613dee9c4ca287870cf94bf2537b79b17650728b78b1559cb301c28dd33",
+          "bytes": 421239,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesiddocuments-1?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesiddocuments-1",
+          "sha256": "029d2613dee9c4ca287870cf94bf2537b79b17650728b78b1559cb301c28dd33",
+          "bytes": 421239,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.employeesiddocuments-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/employees/{id}/documents",
+            "operation_id": "employeesiddocuments-1",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesiddocuments-1?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0027",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesiddocuments?reduce=false",
+          "sha256": "085e4be80aa4636195586edbf96e1404493f81ef139877cc3d413a2515259d9f",
+          "bytes": 424940,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesiddocuments?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesiddocuments",
+          "sha256": "085e4be80aa4636195586edbf96e1404493f81ef139877cc3d413a2515259d9f",
+          "bytes": 424940,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.employeesiddocuments",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/employees/{id}/documents",
+            "operation_id": "employeesiddocuments",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/employeesiddocuments?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0028",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/events-show?reduce=false",
+          "sha256": "14aa96ba64ce46ff5e105bb1e64d165766506831ace0f3d7bb64d5b8e248f615",
+          "bytes": 423726,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/events-show?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/events-show",
+          "sha256": "14aa96ba64ce46ff5e105bb1e64d165766506831ace0f3d7bb64d5b8e248f615",
+          "bytes": 423726,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.events-show",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/events/{id}",
+            "operation_id": "events-show",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/events-show?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0029",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/events?reduce=false",
+          "sha256": "68a88037c80a6c6746be2b0a811656222cf63dfecedd4dffad4a646bad7d2b24",
+          "bytes": 423019,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/events?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/events",
+          "sha256": "68a88037c80a6c6746be2b0a811656222cf63dfecedd4dffad4a646bad7d2b24",
+          "bytes": 423019,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.events",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/events",
+            "operation_id": "events",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/events?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0030",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-activities?reduce=false",
+          "sha256": "eb593e1578e017c5081e042241395bc1fd42cbaa40cbc1f05e9d20d0688adc17",
+          "bytes": 421819,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-activities?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-activities",
+          "sha256": "eb593e1578e017c5081e042241395bc1fd42cbaa40cbc1f05e9d20d0688adc17",
+          "bytes": 421819,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.job-activities",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/jobs/{shortcode}/activities",
+            "operation_id": "job-activities",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-activities?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0031",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-create?reduce=false",
+          "sha256": "dade486ec9e2dc10e28da8dbbaab87e101bb51ef4cebb62911f9b423b3db702e",
+          "bytes": 445083,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-create?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-create",
+          "sha256": "dade486ec9e2dc10e28da8dbbaab87e101bb51ef4cebb62911f9b423b3db702e",
+          "bytes": 445083,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.job-candidates-create",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/jobs/{shortcode}/candidates",
+            "operation_id": "job-candidates-create",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-create?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0032",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-index?reduce=false",
+          "sha256": "1519e1d2e99dc82058488d56217a55ca9434b1102748ec75372fa0993d1207f5",
+          "bytes": 425860,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-index?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-index",
+          "sha256": "1519e1d2e99dc82058488d56217a55ca9434b1102748ec75372fa0993d1207f5",
+          "bytes": 425860,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.job-candidates-index",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/candidates",
+            "operation_id": "job-candidates-index",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-index?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0033",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-show?reduce=false",
+          "sha256": "e82180079f05d440445b51658461fd3aa741711c3b669fc1f13f65503b417c1d",
+          "bytes": 439251,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-show?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-show",
+          "sha256": "e82180079f05d440445b51658461fd3aa741711c3b669fc1f13f65503b417c1d",
+          "bytes": 439251,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.job-candidates-show",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/candidates/{id}",
+            "operation_id": "job-candidates-show",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-candidates-show?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0034",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-custom-attributes?reduce=false",
+          "sha256": "710135fc649dd3a5854148f057fe90b54da4656bb3d76fbc78cf4364c9801335",
+          "bytes": 423197,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-custom-attributes?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-custom-attributes",
+          "sha256": "710135fc649dd3a5854148f057fe90b54da4656bb3d76fbc78cf4364c9801335",
+          "bytes": 423197,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.job-custom-attributes",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/jobs/{shortcode}/custom_attributes",
+            "operation_id": "job-custom-attributes",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-custom-attributes?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0035",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-members?reduce=false",
+          "sha256": "68efe4abcac96de20252e219eb794acd3d6301c489b90f03ddd1467de389c0c2",
+          "bytes": 422376,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-members?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-members",
+          "sha256": "68efe4abcac96de20252e219eb794acd3d6301c489b90f03ddd1467de389c0c2",
+          "bytes": 422376,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.job-members",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/jobs/{shortcode}/members",
+            "operation_id": "job-members",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-members?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0036",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-questions?reduce=false",
+          "sha256": "b60e6c8a44ad52aff43b3b6100ce24aa8376ca60813bbd428e5c3ba2da30ed52",
+          "bytes": 423169,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-questions?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-questions",
+          "sha256": "b60e6c8a44ad52aff43b3b6100ce24aa8376ca60813bbd428e5c3ba2da30ed52",
+          "bytes": 423169,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.job-questions",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/jobs/{shortcode}/questions",
+            "operation_id": "job-questions",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-questions?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0037",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-stages?reduce=false",
+          "sha256": "2a1d50eb0561c5448b7c9d31e9d56b80c02a9f1cc60b0fb6c640b758dc11395d",
+          "bytes": 421672,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-stages?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-stages",
+          "sha256": "2a1d50eb0561c5448b7c9d31e9d56b80c02a9f1cc60b0fb6c640b758dc11395d",
+          "bytes": 421672,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.job-stages",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/jobs/{shortcode}/stages",
+            "operation_id": "job-stages",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/job-stages?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0038",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobs-1?reduce=false",
+          "sha256": "9ae18c17e1c267ae130a6c264da4c0397627afd12d2d760be882f15803cd2dc0",
+          "bytes": 23398,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobs-1?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobs-1",
+          "sha256": "9ae18c17e1c267ae130a6c264da4c0397627afd12d2d760be882f15803cd2dc0",
+          "bytes": 23398,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": []
+      },
+      {
+        "id": "document-0039",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobs?reduce=false",
+          "sha256": "88e333cea288532f3d5ac936f92b1ccaa9e42f29451e415ba3c9b31a21ee5462",
+          "bytes": 430087,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobs?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobs",
+          "sha256": "88e333cea288532f3d5ac936f92b1ccaa9e42f29451e415ba3c9b31a21ee5462",
+          "bytes": 430087,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.jobs",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/jobs",
+            "operation_id": "jobs",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobs?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0040",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobsshortcode?reduce=false",
+          "sha256": "ac803e9044a09faec800bef7a8aa2eaf0c660f02dc5c2f3f25f47711ff69b6ac",
+          "bytes": 433080,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobsshortcode?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobsshortcode",
+          "sha256": "ac803e9044a09faec800bef7a8aa2eaf0c660f02dc5c2f3f25f47711ff69b6ac",
+          "bytes": 433080,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.jobsshortcode",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/jobs/{shortcode}",
+            "operation_id": "jobsshortcode",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobsshortcode?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0041",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobsshortcodeapplication_form?reduce=false",
+          "sha256": "dd9068ce19037d98f73e1b48ebd15a1a5771c96a2627b8584495d5ff550c458f",
+          "bytes": 424298,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobsshortcodeapplication_form?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobsshortcodeapplication_form",
+          "sha256": "dd9068ce19037d98f73e1b48ebd15a1a5771c96a2627b8584495d5ff550c458f",
+          "bytes": 424298,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.jobsshortcodeapplication_form",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/jobs/{shortcode}/application_form",
+            "operation_id": "jobsshortcodeapplication_form",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/jobsshortcodeapplication_form?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0042",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/legal_entities?reduce=false",
+          "sha256": "2983eacedaf03a40bdaa649e0a4161229b1a8f2d4de5fdedd2fd2db2adb7b1b0",
+          "bytes": 424978,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/legal_entities?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/legal_entities",
+          "sha256": "2983eacedaf03a40bdaa649e0a4161229b1a8f2d4de5fdedd2fd2db2adb7b1b0",
+          "bytes": 424978,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.legal_entities",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/legal_entities",
+            "operation_id": "legal_entities",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/legal_entities?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0043",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-delete?reduce=false",
+          "sha256": "fac50ac7eb23b1160881fb4d421f23c77f17d89b97f85aa69ae2dded88d5da60",
+          "bytes": 421063,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-delete?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-delete",
+          "sha256": "fac50ac7eb23b1160881fb4d421f23c77f17d89b97f85aa69ae2dded88d5da60",
+          "bytes": 421063,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.members-delete",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/members/{id}",
+            "operation_id": "members-delete",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-delete?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0044",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-enable?reduce=false",
+          "sha256": "fb0f2e9a62b6b747aad8243944ea70ab74007111f002550332ebbbd8a01672af",
+          "bytes": 420626,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-enable?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-enable",
+          "sha256": "fb0f2e9a62b6b747aad8243944ea70ab74007111f002550332ebbbd8a01672af",
+          "bytes": 420626,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.members-enable",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/members/{id}/enable",
+            "operation_id": "members-enable",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-enable?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0045",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-invite?reduce=false",
+          "sha256": "329c13fd272d21444b772d9a9a9f18c2e1f34675d2590cddc875fa5e162d6b15",
+          "bytes": 425913,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-invite?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-invite",
+          "sha256": "329c13fd272d21444b772d9a9a9f18c2e1f34675d2590cddc875fa5e162d6b15",
+          "bytes": 425913,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.members-invite",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/members/invite",
+            "operation_id": "members-invite",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-invite?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0046",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-put?reduce=false",
+          "sha256": "a9e7f8c8bf6d2b520718bd8b714b9b11e6d0b1d667e8f0de4412d8c1fc7977f7",
+          "bytes": 427030,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-put?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-put",
+          "sha256": "a9e7f8c8bf6d2b520718bd8b714b9b11e6d0b1d667e8f0de4412d8c1fc7977f7",
+          "bytes": 427030,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.members-put",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/members",
+            "operation_id": "members-put",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members-put?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0047",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members?reduce=false",
+          "sha256": "0d535b27df2b16855a7a8767a0849fa2f0d51854cd01ddb08336a3e028dd50af",
+          "bytes": 427054,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members",
+          "sha256": "0d535b27df2b16855a7a8767a0849fa2f0d51854cd01ddb08336a3e028dd50af",
+          "bytes": 427054,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.members",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members",
+            "operation_id": "members",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/members?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0048",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/move-candidate?reduce=false",
+          "sha256": "45dc44c4ac5c679a3e9b238a03d4f4cbe1c9870425edc6cfaf219a37c291b9fa",
+          "bytes": 422312,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/move-candidate?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/move-candidate",
+          "sha256": "45dc44c4ac5c679a3e9b238a03d4f4cbe1c9870425edc6cfaf219a37c291b9fa",
+          "bytes": 422312,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.move-candidate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/candidates/{id}/move",
+            "operation_id": "move-candidate",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/move-candidate?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0049",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/new-jobsshortcoderecruiters?reduce=false",
+          "sha256": "db3b86ed3a88e27f20495faa58b1ed539badfac1baa7a896a78b36572fcf335c",
+          "bytes": 421470,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/new-jobsshortcoderecruiters?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/new-jobsshortcoderecruiters",
+          "sha256": "db3b86ed3a88e27f20495faa58b1ed539badfac1baa7a896a78b36572fcf335c",
+          "bytes": 421470,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.new-jobsshortcoderecruiters",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/jobs/{shortcode}/recruiters",
+            "operation_id": "new-jobsshortcoderecruiters",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/new-jobsshortcoderecruiters?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0050",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/offersidapprove-copy-1?reduce=false",
+          "sha256": "04ab33a063982e1ea4d376c7255a5789104267ba3ffd5be070813af6fc693673",
+          "bytes": 423028,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/offersidapprove-copy-1?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/offersidapprove-copy-1",
+          "sha256": "04ab33a063982e1ea4d376c7255a5789104267ba3ffd5be070813af6fc693673",
+          "bytes": 423028,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.offersidapprove-copy-1",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/offers/{id}/reject",
+            "operation_id": "offersidapprove-copy-1",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/offersidapprove-copy-1?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0051",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/offersidapprove-copy?reduce=false",
+          "sha256": "6162cf8f22bf049a10ece430e5cbf20791a942e62c1c9e886dc04fe974781563",
+          "bytes": 423031,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/offersidapprove-copy?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/offersidapprove-copy",
+          "sha256": "6162cf8f22bf049a10ece430e5cbf20791a942e62c1c9e886dc04fe974781563",
+          "bytes": 423031,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.offersidapprove-copy",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/offers/{id}/approve (COPY)",
+            "operation_id": "offersidapprove-copy",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/offersidapprove-copy?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0052",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-create?reduce=false",
+          "sha256": "ec3021f4e12cc0be9d772da8d70e09e9ec43219e8318d24541fb8aa1235c1290",
+          "bytes": 424432,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-create?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-create",
+          "sha256": "ec3021f4e12cc0be9d772da8d70e09e9ec43219e8318d24541fb8aa1235c1290",
+          "bytes": 424432,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.performance-review-templates-create",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/review-cycles/templates",
+            "operation_id": "performance-review-templates-create",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-create?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0053",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-get?reduce=false",
+          "sha256": "fa0e3fb16df34eac013e42f949b7b63217a4cfb071ab9651bc502b4ff38637d0",
+          "bytes": 423508,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-get?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-get",
+          "sha256": "fa0e3fb16df34eac013e42f949b7b63217a4cfb071ab9651bc502b4ff38637d0",
+          "bytes": 423508,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.performance-review-templates-get",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/review-cycles/templates/{id}",
+            "operation_id": "performance-review-templates-get",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-get?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0054",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-list?reduce=false",
+          "sha256": "08fac98ac5bf7073f8359101bf22b30e5b24c495abc3c1c73c107444f59940d0",
+          "bytes": 422355,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-list?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-list",
+          "sha256": "08fac98ac5bf7073f8359101bf22b30e5b24c495abc3c1c73c107444f59940d0",
+          "bytes": 422355,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.performance-review-templates-list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/review-cycles/templates",
+            "operation_id": "performance-review-templates-list",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/performance-review-templates-list?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0055",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/permission-sets?reduce=false",
+          "sha256": "d84fcb9cf353593de2bb1a9e20f437cc462c0c2811280ecf38d8824b62dfa5a5",
+          "bytes": 422638,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/permission-sets?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/permission-sets",
+          "sha256": "d84fcb9cf353593de2bb1a9e20f437cc462c0c2811280ecf38d8824b62dfa5a5",
+          "bytes": 422638,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.permission-sets",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/permission_sets",
+            "operation_id": "permission-sets",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/permission-sets?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0056",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/rate-candidate?reduce=false",
+          "sha256": "260231233444f8e10a0a8ed7d02a02d3841f2ed6da8e012f5540a011f52a3ea4",
+          "bytes": 424935,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/rate-candidate?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/rate-candidate",
+          "sha256": "260231233444f8e10a0a8ed7d02a02d3841f2ed6da8e012f5540a011f52a3ea4",
+          "bytes": 424935,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.rate-candidate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/candidates/{id}/ratings",
+            "operation_id": "rate-candidate",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/rate-candidate?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0057",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/recruiters?reduce=false",
+          "sha256": "08ca66c226bcd235f7ff9ab2f2bfe06bf90af0f424cf9ab4cb4b02a8b6496848",
+          "bytes": 421295,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/recruiters?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/recruiters",
+          "sha256": "08ca66c226bcd235f7ff9ab2f2bfe06bf90af0f424cf9ab4cb4b02a8b6496848",
+          "bytes": 421295,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.recruiters",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/recruiters",
+            "operation_id": "recruiters",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/recruiters?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0058",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/relocate-candidates?reduce=false",
+          "sha256": "44e9a851b5c99d7864f9757ecedf70ed2d95a872566a8ee8b1a6c81d40a4654c",
+          "bytes": 420898,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/relocate-candidates?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/relocate-candidates",
+          "sha256": "44e9a851b5c99d7864f9757ecedf70ed2d95a872566a8ee8b1a6c81d40a4654c",
+          "bytes": 420898,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.relocate-candidates",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/candidates/{id}/relocate",
+            "operation_id": "relocate-candidates",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/relocate-candidates?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0059",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-approve?reduce=false",
+          "sha256": "3bcf1dbfb464cc3643ea65bf6c4ab65e9bddcb52c5a3dc1bcf820ce0fe607807",
+          "bytes": 432378,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-approve?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-approve",
+          "sha256": "3bcf1dbfb464cc3643ea65bf6c4ab65e9bddcb52c5a3dc1bcf820ce0fe607807",
+          "bytes": 432378,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.requisitions-approve",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/requisitions/{code}/approve",
+            "operation_id": "requisitions-approve",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-approve?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0060",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-patch?reduce=false",
+          "sha256": "b77d4fd12de6691a685ed1ee2c571c1cbc4db2d9b3e55f6cb1ce9f81d9463a40",
+          "bytes": 433802,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-patch?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-patch",
+          "sha256": "b77d4fd12de6691a685ed1ee2c571c1cbc4db2d9b3e55f6cb1ce9f81d9463a40",
+          "bytes": 433802,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.requisitions-patch",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/requisitions/{id}",
+            "operation_id": "requisitions-patch",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-patch?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0061",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-post?reduce=false",
+          "sha256": "213654be60e3334e896b3b866156491191973f67eeaaee5b814142a8867002e3",
+          "bytes": 434844,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-post?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-post",
+          "sha256": "213654be60e3334e896b3b866156491191973f67eeaaee5b814142a8867002e3",
+          "bytes": 434844,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.requisitions-post",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/requisitions",
+            "operation_id": "requisitions-post",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-post?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0062",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-reject?reduce=false",
+          "sha256": "b01a7b80cc7b4db26d46771c99097d98c6d1b59b4170cb74d54886a5c1cbf615",
+          "bytes": 431930,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-reject?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-reject",
+          "sha256": "b01a7b80cc7b4db26d46771c99097d98c6d1b59b4170cb74d54886a5c1cbf615",
+          "bytes": 431930,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.requisitions-reject",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/requisitions/{code}/reject",
+            "operation_id": "requisitions-reject",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions-reject?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0063",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions?reduce=false",
+          "sha256": "7fbdb5413d9e99283eeea87ae2b4d79e2b08d85d4eb58fc3b9ebc2165d4df54a",
+          "bytes": 433403,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions",
+          "sha256": "7fbdb5413d9e99283eeea87ae2b4d79e2b08d85d4eb58fc3b9ebc2165d4df54a",
+          "bytes": 433403,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.requisitions",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/requisitions",
+            "operation_id": "requisitions",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitions?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0064",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitionscode-copy-1?reduce=false",
+          "sha256": "cb0a0aa6fb4ef38bf99bd640c7ecf5b025f7ad289dc9e315fa047cb2c0f4ed2e",
+          "bytes": 422977,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitionscode-copy-1?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitionscode-copy-1",
+          "sha256": "cb0a0aa6fb4ef38bf99bd640c7ecf5b025f7ad289dc9e315fa047cb2c0f4ed2e",
+          "bytes": 422977,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.requisitionscode-copy-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/offers/{id}",
+            "operation_id": "requisitionscode-copy-1",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitionscode-copy-1?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0065",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitionscode?reduce=false",
+          "sha256": "b28fb1e242325621e09bb78b2698dffafa00f7050a41db9813832a71d699ee0e",
+          "bytes": 432343,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitionscode?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitionscode",
+          "sha256": "b28fb1e242325621e09bb78b2698dffafa00f7050a41db9813832a71d699ee0e",
+          "bytes": 432343,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.requisitionscode",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/requisitions/{code}",
+            "operation_id": "requisitionscode",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/requisitionscode?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0066",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/revert-disqualification-candidate?reduce=false",
+          "sha256": "49c189381bbb0fff4ebacf6dd43cc21d774dc00cb681bf4cb7a2337c977ffe31",
+          "bytes": 420504,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/revert-disqualification-candidate?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/revert-disqualification-candidate",
+          "sha256": "49c189381bbb0fff4ebacf6dd43cc21d774dc00cb681bf4cb7a2337c977ffe31",
+          "bytes": 420504,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.revert-disqualification-candidate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/candidates/{id}/revert",
+            "operation_id": "revert-disqualification-candidate",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/revert-disqualification-candidate?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0067",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/stages?reduce=false",
+          "sha256": "0f467aa0136e1931286d8107940410b5337cb3a2d4305bf707a206f315f71b2e",
+          "bytes": 421607,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/stages?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/stages",
+          "sha256": "0f467aa0136e1931286d8107940410b5337cb3a2d4305bf707a206f315f71b2e",
+          "bytes": 421607,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.stages",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/stages",
+            "operation_id": "stages",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/stages?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0068",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/subscriptions?reduce=false",
+          "sha256": "2737e3bfee24c618b5c437093b02cd20db6ec083ef68b2bb0f22804ef884cb3d",
+          "bytes": 420370,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/subscriptions?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/subscriptions",
+          "sha256": "2737e3bfee24c618b5c437093b02cd20db6ec083ef68b2bb0f22804ef884cb3d",
+          "bytes": 420370,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.subscriptions",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/subscriptions",
+            "operation_id": "subscriptions",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/subscriptions?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0069",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/subscriptionsid?reduce=false",
+          "sha256": "d131743a3c59b28458ada9fb2ab9a89d82e1d938bfd2289c6f92657f85397e65",
+          "bytes": 420443,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/subscriptionsid?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/subscriptionsid",
+          "sha256": "d131743a3c59b28458ada9fb2ab9a89d82e1d938bfd2289c6f92657f85397e65",
+          "bytes": 420443,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.subscriptionsid",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/subscriptions/{id}",
+            "operation_id": "subscriptionsid",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/subscriptionsid?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0070",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/tag-candidate?reduce=false",
+          "sha256": "6bd55aed95fa94390bffeb46c5982bb8d976be4da8b1534ac3519f72600362db",
+          "bytes": 420559,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/tag-candidate?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/tag-candidate",
+          "sha256": "6bd55aed95fa94390bffeb46c5982bb8d976be4da8b1534ac3519f72600362db",
+          "bytes": 420559,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.tag-candidate",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/candidates/{id}/tags",
+            "operation_id": "tag-candidate",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/tag-candidate?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0071",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/talent-pool-candidates-create?reduce=false",
+          "sha256": "fa9c60c1a6f062792583347b440e0a613ade190df4528ec5c75568fafb11b497",
+          "bytes": 437460,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/talent-pool-candidates-create?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/talent-pool-candidates-create",
+          "sha256": "fa9c60c1a6f062792583347b440e0a613ade190df4528ec5c75568fafb11b497",
+          "bytes": 437460,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.talent-pool-candidates-create",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/talent_pool/{stage}/candidates",
+            "operation_id": "talent-pool-candidates-create",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/talent-pool-candidates-create?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0072",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-archive-entry?reduce=false",
+          "sha256": "88523fdf36d0f77c5b272b0b51ed7e858c31c49376be4ea35c80637a18851d1e",
+          "bytes": 421840,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-archive-entry?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-archive-entry",
+          "sha256": "88523fdf36d0f77c5b272b0b51ed7e858c31c49376be4ea35c80637a18851d1e",
+          "bytes": 421840,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.time-tracking-archive-entry",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/time-tracking/employees/{key}/time-entries/{uuid}",
+            "operation_id": "time-tracking-archive-entry",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-archive-entry?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0073",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-bulk-create?reduce=false",
+          "sha256": "b3f9e9d72cc408066e5930ea0beadc43a65faacb074e427c124586db70190571",
+          "bytes": 424466,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-bulk-create?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-bulk-create",
+          "sha256": "b3f9e9d72cc408066e5930ea0beadc43a65faacb074e427c124586db70190571",
+          "bytes": 424466,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.time-tracking-bulk-create",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/time-tracking/time-entries",
+            "operation_id": "time-tracking-bulk-create",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-bulk-create?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0074",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-create-entry?reduce=false",
+          "sha256": "dc57d86dcf5476baf1f19ec12981ac1fa3c6e51126bb861f46675e266fc2ae63",
+          "bytes": 427141,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-create-entry?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-create-entry",
+          "sha256": "dc57d86dcf5476baf1f19ec12981ac1fa3c6e51126bb861f46675e266fc2ae63",
+          "bytes": 427141,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.time-tracking-create-entry",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/time-tracking/employees/{key}/time-entries",
+            "operation_id": "time-tracking-create-entry",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-create-entry?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0075",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-list-entries?reduce=false",
+          "sha256": "1d025d44dbe33e70e496d2a354b8979fc1bcedba41f62c727d86b09f4e89b578",
+          "bytes": 423923,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-list-entries?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-list-entries",
+          "sha256": "1d025d44dbe33e70e496d2a354b8979fc1bcedba41f62c727d86b09f4e89b578",
+          "bytes": 423923,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.time-tracking-list-entries",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/time-tracking/time-entries",
+            "operation_id": "time-tracking-list-entries",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-list-entries?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0076",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-update-entry?reduce=false",
+          "sha256": "9e1f737dd51bc168ac180fcd450ed05f9314b4d526b77358d2fd565d137b300f",
+          "bytes": 423593,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-update-entry?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-update-entry",
+          "sha256": "9e1f737dd51bc168ac180fcd450ed05f9314b4d526b77358d2fd565d137b300f",
+          "bytes": 423593,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.time-tracking-update-entry",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/time-tracking/employees/{key}/time-entries/{uuid}",
+            "operation_id": "time-tracking-update-entry",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/time-tracking-update-entry?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0077",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffapprovals?reduce=false",
+          "sha256": "789822f8362b0e0a2b81f1b8355cfddb4577d44790d73b09b9843c73ade73276",
+          "bytes": 422927,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffapprovals?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffapprovals",
+          "sha256": "789822f8362b0e0a2b81f1b8355cfddb4577d44790d73b09b9843c73ade73276",
+          "bytes": 422927,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.timeoffapprovals",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/timeoff/approvals/{key}",
+            "operation_id": "timeoffapprovals",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffapprovals?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0078",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffbalances?reduce=false",
+          "sha256": "3c9c5a79b289b3263263255589f32ee0b748377c0a0d747863636819a626f9a2",
+          "bytes": 422846,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffbalances?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffbalances",
+          "sha256": "3c9c5a79b289b3263263255589f32ee0b748377c0a0d747863636819a626f9a2",
+          "bytes": 422846,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.timeoffbalances",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/timeoff/balances",
+            "operation_id": "timeoffbalances",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffbalances?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0079",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffcategories?reduce=false",
+          "sha256": "ec1f36c3dd7eee066a559bcf3c61ca246f8181df8d58ea5fdb6901111bf9a83d",
+          "bytes": 421805,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffcategories?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffcategories",
+          "sha256": "ec1f36c3dd7eee066a559bcf3c61ca246f8181df8d58ea5fdb6901111bf9a83d",
+          "bytes": 421805,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.timeoffcategories",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/timeoff/categories",
+            "operation_id": "timeoffcategories",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffcategories?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0080",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffrequests-1?reduce=false",
+          "sha256": "d9e3d1ec5f69677e75909872df190ddf61504ddec2e5eb6168f1152569f85f16",
+          "bytes": 426660,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffrequests-1?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffrequests-1",
+          "sha256": "d9e3d1ec5f69677e75909872df190ddf61504ddec2e5eb6168f1152569f85f16",
+          "bytes": 426660,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.timeoffrequests-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/timeoff/requests",
+            "operation_id": "timeoffrequests-1",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffrequests-1?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0081",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffrequests?reduce=false",
+          "sha256": "b832ba0c19b69ffb628c8b8995d3e67cb11e8615b53a17e24ac63fc0ab9be282",
+          "bytes": 423996,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffrequests?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffrequests",
+          "sha256": "b832ba0c19b69ffb628c8b8995d3e67cb11e8615b53a17e24ac63fc0ab9be282",
+          "bytes": 423996,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.timeoffrequests",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/timeoff/requests",
+            "operation_id": "timeoffrequests",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/timeoffrequests?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0082",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-candidate-rating?reduce=false",
+          "sha256": "21e03501bf1405bb3af629751f26920a1044984186ff9867aa1771f4a16ffe59",
+          "bytes": 425667,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-candidate-rating?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-candidate-rating",
+          "sha256": "21e03501bf1405bb3af629751f26920a1044984186ff9867aa1771f4a16ffe59",
+          "bytes": 425667,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.update-candidate-rating",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/candidates/{id}/ratings",
+            "operation_id": "update-candidate-rating",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-candidate-rating?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0083",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-candidate?reduce=false",
+          "sha256": "fb5b1d245b1e53a1cec4b062d0f5f3be7eec9d619c37d37dd76e12bc632d45b7",
+          "bytes": 438252,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-candidate?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-candidate",
+          "sha256": "fb5b1d245b1e53a1cec4b062d0f5f3be7eec9d619c37d37dd76e12bc632d45b7",
+          "bytes": 438252,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.update-candidate",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/candidates/{id}",
+            "operation_id": "update-candidate",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-candidate?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0084",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-employee?reduce=false",
+          "sha256": "16edff613122112eabcd1262c4af9ca43f97dd1cb60c281ec8853814695c8a96",
+          "bytes": 424444,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-employee?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-employee",
+          "sha256": "16edff613122112eabcd1262c4af9ca43f97dd1cb60c281ec8853814695c8a96",
+          "bytes": 424444,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.update-employee",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/employees/{id}",
+            "operation_id": "update-employee",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/update-employee?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0085",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/webhook-subscriptions?reduce=false",
+          "sha256": "752fdd36ab2d0e2cdc6c44c70bc23b68f234efe3ce5f9cc2c3441660e2f5fc0d",
+          "bytes": 420924,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/webhook-subscriptions?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/webhook-subscriptions",
+          "sha256": "752fdd36ab2d0e2cdc6c44c70bc23b68f234efe3ce5f9cc2c3441660e2f5fc0d",
+          "bytes": 420924,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.webhook-subscriptions",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/subscriptions",
+            "operation_id": "webhook-subscriptions",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/webhook-subscriptions?reduce=false"
+          }
+        ]
+      },
+      {
+        "id": "document-0086",
+        "kind": "rendered_reference",
+        "content_type": "application/json",
+        "artifact": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/work_schedules?reduce=false",
+          "sha256": "ba2c9d94299b0c1211b9cc9984c86a7c8fb8f72ec00b2b49288d6ef7fa3f1956",
+          "bytes": 427089,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/work_schedules?reduce=false",
+          "capture_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/work_schedules",
+          "sha256": "ba2c9d94299b0c1211b9cc9984c86a7c8fb8f72ec00b2b49288d6ef7fa3f1956",
+          "bytes": 427089,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "workable.rendered.work_schedules",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/work_schedules",
+            "operation_id": "work_schedules",
+            "deprecated": false,
+            "source_location": "$data.api",
+            "citation_url": "https://workable.readme.io/workable/api-next/v2/branches/3.21.0/reference/work_schedules?reduce=false"
+          }
+        ]
+      }
+    ]
+  },
+  "counts": {
+    "rest": 84,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 84
+  }
+}
