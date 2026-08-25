@@ -75,3 +75,18 @@ action-owned per-record batch, private receipt locator, provider-state read-back
 conformance evidence required by [the sync transport contract](../../../docs/sync-transport-definition.md).
 Their typed direct-write actions remain enabled; their reverse-ETL cells are accurately
 `eligible_declaration_pending`, not foundation gaps. The source transports remain declared.
+
+## Increment 6 — schema-v3 declaration-first ETL cohort
+
+Twenty-six previously declaration-pending source operations are now executable ETL commands: eleven
+ActiveCampaign streams, five Freshdesk streams, three Iterable streams, three Segment streams, and four
+Square streams. Each row keeps the source operation identity, provider route and citation, canonical
+command path, ETL lane, and `streams.json` execution component. The installed binary stopped at the
+credential preflight for all 26 paths in a clean local project; provider-live certification remains
+pending. Their persisted source-transport cells remain `declaration-pending` because none has invented
+connector-owned transport/conformance evidence.
+
+This advances the prior 3,254 schema-v3-reader-gated rows by 26 without changing a lock: **3,228** remain
+blocked from generated validation by the shared evidence reader, while the 26 independently declarable
+stream commands are source-backed and binary-reachable. `api_surface.json` served only as an exact
+checked-in projection consistency check, not as a provider-boundary substitute.

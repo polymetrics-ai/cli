@@ -1,0 +1,107 @@
+{
+  "tagline": "Read Iterable source-locked ETL records.",
+  "usage": "pm iterable <command> [flags]",
+  "source_cli": {
+    "name": "Iterable provider API",
+    "docs": "https://api.iterable.com/api-docs",
+    "reference": "Pinned schema-v3 source documents; each ETL command retains its exact provider operation route and citation.",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "etl",
+      "title": "ETL streams",
+      "commands": [
+        "lists",
+        "campaigns",
+        "templates"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Iterable request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit."
+    }
+  ],
+  "commands": [
+    {
+      "path": "lists list",
+      "summary": "Read Lists as Iterable ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lists",
+      "source_cli_path": "GET /lists",
+      "source_url": "https://api.iterable.com/api-docs",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lists"
+        }
+      ],
+      "examples": [
+        "pm iterable lists list --json"
+      ],
+      "notes": "Pinned source operation iterable.rest.get.getLists from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "campaigns list",
+      "summary": "Read Campaigns as Iterable ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "campaigns",
+      "source_cli_path": "GET /campaigns",
+      "source_url": "https://api.iterable.com/api-docs",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns"
+        }
+      ],
+      "examples": [
+        "pm iterable campaigns list --json"
+      ],
+      "notes": "Pinned source operation iterable.rest.get.campaigns from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "templates list",
+      "summary": "Read Templates as Iterable ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "templates",
+      "source_cli_path": "GET /templates",
+      "source_url": "https://api.iterable.com/api-docs",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/templates"
+        }
+      ],
+      "examples": [
+        "pm iterable templates list --json"
+      ],
+      "notes": "Pinned source operation iterable.rest.get.getTemplates from source document primary; streams.json is the declared execution component."
+    }
+  ]
+}

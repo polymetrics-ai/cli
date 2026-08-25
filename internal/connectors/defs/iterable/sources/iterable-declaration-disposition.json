@@ -23,9 +23,9 @@
       "level": "complete_machine_readable_specification",
       "basis": "Parsed every HTTP operation in the provider-published Swagger artifact at https://api.iterable.com/api-docs."
     },
-    "enabled_operations": 0,
-    "enabled_percent": 0,
-    "disabled_operations": 148,
+    "enabled_operations": 3,
+    "enabled_percent": 2.03,
+    "disabled_operations": 145,
     "documented_deletes": 12,
     "enabled_deletes": 0,
     "parity_class_counts": [
@@ -56,13 +56,13 @@
     ],
     "stream_bindings": 3,
     "writes_actions": 0,
-    "terminal_commands": 0,
+    "terminal_commands": 3,
     "gap_ids": [],
     "foundation_gaps": [],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 148
+        "count": 145
       }
     ],
     "transport": {
@@ -85,16 +85,11 @@
       }
     },
     "declaration_pending_ids": [
-      "runnable-command-binding-iterable",
       "sync-transport-destination-definition-iterable",
       "sync-transport-source-definition-iterable",
       "typed-operation-contract-iterable"
     ],
     "declaration_pending": [
-      {
-        "id": "runnable-command-binding-iterable",
-        "count": 3
-      },
       {
         "id": "typed-operation-contract-iterable",
         "count": 145
@@ -104,14 +99,15 @@
         "count": 96
       }
     ],
-    "runnable_cli_surface_commands": 0,
+    "runnable_cli_surface_commands": 3,
     "typed_write_actions": 0,
-    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_cli_commands": 3,
     "endpoint_bound_typed_write_actions": 0
   },
   "notes": [
     "Complete six-class source-locked map regenerated from the provider's official machine-readable specification; every 148 pinned operation has exactly one primary parity class.",
-    "Direct writes remain direct_write operations. #4304 now provides the connector-neutral typed-destination foundation; no connector-owned typed writes.json action exists for these rows, so reverse-ETL declaration remains pending rather than foundation-gapped."
+    "Direct writes remain direct_write operations. #4304 now provides the connector-neutral typed-destination foundation; no connector-owned typed writes.json action exists for these rows, so reverse-ETL declaration remains pending rather than foundation-gapped.",
+    "2026-08-25 declaration-first ETL command materialization: enabled 3 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists."
   ],
   "ledger_dispositions": [
     {
@@ -734,25 +730,33 @@
         "operation_id": "campaigns",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-iterable",
-          "evidence": "internal/connectors/defs/iterable/api_surface.json endpoints[12] is bound to the pinned provider operation; internal/connectors/defs/iterable/sources/iterable-operation-source-lock.json: paths[\"/api/campaigns\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/iterable/cli_surface.json: implemented ETL command \"campaigns list\" binds GET /campaigns; streams.json stream \"campaigns\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/iterable/api_surface.json endpoints[12] is bound to the pinned provider operation; internal/connectors/defs/iterable/sources/iterable-operation-source-lock.json: paths[\"/api/campaigns\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-iterable",
-        "contract": null
+        "status": "enabled; runnable ETL command \"campaigns list\" binds pinned source operation iterable.rest.get.campaigns",
+        "command": {
+          "path": "campaigns list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /campaigns",
+          "source_url": "https://api.iterable.com/api-docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/iterable/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://api.iterable.com/api-docs",
+          "citation_url": null
+        }
       }
     },
     {
@@ -1900,25 +1904,33 @@
         "operation_id": "getLists",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-iterable",
-          "evidence": "internal/connectors/defs/iterable/api_surface.json endpoints[38] is bound to the pinned provider operation; internal/connectors/defs/iterable/sources/iterable-operation-source-lock.json: paths[\"/api/lists\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/iterable/cli_surface.json: implemented ETL command \"lists list\" binds GET /lists; streams.json stream \"lists\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/iterable/api_surface.json endpoints[38] is bound to the pinned provider operation; internal/connectors/defs/iterable/sources/iterable-operation-source-lock.json: paths[\"/api/lists\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-iterable",
-        "contract": null
+        "status": "enabled; runnable ETL command \"lists list\" binds pinned source operation iterable.rest.get.getLists",
+        "command": {
+          "path": "lists list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /lists",
+          "source_url": "https://api.iterable.com/api-docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/iterable/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://api.iterable.com/api-docs",
+          "citation_url": null
+        }
       }
     },
     {
@@ -2346,25 +2358,33 @@
         "operation_id": "getTemplates",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-iterable",
-          "evidence": "internal/connectors/defs/iterable/api_surface.json endpoints[48] is bound to the pinned provider operation; internal/connectors/defs/iterable/sources/iterable-operation-source-lock.json: paths[\"/api/templates\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/iterable/cli_surface.json: implemented ETL command \"templates list\" binds GET /templates; streams.json stream \"templates\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/iterable/api_surface.json endpoints[48] is bound to the pinned provider operation; internal/connectors/defs/iterable/sources/iterable-operation-source-lock.json: paths[\"/api/templates\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-iterable",
-        "contract": null
+        "status": "enabled; runnable ETL command \"templates list\" binds pinned source operation iterable.rest.get.getTemplates",
+        "command": {
+          "path": "templates list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /templates",
+          "source_url": "https://api.iterable.com/api-docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/iterable/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://api.iterable.com/api-docs",
+          "citation_url": null
+        }
       }
     },
     {

@@ -1,0 +1,147 @@
+{
+  "tagline": "Read Freshdesk source-locked ETL records.",
+  "usage": "pm freshdesk <command> [flags]",
+  "source_cli": {
+    "name": "Freshdesk provider API",
+    "docs": "https://developers.freshdesk.com/api/",
+    "reference": "Pinned schema-v3 source documents; each ETL command retains its exact provider operation route and citation.",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "etl",
+      "title": "ETL streams",
+      "commands": [
+        "tickets",
+        "contacts",
+        "companies",
+        "agents",
+        "groups"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Freshdesk request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit."
+    }
+  ],
+  "commands": [
+    {
+      "path": "tickets list",
+      "summary": "Read Tickets as Freshdesk ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tickets",
+      "source_cli_path": "GET /tickets",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets"
+        }
+      ],
+      "examples": [
+        "pm freshdesk tickets list --json"
+      ],
+      "notes": "Pinned source operation freshdesk.rest.get.list_all_tickets from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "contacts list",
+      "summary": "Read Contacts as Freshdesk ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_cli_path": "GET /contacts",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts"
+        }
+      ],
+      "examples": [
+        "pm freshdesk contacts list --json"
+      ],
+      "notes": "Pinned source operation freshdesk.rest.get.list_all_contacts from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "companies list",
+      "summary": "Read Companies as Freshdesk ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "companies",
+      "source_cli_path": "GET /companies",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies"
+        }
+      ],
+      "examples": [
+        "pm freshdesk companies list --json"
+      ],
+      "notes": "Pinned source operation freshdesk.rest.get.list_all_companies from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "agents list",
+      "summary": "Read Agents as Freshdesk ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agents",
+      "source_cli_path": "GET /agents",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/agents"
+        }
+      ],
+      "examples": [
+        "pm freshdesk agents list --json"
+      ],
+      "notes": "Pinned source operation freshdesk.rest.get.list_all_agents_availability from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "groups list",
+      "summary": "Read Groups as Freshdesk ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "source_cli_path": "GET /groups",
+      "source_url": "https://developers.freshdesk.com/api/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups"
+        }
+      ],
+      "examples": [
+        "pm freshdesk groups list --json"
+      ],
+      "notes": "Pinned source operation freshdesk.rest.get.list_all_groups from source document primary; streams.json is the declared execution component."
+    }
+  ]
+}

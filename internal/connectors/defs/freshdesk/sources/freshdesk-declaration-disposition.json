@@ -23,9 +23,9 @@
       "level": "complete_rendered_reference",
       "basis": "Parsed every endpoint section from the provider’s single 3.2MB rendered Freshdesk API reference. The document exposes 171 sections that normalize to 170 unique HTTP method/path operations after query examples are removed."
     },
-    "enabled_operations": 0,
-    "enabled_percent": 0,
-    "disabled_operations": 170,
+    "enabled_operations": 5,
+    "enabled_percent": 2.94,
+    "disabled_operations": 165,
     "documented_deletes": 22,
     "enabled_deletes": 0,
     "parity_class_counts": [
@@ -56,13 +56,13 @@
     ],
     "stream_bindings": 5,
     "writes_actions": 0,
-    "terminal_commands": 0,
+    "terminal_commands": 5,
     "gap_ids": [],
     "foundation_gaps": [],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 170
+        "count": 165
       }
     ],
     "transport": {
@@ -85,16 +85,11 @@
       }
     },
     "declaration_pending_ids": [
-      "runnable-command-binding-freshdesk",
       "sync-transport-destination-definition-freshdesk",
       "sync-transport-source-definition-freshdesk",
       "typed-operation-contract-freshdesk"
     ],
     "declaration_pending": [
-      {
-        "id": "runnable-command-binding-freshdesk",
-        "count": 5
-      },
       {
         "id": "typed-operation-contract-freshdesk",
         "count": 165
@@ -104,14 +99,15 @@
         "count": 92
       }
     ],
-    "runnable_cli_surface_commands": 0,
+    "runnable_cli_surface_commands": 5,
     "typed_write_actions": 0,
-    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_cli_commands": 5,
     "endpoint_bound_typed_write_actions": 0
   },
   "notes": [
     "Complete six-class source-locked map regenerated from the provider reference; every 170 pinned operation has exactly one primary parity class.",
-    "Direct writes remain direct_write operations. #4304 now provides the connector-neutral typed-destination foundation; no connector-owned typed writes.json action exists for these rows, so reverse-ETL declaration remains pending rather than foundation-gapped."
+    "Direct writes remain direct_write operations. #4304 now provides the connector-neutral typed-destination foundation; no connector-owned typed writes.json action exists for these rows, so reverse-ETL declaration remains pending rather than foundation-gapped.",
+    "2026-08-25 declaration-first ETL command materialization: enabled 5 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists."
   ],
   "ledger_dispositions": [
     {
@@ -1684,25 +1680,33 @@
         "operation_id": "list_all_agents_availability",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-freshdesk",
-          "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[32] is bound to the pinned provider operation; internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: div#list_all_agents_availability .api-url.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/freshdesk/cli_surface.json: implemented ETL command \"agents list\" binds GET /agents; streams.json stream \"agents\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[32] is bound to the pinned provider operation; internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: div#list_all_agents_availability .api-url."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-freshdesk",
-        "contract": null
+        "status": "enabled; runnable ETL command \"agents list\" binds pinned source operation freshdesk.rest.get.list_all_agents_availability",
+        "command": {
+          "path": "agents list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /agents",
+          "source_url": "https://developers.freshdesk.com/api/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/freshdesk/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developers.freshdesk.com/api/",
+          "citation_url": "https://developers.freshdesk.com/api/"
+        }
       }
     },
     {
@@ -2445,25 +2449,33 @@
         "operation_id": "list_all_companies",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-freshdesk",
-          "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[49] is bound to the pinned provider operation; internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: div#list_all_companies .api-url.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/freshdesk/cli_surface.json: implemented ETL command \"companies list\" binds GET /companies; streams.json stream \"companies\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[49] is bound to the pinned provider operation; internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: div#list_all_companies .api-url."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-freshdesk",
-        "contract": null
+        "status": "enabled; runnable ETL command \"companies list\" binds pinned source operation freshdesk.rest.get.list_all_companies",
+        "command": {
+          "path": "companies list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /companies",
+          "source_url": "https://developers.freshdesk.com/api/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/freshdesk/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developers.freshdesk.com/api/",
+          "citation_url": "https://developers.freshdesk.com/api/"
+        }
       }
     },
     {
@@ -2801,25 +2813,33 @@
         "operation_id": "list_all_contacts",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-freshdesk",
-          "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[57] is bound to the pinned provider operation; internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: div#list_all_contacts .api-url.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/freshdesk/cli_surface.json: implemented ETL command \"contacts list\" binds GET /contacts; streams.json stream \"contacts\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[57] is bound to the pinned provider operation; internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: div#list_all_contacts .api-url."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-freshdesk",
-        "contract": null
+        "status": "enabled; runnable ETL command \"contacts list\" binds pinned source operation freshdesk.rest.get.list_all_contacts",
+        "command": {
+          "path": "contacts list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /contacts",
+          "source_url": "https://developers.freshdesk.com/api/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/freshdesk/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developers.freshdesk.com/api/",
+          "citation_url": "https://developers.freshdesk.com/api/"
+        }
       }
     },
     {
@@ -3562,25 +3582,33 @@
         "operation_id": "list_all_groups",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-freshdesk",
-          "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[74] is bound to the pinned provider operation; internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: div#list_all_groups .api-url.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/freshdesk/cli_surface.json: implemented ETL command \"groups list\" binds GET /groups; streams.json stream \"groups\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[74] is bound to the pinned provider operation; internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: div#list_all_groups .api-url."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-freshdesk",
-        "contract": null
+        "status": "enabled; runnable ETL command \"groups list\" binds pinned source operation freshdesk.rest.get.list_all_groups",
+        "command": {
+          "path": "groups list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /groups",
+          "source_url": "https://developers.freshdesk.com/api/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/freshdesk/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developers.freshdesk.com/api/",
+          "citation_url": "https://developers.freshdesk.com/api/"
+        }
       }
     },
     {
@@ -4458,25 +4486,33 @@
         "operation_id": "list_all_tickets",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-freshdesk",
-          "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[94] is bound to the pinned provider operation; internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: div#list_all_tickets .api-url.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/freshdesk/cli_surface.json: implemented ETL command \"tickets list\" binds GET /tickets; streams.json stream \"tickets\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[94] is bound to the pinned provider operation; internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: div#list_all_tickets .api-url."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-freshdesk",
-        "contract": null
+        "status": "enabled; runnable ETL command \"tickets list\" binds pinned source operation freshdesk.rest.get.list_all_tickets",
+        "command": {
+          "path": "tickets list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /tickets",
+          "source_url": "https://developers.freshdesk.com/api/"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/freshdesk/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developers.freshdesk.com/api/",
+          "citation_url": "https://developers.freshdesk.com/api/"
+        }
       }
     },
     {

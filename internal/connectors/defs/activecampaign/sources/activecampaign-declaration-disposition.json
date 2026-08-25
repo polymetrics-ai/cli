@@ -23,9 +23,9 @@
       "level": "complete_machine_readable_specification",
       "basis": "Parsed every operation in the provider-published OpenAPI 3.1.0 document at https://developers.activecampaign.com/reference/list-all-contacts."
     },
-    "enabled_operations": 0,
-    "enabled_percent": 0,
-    "disabled_operations": 296,
+    "enabled_operations": 11,
+    "enabled_percent": 3.72,
+    "disabled_operations": 285,
     "documented_deletes": 50,
     "enabled_deletes": 0,
     "parity_class_counts": [
@@ -56,13 +56,13 @@
     ],
     "stream_bindings": 11,
     "writes_actions": 0,
-    "terminal_commands": 0,
+    "terminal_commands": 11,
     "gap_ids": [],
     "foundation_gaps": [],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 296
+        "count": 285
       }
     ],
     "transport": {
@@ -85,16 +85,11 @@
       }
     },
     "declaration_pending_ids": [
-      "runnable-command-binding-activecampaign",
       "sync-transport-destination-definition-activecampaign",
       "sync-transport-source-definition-activecampaign",
       "typed-operation-contract-activecampaign"
     ],
     "declaration_pending": [
-      {
-        "id": "runnable-command-binding-activecampaign",
-        "count": 11
-      },
       {
         "id": "typed-operation-contract-activecampaign",
         "count": 285
@@ -104,9 +99,9 @@
         "count": 157
       }
     ],
-    "runnable_cli_surface_commands": 0,
+    "runnable_cli_surface_commands": 11,
     "typed_write_actions": 0,
-    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_cli_commands": 11,
     "endpoint_bound_typed_write_actions": 0
   },
   "ledger_dispositions": [
@@ -2900,25 +2895,33 @@
         "operation_id": "list-all-accounts",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-activecampaign",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[56] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/accounts\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/activecampaign/cli_surface.json: implemented ETL command \"accounts list\" binds GET /api/3/accounts; streams.json stream \"accounts\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[56] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/accounts\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null
+        "status": "enabled; runnable ETL command \"accounts list\" binds pinned source operation activecampaign.rest.get.ListAllAccounts56",
+        "command": {
+          "path": "accounts list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /api/3/accounts",
+          "source_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/activecampaign/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+          "citation_url": null
+        }
       }
     },
     {
@@ -3301,25 +3304,33 @@
         "operation_id": "list-all-automations",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-activecampaign",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[65] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/automations\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/activecampaign/cli_surface.json: implemented ETL command \"automations list\" binds GET /api/3/automations; streams.json stream \"automations\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[65] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/automations\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null
+        "status": "enabled; runnable ETL command \"automations list\" binds pinned source operation activecampaign.rest.get.ListAllAutomations65",
+        "command": {
+          "path": "automations list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /api/3/automations",
+          "source_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/activecampaign/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+          "citation_url": null
+        }
       }
     },
     {
@@ -3657,25 +3668,33 @@
         "operation_id": "list-all-campaigns",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-activecampaign",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[73] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/campaigns\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/activecampaign/cli_surface.json: implemented ETL command \"campaigns list\" binds GET /api/3/campaigns; streams.json stream \"campaigns\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[73] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/campaigns\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null
+        "status": "enabled; runnable ETL command \"campaigns list\" binds pinned source operation activecampaign.rest.get.ListAllCampaigns73",
+        "command": {
+          "path": "campaigns list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /api/3/campaigns",
+          "source_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/activecampaign/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+          "citation_url": null
+        }
       }
     },
     {
@@ -4103,25 +4122,33 @@
         "operation_id": "list-all-contacts",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-activecampaign",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[83] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/contacts\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/activecampaign/cli_surface.json: implemented ETL command \"contacts list\" binds GET /api/3/contacts; streams.json stream \"contacts\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[83] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/contacts\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null
+        "status": "enabled; runnable ETL command \"contacts list\" binds pinned source operation activecampaign.rest.get.ListAllContacts83",
+        "command": {
+          "path": "contacts list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /api/3/contacts",
+          "source_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/activecampaign/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+          "citation_url": null
+        }
       }
     },
     {
@@ -5719,25 +5746,33 @@
         "operation_id": "list-all-deals",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-activecampaign",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[119] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/deals\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/activecampaign/cli_surface.json: implemented ETL command \"deals list\" binds GET /api/3/deals; streams.json stream \"deals\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[119] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/deals\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null
+        "status": "enabled; runnable ETL command \"deals list\" binds pinned source operation activecampaign.rest.get.ListAllDeals119",
+        "command": {
+          "path": "deals list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /api/3/deals",
+          "source_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/activecampaign/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+          "citation_url": null
+        }
       }
     },
     {
@@ -5805,25 +5840,33 @@
         "operation_id": "list-all-deal-stages",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-activecampaign",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[121] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/dealStages\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/activecampaign/cli_surface.json: implemented ETL command \"deal-stages list\" binds GET /api/3/dealStages; streams.json stream \"deal_stages\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[121] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/dealStages\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null
+        "status": "enabled; runnable ETL command \"deal-stages list\" binds pinned source operation activecampaign.rest.get.ListAllDealStages121",
+        "command": {
+          "path": "deal-stages list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /api/3/dealStages",
+          "source_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/activecampaign/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+          "citation_url": null
+        }
       }
     },
     {
@@ -5891,25 +5934,33 @@
         "operation_id": "list-all-tasks",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-activecampaign",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[123] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/dealTasks\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/activecampaign/cli_surface.json: implemented ETL command \"deal-tasks list\" binds GET /api/3/dealTasks; streams.json stream \"deal_tasks\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[123] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/dealTasks\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null
+        "status": "enabled; runnable ETL command \"deal-tasks list\" binds pinned source operation activecampaign.rest.get.ListAllTasks123",
+        "command": {
+          "path": "deal-tasks list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /api/3/dealTasks",
+          "source_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/activecampaign/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+          "citation_url": null
+        }
       }
     },
     {
@@ -6517,25 +6568,33 @@
         "operation_id": "retrieve-fields",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-activecampaign",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[137] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/fields\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/activecampaign/cli_surface.json: implemented ETL command \"fields list\" binds GET /api/3/fields; streams.json stream \"fields\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[137] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/fields\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null
+        "status": "enabled; runnable ETL command \"fields list\" binds pinned source operation activecampaign.rest.get.RetrieveFields137",
+        "command": {
+          "path": "fields list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /api/3/fields",
+          "source_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/activecampaign/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+          "citation_url": null
+        }
       }
     },
     {
@@ -7143,25 +7202,33 @@
         "operation_id": "retrieve-all-lists",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-activecampaign",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[151] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/lists\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/activecampaign/cli_surface.json: implemented ETL command \"lists list\" binds GET /api/3/lists; streams.json stream \"lists\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[151] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/lists\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null
+        "status": "enabled; runnable ETL command \"lists list\" binds pinned source operation activecampaign.rest.get.RetrieveAllLists151",
+        "command": {
+          "path": "lists list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /api/3/lists",
+          "source_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/activecampaign/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+          "citation_url": null
+        }
       }
     },
     {
@@ -8084,25 +8151,33 @@
         "operation_id": "retrieve-all-tags",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-activecampaign",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[172] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/tags\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/activecampaign/cli_surface.json: implemented ETL command \"tags list\" binds GET /api/3/tags; streams.json stream \"tags\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[172] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/tags\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null
+        "status": "enabled; runnable ETL command \"tags list\" binds pinned source operation activecampaign.rest.get.RetrieveAllTags172",
+        "command": {
+          "path": "tags list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /api/3/tags",
+          "source_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/activecampaign/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+          "citation_url": null
+        }
       }
     },
     {
@@ -8485,25 +8560,33 @@
         "operation_id": "list-all-users",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-activecampaign",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[181] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/users\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/activecampaign/cli_surface.json: implemented ETL command \"users list\" binds GET /api/3/users; streams.json stream \"users\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[181] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/users\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null
+        "status": "enabled; runnable ETL command \"users list\" binds pinned source operation activecampaign.rest.get.ListAllUsers181",
+        "command": {
+          "path": "users list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /api/3/users",
+          "source_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/activecampaign/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+          "citation_url": null
+        }
       }
     },
     {
@@ -14176,6 +14259,7 @@
   "notes": [
     "Complete six-class source-locked map regenerated from the provider OpenAPI 3.1.0 document; every 296 pinned operation has exactly one primary parity class.",
     "An operation is enabled only when its exact refreshed method/path still resolves to an actual typed write action or runtime-preflight runnable command. Stream-only mappings remain ETL but declaration-pending.",
-    "Direct writes remain direct_write operations. #4304 now provides the connector-neutral typed-destination foundation; no connector-owned typed writes.json action exists for these rows, so reverse-ETL declaration remains pending rather than foundation-gapped."
+    "Direct writes remain direct_write operations. #4304 now provides the connector-neutral typed-destination foundation; no connector-owned typed writes.json action exists for these rows, so reverse-ETL declaration remains pending rather than foundation-gapped.",
+    "2026-08-25 declaration-first ETL command materialization: enabled 11 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists."
   ]
 }

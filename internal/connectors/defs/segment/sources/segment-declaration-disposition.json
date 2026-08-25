@@ -23,9 +23,9 @@
       "level": "complete_machine_readable_specification",
       "basis": "Parsed every operation in the provider-published OpenAPI 3.0.3 document at https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js."
     },
-    "enabled_operations": 0,
-    "enabled_percent": 0,
-    "disabled_operations": 201,
+    "enabled_operations": 3,
+    "enabled_percent": 1.49,
+    "disabled_operations": 198,
     "documented_deletes": 28,
     "enabled_deletes": 0,
     "parity_class_counts": [
@@ -56,13 +56,13 @@
     ],
     "stream_bindings": 3,
     "writes_actions": 0,
-    "terminal_commands": 0,
+    "terminal_commands": 3,
     "gap_ids": [],
     "foundation_gaps": [],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 201
+        "count": 198
       }
     ],
     "transport": {
@@ -85,16 +85,11 @@
       }
     },
     "declaration_pending_ids": [
-      "runnable-command-binding-segment",
       "sync-transport-destination-definition-segment",
       "sync-transport-source-definition-segment",
       "typed-operation-contract-segment"
     ],
     "declaration_pending": [
-      {
-        "id": "runnable-command-binding-segment",
-        "count": 3
-      },
       {
         "id": "typed-operation-contract-segment",
         "count": 198
@@ -104,9 +99,9 @@
         "count": 101
       }
     ],
-    "runnable_cli_surface_commands": 0,
+    "runnable_cli_surface_commands": 3,
     "typed_write_actions": 0,
-    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_cli_commands": 3,
     "endpoint_bound_typed_write_actions": 0
   },
   "ledger_dispositions": [
@@ -1530,25 +1525,33 @@
         "operation_id": "getWorkspace",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-segment",
-          "evidence": "internal/connectors/defs/segment/api_surface.json endpoints[28] is bound to the pinned provider operation; internal/connectors/defs/segment/sources/segment-operation-source-lock.json: .paths[\"/\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/segment/cli_surface.json: implemented ETL command \"workspace list\" binds GET /; streams.json stream \"workspace\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/segment/api_surface.json endpoints[28] is bound to the pinned provider operation; internal/connectors/defs/segment/sources/segment-operation-source-lock.json: .paths[\"/\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-segment",
-        "contract": null
+        "status": "enabled; runnable ETL command \"workspace list\" binds pinned source operation segment.rest.get.GetWorkspace28",
+        "command": {
+          "path": "workspace list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /",
+          "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/segment/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js",
+          "citation_url": null
+        }
       }
     },
     {
@@ -2381,25 +2384,33 @@
         "operation_id": "listDestinations",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-segment",
-          "evidence": "internal/connectors/defs/segment/api_surface.json endpoints[47] is bound to the pinned provider operation; internal/connectors/defs/segment/sources/segment-operation-source-lock.json: .paths[\"/destinations\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/segment/cli_surface.json: implemented ETL command \"destinations list\" binds GET /destinations; streams.json stream \"destinations\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/segment/api_surface.json endpoints[47] is bound to the pinned provider operation; internal/connectors/defs/segment/sources/segment-operation-source-lock.json: .paths[\"/destinations\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-segment",
-        "contract": null
+        "status": "enabled; runnable ETL command \"destinations list\" binds pinned source operation segment.rest.get.ListDestinations47",
+        "command": {
+          "path": "destinations list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /destinations",
+          "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/segment/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js",
+          "citation_url": null
+        }
       }
     },
     {
@@ -3682,25 +3693,33 @@
         "operation_id": "listSources",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-segment",
-          "evidence": "internal/connectors/defs/segment/api_surface.json endpoints[76] is bound to the pinned provider operation; internal/connectors/defs/segment/sources/segment-operation-source-lock.json: .paths[\"/sources\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/segment/cli_surface.json: implemented ETL command \"sources list\" binds GET /sources; streams.json stream \"sources\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/segment/api_surface.json endpoints[76] is bound to the pinned provider operation; internal/connectors/defs/segment/sources/segment-operation-source-lock.json: .paths[\"/sources\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-segment",
-        "contract": null
+        "status": "enabled; runnable ETL command \"sources list\" binds pinned source operation segment.rest.get.ListSources76",
+        "command": {
+          "path": "sources list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /sources",
+          "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/segment/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js",
+          "citation_url": null
+        }
       }
     },
     {
@@ -9669,6 +9688,7 @@
     "Complete six-class source-locked map regenerated from the provider OpenAPI 3.0.3 document; every 201 pinned operation has exactly one primary parity class.",
     "An operation is enabled only when its exact refreshed method/path still resolves to an actual typed write action or runtime-preflight runnable command. Stream-only mappings remain ETL but declaration-pending.",
     "Direct writes remain direct_write operations. #4304 now provides the connector-neutral typed-destination foundation; no connector-owned typed writes.json action exists for these rows, so reverse-ETL declaration remains pending rather than foundation-gapped.",
-    "Legacy stream workspaces (GET /workspaces) is REMOVED: not present in the provider's authoritative OpenAPI."
+    "Legacy stream workspaces (GET /workspaces) is REMOVED: not present in the provider's authoritative OpenAPI.",
+    "2026-08-25 declaration-first ETL command materialization: enabled 3 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists."
   ]
 }

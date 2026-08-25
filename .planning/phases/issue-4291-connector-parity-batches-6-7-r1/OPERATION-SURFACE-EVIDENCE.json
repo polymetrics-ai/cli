@@ -137979,18 +137979,19 @@
         "provider_version_evidence": "internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-freshdesk",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"agents list\" binds pinned source operation freshdesk.rest.get.list_all_agents_availability",
+        "contract": {
+          "execution_component": "internal/connectors/defs/freshdesk/streams.json stream \"agents\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /agents",
+          "citation_url": "https://developers.freshdesk.com/api/"
+        },
         "api_surface_binding": {
           "stream": "agents"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[32] is bound to the pinned provider operation; internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: div#list_all_agents_availability .api-url."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -138000,8 +138001,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:agents"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -138013,9 +138015,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "agents"
+            "stream": "agents",
+            "path": "agents list",
+            "source_cli_path": "GET /agents"
           }
         }
       },
@@ -139287,18 +139291,19 @@
         "provider_version_evidence": "internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-freshdesk",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"companies list\" binds pinned source operation freshdesk.rest.get.list_all_companies",
+        "contract": {
+          "execution_component": "internal/connectors/defs/freshdesk/streams.json stream \"companies\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /companies",
+          "citation_url": "https://developers.freshdesk.com/api/"
+        },
         "api_surface_binding": {
           "stream": "companies"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[49] is bound to the pinned provider operation; internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: div#list_all_companies .api-url."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -139308,8 +139313,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:companies"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -139321,9 +139327,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "companies"
+            "stream": "companies",
+            "path": "companies list",
+            "source_cli_path": "GET /companies"
           }
         }
       },
@@ -139902,18 +139910,19 @@
         "provider_version_evidence": "internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-freshdesk",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"contacts list\" binds pinned source operation freshdesk.rest.get.list_all_contacts",
+        "contract": {
+          "execution_component": "internal/connectors/defs/freshdesk/streams.json stream \"contacts\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /contacts",
+          "citation_url": "https://developers.freshdesk.com/api/"
+        },
         "api_surface_binding": {
           "stream": "contacts"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[57] is bound to the pinned provider operation; internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: div#list_all_contacts .api-url."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -139923,8 +139932,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:contacts"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -139936,9 +139946,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "contacts"
+            "stream": "contacts",
+            "path": "contacts list",
+            "source_cli_path": "GET /contacts"
           }
         }
       },
@@ -141210,18 +141222,19 @@
         "provider_version_evidence": "internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-freshdesk",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"groups list\" binds pinned source operation freshdesk.rest.get.list_all_groups",
+        "contract": {
+          "execution_component": "internal/connectors/defs/freshdesk/streams.json stream \"groups\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /groups",
+          "citation_url": "https://developers.freshdesk.com/api/"
+        },
         "api_surface_binding": {
           "stream": "groups"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[74] is bound to the pinned provider operation; internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: div#list_all_groups .api-url."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -141231,8 +141244,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:groups"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -141244,9 +141258,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "groups"
+            "stream": "groups",
+            "path": "groups list",
+            "source_cli_path": "GET /groups"
           }
         }
       },
@@ -142749,18 +142765,19 @@
         "provider_version_evidence": "internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-freshdesk",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"tickets list\" binds pinned source operation freshdesk.rest.get.list_all_tickets",
+        "contract": {
+          "execution_component": "internal/connectors/defs/freshdesk/streams.json stream \"tickets\"",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /tickets",
+          "citation_url": "https://developers.freshdesk.com/api/"
+        },
         "api_surface_binding": {
           "stream": "tickets"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/freshdesk/api_surface.json endpoints[94] is bound to the pinned provider operation; internal/connectors/defs/freshdesk/sources/freshdesk-operation-source-lock.json: div#list_all_tickets .api-url."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -142770,8 +142787,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:tickets"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -142783,9 +142801,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "tickets"
+            "stream": "tickets",
+            "path": "tickets list",
+            "source_cli_path": "GET /tickets"
           }
         }
       },
@@ -150756,18 +150776,19 @@
         "provider_version_evidence": "internal/connectors/defs/segment/sources/segment-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-segment",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"workspace list\" binds pinned source operation segment.rest.get.GetWorkspace28",
+        "contract": {
+          "execution_component": "internal/connectors/defs/segment/streams.json stream \"workspace\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /",
+          "citation_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+        },
         "api_surface_binding": {
           "stream": "workspace"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/segment/api_surface.json endpoints[28] is bound to the pinned provider operation; internal/connectors/defs/segment/sources/segment-operation-source-lock.json: .paths[\"/\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -150777,8 +150798,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:workspace"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -150790,9 +150812,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "workspace"
+            "stream": "workspace",
+            "path": "workspace list",
+            "source_cli_path": "GET /"
           }
         }
       },
@@ -152218,18 +152242,19 @@
         "provider_version_evidence": "internal/connectors/defs/segment/sources/segment-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-segment",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"destinations list\" binds pinned source operation segment.rest.get.ListDestinations47",
+        "contract": {
+          "execution_component": "internal/connectors/defs/segment/streams.json stream \"destinations\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /destinations",
+          "citation_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+        },
         "api_surface_binding": {
           "stream": "destinations"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/segment/api_surface.json endpoints[47] is bound to the pinned provider operation; internal/connectors/defs/segment/sources/segment-operation-source-lock.json: .paths[\"/destinations\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -152239,8 +152264,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:destinations"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -152252,9 +152278,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "destinations"
+            "stream": "destinations",
+            "path": "destinations list",
+            "source_cli_path": "GET /destinations"
           }
         }
       },
@@ -154450,18 +154478,19 @@
         "provider_version_evidence": "internal/connectors/defs/segment/sources/segment-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-segment",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"sources list\" binds pinned source operation segment.rest.get.ListSources76",
+        "contract": {
+          "execution_component": "internal/connectors/defs/segment/streams.json stream \"sources\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /sources",
+          "citation_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+        },
         "api_surface_binding": {
           "stream": "sources"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/segment/api_surface.json endpoints[76] is bound to the pinned provider operation; internal/connectors/defs/segment/sources/segment-operation-source-lock.json: .paths[\"/sources\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -154471,8 +154500,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:sources"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -154484,9 +154514,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "sources"
+            "stream": "sources",
+            "path": "sources list",
+            "source_cli_path": "GET /sources"
           }
         }
       },
@@ -168386,18 +168418,19 @@
         "provider_version_evidence": "internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"accounts list\" binds pinned source operation activecampaign.rest.get.ListAllAccounts56",
+        "contract": {
+          "execution_component": "internal/connectors/defs/activecampaign/streams.json stream \"accounts\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /api/3/accounts",
+          "citation_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
         "api_surface_binding": {
           "stream": "accounts"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[56] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/accounts\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -168407,8 +168440,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:accounts"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -168420,9 +168454,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "accounts"
+            "stream": "accounts",
+            "path": "accounts list",
+            "source_cli_path": "GET /api/3/accounts"
           }
         }
       },
@@ -169078,18 +169114,19 @@
         "provider_version_evidence": "internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"automations list\" binds pinned source operation activecampaign.rest.get.ListAllAutomations65",
+        "contract": {
+          "execution_component": "internal/connectors/defs/activecampaign/streams.json stream \"automations\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /api/3/automations",
+          "citation_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
         "api_surface_binding": {
           "stream": "automations"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[65] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/automations\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -169099,8 +169136,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:automations"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -169112,9 +169150,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "automations"
+            "stream": "automations",
+            "path": "automations list",
+            "source_cli_path": "GET /api/3/automations"
           }
         }
       },
@@ -169693,18 +169733,19 @@
         "provider_version_evidence": "internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"campaigns list\" binds pinned source operation activecampaign.rest.get.ListAllCampaigns73",
+        "contract": {
+          "execution_component": "internal/connectors/defs/activecampaign/streams.json stream \"campaigns\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /api/3/campaigns",
+          "citation_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
         "api_surface_binding": {
           "stream": "campaigns"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[73] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/campaigns\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -169714,8 +169755,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:campaigns"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -169727,9 +169769,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "campaigns"
+            "stream": "campaigns",
+            "path": "campaigns list",
+            "source_cli_path": "GET /api/3/campaigns"
           }
         }
       },
@@ -170462,18 +170506,19 @@
         "provider_version_evidence": "internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"contacts list\" binds pinned source operation activecampaign.rest.get.ListAllContacts83",
+        "contract": {
+          "execution_component": "internal/connectors/defs/activecampaign/streams.json stream \"contacts\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /api/3/contacts",
+          "citation_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
         "api_surface_binding": {
           "stream": "contacts"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[83] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/contacts\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -170483,8 +170528,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:contacts"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -170496,9 +170542,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "contacts"
+            "stream": "contacts",
+            "path": "contacts list",
+            "source_cli_path": "GET /api/3/contacts"
           }
         }
       },
@@ -173233,18 +173281,19 @@
         "provider_version_evidence": "internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"deals list\" binds pinned source operation activecampaign.rest.get.ListAllDeals119",
+        "contract": {
+          "execution_component": "internal/connectors/defs/activecampaign/streams.json stream \"deals\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /api/3/deals",
+          "citation_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
         "api_surface_binding": {
           "stream": "deals"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[119] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/deals\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -173254,8 +173303,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:deals"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -173267,9 +173317,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "deals"
+            "stream": "deals",
+            "path": "deals list",
+            "source_cli_path": "GET /api/3/deals"
           }
         }
       },
@@ -173386,18 +173438,19 @@
         "provider_version_evidence": "internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"deal-stages list\" binds pinned source operation activecampaign.rest.get.ListAllDealStages121",
+        "contract": {
+          "execution_component": "internal/connectors/defs/activecampaign/streams.json stream \"deal_stages\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /api/3/dealStages",
+          "citation_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
         "api_surface_binding": {
           "stream": "deal_stages"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[121] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/dealStages\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -173407,8 +173460,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:deal_stages"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -173420,9 +173474,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "deal_stages"
+            "stream": "deal_stages",
+            "path": "deal-stages list",
+            "source_cli_path": "GET /api/3/dealStages"
           }
         }
       },
@@ -173539,18 +173595,19 @@
         "provider_version_evidence": "internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"deal-tasks list\" binds pinned source operation activecampaign.rest.get.ListAllTasks123",
+        "contract": {
+          "execution_component": "internal/connectors/defs/activecampaign/streams.json stream \"deal_tasks\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /api/3/dealTasks",
+          "citation_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
         "api_surface_binding": {
           "stream": "deal_tasks"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[123] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/dealTasks\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -173560,8 +173617,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:deal_tasks"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -173573,9 +173631,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "deal_tasks"
+            "stream": "deal_tasks",
+            "path": "deal-tasks list",
+            "source_cli_path": "GET /api/3/dealTasks"
           }
         }
       },
@@ -174616,18 +174676,19 @@
         "provider_version_evidence": "internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"fields list\" binds pinned source operation activecampaign.rest.get.RetrieveFields137",
+        "contract": {
+          "execution_component": "internal/connectors/defs/activecampaign/streams.json stream \"fields\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /api/3/fields",
+          "citation_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
         "api_surface_binding": {
           "stream": "fields"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[137] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/fields\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -174637,8 +174698,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:fields"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -174650,9 +174712,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "fields"
+            "stream": "fields",
+            "path": "fields list",
+            "source_cli_path": "GET /api/3/fields"
           }
         }
       },
@@ -175693,18 +175757,19 @@
         "provider_version_evidence": "internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"lists list\" binds pinned source operation activecampaign.rest.get.RetrieveAllLists151",
+        "contract": {
+          "execution_component": "internal/connectors/defs/activecampaign/streams.json stream \"lists\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /api/3/lists",
+          "citation_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
         "api_surface_binding": {
           "stream": "lists"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[151] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/lists\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -175714,8 +175779,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:lists"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -175727,9 +175793,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "lists"
+            "stream": "lists",
+            "path": "lists list",
+            "source_cli_path": "GET /api/3/lists"
           }
         }
       },
@@ -177309,18 +177377,19 @@
         "provider_version_evidence": "internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"tags list\" binds pinned source operation activecampaign.rest.get.RetrieveAllTags172",
+        "contract": {
+          "execution_component": "internal/connectors/defs/activecampaign/streams.json stream \"tags\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /api/3/tags",
+          "citation_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
         "api_surface_binding": {
           "stream": "tags"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[172] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/tags\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -177330,8 +177399,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:tags"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -177343,9 +177413,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "tags"
+            "stream": "tags",
+            "path": "tags list",
+            "source_cli_path": "GET /api/3/tags"
           }
         }
       },
@@ -178001,18 +178073,19 @@
         "provider_version_evidence": "internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-activecampaign",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"users list\" binds pinned source operation activecampaign.rest.get.ListAllUsers181",
+        "contract": {
+          "execution_component": "internal/connectors/defs/activecampaign/streams.json stream \"users\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /api/3/users",
+          "citation_url": "https://developers.activecampaign.com/reference/list-all-contacts"
+        },
         "api_surface_binding": {
           "stream": "users"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/activecampaign/api_surface.json endpoints[181] is bound to the pinned provider operation; internal/connectors/defs/activecampaign/sources/activecampaign-operation-source-lock.json: .paths[\"/users\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -178022,8 +178095,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:users"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -178035,9 +178109,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "users"
+            "stream": "users",
+            "path": "users list",
+            "source_cli_path": "GET /api/3/users"
           }
         }
       },
@@ -187779,18 +187855,19 @@
         "provider_version_evidence": "internal/connectors/defs/iterable/sources/iterable-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-iterable",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"campaigns list\" binds pinned source operation iterable.rest.get.campaigns",
+        "contract": {
+          "execution_component": "internal/connectors/defs/iterable/streams.json stream \"campaigns\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /campaigns",
+          "citation_url": "https://api.iterable.com/api-docs"
+        },
         "api_surface_binding": {
           "stream": "campaigns"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/iterable/api_surface.json endpoints[12] is bound to the pinned provider operation; internal/connectors/defs/iterable/sources/iterable-operation-source-lock.json: paths[\"/api/campaigns\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -187800,8 +187877,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:campaigns"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -187813,9 +187891,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "campaigns"
+            "stream": "campaigns",
+            "path": "campaigns list",
+            "source_cli_path": "GET /campaigns"
           }
         }
       },
@@ -189780,18 +189860,19 @@
         "provider_version_evidence": "internal/connectors/defs/iterable/sources/iterable-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-iterable",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"lists list\" binds pinned source operation iterable.rest.get.getLists",
+        "contract": {
+          "execution_component": "internal/connectors/defs/iterable/streams.json stream \"lists\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /lists",
+          "citation_url": "https://api.iterable.com/api-docs"
+        },
         "api_surface_binding": {
           "stream": "lists"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/iterable/api_surface.json endpoints[38] is bound to the pinned provider operation; internal/connectors/defs/iterable/sources/iterable-operation-source-lock.json: paths[\"/api/lists\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -189801,8 +189882,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:lists"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -189814,9 +189896,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "lists"
+            "stream": "lists",
+            "path": "lists list",
+            "source_cli_path": "GET /lists"
           }
         }
       },
@@ -190549,18 +190633,19 @@
         "provider_version_evidence": "internal/connectors/defs/iterable/sources/iterable-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-iterable",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"templates list\" binds pinned source operation iterable.rest.get.getTemplates",
+        "contract": {
+          "execution_component": "internal/connectors/defs/iterable/streams.json stream \"templates\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /templates",
+          "citation_url": "https://api.iterable.com/api-docs"
+        },
         "api_surface_binding": {
           "stream": "templates"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/iterable/api_surface.json endpoints[48] is bound to the pinned provider operation; internal/connectors/defs/iterable/sources/iterable-operation-source-lock.json: paths[\"/api/templates\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -190570,8 +190655,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:templates"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -190583,9 +190669,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "templates"
+            "stream": "templates",
+            "path": "templates list",
+            "source_cli_path": "GET /templates"
           }
         }
       },
@@ -273952,18 +274040,19 @@
         "provider_version_evidence": "internal/connectors/defs/square/sources/square-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-square",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"customers list\" binds pinned source operation square.rest.get.ListCustomers53",
+        "contract": {
+          "execution_component": "internal/connectors/defs/square/streams.json stream \"customers\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/customers",
+          "citation_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+        },
         "api_surface_binding": {
           "stream": "customers"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/square/api_surface.json endpoints[53] is bound to the pinned provider operation; internal/connectors/defs/square/sources/square-operation-source-lock.json: .paths[\"/v2/customers\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -273973,8 +274062,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:customers"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -273986,9 +274076,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "customers"
+            "stream": "customers",
+            "path": "customers list",
+            "source_cli_path": "GET /v2/customers"
           }
         }
       },
@@ -277262,18 +277354,19 @@
         "provider_version_evidence": "internal/connectors/defs/square/sources/square-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-square",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"locations list\" binds pinned source operation square.rest.get.ListLocations96",
+        "contract": {
+          "execution_component": "internal/connectors/defs/square/streams.json stream \"locations\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/locations",
+          "citation_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+        },
         "api_surface_binding": {
           "stream": "locations"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/square/api_surface.json endpoints[96] is bound to the pinned provider operation; internal/connectors/defs/square/sources/square-operation-source-lock.json: .paths[\"/v2/locations\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -277283,8 +277376,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:locations"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -277296,9 +277390,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "locations"
+            "stream": "locations",
+            "path": "locations list",
+            "source_cli_path": "GET /v2/locations"
           }
         }
       },
@@ -279494,18 +279590,19 @@
         "provider_version_evidence": "internal/connectors/defs/square/sources/square-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-square",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"payments list\" binds pinned source operation square.rest.get.ListPayments125",
+        "contract": {
+          "execution_component": "internal/connectors/defs/square/streams.json stream \"payments\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/payments",
+          "citation_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+        },
         "api_surface_binding": {
           "stream": "payments"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/square/api_surface.json endpoints[125] is bound to the pinned provider operation; internal/connectors/defs/square/sources/square-operation-source-lock.json: .paths[\"/v2/payments\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -279515,8 +279612,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:payments"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -279528,9 +279626,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "payments"
+            "stream": "payments",
+            "path": "payments list",
+            "source_cli_path": "GET /v2/payments"
           }
         }
       },
@@ -279878,18 +279978,19 @@
         "provider_version_evidence": "internal/connectors/defs/square/sources/square-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-square",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"refunds list\" binds pinned source operation square.rest.get.ListPaymentRefunds130",
+        "contract": {
+          "execution_component": "internal/connectors/defs/square/streams.json stream \"refunds\"",
+          "source_document": "primary",
+          "source_kind": "openapi",
+          "source_cli_path": "GET /v2/refunds",
+          "citation_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+        },
         "api_surface_binding": {
           "stream": "refunds"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/square/api_surface.json endpoints[130] is bound to the pinned provider operation; internal/connectors/defs/square/sources/square-operation-source-lock.json: .paths[\"/v2/refunds\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -279899,8 +280000,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_pending_persisted_transport_declaration",
+          "source_state": "enabled",
+          "execution_component": "streams.json:refunds"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -279912,9 +280014,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "refunds"
+            "stream": "refunds",
+            "path": "refunds list",
+            "source_cli_path": "GET /v2/refunds"
           }
         }
       },

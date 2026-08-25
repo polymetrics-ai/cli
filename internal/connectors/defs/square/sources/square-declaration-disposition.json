@@ -23,9 +23,9 @@
       "level": "complete_machine_readable_specification",
       "basis": "Parsed every operation in the provider-published OpenAPI 3.0.0 document at https://raw.githubusercontent.com/square/connect-api-specification/master/api.json."
     },
-    "enabled_operations": 0,
-    "enabled_percent": 0,
-    "disabled_operations": 334,
+    "enabled_operations": 4,
+    "enabled_percent": 1.2,
+    "disabled_operations": 330,
     "documented_deletes": 27,
     "enabled_deletes": 0,
     "parity_class_counts": [
@@ -56,13 +56,13 @@
     ],
     "stream_bindings": 4,
     "writes_actions": 0,
-    "terminal_commands": 0,
+    "terminal_commands": 4,
     "gap_ids": [],
     "foundation_gaps": [],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 334
+        "count": 330
       }
     ],
     "transport": {
@@ -85,16 +85,11 @@
       }
     },
     "declaration_pending_ids": [
-      "runnable-command-binding-square",
       "sync-transport-destination-definition-square",
       "sync-transport-source-definition-square",
       "typed-operation-contract-square"
     ],
     "declaration_pending": [
-      {
-        "id": "runnable-command-binding-square",
-        "count": 4
-      },
       {
         "id": "typed-operation-contract-square",
         "count": 330
@@ -104,9 +99,9 @@
         "count": 213
       }
     ],
-    "runnable_cli_surface_commands": 0,
+    "runnable_cli_surface_commands": 4,
     "typed_write_actions": 0,
-    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_cli_commands": 4,
     "endpoint_bound_typed_write_actions": 0
   },
   "ledger_dispositions": [
@@ -2650,25 +2645,33 @@
         "operation_id": "ListCustomers",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-square",
-          "evidence": "internal/connectors/defs/square/api_surface.json endpoints[53] is bound to the pinned provider operation; internal/connectors/defs/square/sources/square-operation-source-lock.json: .paths[\"/v2/customers\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/square/cli_surface.json: implemented ETL command \"customers list\" binds GET /v2/customers; streams.json stream \"customers\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/square/api_surface.json endpoints[53] is bound to the pinned provider operation; internal/connectors/defs/square/sources/square-operation-source-lock.json: .paths[\"/v2/customers\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-square",
-        "contract": null
+        "status": "enabled; runnable ETL command \"customers list\" binds pinned source operation square.rest.get.ListCustomers53",
+        "command": {
+          "path": "customers list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/customers",
+          "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/square/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -4581,25 +4584,33 @@
         "operation_id": "ListLocations",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-square",
-          "evidence": "internal/connectors/defs/square/api_surface.json endpoints[96] is bound to the pinned provider operation; internal/connectors/defs/square/sources/square-operation-source-lock.json: .paths[\"/v2/locations\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/square/cli_surface.json: implemented ETL command \"locations list\" binds GET /v2/locations; streams.json stream \"locations\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/square/api_surface.json endpoints[96] is bound to the pinned provider operation; internal/connectors/defs/square/sources/square-operation-source-lock.json: .paths[\"/v2/locations\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-square",
-        "contract": null
+        "status": "enabled; runnable ETL command \"locations list\" binds pinned source operation square.rest.get.ListLocations96",
+        "command": {
+          "path": "locations list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/locations",
+          "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/square/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -5882,25 +5893,33 @@
         "operation_id": "ListPayments",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-square",
-          "evidence": "internal/connectors/defs/square/api_surface.json endpoints[125] is bound to the pinned provider operation; internal/connectors/defs/square/sources/square-operation-source-lock.json: .paths[\"/v2/payments\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/square/cli_surface.json: implemented ETL command \"payments list\" binds GET /v2/payments; streams.json stream \"payments\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/square/api_surface.json endpoints[125] is bound to the pinned provider operation; internal/connectors/defs/square/sources/square-operation-source-lock.json: .paths[\"/v2/payments\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-square",
-        "contract": null
+        "status": "enabled; runnable ETL command \"payments list\" binds pinned source operation square.rest.get.ListPayments125",
+        "command": {
+          "path": "payments list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/payments",
+          "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/square/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -6103,25 +6122,33 @@
         "operation_id": "ListPaymentRefunds",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-square",
-          "evidence": "internal/connectors/defs/square/api_surface.json endpoints[130] is bound to the pinned provider operation; internal/connectors/defs/square/sources/square-operation-source-lock.json: .paths[\"/v2/refunds\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/square/cli_surface.json: implemented ETL command \"refunds list\" binds GET /v2/refunds; streams.json stream \"refunds\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/square/api_surface.json endpoints[130] is bound to the pinned provider operation; internal/connectors/defs/square/sources/square-operation-source-lock.json: .paths[\"/v2/refunds\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-square",
-        "contract": null
+        "status": "enabled; runnable ETL command \"refunds list\" binds pinned source operation square.rest.get.ListPaymentRefunds130",
+        "command": {
+          "path": "refunds list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /v2/refunds",
+          "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/square/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -16194,6 +16221,7 @@
   "notes": [
     "Complete six-class source-locked map regenerated from the provider OpenAPI 3.0.0 document; every 334 pinned operation has exactly one primary parity class.",
     "An operation is enabled only when its exact refreshed method/path still resolves to an actual typed write action or runtime-preflight runnable command. Stream-only mappings remain ETL but declaration-pending.",
-    "Direct writes remain direct_write operations. #4304 now provides the connector-neutral typed-destination foundation; no connector-owned typed writes.json action exists for these rows, so reverse-ETL declaration remains pending rather than foundation-gapped."
+    "Direct writes remain direct_write operations. #4304 now provides the connector-neutral typed-destination foundation; no connector-owned typed writes.json action exists for these rows, so reverse-ETL declaration remains pending rather than foundation-gapped.",
+    "2026-08-25 declaration-first ETL command materialization: enabled 4 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists."
   ]
 }

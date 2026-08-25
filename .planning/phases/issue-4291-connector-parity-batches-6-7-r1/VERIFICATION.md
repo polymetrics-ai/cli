@@ -502,6 +502,31 @@ foundation gaps are not enabled and cannot contribute to a merge-ready verdict.
   retains cross-document per-operation `source_url`, which strict legacy parsing rejects. No source
   lock was changed for this increment. The result is 20 expected source-projection findings, not a
   generated surface drift or a runtime preflight failure.
+
+## V3 declaration-first ETL cohort — 2026-08-25
+
+- **RED:** the fresh post-transport binary returned `error: unknown command` for
+  `activecampaign contacts list`, `freshdesk tickets list`, `iterable lists list`, `segment workspace
+  list`, and `square customers list`.
+- **GREEN:** `generate-v3-etl-cohort.mjs` cross-checks every existing stream only against one exact
+  schema-v3 source-document operation and one exact `api_surface` projection. It generated 26 commands:
+  ActiveCampaign (11), Freshdesk (5), Iterable (3), Segment (3), and Square (4). Each command exposes
+  the canonical provider method/path, source citation URL, provider operation ID, and its `streams.json`
+  execution component; no lock, request schema, response schema, pagination, or engine behavior changed.
+- **Installed binary proof:** after `go build -o /tmp/cli-map-batch67-r1-v3-etl-proof ./cmd/pm`, a fresh
+  initialized temporary project ran all 26 paths without credentials. Every one exited `1` with exactly
+  `error: missing --credential`, before any provider I/O. `go test -timeout 20m
+  ./internal/connectors/commandrunner -run '^TestEveryImplementedCommandPassesRuntimePreflight$'
+  -count=1` passed.
+- **Generated projection proof:** `npm --prefix website run gen:website-data` completed and its two
+  changed connector catalog artifacts are committed with this cohort. The deterministic cohort generator
+  reran without a diff; the 26 evidence rows assert generated CLI binding and `streams.json` execution
+  component; `git diff --check` passed.
+- **Known shared blocker:** `go run ./cmd/connectorgen validate` still reports the same 20
+  source-projection errors (19 v3 descriptors are unreadable and the held Outreach v2 lock has a legacy
+  per-operation citation), while `go run ./cmd/connectorgen surface-sync --check` stops first at
+  ActiveCampaign's missing descriptor. These checks cannot reach generated-surface comparison until the
+  shared v3 evidence-reader/citation foundation lands; no connector-local shim or lock rewrite was used.
 # Stale typed-destination gap reconciliation — increment 1 (2026-08-20)
 
 - **RED:** The operation-evidence ledger exposed 1,111 direct-write rows that still named

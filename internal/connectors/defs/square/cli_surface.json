@@ -1,0 +1,127 @@
+{
+  "tagline": "Read Square source-locked ETL records.",
+  "usage": "pm square <command> [flags]",
+  "source_cli": {
+    "name": "Square provider API",
+    "docs": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json",
+    "reference": "Pinned schema-v3 source documents; each ETL command retains its exact provider operation route and citation.",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "etl",
+      "title": "ETL streams",
+      "commands": [
+        "payments",
+        "refunds",
+        "customers",
+        "locations"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Square request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit."
+    }
+  ],
+  "commands": [
+    {
+      "path": "payments list",
+      "summary": "Read Payments as Square ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payments",
+      "source_cli_path": "GET /v2/payments",
+      "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/payments"
+        }
+      ],
+      "examples": [
+        "pm square payments list --json"
+      ],
+      "notes": "Pinned source operation square.rest.get.ListPayments125 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "refunds list",
+      "summary": "Read Refunds as Square ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "refunds",
+      "source_cli_path": "GET /v2/refunds",
+      "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/refunds"
+        }
+      ],
+      "examples": [
+        "pm square refunds list --json"
+      ],
+      "notes": "Pinned source operation square.rest.get.ListPaymentRefunds130 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "customers list",
+      "summary": "Read Customers as Square ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_cli_path": "GET /v2/customers",
+      "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customers"
+        }
+      ],
+      "examples": [
+        "pm square customers list --json"
+      ],
+      "notes": "Pinned source operation square.rest.get.ListCustomers53 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "locations list",
+      "summary": "Read Locations as Square ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "locations",
+      "source_cli_path": "GET /v2/locations",
+      "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/locations"
+        }
+      ],
+      "examples": [
+        "pm square locations list --json"
+      ],
+      "notes": "Pinned source operation square.rest.get.ListLocations96 from source document primary; streams.json is the declared execution component."
+    }
+  ]
+}
