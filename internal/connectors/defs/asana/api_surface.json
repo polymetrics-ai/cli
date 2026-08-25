@@ -8,14 +8,8 @@
     {
       "method": "GET",
       "path": "/access_requests",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getaccessrequests",
-        "notes": "official_operation_id=getAccessRequests; lane=etl_read"
+      "covered_by": {
+        "direct_read": "access-requests get-access-requests"
       }
     },
     {
@@ -60,27 +54,15 @@
     {
       "method": "GET",
       "path": "/workspaces/{workspace_gid}/agents",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getagentsforworkspace",
-        "notes": "official_operation_id=getAgentsForWorkspace; lane=etl_read"
+      "covered_by": {
+        "direct_read": "agents get-agents-for-workspace"
       }
     },
     {
       "method": "GET",
       "path": "/agents/{agent_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getagent",
-        "notes": "official_operation_id=getAgent; lane=etl_read"
+      "covered_by": {
+        "direct_read": "agents get-agent"
       }
     },
     {

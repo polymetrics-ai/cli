@@ -1,6 +1,6 @@
 # Overview
 
-Asana reads implemented project-management streams through the Asana v1 REST API and executes typed reverse-ETL write actions across tasks, projects, sections, tags, stories, goals, portfolios, teams, users, workspaces, custom fields, exports, templates, OOO entries, and time-tracking entries. This bundle also carries the complete pinned official Asana OpenAPI operation ledger so every documented operation is represented exactly once as executable `covered_by` metadata or as a blocked/planned fixed-target operation row.
+Asana reads implemented project-management streams and bounded source-bound GET operations through the Asana v1 REST API, and executes typed reverse-ETL write actions across tasks, projects, sections, tags, stories, goals, portfolios, teams, users, workspaces, custom fields, exports, templates, OOO entries, and time-tracking entries. This bundle also carries the complete pinned official Asana OpenAPI operation ledger so every documented operation is represented exactly once as executable `covered_by` metadata or as a blocked/planned fixed-target operation row.
 
 Official source inventory:
 
@@ -43,6 +43,8 @@ Default pagination follows Asana's `next_page.uri` response field with same-host
 Implemented streams remain intentionally bounded and fixture-backed:
 
 - `workspaces`: GET `/workspaces`; records path `data`; first-stream fixture-backed.
+
+Bounded source-bound direct reads are deliberately distinct from streams: `pm asana access-requests get-access-requests`, `pm asana agents get-agents-for-workspace --workspace-gid <id>`, and `pm asana agents get-agent --agent-gid <id>` return one fixed, response-capped provider page. They do not claim ETL records or pagination semantics. `pm asana workspaces list` remains the declared, source-bound paginated ETL stream.
 - `projects`: GET `/projects`; optional `workspace` query from `workspace_id`.
 - `tasks`: GET `/tasks`; optional `workspace`, `project`, and `assignee` query values.
 - `users`: GET `/users`; optional `workspace` query.
@@ -74,7 +76,7 @@ The remaining official POST/PUT/DELETE operations are not blanket-excluded. They
 - Fixture-only status: this connector is not live-certified. `certification.json` declares fixture defaults only; no live Asana credentials or provider calls were requested.
 - `api_surface.json` uses `operation_ledger_version: 1`: legacy `excluded` classifiers are intentionally not used. Blocked/planned operation rows are the source of truth for unimplemented operations.
 - `/batch` is the only not-applicable official lane row. It is disallowed because it is a generic batch subrequest wrapper and would recreate raw method/path/body passthrough; each underlying Asana operation is represented individually instead.
-- Executable surfaces are 12 streams + 73 writes (85 `covered_by` rows). The 164 remaining official rows are planned/blocked metadata, not executable runtime claims.
+- Executable surfaces are 12 streams + 3 bounded source-bound direct reads + 73 writes (88 `covered_by` rows). The 161 remaining official rows are planned/blocked metadata, not executable runtime claims.
 - Every promoted write's record schema is derived from the pinned OpenAPI source above, never inferred from response shapes. Envelope and resource levels are closed with `additionalProperties: false`; deeply nested provider-defined regions (for example `custom_fields` on `create_task`) stay `type: object` with `additionalProperties: true`, which is the bundle's bounded-but-not-exhaustive convention.
 - Provider search/typeahead execution depends on #2985. CDC/changefeed/audit/webhook truthfulness depends on #2986/#2988. Attachment metadata read/upload/delete execution needs connector-local JSON/file-upload contracts and fixtures.
 - No generic shell, generic HTTP request/write, raw SQL write, arbitrary GraphQL, unrestricted file, unrestricted binary, or raw passthrough tool is exposed by this connector.

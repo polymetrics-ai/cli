@@ -81,6 +81,52 @@ func runtimeConfig(baseURL string) connectors.RuntimeConfig {
 	}
 }
 
+func TestSourceBoundReadControlsReachEnginePreflight(t *testing.T) {
+	bundle := loadBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	commands := map[string]connectors.CommandSurfaceCommand{}
+	for _, command := range connector.CommandSurface().Commands {
+		commands[command.Path] = command
+	}
+	for _, test := range []struct {
+		path            string
+		wantIntent      string
+		wantSource      string
+		wantOperation   string
+		wantStream      string
+		wantPathMapping string
+	}{
+		{path: "access-requests get-access-requests", wantIntent: "direct_read", wantSource: "asana.rest.getAccessRequests", wantOperation: "get_access_requests"},
+		{path: "agents get-agents-for-workspace", wantIntent: "direct_read", wantSource: "asana.rest.getAgentsForWorkspace", wantOperation: "get_agents_for_workspace", wantPathMapping: "path.workspace_gid"},
+		{path: "agents get-agent", wantIntent: "direct_read", wantSource: "asana.rest.getAgent", wantOperation: "get_agent", wantPathMapping: "path.agent_gid"},
+		{path: "workspaces list", wantIntent: "etl", wantSource: "asana.rest.getWorkspaces", wantStream: "workspaces"},
+	} {
+		t.Run(test.path, func(t *testing.T) {
+			command, found := commands[test.path]
+			if !found {
+				t.Fatalf("command %q is absent", test.path)
+			}
+			if command.Intent != test.wantIntent || command.SourceOperation != test.wantSource || command.Operation != test.wantOperation || command.Stream != test.wantStream {
+				t.Fatalf("command = %+v, want intent=%q source=%q operation=%q stream=%q", command, test.wantIntent, test.wantSource, test.wantOperation, test.wantStream)
+			}
+			if test.wantPathMapping != "" {
+				foundMapping := false
+				for _, flag := range command.Flags {
+					if flag.MapsTo == test.wantPathMapping && flag.Required {
+						foundMapping = true
+					}
+				}
+				if !foundMapping {
+					t.Fatalf("command %q did not retain required %s", test.path, test.wantPathMapping)
+				}
+			}
+			if err := commandrunner.Preflight(connector, strings.Fields(command.Path)); err != nil {
+				t.Fatalf("Preflight(%q) = %v, want source-bound credential boundary", command.Path, err)
+			}
+		})
+	}
+}
+
 // TestReverseETLLedgerReconciles accounts for every ledger row that originally
 // carried the typed reverse-ETL blocked reason. A promoted row is bound to a
 // write action; a row that could not be promoted must carry one of the two

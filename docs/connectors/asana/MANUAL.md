@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector asana [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads implemented Asana project-management streams and executes typed, approval-gated reverse-ETL write actions across tasks, projects, sections, tags, stories, goals, portfolios, teams, users, and workspaces. Tracks every official Asana API operation from the pinned OpenAPI source as covered or blocked/planned fixed-target metadata.
+  Reads implemented Asana project-management streams and bounded source-bound GET operations, and executes typed, approval-gated reverse-ETL write actions across tasks, projects, sections, tags, stories, goals, portfolios, teams, users, and workspaces. Tracks every official Asana API operation from the pinned OpenAPI source as covered or blocked/planned fixed-target metadata.
 
 ICON
   id: asana
@@ -371,13 +371,13 @@ REVERSE ETL ACTIONS
     risk: external mutation; medium-risk create against POST /workspaces/{workspace_gid}/addUser; requires reverse ETL plan -> preview -> explicit approval -> execute
 
 SECURITY
-  read risk: external Asana API reads use fixed declared streams or blocked/planned fixed-target command metadata; no raw provider query/path passthrough
+  read risk: external Asana API reads use fixed declared streams or bounded source-bound operations; no raw provider query/path passthrough
   write risk: external mutations require named reverse-ETL actions, schemas, previews, explicit approval, and typed destructive confirmation when destructive/admin
   approval: all write execution follows plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 COMMAND SURFACE
-  Read implemented Asana streams and inspect planned fixed-target Asana operation parity without raw API passthrough.
+  Read implemented Asana streams and bounded source-bound GET operations; inspect remaining planned fixed-target parity without raw API passthrough.
   Usage: pm asana <command> [flags]
   Source CLI: Asana REST API (Pinned Asana OpenAPI commit 56796a67a3c093eedf55fd9682357957a2ebfd85)
   PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
@@ -393,13 +393,13 @@ COMMAND SURFACE
     --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
     --confirm (string): Typed confirmation challenge for destructive/admin reverse-ETL writes.
   Access requests
-    access-requests get-access-requests - Planned fixed-target Asana read: Get access requests. [intent=etl availability=planned operation=get_access_requests]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.
+    access-requests get-access-requests - Bounded source-bound Asana direct read: Get access requests. [intent=direct_read availability=implemented operation=get_access_requests]; flags: --page, --page-cursor
     access-requests create-access-request - Planned fixed-target Asana mutation: Create an access request. [intent=reverse_etl availability=planned operation=create_access_request]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: high; notes: Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist.; flags: --data-json (non-empty), --confirm (non-empty)
     access-requests approve-access-request - Planned fixed-target Asana mutation: Approve an access request. [intent=reverse_etl availability=planned operation=approve_access_request]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: high; notes: Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist.; flags: --access-request-gid (non-empty), --confirm (non-empty)
     access-requests reject-access-request - Planned fixed-target Asana mutation: Reject an access request. [intent=reverse_etl availability=planned operation=reject_access_request]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: high; notes: Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist.; flags: --access-request-gid (non-empty), --confirm (non-empty)
   Agents
-    agents get-agents-for-workspace - Planned fixed-target Asana read: Get a list of agents in a workspace. [intent=etl availability=planned operation=get_agents_for_workspace]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.; flags: --workspace-gid (non-empty, max 4096 bytes)
-    agents get-agent - Planned fixed-target Asana read: Get an agent. [intent=etl availability=planned operation=get_agent]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.; flags: --agent-gid (non-empty, max 4096 bytes)
+    agents get-agents-for-workspace - Bounded source-bound Asana direct read: Get a list of agents in a workspace. [intent=direct_read availability=implemented operation=get_agents_for_workspace]; flags: --workspace-gid (required, max 4096 bytes), --page, --page-cursor
+    agents get-agent - Bounded source-bound Asana direct read: Get an agent. [intent=direct_read availability=implemented operation=get_agent]; flags: --agent-gid (required, max 4096 bytes), --page, --page-cursor
   AI Studio usage API
     ai-studio-usage-api get-ai-studio-runs - Planned fixed-target Asana read: Get AI Studio credit utilization. [intent=etl availability=planned operation=get_ai_studio_runs]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.; flags: --workspace-gid (non-empty, max 4096 bytes)
     ai-studio-usage-api get-ai-studio-seats - Planned fixed-target Asana read: Get AI Studio seats. [intent=etl availability=planned operation=get_ai_studio_seats]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.; flags: --workspace-gid (non-empty, max 4096 bytes)

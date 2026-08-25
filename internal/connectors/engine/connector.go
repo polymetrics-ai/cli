@@ -304,6 +304,14 @@ func (c *Connector) PreflightOperationDirectReadBindings(operation string, pathF
 	return PreflightOperationDirectReadBindings(c.bundle, operation, pathFields, queryFields, bodyFields, rawBody)
 }
 
+func (c *Connector) PreflightSourceBoundRead(operation, sourceOperation, method, path string) error {
+	return PreflightSourceBoundRead(c.bundle, operation, sourceOperation, method, path)
+}
+
+func (c *Connector) PreflightSourceBoundStreamRead(stream, sourceOperation, method, path string) error {
+	return PreflightSourceBoundStreamRead(c.bundle, stream, sourceOperation, method, path)
+}
+
 // OperationStatusCheck delegates one closed, response-less HEAD operation to
 // the engine. It remains distinct from direct reads so a status declaration
 // cannot gain JSON response behavior through the connector adapter.
@@ -719,6 +727,14 @@ func (b Base) PreflightOperationDirectReadBindings(operation string, pathFields,
 	return PreflightOperationDirectReadBindings(b.bundle, operation, pathFields, queryFields, bodyFields, rawBody)
 }
 
+func (b Base) PreflightSourceBoundRead(operation, sourceOperation, method, path string) error {
+	return PreflightSourceBoundRead(b.bundle, operation, sourceOperation, method, path)
+}
+
+func (b Base) PreflightSourceBoundStreamRead(stream, sourceOperation, method, path string) error {
+	return PreflightSourceBoundStreamRead(b.bundle, stream, sourceOperation, method, path)
+}
+
 // PreflightOperationDirectWrite validates a native connector's declared
 // operation direct-write binding without resolving credentials or network I/O.
 func (b Base) PreflightOperationDirectWrite(operation, method, path, outputPolicy string, queryFields ...string) error {
@@ -1087,24 +1103,25 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 			flags = append(flags, commandSurfaceOperationFlag(b, cmd, flag))
 		}
 		out.Commands = append(out.Commands, connectors.CommandSurfaceCommand{
-			Path:          cmd.Path,
-			Summary:       cmd.Summary,
-			Intent:        cmd.Intent,
-			Availability:  cmd.Availability,
-			Stream:        cmd.Stream,
-			Write:         cmd.Write,
-			Operation:     cmd.Operation,
-			SourceCLIPath: cmd.SourceCLIPath,
-			SourceURL:     cmd.SourceURL,
-			Flags:         flags,
-			Constraints:   commandSurfaceConstraints(cmd.Constraints),
-			Examples:      append([]string(nil), cmd.Examples...),
-			APISurface:    commandSurfaceEndpointRefs(cmd.APISurface),
-			OutputPolicy:  cmd.OutputPolicy,
-			RedactFields:  append([]string(nil), cmd.RedactFields...),
-			Risk:          cmd.Risk,
-			Approval:      cmd.Approval,
-			Notes:         cmd.Notes,
+			Path:            cmd.Path,
+			Summary:         cmd.Summary,
+			Intent:          cmd.Intent,
+			Availability:    cmd.Availability,
+			Stream:          cmd.Stream,
+			Write:           cmd.Write,
+			Operation:       cmd.Operation,
+			SourceOperation: cmd.SourceOperation,
+			SourceCLIPath:   cmd.SourceCLIPath,
+			SourceURL:       cmd.SourceURL,
+			Flags:           flags,
+			Constraints:     commandSurfaceConstraints(cmd.Constraints),
+			Examples:        append([]string(nil), cmd.Examples...),
+			APISurface:      commandSurfaceEndpointRefs(cmd.APISurface),
+			OutputPolicy:    cmd.OutputPolicy,
+			RedactFields:    append([]string(nil), cmd.RedactFields...),
+			Risk:            cmd.Risk,
+			Approval:        cmd.Approval,
+			Notes:           cmd.Notes,
 		})
 	}
 	if commandSurfaceHasWriteIntent(out.Commands) {

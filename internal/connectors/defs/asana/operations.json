@@ -2,9 +2,14 @@
   "operations": [
     {
       "id": "get_access_requests",
+      "source_operation": {
+        "id": "asana.rest.getAccessRequests",
+        "method": "GET",
+        "path": "/access_requests"
+      },
       "kind": "rest_read",
       "summary": "Get access requests",
-      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "description": "Bounded source-bound direct read of one provider response.",
       "source_url": "https://developers.asana.com/reference/getaccessrequests",
       "risk": "none",
       "approval": "none; read-only fixed-target operation remains bounded and redacted",
@@ -18,7 +23,8 @@
       "rest": {
         "method": "GET",
         "path": "/access_requests",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": []
       }
     },
     {
@@ -100,9 +106,14 @@
     },
     {
       "id": "get_agents_for_workspace",
+      "source_operation": {
+        "id": "asana.rest.getAgentsForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/agents"
+      },
       "kind": "rest_read",
       "summary": "Get a list of agents in a workspace",
-      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "description": "Bounded source-bound direct read of one provider response; it is not declared as an ETL stream.",
       "source_url": "https://developers.asana.com/reference/getagentsforworkspace",
       "risk": "none",
       "approval": "none; read-only fixed-target operation remains bounded and redacted",
@@ -116,14 +127,27 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/agents",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
       }
     },
     {
       "id": "get_agent",
+      "source_operation": {
+        "id": "asana.rest.getAgent",
+        "method": "GET",
+        "path": "/agents/{agent_gid}"
+      },
       "kind": "rest_read",
       "summary": "Get an agent",
-      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "description": "Bounded source-bound direct read of one provider response.",
       "source_url": "https://developers.asana.com/reference/getagent",
       "risk": "none",
       "approval": "none; read-only fixed-target operation remains bounded and redacted",
@@ -137,7 +161,15 @@
       "rest": {
         "method": "GET",
         "path": "/agents/{agent_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "agent_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
       }
     },
     {
@@ -4620,6 +4652,11 @@
     },
     {
       "id": "get_workspaces",
+      "source_operation": {
+        "id": "asana.rest.getWorkspaces",
+        "method": "GET",
+        "path": "/workspaces"
+      },
       "kind": "stream_etl",
       "summary": "Get multiple workspaces",
       "description": "Implemented Asana operation mapped to {'stream': 'workspaces'}.",

@@ -1,5 +1,5 @@
 {
-  "tagline": "Read implemented Asana streams and inspect planned fixed-target Asana operation parity without raw API passthrough.",
+  "tagline": "Read implemented Asana streams and bounded source-bound GET operations; inspect remaining planned fixed-target parity without raw API passthrough.",
   "usage": "pm asana <command> [flags]",
   "source_cli": {
     "name": "Asana REST API",
@@ -412,10 +412,11 @@
   "commands": [
     {
       "path": "access-requests get-access-requests",
-      "summary": "Planned fixed-target Asana read: Get access requests.",
-      "intent": "etl",
-      "availability": "planned",
+      "summary": "Bounded source-bound Asana direct read: Get access requests.",
+      "intent": "direct_read",
+      "availability": "implemented",
       "operation": "get_access_requests",
+      "source_operation": "asana.rest.getAccessRequests",
       "source_cli_path": "GET /access_requests",
       "source_url": "https://developers.asana.com/reference/getaccessrequests",
       "api_surface": [
@@ -424,7 +425,7 @@
           "path": "/access_requests"
         }
       ],
-      "notes": "Planned ETL/direct read metadata only; no raw provider request execution is exposed."
+      "output_policy": "json_redacted"
     },
     {
       "path": "access-requests create-access-request",
@@ -530,19 +531,20 @@
     },
     {
       "path": "agents get-agents-for-workspace",
-      "summary": "Planned fixed-target Asana read: Get a list of agents in a workspace.",
-      "intent": "etl",
-      "availability": "planned",
+      "summary": "Bounded source-bound Asana direct read: Get a list of agents in a workspace.",
+      "intent": "direct_read",
+      "availability": "implemented",
       "operation": "get_agents_for_workspace",
+      "source_operation": "asana.rest.getAgentsForWorkspace",
       "source_cli_path": "GET /workspaces/{workspace_gid}/agents",
       "source_url": "https://developers.asana.com/reference/getagentsforworkspace",
       "flags": [
         {
           "name": "workspace-gid",
           "type": "string",
+          "maps_to": "path.workspace_gid",
           "summary": "Asana path parameter `workspace_gid`.",
-          "maps_to": "query.workspace_gid",
-          "allow_empty": false
+          "required": true
         }
       ],
       "api_surface": [
@@ -551,23 +553,24 @@
           "path": "/workspaces/{workspace_gid}/agents"
         }
       ],
-      "notes": "Planned ETL/direct read metadata only; no raw provider request execution is exposed."
+      "output_policy": "json_redacted"
     },
     {
       "path": "agents get-agent",
-      "summary": "Planned fixed-target Asana read: Get an agent.",
-      "intent": "etl",
-      "availability": "planned",
+      "summary": "Bounded source-bound Asana direct read: Get an agent.",
+      "intent": "direct_read",
+      "availability": "implemented",
       "operation": "get_agent",
+      "source_operation": "asana.rest.getAgent",
       "source_cli_path": "GET /agents/{agent_gid}",
       "source_url": "https://developers.asana.com/reference/getagent",
       "flags": [
         {
           "name": "agent-gid",
           "type": "string",
+          "maps_to": "path.agent_gid",
           "summary": "Asana path parameter `agent_gid`.",
-          "maps_to": "query.agent_gid",
-          "allow_empty": false
+          "required": true
         }
       ],
       "api_surface": [
@@ -576,7 +579,7 @@
           "path": "/agents/{agent_gid}"
         }
       ],
-      "notes": "Planned ETL/direct read metadata only; no raw provider request execution is exposed."
+      "output_policy": "json_redacted"
     },
     {
       "path": "ai-studio-usage-api get-ai-studio-runs",
@@ -9301,6 +9304,7 @@
       "summary": "Get multiple workspaces through the declared Asana ETL stream.",
       "intent": "etl",
       "availability": "implemented",
+      "source_operation": "asana.rest.getWorkspaces",
       "source_cli_path": "GET /workspaces",
       "source_url": "https://developers.asana.com/reference/getworkspaces",
       "stream": "workspaces",

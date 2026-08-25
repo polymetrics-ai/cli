@@ -455,6 +455,23 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 			}
 		}
 	}
+	if strings.HasPrefix(strings.TrimSpace(cmd.Notes), "missing_foundation=source-bound-read-execution-r1:") {
+		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+			Connector:    connector.Name(),
+			Command:      command,
+			Intent:       cmd.Intent,
+			Availability: cmd.Availability,
+			Reason:       strings.TrimSpace(cmd.Notes),
+		}
+	}
+	if cmd.Intent == "etl" && cmd.Availability == "implemented" {
+		if cmd.SourceOperation != "" {
+			if err := validateSourceBoundStreamReadCommand(connector, cmd); err != nil {
+				return connectors.CommandSurfaceCommand{}, command, err
+			}
+		}
+		return cmd, command, nil
+	}
 	if cmd.Operation != "" && cmd.Intent != "binary_download" && cmd.Intent != "text_export" &&
 		cmd.Intent != "status_check" &&
 		(cmd.Intent != "direct_read" || cmd.Availability != "implemented") &&
@@ -495,9 +512,6 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 		if err := validateOperationDirectWriteCommand(connector, cmd); err != nil {
 			return connectors.CommandSurfaceCommand{}, command, err
 		}
-		return cmd, command, nil
-	}
-	if cmd.Intent == "etl" && cmd.Availability == "implemented" && cmd.Stream != "" {
 		return cmd, command, nil
 	}
 	if cmd.Intent == "binary_upload" && cmd.Availability == "implemented" && cmd.Write != "" {
@@ -901,6 +915,15 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 	if err := preflighter.PreflightOperationDirectRead(cmd.Operation, method, cmd.APISurface[0].Path, MaxOperationDirectReadBytes, cmd.OutputPolicy); err != nil {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct read metadata is not executable: %v", err)}
 	}
+	if cmd.SourceOperation != "" {
+		sourcePreflighter, ok := connector.(connectors.SourceBoundReadPreflighter)
+		if !ok {
+			return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose source-bound read metadata"}
+		}
+		if err := sourcePreflighter.PreflightSourceBoundRead(cmd.Operation, cmd.SourceOperation, method, cmd.APISurface[0].Path); err != nil {
+			return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("source-bound read metadata is not executable: %v", err)}
+		}
+	}
 	pathFields := make([]string, 0, len(cmd.Flags))
 	queryFields := make([]string, 0, len(cmd.Flags))
 	bodyFields := make([]string, 0, len(cmd.Flags))
@@ -923,6 +946,27 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 	}
 	if err := bindingPreflighter.PreflightOperationDirectReadBindings(cmd.Operation, pathFields, queryFields, bodyFields, rawBody); err != nil {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct read bindings are not executable: %v", err)}
+	}
+	return nil
+}
+
+func validateSourceBoundStreamReadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
+	if cmd.SourceOperation == "" {
+		return nil
+	}
+	if cmd.Stream == "" || len(cmd.APISurface) != 1 {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "source-bound ETL commands require one declared stream and exactly one api_surface endpoint"}
+	}
+	method := strings.ToUpper(strings.TrimSpace(cmd.APISurface[0].Method))
+	if method != http.MethodGet || isAbsoluteHTTPURL(cmd.APISurface[0].Path) {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "source-bound ETL commands require one fixed relative GET endpoint"}
+	}
+	preflighter, ok := connector.(connectors.SourceBoundStreamReadPreflighter)
+	if !ok {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose source-bound stream metadata"}
+	}
+	if err := preflighter.PreflightSourceBoundStreamRead(cmd.Stream, cmd.SourceOperation, method, cmd.APISurface[0].Path); err != nil {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("source-bound stream metadata is not executable: %v", err)}
 	}
 	return nil
 }

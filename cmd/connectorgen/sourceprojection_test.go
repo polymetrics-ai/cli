@@ -403,6 +403,149 @@ func TestSourceProjectionRequiresExplicitReadOnlyNonMutationDeclaration(t *testi
 	}
 }
 
+// The three controls below are copied from Asana's locked OpenAPI inventory:
+// getAccessRequests (paths["/access_requests"].get), getAgent
+// (paths["/agents/{agent_gid}"].get), and getWorkspaces
+// (paths["/workspaces"].get).  They exercise a zero-input bounded read, a
+// source-owned path input, and an already-proven paginated stream without
+// assigning stream semantics to the first two.
+func TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL(t *testing.T) {
+	bundleDir := t.TempDir()
+	operationsPath := filepath.Join(bundleDir, "operations.json")
+	cliPath := filepath.Join(bundleDir, "cli_surface.json")
+	writeProjectionFixture(t, filepath.Join(bundleDir, "writes.json"), `{"schema_version":1,"actions":[]}`)
+	writeProjectionFixture(t, operationsPath, `{
+  "schema_version": 1,
+  "operations": [
+    {"id":"get_access_requests","kind":"rest_read","summary":"Get access requests","risk":"none","approval":"none","output_policy":"json_redacted","rest":{"method":"GET","path":"/access_requests","max_bytes":1024,"parameters":[]}},
+    {"id":"get_agent","kind":"rest_read","summary":"Get an agent","risk":"none","approval":"none","output_policy":"json_redacted","rest":{"method":"GET","path":"/agents/{agent_gid}","max_bytes":1024,"parameters":[{"name":"agent_gid","in":"path","type":"string","required":true}]}},
+    {"id":"get_workspaces","kind":"stream_etl","summary":"Get workspaces","risk":"none","approval":"none","output_policy":"json_redacted","composite":{"steps":["stream:workspaces"]}}
+  ]
+}`)
+	writeProjectionFixture(t, cliPath, `{
+  "schema_version": 1,
+  "commands": [
+    {"path":"access-requests get-access-requests","summary":"Get access requests","intent":"etl","availability":"planned","operation":"get_access_requests","api_surface":[{"method":"GET","path":"/access_requests"}]},
+    {"path":"agents get-agent","summary":"Get an agent","intent":"etl","availability":"planned","operation":"get_agent","flags":[{"name":"agent-gid","type":"string","maps_to":"query.agent_gid"}],"api_surface":[{"method":"GET","path":"/agents/{agent_gid}"}]},
+    {"path":"workspaces get-workspaces","summary":"Get workspaces","intent":"etl","availability":"implemented","stream":"workspaces","api_surface":[{"method":"GET","path":"/workspaces"}]}
+  ]
+}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "streams.json"), `{
+  "schema_version": 1,
+  "base": {"pagination":{"type":"next_url","next_url_path":"next_page.uri"}},
+  "streams": [{"name":"workspaces","path":"/workspaces","records":{"path":"data"},"schema":"schemas/workspaces.json"}]
+}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"), `{
+  "api":"asana",
+  "endpoints":[
+    {"method":"GET","path":"/access_requests"},
+    {"method":"GET","path":"/agents/{agent_gid}"},
+    {"method":"GET","path":"/workspaces"}
+  ]
+}`)
+
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{
+		{Connector: "asana", SourceID: "asana.rest.getAccessRequests", ProviderOperationID: "getAccessRequests", Method: "GET", Path: "/access_requests", Request: sourceRequestDescriptor{Query: []sourceParameterDescriptor{{Name: "limit", Required: false, Schema: map[string]any{"type": "integer"}}}}, Output: sourceOutputDescriptor{Class: sourceOutputJSON}},
+		{Connector: "asana", SourceID: "asana.rest.getAgent", ProviderOperationID: "getAgent", Method: "GET", Path: "/agents/{agent_gid}", Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{{Name: "agent_gid", Required: true, Schema: map[string]any{"type": "string"}}}}, Output: sourceOutputDescriptor{Class: sourceOutputJSON}},
+		{Connector: "asana", SourceID: "asana.rest.getWorkspaces", ProviderOperationID: "getWorkspaces", Method: "GET", Path: "/workspaces", Pagination: map[string]any{"type": "next_url"}, Output: sourceOutputDescriptor{Class: sourceOutputJSON}},
+	}}
+	if _, err := projectSourceDescriptorToBundle(bundleDir, result, false); err != nil {
+		t.Fatalf("project source-bound reads: %v", err)
+	}
+
+	var operations struct {
+		Operations []struct {
+			ID              string `json:"id"`
+			SourceOperation *struct {
+				ID     string `json:"id"`
+				Method string `json:"method"`
+				Path   string `json:"path"`
+			} `json:"source_operation"`
+		} `json:"operations"`
+	}
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, operationsPath)), &operations); err != nil {
+		t.Fatalf("decode projected operations: %v", err)
+	}
+	bound := map[string]string{}
+	for _, operation := range operations.Operations {
+		if operation.SourceOperation != nil {
+			bound[operation.ID] = operation.SourceOperation.ID + " " + operation.SourceOperation.Method + " " + operation.SourceOperation.Path
+		}
+	}
+	for id, want := range map[string]string{
+		"get_access_requests": "asana.rest.getAccessRequests GET /access_requests",
+		"get_agent":           "asana.rest.getAgent GET /agents/{agent_gid}",
+		"get_workspaces":      "asana.rest.getWorkspaces GET /workspaces",
+	} {
+		if got := bound[id]; got != want {
+			t.Fatalf("operation %s source binding = %q, want %q", id, got, want)
+		}
+	}
+
+	var cli engine.CLISurface
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, cliPath)), &cli); err != nil {
+		t.Fatalf("decode projected CLI surface: %v", err)
+	}
+	commands := map[string]engine.CLICommand{}
+	for _, command := range cli.Commands {
+		commands[command.Path] = command
+	}
+	if command := commands["access-requests get-access-requests"]; command.Intent != "direct_read" || command.Availability != "implemented" || command.SourceOperation != "asana.rest.getAccessRequests" {
+		t.Fatalf("access-requests command = %+v, want bounded implemented direct_read", command)
+	}
+	agent := commands["agents get-agent"]
+	if agent.Intent != "direct_read" || agent.Availability != "implemented" || agent.SourceOperation != "asana.rest.getAgent" {
+		t.Fatalf("agent command = %+v, want bounded implemented direct_read", agent)
+	}
+	if len(agent.Flags) != 1 || agent.Flags[0].MapsTo != "path.agent_gid" || !agent.Flags[0].Required {
+		t.Fatalf("agent path contract = %+v, want required path.agent_gid", agent.Flags)
+	}
+	if command := commands["workspaces get-workspaces"]; command.Intent != "etl" || command.Availability != "implemented" || command.Stream != "workspaces" || command.Operation != "" || command.SourceOperation != "asana.rest.getWorkspaces" {
+		t.Fatalf("workspace command = %+v, want preserved source-backed ETL stream", command)
+	}
+}
+
+func TestSourceProjectionLeavesIncompleteReadAsNamedFoundation(t *testing.T) {
+	bundleDir := t.TempDir()
+	operationsPath := filepath.Join(bundleDir, "operations.json")
+	cliPath := filepath.Join(bundleDir, "cli_surface.json")
+	writeProjectionFixture(t, filepath.Join(bundleDir, "writes.json"), `{"schema_version":1,"actions":[]}`)
+	writeProjectionFixture(t, operationsPath, `{
+  "schema_version": 1,
+  "operations": [
+    {"id":"get_agent","kind":"rest_read","summary":"Get an agent","risk":"none","approval":"none","output_policy":"json_redacted","rest":{"method":"GET","path":"/agents/{agent_gid}","max_bytes":1024,"parameters":[]}}
+  ]
+}`)
+	writeProjectionFixture(t, cliPath, `{
+  "schema_version": 1,
+  "commands": [
+    {"path":"agents get-agent","summary":"Get an agent","intent":"etl","availability":"planned","operation":"get_agent","api_surface":[{"method":"GET","path":"/agents/{agent_gid}"}]}
+  ]
+}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"), `{"api":"asana","endpoints":[{"method":"GET","path":"/agents/{agent_gid}"}]}`)
+
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{{
+		Connector: "asana", SourceID: "asana.rest.getAgent", Method: "GET", Path: "/agents/{agent_gid}",
+		Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{{Name: "agent_gid", Required: true, Schema: map[string]any{"type": "string"}}}},
+		Output:  sourceOutputDescriptor{Class: sourceOutputJSON},
+	}}}
+	if _, err := projectSourceDescriptorToBundle(bundleDir, result, false); err != nil {
+		t.Fatalf("project incomplete source-bound read: %v", err)
+	}
+
+	var cli engine.CLISurface
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, cliPath)), &cli); err != nil {
+		t.Fatalf("decode projected CLI surface: %v", err)
+	}
+	command := cli.Commands[0]
+	if command.Availability != "planned" || command.SourceOperation != "" {
+		t.Fatalf("incomplete command = %+v, want unchanged planned declaration", command)
+	}
+	if !strings.Contains(command.Notes, "missing_foundation=source-bound-read-execution-r1:") || !strings.Contains(command.Notes, "agent_gid") {
+		t.Fatalf("incomplete command note = %q, want stable typed-contract foundation", command.Notes)
+	}
+}
+
 func TestSourceProjectionRequiresReachableRESTReadOrConcreteGap(t *testing.T) {
 	source := sourceOperationDescriptor{
 		Connector: "alpha", SourceID: "alpha.widgets.list", Method: "get", Path: "/widgets",

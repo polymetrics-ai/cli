@@ -56,6 +56,59 @@ func TestDirectReadExecutesFixedGETOperation(t *testing.T) {
 	}
 }
 
+func TestPreflightSourceBoundReadRejectsIdentityAndRouteSubstitution(t *testing.T) {
+	bundle := Bundle{
+		Name: "asana",
+		Operations: []OperationSpec{{
+			ID: "get_agent", Kind: "rest_read", OutputPolicy: "json_redacted",
+			SourceOperation: &SourceOperationBinding{ID: "asana.rest.getAgent", Method: http.MethodGet, Path: "/agents/{agent_gid}"},
+			REST:            &RESTOperationSpec{Method: http.MethodGet, Path: "/agents/{agent_gid}", MaxBytes: 1024},
+		}},
+		directReadLedger: &operationEndpointLedger{entries: []OperationEndpointLedgerEntry{{Method: http.MethodGet, Path: "/agents/{agent_gid}", Kind: "rest_read", MaxBytes: 1024}}},
+	}
+	if err := PreflightSourceBoundRead(bundle, "get_agent", "asana.rest.getAgent", http.MethodGet, "/agents/{agent_gid}"); err != nil {
+		t.Fatalf("valid source-bound read preflight: %v", err)
+	}
+	for _, test := range []struct {
+		name            string
+		sourceOperation string
+		method          string
+		path            string
+		want            string
+	}{
+		{name: "identity", sourceOperation: "asana.rest.getUsers", method: http.MethodGet, path: "/agents/{agent_gid}", want: "does not match command source operation"},
+		{name: "method", sourceOperation: "asana.rest.getAgent", method: http.MethodPost, path: "/agents/{agent_gid}", want: "does not match command method"},
+		{name: "path", sourceOperation: "asana.rest.getAgent", method: http.MethodGet, path: "/users/{user_gid}", want: "does not match command path"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			err := PreflightSourceBoundRead(bundle, "get_agent", test.sourceOperation, test.method, test.path)
+			if err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("PreflightSourceBoundRead error = %v, want %q", err, test.want)
+			}
+		})
+	}
+}
+
+func TestPreflightSourceBoundStreamReadRequiresDeclaredRecordAndPaginationSemantics(t *testing.T) {
+	bundle := Bundle{
+		Operations: []OperationSpec{{
+			ID: "get_workspaces", Kind: "stream_etl",
+			SourceOperation: &SourceOperationBinding{ID: "asana.rest.getWorkspaces", Method: http.MethodGet, Path: "/workspaces"},
+			Composite:       &CompositeOperationSpec{Steps: []string{"stream:workspaces"}},
+		}},
+		HTTP:    HTTPBase{Pagination: &PaginationSpec{Type: "next_url", NextURLPath: "next_page.uri"}},
+		Streams: []StreamSpec{{Name: "workspaces", Path: "/workspaces", Records: RecordsSpec{Path: "data"}, SchemaRef: "schemas/workspaces.json"}},
+	}
+	if err := PreflightSourceBoundStreamRead(bundle, "workspaces", "asana.rest.getWorkspaces", http.MethodGet, "/workspaces"); err != nil {
+		t.Fatalf("valid source-bound stream preflight: %v", err)
+	}
+	bundle.Streams[0].SchemaRef = ""
+	err := PreflightSourceBoundStreamRead(bundle, "workspaces", "asana.rest.getWorkspaces", http.MethodGet, "/workspaces")
+	if err == nil || !strings.Contains(err.Error(), "record semantics") {
+		t.Fatalf("missing stream schema error = %v, want record semantics rejection", err)
+	}
+}
+
 func TestDirectReadAllowsSlashBearingRefPathVariables(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/repos/octo/hello/git/ref/heads/main" {
