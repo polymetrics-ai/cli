@@ -63575,8 +63575,12 @@
       },
       "canonical_mapping": {
         "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-copper",
-        "contract": null,
+        "declaration_status": "disabled; declaration-pending intended ETL command \"companies search\"",
+        "contract": {
+          "execution_component": "streams.json POST search declaration replacing the legacy hook",
+          "source_cli_path": "POST /v1/companies/search",
+          "source_url": "https://developer.copper.com/companies/list-companies-search.html"
+        },
         "api_surface_binding": {
           "stream": "companies"
         },
@@ -63595,7 +63599,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
+          "state": "declaration_pending_source_backed_post_search_stream",
           "source_state": "disabled"
         },
         "reverse_etl": {
@@ -63608,10 +63612,12 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "declaration_pending_source_template_contract",
           "binding": {
-            "stream": "companies"
-          }
+            "intended_path": "companies search",
+            "intent": "etl"
+          },
+          "reason": "A source-backed POST search request/body contract must replace the legacy GET hook before this command can execute."
         }
       },
       "generated_projections": {
@@ -64190,8 +64196,12 @@
       },
       "canonical_mapping": {
         "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-copper",
-        "contract": null,
+        "declaration_status": "disabled; declaration-pending intended ETL command \"leads search\"",
+        "contract": {
+          "execution_component": "streams.json POST search declaration replacing the legacy hook",
+          "source_cli_path": "POST /v1/leads/search",
+          "source_url": "https://developer.copper.com/leads/list-leads-search.html"
+        },
         "api_surface_binding": {
           "stream": "leads"
         },
@@ -64210,7 +64220,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
+          "state": "declaration_pending_source_backed_post_search_stream",
           "source_state": "disabled"
         },
         "reverse_etl": {
@@ -64223,10 +64233,12 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "declaration_pending_source_template_contract",
           "binding": {
-            "stream": "leads"
-          }
+            "intended_path": "leads search",
+            "intent": "etl"
+          },
+          "reason": "A source-backed POST search request/body contract must replace the legacy GET hook before this command can execute."
         }
       },
       "generated_projections": {
@@ -64420,8 +64432,12 @@
       },
       "canonical_mapping": {
         "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-copper",
-        "contract": null,
+        "declaration_status": "disabled; declaration-pending intended ETL command \"opportunities search\"",
+        "contract": {
+          "execution_component": "streams.json POST search declaration replacing the legacy hook",
+          "source_cli_path": "POST /v1/opportunities/search",
+          "source_url": "https://developer.copper.com/opportunities/list-opportunities-search.html"
+        },
         "api_surface_binding": {
           "stream": "opportunities"
         },
@@ -64440,7 +64456,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
+          "state": "declaration_pending_source_backed_post_search_stream",
           "source_state": "disabled"
         },
         "reverse_etl": {
@@ -64453,10 +64469,12 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "declaration_pending_source_template_contract",
           "binding": {
-            "stream": "opportunities"
-          }
+            "intended_path": "opportunities search",
+            "intent": "etl"
+          },
+          "reason": "A source-backed POST search request/body contract must replace the legacy GET hook before this command can execute."
         }
       },
       "generated_projections": {
@@ -64881,8 +64899,12 @@
       },
       "canonical_mapping": {
         "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-copper",
-        "contract": null,
+        "declaration_status": "disabled; declaration-pending intended ETL command \"people search\"",
+        "contract": {
+          "execution_component": "streams.json POST search declaration replacing the legacy hook",
+          "source_cli_path": "POST /v1/people/search",
+          "source_url": "https://developer.copper.com/people/list-people-search.html"
+        },
         "api_surface_binding": {
           "stream": "people"
         },
@@ -64901,7 +64923,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
+          "state": "declaration_pending_source_backed_post_search_stream",
           "source_state": "disabled"
         },
         "reverse_etl": {
@@ -64914,10 +64936,12 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "declaration_pending_source_template_contract",
           "binding": {
-            "stream": "people"
-          }
+            "intended_path": "people search",
+            "intent": "etl"
+          },
+          "reason": "A source-backed POST search request/body contract must replace the legacy GET hook before this command can execute."
         }
       },
       "generated_projections": {
@@ -65265,8 +65289,12 @@
       },
       "canonical_mapping": {
         "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-copper",
-        "contract": null,
+        "declaration_status": "disabled; declaration-pending intended ETL command \"tasks search\"",
+        "contract": {
+          "execution_component": "streams.json POST search declaration replacing the legacy hook",
+          "source_cli_path": "POST /v1/tasks/search",
+          "source_url": "https://developer.copper.com/tasks/list-tasks-search.html"
+        },
         "api_surface_binding": {
           "stream": "tasks"
         },
@@ -65285,7 +65313,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
+          "state": "declaration_pending_source_backed_post_search_stream",
           "source_state": "disabled"
         },
         "reverse_etl": {
@@ -65298,10 +65326,12 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "declaration_pending_source_template_contract",
           "binding": {
-            "stream": "tasks"
-          }
+            "intended_path": "tasks search",
+            "intent": "etl"
+          },
+          "reason": "A source-backed POST search request/body contract must replace the legacy GET hook before this command can execute."
         }
       },
       "generated_projections": {

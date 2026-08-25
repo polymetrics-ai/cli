@@ -147,3 +147,10 @@ templates are explicitly deferred with their intended command path, lane, source
 component. This preserves the provider's six-operation fixed template inventory and its dynamic-schema
 constraint: customer table names, field dictionaries, and ACLs are not fabricated as finite source
 operations or used as a safety-based omission.
+
+## Increment 12 — Copper POST-search boundary correction
+
+Copper's five source-backed search operations now explicitly state their intended ETL command and the
+legacy-hook-to-POST-stream execution component. The declared engine supports the needed method/body shape;
+the missing public request-body/query contract belongs in connector JSON. The rows remain
+`declaration-pending`, not `foundation-gap`, and no false GET command or API boundary expansion is present.

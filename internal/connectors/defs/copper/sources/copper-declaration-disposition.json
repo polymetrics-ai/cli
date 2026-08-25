@@ -2634,12 +2634,23 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The documented source operation is a POST search. streams.json currently routes this alias through GET /__legacy_hook and has no pinned body/query contract, so it cannot faithfully become an ETL CLI command yet.",
         "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[53] is bound to the pinned provider operation; internal/connectors/defs/copper/sources/copper-operation-source-lock.json: Copper rendered declaration: List Companies (Search)."
       },
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-copper",
-        "contract": null
+        "status": "disabled; declaration-pending intended ETL command \"companies search\"",
+        "contract": null,
+        "command": {
+          "state": "declaration-pending",
+          "intended_path": "companies search",
+          "intent": "etl",
+          "lane": "etl",
+          "source_cli_path": "POST /v1/companies/search",
+          "source_url": "https://developer.copper.com/companies/list-companies-search.html",
+          "execution_component": "internal/connectors/defs/copper/streams.json: replace legacy \"companies\" GET hook with a source-backed POST search stream and declared request body/query schema",
+          "reason": "The documented source operation is a POST search. streams.json currently routes this alias through GET /__legacy_hook and has no pinned body/query contract, so it cannot faithfully become an ETL CLI command yet.",
+          "engine_support": "internal/connectors/engine/bundle.go:296-301 declares StreamSpec.Method and StreamSpec.Body for POST-body streams; no shared engine change is required."
+        }
       }
     },
     {
@@ -3025,12 +3036,23 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The documented source operation is a POST search. streams.json currently routes this alias through GET /__legacy_hook and has no pinned body/query contract, so it cannot faithfully become an ETL CLI command yet.",
         "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[61] is bound to the pinned provider operation; internal/connectors/defs/copper/sources/copper-operation-source-lock.json: Copper rendered declaration: List Leads (Search)."
       },
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-copper",
-        "contract": null
+        "status": "disabled; declaration-pending intended ETL command \"leads search\"",
+        "contract": null,
+        "command": {
+          "state": "declaration-pending",
+          "intended_path": "leads search",
+          "intent": "etl",
+          "lane": "etl",
+          "source_cli_path": "POST /v1/leads/search",
+          "source_url": "https://developer.copper.com/leads/list-leads-search.html",
+          "execution_component": "internal/connectors/defs/copper/streams.json: replace legacy \"leads\" GET hook with a source-backed POST search stream and declared request body/query schema",
+          "reason": "The documented source operation is a POST search. streams.json currently routes this alias through GET /__legacy_hook and has no pinned body/query contract, so it cannot faithfully become an ETL CLI command yet.",
+          "engine_support": "internal/connectors/engine/bundle.go:296-301 declares StreamSpec.Method and StreamSpec.Body for POST-body streams; no shared engine change is required."
+        }
       }
     },
     {
@@ -3166,12 +3188,23 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The documented source operation is a POST search. streams.json currently routes this alias through GET /__legacy_hook and has no pinned body/query contract, so it cannot faithfully become an ETL CLI command yet.",
         "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[64] is bound to the pinned provider operation; internal/connectors/defs/copper/sources/copper-operation-source-lock.json: Copper rendered declaration: List Opportunities (Search)."
       },
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-copper",
-        "contract": null
+        "status": "disabled; declaration-pending intended ETL command \"opportunities search\"",
+        "contract": null,
+        "command": {
+          "state": "declaration-pending",
+          "intended_path": "opportunities search",
+          "intent": "etl",
+          "lane": "etl",
+          "source_cli_path": "POST /v1/opportunities/search",
+          "source_url": "https://developer.copper.com/opportunities/list-opportunities-search.html",
+          "execution_component": "internal/connectors/defs/copper/streams.json: replace legacy \"opportunities\" GET hook with a source-backed POST search stream and declared request body/query schema",
+          "reason": "The documented source operation is a POST search. streams.json currently routes this alias through GET /__legacy_hook and has no pinned body/query contract, so it cannot faithfully become an ETL CLI command yet.",
+          "engine_support": "internal/connectors/engine/bundle.go:296-301 declares StreamSpec.Method and StreamSpec.Body for POST-body streams; no shared engine change is required."
+        }
       }
     },
     {
@@ -3457,12 +3490,23 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The documented source operation is a POST search. streams.json currently routes this alias through GET /__legacy_hook and has no pinned body/query contract, so it cannot faithfully become an ETL CLI command yet.",
         "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[70] is bound to the pinned provider operation; internal/connectors/defs/copper/sources/copper-operation-source-lock.json: Copper rendered declaration: List People (Search)."
       },
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-copper",
-        "contract": null
+        "status": "disabled; declaration-pending intended ETL command \"people search\"",
+        "contract": null,
+        "command": {
+          "state": "declaration-pending",
+          "intended_path": "people search",
+          "intent": "etl",
+          "lane": "etl",
+          "source_cli_path": "POST /v1/people/search",
+          "source_url": "https://developer.copper.com/people/list-people-search.html",
+          "execution_component": "internal/connectors/defs/copper/streams.json: replace legacy \"people\" GET hook with a source-backed POST search stream and declared request body/query schema",
+          "reason": "The documented source operation is a POST search. streams.json currently routes this alias through GET /__legacy_hook and has no pinned body/query contract, so it cannot faithfully become an ETL CLI command yet.",
+          "engine_support": "internal/connectors/engine/bundle.go:296-301 declares StreamSpec.Method and StreamSpec.Body for POST-body streams; no shared engine change is required."
+        }
       }
     },
     {
@@ -3698,12 +3742,23 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "detail": "The documented source operation is a POST search. streams.json currently routes this alias through GET /__legacy_hook and has no pinned body/query contract, so it cannot faithfully become an ETL CLI command yet.",
         "evidence": "internal/connectors/defs/copper/api_surface.json endpoints[75] is bound to the pinned provider operation; internal/connectors/defs/copper/sources/copper-operation-source-lock.json: Copper rendered declaration: List Tasks (Search)."
       },
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-copper",
-        "contract": null
+        "status": "disabled; declaration-pending intended ETL command \"tasks search\"",
+        "contract": null,
+        "command": {
+          "state": "declaration-pending",
+          "intended_path": "tasks search",
+          "intent": "etl",
+          "lane": "etl",
+          "source_cli_path": "POST /v1/tasks/search",
+          "source_url": "https://developer.copper.com/tasks/list-tasks-search.html",
+          "execution_component": "internal/connectors/defs/copper/streams.json: replace legacy \"tasks\" GET hook with a source-backed POST search stream and declared request body/query schema",
+          "reason": "The documented source operation is a POST search. streams.json currently routes this alias through GET /__legacy_hook and has no pinned body/query contract, so it cannot faithfully become an ETL CLI command yet.",
+          "engine_support": "internal/connectors/engine/bundle.go:296-301 declares StreamSpec.Method and StreamSpec.Body for POST-body streams; no shared engine change is required."
+        }
       }
     },
     {
@@ -4362,6 +4417,7 @@
     "Complete six-class source-locked map regenerated from all 637 Copper rendered-reference documents; every 89 pinned operation has exactly one primary parity class.",
     "The previous five synthetic HOOK rows were discarded. The native stream table proves the five POST /<resource>/search ETL bindings; all other documented operations are source-only until a connector-owned declaration exists.",
     "Direct writes remain direct_write operations. #4304 now provides the connector-neutral typed-destination foundation; no connector-owned typed writes.json action exists for these rows, so reverse-ETL declaration remains pending rather than foundation-gapped.",
-    "The provider’s View subscription by ID declaration omits a path separator in `/v1/webhooks{webhook_id}`; the map records the mechanical `/v1/webhooks/{webhook_id}` normalization and retains the endpoint-page citation."
+    "The provider’s View subscription by ID declaration omits a path separator in `/v1/webhooks{webhook_id}`; the map records the mechanical `/v1/webhooks/{webhook_id}` normalization and retains the endpoint-page citation.",
+    "2026-08-26 Copper POST-search pending mapping: all five source-locked search operations retain canonical command paths, citations, and the legacy-hook-to-POST-stream component gap. StreamSpec already supports POST/body streams; request contract authoring is connector work, not a foundation gap."
   ]
 }

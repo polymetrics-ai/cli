@@ -631,6 +631,20 @@ foundation gaps are not enabled and cannot contribute to a merge-ready verdict.
   connector component. The public GET/PUT/DELETE templates are therefore not omitted or called unsafe;
   they are declaration-pending until a source-backed fixed table selection/schema/action exists. No engine
   gap or dynamic customer schema was invented.
+
+## Copper POST-search declaration reconciliation — 2026-08-26
+
+- **RED:** Copper's five source-locked List/Search operations were paired with legacy `GET
+  /__legacy_hook/*` stream aliases, while every documented provider operation is a `POST /v1/*/search`.
+  A generated `list` command would have lied about the provider method and request contract.
+- **GREEN (evidence):** all five rows now retain their citation, source ID, exact POST route, ETL lane,
+  intended canonical command (`people|companies|opportunities|leads|tasks search`), and the precise
+  component to replace: the connector's legacy hook with a source-backed POST stream including its request
+  body/query contract. `StreamSpec.Method` and `StreamSpec.Body` in
+  `internal/connectors/engine/bundle.go:296-301` already support the execution shape, so this is
+  connector declaration work rather than a foundation gap.
+- **No false command:** no CLI surface, schema, body, pagination, or provider call was fabricated. The
+  source-disposition and operation-evidence assertions pass with `git diff --check`.
 # Stale typed-destination gap reconciliation — increment 1 (2026-08-20)
 
 - **RED:** The operation-evidence ledger exposed 1,111 direct-write rows that still named
