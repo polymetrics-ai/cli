@@ -10,11 +10,15 @@ current delivery rules are in [the connector canon](../connector-canon/INDEX.md)
 
 > **Declaration admission is a separate certificate.**
 > `connectorgen declaration-admission` proves only that a cited provider
-> operation has exactly one source declaration, lane, canonical endpoint, and
-> discoverable command, with a runtime binding or named deferred foundation.
+> operation in the required independent source cohort has exactly one separate
+> declaration, lane, canonical endpoint, exact command/declaration binding,
+> source-owned destructive semantic, and discoverable command, with a runtime
+> binding or named deferred foundation. Nonzero expected cohort counts make a
+> missing catalog, omitted row, or zero-work run fail.
 > Its no-I/O check reuses the real runtime resolver to reject false implemented
-> bindings and to validate a deferred foundation's exact non-policy target
-> before typed `missing_foundation`. It accepts URL-plus-exact-citation evidence
+> bindings. Deferred targets carry the admitted source and binding identities;
+> their compact ledger is embedded for production preflight even though full
+> API-surface manifests are not. It accepts URL-plus-exact-citation evidence
 > without retained bytes, hashes, request bodies, credentials, or live proof. A
 > passing admission result is neither credential-bound runtime usability nor
 > live certification; see

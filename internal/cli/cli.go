@@ -819,13 +819,16 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 }
 
 func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, args []string, stdout, stderr io.Writer, jsonOut bool) error {
+	return runMaybeConnectorCommandWithRegistry(ctx, root, connectorName, args, stdout, stderr, jsonOut, appRegistry())
+}
+
+func runMaybeConnectorCommandWithRegistry(ctx context.Context, root, connectorName string, args []string, stdout, stderr io.Writer, jsonOut bool, registry *connectors.Registry) error {
 	if err := safety.ValidateIdentifier(connectorName, "connector"); err != nil {
 		return usageErrorf("unknown command %q", connectorName)
 	}
 	if err := connectors.RejectLegacyConnectorName(connectorName); err != nil {
 		return err
 	}
-	registry := appRegistry()
 	connector, ok := registry.Get(connectorName)
 	if !ok {
 		return usageErrorf("unknown command %q", connectorName)
@@ -1935,6 +1938,15 @@ func connectorCommandPlanForPath(a *app.App, planID, connectorName string, path 
 }
 
 func connectorCommandBlockedError(err error) error {
+	var blocked *commandrunner.BlockedCommandError
+	if errors.As(err, &blocked) && blocked.Failure != nil && blocked.Failure.Code() == "missing_foundation" {
+		return &cliError{
+			category: categoryInternal,
+			code:     "missing_foundation",
+			message:  blocked.Error(),
+			err:      err,
+		}
+	}
 	return &cliError{
 		category: categoryPolicy,
 		code:     "connector_command_blocked",

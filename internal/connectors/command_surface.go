@@ -144,19 +144,38 @@ type CommandSurfaceConstraint struct {
 	Message       string
 }
 
-// CommandFoundationTarget names the one provider endpoint a deferred command
-// would resolve once its named foundation exists. It is not a request URL and
-// cannot be supplied by a caller.
+// CommandFoundationTarget names the one admitted provider operation and
+// runtime binding a deferred command would resolve once its foundation exists.
+// It is not a request URL and cannot be supplied by a caller.
 type CommandFoundationTarget struct {
-	Method string
-	Path   string
+	SourceID            string
+	ProviderOperationID string
+	Binding             CommandBindingIdentity
+	DestructiveKind     string
+	Method              string
+	Path                string
+}
+
+const (
+	CommandBindingCommand   = "command"
+	CommandBindingStream    = "stream"
+	CommandBindingWrite     = "write"
+	CommandBindingOperation = "operation"
+)
+
+// CommandBindingIdentity is the stable declaration selected by a command.
+// Method/path alone are not an operation identity because GraphQL operations
+// and provider actions may share one transport endpoint.
+type CommandBindingIdentity struct {
+	Kind string
+	ID   string
 }
 
 // CommandFoundation names the missing shared capability for a command that is
 // deliberately discoverable but not runnable. Component and Evidence are a
 // closed, locally checkable absence claim; Target binds that claim to exactly
-// one declared API-surface endpoint. It is declaration metadata, not a request
-// parameter, so dispatch can refuse before any provider I/O.
+// one admitted source identity and provider target. It is declaration
+// metadata, not a request parameter, so dispatch can refuse before provider I/O.
 type CommandFoundation struct {
 	ID        string
 	Reason    string

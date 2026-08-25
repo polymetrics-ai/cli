@@ -24,7 +24,7 @@
 
 - Captain policy treats every provider operation as a declaration/discovery obligation, including writes, deletes, and binary operations. A source citation is sufficient for admission; byte retention and live proof are distinct certificates.
 - Firstmate clarification: a deferred operation still owns a deterministic `cli_surface.json` command identity/path. A missing foundation is metadata, never an omitted operation.
-- The existing source-import descriptor is intentionally artifact/hash-bound and runtime projection is stricter. Admission therefore receives a new optional, versioned shared sidecar rather than weakening either existing contract.
+- The existing source-import descriptor is intentionally artifact/hash-bound and runtime projection is stricter. Admission therefore receives a required, versioned repository source cohort plus a separate declaration catalog rather than weakening either existing contract; neither catalog requires retained bytes or a hash.
 - Inline/manual GSD execution is used because this runner cannot use compatible isolated GSD roles and repository policy forbids role spawning.
 
 ## Skills and lifecycle

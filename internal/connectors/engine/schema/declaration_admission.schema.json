@@ -1,47 +1,42 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "declaration-admission.json",
+  "title": "declaration_admissions.json",
   "type": "object",
-  "required": ["schema_version", "connector", "source_operations", "declarations"],
+  "required": ["schema_version", "cohort", "expected_declarations", "declarations"],
   "additionalProperties": false,
   "properties": {
     "schema_version": { "type": "integer", "enum": [1] },
-    "connector": { "type": "string" },
-    "source_operations": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["id", "source_url", "location", "operation_id", "method", "path"],
-        "additionalProperties": false,
-        "properties": {
-          "id": { "type": "string" },
-          "source_url": { "type": "string", "minLength": 1 },
-          "location": { "type": "string", "minLength": 1 },
-          "operation_id": { "type": "string", "minLength": 1 },
-          "method": { "type": "string", "minLength": 1 },
-          "base_path": { "type": "string" },
-          "path": { "type": "string", "minLength": 1 }
-        }
-      }
-    },
+    "cohort": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "expected_declarations": { "type": "integer", "minimum": 1 },
     "declarations": {
       "type": "array",
+      "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["source_id", "lane", "command", "state", "canonical"],
+        "required": ["connector", "source_id", "lane", "command", "state", "canonical", "binding"],
         "additionalProperties": false,
         "properties": {
-          "source_id": { "type": "string" },
+          "connector": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "source_id": { "type": "string", "minLength": 1, "maxLength": 256 },
           "lane": { "type": "string", "enum": ["etl", "reverse_etl", "direct_read", "direct_write", "binary_download", "binary_upload"] },
-          "command": { "type": "string", "minLength": 1 },
+          "command": { "type": "string", "minLength": 1, "maxLength": 512 },
           "state": { "type": "string", "enum": ["implemented", "deferred"] },
           "canonical": {
             "type": "object",
             "required": ["method", "path"],
             "additionalProperties": false,
             "properties": {
-              "method": { "type": "string", "minLength": 1 },
-              "path": { "type": "string", "minLength": 1 }
+              "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"] },
+              "path": { "type": "string", "minLength": 1, "maxLength": 8192 }
+            }
+          },
+          "binding": {
+            "type": "object",
+            "required": ["kind", "id"],
+            "additionalProperties": false,
+            "properties": {
+              "kind": { "type": "string", "enum": ["command", "stream", "write", "operation"] },
+              "id": { "type": "string", "minLength": 1, "maxLength": 512 }
             }
           },
           "foundation_gap": {
@@ -49,8 +44,8 @@
             "required": ["id", "reason", "component", "evidence", "target"],
             "additionalProperties": false,
             "properties": {
-              "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
-              "reason": { "type": "string", "minLength": 1 },
+              "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "maxLength": 128 },
+              "reason": { "type": "string", "minLength": 1, "maxLength": 512 },
               "component": {
                 "type": "string",
                 "enum": ["typed_write_action", "typed_record_schema", "typed_request_body", "typed_response_descriptor", "binary_transfer_binding", "source_importer", "runtime_executor", "idempotency_contract"]
@@ -64,8 +59,8 @@
                 "required": ["method", "path"],
                 "additionalProperties": false,
                 "properties": {
-                  "method": { "type": "string", "minLength": 1 },
-                  "path": { "type": "string", "minLength": 1 }
+                  "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"] },
+                  "path": { "type": "string", "minLength": 1, "maxLength": 8192 }
                 }
               }
             }
@@ -76,7 +71,7 @@
             "additionalProperties": false,
             "properties": {
               "kind": { "type": "string", "enum": ["delete", "destructive"] },
-              "reason": { "type": "string", "minLength": 1 }
+              "reason": { "type": "string", "minLength": 1, "maxLength": 512 }
             }
           }
         }

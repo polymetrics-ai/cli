@@ -10,7 +10,7 @@
   executor only after resolving one exact non-excluded, non-policy target,
   while an `implemented` declaration still requires the existing lane-specific
   binding and real no-I/O preflight.
-- Confirmed sidecar schema intentionally contains no source bytes, hash, raw
+- Confirmed the two required catalog schemas intentionally contain no source bytes, hash, raw
   body, or typed request schema requirement.
 - Confirmed the admission URL is checked by the same public HTTPS,
   no-userinfo/no-fragment, bounded secret-safe query policy as source import.
@@ -62,12 +62,44 @@ foundation can defer it; delete and destructive operations are not generically
 deferred.
 
 Captain clarification 007 supersedes a subsequent Stripe conversion request.
-This PR now reviews only generic admission semantics: a deferred sidecar row
+This PR now reviews only generic admission semantics: a deferred catalog row
 must name a bounded missing implementation component plus evidence, and a
 deferred command may cite its blocked endpoint without claiming executable
 coverage. The started Stripe CLI/source declaration files remain deliberately
 unstaged for `cli-batch1-repair-r1`; no connector-owned mapping change appears
 in this PR's committed diff.
+
+## Exact-SHA Codex audit disposition (2026-08-26)
+
+1. **DA-001 accepted:** optional sidecars allowed a successful zero-work gate.
+   Two required root catalogs, nonzero expected counts, and exact count checks
+   now fail missing catalogs and omitted rows.
+2. **DA-002 accepted:** method/path and a provider-native operation ID were not
+   sufficient identities. Source and declaration rows now carry an exact
+   binding identity; runtime must match it, same-endpoint swaps fail, and an
+   empty provider-native ID remains valid.
+3. **DA-003 accepted:** admission copied an incomplete runtime switch. The
+   engine now owns the shared implemented resolver used by runtime preflight
+   and admission, covering templated ETL, operation-free direct read, REST,
+   binary, and GraphQL operations.
+4. **DA-004 accepted:** deferred staleness was endpoint-first and missed
+   GraphQL identity. The identity-aware resolver rejects both an existing exact
+   GraphQL binding and another operation occupying its shared transport.
+5. **DA-005 accepted:** destructive applicability was self-authored through
+   the surface model. The independent source cohort owns `none`, `delete`, or
+   `destructive`; declaration and implemented runtime semantics must match.
+6. **DA-006 accepted:** typed missing-foundation could be lost through large
+   metadata, App credential ordering, and the CLI wrapper. Text/references are
+   bounded deterministically, App preflights first, and the public error keeps
+   code `missing_foundation`.
+7. **DA-010 accepted:** production omits `api_surface.json`. The compact source
+   cohort is embedded into `defs.FS` and loaded per connector; a production-
+   layout CLI test proves a deferred admitted command returns typed
+   missing-foundation with `Surface == nil`.
+8. **DA-011 accepted:** source and deferred targets now reject noncanonical
+   methods, absolute URLs, queries/fragments, controls, traversal, backslashes,
+   and repeated separators. Legacy implemented provider-specific identities are
+   not silently reclassified by this new admission-only constraint.
 
 ## Automated review route
 

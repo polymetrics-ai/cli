@@ -88,8 +88,13 @@ func TestDeclarationAdmissionRejectsCompletenessAndBindingDefects(t *testing.T) 
 			want: "destructive metadata",
 		},
 		{
-			name: "destructive post lacks destructive metadata",
+			name: "source-declared destructive post lacks destructive metadata",
 			edit: func(document *declarationAdmissionDocument, bundle *engine.Bundle) {
+				for index := range document.SourceOperations {
+					if document.SourceOperations[index].ID == "create-widget" {
+						document.SourceOperations[index].DestructiveKind = "destructive"
+					}
+				}
 				for index := range bundle.Surface.Endpoints {
 					if bundle.Surface.Endpoints[index].Method == "POST" && bundle.Surface.Endpoints[index].Path == "/v1/widgets" {
 						bundle.Surface.Endpoints[index].Operation.Model = "destructive_action"
@@ -293,7 +298,7 @@ func TestDeclarationAdmissionAuditRepairRejectsWeakIdentityCitationAndDeferredTa
 					}
 				}
 			},
-			want: "delete metadata requires a destructive target",
+			want: "delete semantics do not match the independent source semantic",
 		},
 	}
 
@@ -395,7 +400,11 @@ func TestDeclarationAdmissionAcceptsCompleteZeroRunnableConnector(t *testing.T) 
 			bundle.CLISurface.Commands[index].Foundation = &engine.CommandFoundation{
 				ID: "read_runtime_foundation", Reason: "read runtime binding is intentionally pending",
 				Component: "runtime_executor", Evidence: "runtime_executor_absent",
-				Target: engine.CommandFoundationTarget{Method: "GET", Path: "/v1/widgets"},
+				Target: engine.CommandFoundationTarget{
+					SourceID: "list-widgets", ProviderOperationID: "provider.list-widgets",
+					Binding:         engine.CommandBindingIdentity{Kind: "stream", ID: "widgets"},
+					DestructiveKind: "none", Method: "GET", Path: "/v1/widgets",
+				},
 			}
 			bundle.Surface.Endpoints[0].Operation = &engine.SurfaceOperation{Model: "direct_read", Status: "blocked", Risk: "low", BlockedByDefault: true, Reason: "read runtime binding is intentionally pending"}
 			bundle.CLISurface.Commands[index].Stream = ""
@@ -437,11 +446,14 @@ func TestDeclarationAdmissionAdmitsGitHubImplementedDeleteControl(t *testing.T) 
 		Connector:     "github",
 		SourceOperations: []declarationAdmissionSourceOperation{{
 			ID:                  "github.rest.issues.delete-label",
+			Protocol:            "rest",
 			SourceURL:           "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
 			Location:            `paths["/repos/{owner}/{repo}/labels/{name}"].delete`,
 			ProviderOperationID: "issues/delete-label",
 			Method:              "DELETE",
 			Path:                "/repos/{owner}/{repo}/labels/{name}",
+			Binding:             declarationAdmissionBinding{Kind: "write", ID: "delete_label"},
+			DestructiveKind:     "delete",
 		}},
 		Declarations: []declarationAdmissionDeclaration{{
 			SourceID:  "github.rest.issues.delete-label",
@@ -449,6 +461,7 @@ func TestDeclarationAdmissionAdmitsGitHubImplementedDeleteControl(t *testing.T) 
 			Command:   "label delete",
 			State:     declarationAdmissionStateImplemented,
 			Canonical: declarationAdmissionEndpoint{Method: "DELETE", Path: "/repos/{owner}/{repo}/labels/{name}"},
+			Binding:   declarationAdmissionBinding{Kind: "write", ID: "delete_label"},
 			Destructive: &declarationAdmissionDestructive{
 				Kind: "delete", Reason: "deletes a repository label and its existing issue metadata",
 			},
@@ -459,6 +472,49 @@ func TestDeclarationAdmissionAdmitsGitHubImplementedDeleteControl(t *testing.T) 
 	}
 	if err := commandrunner.Preflight(engine.New(bundle, nil), []string{"label", "delete"}); err != nil {
 		t.Fatalf("GitHub label delete runtime preflight: %v", err)
+	}
+}
+
+func TestDeclarationAdmissionUsesRuntimeResolverForImplementedCommandKinds(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatalf("repository root: %v", err)
+	}
+	bundle, err := engine.Load(os.DirFS(filepath.Join(root, "internal", "connectors", "defs")), "github")
+	if err != nil {
+		t.Fatalf("load GitHub bundle: %v", err)
+	}
+
+	tests := []struct {
+		name, command, lane, protocol, method, path, bindingKind, bindingID string
+	}{
+		{name: "templated ETL stream", command: "issue list", lane: declarationAdmissionLaneETL, protocol: "rest", method: "GET", path: "/repos/{owner}/{repo}/issues", bindingKind: "stream", bindingID: "issues"},
+		{name: "operation-free direct read", command: "users get-authenticated", lane: declarationAdmissionLaneDirectRead, protocol: "rest", method: "GET", path: "/user", bindingKind: "command", bindingID: "users get-authenticated"},
+		{name: "GraphQL direct write", command: "discussion create", lane: declarationAdmissionLaneDirectWrite, protocol: "graphql", method: "POST", path: "/graphql", bindingKind: "operation", bindingID: "github.graphql.mutation.create-discussion"},
+	}
+
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			document := declarationAdmissionDocument{
+				SchemaVersion: declarationAdmissionSchemaVersion,
+				Connector:     "github",
+				SourceOperations: []declarationAdmissionSourceOperation{{
+					ID: "github.audit." + strings.ReplaceAll(testCase.command, " ", "-"), SourceURL: "https://docs.github.com/rest",
+					Location: "audit > " + testCase.command, ProviderOperationID: "audit/" + strings.ReplaceAll(testCase.command, " ", "-"),
+					Protocol: testCase.protocol, Method: testCase.method, Path: testCase.path,
+					Binding: declarationAdmissionBinding{Kind: testCase.bindingKind, ID: testCase.bindingID}, DestructiveKind: "none",
+				}},
+				Declarations: []declarationAdmissionDeclaration{{
+					SourceID: "github.audit." + strings.ReplaceAll(testCase.command, " ", "-"), Lane: testCase.lane,
+					Command: testCase.command, State: declarationAdmissionStateImplemented,
+					Canonical: declarationAdmissionEndpoint{Method: testCase.method, Path: testCase.path},
+					Binding:   declarationAdmissionBinding{Kind: testCase.bindingKind, ID: testCase.bindingID},
+				}},
+			}
+			if findings := declarationAdmissionFindings(bundle, document); len(findings) != 0 {
+				t.Fatalf("implemented runtime-resolved command findings = %+v", findings)
+			}
+		})
 	}
 }
 
@@ -512,54 +568,118 @@ func TestDeclarationAdmissionRejectsPolicyOnlyDeferredFoundation(t *testing.T) {
 	t.Fatalf("policy-only deferred foundation findings = %+v, want specific-component refusal", findings)
 }
 
-func TestDeclarationAdmissionCommandReportsMachineReadableCleanResult(t *testing.T) {
+func TestDeclarationAdmissionCommandRejectsMissingIndependentCohort(t *testing.T) {
 	var stdout, stderr bytes.Buffer
-	if code := run([]string{"declaration-admission", "testdata/valid", "--json"}, &stdout, &stderr); code != 0 {
-		t.Fatalf("exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
-	}
-	var report declarationAdmissionReport
-	if err := json.Unmarshal(stdout.Bytes(), &report); err != nil {
-		t.Fatalf("decode report: %v\n%s", err, stdout.String())
-	}
-	if report.ConnectorsChecked != 0 || len(report.Findings) != 0 {
-		t.Fatalf("clean report = %+v, want no admission sidecars/findings", report)
+	if code := run([]string{"declaration-admission", "testdata/valid", "--json"}, &stdout, &stderr); code == 0 {
+		t.Fatalf("missing independent cohort passed; stdout=%s stderr=%s", stdout.String(), stderr.String())
 	}
 }
 
-func TestDeclarationAdmissionCommandLoadsCitedSidecarWithoutRetainedArtifact(t *testing.T) {
-	defsRoot := t.TempDir()
-	for name, file := range cliSurfaceBundleFS(validCLISurfaceJSON()) {
-		path := filepath.Join(defsRoot, filepath.FromSlash(name))
-		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
-			t.Fatalf("create fixture directory: %v", err)
+func TestDeclarationAdmissionAllowsEmptyRawProviderOperationID(t *testing.T) {
+	bundle, document := declarationAdmissionFixture()
+	document.SourceOperations[0].ProviderOperationID = ""
+	if findings := declarationAdmissionFindings(bundle, document); len(findings) != 0 {
+		t.Fatalf("empty provider operation ID findings = %+v, want deterministic source ID to remain authoritative", findings)
+	}
+}
+
+func TestDeclarationAdmissionRejectsDeferredDeleteSemanticsOnDestructivePost(t *testing.T) {
+	bundle, document := declarationAdmissionFixture()
+	for index := range bundle.Surface.Endpoints {
+		if bundle.Surface.Endpoints[index].Method == "POST" && bundle.Surface.Endpoints[index].Path == "/v1/widgets" {
+			bundle.Surface.Endpoints[index].Operation.Model = "destructive_action"
 		}
-		if err := os.WriteFile(path, file.Data, 0o600); err != nil {
-			t.Fatalf("write fixture %s: %v", name, err)
+	}
+	for index := range document.Declarations {
+		if document.Declarations[index].SourceID == "create-widget" {
+			document.Declarations[index].Destructive = &declarationAdmissionDestructive{Kind: "delete", Reason: "self-labelled delete"}
 		}
 	}
-	document := declarationAdmissionDocument{
-		SchemaVersion: declarationAdmissionSchemaVersion,
-		Connector:     "cli-surface",
-		SourceOperations: []declarationAdmissionSourceOperation{{
-			ID: "list-widgets", SourceURL: "https://provider.example.test/reference", Location: "Widgets > List", ProviderOperationID: "listWidgets",
-			Method: "GET", Path: "/widgets",
-		}},
-		Declarations: []declarationAdmissionDeclaration{{
-			SourceID: "list-widgets", Lane: declarationAdmissionLaneETL, Command: "widget list", State: declarationAdmissionStateImplemented,
-			Canonical: declarationAdmissionEndpoint{Method: "GET", Path: "/widgets"},
-		}},
+	if findings := declarationAdmissionFindings(bundle, document); !declarationAdmissionFindingContains(findings, "delete semantics") {
+		t.Fatalf("destructive POST false-delete findings = %+v, want exact source semantic rejection", findings)
 	}
-	raw, err := json.Marshal(document)
-	if err != nil {
-		t.Fatalf("marshal admission declaration: %v", err)
+}
+
+func TestDeclarationAdmissionRejectsSameEndpointBindingSwap(t *testing.T) {
+	bundle, document := declarationAdmissionFixture()
+	bundle.Streams = append(bundle.Streams, engine.StreamSpec{Name: "mirror_widgets", Method: "GET", Path: "/v1/widgets"})
+	document.SourceOperations[0].Binding.ID = "mirror_widgets"
+	if findings := declarationAdmissionFindings(bundle, document); !declarationAdmissionFindingContains(findings, "canonical binding does not match") {
+		t.Fatalf("same-endpoint binding swap findings = %+v, want independent binding mismatch", findings)
 	}
-	sidecar := filepath.Join(defsRoot, "cli-surface", "sources", "cli-surface-declaration-admission.json")
-	if err := os.MkdirAll(filepath.Dir(sidecar), 0o755); err != nil {
-		t.Fatalf("create admission directory: %v", err)
+}
+
+func TestDeclarationAdmissionRejectsFalseImplementedSameEndpointBinding(t *testing.T) {
+	bundle, document := declarationAdmissionFixture()
+	bundle.Streams = append(bundle.Streams, engine.StreamSpec{Name: "mirror_widgets", Method: "GET", Path: "/v1/widgets"})
+	document.SourceOperations[0].Binding.ID = "mirror_widgets"
+	document.Declarations[0].Binding.ID = "mirror_widgets"
+	if findings := declarationAdmissionFindings(bundle, document); !declarationAdmissionFindingContains(findings, "implemented declaration has no valid runtime binding") {
+		t.Fatalf("false implemented same-endpoint binding findings = %+v, want runtime identity rejection", findings)
 	}
-	if err := os.WriteFile(sidecar, raw, 0o600); err != nil {
-		t.Fatalf("write admission declaration: %v", err)
+}
+
+func TestDeclarationAdmissionCommandRequiresBothCatalogsAndExactCounts(t *testing.T) {
+	tests := []struct {
+		name string
+		edit func(*testing.T, string)
+	}{
+		{
+			name: "missing source cohort",
+			edit: func(t *testing.T, dir string) {
+				t.Helper()
+				if err := os.Remove(filepath.Join(dir, "declaration_admission_sources.json")); err != nil {
+					t.Fatalf("remove source cohort: %v", err)
+				}
+			},
+		},
+		{
+			name: "missing declaration catalog",
+			edit: func(t *testing.T, dir string) {
+				t.Helper()
+				if err := os.Remove(filepath.Join(dir, "declaration_admissions.json")); err != nil {
+					t.Fatalf("remove declaration catalog: %v", err)
+				}
+			},
+		},
+		{
+			name: "source count hides omitted row",
+			edit: func(t *testing.T, dir string) {
+				t.Helper()
+				path := filepath.Join(dir, "declaration_admission_sources.json")
+				var catalog declarationAdmissionSourceCatalog
+				readDeclarationAdmissionJSON(t, path, &catalog)
+				catalog.ExpectedOperations++
+				writeDeclarationAdmissionJSON(t, path, catalog)
+			},
+		},
+		{
+			name: "declaration count hides omitted row",
+			edit: func(t *testing.T, dir string) {
+				t.Helper()
+				path := filepath.Join(dir, "declaration_admissions.json")
+				var catalog declarationAdmissionCatalog
+				readDeclarationAdmissionJSON(t, path, &catalog)
+				catalog.ExpectedDeclarations++
+				writeDeclarationAdmissionJSON(t, path, catalog)
+			},
+		},
 	}
+
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			defsRoot := declarationAdmissionCatalogFixtureDir(t)
+			testCase.edit(t, defsRoot)
+			var stdout, stderr bytes.Buffer
+			if code := run([]string{"declaration-admission", defsRoot, "--json"}, &stdout, &stderr); code == 0 {
+				t.Fatalf("catalog defect passed: stdout=%s stderr=%s", stdout.String(), stderr.String())
+			}
+		})
+	}
+}
+
+func TestDeclarationAdmissionCommandLoadsIndependentCatalogsWithoutRetainedArtifact(t *testing.T) {
+	defsRoot := declarationAdmissionCatalogFixtureDir(t)
 
 	var stdout, stderr bytes.Buffer
 	if code := run([]string{"declaration-admission", defsRoot, "--json"}, &stdout, &stderr); code != 0 {
@@ -571,6 +691,71 @@ func TestDeclarationAdmissionCommandLoadsCitedSidecarWithoutRetainedArtifact(t *
 	}
 	if report.ConnectorsChecked != 1 || report.SourceOperations != 1 || len(report.Findings) != 0 {
 		t.Fatalf("report = %+v, want one clean source-cited operation", report)
+	}
+}
+
+func declarationAdmissionCatalogFixtureDir(t *testing.T) string {
+	t.Helper()
+	defsRoot := t.TempDir()
+	for name, file := range cliSurfaceBundleFS(validCLISurfaceJSON()) {
+		path := filepath.Join(defsRoot, filepath.FromSlash(name))
+		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+			t.Fatalf("create fixture directory: %v", err)
+		}
+		if err := os.WriteFile(path, file.Data, 0o600); err != nil {
+			t.Fatalf("write fixture %s: %v", name, err)
+		}
+	}
+	sources := declarationAdmissionSourceCatalog{
+		SchemaVersion: declarationAdmissionSchemaVersion,
+		Cohort:        "test-cohort", ExpectedConnectors: 1, ExpectedOperations: 1,
+		SourceOperations: []declarationAdmissionSourceOperation{{
+			Connector: "cli-surface", ID: "list-widgets", Protocol: "rest", SourceURL: "https://provider.example.test/reference", Location: "Widgets > List", ProviderOperationID: "",
+			Method: "GET", Path: "/widgets", Binding: declarationAdmissionBinding{Kind: "stream", ID: "widgets"}, DestructiveKind: "none",
+		}},
+	}
+	declarations := declarationAdmissionCatalog{
+		SchemaVersion: declarationAdmissionSchemaVersion,
+		Cohort:        "test-cohort", ExpectedDeclarations: 1,
+		Declarations: []declarationAdmissionDeclaration{{
+			Connector: "cli-surface", SourceID: "list-widgets", Lane: declarationAdmissionLaneETL, Command: "widget list", State: declarationAdmissionStateImplemented,
+			Canonical: declarationAdmissionEndpoint{Method: "GET", Path: "/widgets"}, Binding: declarationAdmissionBinding{Kind: "stream", ID: "widgets"},
+		}},
+	}
+	for name, catalog := range map[string]any{
+		"declaration_admission_sources.json": sources,
+		"declaration_admissions.json":        declarations,
+	} {
+		raw, err := json.Marshal(catalog)
+		if err != nil {
+			t.Fatalf("marshal %s: %v", name, err)
+		}
+		if err := os.WriteFile(filepath.Join(defsRoot, name), raw, 0o600); err != nil {
+			t.Fatalf("write %s: %v", name, err)
+		}
+	}
+	return defsRoot
+}
+
+func readDeclarationAdmissionJSON(t *testing.T, path string, target any) {
+	t.Helper()
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read %s: %v", path, err)
+	}
+	if err := json.Unmarshal(raw, target); err != nil {
+		t.Fatalf("decode %s: %v", path, err)
+	}
+}
+
+func writeDeclarationAdmissionJSON(t *testing.T, path string, value any) {
+	t.Helper()
+	raw, err := json.Marshal(value)
+	if err != nil {
+		t.Fatalf("marshal %s: %v", path, err)
+	}
+	if err := os.WriteFile(path, raw, 0o600); err != nil {
+		t.Fatalf("write %s: %v", path, err)
 	}
 }
 
@@ -636,6 +821,13 @@ func TestDeclarationAdmissionNormalizesWriteActionTemplatePath(t *testing.T) {
 }
 
 func declarationAdmissionFixture() (engine.Bundle, declarationAdmissionDocument) {
+	target := func(sourceID, bindingKind, bindingID, destructiveKind, method, path string) engine.CommandFoundationTarget {
+		return engine.CommandFoundationTarget{
+			SourceID: sourceID, ProviderOperationID: "provider." + sourceID,
+			Binding:         engine.CommandBindingIdentity{Kind: bindingKind, ID: bindingID},
+			DestructiveKind: destructiveKind, Method: method, Path: path,
+		}
+	}
 	commands := []engine.CLICommand{
 		{
 			Path: "widgets list", Intent: "etl", Availability: declarationAdmissionStateImplemented,
@@ -644,27 +836,27 @@ func declarationAdmissionFixture() (engine.Bundle, declarationAdmissionDocument)
 		{
 			Path: "widgets create", Intent: "reverse_etl", Availability: declarationAdmissionStateDeferred,
 			APISurface: []engine.CLISurfaceEndpointRef{{Method: "POST", Path: "/v1/widgets"}},
-			Foundation: &engine.CommandFoundation{ID: "write_plan_foundation", Reason: "write plan compiler is not available", Component: "runtime_executor", Evidence: "runtime_executor_absent", Target: engine.CommandFoundationTarget{Method: "POST", Path: "/v1/widgets"}},
+			Foundation: &engine.CommandFoundation{ID: "write_plan_foundation", Reason: "write plan compiler is not available", Component: "runtime_executor", Evidence: "runtime_executor_absent", Target: target("create-widget", "write", "create_widget", "none", "POST", "/v1/widgets")},
 		},
 		{
 			Path: "widgets delete", Intent: "reverse_etl", Availability: declarationAdmissionStateDeferred,
 			APISurface: []engine.CLISurfaceEndpointRef{{Method: "DELETE", Path: "/v1/widgets/{id}"}},
-			Foundation: &engine.CommandFoundation{ID: "delete_plan_foundation", Reason: "delete plan compiler is not available", Component: "runtime_executor", Evidence: "runtime_executor_absent", Target: engine.CommandFoundationTarget{Method: "DELETE", Path: "/v1/widgets/{id}"}},
+			Foundation: &engine.CommandFoundation{ID: "delete_plan_foundation", Reason: "delete plan compiler is not available", Component: "runtime_executor", Evidence: "runtime_executor_absent", Target: target("delete-widget", "write", "delete_widget", "delete", "DELETE", "/v1/widgets/{id}")},
 		},
 		{
 			Path: "widgets download", Intent: "binary_download", Availability: declarationAdmissionStateDeferred,
 			APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/v1/widgets/{id}/archive"}},
-			Foundation: &engine.CommandFoundation{ID: "binary_download_foundation", Reason: "binary response binding is not available", Component: "binary_transfer_binding", Evidence: "binary_transfer_binding_absent", Target: engine.CommandFoundationTarget{Method: "GET", Path: "/v1/widgets/{id}/archive"}},
+			Foundation: &engine.CommandFoundation{ID: "binary_download_foundation", Reason: "binary response binding is not available", Component: "binary_transfer_binding", Evidence: "binary_transfer_binding_absent", Target: target("download-widget", "operation", "download_widget", "none", "GET", "/v1/widgets/{id}/archive")},
 		},
 		{
 			Path: "widgets upload", Intent: "binary_upload", Availability: declarationAdmissionStateDeferred,
 			APISurface: []engine.CLISurfaceEndpointRef{{Method: "POST", Path: "/v1/widgets/{id}/archive"}},
-			Foundation: &engine.CommandFoundation{ID: "binary_upload_foundation", Reason: "binary request binding is not available", Component: "binary_transfer_binding", Evidence: "binary_transfer_binding_absent", Target: engine.CommandFoundationTarget{Method: "POST", Path: "/v1/widgets/{id}/archive"}},
+			Foundation: &engine.CommandFoundation{ID: "binary_upload_foundation", Reason: "binary request binding is not available", Component: "binary_transfer_binding", Evidence: "binary_transfer_binding_absent", Target: target("upload-widget", "write", "upload_widget", "none", "POST", "/v1/widgets/{id}/archive")},
 		},
 		{
 			Path: "widgets descriptor", Intent: "direct_write", Availability: declarationAdmissionStateDeferred,
 			APISurface: []engine.CLISurfaceEndpointRef{{Method: "PATCH", Path: "/v1/widgets/{id}"}},
-			Foundation: &engine.CommandFoundation{ID: "source_descriptor_importer", Reason: "provider descriptor importer cannot yet represent this request", Component: "source_importer", Evidence: "source_importer_absent", Target: engine.CommandFoundationTarget{Method: "PATCH", Path: "/v1/widgets/{id}"}},
+			Foundation: &engine.CommandFoundation{ID: "source_descriptor_importer", Reason: "provider descriptor importer cannot yet represent this request", Component: "source_importer", Evidence: "source_importer_absent", Target: target("patch-widget", "operation", "patch_widget", "none", "PATCH", "/v1/widgets/{id}")},
 		},
 	}
 	bundle := engine.Bundle{
@@ -682,24 +874,27 @@ func declarationAdmissionFixture() (engine.Bundle, declarationAdmissionDocument)
 	}
 	rows := []struct {
 		id, method, sourcePath, command, lane, state, foundationID, foundationReason, foundationComponent, foundationEvidence string
+		bindingKind, bindingID, destructiveKind                                                                               string
 		destructive                                                                                                           *declarationAdmissionDestructive
 	}{
-		{"list-widgets", "GET", "/widgets", "widgets list", declarationAdmissionLaneETL, declarationAdmissionStateImplemented, "", "", "", "", nil},
-		{"create-widget", "POST", "/widgets", "widgets create", declarationAdmissionLaneReverseETL, declarationAdmissionStateDeferred, "write_plan_foundation", "write plan compiler is not available", "runtime_executor", "runtime_executor_absent", nil},
-		{"delete-widget", "DELETE", "/widgets/{id}", "widgets delete", declarationAdmissionLaneReverseETL, declarationAdmissionStateDeferred, "delete_plan_foundation", "delete plan compiler is not available", "runtime_executor", "runtime_executor_absent", &declarationAdmissionDestructive{Kind: "delete", Reason: "provider operation deletes a widget"}},
-		{"download-widget", "GET", "/widgets/{id}/archive", "widgets download", declarationAdmissionLaneBinaryDownload, declarationAdmissionStateDeferred, "binary_download_foundation", "binary response binding is not available", "binary_transfer_binding", "binary_transfer_binding_absent", nil},
-		{"upload-widget", "POST", "/widgets/{id}/archive", "widgets upload", declarationAdmissionLaneBinaryUpload, declarationAdmissionStateDeferred, "binary_upload_foundation", "binary request binding is not available", "binary_transfer_binding", "binary_transfer_binding_absent", nil},
-		{"patch-widget", "PATCH", "/widgets/{id}", "widgets descriptor", declarationAdmissionLaneDirectWrite, declarationAdmissionStateDeferred, "source_descriptor_importer", "provider descriptor importer cannot yet represent this request", "source_importer", "source_importer_absent", nil},
+		{"list-widgets", "GET", "/widgets", "widgets list", declarationAdmissionLaneETL, declarationAdmissionStateImplemented, "", "", "", "", "stream", "widgets", "none", nil},
+		{"create-widget", "POST", "/widgets", "widgets create", declarationAdmissionLaneReverseETL, declarationAdmissionStateDeferred, "write_plan_foundation", "write plan compiler is not available", "runtime_executor", "runtime_executor_absent", "write", "create_widget", "none", nil},
+		{"delete-widget", "DELETE", "/widgets/{id}", "widgets delete", declarationAdmissionLaneReverseETL, declarationAdmissionStateDeferred, "delete_plan_foundation", "delete plan compiler is not available", "runtime_executor", "runtime_executor_absent", "write", "delete_widget", "delete", &declarationAdmissionDestructive{Kind: "delete", Reason: "provider operation deletes a widget"}},
+		{"download-widget", "GET", "/widgets/{id}/archive", "widgets download", declarationAdmissionLaneBinaryDownload, declarationAdmissionStateDeferred, "binary_download_foundation", "binary response binding is not available", "binary_transfer_binding", "binary_transfer_binding_absent", "operation", "download_widget", "none", nil},
+		{"upload-widget", "POST", "/widgets/{id}/archive", "widgets upload", declarationAdmissionLaneBinaryUpload, declarationAdmissionStateDeferred, "binary_upload_foundation", "binary request binding is not available", "binary_transfer_binding", "binary_transfer_binding_absent", "write", "upload_widget", "none", nil},
+		{"patch-widget", "PATCH", "/widgets/{id}", "widgets descriptor", declarationAdmissionLaneDirectWrite, declarationAdmissionStateDeferred, "source_descriptor_importer", "provider descriptor importer cannot yet represent this request", "source_importer", "source_importer_absent", "operation", "patch_widget", "none", nil},
 	}
 	document := declarationAdmissionDocument{SchemaVersion: declarationAdmissionSchemaVersion, Connector: "acme"}
 	for _, row := range rows {
 		document.SourceOperations = append(document.SourceOperations, declarationAdmissionSourceOperation{
 			ID: row.id, SourceURL: "https://provider.example.test/v1/reference", Location: "Widgets > " + row.id, ProviderOperationID: "provider." + row.id,
-			Method: row.method, Path: row.sourcePath, BasePath: "/v1",
+			Protocol: "rest", Method: row.method, Path: row.sourcePath, BasePath: "/v1",
+			Binding: declarationAdmissionBinding{Kind: row.bindingKind, ID: row.bindingID}, DestructiveKind: row.destructiveKind,
 		})
 		declaration := declarationAdmissionDeclaration{
 			SourceID: row.id, Lane: row.lane, Command: row.command, State: row.state,
-			Canonical: declarationAdmissionEndpoint{Method: row.method, Path: "/v1" + row.sourcePath}, Destructive: row.destructive,
+			Canonical: declarationAdmissionEndpoint{Method: row.method, Path: "/v1" + row.sourcePath},
+			Binding:   declarationAdmissionBinding{Kind: row.bindingKind, ID: row.bindingID}, Destructive: row.destructive,
 		}
 		if row.foundationID != "" {
 			declaration.Foundation = &declarationAdmissionFoundation{

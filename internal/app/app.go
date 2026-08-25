@@ -2142,6 +2142,13 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 	if err := connectors.RejectLegacyConnectorName(req.Connector); err != nil {
 		return ReversePlan{}, nil, err
 	}
+	preflightConnector, ok := a.registry.Get(req.Connector)
+	if !ok {
+		return ReversePlan{}, nil, fmt.Errorf("connector %q not found", req.Connector)
+	}
+	if err := commandrunner.Preflight(preflightConnector, req.Path); err != nil {
+		return ReversePlan{}, nil, err
+	}
 	connector, runtime, err := a.ResolveConnectorCredential(ctx, req.Connector, req.Credential, req.Config)
 	if err != nil {
 		return ReversePlan{}, nil, err

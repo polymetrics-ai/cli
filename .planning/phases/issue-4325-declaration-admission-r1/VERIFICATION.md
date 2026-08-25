@@ -2,16 +2,19 @@
 
 ## Acceptance evidence
 
-- The new `connectorgen declaration-admission [dir] [--json]` check loads only
-  `sources/<connector>-declaration-admission.json` sidecars. Its focused tests
+- The new `connectorgen declaration-admission [dir] [--json]` check requires
+  `declaration_admission_sources.json` and `declaration_admissions.json` at the
+  definitions root. Nonzero expected counts make missing catalogs, omitted
+  rows, and zero-work runs fail. Its focused tests
   cover one runnable read; deferred reverse-ETL write/delete and binary
   upload/download rows; a retained importer/descriptor gap; missing,
   duplicate, citation-free, malformed, stale, base-path-mismatched,
   lane-changing, destructive-metadata-free, and falsely implemented rows; and
   a complete zero-runnable connector.
-- The on-disk fixture has only source URL, exact citation, raw operation ID,
-  endpoint, lane, command, and state. It contains neither an artifact nor a
-  hash, proving those are not admission inputs.
+- The on-disk fixture has only source URL, exact citation, stable source and
+  binding identities, endpoint, lane, command, destructive semantic, and
+  state. Its raw provider operation ID is empty, and it contains neither an
+  artifact nor a hash, proving none is an admission prerequisite.
 - Deferred command metadata is projected into the command surface and rejected
   by `commandrunner` with the typed `system/missing_foundation` classification
   before an executor can perform provider I/O.
@@ -20,7 +23,9 @@
   destructive/risk, approval/confirmation, retained source data, and live
   certification are not valid components, so a policy-only block is rejected
   while its command must stay discoverable.
-- GitHub's implemented `label delete` action is the destructive green control:
+- Source rows own the `none`/`delete`/`destructive` semantic, and declarations
+  cannot change it by self-labeling a shared endpoint. GitHub's implemented
+  `label delete` action is the destructive green control:
   its source-cited declaration is admitted and the actual commandrunner
   preflight succeeds. Deferred state is therefore endpoint-specific rather
   than a generic delete/destructive classification.
@@ -33,10 +38,14 @@
 
 ## Audit-repair status
 
-Inbox 008 reopened verification after an independent audit of `3d39cc1fc`.
-The earlier results remain evidence for DA-001 through DA-007. DA-008 and
-DA-009 are now green: deferred classification follows exact target resolution,
-and admission citations use the shared safe source-publication policy. The two
+Inbox 008 first repaired DA-008 and DA-009. A later exact-SHA audit of
+`683a3c76e` reopened DA-001 through DA-006, DA-010, and DA-011. They are now
+green: the denominator is required and counted; source/declaration/runtime
+bindings use stable identity; implemented resolution is shared; destructive
+semantics are source-owned; GraphQL/shared transports cannot swap operations;
+typed missing-foundation survives App/CLI boundaries and oversized metadata;
+the compact source ledger is embedded for production-layout preflight; and
+source/deferred endpoint identities are structurally validated. The two
 unstaged Stripe paths and the concurrently authored Docker Hub connector paths
 remain outside this work and are not staged, regenerated, or otherwise used as
 certificate evidence.
@@ -63,13 +72,17 @@ certificate evidence.
 | `make connectorgen-operation-evidence`, `make github-parity-artifacts-check`, `make connector-boundary`, `make connector-canon-check` | pass |
 | `make connectorgen-certification-subject`, `make connectorgen-certification-matrix`, `make connectorgen-certification-candidates`, `make connectorgen-certification-sweep` | pass |
 | `make release-workflow-check` | pass |
-| `go run ./cmd/connectorgen declaration-admission --json` | pass; zero sidecars and zero findings on current definitions |
+| `go run ./cmd/connectorgen declaration-admission --json` | pass; one required connector/source row and zero findings |
 | `go run ./cmd/connectorgen` | expected usage error; confirms the command is listed in the internal generator help |
 | `git diff --check` | pass |
 | `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestDeclarationAdmission\|TestCheckCLISurfaceEndpointCoverageAllowsDeclarationBoundDeferredCommand)$'` | pass after audit repair |
 | `go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run '^TestPreflightDeferredCommand'` | pass after audit repair; missing/invalid exact-target resolvers fail before typed `missing_foundation` |
 | `go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestCommandSurfaceProjectsDeferredFoundationGap$'` | pass after audit repair |
 | Focused semantic destructive red/green cases | red showed a POST `destructive_action` could omit metadata; green requires metadata from the exact declared target and rejects a non-destructive POST falsely labelled delete |
+| `go test -timeout 20m ./internal/connectors/engine -run '^TestDeferredCommand'` | pass; malformed endpoints, GraphQL staleness, and shared-transport operation swaps fail closed |
+| `go test -timeout 20m ./internal/app -run '^TestPlanConnectorCommandPreflightsDeferredCommandBeforeCredentialResolution$'` | pass; missing foundation precedes missing credential |
+| `go test -timeout 20m ./internal/cli -run '^TestShippedDeclarationTargetReachesPublicMissingFoundationEnvelopeWithoutAPISurface$'` | pass; `defs.FS` compact ledger and public `internal/missing_foundation` envelope work with no API-surface manifest |
+| `go test -timeout 20m ./internal/connectors/commandrunner -run '^TestPreflightDeferredCommand'` | pass; oversized foundation text retains typed `system/missing_foundation` |
 
 The aggregate `go test -timeout 20m ./...` and serial `make verify` are not
 run as one process: the repository's `AGENTS.md` explicitly says a per-command

@@ -1130,7 +1130,11 @@ func commandSurfaceFoundation(foundation *CommandFoundation) *connectors.Command
 	}
 	return &connectors.CommandFoundation{
 		ID: foundation.ID, Reason: foundation.Reason, Component: foundation.Component, Evidence: foundation.Evidence,
-		Target: connectors.CommandFoundationTarget{Method: foundation.Target.Method, Path: foundation.Target.Path},
+		Target: connectors.CommandFoundationTarget{
+			SourceID: foundation.Target.SourceID, ProviderOperationID: foundation.Target.ProviderOperationID,
+			Binding:         connectors.CommandBindingIdentity{Kind: foundation.Target.Binding.Kind, ID: foundation.Target.Binding.ID},
+			DestructiveKind: foundation.Target.DestructiveKind, Method: foundation.Target.Method, Path: foundation.Target.Path,
+		},
 	}
 }
 

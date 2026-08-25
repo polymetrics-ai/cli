@@ -5,8 +5,9 @@ without converting connector-owned definitions or claiming live certification.
 
 ## What Changed
 
-- Added `connectorgen declaration-admission [dir] [--json]` and a versioned,
-  source-cited declaration sidecar schema.
+- Added `connectorgen declaration-admission [dir] [--json]`, a required
+  independently counted source-cohort schema, and a separate declaration
+  catalog schema.
 - Required exactly one declaration per source row, a canonical lane/endpoint,
   a discoverable `cli_surface.json` command, delete metadata, and either a
   proven runtime binding or named deferred foundation.
@@ -26,6 +27,14 @@ without converting connector-owned definitions or claiming live certification.
 - Added GitHub `label delete` as the implemented destructive green control:
   endpoint-specific missing action contracts are deferred, not delete
   operations as a class.
+- Required exact source/declaration/runtime binding identities, including for
+  GraphQL operations sharing one transport endpoint; empty provider-native
+  operation IDs remain valid when the stable source identity and citation are
+  exact.
+- Embedded the compact source target ledger used by deferred production
+  preflight, while retaining the existing omission of full `api_surface.json`.
+  App planning now preflights before credentials, oversized foundation metadata
+  remains typed, and the public CLI preserves `missing_foundation`.
 
 The accompanying investigation records the exact distinction: GitHub's cited
 `label delete` endpoint has a typed delete action, CLI binding, fixture, and
@@ -67,8 +76,9 @@ blocked source mapping with no action or command binding. See
   certification projection, connector boundary, canon, and release-workflow
   gates (all pass)
 - Audit repair: focused declaration-admission, deferred-command, and engine
-  projection suites pass; repository-wide vet/build, tidy, lint, agent-contract,
-  and GSD evidence checks pass.
+  projection suites pass, including the exact-SHA DA-001/002/003/004/005/006/
+  010/011 repairs; repository-wide vet/build, tidy, lint, agent-contract, and
+  GSD evidence checks are recorded in verification.
 
 The aggregate `go test -timeout 20m ./...` and serial `make verify` are left
 to CI, per the repository’s per-command-timeout guidance. Full commands and

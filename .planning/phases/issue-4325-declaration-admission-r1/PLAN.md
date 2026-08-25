@@ -22,7 +22,7 @@
 | Policy-only suppression is rejected | fake | A hermetic declaration bundle mutates only the foundation component to a policy value; it is rejected before any provider request. A provider call cannot establish this schema invariant. |
 | Existing implemented delete remains runnable | live | GitHub's cited `label delete` declaration admits and the no-credential binary dispatch reaches `missing --credential`. |
 | Deferred command cannot hide behind a policy or excluded endpoint | fake | A hermetic bundle tries to declare a deferred command against an excluded/policy endpoint. The shared runtime resolver refuses it before it can become `missing_foundation`; no provider call can establish this local structural invariant. |
-| Deferred foundation is machine-verifiable and round-trippable | fake | A hermetic sidecar and command surface must carry the same typed component, evidence kind, and one canonical target. Tests mutate each field independently and observe an admission/preflight failure. |
+| Deferred foundation is machine-verifiable and round-trippable | fake | A hermetic source cohort, declaration catalog, and command surface carry the same typed component, evidence, exact source/binding identity, destructive semantic, and canonical target. Tests mutate each independently and observe an admission/preflight failure. |
 | Citation follows the existing safe source-publication policy | fake | A hermetic source row using HTTP, userinfo, a private literal, a fragment, or a credential-shaped query is rejected by the shared local citation validator. |
 
 ## Scope boundary
@@ -61,7 +61,7 @@ work is recorded and performed inline. Required skills loaded: `golang-how-to`,
 ## Audit repair waves (TDD)
 
 1. **Red — independent denominator and command identity:** Extend the
-   hermetic sidecar tests to reject duplicate exact provider operation
+   hermetic catalog tests to reject duplicate exact provider operation
    identities, noncanonical/non-round-trippable command paths, and weak or
    secret-shaped citation URLs. The source row itself remains the independent
    completeness denominator; no source lock, imported bytes, or hash is read.
@@ -70,7 +70,7 @@ work is recorded and performed inline. Required skills loaded: `golang-how-to`,
    resolver returns `missing_foundation` before inspecting any target, so these
    tests must fail first.
 3. **Green — typed target and foundation evidence:** Carry a typed foundation
-   component/evidence and exactly one target through the declaration sidecar,
+   component/evidence and exactly one target through the declaration catalog,
    CLI schema, engine projection, and commandrunner. The engine's no-network
    deferred preflight validates its target against a blocked ledger operation;
    `connectorgen declaration-admission` calls the real `commandrunner.Preflight`
@@ -95,10 +95,11 @@ work is recorded and performed inline. Required skills loaded: `golang-how-to`,
    mismatch; false implementation; and an all-deferred zero-runnable bundle.
    The tests should fail because `declaration-admission` and its schema/type do
    not exist.
-2. **Green — shared declaration checker:** Add the optional, versioned
-   `sources/<connector>-declaration-admission.json` sidecar and a
+2. **Green — shared declaration checker:** Add the required, versioned
+   `declaration_admission_sources.json` independent cohort and separate
+   `declaration_admissions.json` catalog plus a
    `connectorgen declaration-admission [defs-dir] [--json]` command. It checks
-   only opt-in sidecars, deterministically cross-links source identity, lane,
+   a nonzero expected source denominator, deterministically cross-links source identity, lane,
    canonical endpoint, command, destructive/delete metadata, and runtime
    state. It never fetches provider data or requires source artifact bytes,
    hashes, request schemas, or fixtures.
@@ -117,6 +118,22 @@ work is recorded and performed inline. Required skills loaded: `golang-how-to`,
    retention/hash, or live-certification policy. Prove a hermetic deferred
    delete command returns `system/missing_foundation`, while GitHub's `label
    delete` remains implemented and reaches the no-credential boundary.
+
+## Exact-SHA re-audit repair (2026-08-26)
+
+The independent Codex audit of `683a3c76e` reopened DA-001 through DA-006,
+DA-010, and DA-011. The repair uses two required root catalogs rather than
+optional connector sidecars; binds source, declaration, command, and runtime by
+stable binding identity rather than method/path alone; derives destructive
+semantics from the independent source row; and moves implemented binding
+resolution into one engine function shared with runtime preflight. Deferred
+targets now include source/binding identity and use the compact source cohort
+embedded in `defs.FS`, so production preflight does not depend on the omitted
+`api_surface.json`. Typed `missing_foundation` survives oversized metadata,
+the App plan path preflights before credential resolution, and the public CLI
+preserves its machine-readable code. Structural endpoint checks apply to new
+source/deferred identities without retroactively changing legacy implemented
+provider-specific command paths.
 
 ## CLI docs parity
 

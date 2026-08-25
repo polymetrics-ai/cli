@@ -3,6 +3,7 @@ package commandrunner
 import (
 	"errors"
 	"fmt"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
@@ -69,5 +70,21 @@ func TestPreflightDeferredCommandFailsBeforeMissingFoundationOnInvalidTarget(t *
 	}
 	if blocked.Failure != nil {
 		t.Fatalf("failure = %+v, want no missing_foundation classification for invalid target", blocked.Failure)
+	}
+}
+
+func TestPreflightDeferredCommandKeepsTypedClassificationForOversizedFoundationText(t *testing.T) {
+	command := deferredCommandFixture()
+	command.Foundation.ID = strings.Repeat("foundation", 80)
+	command.Foundation.Reason = strings.Repeat("runtime foundation is unavailable ", 100)
+	connector := &deferredPreflightConnector{fakeConnector: &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{command}}}}
+
+	_, _, err := resolvePreflightCommand(connector, []string{"widgets", "delete"})
+	var blocked *BlockedCommandError
+	if !errors.As(err, &blocked) || blocked.Failure == nil {
+		t.Fatalf("oversized foundation error = %v, want typed blocked failure", err)
+	}
+	if blocked.Failure.Code() != "missing_foundation" || blocked.Failure.Domain() != failures.DomainSystem {
+		t.Fatalf("oversized foundation classification = %s/%s, want system/missing_foundation", blocked.Failure.Domain(), blocked.Failure.Code())
 	}
 }

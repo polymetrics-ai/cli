@@ -40,24 +40,50 @@ type declarationAdmissionDocument struct {
 	Declarations     []declarationAdmissionDeclaration     `json:"declarations"`
 }
 
+type declarationAdmissionSourceCatalog struct {
+	SchemaVersion      int                                   `json:"schema_version"`
+	Cohort             string                                `json:"cohort"`
+	ExpectedConnectors int                                   `json:"expected_connectors"`
+	ExpectedOperations int                                   `json:"expected_source_operations"`
+	SourceOperations   []declarationAdmissionSourceOperation `json:"source_operations"`
+}
+
+type declarationAdmissionCatalog struct {
+	SchemaVersion        int                               `json:"schema_version"`
+	Cohort               string                            `json:"cohort"`
+	ExpectedDeclarations int                               `json:"expected_declarations"`
+	Declarations         []declarationAdmissionDeclaration `json:"declarations"`
+}
+
 type declarationAdmissionSourceOperation struct {
-	ID                  string `json:"id"`
-	SourceURL           string `json:"source_url"`
-	Location            string `json:"location"`
-	ProviderOperationID string `json:"operation_id"`
-	Method              string `json:"method"`
-	BasePath            string `json:"base_path,omitempty"`
-	Path                string `json:"path"`
+	Connector           string                      `json:"connector,omitempty"`
+	ID                  string                      `json:"id"`
+	Protocol            string                      `json:"protocol"`
+	SourceURL           string                      `json:"source_url"`
+	Location            string                      `json:"location"`
+	ProviderOperationID string                      `json:"operation_id"`
+	Method              string                      `json:"method"`
+	BasePath            string                      `json:"base_path,omitempty"`
+	Path                string                      `json:"path"`
+	Binding             declarationAdmissionBinding `json:"binding"`
+	DestructiveKind     string                      `json:"destructive_kind"`
 }
 
 type declarationAdmissionDeclaration struct {
+	Connector   string                           `json:"connector,omitempty"`
 	SourceID    string                           `json:"source_id"`
 	Lane        string                           `json:"lane"`
 	Command     string                           `json:"command"`
 	State       string                           `json:"state"`
 	Canonical   declarationAdmissionEndpoint     `json:"canonical"`
+	Binding     declarationAdmissionBinding      `json:"binding"`
 	Foundation  *declarationAdmissionFoundation  `json:"foundation_gap,omitempty"`
 	Destructive *declarationAdmissionDestructive `json:"destructive,omitempty"`
+}
+
+type declarationAdmissionBinding struct {
+	Kind string `json:"kind"`
+	ID   string `json:"id"`
 }
 
 type declarationAdmissionEndpoint struct {
@@ -89,7 +115,8 @@ type declarationAdmissionOptions struct {
 	asJSON bool
 }
 
-// runDeclarationAdmission checks optional, source-cited admission sidecars.
+// runDeclarationAdmission checks the required independent source cohort and
+// its separate declaration catalog.
 // It does not fetch provider material or run a provider operation. It reuses
 // commandrunner's no-I/O preflight so executable and deferred declarations are
 // checked by the same resolver as the CLI without becoming runtime or live
@@ -149,42 +176,86 @@ func parseDeclarationAdmissionOptions(args []string) (declarationAdmissionOption
 }
 
 func declarationAdmissionPathCheck(dir string) (declarationAdmissionReport, error) {
-	entries, err := os.ReadDir(dir)
+	sourceFile := filepath.Join(dir, "declaration_admission_sources.json")
+	declarationFile := filepath.Join(dir, "declaration_admissions.json")
+	sourceRaw, err := os.ReadFile(sourceFile)
 	if err != nil {
-		return declarationAdmissionReport{}, fmt.Errorf("read definitions: %w", err)
+		return declarationAdmissionReport{}, fmt.Errorf("read required independent source cohort %s: %w", sourceFile, err)
 	}
-	report := declarationAdmissionReport{Findings: []Finding{}}
-	for _, entry := range entries {
-		if !entry.IsDir() {
-			continue
+	if err := engine.ValidateDeclarationAdmissionSources(sourceRaw); err != nil {
+		return declarationAdmissionReport{}, fmt.Errorf("validate independent source cohort: %w", err)
+	}
+	declarationRaw, err := os.ReadFile(declarationFile)
+	if err != nil {
+		return declarationAdmissionReport{}, fmt.Errorf("read required declaration catalog %s: %w", declarationFile, err)
+	}
+	if err := engine.ValidateDeclarationAdmission(declarationRaw); err != nil {
+		return declarationAdmissionReport{}, fmt.Errorf("validate declaration catalog: %w", err)
+	}
+
+	var sources declarationAdmissionSourceCatalog
+	if err := decodeSourceStrictJSON(sourceRaw, &sources); err != nil {
+		return declarationAdmissionReport{}, fmt.Errorf("parse independent source cohort: %w", err)
+	}
+	var declarations declarationAdmissionCatalog
+	if err := decodeSourceStrictJSON(declarationRaw, &declarations); err != nil {
+		return declarationAdmissionReport{}, fmt.Errorf("parse declaration catalog: %w", err)
+	}
+
+	report := declarationAdmissionReport{Findings: []Finding{}, SourceOperations: len(sources.SourceOperations)}
+	addCatalogFinding := func(file, message string) {
+		report.Findings = append(report.Findings, Finding{File: file, Rule: "declaration_admission", Message: message})
+	}
+	if sources.SchemaVersion != declarationAdmissionSchemaVersion || declarations.SchemaVersion != declarationAdmissionSchemaVersion {
+		addCatalogFinding("declaration_admission_sources.json", "catalog schema_version must be 1")
+	}
+	if strings.TrimSpace(sources.Cohort) == "" || sources.Cohort != declarations.Cohort {
+		addCatalogFinding("declaration_admissions.json", "declaration cohort does not match the independent source cohort")
+	}
+	if sources.ExpectedConnectors <= 0 || sources.ExpectedOperations <= 0 || declarations.ExpectedDeclarations <= 0 {
+		addCatalogFinding("declaration_admission_sources.json", "repository admission cohort expected counts must be nonzero")
+	}
+	if sources.ExpectedOperations != len(sources.SourceOperations) {
+		addCatalogFinding("declaration_admission_sources.json", fmt.Sprintf("expected_source_operations = %d, found %d", sources.ExpectedOperations, len(sources.SourceOperations)))
+	}
+	if declarations.ExpectedDeclarations != len(declarations.Declarations) {
+		addCatalogFinding("declaration_admissions.json", fmt.Sprintf("expected_declarations = %d, found %d", declarations.ExpectedDeclarations, len(declarations.Declarations)))
+	}
+
+	documents := map[string]*declarationAdmissionDocument{}
+	for _, source := range sources.SourceOperations {
+		document := documents[source.Connector]
+		if document == nil {
+			document = &declarationAdmissionDocument{SchemaVersion: declarationAdmissionSchemaVersion, Connector: source.Connector}
+			documents[source.Connector] = document
 		}
-		connector := entry.Name()
-		admissionFile := filepath.Join(dir, connector, "sources", connector+"-declaration-admission.json")
-		raw, err := os.ReadFile(admissionFile)
-		if errors.Is(err, os.ErrNotExist) {
-			continue
+		document.SourceOperations = append(document.SourceOperations, source)
+	}
+	for _, declaration := range declarations.Declarations {
+		document := documents[declaration.Connector]
+		if document == nil {
+			document = &declarationAdmissionDocument{SchemaVersion: declarationAdmissionSchemaVersion, Connector: declaration.Connector}
+			documents[declaration.Connector] = document
 		}
-		report.ConnectorsChecked++
-		if err != nil {
-			report.Findings = append(report.Findings, declarationAdmissionFinding(connector, admissionFile, "read admission declaration: "+err.Error()))
-			continue
-		}
-		if err := engine.ValidateDeclarationAdmission(raw); err != nil {
-			report.Findings = append(report.Findings, declarationAdmissionFinding(connector, admissionFile, "schema: "+err.Error()))
-			continue
-		}
-		var document declarationAdmissionDocument
-		if err := decodeSourceStrictJSON(raw, &document); err != nil {
-			report.Findings = append(report.Findings, declarationAdmissionFinding(connector, admissionFile, "parse admission declaration: "+err.Error()))
-			continue
-		}
+		document.Declarations = append(document.Declarations, declaration)
+	}
+	if sources.ExpectedConnectors != len(documents) {
+		addCatalogFinding("declaration_admission_sources.json", fmt.Sprintf("expected_connectors = %d, found %d", sources.ExpectedConnectors, len(documents)))
+	}
+
+	connectorNames := make([]string, 0, len(documents))
+	for connector := range documents {
+		connectorNames = append(connectorNames, connector)
+	}
+	sort.Strings(connectorNames)
+	report.ConnectorsChecked = len(connectorNames)
+	for _, connector := range connectorNames {
 		bundle, err := engine.Load(os.DirFS(dir), connector)
 		if err != nil {
-			report.Findings = append(report.Findings, declarationAdmissionFinding(connector, admissionFile, "load connector bundle: "+err.Error()))
+			report.Findings = append(report.Findings, declarationAdmissionFinding(connector, declarationFile, "load connector bundle: "+err.Error()))
 			continue
 		}
-		report.SourceOperations += len(document.SourceOperations)
-		report.Findings = append(report.Findings, declarationAdmissionFindings(bundle, document)...)
+		report.Findings = append(report.Findings, declarationAdmissionFindings(bundle, *documents[connector])...)
 	}
 	sort.Slice(report.Findings, func(i, j int) bool {
 		if report.Findings[i].Connector != report.Findings[j].Connector {
@@ -200,7 +271,7 @@ func declarationAdmissionPathCheck(dir string) (declarationAdmissionReport, erro
 
 func declarationAdmissionFindings(bundle engine.Bundle, document declarationAdmissionDocument) []Finding {
 	findings := []Finding{}
-	file := filepath.ToSlash(filepath.Join("sources", bundle.Name+"-declaration-admission.json"))
+	file := "declaration_admissions.json"
 	add := func(message string) {
 		findings = append(findings, Finding{Connector: bundle.Name, File: file, Rule: "declaration_admission", Message: message})
 	}
@@ -216,6 +287,10 @@ func declarationAdmissionFindings(bundle engine.Bundle, document declarationAdmi
 	sources := make(map[string]declarationAdmissionSourceOperation, len(document.SourceOperations))
 	identities := make(map[string]string, len(document.SourceOperations))
 	for _, source := range document.SourceOperations {
+		if source.Connector != "" && source.Connector != bundle.Name {
+			add(fmt.Sprintf("source operation %q belongs to connector %q", source.ID, source.Connector))
+			continue
+		}
 		if source.ID == "" {
 			add("source operation has no identity")
 			continue
@@ -228,10 +303,29 @@ func declarationAdmissionFindings(bundle engine.Bundle, document declarationAdmi
 		if !declarationAdmissionProviderURL(source.SourceURL) {
 			add("source operation " + source.ID + " has no valid provider source URL")
 		}
-		if strings.TrimSpace(source.Location) == "" || strings.TrimSpace(source.ProviderOperationID) == "" {
+		if strings.TrimSpace(source.Location) == "" {
 			add("source operation " + source.ID + " has no exact provider operation citation")
 		}
-		if _, err := declarationAdmissionEffectivePath(source.BasePath, source.Path); err != nil {
+		if source.ProviderOperationID != strings.TrimSpace(source.ProviderOperationID) {
+			add("source operation " + source.ID + " has a noncanonical provider operation identity")
+		}
+		if source.Protocol != "rest" && source.Protocol != "graphql" {
+			add("source operation " + source.ID + " has an invalid protocol")
+		}
+		if !declarationAdmissionBindingValid(source.Binding) {
+			add("source operation " + source.ID + " has no exact canonical binding")
+		}
+		switch source.DestructiveKind {
+		case "none", "delete", "destructive":
+		default:
+			add("source operation " + source.ID + " has an invalid destructive semantic")
+		}
+		effectivePath, err := declarationAdmissionEffectivePath(source.BasePath, source.Path)
+		if err != nil {
+			add("source operation " + source.ID + ": " + err.Error())
+			continue
+		}
+		if err := engine.ValidateCommandEndpoint(strings.ToUpper(strings.TrimSpace(source.Method)), effectivePath); err != nil {
 			add("source operation " + source.ID + ": " + err.Error())
 			continue
 		}
@@ -244,6 +338,10 @@ func declarationAdmissionFindings(bundle engine.Bundle, document declarationAdmi
 	}
 	declared := make(map[string]bool, len(document.Declarations))
 	for _, declaration := range document.Declarations {
+		if declaration.Connector != "" && declaration.Connector != bundle.Name {
+			add(fmt.Sprintf("declaration for source operation %q belongs to connector %q", declaration.SourceID, declaration.Connector))
+			continue
+		}
 		source, exists := sources[declaration.SourceID]
 		if declaration.SourceID == "" || !exists {
 			add("declaration references unknown source operation " + declaration.SourceID)
@@ -278,7 +376,7 @@ func declarationAdmissionSourceIdentity(source declarationAdmissionSourceOperati
 	if err != nil {
 		return ""
 	}
-	return strings.Join([]string{source.SourceURL, source.Location, source.ProviderOperationID, strings.ToUpper(strings.TrimSpace(source.Method)), path}, "\x00")
+	return strings.Join([]string{source.SourceURL, source.Location, strings.ToUpper(strings.TrimSpace(source.Method)), path, source.Binding.Kind, source.Binding.ID}, "\x00")
 }
 
 func declarationAdmissionCheckRow(findings *[]Finding, bundle engine.Bundle, file string, source declarationAdmissionSourceOperation, declaration declarationAdmissionDeclaration) {
@@ -297,27 +395,24 @@ func declarationAdmissionCheckRow(findings *[]Finding, bundle engine.Bundle, fil
 	if !strings.EqualFold(declaration.Canonical.Method, source.Method) || declaration.Canonical.Path != effectivePath {
 		add("base-path mismatch or stale canonical endpoint")
 	}
-	destructiveTarget := declarationAdmissionSurfaceIsDestructive(bundle.Surface, declaration.Canonical)
-	if strings.EqualFold(source.Method, "DELETE") {
-		if declaration.Destructive == nil || declaration.Destructive.Kind != "delete" || strings.TrimSpace(declaration.Destructive.Reason) == "" {
-			add("delete operation lacks destructive metadata")
-		}
-	} else if destructiveTarget && declaration.Destructive == nil {
-		add("destructive operation lacks destructive metadata")
-	} else if declaration.Destructive != nil {
-		switch declaration.Destructive.Kind {
-		case "delete":
-			if !destructiveTarget {
-				add("delete metadata requires a destructive target")
+	if !declarationAdmissionBindingValid(declaration.Binding) || !declarationAdmissionBindingsMatch(declaration.Binding, source.Binding) {
+		add("canonical binding does not match the independent source operation")
+	}
+	switch source.DestructiveKind {
+	case "none":
+		if declaration.Destructive != nil {
+			if declaration.Destructive.Kind == "delete" {
+				add("delete semantics do not match the independent source semantic")
+			} else {
+				add("destructive metadata does not match the independent source semantic")
 			}
-		case "destructive":
-			if !destructiveTarget || !declarationAdmissionMutationMethod(source.Method) {
-				add("destructive metadata requires a destructive mutation target")
-			}
-		default:
-			add("destructive metadata has an unknown kind")
 		}
-		if strings.TrimSpace(declaration.Destructive.Reason) == "" {
+	case "delete", "destructive":
+		if declaration.Destructive == nil {
+			add(source.DestructiveKind + " operation lacks destructive metadata")
+		} else if declaration.Destructive.Kind != source.DestructiveKind {
+			add("delete semantics do not match the independent source semantic")
+		} else if strings.TrimSpace(declaration.Destructive.Reason) == "" {
 			add("destructive metadata lacks a reason")
 		}
 	}
@@ -346,12 +441,15 @@ func declarationAdmissionCheckRow(findings *[]Finding, bundle engine.Bundle, fil
 		if declaration.Foundation != nil || command.Foundation != nil {
 			add("implemented declaration must not retain a foundation gap")
 		}
-		if command.Availability != declarationAdmissionStateImplemented || !declarationAdmissionImplementedBinding(bundle, command, declaration.Lane, declaration.Canonical) {
+		resolved, resolveErr := engine.ResolveImplementedCommandPath(bundle, declaration.Command)
+		if command.Availability != declarationAdmissionStateImplemented || resolveErr != nil ||
+			!strings.EqualFold(resolved.Method, declaration.Canonical.Method) || resolved.Path != declaration.Canonical.Path ||
+			!declarationAdmissionRuntimeBindingMatches(resolved.Binding, source.Binding) {
 			add("implemented declaration has no valid runtime binding")
 		} else if err := commandrunner.Preflight(engine.New(bundle, nil), commandPath); err != nil {
 			add("implemented declaration fails runtime preflight: " + err.Error())
 		}
-		if declaration.Destructive != nil && !declarationAdmissionDestructiveBinding(bundle, command, declaration) {
+		if !declarationAdmissionResolvedDestructiveMatches(resolved, source.DestructiveKind) {
 			add("implemented destructive declaration does not retain destructive runtime metadata")
 		}
 	case declarationAdmissionStateDeferred:
@@ -362,6 +460,9 @@ func declarationAdmissionCheckRow(findings *[]Finding, bundle engine.Bundle, fil
 		}
 		if !declarationAdmissionFoundationMatches(declaration.Foundation, command.Foundation) {
 			add("deferred declaration requires the same named foundation gap on its command")
+		}
+		if !declarationAdmissionFoundationTargetMatchesSource(command.Foundation, source) {
+			add("deferred command foundation target does not retain the exact source identity and binding")
 		}
 		if declaration.Foundation != nil && !declarationAdmissionEndpointsMatch(declaration.Foundation.Target, declaration.Canonical) {
 			add("deferred declaration foundation target does not match the canonical API surface endpoint")
@@ -400,16 +501,24 @@ func declarationAdmissionLaneForIntent(intent string) string {
 }
 
 func declarationAdmissionEffectivePath(basePath, operationPath string) (string, error) {
-	if !strings.HasPrefix(operationPath, "/") || strings.Contains(operationPath, "?") || strings.Contains(operationPath, "#") || strings.Contains(operationPath, "..") {
+	if !strings.HasPrefix(operationPath, "/") {
 		return "", errors.New("source path must be a connector-relative absolute path")
 	}
+	effective := operationPath
 	if basePath == "" || basePath == "/" {
-		return operationPath, nil
+		if err := engine.ValidateCommandEndpoint("GET", effective); err != nil {
+			return "", errors.New("source path must be a canonical connector-relative absolute path")
+		}
+		return effective, nil
 	}
-	if !strings.HasPrefix(basePath, "/") || strings.Contains(basePath, "?") || strings.Contains(basePath, "#") || strings.Contains(basePath, "..") {
-		return "", errors.New("base path must be a connector-relative absolute path")
+	if err := engine.ValidateCommandEndpoint("GET", basePath); err != nil {
+		return "", errors.New("base path must be a canonical connector-relative absolute path")
 	}
-	return strings.TrimRight(basePath, "/") + operationPath, nil
+	effective = strings.TrimRight(basePath, "/") + operationPath
+	if err := engine.ValidateCommandEndpoint("GET", effective); err != nil {
+		return "", errors.New("source path must be a canonical connector-relative absolute path")
+	}
+	return effective, nil
 }
 
 func declarationAdmissionCommand(bundle engine.Bundle, path string) (engine.CLICommand, int) {
@@ -452,18 +561,6 @@ func declarationAdmissionSurfaceHasEndpoint(surface *engine.APISurface, endpoint
 	return matches == 1
 }
 
-func declarationAdmissionSurfaceIsDestructive(surface *engine.APISurface, target declarationAdmissionEndpoint) bool {
-	if surface == nil {
-		return false
-	}
-	for _, endpoint := range surface.Endpoints {
-		if strings.EqualFold(endpoint.Method, target.Method) && endpoint.Path == target.Path && endpoint.Operation != nil && endpoint.Operation.Model == "destructive_action" {
-			return true
-		}
-	}
-	return false
-}
-
 func declarationAdmissionFoundationMatches(declaration *declarationAdmissionFoundation, command *engine.CommandFoundation) bool {
 	return declarationAdmissionFoundationSpecific(declaration) && command != nil && declaration.ID == command.ID && declaration.Reason == command.Reason &&
 		declaration.Component == command.Component && declaration.Evidence == command.Evidence &&
@@ -503,40 +600,6 @@ func declarationAdmissionFoundationEvidenceFinding(bundle engine.Bundle, declara
 	return ""
 }
 
-func declarationAdmissionImplementedBinding(bundle engine.Bundle, command engine.CLICommand, lane string, endpoint declarationAdmissionEndpoint) bool {
-	switch lane {
-	case declarationAdmissionLaneETL:
-		for _, stream := range bundle.Streams {
-			method := stream.Method
-			if method == "" {
-				method = "GET"
-			}
-			if command.Stream == stream.Name && strings.EqualFold(method, endpoint.Method) && stream.Path == endpoint.Path {
-				return true
-			}
-		}
-	case declarationAdmissionLaneReverseETL, declarationAdmissionLaneBinaryUpload:
-		for _, action := range bundle.Writes {
-			if command.Write == action.Name && strings.EqualFold(action.Method, endpoint.Method) && declarationAdmissionActionPath(action.Path) == endpoint.Path {
-				return true
-			}
-		}
-	case declarationAdmissionLaneDirectRead, declarationAdmissionLaneDirectWrite, declarationAdmissionLaneBinaryDownload:
-		for _, operation := range bundle.Operations {
-			if command.Operation != operation.ID {
-				continue
-			}
-			if operation.REST != nil && strings.EqualFold(operation.REST.Method, endpoint.Method) && operation.REST.Path == endpoint.Path {
-				return true
-			}
-			if operation.Binary != nil && strings.EqualFold(operation.Binary.Method, endpoint.Method) && operation.Binary.Path == endpoint.Path {
-				return true
-			}
-		}
-	}
-	return false
-}
-
 func declarationAdmissionActionPath(path string) string {
 	return declarationAdmissionActionTemplateRE.ReplaceAllString(path, "{$1}")
 }
@@ -545,10 +608,48 @@ func declarationAdmissionEndpointsMatch(left, right declarationAdmissionEndpoint
 	return strings.EqualFold(left.Method, right.Method) && left.Path == right.Path
 }
 
-func declarationAdmissionMutationMethod(method string) bool {
-	switch strings.ToUpper(strings.TrimSpace(method)) {
-	case "POST", "PUT", "PATCH", "DELETE":
+func declarationAdmissionBindingValid(binding declarationAdmissionBinding) bool {
+	if binding.ID == "" || binding.ID != strings.TrimSpace(binding.ID) {
+		return false
+	}
+	switch binding.Kind {
+	case connectors.CommandBindingCommand, connectors.CommandBindingStream, connectors.CommandBindingWrite, connectors.CommandBindingOperation:
 		return true
+	default:
+		return false
+	}
+}
+
+func declarationAdmissionBindingsMatch(left, right declarationAdmissionBinding) bool {
+	return left.Kind == right.Kind && left.ID == right.ID
+}
+
+func declarationAdmissionRuntimeBindingMatches(runtime connectors.CommandBindingIdentity, source declarationAdmissionBinding) bool {
+	return runtime.Kind == source.Kind && runtime.ID == source.ID
+}
+
+func declarationAdmissionFoundationTargetMatchesSource(foundation *engine.CommandFoundation, source declarationAdmissionSourceOperation) bool {
+	if foundation == nil {
+		return false
+	}
+	effectivePath, err := declarationAdmissionEffectivePath(source.BasePath, source.Path)
+	if err != nil {
+		return false
+	}
+	target := foundation.Target
+	return target.SourceID == source.ID && target.ProviderOperationID == source.ProviderOperationID &&
+		target.Binding.Kind == source.Binding.Kind && target.Binding.ID == source.Binding.ID &&
+		target.DestructiveKind == source.DestructiveKind && strings.EqualFold(target.Method, source.Method) && target.Path == effectivePath
+}
+
+func declarationAdmissionResolvedDestructiveMatches(resolved engine.ResolvedCommandBinding, semantic string) bool {
+	switch semantic {
+	case "none":
+		return !resolved.Destructive.RequiresApproval()
+	case "delete":
+		return strings.EqualFold(resolved.Destructive.MutationClass, "delete") && resolved.Destructive.RequiresApproval()
+	case "destructive":
+		return resolved.Destructive.RequiresApproval()
 	default:
 		return false
 	}
@@ -564,43 +665,4 @@ func declarationAdmissionDeferredPreflight(bundle engine.Bundle, path []string) 
 		return fmt.Sprintf("deferred target does not resolve to system/missing_foundation: %v", blocked)
 	}
 	return ""
-}
-
-func declarationAdmissionDestructiveBinding(bundle engine.Bundle, command engine.CLICommand, declaration declarationAdmissionDeclaration) bool {
-	if declaration.Destructive == nil {
-		return true
-	}
-	if action, found := declarationAdmissionWriteAction(bundle, command.Write); found {
-		target := engine.DestructiveTargetForWrite(bundle.Name, action)
-		if declaration.Destructive.Kind == "delete" {
-			return action.Kind == "delete" && target.RequiresApproval()
-		}
-		return target.RequiresApproval()
-	}
-	if operation, found := declarationAdmissionOperation(bundle, command.Operation); found {
-		target := engine.DestructiveTargetForOperation(bundle.Name, operation)
-		if declaration.Destructive.Kind == "delete" {
-			return operation.MutationClass == "delete" && target.RequiresApproval()
-		}
-		return target.RequiresApproval()
-	}
-	return false
-}
-
-func declarationAdmissionWriteAction(bundle engine.Bundle, name string) (engine.WriteAction, bool) {
-	for _, action := range bundle.Writes {
-		if action.Name == name {
-			return action, true
-		}
-	}
-	return engine.WriteAction{}, false
-}
-
-func declarationAdmissionOperation(bundle engine.Bundle, id string) (engine.OperationSpec, bool) {
-	for _, operation := range bundle.Operations {
-		if operation.ID == id {
-			return operation, true
-		}
-	}
-	return engine.OperationSpec{}, false
 }

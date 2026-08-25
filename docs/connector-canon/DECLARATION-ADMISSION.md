@@ -1,60 +1,64 @@
 # Source-declaration admission
 
-`connectorgen declaration-admission` is the source-completeness certificate.
-It reads optional
-`sources/<connector>-declaration-admission.json` sidecars and performs no
-provider I/O. A sidecar separates provider source operations from their one
-canonical declaration so the checker can reject an omitted, duplicate, stale,
-uncited, lane-changing, or destructive-metadata-free operation.
+`connectorgen declaration-admission` is the deterministic source-completeness
+certificate. It reads two required repository-level catalogs and performs no
+provider I/O:
 
-Every source operation records its provider URL, raw provider operation ID,
-exact document location, method, source path, and optional source base path.
-Every declaration references exactly one source ID and names the resulting
-canonical endpoint, exactly one lane (`etl`, `reverse_etl`, `direct_read`,
-`direct_write`, `binary_download`, or `binary_upload`), and a discoverable
-`cli_surface.json` command path. The command must cite the same canonical API
-surface endpoint. There is no command-projection omission state: when a
-provider operation cannot run, its deterministic command still exists and is
-`deferred`.
+- `internal/connectors/defs/declaration_admission_sources.json` is the
+  independent source cohort and completeness denominator. Its nonzero expected
+  connector and operation counts make a missing catalog, deleted row, or
+  zero-work run fail.
+- `internal/connectors/defs/declaration_admissions.json` contains the separate
+  canonical declaration for each source identity. Its expected declaration
+  count must match the rows present.
 
-An admitted `implemented` declaration needs the appropriate existing runtime
-binding and must pass the real no-I/O `commandrunner.Preflight` path. An
-admitted `deferred` declaration instead names one foundation gap, and its
-discoverable command carries the same `foundation_gap` metadata. Before the
-runtime returns typed `system/missing_foundation`, that same preflight path
-resolves exactly one non-excluded, non-policy API-surface target and verifies
-the declared absence. A connector with no runnable operations is complete when
-every source operation is deferred this way.
+The checker does not scan connector-local sidecars. Adding a sidecar without
+adding its operation to the required source cohort cannot make the global gate
+pass or silently expand the certified cohort.
 
-A deferred declaration is a claim about a missing *implementation component*,
-not a policy label. Its admission-sidecar `foundation_gap` records a bounded
-component (for example `typed_write_action`, `typed_record_schema`,
-`source_importer`, or `runtime_executor`) plus evidence naming the absent
-piece and exactly one method/path target. The command surface carries the same
-gap ID, reason, typed component/evidence, and target for its runtime refusal.
-Free-form evidence, an unknown target, an excluded row, and a policy-only
-`disallowed` row cannot produce `missing_foundation`. Method, operation lane,
-destructive/risk marker,
-`blocked_by_default`, confirmation or approval policy, source retention/hash,
-and certification state are not foundation components. They cannot hide a
-cited source operation or its discoverable command.
+Each source row records a stable source ID, protocol, provider HTTPS URL,
+exact document location, optional raw provider operation ID, method/base/path,
+one binding identity, and the provider operation's `none`, `delete`, or
+`destructive` semantic. A provider format may have no raw operation ID; the
+stable source ID, exact citation, endpoint, and binding remain authoritative.
+The binding selects exactly one command, stream, write action, or operation,
+so two GraphQL operations or other actions sharing a transport endpoint cannot
+borrow each other's implementation.
 
-`deferred` is endpoint-specific missing-foundation state, not a classification
-for operation kinds. In particular, an implemented delete remains implemented
-when its declared delete action and runtime binding exist; GitHub's `label
-delete` is the admission/runtime regression control. A missing action contract
-for a specific endpoint must be named as that endpoint's foundation gap rather
-than treating deletes or destructive operations as generically deferred.
-Every `DELETE` declaration carries explicit `kind=delete` metadata. A
-non-`DELETE` target classified as `destructive_action` also carries explicit
-destructive metadata, while a non-destructive target cannot be labelled delete
-merely to change its admission semantics.
+Each declaration references one source ID and repeats its exact binding and
+canonical endpoint. It names exactly one lane (`etl`, `reverse_etl`,
+`direct_read`, `direct_write`, `binary_download`, or `binary_upload`) and one
+discoverable `cli_surface.json` command. Source-owned destructive semantics
+determine whether `delete` or `destructive` metadata is required; surface or
+declaration self-labeling cannot change that semantic.
 
-Admission does **not** require retained source bytes, a hash, a request body,
-or a typed schema. Those belong to source-lock/import, materialization, and
-runtime contracts. Reusing no-I/O runtime preflight prevents resolver drift; it
-does not certify credential-bound reachability, fixtures, provider responses,
-or live behavior. Keep those certificates separate:
+An admitted `implemented` row must resolve through the engine's shared runtime
+binding resolver, match the source binding and endpoint, retain the source
+destructive semantic, and pass the real no-I/O `commandrunner.Preflight`. The
+admission checker does not copy lane-specific runtime rules.
+
+An admitted `deferred` row instead names one missing implementation component
+with closed evidence. Its discoverable command carries the same gap and an
+exact source target: source ID, optional raw operation ID, binding identity,
+destructive semantic, method, and path. Before returning typed
+`system/missing_foundation`, runtime preflight verifies that identity against
+the admitted source ledger and rejects stale, excluded, policy-only,
+duplicated, or operation-swapped targets. The compact source ledger is embedded
+in `defs.FS`, so this remains true in the shipped binary even though the full
+`api_surface.json` is intentionally not embedded. A complete connector may
+have zero runnable operations when every source row is explicitly deferred.
+
+A foundation gap names a missing implementation component such as
+`typed_write_action`, `typed_record_schema`, `source_importer`, or
+`runtime_executor`. A method, lane, risk, approval policy,
+`blocked_by_default`, retained artifact/hash, or live-certification state is
+not a foundation component and cannot hide a source operation. Deferred state
+also does not apply to an operation class: an existing implemented delete
+remains implemented. GitHub `label delete` is the admission/runtime control.
+
+Admission requires neither retained source bytes nor a hash, request body,
+typed schema, credentials, provider response, or live proof. Declaration
+completeness and runtime/live usability are distinct certificates:
 
 ```bash
 go run ./cmd/connectorgen declaration-admission

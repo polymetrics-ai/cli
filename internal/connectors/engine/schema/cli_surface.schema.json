@@ -226,6 +226,18 @@
                 "required": ["method", "path"],
                 "additionalProperties": false,
                 "properties": {
+                  "source_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+                  "operation_id": { "type": "string", "maxLength": 512 },
+                  "binding": {
+                    "type": "object",
+                    "required": ["kind", "id"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "kind": { "type": "string", "enum": ["command", "stream", "write", "operation"] },
+                      "id": { "type": "string", "minLength": 1, "maxLength": 512 }
+                    }
+                  },
+                  "destructive_kind": { "type": "string", "enum": ["none", "delete", "destructive"] },
                   "method": { "type": "string", "minLength": 1 },
                   "path": { "type": "string", "minLength": 1 }
                 }

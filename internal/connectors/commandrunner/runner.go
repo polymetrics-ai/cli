@@ -2,6 +2,7 @@ package commandrunner
 
 import (
 	"context"
+	"crypto/sha256"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -15,6 +16,7 @@ import (
 	"strings"
 	"time"
 	"unicode"
+	"unicode/utf8"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/failures"
@@ -105,6 +107,12 @@ type binaryUploadActionPreflighter interface {
 // credential or making a provider request.
 type deferredCommandPreflighter interface {
 	PreflightDeferredCommand(connectors.CommandSurfaceCommand) error
+}
+
+// implementedCommandPreflighter is the engine-owned, lane-complete binding
+// resolver shared with declaration admission.
+type implementedCommandPreflighter interface {
+	PreflightImplementedCommand(connectors.CommandSurfaceCommand) error
 }
 
 // structuredJSONRecordPreflighter is deliberately narrower than a generic
@@ -469,6 +477,14 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 		return connectors.CommandSurfaceCommand{}, command, deferredCommandError(connector.Name(), command, cmd)
 	}
 	if cmd.Availability == "implemented" {
+		if preflighter, supported := connector.(implementedCommandPreflighter); supported {
+			if err := preflighter.PreflightImplementedCommand(cmd); err != nil {
+				return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+					Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability,
+					Reason: fmt.Sprintf("implemented command binding is not admissible: %v", err),
+				}
+			}
+		}
 		if err := preflightStructuredJSONFlags(connector, cmd); err != nil {
 			return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
 				Connector:    connector.Name(),
@@ -557,27 +573,77 @@ func deferredCommandError(connectorName, command string, cmd connectors.CommandS
 	reason := "deferred command has no named missing foundation"
 	var failure *failures.Classification
 	if cmd.Foundation != nil && strings.TrimSpace(cmd.Foundation.ID) != "" && strings.TrimSpace(cmd.Foundation.Reason) != "" {
-		reason = fmt.Sprintf("missing foundation %q: %s", cmd.Foundation.ID, cmd.Foundation.Reason)
+		foundationID := boundedFailureIdentifier(cmd.Foundation.ID)
+		foundationReason := boundedFailureMessage(cmd.Foundation.Reason, 700)
+		reason = fmt.Sprintf("missing foundation %q: %s", foundationID, foundationReason)
 		classification, err := failures.New(failures.Input{
 			Domain:       failures.DomainSystem,
 			Code:         "missing_foundation",
 			Message:      reason,
 			DispatchKind: failures.DispatchKindDeclaredButUnroutableCommand,
 			References: []failures.Reference{
-				{Kind: failures.ReferenceKindConnector, Value: connectorName},
-				{Kind: failures.ReferenceKindCommand, Value: strings.ReplaceAll(command, " ", "_")},
+				{Kind: failures.ReferenceKindConnector, Value: boundedFailureReference(connectorName)},
+				{Kind: failures.ReferenceKindCommand, Value: boundedFailureReference(strings.ReplaceAll(command, " ", "_"))},
 			},
 		}, nil)
 		if err != nil {
-			return &BlockedCommandError{
-				Connector: connectorName, Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: reason,
-			}
+			classification, _ = failures.New(failures.Input{
+				Domain: failures.DomainSystem, Code: "missing_foundation", Message: "missing declared foundation",
+				DispatchKind: failures.DispatchKindDeclaredButUnroutableCommand,
+			}, nil)
 		}
 		failure = classification
 	}
 	return &BlockedCommandError{
 		Connector: connectorName, Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: reason, Failure: failure,
 	}
+}
+
+func boundedFailureIdentifier(raw string) string {
+	value := strings.TrimSpace(safety.SanitizeTerminal(raw))
+	if value != "" && len(value) <= 128 && failureReferenceSafe(value) {
+		return value
+	}
+	return failureDigest(raw)
+}
+
+func boundedFailureReference(raw string) string {
+	value := strings.TrimSpace(safety.SanitizeTerminal(raw))
+	if value != "" && len(value) <= 256 && failureReferenceSafe(value) {
+		return value
+	}
+	return failureDigest(raw)
+}
+
+func boundedFailureMessage(raw string, maximum int) string {
+	value := strings.TrimSpace(safety.SanitizeTerminal(raw))
+	if value == "" {
+		return "declared foundation is unavailable"
+	}
+	for len(value) > maximum {
+		_, size := utf8.DecodeLastRuneInString(value)
+		if size <= 0 {
+			return "declared foundation is unavailable"
+		}
+		value = value[:len(value)-size]
+	}
+	return value
+}
+
+func failureReferenceSafe(value string) bool {
+	for _, character := range value {
+		if (character >= 'a' && character <= 'z') || (character >= 'A' && character <= 'Z') ||
+			(character >= '0' && character <= '9') || strings.ContainsRune("._:/-", character) {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
+func failureDigest(raw string) string {
+	digest := sha256.Sum256([]byte(raw))
+	return fmt.Sprintf("sha256-%x", digest[:12])
 }
 
 func validateBinaryUploadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
