@@ -382,6 +382,26 @@
   reran `pm docs validate --connectors-dir docs/connectors` successfully.
   This is generated documentation parity only; command behavior is unchanged.
 
+### Source-lock projection foundation — 2026-08-25
+
+- **Red:** PR #4301 current head `feb0ac324` fails
+  `connectorgen validate` with 30 `source_projection` findings, while the
+  preserved `origin/main` tree validates clean (553 connectors, 0 findings).
+  The difference is the branch's 30 source-lock imports: main has no such
+  locks to project. The shared validator's `checkSourceProjection`
+  (`cmd/connectorgen/sourceprojection.go:2244-2268`) requires a separate
+  canonical `*-operation-descriptor.json`; it has no projector from v3
+  `source_documents`. Separately, `validateSourceImportREST`
+  (`cmd/connectorgen/sourceimport.go:809-813`) rejects imported OpenAPI
+  document metadata unless it is represented in the aggregate inventory.
+- **Foundation gap:** this is not a connector-specific exception or a reason
+  to fabricate descriptors, pins, or operation counts. The required shared
+  component is the v3 source-lock-to-canonical-descriptor projector (including
+  aggregate OpenAPI inventory derivation) that preserves captured-document
+  evidence. Declaration-first mapping continues against the checked-in
+  provider evidence; source certification remains blocked until that component
+  lands.
+
 - The source lock carries `counts.total`, per-method and per-kind counts,
   source-document pins, and coverage basis. Dispositions use
   `operations_found`; no generated summary has `declared_percent`.
