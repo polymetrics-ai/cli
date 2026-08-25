@@ -33,7 +33,7 @@ function actionCommandPath(name) {
 }
 
 function normalizedActionPath(path) {
-  return path
+  return path.split("?", 1)[0]
     .replace(/\{\{\s*record\.([A-Za-z0-9_]+)\s*\}\}/g, "{$1}")
     .replace(/\{\{\s*config\.([A-Za-z0-9_]+)\s*\}\}/g, "{$1}");
 }
@@ -46,18 +46,19 @@ function routeSegments(path) {
     .filter(Boolean);
 }
 
-// writes.json paths are connector-relative to config.base_url. Public OpenAPI
-// sources sometimes include that base's fixed /v1 or /v2 prefix and naturally
+// writes.json paths are connector-relative to config.base_url. Public sources
+// can include that base's fixed path prefix (for example /api/v2) and naturally
 // give path variables provider names rather than the action record names. The
 // disposition's existing covered_by.write relation is the precise mapping;
-// this check only refuses a different method or static route.
+// this check only refuses a different action-relative static route.
 function sameProviderRoute(actionPath, sourcePath) {
   const action = routeSegments(actionPath);
   const source = routeSegments(sourcePath);
-  if (source.length === action.length + 1 && /^v[0-9]+$/.test(source[0])) {
-    source.shift();
+  if (source.length < action.length) {
+    return false;
   }
-  return action.length === source.length && action.every((segment, index) => segment === source[index]);
+  const suffix = source.slice(source.length - action.length);
+  return action.every((segment, index) => segment === suffix[index]);
 }
 
 function cliFlagForProperty(name, schema, required) {

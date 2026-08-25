@@ -130,3 +130,11 @@ path and its typed-action component as CLI declaration-pending because `transact
 type in the existing `writes.json` schema. Supplying an arbitrary body or choosing a type would violate the
 declared-contract boundary. Provider-live certification remains pending for every action in this credential-
 free lane.
+
+## Increment 10 — Outreach typed action command reachability
+
+All 163 already source-bound Outreach typed actions now have installed CLI write-plan commands with exact
+source citations/routes and `writes.json` execution contracts. The binary proof covers every command in
+four bounded clean-project runs and stops at credential preflight; neither a live write nor a provider-live
+certification occurred. The actions remain direct-write capabilities; no reverse-ETL destination is claimed
+without the action-specific durable acknowledgement/read-back transport facts required by the sync contract.

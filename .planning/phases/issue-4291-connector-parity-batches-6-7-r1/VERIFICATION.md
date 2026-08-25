@@ -592,6 +592,27 @@ foundation gaps are not enabled and cannot contribute to a merge-ready verdict.
   ./internal/connectors/commandrunner -run '^TestEveryImplementedCommandPassesRuntimePreflight$'
   -count=1`, `npm --prefix website run gen:website-data`, the 92-command/one-pending evidence assertions,
   and `git diff --check` passed. No provider call, credential, mutation, or live certification occurred.
+
+## Outreach typed direct-write CLI cohort — 2026-08-25
+
+- **RED:** after the preceding write cohort, the installed binary still answered `unknown command` for
+  `outreach create account note apply`, `outreach delete account apply`, and `outreach create prospect
+  apply`; all 163 existing Outreach typed actions lacked command paths.
+- **GREEN:** the same action-owned generator materialized all 163 commands. Each command is bound to the
+  source-disposition operation ID/citation and its `writes.json` method, connector-relative path, record
+  schema, field flags, risk, and plan/preview/approval lifecycle. The exact source route retains the
+  OpenAPI base prefix, while action execution retains its connector-relative path; query-bearing actions
+  keep their action-owned query mapping rather than treating a query as a second route.
+- **Installed binary proof:** `go test -timeout 20m ./internal/connectors/commandrunner -run
+  '^TestEveryImplementedCommandPassesRuntimePreflight$' -count=1` and `go build -o
+  /tmp/cli-map-batch67-r1-outreach-write-proof ./cmd/pm` passed. In four fresh initialized temporary
+  projects, 50 + 50 + 50 + 13 commands all exited `1` with exactly `error: missing --credential`, before
+  provider I/O. `npm --prefix website run gen:website-data`, the 163-row evidence assertion, and
+  `git diff --check` passed.
+- **Preservation:** the held `outreach-operation-source-lock.json` citation migration and both preservation
+  directories are intentionally unstaged and unchanged by this cohort. Global `connectorgen validate` and
+  `surface-sync --check` remain blocked at the shared v3 source-descriptor reader / held legacy citation
+  parser before connector surface comparison; no workaround was added.
 # Stale typed-destination gap reconciliation — increment 1 (2026-08-20)
 
 - **RED:** The operation-evidence ledger exposed 1,111 direct-write rows that still named
