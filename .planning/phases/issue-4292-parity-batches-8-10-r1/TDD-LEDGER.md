@@ -426,6 +426,21 @@
   same source-certification-only `source-lock-projection-gap`. The 1,273
   remaining rows have no fabricated path or request contract.
 
+### Declaration-first direct-write cohort 02 — 2026-08-25
+
+- **Red:** the remaining Batch 8 connectors—Metabase, dbt Cloud, Looker,
+  Mode, and Dremio—have no per-operation declaration-first map. The cohort
+  generator must extend only its checked-in selector; it must not alter Cohort
+  01, a source lock, a descriptor, or a connector definition.
+- **Green target:** derive Cohort 02 from the same closed source/disposition/
+  action/CLI inputs. The output must use the physical definition key `dbt`
+  while preserving the issue's dbt Cloud provider label through its existing
+  source evidence.
+- **Green:** Cohort 02 now verifies 653 direct-write source rows: Metabase
+  329 (0 existing-schema CLI-bound), dbt 26 (13), Looker 222 (0), Mode 45
+  (0), and Dremio 31 (10). All 5 connectors remain enumerable; the 590
+  non-action-backed rows retain `declaration-pending` and no invented path.
+
 - The source lock carries `counts.total`, per-method and per-kind counts,
   source-document pins, and coverage basis. Dispositions use
   `operations_found`; no generated summary has `declared_percent`.

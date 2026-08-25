@@ -10,16 +10,58 @@ import { resolve } from "node:path";
 const root = process.cwd();
 const phase = resolve(root, ".planning/phases/issue-4292-parity-batches-8-10-r1");
 const defs = resolve(root, "internal/connectors/defs");
-const output = resolve(phase, "DECLARATION-FIRST-COHORT-01.json");
-const summaryOutput = resolve(phase, "DECLARATION-FIRST-COHORT-01.md");
-
-const cohort = [
-  { batch: 8, connector: "brex" },
-  { batch: 8, connector: "zoho-books" },
-  { batch: 8, connector: "testrail" },
-  { batch: 8, connector: "amplitude" },
-  { batch: 8, connector: "posthog" },
-];
+const cohortDefinitions = {
+  "01": [
+    { batch: 8, connector: "brex" },
+    { batch: 8, connector: "zoho-books" },
+    { batch: 8, connector: "testrail" },
+    { batch: 8, connector: "amplitude" },
+    { batch: 8, connector: "posthog" },
+  ],
+  "02": [
+    { batch: 8, connector: "metabase" },
+    { batch: 8, connector: "dbt" },
+    { batch: 8, connector: "looker" },
+    { batch: 8, connector: "mode" },
+    { batch: 8, connector: "dremio" },
+  ],
+  "03": [
+    { batch: 9, connector: "coda" },
+    { batch: 9, connector: "clickup-api" },
+    { batch: 9, connector: "calendly" },
+    { batch: 9, connector: "greenhouse" },
+    { batch: 9, connector: "lever-hiring" },
+  ],
+  "04": [
+    { batch: 9, connector: "ashby" },
+    { batch: 9, connector: "workable" },
+    { batch: 9, connector: "recruitee" },
+    { batch: 9, connector: "hibob" },
+    { batch: 9, connector: "factorial" },
+  ],
+  "05": [
+    { batch: 10, connector: "datadog" },
+    { batch: 10, connector: "pagerduty" },
+    { batch: 10, connector: "auth0" },
+    { batch: 10, connector: "okta" },
+    { batch: 10, connector: "firehydrant" },
+  ],
+  "06": [
+    { batch: 10, connector: "adobe-commerce-magento" },
+    { batch: 10, connector: "commercetools" },
+    { batch: 10, connector: "recharge" },
+    { batch: 10, connector: "docuseal" },
+    { batch: 10, connector: "eventbrite" },
+  ],
+};
+const cohortArgument = process.argv.indexOf("--cohort");
+const cohortID = cohortArgument < 0 ? "01" : process.argv[cohortArgument + 1];
+if (!cohortID || !cohortDefinitions[cohortID]) {
+  throw new Error(`unknown or missing --cohort value ${JSON.stringify(cohortID)}`);
+}
+const cohort = cohortDefinitions[cohortID];
+const output = resolve(phase, `DECLARATION-FIRST-COHORT-${cohortID}.json`);
+const summaryOutput = resolve(phase, `DECLARATION-FIRST-COHORT-${cohortID}.md`);
 
 const sourceProjectionGap = {
   id: "source-lock-projection-gap",
@@ -161,7 +203,7 @@ async function mapConnector({ batch, connector }) {
 
 function summary(document) {
   const lines = [
-    "# Issue #4292 declaration-first direct-write cohort 01",
+    `# Issue #4292 declaration-first direct-write cohort ${cohortID}`,
     "",
     "This mechanical cohort preserves source identities and existing action CLI paths. It does not create or infer a provider request, response, pagination, body schema, or CLI spelling. `source-lock-projection-gap` blocks source certification uniformly; it does not turn connector-local declaration work into an engine gap.",
     "",
@@ -184,7 +226,7 @@ const connectors = await Promise.all(cohort.map(mapConnector));
 const document = {
   schema_version: 1,
   issue: 4292,
-  cohort: "batch-8-declaration-first-01",
+  cohort: `batch-${cohort[0].batch}-declaration-first-${cohortID}`,
   purpose: "mechanical direct-write promotion inventory from committed connector evidence",
   source_certification: {
     state: "blocked",
