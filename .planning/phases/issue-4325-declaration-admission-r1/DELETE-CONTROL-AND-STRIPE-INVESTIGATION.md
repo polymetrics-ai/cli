@@ -29,6 +29,43 @@ REST command's live certification state as `fixture_required`; that is not a
 credential-bound or live-provider proof. The regression control deliberately
 does not claim either certificate.
 
+## GitHub CLI spelling and source-to-runtime route
+
+`pm github label delete --help` renders `pm github label delete [flags]` with
+one command-owned required flag: `--name` (`maps_to=record.name`). It does
+**not** declare literal `--owner` or `--repo` flags. Those are required GitHub
+credential configuration keys, so the exact safe planning spelling is:
+
+```bash
+pm credentials add github-write --connector github \
+  --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN
+pm github label delete --credential github-write --name LABEL --json
+```
+
+The second command creates a reverse-ETL command plan; it is not a DELETE
+request. The plan must then be previewed, and its execution form requires the
+saved plan ID, `--approval-token-stdin`, and `--confirm destructive`. Those
+approval/confirmation flags are intentionally lifecycle flags, not fields of
+the action's `record_schema`.
+
+The source-to-runtime route is fixed and named:
+
+1. `cli_surface.json` command `label delete` has `write: "delete_label"`;
+   `engine.(*Connector).CommandSurface` in
+   `internal/connectors/engine/connector.go` synthesizes that surface.
+2. `internal/cli/cli.go:runMaybeConnectorCommand` parses the connector path
+   and calls `commandrunner.Preflight`; `runConnectorCommand` delegates the
+   write-planning route to `runConnectorWriteCommand`.
+3. `internal/app/app.go:PlanConnectorCommand` calls
+   `commandrunner.BuildWriteCommand`. `commandrunner/runner.go` resolves the
+   path in `resolvePreflightCommand`/`findCommand`, verifies the implemented
+   reverse-ETL command with `engine.(*Connector).PreflightWriteAction`, and
+   resolves `delete_label` using `findWriteAction`.
+4. `BuildWriteCommand` obtains `record.name` from `--name`, calls
+   `engine.(*Connector).ValidateWrite` against the closed action schema, and
+   returns a planned write. Only a separately approved plan execution can
+   enter the provider-write path.
+
 ## Stripe: account delete is an endpoint-specific gap
 
 | Contract layer | Exact evidence |
