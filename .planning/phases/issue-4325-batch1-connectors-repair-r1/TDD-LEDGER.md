@@ -404,6 +404,83 @@
 Every red/green command and its result is appended when it executes. No test is
 weakened or skipped to advance a row.
 
+## 2026-08-25 — source declaration admission design (captain override)
+
+### Scope and invariant
+
+Every operation retained by a connector's provider source lock must have a
+source-cited declaration regardless of whether the operation can execute now.
+The declaration must retain its exact method/path/protocol, provider URL,
+SHA-256, byte count, document location, semantic class, and destructive or
+secret metadata. A non-runnable declaration is `deferred` with a named,
+source-cited foundation gap; it is not an `implemented` command and it is not
+removed from the source denominator.
+
+This is intentionally separate from runtime preflight. `implemented` remains
+an executable claim and must retain real `commandrunner.Preflight` and
+credential-free built-binary evidence. A deferred source row must never be
+promoted merely to satisfy the declaration certificate.
+
+### Red cases to preserve
+
+1. A locked provider operation with no declaration currently fails source
+   projection/validation because it has no complete executable action or
+   reachable runtime operation (`sourceprojection.go:187-290` and
+   `:2430-2524`). That rejects coverage even when the JSON can honestly carry
+   a deferred foundation reference.
+2. `batch gate` excludes a complete source bundle with zero implemented
+   commands (`batch.go:939-956`), so it cannot be the source-admission
+   certificate for a deliberately deferred-only connector.
+3. An operation-evidence row with no enabled command receives
+   `runtime_reachability` and `cli_command` gaps
+   (`operationevidence.go:743-752`); its fixed-100 selection requires both a
+   declared and enabled classification (`:1200`). These are valuable runtime
+   facts, but must not erase the source declaration.
+
+### Green contract and smallest safe change
+
+Add a declaration-completeness certificate that consumes the retained source
+identity set (or its source descriptor where importable), crosswalk,
+declaration-disposition ledger, and `api_surface.json`. It passes only when
+every source identity is represented exactly once after documented base-path
+normalization, with either:
+
+- a closed, runtime-eligible operation/action/command contract; or
+- an explicit non-runnable declaration containing the exact source trace,
+  classification, risk/destructive metadata, and source-cited refusing
+  foundation.
+
+It must fail on an omitted/duplicate source identity, stale unnormalised
+endpoint, lost method/path, missing source citation, missing destructive
+metadata, a fabricated foundation citation, or a deferred row marked
+`implemented`. Existing runtime enforcement remains unchanged:
+`TestEveryImplementedCommandPassesRuntimePreflight`, built-binary
+`missing --credential` sweeps, and the engine's closed binding/body checks are
+still the only proof of executability.
+
+`surface-sync` is not changed to invent commands—it synchronizes existing
+operation-owned command metadata. `surface-reconcile` remains runtime-only:
+it may mark an endpoint blocked when preflight fails, but cannot define source
+coverage. `certification-sweep` may retain its non-implemented N/A accounting,
+and operation evidence may retain runtime gaps; neither result is allowed to
+be treated as an absent source declaration.
+
+### Test matrix before implementation
+
+| Case | Admission certificate | Runtime/preflight assertion |
+| --- | --- | --- |
+| Complete runnable REST read | passes exact source-to-declaration join | implemented command passes real preflight and built binary stops at missing credential |
+| Deferred mutation/delete | passes with exact source trace, destructive metadata, and cited foundation | no implemented command/action is accepted; executing a deferred command returns its declared block |
+| Deferred binary operation | passes with content/response metadata plus foundation citation | binary preflight still refuses unsafe or incomplete metadata |
+| Provider dialect/importer refusal | emits/retains an operation-level source gap rather than dropping the descriptor | no runnable command is generated from the incomplete shape |
+| Missing, duplicate, stale, or path-normalization-mismatched row | fails with source ID and file:line | no runtime assertion is substituted for coverage |
+| Falsely implemented deferred row | fails admission and existing runtime sweep | `TestEveryImplementedCommandPassesRuntimePreflight` remains unchanged |
+| Zero-runnable connector (Vercel-shaped) | admits complete deferred provider coverage | batch/runtime certification reports deferred, not source omission |
+
+No production certification or runtime code is changed in this slice. The
+captain-directed definition-only conversion continues only after this design
+record is reviewed against the report below.
+
 ## CircleCI red/green evidence
 
 - Red: the baseline `pm circleci operations list` exited 2 with

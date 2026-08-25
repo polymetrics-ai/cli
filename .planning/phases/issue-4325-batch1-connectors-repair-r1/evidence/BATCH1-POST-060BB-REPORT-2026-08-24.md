@@ -65,3 +65,105 @@ Likewise, Notion and Stripe need importer tolerance that retains a source-traced
 gap instead of losing the descriptor; Asana, Sentry, Vercel, and Jira need
 source-cited per-operation action/disposition coverage. These are recorded as
 facts from the commands above, not converted into declaration-count reductions.
+
+## 2026-08-25 — declaration-admission inventory and certification design
+
+### Captain rule
+
+Provider-backed coverage is admitted before runtime capability. Every provider
+operation—including destructive writes, reverse-ETL-shaped actions, direct
+operations, and binary operations—must remain in the JSON ledger and be
+discoverable. Runtime safety remains strict: only an `implemented` command
+with closed metadata and successful real preflight is runnable. Deferred rows
+must name their exact source and missing foundation; they are never omitted or
+promoted.
+
+### Exact JSON artifacts by connector lane
+
+All ten lanes require these connector-owned artifacts:
+
+- `sources/<connector>-operation-source-lock.json` (pinned source identity),
+  `sources/<connector>-operation-crosswalk.json`,
+  `sources/<connector>-declaration-disposition.json`, and
+  `sources/<connector>-retained-artifacts.json`;
+- `api_surface.json` (discoverable endpoint ledger), `operations.json`,
+  `writes.json`, `cli_surface.json` containing the declared state of every
+  exposed source operation,
+  `certification-sweep.json`, `metadata.json`, `spec.json`, `streams.json`,
+  and `sync_transport.json`.
+
+`sources/<connector>-operation-descriptor.json` is additionally required for
+the importable lanes **Bitbucket, GitLab, CircleCI, Sentry, Vercel, Asana, and
+Jira**. Docker Hub, Notion, and Stripe require it as the output of the
+source-dialect-tolerant importer; its current absence is an explicit
+source-bound importer gap, not evidence that their source operations vanish.
+`sources/<connector>-mutation-dispositions.json` is required where a source
+mutation is non-executable: present today for Bitbucket, GitLab, Sentry, Asana,
+and Jira. Docker Hub additionally owns its reverse-ETL action audit. Vercel
+must add `cli_surface.json` with explicit deferred states for every applicable
+source operation; the absence of a runnable command cannot remove its 400
+source rows or make its command namespace undiscoverable.
+
+### Counts (measured from the retained source and declaration artifacts)
+
+The ten retained provider locks contain **4,341** exact REST method/path
+operations. The previously re-derived operational split was **767 runnable,
+1,666 immediately declarable, and 1,908 source-bound blocked**. Under the
+captain rule, all 1,908 blocked rows remain required declarations with explicit
+deferred/foundation state; the split is an execution plan, never a reason to
+shrink the source denominator.
+
+| Lane | Locked source operations | Existing source-ledger rows | This-branch converted and credential-proven | Immediately declarable / source-bound deferred |
+| --- | ---: | ---: | ---: | --- |
+| Docker Hub | 54 | 54 | 0 | 0 / 50 |
+| Notion | 49 | 49 | 0 | 0 / 7 |
+| Stripe | 589 | 589 | 0 | 0 / 581 |
+| Bitbucket | 297 | 331 (34 stale rows to refresh) | 0 | 136 / 111 |
+| GitLab | 1,752 | 1,755 (3 stale rows; base-path-normalized) | 0 | 917 / 835 |
+| CircleCI | 111 | 111 | 0 (43 existing commands re-proven) | 75 / 20 |
+| Sentry | 223 | 223 | 32 | 144 / 76 |
+| Vercel | 400 | 400 | 0 | 261 / 139 |
+| Asana | 249 | 249 | 0 | 130 / 37 |
+| Jira | 617 | 617 | 0 | 3 / 52 |
+| **Total** | **4,341** | **4,378** | **32** | **1,666 / 1,908** |
+
+The ledger total is 37 larger than the current source denominator only because
+Bitbucket and GitLab retain the 34 and 3 known stale endpoint rows. Every
+current Bitbucket descriptor endpoint is present in its ledger; GitLab's
+descriptor uses the documented `/api/v4` base-path normalization and must be
+compared after that normalization. No source lock or provider bytes were
+rewritten for this report.
+
+### Current restrictions and their correct scope
+
+| Tool/restriction | Current behavior | Required boundary |
+| --- | --- | --- |
+| Source projection (`sourceprojection.go:187-290`) | Source import errors when a mutation lacks a complete executable action, unless its narrow non-executable mutation disposition applies. | It must preserve a source-cited deferred declaration for every non-runnable operation, not demand an invented action. |
+| Source executable coverage validation (`sourceprojection.go:2430-2524`) | Rejects reads without reachable operations and mutations without a complete action/implemented command unless a blocking gap is already materialized. | This is a runtime-suitability result, not the source-admission denominator. |
+| Batch gate (`batch.go:939-956`) | Drops a bundle with zero `implemented` commands. | Keep it as runtime certification; do not use it as provider-declaration admission. |
+| Surface reconcile (`surfacereconcile.go:18-22`, `:276-315`) | Grants `covered_by.direct_read` only after real preflight and otherwise records a blocked reason. | Keep it runtime-only; its output cannot delete a declared source row. |
+| Surface sync | Synchronizes metadata for existing operation-owned commands; it does not invent a command. | No change: it must not be asked to prove or fabricate deferred coverage. |
+| Certification sweep (`certificationsweep.go:810-814`) | Marks a non-implemented command `not_applicable`. | Keep this accounting, but do not interpret N/A as absent source coverage. |
+| Operation evidence (`operationevidence.go:743-752`, `:1200`) | Records CLI/runtime gaps and excludes non-enabled rows from the fixed-100 eligible set. | Retain these gaps as runtime evidence; the artifact must still retain the source row and deferred foundation. |
+
+### Smallest safe certification change and tests
+
+Add a source-declaration-completeness certificate, separate from runtime
+preflight. It joins the lock/descriptor identity set, crosswalk,
+declaration-disposition ledger, and API surface; each source operation must
+have exactly one canonical declaration or an exact deferred foundation record.
+It must reject omitted, duplicate, stale, citation-free, class-changing,
+destructive-metadata-free, or falsely implemented rows. It must not alter
+`commandrunner.Preflight`, credential checks, `surface-sync`, or the
+implemented-command sweep.
+
+The test matrix is: (1) runnable REST read passes admission and real preflight;
+(2) deferred mutation/delete and binary rows pass admission only with exact
+source and foundation facts, while execution remains blocked; (3) an importer
+dialect failure retains an operation-level source gap instead of dropping a
+descriptor; (4) missing/duplicate/stale/base-path-mismatched rows fail with
+the source identity; (5) a deferred row falsely marked implemented fails both
+admission and the existing runtime sweep; and (6) a complete zero-runnable
+connector is admitted as deferred coverage while batch/runtime certification
+reports it as non-runnable. This is design and test planning only: no
+certification code has started.

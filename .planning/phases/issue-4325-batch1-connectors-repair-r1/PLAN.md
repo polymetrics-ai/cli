@@ -49,6 +49,30 @@
 
 ## Gap plan — cited non-executable mutations (2026-08-24)
 
+## Captain declaration-admission override (2026-08-25)
+
+Provider-backed declaration completeness is an independent admission rule. Every
+method/path operation in a retained provider source—read, binary, mutation,
+delete, or reverse-ETL-shaped—must retain a source-cited JSON declaration even
+when it is unsafe or its runtime foundation is absent. A non-runnable operation
+is explicitly `deferred`/`foundation-gap` with its exact source citation and
+refusing implementation location; it is never omitted, lowered to a different
+operation class, or labelled `implemented`.
+
+This creates two deliberately separate gates:
+
+1. **Source declaration admission** proves a one-to-one source identity,
+   canonical endpoint, classification, destructive metadata, and either an
+   executable contract or an explicit deferred foundation reference.
+2. **Runtime usability** retains the existing `availability: implemented` →
+   real `commandrunner.Preflight` → credential-bound built-binary proof. It
+   must continue to reject unsafe, incomplete, or unbound execution claims.
+
+The proposed certification change is documented with its red/green matrix in
+`TDD-LEDGER.md` and its present-artifact inventory in
+`evidence/BATCH1-POST-060BB-REPORT-2026-08-24.md`. No certification code is
+started until that design has been accepted as a separate implementation slice.
+
 Captain direction is to retain every provider operation and mark a mutation
 whose source-cited action cannot yet be executed as declared-and-deferred. The
 only permitted mechanism is
