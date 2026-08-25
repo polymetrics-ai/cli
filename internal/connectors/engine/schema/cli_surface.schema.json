@@ -215,11 +215,11 @@
               "reason": { "type": "string", "minLength": 1 },
               "component": {
                 "type": "string",
-                "enum": ["typed_write_action", "typed_record_schema", "typed_request_body", "typed_response_descriptor", "binary_transfer_binding", "source_importer", "runtime_executor", "idempotency_contract"]
+                "enum": ["typed_write_action", "typed_record_schema", "typed_request_body", "typed_response_descriptor", "binary_transfer_binding", "source_importer", "runtime_executor"]
               },
               "evidence": {
                 "type": "string",
-                "enum": ["write_action_absent", "record_schema_absent", "request_body_schema_absent", "response_descriptor_absent", "binary_transfer_binding_absent", "source_importer_absent", "runtime_executor_absent", "idempotency_contract_absent"]
+                "enum": ["write_action_absent", "record_schema_absent", "request_body_schema_absent", "response_descriptor_absent", "binary_transfer_binding_absent", "source_importer_absent", "runtime_executor_absent"]
               },
               "target": {
                 "type": "object",

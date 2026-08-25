@@ -23,7 +23,7 @@
           "source_url": { "type": "string", "minLength": 1, "maxLength": 4096 },
           "location": { "type": "string", "minLength": 1, "maxLength": 4096 },
           "operation_id": { "type": "string", "maxLength": 512 },
-          "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"] },
+          "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "GRAPHQL"] },
           "base_path": { "type": "string", "maxLength": 8192 },
           "path": { "type": "string", "minLength": 1, "maxLength": 8192 },
           "binding": {

@@ -135,6 +135,61 @@ preserves its machine-readable code. Structural endpoint checks apply to new
 source/deferred identities without retroactively changing legacy implemented
 provider-specific command paths.
 
+## Exact-SHA R2 gap closure (2026-08-26)
+
+The independent Codex R2 audit of `c99e40a315b20b776a3b8653b54fc682a8469844`
+found four remaining High blockers. This gap wave stays within the shared
+admission/runtime seam and preserves every uncommitted Stripe and Docker Hub
+path byte-for-byte.
+
+1. **Red — provenance-only source uniqueness (DA-002):** duplicate one exact
+   provider citation under different local source IDs and different runtime
+   bindings. Both the authoring check and compact production ledger must reject
+   it before declaration or runtime evaluation. The source key comprises only
+   canonical source URL, exact document location, protocol, raw provider
+   operation ID, method, and canonical provider endpoint identity; binding
+   uniqueness remains a separate invariant.
+2. **Red — fail-closed canonical endpoint equivalence (DA-003):** reject
+   same-binding wrong-method/wrong-path aliases for stream, write, REST, and
+   binary bindings. Add a locked real-bundle census for the 243 non-GraphQL
+   aliases and an end-to-end GitHub `discussion list` admission case. The green
+   resolver may prove only named transformations: declared base-URL path
+   composition, absolute-transport normalization, query separation, positional
+   placeholder equivalence, the closed operation-variant annotation grammar,
+   a registered hook transport route, and GraphQL operation identity to
+   `POST /graphql` transport. It must retain canonical and transport endpoints
+   separately.
+3. **Red — reject runnable commands relabelled deferred (DA-004):** exercise
+   the actual implemented `commandrunner` preflight against a synthesized
+   implemented form of each deferred command. Every foundation component must
+   fail for the runnable GitHub label delete and GraphQL read/write controls.
+   Remove the idempotency component because no runtime executor requires it,
+   and make response-descriptor evidence REST/binary-specific.
+4. **Red — exact production ledger inventory (DA-012):** require
+   `declaration_admission_sources.json` to have one exact root-artifact class,
+   byte attribution, and deterministic inventory while continuing to reject
+   the declaration catalog, API surfaces, fixtures, and non-exempt source
+   locks.
+5. **Green/refactor/gate:** implement the smallest shared changes, correct the
+   stale Makefile wording, update the certificate-separation docs and this
+   ledger, run focused packages plus every applicable generated/static gate in
+   a clean committed checkout, then execute `verify-work` and `code-review`
+   inline. The generated GSD gap prompts are executed inline because the
+   canonical single-worker contract and launch brief forbid role spawning.
+6. **Post-repair merge integration gate (captain steer 014):** load the real
+   Outreach bundle and synthesize only its missing discovery projection in the
+   test. Prove the existing `/api/v2`-based `prospects` ETL stream and
+   destructive `delete_account` write through declaration admission,
+   canonical/transport resolution, and no-I/O commandrunner preflight. This
+   supplements, and does not replace, the exact 243-alias fleet census and
+   GitHub GraphQL/delete controls. No provider request or connector definition
+   change is permitted.
+
+Required skills for this gap wave: `golang-how-to`, `golang-cli`,
+`golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`,
+`golang-design-patterns`, `golang-structs-interfaces`, `golang-graphql`,
+`golang-documentation`, and `golang-lint`.
+
 ## CLI docs parity
 
 `connectorgen declaration-admission` is an internal generator command, not a

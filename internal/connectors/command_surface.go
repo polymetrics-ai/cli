@@ -192,7 +192,6 @@ const (
 	FoundationComponentBinaryTransferBinding   = "binary_transfer_binding"
 	FoundationComponentSourceImporter          = "source_importer"
 	FoundationComponentRuntimeExecutor         = "runtime_executor"
-	FoundationComponentIdempotencyContract     = "idempotency_contract"
 )
 
 // ValidCommandFoundationComponent reports whether component is a specific
@@ -206,8 +205,7 @@ func ValidCommandFoundationComponent(component string) bool {
 		FoundationComponentTypedResponseDescriptor,
 		FoundationComponentBinaryTransferBinding,
 		FoundationComponentSourceImporter,
-		FoundationComponentRuntimeExecutor,
-		FoundationComponentIdempotencyContract:
+		FoundationComponentRuntimeExecutor:
 		return true
 	default:
 		return false
@@ -233,8 +231,6 @@ func ValidCommandFoundationEvidence(component, evidence string) bool {
 		return evidence == "source_importer_absent"
 	case FoundationComponentRuntimeExecutor:
 		return evidence == "runtime_executor_absent"
-	case FoundationComponentIdempotencyContract:
-		return evidence == "idempotency_contract_absent"
 	default:
 		return false
 	}

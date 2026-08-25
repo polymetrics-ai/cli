@@ -76,6 +76,47 @@ func TestDeferredCommandGraphQLSharedTransportCannotSwapOperationIdentity(t *tes
 	}
 }
 
+func TestDeferredCommandResponseDescriptorDoesNotApplyToGraphQLExecutor(t *testing.T) {
+	bundle := deferredAuditBundle("POST", "/graphql")
+	bundle.Surface.Endpoints[0].Operation.Model = "direct_read"
+	bundle.Operations = []OperationSpec{{
+		ID: "acme.graphql.query.viewer", Kind: "graphql_query",
+		GraphQL: &GraphQLOperationSpec{OperationName: "Viewer", Path: "/graphql"},
+	}}
+	command := deferredAuditCommand("POST", "/graphql")
+	command.Intent = "direct_read"
+	command.Operation = "acme.graphql.query.viewer"
+	command.Foundation.Component = connectors.FoundationComponentTypedResponseDescriptor
+	command.Foundation.Evidence = "response_descriptor_absent"
+	command.Foundation.Target = connectors.CommandFoundationTarget{
+		SourceID: "acme.graphql.query.viewer", ProviderOperationID: "Viewer",
+		Binding:         connectors.CommandBindingIdentity{Kind: connectors.CommandBindingOperation, ID: "acme.graphql.query.viewer"},
+		DestructiveKind: "none", Method: "POST", Path: "/graphql",
+	}
+
+	err := PreflightDeferredCommand(bundle, command)
+	if err == nil || !strings.Contains(err.Error(), "requires its exact admitted operation") {
+		t.Fatalf("GraphQL response-descriptor foundation = %v, want executor-specific rejection", err)
+	}
+}
+
+func TestDeferredCommandSourceImporterRequiresDirectOperationLane(t *testing.T) {
+	bundle := deferredAuditBundle("POST", "/widgets")
+	command := deferredAuditCommand("POST", "/widgets")
+	command.Foundation.Component = connectors.FoundationComponentSourceImporter
+	command.Foundation.Evidence = "source_importer_absent"
+	command.Foundation.Target = connectors.CommandFoundationTarget{
+		SourceID: "acme.widgets.create", ProviderOperationID: "widgets/create",
+		Binding:         connectors.CommandBindingIdentity{Kind: connectors.CommandBindingOperation, ID: "acme.widgets.create"},
+		DestructiveKind: "none", Method: "POST", Path: "/widgets",
+	}
+
+	err := PreflightDeferredCommand(bundle, command)
+	if err == nil || !strings.Contains(err.Error(), "requires a direct-operation binding") {
+		t.Fatalf("reverse-ETL source-importer foundation = %v, want executor-specific rejection", err)
+	}
+}
+
 func deferredAuditBundle(method, path string) Bundle {
 	return Bundle{
 		Name: "acme",

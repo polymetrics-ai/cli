@@ -16,9 +16,14 @@ current delivery rules are in [the connector canon](../connector-canon/INDEX.md)
 > binding or named deferred foundation. Nonzero expected cohort counts make a
 > missing catalog, omitted row, or zero-work run fail.
 > Its no-I/O check reuses the real runtime resolver to reject false implemented
-> bindings. Deferred targets carry the admitted source and binding identities;
+> bindings. Provenance-row uniqueness excludes the runtime binding, whose
+> uniqueness is checked independently. Canonical endpoints may differ from
+> physical runtime routes only through named base-path, placeholder, registered
+> hook, GraphQL transport, query, suffix, or operation-annotation equivalence;
+> arbitrary endpoint substitution fails closed. Deferred targets carry the admitted source and binding identities;
 > their compact ledger is embedded for production preflight even though full
-> API-surface manifests are not. It accepts URL-plus-exact-citation evidence
+> API-surface manifests are not, and commandrunner tries its real implemented
+> preflight before accepting any missing-foundation classification. It accepts URL-plus-exact-citation evidence
 > without retained bytes, hashes, request bodies, credentials, or live proof. A
 > passing admission result is neither credential-bound runtime usability nor
 > live certification; see

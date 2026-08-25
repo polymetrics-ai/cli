@@ -107,7 +107,8 @@ connectorgen-surface-sync:
 
 # Source declaration admission is intentionally separate from source-lock
 # retention, runtime preflight, generated operation evidence, and live proof.
-# It is a provider-I/O-free check of optional declaration sidecars.
+# It is a provider-I/O-free check of the required independent source and
+# declaration catalogs.
 connectorgen-declaration-admission:
 	go run ./cmd/connectorgen declaration-admission
 

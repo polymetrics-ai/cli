@@ -200,7 +200,8 @@ func deferredCommandIdentityEvidenceMatchesBundle(b Bundle, cmd connectors.Comma
 			return fmt.Errorf("typed_request_body foundation is stale: the target operation has a request body schema")
 		}
 	case connectors.FoundationComponentTypedResponseDescriptor:
-		if target.Binding.Kind != connectors.CommandBindingOperation || !resolved.exists || resolved.operation == nil || bindings != 1 {
+		if target.Binding.Kind != connectors.CommandBindingOperation || !resolved.exists || resolved.operation == nil || bindings != 1 ||
+			(resolved.operation.REST == nil && resolved.operation.Binary == nil) {
 			return fmt.Errorf("typed_response_descriptor foundation requires its exact admitted operation")
 		}
 		if (resolved.operation.REST != nil && resolved.operation.REST.Response != nil) ||
@@ -244,19 +245,23 @@ func deferredCommandIdentityEvidenceMatchesBundle(b Bundle, cmd connectors.Comma
 		default:
 			return fmt.Errorf("binary_transfer_binding foundation does not apply to %q", cmd.Intent)
 		}
-	case connectors.FoundationComponentSourceImporter, connectors.FoundationComponentRuntimeExecutor:
+	case connectors.FoundationComponentSourceImporter:
+		if target.Binding.Kind != connectors.CommandBindingOperation ||
+			(cmd.Intent != "direct_read" && cmd.Intent != "direct_write") {
+			return fmt.Errorf("source_importer foundation requires a direct-operation binding")
+		}
 		if bindings != 0 {
-			return fmt.Errorf("%s foundation must not reference an undeclared runtime binding", foundation.Component)
+			return fmt.Errorf("source_importer foundation must not reference an undeclared runtime binding")
 		}
 		if resolved.exists {
-			return fmt.Errorf("%s foundation is stale: the admitted runtime binding already exists", foundation.Component)
+			return fmt.Errorf("source_importer foundation is stale: the admitted runtime binding already exists")
 		}
-	case connectors.FoundationComponentIdempotencyContract:
-		if target.Binding.Kind != connectors.CommandBindingWrite || !resolved.exists || resolved.action == nil || bindings != 1 {
-			return fmt.Errorf("idempotency_contract foundation requires its exact admitted write action")
+	case connectors.FoundationComponentRuntimeExecutor:
+		if bindings != 0 {
+			return fmt.Errorf("runtime_executor foundation must not reference an undeclared runtime binding")
 		}
-		if strings.TrimSpace(resolved.action.IdempotencyKeyHeader) != "" {
-			return fmt.Errorf("idempotency_contract foundation is stale: the target action declares an idempotency header")
+		if resolved.exists {
+			return fmt.Errorf("runtime_executor foundation is stale: the admitted runtime binding already exists")
 		}
 	default:
 		return fmt.Errorf("unknown deferred foundation component %q", foundation.Component)
@@ -402,7 +407,8 @@ func deferredCommandEvidenceMatchesBundleLegacy(b Bundle, cmd connectors.Command
 			return fmt.Errorf("typed_request_body foundation is stale: the target operation has a request body schema")
 		}
 	case connectors.FoundationComponentTypedResponseDescriptor:
-		if !hasOperation || strings.TrimSpace(cmd.Operation) == "" || operation.ID != cmd.Operation {
+		if !hasOperation || strings.TrimSpace(cmd.Operation) == "" || operation.ID != cmd.Operation ||
+			(operation.REST == nil && operation.Binary == nil) {
 			return fmt.Errorf("typed_response_descriptor foundation requires its exact declared operation")
 		}
 		if (operation.REST != nil && operation.REST.Response != nil) || (operation.Binary != nil && operation.Binary.Response != nil) {
@@ -441,19 +447,22 @@ func deferredCommandEvidenceMatchesBundleLegacy(b Bundle, cmd connectors.Command
 		default:
 			return fmt.Errorf("binary_transfer_binding foundation does not apply to %q", cmd.Intent)
 		}
-	case connectors.FoundationComponentSourceImporter, connectors.FoundationComponentRuntimeExecutor:
+	case connectors.FoundationComponentSourceImporter:
+		if cmd.Intent != "direct_read" && cmd.Intent != "direct_write" {
+			return fmt.Errorf("source_importer foundation requires a direct operation")
+		}
 		if bindings != 0 {
-			return fmt.Errorf("%s foundation must not reference an undeclared runtime binding", foundation.Component)
+			return fmt.Errorf("source_importer foundation must not reference an undeclared runtime binding")
 		}
 		if hasAction || hasOperation || stream {
-			return fmt.Errorf("%s foundation is stale: the target already has a declared runtime binding", foundation.Component)
+			return fmt.Errorf("source_importer foundation is stale: the target already has a declared runtime binding")
 		}
-	case connectors.FoundationComponentIdempotencyContract:
-		if !hasAction || strings.TrimSpace(cmd.Write) == "" || action.Name != cmd.Write {
-			return fmt.Errorf("idempotency_contract foundation requires its exact declared write action")
+	case connectors.FoundationComponentRuntimeExecutor:
+		if bindings != 0 {
+			return fmt.Errorf("runtime_executor foundation must not reference an undeclared runtime binding")
 		}
-		if strings.TrimSpace(action.IdempotencyKeyHeader) != "" {
-			return fmt.Errorf("idempotency_contract foundation is stale: the target action declares an idempotency header")
+		if hasAction || hasOperation || stream {
+			return fmt.Errorf("runtime_executor foundation is stale: the target already has a declared runtime binding")
 		}
 	default:
 		return fmt.Errorf("unknown deferred foundation component %q", foundation.Component)

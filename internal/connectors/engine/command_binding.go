@@ -3,27 +3,62 @@ package engine
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 	"regexp"
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
 )
 
-var commandBindingTemplateRE = regexp.MustCompile(`\{\{\s*(?:config|record|fanout)\.([-A-Za-z0-9_]+)(?:\s*\|[^}]*)?\s*\}\}`)
+var (
+	commandBindingTemplateRE   = regexp.MustCompile(`\{\{\s*(?:config|record|fanout)\.([-A-Za-z0-9_]+)(?:\s*\|[^}]*)?\s*\}\}`)
+	commandBindingSlotRE       = regexp.MustCompile(`\{[-A-Za-z0-9_]+\}`)
+	commandBindingAnnotationRE = regexp.MustCompile(`\s+\((?:body|object|parent)=[-A-Za-z0-9_]+\)$`)
+	commandBindingBaseURLRE    = regexp.MustCompile(`\{\{\s*config\.base_url\s*\}\}`)
+)
+
+const (
+	CommandEndpointExact              = "exact"
+	CommandEndpointBasePath           = "declared_base_path"
+	CommandEndpointPlaceholder        = "placeholder_identity"
+	CommandEndpointHookTransport      = "registered_hook_transport"
+	CommandEndpointGraphQLTransport   = "graphql_operation_transport"
+	CommandEndpointAbsoluteTransport  = "absolute_url_transport"
+	CommandEndpointQueryTransport     = "declared_query_transport"
+	CommandEndpointSuffixTransport    = "provider_suffix_transport"
+	CommandEndpointAnnotationIdentity = "operation_annotation_identity"
+)
 
 // ResolvedCommandBinding is the one declaration and provider target selected
-// by the runtime for an implemented CLI command.
+// by the runtime for an implemented CLI command. Method/Path are the canonical
+// discovery identity. TransportMethod/TransportPath retain what the executor
+// actually sends; Equivalence names the closed proof relating the two.
 type ResolvedCommandBinding struct {
-	Binding     connectors.CommandBindingIdentity
-	Method      string
-	Path        string
-	Destructive DestructiveTarget
+	Binding         connectors.CommandBindingIdentity
+	Method          string
+	Path            string
+	TransportMethod string
+	TransportPath   string
+	Equivalence     string
+	Destructive     DestructiveTarget
+}
+
+type commandRuntimeEndpoint struct {
+	method           string
+	path             string
+	route            string
+	baseURL          string
+	graphqlOperation string
 }
 
 // ResolveImplementedCommandBinding is shared by runtime preflight and source
 // admission. It is the sole lane-to-declaration resolver; certification must
 // not copy its own incomplete stream/write/operation switch.
 func ResolveImplementedCommandBinding(b Bundle, cmd connectors.CommandSurfaceCommand) (ResolvedCommandBinding, error) {
+	return resolveImplementedCommandBinding(b, cmd, HooksFor(b.Name))
+}
+
+func resolveImplementedCommandBinding(b Bundle, cmd connectors.CommandSurfaceCommand, hooks Hooks) (ResolvedCommandBinding, error) {
 	bindings := 0
 	for _, value := range []string{cmd.Stream, cmd.Write, cmd.Operation} {
 		if strings.TrimSpace(value) != "" {
@@ -34,7 +69,10 @@ func ResolveImplementedCommandBinding(b Bundle, cmd connectors.CommandSurfaceCom
 		return ResolvedCommandBinding{}, fmt.Errorf("implemented command %q references more than one runtime binding", cmd.Path)
 	}
 
-	var resolved ResolvedCommandBinding
+	var (
+		resolved ResolvedCommandBinding
+		runtime  commandRuntimeEndpoint
+	)
 	switch {
 	case cmd.Stream != "":
 		stream, ok := commandBindingStream(b, cmd.Stream)
@@ -45,20 +83,21 @@ func ResolveImplementedCommandBinding(b Bundle, cmd connectors.CommandSurfaceCom
 		if method == "" {
 			method = http.MethodGet
 		}
-		resolved = ResolvedCommandBinding{
-			Binding: connectors.CommandBindingIdentity{Kind: connectors.CommandBindingStream, ID: stream.Name},
-			Method:  method, Path: normalizeBindingPathTemplate(stream.Path),
+		resolved.Binding = connectors.CommandBindingIdentity{Kind: connectors.CommandBindingStream, ID: stream.Name}
+		runtime = commandRuntimeEndpoint{method: method, path: normalizeBindingPathTemplate(stream.Path), route: stream.Route}
+		if stream.GraphQL != nil {
+			runtime.graphqlOperation = strings.TrimSpace(stream.GraphQL.OperationName)
 		}
 	case cmd.Write != "":
 		action, ok := commandBindingWrite(b, cmd.Write)
 		if !ok {
 			return ResolvedCommandBinding{}, fmt.Errorf("implemented command %q references missing write action %q", cmd.Path, cmd.Write)
 		}
-		resolved = ResolvedCommandBinding{
-			Binding:     connectors.CommandBindingIdentity{Kind: connectors.CommandBindingWrite, ID: action.Name},
-			Method:      strings.ToUpper(strings.TrimSpace(action.Method)),
-			Path:        normalizeBindingPathTemplate(action.Path),
-			Destructive: DestructiveTargetForWrite(b.Name, action),
+		resolved.Binding = connectors.CommandBindingIdentity{Kind: connectors.CommandBindingWrite, ID: action.Name}
+		resolved.Destructive = DestructiveTargetForWrite(b.Name, action)
+		runtime = commandRuntimeEndpoint{
+			method: strings.ToUpper(strings.TrimSpace(action.Method)), path: normalizeBindingPathTemplate(action.Path),
+			route: action.Route, baseURL: action.BaseURL,
 		}
 	case cmd.Operation != "":
 		operation, ok := commandBindingOperation(b, cmd.Operation)
@@ -69,38 +108,218 @@ func ResolveImplementedCommandBinding(b Bundle, cmd connectors.CommandSurfaceCom
 		if err != nil {
 			return ResolvedCommandBinding{}, err
 		}
-		resolved = ResolvedCommandBinding{
-			Binding:     connectors.CommandBindingIdentity{Kind: connectors.CommandBindingOperation, ID: operation.ID},
-			Method:      method,
-			Path:        path,
-			Destructive: DestructiveTargetForOperation(b.Name, operation),
+		resolved.Binding = connectors.CommandBindingIdentity{Kind: connectors.CommandBindingOperation, ID: operation.ID}
+		resolved.Destructive = DestructiveTargetForOperation(b.Name, operation)
+		runtime = commandRuntimeEndpoint{method: method, path: normalizeBindingPathTemplate(path), route: operation.Route}
+		if operation.GraphQL != nil {
+			runtime.graphqlOperation = strings.TrimSpace(operation.GraphQL.OperationName)
 		}
 	default:
 		if cmd.Intent != "direct_read" || len(cmd.APISurface) != 1 {
 			return ResolvedCommandBinding{}, fmt.Errorf("implemented command %q has no resolvable runtime binding", cmd.Path)
 		}
-		resolved = ResolvedCommandBinding{
-			Binding: connectors.CommandBindingIdentity{Kind: connectors.CommandBindingCommand, ID: cmd.Path},
-			Method:  cmd.APISurface[0].Method, Path: cmd.APISurface[0].Path,
+		reference := cmd.APISurface[0]
+		resolved.Binding = connectors.CommandBindingIdentity{Kind: connectors.CommandBindingCommand, ID: cmd.Path}
+		resolved.Method = strings.ToUpper(strings.TrimSpace(reference.Method))
+		resolved.Path = reference.Path
+		resolved.TransportMethod = resolved.Method
+		resolved.TransportPath = resolved.Path
+		resolved.Equivalence = CommandEndpointExact
+		return resolved, nil
+	}
+
+	if len(cmd.APISurface) != 1 {
+		resolved.Method = runtime.method
+		resolved.Path = runtime.path
+		resolved.TransportMethod = runtime.method
+		resolved.TransportPath = runtime.path
+		resolved.Equivalence = CommandEndpointExact
+		return resolved, nil
+	}
+	proofPrefix := ""
+	if transportHook, ok := hooks.(CommandBindingTransportHook); ok {
+		method, path, handled := transportHook.CommandBindingTransport(resolved.Binding)
+		if handled {
+			if strings.TrimSpace(method) == "" || strings.TrimSpace(path) == "" {
+				return ResolvedCommandBinding{}, fmt.Errorf("implemented command %q registered hook returned an empty transport endpoint", cmd.Path)
+			}
+			runtime.method = strings.ToUpper(strings.TrimSpace(method))
+			runtime.path = normalizeBindingPathTemplate(path)
+			proofPrefix = CommandEndpointHookTransport
 		}
 	}
 
-	if len(cmd.APISurface) == 1 {
-		reference := cmd.APISurface[0]
-		// The command projection owns the provider-document endpoint identity.
-		// Runtime declarations frequently keep a path relative to a configurable
-		// base URL, or use a different local placeholder name for the same path
-		// slot. Those are intentionally valid runtime bindings and must not be
-		// reclassified by a literal comparison that commandrunner never made.
-		// A GRAPHQL reference can instead name the fixed document/field; retain
-		// the POST transport in that representation and let Binding disambiguate
-		// operations sharing it.
-		if reference.Method != "GRAPHQL" {
-			resolved.Method = strings.ToUpper(strings.TrimSpace(reference.Method))
-			resolved.Path = reference.Path
+	reference := cmd.APISurface[0]
+	canonicalMethod := strings.ToUpper(strings.TrimSpace(reference.Method))
+	canonicalPath := reference.Path
+	proof, err := proveCommandEndpointEquivalence(b, runtime, canonicalMethod, canonicalPath)
+	if err != nil {
+		return ResolvedCommandBinding{}, fmt.Errorf("implemented command %q binding %s/%s: %w", cmd.Path, resolved.Binding.Kind, resolved.Binding.ID, err)
+	}
+	if proofPrefix != "" {
+		proof = proofPrefix
+	}
+	resolved.Method = canonicalMethod
+	resolved.Path = canonicalPath
+	resolved.TransportMethod = runtime.method
+	resolved.TransportPath = runtime.path
+	resolved.Equivalence = proof
+	return resolved, nil
+}
+
+func proveCommandEndpointEquivalence(b Bundle, runtime commandRuntimeEndpoint, canonicalMethod, canonicalPath string) (string, error) {
+	if canonicalMethod == "GRAPHQL" {
+		if runtime.graphqlOperation == "" || runtime.graphqlOperation != canonicalPath {
+			return "", fmt.Errorf("runtime GraphQL operation %q does not match canonical operation %q", runtime.graphqlOperation, canonicalPath)
+		}
+		if strings.ToUpper(runtime.method) != http.MethodPost || commandBindingComparablePath(runtime.path) != "/graphql" {
+			return "", fmt.Errorf("GraphQL operation %q does not use the declared POST /graphql transport", canonicalPath)
+		}
+		return CommandEndpointGraphQLTransport, nil
+	}
+	if strings.ToUpper(runtime.method) != canonicalMethod {
+		return "", fmt.Errorf("runtime method %s does not match canonical method %s", runtime.method, canonicalMethod)
+	}
+
+	runtimeComparable, runtimeChange := commandBindingComparablePathWithProof(runtime.path)
+	canonicalComparable, canonicalChange := commandBindingComparablePathWithProof(canonicalPath)
+	if commandBindingSlots(runtimeComparable) == commandBindingSlots(canonicalComparable) {
+		return commandBindingEquivalenceProof(runtime.path, canonicalPath, runtimeChange, canonicalChange), nil
+	}
+	for _, basePath := range commandBindingBasePaths(b, runtime.route, runtime.baseURL) {
+		combined := strings.TrimRight(basePath, "/") + "/" + strings.TrimLeft(runtimeComparable, "/")
+		if strings.TrimRight(commandBindingSlots(combined), "/") == strings.TrimRight(commandBindingSlots(canonicalComparable), "/") {
+			return CommandEndpointBasePath, nil
 		}
 	}
-	return resolved, nil
+	if commandBindingUsesConfigurableBase(b, runtime.route, runtime.baseURL) &&
+		strings.HasSuffix(commandBindingSlots(canonicalComparable), commandBindingSlots(runtimeComparable)) {
+		return CommandEndpointBasePath, nil
+	}
+	return "", fmt.Errorf("runtime endpoint %s %s is not canonically equivalent to %s %s", runtime.method, runtime.path, canonicalMethod, canonicalPath)
+}
+
+func commandBindingEquivalenceProof(runtimePath, canonicalPath, runtimeChange, canonicalChange string) string {
+	switch {
+	case runtimeChange == CommandEndpointQueryTransport:
+		return CommandEndpointQueryTransport
+	case runtimeChange == CommandEndpointAbsoluteTransport:
+		return CommandEndpointAbsoluteTransport
+	case runtimeChange == CommandEndpointSuffixTransport || canonicalChange == CommandEndpointSuffixTransport:
+		return CommandEndpointSuffixTransport
+	case canonicalChange == CommandEndpointAnnotationIdentity:
+		return CommandEndpointAnnotationIdentity
+	case normalizeBindingPathTemplate(runtimePath) != normalizeBindingPathTemplate(canonicalPath):
+		return CommandEndpointPlaceholder
+	default:
+		return CommandEndpointExact
+	}
+}
+
+func commandBindingComparablePath(path string) string {
+	value, _ := commandBindingComparablePathWithProof(path)
+	return value
+}
+
+func commandBindingComparablePathWithProof(path string) (string, string) {
+	value := strings.TrimSpace(normalizeBindingPathTemplate(path))
+	proof := ""
+	if parsed, err := url.Parse(value); err == nil && parsed.IsAbs() && parsed.Host != "" {
+		value = parsed.Path
+		proof = CommandEndpointAbsoluteTransport
+		if value == "" {
+			value = "/"
+		}
+		if parsed.RawQuery != "" {
+			proof = CommandEndpointQueryTransport
+		}
+	} else if query := strings.IndexByte(value, '?'); query >= 0 {
+		value = value[:query]
+		proof = CommandEndpointQueryTransport
+	}
+	if commandBindingAnnotationRE.MatchString(value) {
+		value = commandBindingAnnotationRE.ReplaceAllString(value, "")
+		proof = CommandEndpointAnnotationIdentity
+	}
+	if strings.HasSuffix(value, ".json") {
+		value = strings.TrimSuffix(value, ".json")
+		proof = CommandEndpointSuffixTransport
+	}
+	return value, proof
+}
+
+func commandBindingSlots(path string) string {
+	return commandBindingSlotRE.ReplaceAllString(path, "{}")
+}
+
+func commandBindingBasePaths(b Bundle, routeName, override string) []string {
+	candidates := []string{}
+	if strings.TrimSpace(override) != "" {
+		candidates = append(candidates, override)
+	} else if strings.TrimSpace(routeName) != "" {
+		for _, route := range b.HTTP.Routes {
+			if route.Name == routeName {
+				if strings.TrimSpace(route.Version) == "" {
+					candidates = append(candidates, route.BaseURL)
+				}
+				break
+			}
+		}
+	} else {
+		candidates = append(candidates, b.HTTP.URL)
+	}
+
+	seen := map[string]bool{}
+	paths := []string{}
+	for _, candidate := range candidates {
+		path := commandBindingBasePath(b, candidate)
+		if path == "" || path == "/" || seen[path] {
+			continue
+		}
+		seen[path] = true
+		paths = append(paths, path)
+	}
+	return paths
+}
+
+func commandBindingUsesConfigurableBase(b Bundle, routeName, override string) bool {
+	if strings.TrimSpace(override) != "" {
+		return commandBindingBaseURLRE.MatchString(override)
+	}
+	if strings.TrimSpace(routeName) != "" {
+		for _, route := range b.HTTP.Routes {
+			if route.Name == routeName {
+				return commandBindingBaseURLRE.MatchString(route.BaseURL)
+			}
+		}
+		return false
+	}
+	return commandBindingBaseURLRE.MatchString(b.HTTP.URL)
+}
+
+func commandBindingBasePath(b Bundle, raw string) string {
+	value := strings.TrimSpace(raw)
+	if value == "" {
+		return ""
+	}
+	if b.Spec != nil {
+		if baseURL := strings.TrimSpace(b.Spec.Defaults()["base_url"]); baseURL != "" {
+			value = commandBindingBaseURLRE.ReplaceAllString(value, baseURL)
+		}
+	}
+	value = commandBindingBaseURLRE.ReplaceAllString(value, "https://declared-base.invalid")
+	value = normalizeBindingPathTemplate(value)
+	parsed, err := url.Parse(value)
+	if err != nil {
+		return ""
+	}
+	if parsed.IsAbs() && parsed.Host != "" {
+		return strings.TrimRight(parsed.Path, "/")
+	}
+	if strings.HasPrefix(value, "/") {
+		return strings.TrimRight(value, "/")
+	}
+	return ""
 }
 
 // ResolveImplementedCommandPath resolves one bundle command through the same
@@ -127,7 +346,7 @@ func ResolveImplementedCommandPath(b Bundle, path string) (ResolvedCommandBindin
 // PreflightImplementedCommand lets commandrunner use the same resolver as
 // admission before selecting an executor.
 func (c *Connector) PreflightImplementedCommand(cmd connectors.CommandSurfaceCommand) error {
-	_, err := ResolveImplementedCommandBinding(c.bundle, cmd)
+	_, err := resolveImplementedCommandBinding(c.bundle, cmd, c.hooks)
 	return err
 }
 

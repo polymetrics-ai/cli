@@ -461,6 +461,15 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: "unknown command"}
 	}
 	if cmd.Availability == "deferred" {
+		implemented := cmd
+		implemented.Availability = "implemented"
+		implemented.Foundation = nil
+		if _, err := preflightImplementedCommand(connector, implemented, command); err == nil {
+			return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+				Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability,
+				Reason: "deferred command is stale: the exact command passes implemented runtime preflight",
+			}
+		}
 		preflighter, supported := connector.(deferredCommandPreflighter)
 		if !supported {
 			return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
@@ -477,29 +486,35 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 		return connectors.CommandSurfaceCommand{}, command, deferredCommandError(connector.Name(), command, cmd)
 	}
 	if cmd.Availability == "implemented" {
-		if preflighter, supported := connector.(implementedCommandPreflighter); supported {
-			if err := preflighter.PreflightImplementedCommand(cmd); err != nil {
-				return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
-					Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability,
-					Reason: fmt.Sprintf("implemented command binding is not admissible: %v", err),
-				}
+		implemented, err := preflightImplementedCommand(connector, cmd, command)
+		return implemented, command, err
+	}
+	return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+		Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: blockReason(cmd),
+	}
+}
+
+// preflightImplementedCommand is the executable commandrunner contract. A
+// deferred row is tested through this exact helper before it may report a
+// missing foundation, preventing runnable commands from being relabelled.
+func preflightImplementedCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand, command string) (connectors.CommandSurfaceCommand, error) {
+	if preflighter, supported := connector.(implementedCommandPreflighter); supported {
+		if err := preflighter.PreflightImplementedCommand(cmd); err != nil {
+			return connectors.CommandSurfaceCommand{}, &BlockedCommandError{
+				Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability,
+				Reason: fmt.Sprintf("implemented command binding is not admissible: %v", err),
 			}
 		}
-		if err := preflightStructuredJSONFlags(connector, cmd); err != nil {
-			return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
-				Connector:    connector.Name(),
-				Command:      command,
-				Intent:       cmd.Intent,
-				Availability: cmd.Availability,
-				Reason:       err.Error(),
-			}
+	}
+	if err := preflightStructuredJSONFlags(connector, cmd); err != nil {
+		return connectors.CommandSurfaceCommand{}, &BlockedCommandError{
+			Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: err.Error(),
 		}
 	}
 	if cmd.Operation != "" && cmd.Intent != "binary_download" && cmd.Intent != "text_export" &&
 		cmd.Intent != "status_check" &&
-		(cmd.Intent != "direct_read" || cmd.Availability != "implemented") &&
-		(cmd.Intent != "direct_write" || cmd.Availability != "implemented") {
-		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+		cmd.Intent != "direct_read" && cmd.Intent != "direct_write" {
+		return connectors.CommandSurfaceCommand{}, &BlockedCommandError{
 			Connector:    connector.Name(),
 			Command:      command,
 			Intent:       cmd.Intent,
@@ -509,47 +524,47 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	}
 	if (cmd.Intent == "binary_download" || cmd.Intent == "text_export") && cmd.Availability == "implemented" {
 		if err := validateBinaryDownloadCommand(connector, cmd); err != nil {
-			return connectors.CommandSurfaceCommand{}, command, err
+			return connectors.CommandSurfaceCommand{}, err
 		}
-		return cmd, command, nil
+		return cmd, nil
 	}
 	if cmd.Intent == "status_check" && cmd.Availability == "implemented" {
 		if err := validateStatusCheckCommand(connector, cmd); err != nil {
-			return connectors.CommandSurfaceCommand{}, command, err
+			return connectors.CommandSurfaceCommand{}, err
 		}
-		return cmd, command, nil
+		return cmd, nil
 	}
 	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" && cmd.Operation != "" {
 		if err := validateOperationDirectReadCommand(connector, cmd); err != nil {
-			return connectors.CommandSurfaceCommand{}, command, err
+			return connectors.CommandSurfaceCommand{}, err
 		}
-		return cmd, command, nil
+		return cmd, nil
 	}
 	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
 		if err := validateDirectReadCommand(connector, cmd); err != nil {
-			return connectors.CommandSurfaceCommand{}, command, err
+			return connectors.CommandSurfaceCommand{}, err
 		}
-		return cmd, command, nil
+		return cmd, nil
 	}
 	if cmd.Intent == "direct_write" && cmd.Availability == "implemented" {
 		if err := validateOperationDirectWriteCommand(connector, cmd); err != nil {
-			return connectors.CommandSurfaceCommand{}, command, err
+			return connectors.CommandSurfaceCommand{}, err
 		}
-		return cmd, command, nil
+		return cmd, nil
 	}
 	if cmd.Intent == "etl" && cmd.Availability == "implemented" && cmd.Stream != "" {
-		return cmd, command, nil
+		return cmd, nil
 	}
 	if cmd.Intent == "binary_upload" && cmd.Availability == "implemented" && cmd.Write != "" {
 		if err := validateBinaryUploadCommand(connector, cmd); err != nil {
-			return connectors.CommandSurfaceCommand{}, command, err
+			return connectors.CommandSurfaceCommand{}, err
 		}
-		return cmd, command, nil
+		return cmd, nil
 	}
 	if cmd.Intent == "reverse_etl" && cmd.Availability == "implemented" && cmd.Write != "" {
 		if preflighter, ok := connector.(declarativeWritePreflighter); ok {
 			if err := preflighter.PreflightWriteAction(cmd.Write); err != nil {
-				return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+				return connectors.CommandSurfaceCommand{}, &BlockedCommandError{
 					Connector:    connector.Name(),
 					Command:      command,
 					Intent:       cmd.Intent,
@@ -558,9 +573,9 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 				}
 			}
 		}
-		return cmd, command, nil
+		return cmd, nil
 	}
-	return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+	return connectors.CommandSurfaceCommand{}, &BlockedCommandError{
 		Connector:    connector.Name(),
 		Command:      command,
 		Intent:       cmd.Intent,

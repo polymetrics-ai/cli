@@ -74,11 +74,11 @@ func loadDeclarationTargetLedgers(fsys fs.FS) (map[string]*declarationTargetLedg
 			return nil, fmt.Errorf("%s: duplicate source identity %q", DeclarationAdmissionSourcesFile, source.ID)
 		}
 		seenSources[source.ID] = struct{}{}
-		effectivePath, err := declarationAdmissionSourcePath(source.BasePath, source.Path)
+		method, effectivePath, err := declarationAdmissionSourceEndpoint(source)
 		if err != nil {
 			return nil, fmt.Errorf("%s: source operation %q: %w", DeclarationAdmissionSourcesFile, source.ID, err)
 		}
-		identity := strings.Join([]string{source.SourceURL, source.Location, source.Method, effectivePath, source.Binding.Kind, source.Binding.ID}, "\x00")
+		identity := strings.Join([]string{source.SourceURL, source.Location, source.Protocol, source.ProviderOperationID, method, effectivePath}, "\x00")
 		if previous, duplicate := seenIdentities[identity]; duplicate {
 			return nil, fmt.Errorf("%s: source operations %q and %q duplicate one exact provider operation", DeclarationAdmissionSourcesFile, previous, source.ID)
 		}
@@ -97,7 +97,7 @@ func loadDeclarationTargetLedgers(fsys fs.FS) (map[string]*declarationTargetLedg
 		ledger.entries[source.ID] = connectors.CommandFoundationTarget{
 			SourceID: source.ID, ProviderOperationID: source.ProviderOperationID,
 			Binding:         connectors.CommandBindingIdentity{Kind: source.Binding.Kind, ID: source.Binding.ID},
-			DestructiveKind: source.DestructiveKind, Method: source.Method, Path: effectivePath,
+			DestructiveKind: source.DestructiveKind, Method: method, Path: effectivePath,
 		}
 	}
 	if catalog.ExpectedConnectors != len(ledgers) || catalog.ExpectedConnectors <= 0 {
@@ -138,11 +138,32 @@ func validateDeclarationAdmissionSource(source declarationAdmissionSourceOperati
 	default:
 		return fmt.Errorf("invalid destructive kind %q", source.DestructiveKind)
 	}
+	_, _, err := declarationAdmissionSourceEndpoint(source)
+	return err
+}
+
+func declarationAdmissionSourceEndpoint(source declarationAdmissionSourceOperation) (string, string, error) {
+	method := strings.ToUpper(strings.TrimSpace(source.Method))
+	if source.Protocol == "graphql" && method == "GRAPHQL" {
+		if source.BasePath != "" && source.BasePath != "/" {
+			return "", "", fmt.Errorf("GraphQL operation identity must not declare an HTTP base path")
+		}
+		if err := ValidateCommandEndpoint(method, source.Path); err != nil {
+			return "", "", err
+		}
+		return method, source.Path, nil
+	}
+	if source.Protocol == "rest" && method == "GRAPHQL" {
+		return "", "", fmt.Errorf("REST source operation cannot declare a GraphQL operation identity")
+	}
 	path, err := declarationAdmissionSourcePath(source.BasePath, source.Path)
 	if err != nil {
-		return err
+		return "", "", err
 	}
-	return ValidateCommandEndpoint(source.Method, path)
+	if err := ValidateCommandEndpoint(method, path); err != nil {
+		return "", "", err
+	}
+	return method, path, nil
 }
 
 func declarationAdmissionSourcePath(basePath, operationPath string) (string, error) {

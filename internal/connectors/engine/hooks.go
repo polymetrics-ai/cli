@@ -34,6 +34,14 @@ type Hooks interface {
 	ConnectorName() string
 }
 
+// CommandBindingTransportHook exposes the fixed physical endpoint selected by
+// a registered executor hook for one declaration binding. Admission uses it
+// only to prove a documented canonical endpoint maps to that exact transport;
+// callers cannot provide or alter either value.
+type CommandBindingTransportHook interface {
+	CommandBindingTransport(binding connectors.CommandBindingIdentity) (method, path string, handled bool)
+}
+
 // AuthHook resolves a connsdk.Authenticator for an AuthSpec whose mode is
 // "custom" (e.g. GitHub App JWT->installation-token exchange, AWS SigV4).
 type AuthHook interface {

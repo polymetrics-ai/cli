@@ -286,6 +286,7 @@ func declarationAdmissionFindings(bundle engine.Bundle, document declarationAdmi
 	}
 	sources := make(map[string]declarationAdmissionSourceOperation, len(document.SourceOperations))
 	identities := make(map[string]string, len(document.SourceOperations))
+	bindings := make(map[string]string, len(document.SourceOperations))
 	for _, source := range document.SourceOperations {
 		if source.Connector != "" && source.Connector != bundle.Name {
 			add(fmt.Sprintf("source operation %q belongs to connector %q", source.ID, source.Connector))
@@ -320,12 +321,8 @@ func declarationAdmissionFindings(bundle engine.Bundle, document declarationAdmi
 		default:
 			add("source operation " + source.ID + " has an invalid destructive semantic")
 		}
-		effectivePath, err := declarationAdmissionEffectivePath(source.BasePath, source.Path)
+		_, _, err := declarationAdmissionCanonicalSourceEndpoint(source)
 		if err != nil {
-			add("source operation " + source.ID + ": " + err.Error())
-			continue
-		}
-		if err := engine.ValidateCommandEndpoint(strings.ToUpper(strings.TrimSpace(source.Method)), effectivePath); err != nil {
 			add("source operation " + source.ID + ": " + err.Error())
 			continue
 		}
@@ -334,6 +331,12 @@ func declarationAdmissionFindings(bundle engine.Bundle, document declarationAdmi
 			add(fmt.Sprintf("duplicate exact provider operation identity for source operations %s and %s", previous, source.ID))
 		} else {
 			identities[identity] = source.ID
+		}
+		binding := strings.Join([]string{source.Binding.Kind, source.Binding.ID}, "\x00")
+		if previous, duplicate := bindings[binding]; duplicate {
+			add(fmt.Sprintf("source operations %s and %s claim one canonical binding", previous, source.ID))
+		} else {
+			bindings[binding] = source.ID
 		}
 	}
 	declared := make(map[string]bool, len(document.Declarations))
@@ -372,11 +375,18 @@ func declarationAdmissionProviderURL(raw string) bool {
 // exact documented operation is enough to establish the independent admission
 // denominator, but two aliases for that same documented operation are not.
 func declarationAdmissionSourceIdentity(source declarationAdmissionSourceOperation) string {
-	path, err := declarationAdmissionEffectivePath(source.BasePath, source.Path)
+	method, path, err := declarationAdmissionCanonicalSourceEndpoint(source)
 	if err != nil {
 		return ""
 	}
-	return strings.Join([]string{source.SourceURL, source.Location, strings.ToUpper(strings.TrimSpace(source.Method)), path, source.Binding.Kind, source.Binding.ID}, "\x00")
+	return strings.Join([]string{
+		source.SourceURL,
+		source.Location,
+		source.Protocol,
+		source.ProviderOperationID,
+		method,
+		path,
+	}, "\x00")
 }
 
 func declarationAdmissionCheckRow(findings *[]Finding, bundle engine.Bundle, file string, source declarationAdmissionSourceOperation, declaration declarationAdmissionDeclaration) {
@@ -387,12 +397,12 @@ func declarationAdmissionCheckRow(findings *[]Finding, bundle engine.Bundle, fil
 		add("lane is not one of the admission lanes")
 		return
 	}
-	effectivePath, err := declarationAdmissionEffectivePath(source.BasePath, source.Path)
+	canonicalMethod, effectivePath, err := declarationAdmissionCanonicalSourceEndpoint(source)
 	if err != nil {
 		add(err.Error())
 		return
 	}
-	if !strings.EqualFold(declaration.Canonical.Method, source.Method) || declaration.Canonical.Path != effectivePath {
+	if !strings.EqualFold(declaration.Canonical.Method, canonicalMethod) || declaration.Canonical.Path != effectivePath {
 		add("base-path mismatch or stale canonical endpoint")
 	}
 	if !declarationAdmissionBindingValid(declaration.Binding) || !declarationAdmissionBindingsMatch(declaration.Binding, source.Binding) {
@@ -521,6 +531,30 @@ func declarationAdmissionEffectivePath(basePath, operationPath string) (string, 
 	return effective, nil
 }
 
+func declarationAdmissionCanonicalSourceEndpoint(source declarationAdmissionSourceOperation) (string, string, error) {
+	method := strings.ToUpper(strings.TrimSpace(source.Method))
+	if source.Protocol == "graphql" && method == "GRAPHQL" {
+		if source.BasePath != "" && source.BasePath != "/" {
+			return "", "", errors.New("GraphQL operation identity must not declare an HTTP base path")
+		}
+		if err := engine.ValidateCommandEndpoint(method, source.Path); err != nil {
+			return "", "", err
+		}
+		return method, source.Path, nil
+	}
+	if source.Protocol == "rest" && method == "GRAPHQL" {
+		return "", "", errors.New("REST source operation cannot declare a GraphQL operation identity")
+	}
+	path, err := declarationAdmissionEffectivePath(source.BasePath, source.Path)
+	if err != nil {
+		return "", "", err
+	}
+	if err := engine.ValidateCommandEndpoint(method, path); err != nil {
+		return "", "", err
+	}
+	return method, path, nil
+}
+
 func declarationAdmissionCommand(bundle engine.Bundle, path string) (engine.CLICommand, int) {
 	if bundle.CLISurface == nil {
 		return engine.CLICommand{}, 0
@@ -627,14 +661,14 @@ func declarationAdmissionFoundationTargetMatchesSource(foundation *engine.Comman
 	if foundation == nil {
 		return false
 	}
-	effectivePath, err := declarationAdmissionEffectivePath(source.BasePath, source.Path)
+	method, effectivePath, err := declarationAdmissionCanonicalSourceEndpoint(source)
 	if err != nil {
 		return false
 	}
 	target := foundation.Target
 	return target.SourceID == source.ID && target.ProviderOperationID == source.ProviderOperationID &&
 		target.Binding.Kind == source.Binding.Kind && target.Binding.ID == source.Binding.ID &&
-		target.DestructiveKind == source.DestructiveKind && strings.EqualFold(target.Method, source.Method) && target.Path == effectivePath
+		target.DestructiveKind == source.DestructiveKind && strings.EqualFold(target.Method, method) && target.Path == effectivePath
 }
 
 func declarationAdmissionResolvedDestructiveMatches(resolved engine.ResolvedCommandBinding, semantic string) bool {

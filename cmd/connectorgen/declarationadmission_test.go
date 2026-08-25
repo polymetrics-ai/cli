@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors/commandrunner"
+	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/failures"
 )
@@ -19,6 +20,50 @@ func TestDeclarationAdmissionAcceptsRunnableReadAndExplicitDeferrals(t *testing.
 	if findings := declarationAdmissionFindings(bundle, document); len(findings) != 0 {
 		t.Fatalf("admission findings = %+v, want none", findings)
 	}
+}
+
+func TestImplementedCommandEndpointEquivalenceCoversExactFleet(t *testing.T) {
+	bundles, err := engine.LoadAll(defs.FS)
+	loadFailed := err != nil
+	if err != nil {
+		t.Errorf("load production bundles: %v", err)
+	}
+	aliases := 0
+	graphql := 0
+	for _, bundle := range bundles {
+		surface := engine.New(bundle, nil).CommandSurface()
+		if surface == nil {
+			continue
+		}
+		for _, command := range surface.Commands {
+			if command.Availability != declarationAdmissionStateImplemented ||
+				(command.Stream == "" && command.Write == "" && command.Operation == "") || len(command.APISurface) != 1 {
+				continue
+			}
+			resolved, resolveErr := engine.ResolveImplementedCommandBinding(bundle, command)
+			if resolveErr != nil {
+				t.Errorf("%s %s: %v", bundle.Name, command.Path, resolveErr)
+				continue
+			}
+			if resolved.Method == "GRAPHQL" {
+				graphql++
+				if resolved.Equivalence != engine.CommandEndpointGraphQLTransport {
+					t.Errorf("%s %s: GraphQL equivalence = %q", bundle.Name, command.Path, resolved.Equivalence)
+				}
+				continue
+			}
+			if !strings.EqualFold(resolved.Method, resolved.TransportMethod) || resolved.Path != resolved.TransportPath {
+				aliases++
+				if resolved.Equivalence == "" || resolved.Equivalence == engine.CommandEndpointExact {
+					t.Errorf("%s %s: aliased endpoint has proof %q (%s %s -> %s %s)", bundle.Name, command.Path, resolved.Equivalence, resolved.TransportMethod, resolved.TransportPath, resolved.Method, resolved.Path)
+				}
+			}
+		}
+	}
+	if !loadFailed && (aliases != 243 || graphql != 4) {
+		t.Fatalf("proved endpoint aliases = %d non-GraphQL and %d GraphQL, want 243 and 4", aliases, graphql)
+	}
+	t.Logf("proved endpoint aliases = %d non-GraphQL and %d GraphQL", aliases, graphql)
 }
 
 func TestDeclarationAdmissionRejectsCompletenessAndBindingDefects(t *testing.T) {
@@ -40,6 +85,28 @@ func TestDeclarationAdmissionRejectsCompletenessAndBindingDefects(t *testing.T) 
 				document.Declarations = append(document.Declarations, document.Declarations[0])
 			},
 			want: "duplicate declaration",
+		},
+		{
+			name: "duplicate provider operation with a different binding",
+			edit: func(document *declarationAdmissionDocument, _ *engine.Bundle) {
+				duplicate := document.SourceOperations[0]
+				duplicate.ID = "list-widgets-alias"
+				duplicate.Binding = declarationAdmissionBinding{Kind: "stream", ID: "widgets_alias"}
+				document.SourceOperations = append(document.SourceOperations, duplicate)
+			},
+			want: "duplicate exact provider operation identity",
+		},
+		{
+			name: "duplicate canonical binding for different provider operations",
+			edit: func(document *declarationAdmissionDocument, _ *engine.Bundle) {
+				duplicate := document.SourceOperations[0]
+				duplicate.ID = "get-widget"
+				duplicate.Location = "Widgets > get-widget"
+				duplicate.ProviderOperationID = "provider.get-widget"
+				duplicate.Path = "/widgets/{id}"
+				document.SourceOperations = append(document.SourceOperations, duplicate)
+			},
+			want: "claim one canonical binding",
 		},
 		{
 			name: "citation free",
@@ -482,6 +549,71 @@ func TestDeclarationAdmissionAdmitsGitHubImplementedDeleteControl(t *testing.T) 
 	}
 }
 
+// TestDeclarationAdmissionOutreachRealConnectorIntegrationGate is the
+// post-repair merge gate requested by the captain: one real base-path-backed
+// ETL read and one destructive reverse-ETL write must pass admission, the
+// shared binding resolver, and commandrunner's no-I/O implemented preflight.
+func TestDeclarationAdmissionOutreachRealConnectorIntegrationGate(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatalf("repository root: %v", err)
+	}
+	bundle, err := engine.Load(os.DirFS(filepath.Join(root, "internal", "connectors", "defs")), "outreach")
+	if err != nil {
+		t.Fatalf("load Outreach bundle: %v", err)
+	}
+	bundle.CLISurface = &engine.CLISurface{Commands: []engine.CLICommand{
+		{
+			Path: "prospects list", Intent: declarationAdmissionLaneETL, Availability: declarationAdmissionStateImplemented,
+			Stream: "prospects", APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/api/v2/prospects"}},
+		},
+		{
+			Path: "accounts delete", Intent: declarationAdmissionLaneReverseETL, Availability: declarationAdmissionStateImplemented,
+			Write: "delete_account", APISurface: []engine.CLISurfaceEndpointRef{{Method: "DELETE", Path: "/api/v2/accounts/{id}"}},
+		},
+	}}
+	document := declarationAdmissionDocument{
+		SchemaVersion: declarationAdmissionSchemaVersion,
+		Connector:     "outreach",
+		SourceOperations: []declarationAdmissionSourceOperation{
+			{
+				ID: "outreach.prospects.list", Protocol: "rest", SourceURL: "https://developers.outreach.io/api",
+				Location: "Prospect resource > list prospects", ProviderOperationID: "prospects/list",
+				Method: "GET", BasePath: "/api/v2", Path: "/prospects",
+				Binding: declarationAdmissionBinding{Kind: "stream", ID: "prospects"}, DestructiveKind: "none",
+			},
+			{
+				ID: "outreach.accounts.delete", Protocol: "rest", SourceURL: "https://developers.outreach.io/api",
+				Location: "Account resource > delete account", ProviderOperationID: "accounts/delete",
+				Method: "DELETE", BasePath: "/api/v2", Path: "/accounts/{id}",
+				Binding: declarationAdmissionBinding{Kind: "write", ID: "delete_account"}, DestructiveKind: "delete",
+			},
+		},
+		Declarations: []declarationAdmissionDeclaration{
+			{
+				SourceID: "outreach.prospects.list", Lane: declarationAdmissionLaneETL, Command: "prospects list",
+				State: declarationAdmissionStateImplemented, Canonical: declarationAdmissionEndpoint{Method: "GET", Path: "/api/v2/prospects"},
+				Binding: declarationAdmissionBinding{Kind: "stream", ID: "prospects"},
+			},
+			{
+				SourceID: "outreach.accounts.delete", Lane: declarationAdmissionLaneReverseETL, Command: "accounts delete",
+				State: declarationAdmissionStateImplemented, Canonical: declarationAdmissionEndpoint{Method: "DELETE", Path: "/api/v2/accounts/{id}"},
+				Binding:     declarationAdmissionBinding{Kind: "write", ID: "delete_account"},
+				Destructive: &declarationAdmissionDestructive{Kind: "delete", Reason: "deletes an Outreach account resource"},
+			},
+		},
+	}
+	if findings := declarationAdmissionFindings(bundle, document); len(findings) != 0 {
+		t.Fatalf("Outreach integration findings = %+v", findings)
+	}
+	connector := engine.New(bundle, nil)
+	for _, path := range [][]string{{"prospects", "list"}, {"accounts", "delete"}} {
+		if err := commandrunner.Preflight(connector, path); err != nil {
+			t.Fatalf("Outreach %v implemented preflight: %v", path, err)
+		}
+	}
+}
+
 func TestDeclarationAdmissionUsesRuntimeResolverForImplementedCommandKinds(t *testing.T) {
 	root, err := repoRoot()
 	if err != nil {
@@ -497,6 +629,7 @@ func TestDeclarationAdmissionUsesRuntimeResolverForImplementedCommandKinds(t *te
 	}{
 		{name: "templated ETL stream", command: "issue list", lane: declarationAdmissionLaneETL, protocol: "rest", method: "GET", path: "/repos/{owner}/{repo}/issues", bindingKind: "stream", bindingID: "issues"},
 		{name: "operation-free direct read", command: "users get-authenticated", lane: declarationAdmissionLaneDirectRead, protocol: "rest", method: "GET", path: "/user", bindingKind: "command", bindingID: "users get-authenticated"},
+		{name: "GraphQL ETL read", command: "discussion list", lane: declarationAdmissionLaneETL, protocol: "graphql", method: "GRAPHQL", path: "ListDiscussions", bindingKind: "stream", bindingID: "discussions"},
 		{name: "GraphQL direct write", command: "discussion create", lane: declarationAdmissionLaneDirectWrite, protocol: "graphql", method: "POST", path: "/graphql", bindingKind: "operation", bindingID: "github.graphql.mutation.create-discussion"},
 	}
 
