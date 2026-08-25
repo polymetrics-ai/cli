@@ -8,6 +8,15 @@ current delivery rules are in [the connector canon](../connector-canon/INDEX.md)
 > A `certification.json` definition, fixture, or generated file is not live
 > proof.
 
+> **Declaration admission is a separate certificate.**
+> `connectorgen declaration-admission` proves only that a cited provider
+> operation has exactly one source declaration, lane, canonical endpoint, and
+> discoverable command, with a runtime binding or named deferred foundation.
+> It performs no provider I/O and accepts URL-plus-exact-citation evidence
+> without retained bytes, hashes, request bodies, or live proof. A passing
+> admission result is neither runtime preflight nor live certification; see
+> [the declaration-admission canon](../connector-canon/DECLARATION-ADMISSION.md).
+
 > **Current certification authority (r1).** The generated proof-bearing
 > artifacts under `internal/connectors/certifications/` supersede the legacy
 > report/cassette material described below for the question “is this connector

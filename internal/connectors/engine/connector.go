@@ -1104,6 +1104,7 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 			RedactFields:  append([]string(nil), cmd.RedactFields...),
 			Risk:          cmd.Risk,
 			Approval:      cmd.Approval,
+			Foundation:    commandSurfaceFoundation(cmd.Foundation),
 			Notes:         cmd.Notes,
 		})
 	}
@@ -1121,6 +1122,13 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 		})
 	}
 	return out
+}
+
+func commandSurfaceFoundation(foundation *CommandFoundation) *connectors.CommandFoundation {
+	if foundation == nil {
+		return nil
+	}
+	return &connectors.CommandFoundation{ID: foundation.ID, Reason: foundation.Reason}
 }
 
 func commandSurfaceHasWriteIntent(commands []connectors.CommandSurfaceCommand) bool {

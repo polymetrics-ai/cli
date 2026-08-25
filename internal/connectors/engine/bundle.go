@@ -1140,6 +1140,14 @@ type CLIConstraint struct {
 	Message       string   `json:"message,omitempty"`
 }
 
+// CommandFoundation is the named missing capability for a deferred command.
+// It keeps the command discoverable without allowing a planned declaration to
+// masquerade as a runnable binding.
+type CommandFoundation struct {
+	ID     string `json:"id"`
+	Reason string `json:"reason"`
+}
+
 // CLICommand is one provider-inspired command path.
 type CLICommand struct {
 	Path          string                  `json:"path"`
@@ -1159,6 +1167,7 @@ type CLICommand struct {
 	Operation     string                  `json:"operation,omitempty"`
 	Risk          string                  `json:"risk,omitempty"`
 	Approval      string                  `json:"approval,omitempty"`
+	Foundation    *CommandFoundation      `json:"foundation_gap,omitempty"`
 	Notes         string                  `json:"notes,omitempty"`
 }
 
@@ -1487,8 +1496,8 @@ type CertificationWriteWaveBlockedAction struct {
 // metaSchemas holds the compiled meta-schemas used to validate the bundle
 // files themselves, lazily compiled once from the embedded schema/ dir.
 var metaSchemas = struct {
-	metadata, changefeed, pollingWatermark, syncTransport, spec, streams, writes, apiSurface, operations, cliSurface, certification, rateLimits *Schema
-	err                                                                                                                                         error
+	metadata, changefeed, pollingWatermark, syncTransport, spec, streams, writes, apiSurface, operations, cliSurface, declarationAdmission, certification, rateLimits *Schema
+	err                                                                                                                                                               error
 }{}
 
 func init() {
@@ -1513,8 +1522,23 @@ func init() {
 	metaSchemas.apiSurface = compileMeta(apiSurfaceSchemaJSON)
 	metaSchemas.operations = compileMeta(operationsSchemaJSON)
 	metaSchemas.cliSurface = compileMeta(cliSurfaceSchemaJSON)
+	metaSchemas.declarationAdmission = compileMeta(declarationAdmissionSchemaJSON)
 	metaSchemas.certification = compileMeta(certificationSchemaJSON)
 	metaSchemas.rateLimits = compileMeta(rateLimitsSchemaJSON)
+}
+
+// ValidateDeclarationAdmission validates the optional source-admission sidecar
+// shared by connectorgen. It deliberately validates only its declaration
+// shape: source-lock retention, runtime preflight, and live proof are separate
+// certificates with their own stricter contracts.
+func ValidateDeclarationAdmission(raw []byte) error {
+	if metaSchemas.err != nil {
+		return fmt.Errorf("declaration-admission meta-schema failed to compile: %w", metaSchemas.err)
+	}
+	if err := metaSchemas.declarationAdmission.Validate(mustDecodeAny(raw)); err != nil {
+		return err
+	}
+	return nil
 }
 
 // requiredFiles lists the bundle files that must always exist relative to a

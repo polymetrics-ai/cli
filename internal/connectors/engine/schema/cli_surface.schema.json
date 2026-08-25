@@ -98,6 +98,7 @@
             "type": "string",
             "enum": [
               "implemented",
+              "deferred",
               "partial",
               "planned",
               "excluded",
@@ -205,6 +206,15 @@
           },
           "risk": { "type": "string" },
           "approval": { "type": "string" },
+          "foundation_gap": {
+            "type": "object",
+            "required": ["id", "reason"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+              "reason": { "type": "string", "minLength": 1 }
+            }
+          },
           "notes": { "type": "string" }
         }
       }

@@ -444,6 +444,9 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	if !ok {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: "unknown command"}
 	}
+	if cmd.Availability == "deferred" {
+		return connectors.CommandSurfaceCommand{}, command, deferredCommandError(connector.Name(), command, cmd)
+	}
 	if cmd.Availability == "implemented" {
 		if err := preflightStructuredJSONFlags(connector, cmd); err != nil {
 			return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
@@ -526,6 +529,33 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 		Intent:       cmd.Intent,
 		Availability: cmd.Availability,
 		Reason:       blockReason(cmd),
+	}
+}
+
+func deferredCommandError(connectorName, command string, cmd connectors.CommandSurfaceCommand) *BlockedCommandError {
+	reason := "deferred command has no named missing foundation"
+	var failure *failures.Classification
+	if cmd.Foundation != nil && strings.TrimSpace(cmd.Foundation.ID) != "" && strings.TrimSpace(cmd.Foundation.Reason) != "" {
+		reason = fmt.Sprintf("missing foundation %q: %s", cmd.Foundation.ID, cmd.Foundation.Reason)
+		classification, err := failures.New(failures.Input{
+			Domain:       failures.DomainSystem,
+			Code:         "missing_foundation",
+			Message:      reason,
+			DispatchKind: failures.DispatchKindDeclaredButUnroutableCommand,
+			References: []failures.Reference{
+				{Kind: failures.ReferenceKindConnector, Value: connectorName},
+				{Kind: failures.ReferenceKindCommand, Value: strings.ReplaceAll(command, " ", "_")},
+			},
+		}, nil)
+		if err != nil {
+			return &BlockedCommandError{
+				Connector: connectorName, Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: reason,
+			}
+		}
+		failure = classification
+	}
+	return &BlockedCommandError{
+		Connector: connectorName, Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: reason, Failure: failure,
 	}
 }
 

@@ -16,6 +16,9 @@
 //	                           (api_surface, output_policy, flag maps_to,
 //	                           rest.max_bytes) and the compact runtime
 //	                           direct-read endpoint ledger from bundle sources
+//	declaration-admission [dir] [--json]
+//	                           checks optional source-cited declaration
+//	                           sidecars without asserting runtime or live proof
 //	source-import <connector> --out <path> [--defs <dir>] [--check]
 //	                           verifies a connector-owned source lock and
 //	                           emits canonical provider contracts for later
@@ -72,6 +75,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return runGen(args, stdout, stderr)
 	case "surface-sync":
 		return runSurfaceSync(args, stdout, stderr)
+	case "declaration-admission":
+		return runDeclarationAdmission(args, stdout, stderr)
 	case "params-import":
 		return runParamsImport(args, stdout, stderr)
 	case "source-import":
@@ -128,6 +133,7 @@ func usage() string {
   connectorgen ownership [repo-root] [--json] [--base <ref>] [--scope-file <path>]
 	connectorgen gen
 	connectorgen surface-sync [dir] [--check]  (default dir: internal/connectors/defs)
+	connectorgen declaration-admission [dir] [--json]  (default dir: internal/connectors/defs)
 	connectorgen source-import <connector> --out <path> [--defs <dir>] [--check]
 	connectorgen source-retain <connector> [--defs <dir>] --retrieved-at <RFC3339> --license <text> --terms <text>
 	connectorgen evidence-gate <evidence-manifest.json> <TDD-LEDGER.md> <REVIEW.md>

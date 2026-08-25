@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "declaration-admission.json",
+  "type": "object",
+  "required": ["schema_version", "connector", "source_operations", "declarations"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "integer", "enum": [1] },
+    "connector": { "type": "string" },
+    "source_operations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "source_url", "location", "operation_id", "method", "path"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "source_url": { "type": "string", "minLength": 1 },
+          "location": { "type": "string", "minLength": 1 },
+          "operation_id": { "type": "string", "minLength": 1 },
+          "method": { "type": "string", "minLength": 1 },
+          "base_path": { "type": "string" },
+          "path": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "declarations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source_id", "lane", "command", "state", "canonical"],
+        "additionalProperties": false,
+        "properties": {
+          "source_id": { "type": "string" },
+          "lane": { "type": "string", "enum": ["etl", "reverse_etl", "direct_read", "direct_write", "binary_download", "binary_upload"] },
+          "command": { "type": "string", "minLength": 1 },
+          "state": { "type": "string", "enum": ["implemented", "deferred"] },
+          "canonical": {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "minLength": 1 },
+              "path": { "type": "string", "minLength": 1 }
+            }
+          },
+          "foundation_gap": {
+            "type": "object",
+            "required": ["id", "reason"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+              "reason": { "type": "string", "minLength": 1 }
+            }
+          },
+          "destructive": {
+            "type": "object",
+            "required": ["kind", "reason"],
+            "additionalProperties": false,
+            "properties": {
+              "kind": { "type": "string", "enum": ["delete", "destructive"] },
+              "reason": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

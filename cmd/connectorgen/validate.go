@@ -873,6 +873,7 @@ func checkCLISurface(b engine.Bundle) []Finding {
 
 	var findings []Finding
 	for i, cmd := range b.CLISurface.Commands {
+		findings = append(findings, checkCLISurfaceFoundation(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceReferences(b, i, cmd, streams, writes, operations)...)
 		findings = append(findings, checkCLISurfaceOperationSafety(b, i, cmd, operations)...)
 		findings = append(findings, checkCLISurfaceIntent(b, i, cmd, writes)...)
@@ -884,6 +885,29 @@ func checkCLISurface(b engine.Bundle) []Finding {
 		findings = append(findings, checkCLISurfaceEndpointCoverage(b, i, cmd, endpoints)...)
 	}
 	return findings
+}
+
+func checkCLISurfaceFoundation(b engine.Bundle, index int, command engine.CLICommand) []Finding {
+	if command.Availability == declarationAdmissionStateDeferred {
+		if command.Foundation != nil && strings.TrimSpace(command.Foundation.ID) != "" && strings.TrimSpace(command.Foundation.Reason) != "" {
+			return nil
+		}
+		return []Finding{{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("command %d (%q) deferred availability requires foundation_gap.id and foundation_gap.reason", index, command.Path),
+		}}
+	}
+	if command.Foundation == nil {
+		return nil
+	}
+	return []Finding{{
+		Connector: b.Name,
+		File:      "cli_surface.json",
+		Rule:      ruleCLISurfaceSafety,
+		Message:   fmt.Sprintf("command %d (%q) foundation_gap requires deferred availability", index, command.Path),
+	}}
 }
 
 // checkCLISurfaceEnvOnlyFlags requires every declaration-owned request secret

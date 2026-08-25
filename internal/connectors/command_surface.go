@@ -144,6 +144,14 @@ type CommandSurfaceConstraint struct {
 	Message       string
 }
 
+// CommandFoundation names the missing shared capability for a command that is
+// deliberately discoverable but not runnable. It is declaration metadata, not
+// a request parameter, so dispatch can refuse before any provider I/O.
+type CommandFoundation struct {
+	ID     string
+	Reason string
+}
+
 type CommandSurfaceCommand struct {
 	Path          string
 	Summary       string
@@ -172,6 +180,7 @@ type CommandSurfaceCommand struct {
 	RedactFields []string
 	Risk         string
 	Approval     string
+	Foundation   *CommandFoundation
 	Notes        string
 }
 

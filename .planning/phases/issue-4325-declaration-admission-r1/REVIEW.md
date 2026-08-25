@@ -1,0 +1,39 @@
+# Code review — issue 4325 declaration-admission foundation
+
+## Local review
+
+- Reviewed the declaration schema, deterministic finder, command-surface
+  projection, and commandrunner dispatch boundary against the issue contract.
+- Confirmed the check performs local filesystem reads only. It neither fetches
+  a provider nor accepts credentials, and it does not execute writes/deletes.
+- Confirmed a deferred command remains discoverable and is refused before any
+  executor, while an `implemented` declaration still requires the existing
+  lane-specific binding.
+- Confirmed sidecar schema intentionally contains no source bytes, hash, raw
+  body, or typed request schema requirement.
+- Confirmed no connector-owned Batch-1 definition, generated evidence, or
+  live certification record is changed.
+
+## Finding disposition
+
+Two implementation findings were corrected before this review record:
+
+1. The typed failure reference cannot contain the human-readable
+   space-separated command path. The dispatch now uses the normalized command
+   identity for that reference, and
+   `TestPreflightDeferredCommandReturnsNamedFoundationBeforeExecutor` verifies
+   the `system/missing_foundation` classification.
+2. An implemented write could otherwise name an existing action whose endpoint
+   differed from the cited source operation. The admission binding now compares
+   method and canonicalized template path as well as action identity; the red
+   `false implemented write binding` subtest is now green.
+
+No unresolved local findings remain.
+
+## Automated review route
+
+The direct PR targets `main`. Its route is `claude_auto`: opening a non-draft
+PR by the repository author triggers the configured Claude review. No manual
+Claude or Copilot request is made before that trigger. Review coverage is
+therefore pending PR creation; any actionable response will require a recorded
+disposition before merge.
