@@ -12,9 +12,12 @@ current delivery rules are in [the connector canon](../connector-canon/INDEX.md)
 > `connectorgen declaration-admission` proves only that a cited provider
 > operation has exactly one source declaration, lane, canonical endpoint, and
 > discoverable command, with a runtime binding or named deferred foundation.
-> It performs no provider I/O and accepts URL-plus-exact-citation evidence
-> without retained bytes, hashes, request bodies, or live proof. A passing
-> admission result is neither runtime preflight nor live certification; see
+> Its no-I/O check reuses the real runtime resolver to reject false implemented
+> bindings and to validate a deferred foundation's exact non-policy target
+> before typed `missing_foundation`. It accepts URL-plus-exact-citation evidence
+> without retained bytes, hashes, request bodies, credentials, or live proof. A
+> passing admission result is neither credential-bound runtime usability nor
+> live certification; see
 > [the declaration-admission canon](../connector-canon/DECLARATION-ADMISSION.md).
 
 > **Current certification authority (r1).** The generated proof-bearing

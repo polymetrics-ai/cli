@@ -99,6 +99,14 @@ type binaryUploadActionPreflighter interface {
 	PreflightBinaryUploadAction(name string) ([]connectors.BinaryUploadSource, error)
 }
 
+// deferredCommandPreflighter is the declaration-runtime seam for a command
+// that is intentionally not executable yet. It proves an honest exact target
+// before commandrunner returns missing_foundation, without resolving a
+// credential or making a provider request.
+type deferredCommandPreflighter interface {
+	PreflightDeferredCommand(connectors.CommandSurfaceCommand) error
+}
+
 // structuredJSONRecordPreflighter is deliberately narrower than a generic
 // JSON parser. The engine owns the raw record schema, so it alone decides
 // whether a named, top-level record field may accept one structured JSON
@@ -445,6 +453,19 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: "unknown command"}
 	}
 	if cmd.Availability == "deferred" {
+		preflighter, supported := connector.(deferredCommandPreflighter)
+		if !supported {
+			return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+				Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability,
+				Reason: "connector does not expose exact deferred-command target preflight",
+			}
+		}
+		if err := preflighter.PreflightDeferredCommand(cmd); err != nil {
+			return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+				Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability,
+				Reason: fmt.Sprintf("deferred command target is not admissible: %v", err),
+			}
+		}
 		return connectors.CommandSurfaceCommand{}, command, deferredCommandError(connector.Name(), command, cmd)
 	}
 	if cmd.Availability == "implemented" {
@@ -1093,6 +1114,24 @@ func isOperationDirectWriteMethod(method string) bool {
 
 func commandPath(path []string) string {
 	return strings.Join(path, " ")
+}
+
+// CanonicalCommandPath parses a declaration-owned command path into the exact
+// segments commandrunner resolves. It rejects alternate whitespace spellings,
+// empty segments, and unsafe identifiers so a certification row cannot claim
+// a command that the runtime parser can never dispatch.
+func CanonicalCommandPath(raw string) ([]string, error) {
+	if raw == "" || raw != strings.TrimSpace(raw) {
+		return nil, fmt.Errorf("command path must be non-empty and trimmed")
+	}
+	parts := strings.Split(raw, " ")
+	if strings.Join(parts, " ") != raw {
+		return nil, fmt.Errorf("command path must use one ASCII space between segments")
+	}
+	if err := validateCommandPath(parts); err != nil {
+		return nil, err
+	}
+	return parts, nil
 }
 
 func validateCommandPath(path []string) error {

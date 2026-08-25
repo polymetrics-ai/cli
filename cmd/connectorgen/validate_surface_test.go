@@ -61,13 +61,17 @@ func TestCheckCLISurfaceEndpointCoverageAllowsDeclarationBoundDeferredCommand(t 
 	bundle := engine.Bundle{
 		Name: "acme",
 		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
-			Method: "DELETE", Path: "/widgets/{id}", Operation: &engine.SurfaceOperation{Status: "blocked"},
+			Method: "DELETE", Path: "/widgets/{id}", Operation: &engine.SurfaceOperation{Model: "destructive_action", Status: "blocked", BlockedByDefault: true},
 		}}},
 	}
 	command := engine.CLICommand{
 		Path: "widgets delete", Intent: "reverse_etl", Availability: declarationAdmissionStateDeferred,
 		APISurface: []engine.CLISurfaceEndpointRef{{Method: "DELETE", Path: "/widgets/{id}"}},
-		Foundation: &engine.CommandFoundation{ID: "typed_write_action", Reason: "the endpoint has no typed write action"},
+		Foundation: &engine.CommandFoundation{
+			ID: "typed_write_action", Reason: "the endpoint has no typed write action",
+			Component: "typed_write_action", Evidence: "write_action_absent",
+			Target: engine.CommandFoundationTarget{Method: "DELETE", Path: "/widgets/{id}"},
+		},
 	}
 	if findings := checkCLISurfaceEndpointCoverage(bundle, 0, command, cliSurfaceEndpointStates(bundle.Surface)); len(findings) != 0 {
 		t.Fatalf("deferred declaration command must retain its cited blocked endpoint: %+v", findings)

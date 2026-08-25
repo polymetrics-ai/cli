@@ -88,9 +88,21 @@ func TestDeclarationAdmissionRejectsCompletenessAndBindingDefects(t *testing.T) 
 			want: "destructive metadata",
 		},
 		{
+			name: "destructive post lacks destructive metadata",
+			edit: func(document *declarationAdmissionDocument, bundle *engine.Bundle) {
+				for index := range bundle.Surface.Endpoints {
+					if bundle.Surface.Endpoints[index].Method == "POST" && bundle.Surface.Endpoints[index].Path == "/v1/widgets" {
+						bundle.Surface.Endpoints[index].Operation.Model = "destructive_action"
+						return
+					}
+				}
+			},
+			want: "destructive operation lacks destructive metadata",
+		},
+		{
 			name: "false implementation",
 			edit: func(document *declarationAdmissionDocument, bundle *engine.Bundle) {
-				bundle.CLISurface.Commands[0].Operation = "missing.operation"
+				bundle.CLISurface.Commands[0].Stream = "missing_stream"
 			},
 			want: "runtime binding",
 		},
@@ -109,6 +121,25 @@ func TestDeclarationAdmissionRejectsCompletenessAndBindingDefects(t *testing.T) 
 				bundle.Writes = []engine.WriteAction{{Name: "create_widget", Method: "POST", Path: "/v1/other-widgets"}}
 			},
 			want: "runtime binding",
+		},
+		{
+			name: "false implemented delete semantics",
+			edit: func(document *declarationAdmissionDocument, bundle *engine.Bundle) {
+				for index := range document.Declarations {
+					if document.Declarations[index].SourceID == "delete-widget" {
+						document.Declarations[index].State = declarationAdmissionStateImplemented
+						document.Declarations[index].Foundation = nil
+					}
+				}
+				bundle.CLISurface.Commands[2].Availability = declarationAdmissionStateImplemented
+				bundle.CLISurface.Commands[2].Foundation = nil
+				bundle.CLISurface.Commands[2].Write = "delete_widget"
+				bundle.Writes = []engine.WriteAction{{
+					Name: "delete_widget", Kind: "update", Method: "DELETE", Path: "/v1/widgets/{{ record.id }}",
+					RecordSchema: json.RawMessage(`{"type":"object","required":["id"],"properties":{"id":{"type":"string"}}}`),
+				}}
+			},
+			want: "destructive runtime metadata",
 		},
 		{
 			name: "missing foundation",
@@ -143,7 +174,7 @@ func TestDeclarationAdmissionRejectsCompletenessAndBindingDefects(t *testing.T) 
 						continue
 					}
 					document.Declarations[index].Foundation.Component = "typed_write_action"
-					document.Declarations[index].Foundation.Evidence = "writes.json has no create-widget action"
+					document.Declarations[index].Foundation.Evidence = "write_action_absent"
 					break
 				}
 				bundle.Writes = append(bundle.Writes, engine.WriteAction{Name: "create_widget", Method: "POST", Path: "/v1/widgets"})
@@ -170,6 +201,186 @@ func TestDeclarationAdmissionRejectsCompletenessAndBindingDefects(t *testing.T) 
 	}
 }
 
+func TestDeclarationAdmissionAuditRepairRejectsWeakIdentityCitationAndDeferredTarget(t *testing.T) {
+	tests := []struct {
+		name string
+		edit func(*declarationAdmissionDocument, *engine.Bundle)
+		want string
+	}{
+		{
+			name: "duplicate exact provider operation identity",
+			edit: func(document *declarationAdmissionDocument, _ *engine.Bundle) {
+				duplicate := document.SourceOperations[0]
+				duplicate.ID = "list-widgets-duplicate-id"
+				document.SourceOperations = append(document.SourceOperations, duplicate)
+				declaration := document.Declarations[0]
+				declaration.SourceID = duplicate.ID
+				document.Declarations = append(document.Declarations, declaration)
+			},
+			want: "duplicate exact provider operation identity",
+		},
+		{
+			name: "insecure citation",
+			edit: func(document *declarationAdmissionDocument, _ *engine.Bundle) {
+				document.SourceOperations[0].SourceURL = "http://provider.example.test/v1/reference"
+			},
+			want: "valid provider source URL",
+		},
+		{
+			name: "credential-shaped citation query",
+			edit: func(document *declarationAdmissionDocument, _ *engine.Bundle) {
+				document.SourceOperations[0].SourceURL = "https://provider.example.test/v1/reference?api_key=not-a-secret"
+			},
+			want: "valid provider source URL",
+		},
+		{
+			name: "private literal citation",
+			edit: func(document *declarationAdmissionDocument, _ *engine.Bundle) {
+				document.SourceOperations[0].SourceURL = "https://127.0.0.1/v1/reference"
+			},
+			want: "valid provider source URL",
+		},
+		{
+			name: "userinfo citation",
+			edit: func(document *declarationAdmissionDocument, _ *engine.Bundle) {
+				document.SourceOperations[0].SourceURL = "https://user@provider.example.test/v1/reference"
+			},
+			want: "valid provider source URL",
+		},
+		{
+			name: "fragment citation",
+			edit: func(document *declarationAdmissionDocument, _ *engine.Bundle) {
+				document.SourceOperations[0].SourceURL = "https://provider.example.test/v1/reference#operation"
+			},
+			want: "valid provider source URL",
+		},
+		{
+			name: "noncanonical command path",
+			edit: func(document *declarationAdmissionDocument, bundle *engine.Bundle) {
+				document.Declarations[0].Command = "widgets  list"
+				bundle.CLISurface.Commands[0].Path = "widgets  list"
+			},
+			want: "canonical round-trippable command path",
+		},
+		{
+			name: "implemented target is excluded",
+			edit: func(_ *declarationAdmissionDocument, bundle *engine.Bundle) {
+				bundle.Surface.Endpoints[0].Excluded = &engine.SurfaceExclusion{Category: "not_runnable", Reason: "runtime binding must not override an excluded source row"}
+			},
+			want: "does not map to the canonical API surface endpoint",
+		},
+		{
+			name: "implemented target is policy only",
+			edit: func(_ *declarationAdmissionDocument, bundle *engine.Bundle) {
+				bundle.Surface.Endpoints[0].Operation = &engine.SurfaceOperation{Model: "disallowed", Status: "blocked", BlockedByDefault: true, Reason: "policy-only source row"}
+			},
+			want: "does not map to the canonical API surface endpoint",
+		},
+		{
+			name: "implemented target is duplicated",
+			edit: func(_ *declarationAdmissionDocument, bundle *engine.Bundle) {
+				bundle.Surface.Endpoints = append(bundle.Surface.Endpoints, bundle.Surface.Endpoints[0])
+			},
+			want: "does not map to the canonical API surface endpoint",
+		},
+		{
+			name: "delete metadata on post",
+			edit: func(document *declarationAdmissionDocument, _ *engine.Bundle) {
+				for index := range document.Declarations {
+					if document.Declarations[index].SourceID == "create-widget" {
+						document.Declarations[index].Destructive = &declarationAdmissionDestructive{Kind: "delete", Reason: "incorrectly calls a create operation a delete"}
+						return
+					}
+				}
+			},
+			want: "delete metadata requires a destructive target",
+		},
+	}
+
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			bundle, document := declarationAdmissionFixture()
+			testCase.edit(&document, &bundle)
+			findings := declarationAdmissionFindings(bundle, document)
+			for _, finding := range findings {
+				if strings.Contains(finding.Message, testCase.want) {
+					return
+				}
+			}
+			t.Fatalf("findings = %+v, want message containing %q", findings, testCase.want)
+		})
+	}
+}
+
+func TestDeclarationAdmissionAuditRepairRejectsDeferredPolicyTargetBeforeMissingFoundation(t *testing.T) {
+	tests := []struct {
+		name string
+		edit func(*engine.Bundle)
+	}{
+		{
+			name: "excluded endpoint",
+			edit: func(bundle *engine.Bundle) {
+				for index := range bundle.Surface.Endpoints {
+					if bundle.Surface.Endpoints[index].Method == "DELETE" {
+						bundle.Surface.Endpoints[index].Excluded = &engine.SurfaceExclusion{Category: "destructive_admin", Reason: "policy-only exclusion"}
+						return
+					}
+				}
+			},
+		},
+		{
+			name: "disallowed policy operation",
+			edit: func(bundle *engine.Bundle) {
+				for index := range bundle.Surface.Endpoints {
+					if bundle.Surface.Endpoints[index].Method == "DELETE" {
+						bundle.Surface.Endpoints[index].Operation.Model = "disallowed"
+						return
+					}
+				}
+			},
+		},
+		{
+			name: "duplicate exact endpoint",
+			edit: func(bundle *engine.Bundle) {
+				for _, endpoint := range bundle.Surface.Endpoints {
+					if endpoint.Method == "DELETE" {
+						bundle.Surface.Endpoints = append(bundle.Surface.Endpoints, endpoint)
+						return
+					}
+				}
+			},
+		},
+	}
+
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			bundle, document := declarationAdmissionFixture()
+			testCase.edit(&bundle)
+			if findings := declarationAdmissionFindings(bundle, document); !declarationAdmissionFindingContains(findings, "deferred target") {
+				t.Fatalf("findings = %+v, want deferred target refusal", findings)
+			}
+
+			err := commandrunner.Preflight(engine.New(bundle, nil), []string{"widgets", "delete"})
+			var blocked *commandrunner.BlockedCommandError
+			if !errors.As(err, &blocked) {
+				t.Fatalf("deferred policy target preflight = %v, want blocked error", err)
+			}
+			if blocked.Failure != nil && blocked.Failure.Code() == "missing_foundation" {
+				t.Fatalf("deferred policy target reached missing_foundation: %+v", blocked)
+			}
+		})
+	}
+}
+
+func declarationAdmissionFindingContains(findings []Finding, want string) bool {
+	for _, finding := range findings {
+		if strings.Contains(finding.Message, want) {
+			return true
+		}
+	}
+	return false
+}
+
 func TestDeclarationAdmissionAcceptsCompleteZeroRunnableConnector(t *testing.T) {
 	bundle, document := declarationAdmissionFixture()
 	for index := range document.Declarations {
@@ -177,14 +388,38 @@ func TestDeclarationAdmissionAcceptsCompleteZeroRunnableConnector(t *testing.T) 
 			document.Declarations[index].State = declarationAdmissionStateDeferred
 			document.Declarations[index].Foundation = &declarationAdmissionFoundation{
 				ID: "read_runtime_foundation", Reason: "read runtime binding is intentionally pending",
-				Component: "runtime_executor", Evidence: "direct-read executor binding has not been implemented",
+				Component: "runtime_executor", Evidence: "runtime_executor_absent",
+				Target: declarationAdmissionEndpoint{Method: "GET", Path: "/v1/widgets"},
 			}
 			bundle.CLISurface.Commands[index].Availability = declarationAdmissionStateDeferred
-			bundle.CLISurface.Commands[index].Foundation = &engine.CommandFoundation{ID: "read_runtime_foundation", Reason: "read runtime binding is intentionally pending"}
+			bundle.CLISurface.Commands[index].Foundation = &engine.CommandFoundation{
+				ID: "read_runtime_foundation", Reason: "read runtime binding is intentionally pending",
+				Component: "runtime_executor", Evidence: "runtime_executor_absent",
+				Target: engine.CommandFoundationTarget{Method: "GET", Path: "/v1/widgets"},
+			}
+			bundle.Surface.Endpoints[0].Operation = &engine.SurfaceOperation{Model: "direct_read", Status: "blocked", Risk: "low", BlockedByDefault: true, Reason: "read runtime binding is intentionally pending"}
+			bundle.CLISurface.Commands[index].Stream = ""
+			bundle.Streams = nil
 		}
 	}
 	if findings := declarationAdmissionFindings(bundle, document); len(findings) != 0 {
 		t.Fatalf("zero-runnable deferred connector findings = %+v, want none", findings)
+	}
+}
+
+func TestDeclarationAdmissionRejectsMissingCommandProjection(t *testing.T) {
+	bundle, document := declarationAdmissionFixture()
+	document.Declarations[0].Command = ""
+	document.Declarations[0].State = declarationAdmissionStateDeferred
+	document.Declarations[0].Foundation = &declarationAdmissionFoundation{
+		ID: "command_projection_foundation", Reason: "the command path encoder is not available",
+		Component: "runtime_executor", Evidence: "runtime_executor_absent",
+		Target: declarationAdmissionEndpoint{Method: "GET", Path: "/v1/widgets"},
+	}
+	bundle.CLISurface.Commands = bundle.CLISurface.Commands[1:]
+
+	if findings := declarationAdmissionFindings(bundle, document); !declarationAdmissionFindingContains(findings, "discoverable command mapping") {
+		t.Fatalf("missing command projection findings = %+v, want discoverable-command refusal", findings)
 	}
 }
 
@@ -255,7 +490,10 @@ func TestDeclarationAdmissionRejectsPolicyOnlyDeferredFoundation(t *testing.T) {
 		document.Declarations[index].Foundation = &declarationAdmissionFoundation{
 			ID: "blocked_by_default", Reason: "operation is blocked by default", Component: "blocked_by_default", Evidence: "api_surface policy",
 		}
-		bundle.CLISurface.Commands[index].Foundation = &engine.CommandFoundation{ID: "blocked_by_default", Reason: "operation is blocked by default"}
+		bundle.CLISurface.Commands[index].Foundation = &engine.CommandFoundation{
+			ID: "blocked_by_default", Reason: "operation is blocked by default", Component: "blocked_by_default", Evidence: "api_surface policy",
+			Target: engine.CommandFoundationTarget{Method: bundle.CLISurface.Commands[index].APISurface[0].Method, Path: bundle.CLISurface.Commands[index].APISurface[0].Path},
+		}
 		break
 	}
 	raw, err := json.Marshal(document)
@@ -344,10 +582,50 @@ func TestDeclarationAdmissionDeferredCLISurfaceNeedsFoundationGap(t *testing.T) 
 		t.Fatalf("deferred foundation findings = %+v", findings)
 	}
 	bundle.CLISurface.Commands[1].Availability = declarationAdmissionStateImplemented
-	bundle.CLISurface.Commands[1].Foundation = &engine.CommandFoundation{ID: "write_plan_foundation", Reason: "write plan compiler is not available"}
+	bundle.CLISurface.Commands[1].Foundation = &engine.CommandFoundation{
+		ID: "write_plan_foundation", Reason: "write plan compiler is not available", Component: "runtime_executor", Evidence: "runtime_executor_absent",
+		Target: engine.CommandFoundationTarget{Method: "POST", Path: "/v1/widgets"},
+	}
 	findings = checkCLISurfaceFoundation(bundle, 1, bundle.CLISurface.Commands[1])
 	if len(findings) != 1 || !strings.Contains(findings[0].Message, "requires deferred availability") {
 		t.Fatalf("implemented foundation findings = %+v", findings)
+	}
+}
+
+func TestDeclarationAdmissionDeferredCLISurfaceRequiresAdmissibleExactTarget(t *testing.T) {
+	tests := []struct {
+		name string
+		edit func(*engine.Bundle)
+	}{
+		{
+			name: "excluded",
+			edit: func(bundle *engine.Bundle) {
+				bundle.Surface.Endpoints[2].Excluded = &engine.SurfaceExclusion{Category: "destructive_admin", Reason: "policy exclusion"}
+			},
+		},
+		{
+			name: "disallowed",
+			edit: func(bundle *engine.Bundle) {
+				bundle.Surface.Endpoints[2].Operation.Model = "disallowed"
+			},
+		},
+		{
+			name: "duplicate",
+			edit: func(bundle *engine.Bundle) {
+				bundle.Surface.Endpoints = append(bundle.Surface.Endpoints, bundle.Surface.Endpoints[2])
+			},
+		},
+	}
+
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			bundle, _ := declarationAdmissionFixture()
+			testCase.edit(&bundle)
+			findings := checkCLISurfaceFoundation(bundle, 2, bundle.CLISurface.Commands[2])
+			if len(findings) != 1 || !strings.Contains(findings[0].Message, "deferred target") {
+				t.Fatalf("deferred target findings = %+v, want exact-target refusal", findings)
+			}
+		})
 	}
 }
 
@@ -360,44 +638,45 @@ func TestDeclarationAdmissionNormalizesWriteActionTemplatePath(t *testing.T) {
 func declarationAdmissionFixture() (engine.Bundle, declarationAdmissionDocument) {
 	commands := []engine.CLICommand{
 		{
-			Path: "widgets list", Intent: "direct_read", Availability: declarationAdmissionStateImplemented,
-			Operation: "acme.widgets.list", APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/v1/widgets"}},
+			Path: "widgets list", Intent: "etl", Availability: declarationAdmissionStateImplemented,
+			Stream: "widgets", APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/v1/widgets"}},
 		},
 		{
 			Path: "widgets create", Intent: "reverse_etl", Availability: declarationAdmissionStateDeferred,
 			APISurface: []engine.CLISurfaceEndpointRef{{Method: "POST", Path: "/v1/widgets"}},
-			Foundation: &engine.CommandFoundation{ID: "write_plan_foundation", Reason: "write plan compiler is not available"},
+			Foundation: &engine.CommandFoundation{ID: "write_plan_foundation", Reason: "write plan compiler is not available", Component: "runtime_executor", Evidence: "runtime_executor_absent", Target: engine.CommandFoundationTarget{Method: "POST", Path: "/v1/widgets"}},
 		},
 		{
 			Path: "widgets delete", Intent: "reverse_etl", Availability: declarationAdmissionStateDeferred,
 			APISurface: []engine.CLISurfaceEndpointRef{{Method: "DELETE", Path: "/v1/widgets/{id}"}},
-			Foundation: &engine.CommandFoundation{ID: "delete_plan_foundation", Reason: "delete plan compiler is not available"},
+			Foundation: &engine.CommandFoundation{ID: "delete_plan_foundation", Reason: "delete plan compiler is not available", Component: "runtime_executor", Evidence: "runtime_executor_absent", Target: engine.CommandFoundationTarget{Method: "DELETE", Path: "/v1/widgets/{id}"}},
 		},
 		{
 			Path: "widgets download", Intent: "binary_download", Availability: declarationAdmissionStateDeferred,
 			APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/v1/widgets/{id}/archive"}},
-			Foundation: &engine.CommandFoundation{ID: "binary_download_foundation", Reason: "binary response binding is not available"},
+			Foundation: &engine.CommandFoundation{ID: "binary_download_foundation", Reason: "binary response binding is not available", Component: "binary_transfer_binding", Evidence: "binary_transfer_binding_absent", Target: engine.CommandFoundationTarget{Method: "GET", Path: "/v1/widgets/{id}/archive"}},
 		},
 		{
 			Path: "widgets upload", Intent: "binary_upload", Availability: declarationAdmissionStateDeferred,
 			APISurface: []engine.CLISurfaceEndpointRef{{Method: "POST", Path: "/v1/widgets/{id}/archive"}},
-			Foundation: &engine.CommandFoundation{ID: "binary_upload_foundation", Reason: "binary request binding is not available"},
+			Foundation: &engine.CommandFoundation{ID: "binary_upload_foundation", Reason: "binary request binding is not available", Component: "binary_transfer_binding", Evidence: "binary_transfer_binding_absent", Target: engine.CommandFoundationTarget{Method: "POST", Path: "/v1/widgets/{id}/archive"}},
 		},
 		{
 			Path: "widgets descriptor", Intent: "direct_write", Availability: declarationAdmissionStateDeferred,
 			APISurface: []engine.CLISurfaceEndpointRef{{Method: "PATCH", Path: "/v1/widgets/{id}"}},
-			Foundation: &engine.CommandFoundation{ID: "source_descriptor_importer", Reason: "provider descriptor importer cannot yet represent this request"},
+			Foundation: &engine.CommandFoundation{ID: "source_descriptor_importer", Reason: "provider descriptor importer cannot yet represent this request", Component: "source_importer", Evidence: "source_importer_absent", Target: engine.CommandFoundationTarget{Method: "PATCH", Path: "/v1/widgets/{id}"}},
 		},
 	}
-	operations := []engine.OperationSpec{{
-		ID: "acme.widgets.list", Kind: "rest_read", REST: &engine.RESTOperationSpec{Method: "GET", Path: "/v1/widgets"},
-	}}
 	bundle := engine.Bundle{
-		Name:       "acme",
-		Operations: operations,
+		Name:    "acme",
+		Streams: []engine.StreamSpec{{Name: "widgets", Method: "GET", Path: "/v1/widgets"}},
 		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{
-			{Method: "GET", Path: "/v1/widgets"}, {Method: "POST", Path: "/v1/widgets"}, {Method: "DELETE", Path: "/v1/widgets/{id}"},
-			{Method: "GET", Path: "/v1/widgets/{id}/archive"}, {Method: "POST", Path: "/v1/widgets/{id}/archive"}, {Method: "PATCH", Path: "/v1/widgets/{id}"},
+			{Method: "GET", Path: "/v1/widgets"},
+			{Method: "POST", Path: "/v1/widgets", Operation: &engine.SurfaceOperation{Model: "sensitive_reverse_etl", Status: "blocked", Risk: "medium", BlockedByDefault: true, Reason: "write runtime binding is pending"}},
+			{Method: "DELETE", Path: "/v1/widgets/{id}", Operation: &engine.SurfaceOperation{Model: "destructive_action", Status: "blocked", Risk: "high", BlockedByDefault: true, Reason: "delete runtime binding is pending"}},
+			{Method: "GET", Path: "/v1/widgets/{id}/archive", Operation: &engine.SurfaceOperation{Model: "binary_read", Status: "blocked", Risk: "medium", BlockedByDefault: true, Reason: "binary response binding is pending"}},
+			{Method: "POST", Path: "/v1/widgets/{id}/archive", Operation: &engine.SurfaceOperation{Model: "sensitive_reverse_etl", Status: "blocked", Risk: "medium", BlockedByDefault: true, Reason: "binary upload binding is pending"}},
+			{Method: "PATCH", Path: "/v1/widgets/{id}", Operation: &engine.SurfaceOperation{Model: "sensitive_reverse_etl", Status: "blocked", Risk: "medium", BlockedByDefault: true, Reason: "source importer is pending"}},
 		}},
 		CLISurface: &engine.CLISurface{Commands: commands},
 	}
@@ -405,12 +684,12 @@ func declarationAdmissionFixture() (engine.Bundle, declarationAdmissionDocument)
 		id, method, sourcePath, command, lane, state, foundationID, foundationReason, foundationComponent, foundationEvidence string
 		destructive                                                                                                           *declarationAdmissionDestructive
 	}{
-		{"list-widgets", "GET", "/widgets", "widgets list", declarationAdmissionLaneDirectRead, declarationAdmissionStateImplemented, "", "", "", "", nil},
-		{"create-widget", "POST", "/widgets", "widgets create", declarationAdmissionLaneReverseETL, declarationAdmissionStateDeferred, "write_plan_foundation", "write plan compiler is not available", "runtime_executor", "reverse-ETL plan compiler has no widget binding", nil},
-		{"delete-widget", "DELETE", "/widgets/{id}", "widgets delete", declarationAdmissionLaneReverseETL, declarationAdmissionStateDeferred, "delete_plan_foundation", "delete plan compiler is not available", "runtime_executor", "reverse-ETL plan compiler has no widget delete binding", &declarationAdmissionDestructive{Kind: "delete", Reason: "provider operation deletes a widget"}},
-		{"download-widget", "GET", "/widgets/{id}/archive", "widgets download", declarationAdmissionLaneBinaryDownload, declarationAdmissionStateDeferred, "binary_download_foundation", "binary response binding is not available", "binary_transfer_binding", "binary response binding has not been implemented", nil},
-		{"upload-widget", "POST", "/widgets/{id}/archive", "widgets upload", declarationAdmissionLaneBinaryUpload, declarationAdmissionStateDeferred, "binary_upload_foundation", "binary request binding is not available", "binary_transfer_binding", "binary request binding has not been implemented", nil},
-		{"patch-widget", "PATCH", "/widgets/{id}", "widgets descriptor", declarationAdmissionLaneDirectWrite, declarationAdmissionStateDeferred, "source_descriptor_importer", "provider descriptor importer cannot yet represent this request", "source_importer", "provider descriptor importer cannot represent the operation", nil},
+		{"list-widgets", "GET", "/widgets", "widgets list", declarationAdmissionLaneETL, declarationAdmissionStateImplemented, "", "", "", "", nil},
+		{"create-widget", "POST", "/widgets", "widgets create", declarationAdmissionLaneReverseETL, declarationAdmissionStateDeferred, "write_plan_foundation", "write plan compiler is not available", "runtime_executor", "runtime_executor_absent", nil},
+		{"delete-widget", "DELETE", "/widgets/{id}", "widgets delete", declarationAdmissionLaneReverseETL, declarationAdmissionStateDeferred, "delete_plan_foundation", "delete plan compiler is not available", "runtime_executor", "runtime_executor_absent", &declarationAdmissionDestructive{Kind: "delete", Reason: "provider operation deletes a widget"}},
+		{"download-widget", "GET", "/widgets/{id}/archive", "widgets download", declarationAdmissionLaneBinaryDownload, declarationAdmissionStateDeferred, "binary_download_foundation", "binary response binding is not available", "binary_transfer_binding", "binary_transfer_binding_absent", nil},
+		{"upload-widget", "POST", "/widgets/{id}/archive", "widgets upload", declarationAdmissionLaneBinaryUpload, declarationAdmissionStateDeferred, "binary_upload_foundation", "binary request binding is not available", "binary_transfer_binding", "binary_transfer_binding_absent", nil},
+		{"patch-widget", "PATCH", "/widgets/{id}", "widgets descriptor", declarationAdmissionLaneDirectWrite, declarationAdmissionStateDeferred, "source_descriptor_importer", "provider descriptor importer cannot yet represent this request", "source_importer", "source_importer_absent", nil},
 	}
 	document := declarationAdmissionDocument{SchemaVersion: declarationAdmissionSchemaVersion, Connector: "acme"}
 	for _, row := range rows {
@@ -425,6 +704,7 @@ func declarationAdmissionFixture() (engine.Bundle, declarationAdmissionDocument)
 		if row.foundationID != "" {
 			declaration.Foundation = &declarationAdmissionFoundation{
 				ID: row.foundationID, Reason: row.foundationReason, Component: row.foundationComponent, Evidence: row.foundationEvidence,
+				Target: declarationAdmissionEndpoint{Method: row.method, Path: "/v1" + row.sourcePath},
 			}
 		}
 		document.Declarations = append(document.Declarations, declaration)

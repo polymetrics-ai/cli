@@ -2,17 +2,36 @@ package commandrunner
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/failures"
 )
 
-func TestPreflightDeferredCommandReturnsNamedFoundationBeforeExecutor(t *testing.T) {
-	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+type deferredPreflightConnector struct {
+	*fakeConnector
+	err error
+}
+
+func (c *deferredPreflightConnector) PreflightDeferredCommand(connectors.CommandSurfaceCommand) error {
+	return c.err
+}
+
+func deferredCommandFixture() connectors.CommandSurfaceCommand {
+	return connectors.CommandSurfaceCommand{
 		Path: "widgets delete", Intent: "reverse_etl", Availability: "deferred",
-		Foundation: &connectors.CommandFoundation{ID: "delete_plan_foundation", Reason: "delete plan compiler is not available"},
-	}}}}
+		APISurface: []connectors.CommandSurfaceEndpointRef{{Method: "DELETE", Path: "/widgets/{id}"}},
+		Foundation: &connectors.CommandFoundation{
+			ID: "delete_plan_foundation", Reason: "delete plan compiler is not available",
+			Component: connectors.FoundationComponentRuntimeExecutor, Evidence: "runtime_executor_absent",
+			Target: connectors.CommandFoundationTarget{Method: "DELETE", Path: "/widgets/{id}"},
+		},
+	}
+}
+
+func TestPreflightDeferredCommandReturnsNamedFoundationAfterExactTargetValidation(t *testing.T) {
+	connector := &deferredPreflightConnector{fakeConnector: &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{deferredCommandFixture()}}}}
 	_, _, err := resolvePreflightCommand(connector, []string{"widgets", "delete"})
 	var blocked *BlockedCommandError
 	if !errors.As(err, &blocked) {
@@ -23,5 +42,32 @@ func TestPreflightDeferredCommandReturnsNamedFoundationBeforeExecutor(t *testing
 	}
 	if blocked.Failure.Code() != "missing_foundation" || blocked.Failure.Domain() != failures.DomainSystem {
 		t.Fatalf("failure = code=%q domain=%q, want missing_foundation/system", blocked.Failure.Code(), blocked.Failure.Domain())
+	}
+}
+
+func TestPreflightDeferredCommandFailsClosedWithoutExactTargetValidation(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{deferredCommandFixture()}}}
+	_, _, err := resolvePreflightCommand(connector, []string{"widgets", "delete"})
+	var blocked *BlockedCommandError
+	if !errors.As(err, &blocked) {
+		t.Fatalf("error = %v, want BlockedCommandError", err)
+	}
+	if blocked.Failure != nil {
+		t.Fatalf("failure = %+v, want no missing_foundation classification without exact target validation", blocked.Failure)
+	}
+}
+
+func TestPreflightDeferredCommandFailsBeforeMissingFoundationOnInvalidTarget(t *testing.T) {
+	connector := &deferredPreflightConnector{
+		fakeConnector: &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{deferredCommandFixture()}}},
+		err:           fmt.Errorf("target is excluded"),
+	}
+	_, _, err := resolvePreflightCommand(connector, []string{"widgets", "delete"})
+	var blocked *BlockedCommandError
+	if !errors.As(err, &blocked) {
+		t.Fatalf("error = %v, want BlockedCommandError", err)
+	}
+	if blocked.Failure != nil {
+		t.Fatalf("failure = %+v, want no missing_foundation classification for invalid target", blocked.Failure)
 	}
 }

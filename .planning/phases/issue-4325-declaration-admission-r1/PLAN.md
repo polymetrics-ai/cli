@@ -13,15 +13,17 @@
   and its command stays discoverable. A policy-only block must not be accepted
   as a deferred foundation.
 - Verification: Focused declaration-admission and commandrunner tests,
-  Stripe bundle validation, `connectorgen declaration-admission`, the
-  no-credential `pm stripe accounts delete --json` boundary, formatting, and
-  the applicable generator/docs/canon checks.
+  actual no-credential deferred preflight, formatting, and the applicable
+  generator/docs/canon checks.
 
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
 | Deferred source mapping has a CLI projection | fake | A hermetic cited bundle has a deferred delete command that resolves to a typed missing-foundation error. A provider call cannot establish this schema invariant. |
 | Policy-only suppression is rejected | fake | A hermetic declaration bundle mutates only the foundation component to a policy value; it is rejected before any provider request. A provider call cannot establish this schema invariant. |
 | Existing implemented delete remains runnable | live | GitHub's cited `label delete` declaration admits and the no-credential binary dispatch reaches `missing --credential`. |
+| Deferred command cannot hide behind a policy or excluded endpoint | fake | A hermetic bundle tries to declare a deferred command against an excluded/policy endpoint. The shared runtime resolver refuses it before it can become `missing_foundation`; no provider call can establish this local structural invariant. |
+| Deferred foundation is machine-verifiable and round-trippable | fake | A hermetic sidecar and command surface must carry the same typed component, evidence kind, and one canonical target. Tests mutate each field independently and observe an admission/preflight failure. |
+| Citation follows the existing safe source-publication policy | fake | A hermetic source row using HTTP, userinfo, a private literal, a fragment, or a credential-shaped query is rejected by the shared local citation validator. |
 
 ## Scope boundary
 
@@ -36,6 +38,54 @@ The uncommitted mapping work at
 `internal/connectors/defs/stripe/sources/stripe-declaration-admission.json`
 is intentionally preserved for `cli-batch1-repair-r1`; it must not be staged
 or committed by this PR.
+
+## Audit repair context (2026-08-25)
+
+Captain inbox 008 carries an independent audit of frozen commit `3d39cc1fc`.
+DA-001 through DA-007 were confirmed, but DA-008 found that a deferred command
+could bypass exact API-surface/executor mapping through an excluded or policy
+row, and DA-009 found that admission citations used a weaker URL policy than
+source import. This repair remains a generic foundation change: it adds no
+provider mapping and leaves the preserved Stripe files untouched.
+
+The normal GSD adapter path was resolved with `scripts/gsd doctor`,
+`scripts/gsd sources`, and generated `discuss-phase`, `plan-phase --gaps`,
+`execute-phase --gaps-only`, `verify-work`, and `code-review` prompts. This
+non-Pi single-worker session cannot run the Pi role runtime, and the canonical
+contract forbids role spawning here, so the discuss/plan/execute/verify/review
+work is recorded and performed inline. Required skills loaded: `golang-how-to`,
+`golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`,
+`golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, and
+`golang-documentation`, plus `golang-lint` for final static verification.
+
+## Audit repair waves (TDD)
+
+1. **Red — independent denominator and command identity:** Extend the
+   hermetic sidecar tests to reject duplicate exact provider operation
+   identities, noncanonical/non-round-trippable command paths, and weak or
+   secret-shaped citation URLs. The source row itself remains the independent
+   completeness denominator; no source lock, imported bytes, or hash is read.
+2. **Red — shared deferred resolver:** Add adversarial bundles whose deferred
+   target is excluded, policy-only, mismatched, or multi-endpoint. The current
+   resolver returns `missing_foundation` before inspecting any target, so these
+   tests must fail first.
+3. **Green — typed target and foundation evidence:** Carry a typed foundation
+   component/evidence and exactly one target through the declaration sidecar,
+   CLI schema, engine projection, and commandrunner. The engine's no-network
+   deferred preflight validates its target against a blocked ledger operation;
+   `connectorgen declaration-admission` calls the real `commandrunner.Preflight`
+   with canonical command segments and accepts only typed
+   `system/missing_foundation` for a valid deferred row.
+4. **Green — semantic destructive metadata:** Require DELETE rows to declare
+   `kind=delete`; require any other exact target classified as
+   `destructive_action` to carry destructive metadata; reject a non-destructive
+   target falsely labelled delete; and require an implemented row's exact
+   write/operation binding to retain the declared destructive semantics.
+   Deferred metadata remains a declaration, not a runtime claim.
+5. **Refactor/document/verify:** Reuse the source-import publication URL
+   validator for admission citations, document all three certificates, run
+   the focused red/green tests and repository gates, then conduct the inline
+   code review and update the PR body.
 
 ## TDD execution slices
 

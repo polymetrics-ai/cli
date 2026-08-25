@@ -1141,11 +1141,22 @@ type CLIConstraint struct {
 }
 
 // CommandFoundation is the named missing capability for a deferred command.
-// It keeps the command discoverable without allowing a planned declaration to
-// masquerade as a runnable binding.
+// Target makes the future provider endpoint explicit so the runtime can reject
+// a policy or excluded row rather than treating it as an executable binding.
 type CommandFoundation struct {
-	ID     string `json:"id"`
-	Reason string `json:"reason"`
+	ID        string                  `json:"id"`
+	Reason    string                  `json:"reason"`
+	Component string                  `json:"component"`
+	Evidence  string                  `json:"evidence"`
+	Target    CommandFoundationTarget `json:"target"`
+}
+
+// CommandFoundationTarget is the exact API-surface target of a deferred
+// command. It is duplicated with the command reference deliberately: the
+// engine verifies they stay equal before returning missing_foundation.
+type CommandFoundationTarget struct {
+	Method string `json:"method"`
+	Path   string `json:"path"`
 }
 
 // CLICommand is one provider-inspired command path.

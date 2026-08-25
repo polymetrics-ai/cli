@@ -24,12 +24,22 @@
   its source-cited declaration is admitted and the actual commandrunner
   preflight succeeds. Deferred state is therefore endpoint-specific rather
   than a generic delete/destructive classification.
-- No `internal/connectors/defs/<connector>` file changed. Existing
+- No connector-owned definition is part of this PR's generic commit range. Existing
   source-lock, surface-sync, runtime-preflight, certification, and live-proof
   gates remain independent and were exercised below where hermetic.
 - Captain clarification 007 keeps the separately started Stripe mapping files
   unstaged for `cli-batch1-repair-r1`; they are not part of this PR's commit
   range or certificate claim.
+
+## Audit-repair status
+
+Inbox 008 reopened verification after an independent audit of `3d39cc1fc`.
+The earlier results remain evidence for DA-001 through DA-007. DA-008 and
+DA-009 are now green: deferred classification follows exact target resolution,
+and admission citations use the shared safe source-publication policy. The two
+unstaged Stripe paths and the concurrently authored Docker Hub connector paths
+remain outside this work and are not staged, regenerated, or otherwise used as
+certificate evidence.
 
 ## Commands and results
 
@@ -38,7 +48,7 @@
 | `go test -timeout 20m ./cmd/connectorgen -run '^TestDeclarationAdmission'` | pass |
 | `go test -timeout 20m ./cmd/connectorgen -run '^(TestDeclarationAdmission|TestCheckCLISurfaceEndpointCoverageAllowsDeclarationBoundDeferredCommand)$'` | pass |
 | `go test -timeout 20m ./cmd/connectorgen -run '^TestDeclarationAdmissionAdmitsGitHubImplementedDeleteControl$'` | pass |
-| `go test -timeout 20m ./internal/connectors/commandrunner -run '^TestPreflightDeferredCommandReturnsNamedFoundationBeforeExecutor$'` | pass |
+| `go test -timeout 20m ./internal/connectors/commandrunner -run '^TestPreflightDeferredCommandReturnsNamedFoundationAfterExactTargetValidation$'` | pass |
 | `go test -timeout 20m ./internal/connectors/engine -run '^TestCommandSurfaceProjectsDeferredFoundationGap$'` | pass |
 | `go test -timeout 20m ./cmd/connectorgen` | pass (153.562s including component/evidence admission regressions) |
 | Fresh local project, no credential: `pm github label delete --json` | exit 1, `missing --credential`; command dispatches without provider I/O |
@@ -56,11 +66,23 @@
 | `go run ./cmd/connectorgen declaration-admission --json` | pass; zero sidecars and zero findings on current definitions |
 | `go run ./cmd/connectorgen` | expected usage error; confirms the command is listed in the internal generator help |
 | `git diff --check` | pass |
+| `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestDeclarationAdmission\|TestCheckCLISurfaceEndpointCoverageAllowsDeclarationBoundDeferredCommand)$'` | pass after audit repair |
+| `go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run '^TestPreflightDeferredCommand'` | pass after audit repair; missing/invalid exact-target resolvers fail before typed `missing_foundation` |
+| `go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestCommandSurfaceProjectsDeferredFoundationGap$'` | pass after audit repair |
+| Focused semantic destructive red/green cases | red showed a POST `destructive_action` could omit metadata; green requires metadata from the exact declared target and rejects a non-destructive POST falsely labelled delete |
 
 The aggregate `go test -timeout 20m ./...` and serial `make verify` are not
 run as one process: the repository's `AGENTS.md` explicitly says a per-command
 timeout routinely cuts off the full suite and directs agents to run changed
 packages plus Make gates individually, leaving the aggregate suite to CI.
+
+Captain instruction 009 also forbids even temporary mutation of the preserved
+Stripe handoff. The audit-repair rerun therefore uses the focused generic tests
+above plus compile-only repository gates and leaves bundle-loading/generator
+checks to the clean committed-tree CI run. The pre-existing Stripe SHA-256
+values were rechecked byte-identical after the instruction arrived:
+`1f18d5f3cbb4dd4d053af3cdd6505075359b7a58dec1740042686bbea2c2168b`
+and `d72234a7c68f8646596579cfbf2a1810cc198a62ce6056116347bbc6bec4183a`.
 
 ## CLI/documentation parity
 

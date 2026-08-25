@@ -1128,7 +1128,10 @@ func commandSurfaceFoundation(foundation *CommandFoundation) *connectors.Command
 	if foundation == nil {
 		return nil
 	}
-	return &connectors.CommandFoundation{ID: foundation.ID, Reason: foundation.Reason}
+	return &connectors.CommandFoundation{
+		ID: foundation.ID, Reason: foundation.Reason, Component: foundation.Component, Evidence: foundation.Evidence,
+		Target: connectors.CommandFoundationTarget{Method: foundation.Target.Method, Path: foundation.Target.Path},
+	}
 }
 
 func commandSurfaceHasWriteIntent(commands []connectors.CommandSurfaceCommand) bool {

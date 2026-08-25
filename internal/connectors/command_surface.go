@@ -144,12 +144,81 @@ type CommandSurfaceConstraint struct {
 	Message       string
 }
 
+// CommandFoundationTarget names the one provider endpoint a deferred command
+// would resolve once its named foundation exists. It is not a request URL and
+// cannot be supplied by a caller.
+type CommandFoundationTarget struct {
+	Method string
+	Path   string
+}
+
 // CommandFoundation names the missing shared capability for a command that is
-// deliberately discoverable but not runnable. It is declaration metadata, not
-// a request parameter, so dispatch can refuse before any provider I/O.
+// deliberately discoverable but not runnable. Component and Evidence are a
+// closed, locally checkable absence claim; Target binds that claim to exactly
+// one declared API-surface endpoint. It is declaration metadata, not a request
+// parameter, so dispatch can refuse before any provider I/O.
 type CommandFoundation struct {
-	ID     string
-	Reason string
+	ID        string
+	Reason    string
+	Component string
+	Evidence  string
+	Target    CommandFoundationTarget
+}
+
+const (
+	FoundationComponentTypedWriteAction        = "typed_write_action"
+	FoundationComponentTypedRecordSchema       = "typed_record_schema"
+	FoundationComponentTypedRequestBody        = "typed_request_body"
+	FoundationComponentTypedResponseDescriptor = "typed_response_descriptor"
+	FoundationComponentBinaryTransferBinding   = "binary_transfer_binding"
+	FoundationComponentSourceImporter          = "source_importer"
+	FoundationComponentRuntimeExecutor         = "runtime_executor"
+	FoundationComponentIdempotencyContract     = "idempotency_contract"
+)
+
+// ValidCommandFoundationComponent reports whether component is a specific
+// implementation seam, not a provider policy, method, risk, retained source
+// artifact, or a runtime/live-certification state.
+func ValidCommandFoundationComponent(component string) bool {
+	switch component {
+	case FoundationComponentTypedWriteAction,
+		FoundationComponentTypedRecordSchema,
+		FoundationComponentTypedRequestBody,
+		FoundationComponentTypedResponseDescriptor,
+		FoundationComponentBinaryTransferBinding,
+		FoundationComponentSourceImporter,
+		FoundationComponentRuntimeExecutor,
+		FoundationComponentIdempotencyContract:
+		return true
+	default:
+		return false
+	}
+}
+
+// ValidCommandFoundationEvidence binds each foundation component to one
+// machine-checkable absence predicate. The human explanation stays in Reason;
+// Evidence cannot be a free-form policy claim.
+func ValidCommandFoundationEvidence(component, evidence string) bool {
+	switch component {
+	case FoundationComponentTypedWriteAction:
+		return evidence == "write_action_absent"
+	case FoundationComponentTypedRecordSchema:
+		return evidence == "record_schema_absent"
+	case FoundationComponentTypedRequestBody:
+		return evidence == "request_body_schema_absent"
+	case FoundationComponentTypedResponseDescriptor:
+		return evidence == "response_descriptor_absent"
+	case FoundationComponentBinaryTransferBinding:
+		return evidence == "binary_transfer_binding_absent"
+	case FoundationComponentSourceImporter:
+		return evidence == "source_importer_absent"
+	case FoundationComponentRuntimeExecutor:
+		return evidence == "runtime_executor_absent"
+	case FoundationComponentIdempotencyContract:
+		return evidence == "idempotency_contract_absent"
+	default:
+		return false
+	}
 }
 
 type CommandSurfaceCommand struct {

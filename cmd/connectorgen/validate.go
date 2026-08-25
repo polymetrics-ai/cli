@@ -10,6 +10,8 @@ import (
 	"sort"
 	"strings"
 
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -889,15 +891,43 @@ func checkCLISurface(b engine.Bundle) []Finding {
 
 func checkCLISurfaceFoundation(b engine.Bundle, index int, command engine.CLICommand) []Finding {
 	if command.Availability == declarationAdmissionStateDeferred {
-		if command.Foundation != nil && strings.TrimSpace(command.Foundation.ID) != "" && strings.TrimSpace(command.Foundation.Reason) != "" {
-			return nil
+		if command.Foundation == nil || strings.TrimSpace(command.Foundation.ID) == "" || strings.TrimSpace(command.Foundation.Reason) == "" ||
+			!connectors.ValidCommandFoundationComponent(command.Foundation.Component) ||
+			!connectors.ValidCommandFoundationEvidence(command.Foundation.Component, command.Foundation.Evidence) ||
+			strings.TrimSpace(command.Foundation.Target.Method) == "" || strings.TrimSpace(command.Foundation.Target.Path) == "" {
+			return []Finding{{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) deferred availability requires foundation_gap.id, reason, typed component/evidence, and target", index, command.Path),
+			}}
 		}
-		return []Finding{{
-			Connector: b.Name,
-			File:      "cli_surface.json",
-			Rule:      ruleCLISurfaceSafety,
-			Message:   fmt.Sprintf("command %d (%q) deferred availability requires foundation_gap.id and foundation_gap.reason", index, command.Path),
-		}}
+		if len(command.APISurface) != 1 || !strings.EqualFold(command.APISurface[0].Method, command.Foundation.Target.Method) || command.APISurface[0].Path != command.Foundation.Target.Path {
+			return []Finding{{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) deferred foundation target must match exactly one api_surface endpoint", index, command.Path),
+			}}
+		}
+		path, err := commandrunner.CanonicalCommandPath(command.Path)
+		if err != nil {
+			return []Finding{{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) has no canonical round-trippable command path: %v", index, command.Path, err),
+			}}
+		}
+		if message := declarationAdmissionDeferredPreflight(b, path); message != "" {
+			return []Finding{{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) %s", index, command.Path, message),
+			}}
+		}
+		return nil
 	}
 	if command.Foundation == nil {
 		return nil
@@ -2480,7 +2510,18 @@ func checkCLISurfaceEndpointCoverage(
 			})
 			continue
 		}
-		if sourceBoundPartialReadCommand(cmd) || declarationBoundDeferredCommand(cmd) {
+		if sourceBoundPartialReadCommand(cmd) {
+			continue
+		}
+		if declarationBoundDeferredCommand(cmd) {
+			if state.excluded || state.operation == nil || state.operation.Status != "blocked" || !state.operation.BlockedByDefault {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("deferred command %d (%q) references api_surface endpoint %s %s that is not one blocked operation target", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path),
+				})
+			}
 			continue
 		}
 		if cmd.Operation != "" && slices.Contains(state.coveredBy.OperationTargets(), cmd.Operation) {
@@ -2545,7 +2586,10 @@ func sourceBoundPartialReadCommand(cmd engine.CLICommand) bool {
 // separately requires a specific evidenced component for this state.
 func declarationBoundDeferredCommand(cmd engine.CLICommand) bool {
 	return cmd.Availability == declarationAdmissionStateDeferred && cmd.Foundation != nil &&
-		strings.TrimSpace(cmd.Foundation.ID) != "" && strings.TrimSpace(cmd.Foundation.Reason) != ""
+		strings.TrimSpace(cmd.Foundation.ID) != "" && strings.TrimSpace(cmd.Foundation.Reason) != "" &&
+		connectors.ValidCommandFoundationComponent(cmd.Foundation.Component) &&
+		connectors.ValidCommandFoundationEvidence(cmd.Foundation.Component, cmd.Foundation.Evidence) &&
+		strings.TrimSpace(cmd.Foundation.Target.Method) != "" && strings.TrimSpace(cmd.Foundation.Target.Path) != ""
 }
 
 func cliSurfaceEndpointStates(surface *engine.APISurface) map[string]cliSurfaceEndpointState {

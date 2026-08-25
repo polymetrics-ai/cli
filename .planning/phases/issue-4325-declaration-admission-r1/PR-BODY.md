@@ -15,8 +15,14 @@ without converting connector-owned definitions or claiming live certification.
   runtime preflight behavior.
 - Added focused red/green tests and certificate-separation documentation.
 - Deferred source rows now name a bounded missing implementation component and
-  its evidence; a policy-only block is rejected while the declared command
-  remains discoverable and returns its named missing foundation.
+  its evidence plus one exact API-surface target; excluded, policy-only,
+  duplicate, mismatched, and stale targets are rejected before the declared
+  command can return its named missing foundation.
+- Reused the source-import public HTTPS citation policy and the real no-I/O
+  command preflight so citation and resolver semantics cannot drift.
+- Required semantic destructive metadata from the exact target, including
+  non-`DELETE` `destructive_action` operations, and rejected false implemented
+  bindings against excluded, policy-only, or duplicate surface rows.
 - Added GitHub `label delete` as the implemented destructive green control:
   endpoint-specific missing action contracts are deferred, not delete
   operations as a class.
@@ -49,7 +55,7 @@ blocked source mapping with no action or command binding. See
 - Required skills loaded: `golang-how-to`, `golang-cli`, `golang-testing`,
   `golang-error-handling`, `golang-security`, `golang-safety`,
   `golang-design-patterns`, `golang-structs-interfaces`, and
-  `golang-documentation`.
+  `golang-documentation`, plus `golang-lint` for static verification.
 
 ## Testing
 
@@ -60,6 +66,9 @@ blocked source mapping with no action or command binding. See
 - `go vet ./...`; `go build ./cmd/pm`; docs, lint, smoke, generated artifact,
   certification projection, connector boundary, canon, and release-workflow
   gates (all pass)
+- Audit repair: focused declaration-admission, deferred-command, and engine
+  projection suites pass; repository-wide vet/build, tidy, lint, agent-contract,
+  and GSD evidence checks pass.
 
 The aggregate `go test -timeout 20m ./...` and serial `make verify` are left
 to CI, per the repository’s per-command-timeout guidance. Full commands and
@@ -74,6 +83,7 @@ are not applicable.
 
 ## Review Route
 
-`claude_auto` on this non-draft, `main`-targeted PR. No manual Claude/Copilot
-request has been issued. Automated review findings, if any, require disposition
-before merge.
+The original route was `claude_auto` on this non-draft, `main`-targeted PR. The
+audit repair is a new unreviewed commit and receives one deliberate fresh
+review request after push, plus Firstmate's independent-Codex re-audit handoff.
+Automated findings, if any, require disposition before merge.

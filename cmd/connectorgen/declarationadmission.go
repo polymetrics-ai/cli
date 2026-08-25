@@ -5,14 +5,16 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"net/url"
 	"os"
 	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
 
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/failures"
 )
 
 var declarationAdmissionActionTemplateRE = regexp.MustCompile(`\{\{\s*(?:config|record)\.([-A-Za-z0-9_]+)\s*\}\}`)
@@ -64,10 +66,11 @@ type declarationAdmissionEndpoint struct {
 }
 
 type declarationAdmissionFoundation struct {
-	ID        string `json:"id"`
-	Reason    string `json:"reason"`
-	Component string `json:"component"`
-	Evidence  string `json:"evidence"`
+	ID        string                       `json:"id"`
+	Reason    string                       `json:"reason"`
+	Component string                       `json:"component"`
+	Evidence  string                       `json:"evidence"`
+	Target    declarationAdmissionEndpoint `json:"target"`
 }
 
 type declarationAdmissionDestructive struct {
@@ -87,8 +90,10 @@ type declarationAdmissionOptions struct {
 }
 
 // runDeclarationAdmission checks optional, source-cited admission sidecars.
-// It does not fetch provider material or invoke commandrunner: those belong to
-// source-lock retention and runtime certification, respectively.
+// It does not fetch provider material or run a provider operation. It reuses
+// commandrunner's no-I/O preflight so executable and deferred declarations are
+// checked by the same resolver as the CLI without becoming runtime or live
+// certification.
 func runDeclarationAdmission(args []string, stdout, stderr io.Writer) int {
 	options, err := parseDeclarationAdmissionOptions(args)
 	if err != nil {
@@ -209,6 +214,7 @@ func declarationAdmissionFindings(bundle engine.Bundle, document declarationAdmi
 		add("source declaration has no operations")
 	}
 	sources := make(map[string]declarationAdmissionSourceOperation, len(document.SourceOperations))
+	identities := make(map[string]string, len(document.SourceOperations))
 	for _, source := range document.SourceOperations {
 		if source.ID == "" {
 			add("source operation has no identity")
@@ -227,6 +233,13 @@ func declarationAdmissionFindings(bundle engine.Bundle, document declarationAdmi
 		}
 		if _, err := declarationAdmissionEffectivePath(source.BasePath, source.Path); err != nil {
 			add("source operation " + source.ID + ": " + err.Error())
+			continue
+		}
+		identity := declarationAdmissionSourceIdentity(source)
+		if previous, duplicate := identities[identity]; duplicate {
+			add(fmt.Sprintf("duplicate exact provider operation identity for source operations %s and %s", previous, source.ID))
+		} else {
+			identities[identity] = source.ID
 		}
 	}
 	declared := make(map[string]bool, len(document.Declarations))
@@ -253,14 +266,19 @@ func declarationAdmissionFindings(bundle engine.Bundle, document declarationAdmi
 }
 
 func declarationAdmissionProviderURL(raw string) bool {
-	if raw == "" || raw != strings.TrimSpace(raw) || strings.ContainsAny(raw, "\r\n") {
-		return false
+	return validateSourceImportPublishedURL(raw) == nil
+}
+
+// declarationAdmissionSourceIdentity is the source-row completeness key. It
+// intentionally does not consult a source lock or importer: a URL plus its
+// exact documented operation is enough to establish the independent admission
+// denominator, but two aliases for that same documented operation are not.
+func declarationAdmissionSourceIdentity(source declarationAdmissionSourceOperation) string {
+	path, err := declarationAdmissionEffectivePath(source.BasePath, source.Path)
+	if err != nil {
+		return ""
 	}
-	parsed, err := url.Parse(raw)
-	if err != nil || !parsed.IsAbs() || parsed.Host == "" || parsed.User != nil {
-		return false
-	}
-	return parsed.Scheme == "https" || parsed.Scheme == "http"
+	return strings.Join([]string{source.SourceURL, source.Location, source.ProviderOperationID, strings.ToUpper(strings.TrimSpace(source.Method)), path}, "\x00")
 }
 
 func declarationAdmissionCheckRow(findings *[]Finding, bundle engine.Bundle, file string, source declarationAdmissionSourceOperation, declaration declarationAdmissionDeclaration) {
@@ -279,6 +297,39 @@ func declarationAdmissionCheckRow(findings *[]Finding, bundle engine.Bundle, fil
 	if !strings.EqualFold(declaration.Canonical.Method, source.Method) || declaration.Canonical.Path != effectivePath {
 		add("base-path mismatch or stale canonical endpoint")
 	}
+	destructiveTarget := declarationAdmissionSurfaceIsDestructive(bundle.Surface, declaration.Canonical)
+	if strings.EqualFold(source.Method, "DELETE") {
+		if declaration.Destructive == nil || declaration.Destructive.Kind != "delete" || strings.TrimSpace(declaration.Destructive.Reason) == "" {
+			add("delete operation lacks destructive metadata")
+		}
+	} else if destructiveTarget && declaration.Destructive == nil {
+		add("destructive operation lacks destructive metadata")
+	} else if declaration.Destructive != nil {
+		switch declaration.Destructive.Kind {
+		case "delete":
+			if !destructiveTarget {
+				add("delete metadata requires a destructive target")
+			}
+		case "destructive":
+			if !destructiveTarget || !declarationAdmissionMutationMethod(source.Method) {
+				add("destructive metadata requires a destructive mutation target")
+			}
+		default:
+			add("destructive metadata has an unknown kind")
+		}
+		if strings.TrimSpace(declaration.Destructive.Reason) == "" {
+			add("destructive metadata lacks a reason")
+		}
+	}
+	commandPath, commandPathErr := commandrunner.CanonicalCommandPath(declaration.Command)
+	if declaration.Command == "" {
+		add("has no discoverable command mapping")
+		return
+	}
+	if commandPathErr != nil {
+		add("has no canonical round-trippable command path: " + commandPathErr.Error())
+		return
+	}
 	command, matches := declarationAdmissionCommand(bundle, declaration.Command)
 	if matches != 1 {
 		add("has no unique discoverable command mapping")
@@ -290,13 +341,6 @@ func declarationAdmissionCheckRow(findings *[]Finding, bundle engine.Bundle, fil
 	if !declarationAdmissionCommandCitesEndpoint(command, declaration.Canonical) || !declarationAdmissionSurfaceHasEndpoint(bundle.Surface, declaration.Canonical) {
 		add("command does not map to the canonical API surface endpoint")
 	}
-	if strings.EqualFold(source.Method, "DELETE") {
-		if declaration.Destructive == nil || declaration.Destructive.Kind != "delete" || strings.TrimSpace(declaration.Destructive.Reason) == "" {
-			add("delete operation lacks destructive metadata")
-		}
-	} else if declaration.Destructive != nil && strings.TrimSpace(declaration.Destructive.Reason) == "" {
-		add("destructive metadata lacks a reason")
-	}
 	switch declaration.State {
 	case declarationAdmissionStateImplemented:
 		if declaration.Foundation != nil || command.Foundation != nil {
@@ -304,6 +348,11 @@ func declarationAdmissionCheckRow(findings *[]Finding, bundle engine.Bundle, fil
 		}
 		if command.Availability != declarationAdmissionStateImplemented || !declarationAdmissionImplementedBinding(bundle, command, declaration.Lane, declaration.Canonical) {
 			add("implemented declaration has no valid runtime binding")
+		} else if err := commandrunner.Preflight(engine.New(bundle, nil), commandPath); err != nil {
+			add("implemented declaration fails runtime preflight: " + err.Error())
+		}
+		if declaration.Destructive != nil && !declarationAdmissionDestructiveBinding(bundle, command, declaration) {
+			add("implemented destructive declaration does not retain destructive runtime metadata")
 		}
 	case declarationAdmissionStateDeferred:
 		if !declarationAdmissionFoundationSpecific(declaration.Foundation) {
@@ -314,8 +363,14 @@ func declarationAdmissionCheckRow(findings *[]Finding, bundle engine.Bundle, fil
 		if !declarationAdmissionFoundationMatches(declaration.Foundation, command.Foundation) {
 			add("deferred declaration requires the same named foundation gap on its command")
 		}
+		if declaration.Foundation != nil && !declarationAdmissionEndpointsMatch(declaration.Foundation.Target, declaration.Canonical) {
+			add("deferred declaration foundation target does not match the canonical API surface endpoint")
+		}
 		if command.Availability != declarationAdmissionStateDeferred {
 			add("deferred declaration command is not deferred")
+		}
+		if message := declarationAdmissionDeferredPreflight(bundle, commandPath); message != "" {
+			add(message)
 		}
 	default:
 		add("state must be implemented or deferred")
@@ -385,8 +440,24 @@ func declarationAdmissionSurfaceHasEndpoint(surface *engine.APISurface, endpoint
 	if surface == nil {
 		return false
 	}
+	matches := 0
 	for _, candidate := range surface.Endpoints {
 		if strings.EqualFold(candidate.Method, endpoint.Method) && candidate.Path == endpoint.Path {
+			matches++
+			if candidate.Excluded != nil || (candidate.Operation != nil && candidate.Operation.Model == "disallowed") {
+				return false
+			}
+		}
+	}
+	return matches == 1
+}
+
+func declarationAdmissionSurfaceIsDestructive(surface *engine.APISurface, target declarationAdmissionEndpoint) bool {
+	if surface == nil {
+		return false
+	}
+	for _, endpoint := range surface.Endpoints {
+		if strings.EqualFold(endpoint.Method, target.Method) && endpoint.Path == target.Path && endpoint.Operation != nil && endpoint.Operation.Model == "destructive_action" {
 			return true
 		}
 	}
@@ -394,12 +465,15 @@ func declarationAdmissionSurfaceHasEndpoint(surface *engine.APISurface, endpoint
 }
 
 func declarationAdmissionFoundationMatches(declaration *declarationAdmissionFoundation, command *engine.CommandFoundation) bool {
-	return declarationAdmissionFoundationSpecific(declaration) && command != nil && declaration.ID == command.ID && declaration.Reason == command.Reason
+	return declarationAdmissionFoundationSpecific(declaration) && command != nil && declaration.ID == command.ID && declaration.Reason == command.Reason &&
+		declaration.Component == command.Component && declaration.Evidence == command.Evidence &&
+		declarationAdmissionEndpointsMatch(declaration.Target, declarationAdmissionEndpoint{Method: command.Target.Method, Path: command.Target.Path})
 }
 
 func declarationAdmissionFoundationSpecific(foundation *declarationAdmissionFoundation) bool {
 	return foundation != nil && strings.TrimSpace(foundation.ID) != "" && strings.TrimSpace(foundation.Reason) != "" &&
-		declarationAdmissionFoundationComponentValid(foundation.Component) && strings.TrimSpace(foundation.Evidence) != ""
+		declarationAdmissionFoundationComponentValid(foundation.Component) && declarationAdmissionFoundationEvidenceValid(foundation.Component, foundation.Evidence) &&
+		strings.TrimSpace(foundation.Target.Method) != "" && strings.TrimSpace(foundation.Target.Path) != ""
 }
 
 // declarationAdmissionFoundationComponentValid accepts missing runtime pieces,
@@ -407,13 +481,11 @@ func declarationAdmissionFoundationSpecific(foundation *declarationAdmissionFoun
 // certification state. Those facts can explain risk, but cannot remove a
 // cited source operation from the declaration and command surface.
 func declarationAdmissionFoundationComponentValid(component string) bool {
-	switch component {
-	case "typed_write_action", "typed_record_schema", "typed_request_body", "typed_response_descriptor",
-		"binary_transfer_binding", "source_importer", "runtime_executor", "idempotency_contract", "conformance_fixture":
-		return true
-	default:
-		return false
-	}
+	return connectors.ValidCommandFoundationComponent(component)
+}
+
+func declarationAdmissionFoundationEvidenceValid(component, evidence string) bool {
+	return connectors.ValidCommandFoundationEvidence(component, evidence)
 }
 
 func declarationAdmissionFoundationEvidenceFinding(bundle engine.Bundle, declaration declarationAdmissionDeclaration, foundation *declarationAdmissionFoundation) string {
@@ -467,4 +539,68 @@ func declarationAdmissionImplementedBinding(bundle engine.Bundle, command engine
 
 func declarationAdmissionActionPath(path string) string {
 	return declarationAdmissionActionTemplateRE.ReplaceAllString(path, "{$1}")
+}
+
+func declarationAdmissionEndpointsMatch(left, right declarationAdmissionEndpoint) bool {
+	return strings.EqualFold(left.Method, right.Method) && left.Path == right.Path
+}
+
+func declarationAdmissionMutationMethod(method string) bool {
+	switch strings.ToUpper(strings.TrimSpace(method)) {
+	case "POST", "PUT", "PATCH", "DELETE":
+		return true
+	default:
+		return false
+	}
+}
+
+func declarationAdmissionDeferredPreflight(bundle engine.Bundle, path []string) string {
+	err := commandrunner.Preflight(engine.New(bundle, nil), path)
+	var blocked *commandrunner.BlockedCommandError
+	if !errors.As(err, &blocked) {
+		return fmt.Sprintf("deferred target does not pass runtime preflight: %v", err)
+	}
+	if blocked.Failure == nil || blocked.Failure.Domain() != failures.DomainSystem || blocked.Failure.Code() != "missing_foundation" {
+		return fmt.Sprintf("deferred target does not resolve to system/missing_foundation: %v", blocked)
+	}
+	return ""
+}
+
+func declarationAdmissionDestructiveBinding(bundle engine.Bundle, command engine.CLICommand, declaration declarationAdmissionDeclaration) bool {
+	if declaration.Destructive == nil {
+		return true
+	}
+	if action, found := declarationAdmissionWriteAction(bundle, command.Write); found {
+		target := engine.DestructiveTargetForWrite(bundle.Name, action)
+		if declaration.Destructive.Kind == "delete" {
+			return action.Kind == "delete" && target.RequiresApproval()
+		}
+		return target.RequiresApproval()
+	}
+	if operation, found := declarationAdmissionOperation(bundle, command.Operation); found {
+		target := engine.DestructiveTargetForOperation(bundle.Name, operation)
+		if declaration.Destructive.Kind == "delete" {
+			return operation.MutationClass == "delete" && target.RequiresApproval()
+		}
+		return target.RequiresApproval()
+	}
+	return false
+}
+
+func declarationAdmissionWriteAction(bundle engine.Bundle, name string) (engine.WriteAction, bool) {
+	for _, action := range bundle.Writes {
+		if action.Name == name {
+			return action, true
+		}
+	}
+	return engine.WriteAction{}, false
+}
+
+func declarationAdmissionOperation(bundle engine.Bundle, id string) (engine.OperationSpec, bool) {
+	for _, operation := range bundle.Operations {
+		if operation.ID == id {
+			return operation, true
+		}
+	}
+	return engine.OperationSpec{}, false
 }
