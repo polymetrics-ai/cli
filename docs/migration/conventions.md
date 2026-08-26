@@ -1644,7 +1644,7 @@ Connector batches begin with the connector-owned
 `sources/<connector>-operation-source-lock.json`; never give the generator an
 alternate provider URL or a downloaded production artifact. Each locked input
 also has an exact tracked retained copy at
-`sources/artifacts/<lowercase-lock-sha256>.artifact` and a connector-owned
+`sources/artifacts/<lowercase-retained-byte-sha256>.artifact` and a connector-owned
 `sources/<connector>-retained-artifacts.json` provenance manifest. Run:
 
 ```sh
@@ -1653,9 +1653,11 @@ go run ./cmd/connectorgen source-import <connector> --out <reviewed-descriptor-p
 ```
 
 The only command allowed to obtain a retained copy is the explicit maintenance
-operation below. It fetches the source URL already named by the lock, proves
-the returned bytes against that lock before writing, and does **not** change a
-URL, byte count, or digest. It is never part of a build or verification path:
+operation below. It accepts the connector-owned operation lock or the
+connector-owned parity lock, fetches only the URL already named by that lock,
+proves the returned document against the lock-selected identity before
+writing, and does **not** change a URL, byte count, or digest. It is never part
+of a build or verification path:
 
 ```sh
 go run ./cmd/connectorgen source-retain <connector> \
@@ -1663,7 +1665,31 @@ go run ./cmd/connectorgen source-retain <connector> \
   --terms <known-terms-or-status>
 ```
 
-If a current provider document differs from a pin, do not use
+`identity` is `byte` by default: the byte count and `sha256` remain the exact
+identity. A source that is valid structured JSON but whose provider can
+reserialise object keys may declare `identity: "canonical_json"` and a
+`canonical_sha256`; that identity accepts exactly one unambiguous JSON value,
+key-sorts objects, and hashes the normalised result. Duplicate object member
+names are ambiguous and therefore wrong-source input, not a canonical match or
+ordinary drift. The original byte count/SHA-256 remain visible source
+provenance, while the retained manifest records the raw byte count/SHA-256
+actually fetched. For `canonical_json`, formatted or minified equivalent JSON
+may differ in raw count/SHA-256 without drift: the canonical digest is the
+identity and raw bytes are provenance. `byte` identity remains exact raw size
+plus SHA-256. A canonical match with changed raw bytes does not silently re-pin
+the lock.
+
+Classify the fetch before comparing its identity. A redirect, invalid response
+MIME, a structured source served as HTML, a credible HTML login/error body (even
+at a plausible byte count), or a byte-identity response drastically smaller than
+the lock is `wrong source`, not drift; correct the URL or publication path before
+any re-pin. A `canonical_json` raw size is provenance rather than an identity
+gate, so minification alone cannot become wrong-source or drift. Legitimate HTML
+documentation remains retainable when its body is not a login/error signature and
+the lock does not declare a non-HTML source. A provider HTTP 403 or TLS/certificate
+failure is `BOT-BLOCK`, not evidence that a source is absent:
+try a browser capture or the provider's own repository before treating the
+connector as unmappable. If a current provider document differs from a pin, do not use
 `source-retain` to make it fit. Preserve the lock first; only the separately
 recorded delivery-owner authorization and re-pin report described below may
 replace that identity. A terminal HTTP response, redirect, login wall, or
@@ -1681,23 +1707,41 @@ document and makes the exact bounded, non-secret query already locked in its
 or URL from source-import command input. The importer retrieves only each
 document's retained content-addressed artifact without credentials, a provider
 request, or a user cache. It verifies the retained bytes against the lock's
-already-recorded byte count and SHA-256 before parsing. A missing copy or
-mismatch is terminal: do not infer a replacement schema, accept source drift,
-or fall back to a live URL. The generated
+selected identity before parsing: exact byte count/SHA-256 for `byte`, or one
+strict unambiguous JSON value and its canonical digest for `canonical_json`.
+A missing copy or mismatch is terminal: do not infer a replacement schema,
+accept source drift, or fall back to a live URL. The generated
 descriptor preserves each operation's document ID, stable artifact, published
 URL, capture identity, and provider operation ID; a document-qualified locked
 `id` is the descriptor source identity even when the provider repeats an
 `operationId` in another document.
 
+For a `rendered_reference`, an operation's `citation_url` cannot be the generic
+published reference page merely because it shares that page's origin. It must
+either carry a non-empty fragment that exactly names the operation's locked
+extraction location, or carry a
+`citation_binding` whose `capture_url`, `capture_sha256`, `capture_bytes`, and
+`source_location` exactly repeat the document's hash-pinned capture and that
+operation's locked extraction location. If both a fragment and binding are
+present, both must agree; the fragment never causes a contradictory binding to
+be ignored. The binding makes an explicitly captured extraction auditable; it
+does not authorize a citation fetch or relax the captured-byte identity.
+
+A parity lock can likewise retain a bounded query that it already stores, even
+though that older lock shape has no `identity_query` field. Retention records
+the fixed query as provenance and fetches no caller-supplied URL; it does not
+make that parity lock importable or relax source-import's v3 query rule.
+
 The retained-artifact manifest is provenance only and cannot alter lock
-identity. Every artifact record repeats the locked `sha256`, `bytes`, and
-`source_url`, names an RFC3339 `retrieved_at` value, and records non-empty
-`license` and `terms` data (use `undetermined` when that is all that can be
-established). A manifest record must match the lock before its digest-addressed
-file is read. The importer treats plain OpenAPI/Swagger, rendered-reference
-captures, and zip/gzip bundle bytes alike at this boundary: it first proves the
-opaque retained bytes are the locked bytes, then dispatches to the source-kind
-specific parser/projection path.
+identity. Every artifact record repeats the lock identity and `source_url`,
+names an RFC3339 `retrieved_at` value, records non-empty `license` and `terms`
+data (use `undetermined` when that is all that can be established), and records
+the fetched raw byte SHA-256/count plus detected form/version (or
+`undetermined`). A manifest record must match the lock before its
+digest-addressed file is read. The importer treats plain OpenAPI/Swagger,
+rendered-reference captures, and zip/gzip bundle bytes alike at this boundary:
+it first proves the opaque retained bytes are the selected lock identity, then
+dispatches to the source-kind-specific parser/projection path.
 
 A v3 `published_source.source_url` is a historical citation, not a retrieval
 endpoint. It may carry only a bounded, non-secret provider query (for example a
