@@ -878,6 +878,9 @@ func runMaybeConnectorCommandWithRegistry(ctx context.Context, root, connectorNa
 	if err != nil {
 		return err
 	}
+	if _, found := connectorSurfaceCommand(surface, strings.Join(path, " ")); !found {
+		return connectorCommandUsageError(surface, path)
+	}
 	var preparedCommandFlags map[string][]string
 	preflight := func() error {
 		if flags.first("plan") != "" {

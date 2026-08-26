@@ -186,6 +186,13 @@ func TestConnectorCommandInputDefectsFailBeforeWithApp(t *testing.T) {
 		})
 	}
 
+	var unknownOut, unknownErr bytes.Buffer
+	err := runMaybeConnectorCommandWithRegistry(context.Background(), t.TempDir(), "input-ordering", []string{"widgets", "bogus"}, &unknownOut, &unknownErr, true, registry)
+	var classified *cliError
+	if !errors.As(err, &classified) || classified.category != categoryUsage {
+		t.Fatalf("unknown command error=%v, want usage classification before app open", err)
+	}
+
 	var helpOut, helpErr bytes.Buffer
 	if err := runMaybeConnectorCommandWithRegistry(context.Background(), t.TempDir(), "input-ordering", []string{"widgets", "list", "--help"}, &helpOut, &helpErr, false, registry); err != nil {
 		t.Fatalf("help should return before request validation: %v", err)
