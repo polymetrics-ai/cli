@@ -333,6 +333,22 @@ func (c *Connector) PreflightSourceBoundStreamRead(stream, sourceOperation, meth
 	return PreflightSourceBoundStreamRead(c.bundle, stream, sourceOperation, method, path)
 }
 
+func (c *Connector) PreflightSourceBoundOperationOrigin(operation string, cfg connectors.RuntimeConfig) error {
+	op, err := findOperation(c.bundle, operation)
+	if err != nil {
+		return err
+	}
+	return preflightSourceBoundOperationOrigin(c.bundle, cfg, op)
+}
+
+func (c *Connector) PreflightSourceBoundStreamOrigin(stream string, cfg connectors.RuntimeConfig) error {
+	spec, err := findStream(c.bundle, stream)
+	if err != nil {
+		return err
+	}
+	return preflightSourceBoundStreamOrigin(c.bundle, cfg, spec)
+}
+
 // OperationStatusCheck delegates one closed, response-less HEAD operation to
 // the engine. It remains distinct from direct reads so a status declaration
 // cannot gain JSON response behavior through the connector adapter.
@@ -754,6 +770,22 @@ func (b Base) PreflightSourceBoundRead(operation, sourceOperation, method, path 
 
 func (b Base) PreflightSourceBoundStreamRead(stream, sourceOperation, method, path string) error {
 	return PreflightSourceBoundStreamRead(b.bundle, stream, sourceOperation, method, path)
+}
+
+func (b Base) PreflightSourceBoundOperationOrigin(operation string, cfg connectors.RuntimeConfig) error {
+	op, err := findOperation(b.bundle, operation)
+	if err != nil {
+		return err
+	}
+	return preflightSourceBoundOperationOrigin(b.bundle, cfg, op)
+}
+
+func (b Base) PreflightSourceBoundStreamOrigin(stream string, cfg connectors.RuntimeConfig) error {
+	spec, err := findStream(b.bundle, stream)
+	if err != nil {
+		return err
+	}
+	return preflightSourceBoundStreamOrigin(b.bundle, cfg, spec)
 }
 
 // PreflightOperationDirectWrite validates a native connector's declared

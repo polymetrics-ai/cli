@@ -67,3 +67,14 @@ admitted as a declaration.
 
 PR #4353 remains open and unmerged. It requires fresh automated review for the
 final commit range and the normal human merge gate.
+
+## r4 repair delta for PR #4356
+
+This continuation repairs the six frozen audit findings without changing the
+Asana source lock or retained provider bytes. The final executable source map
+is 106 direct reads, 12 ETL streams, and 94 reverse-ETL actions (51 create, 20
+update, 23 delete); 19 source-complete DELETEs and two no-body POST mutations
+now use the established action/approval path. Remaining source rows are either
+an exact `missing_foundation` or `/batch`, explicitly not applicable as a
+generic wrapper. A fresh independent audit is required after the repair SHA is
+pushed; this PR remains open and unmerged.

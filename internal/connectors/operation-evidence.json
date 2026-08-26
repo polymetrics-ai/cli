@@ -2,7 +2,7 @@
   "schema_version": 1,
   "generated_command": "go run ./cmd/connectorgen operation-evidence",
   "provenance": {
-    "source_projection_sha256": "a1e7263b771ac8ce91c1f01b5e74dc863c8c0218fecccfbb874a5a986de7ff3c",
+    "source_projection_sha256": "419dc6ab9fea10d1a708fa8352a454dc5536f557447eb9641a99eae1976d07b7",
     "relevant_config_sha256": "4b59f27395f5127578bce027786ba9c3f1829b044281e39467a2c1b182ee6ffe"
   },
   "rows": [
@@ -1266,9 +1266,10 @@
         "path": "/access_requests/{access_request_gid}/approve"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:approve_access_request"
+          "operation:approve_access_request",
+          "write:approve_access_request"
         ]
       },
       "cli": {
@@ -1311,7 +1312,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -1323,10 +1324,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -4036,9 +4033,10 @@
         "path": "/allocations/{allocation_gid}"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:delete_allocation"
+          "operation:delete_allocation",
+          "write:delete_allocation"
         ]
       },
       "cli": {
@@ -4081,7 +4079,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -4093,10 +4091,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -4120,9 +4114,10 @@
         "path": "/attachments/{attachment_gid}"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:delete_attachment"
+          "operation:delete_attachment",
+          "write:delete_attachment"
         ]
       },
       "cli": {
@@ -4165,7 +4160,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -4177,10 +4172,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -4204,9 +4195,10 @@
         "path": "/budgets/{budget_gid}"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:delete_budget"
+          "operation:delete_budget",
+          "write:delete_budget"
         ]
       },
       "cli": {
@@ -4249,7 +4241,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -4261,10 +4253,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -4288,9 +4276,10 @@
         "path": "/custom_fields/{custom_field_gid}"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:delete_custom_field"
+          "operation:delete_custom_field",
+          "write:delete_custom_field"
         ]
       },
       "cli": {
@@ -4333,7 +4322,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -4345,10 +4334,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -4372,9 +4357,10 @@
         "path": "/goals/{goal_gid}"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:delete_goal"
+          "operation:delete_goal",
+          "write:delete_goal"
         ]
       },
       "cli": {
@@ -4417,7 +4403,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -4429,10 +4415,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -4456,9 +4438,10 @@
         "path": "/memberships/{membership_gid}"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:delete_membership"
+          "operation:delete_membership",
+          "write:delete_membership"
         ]
       },
       "cli": {
@@ -4501,7 +4484,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -4513,10 +4496,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -4540,9 +4519,10 @@
         "path": "/ooo_entries/{ooo_entry_gid}"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:delete_ooo_entry"
+          "operation:delete_ooo_entry",
+          "write:delete_ooo_entry"
         ]
       },
       "cli": {
@@ -4585,7 +4565,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -4597,10 +4577,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -4624,9 +4600,10 @@
         "path": "/portfolios/{portfolio_gid}"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:delete_portfolio"
+          "operation:delete_portfolio",
+          "write:delete_portfolio"
         ]
       },
       "cli": {
@@ -4669,7 +4646,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -4681,10 +4658,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -4782,9 +4755,10 @@
         "path": "/project_briefs/{project_brief_gid}"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:delete_project_brief"
+          "operation:delete_project_brief",
+          "write:delete_project_brief"
         ]
       },
       "cli": {
@@ -4827,7 +4801,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -4839,10 +4813,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -4866,9 +4836,10 @@
         "path": "/project_statuses/{project_status_gid}"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:delete_project_status"
+          "operation:delete_project_status",
+          "write:delete_project_status"
         ]
       },
       "cli": {
@@ -4911,7 +4882,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -4923,10 +4894,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -4950,9 +4917,10 @@
         "path": "/project_templates/{project_template_gid}"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:delete_project_template"
+          "operation:delete_project_template",
+          "write:delete_project_template"
         ]
       },
       "cli": {
@@ -4995,7 +4963,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -5007,10 +4975,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -5034,9 +4998,10 @@
         "path": "/rates/{rate_gid}"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:delete_rate"
+          "operation:delete_rate",
+          "write:delete_rate"
         ]
       },
       "cli": {
@@ -5079,7 +5044,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -5091,10 +5056,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -5118,9 +5079,10 @@
         "path": "/roles/{role_gid}"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:delete_role"
+          "operation:delete_role",
+          "write:delete_role"
         ]
       },
       "cli": {
@@ -5163,7 +5125,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -5175,10 +5137,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -5276,9 +5234,10 @@
         "path": "/status_updates/{status_update_gid}"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:delete_status"
+          "operation:delete_status",
+          "write:delete_status"
         ]
       },
       "cli": {
@@ -5321,7 +5280,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -5333,10 +5292,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -5360,9 +5315,10 @@
         "path": "/stories/{story_gid}"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:delete_story"
+          "operation:delete_story",
+          "write:delete_story"
         ]
       },
       "cli": {
@@ -5405,7 +5361,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -5417,10 +5373,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -5592,9 +5544,10 @@
         "path": "/task_templates/{task_template_gid}"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:delete_task_template"
+          "operation:delete_task_template",
+          "write:delete_task_template"
         ]
       },
       "cli": {
@@ -5637,7 +5590,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -5649,10 +5602,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -5676,9 +5625,10 @@
         "path": "/time_tracking_categories/{time_tracking_category_gid}"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:delete_time_tracking_category"
+          "operation:delete_time_tracking_category",
+          "write:delete_time_tracking_category"
         ]
       },
       "cli": {
@@ -5721,7 +5671,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -5733,10 +5683,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -5760,9 +5706,10 @@
         "path": "/time_tracking_entries/{time_tracking_entry_gid}"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:delete_time_tracking_entry"
+          "operation:delete_time_tracking_entry",
+          "write:delete_time_tracking_entry"
         ]
       },
       "cli": {
@@ -5805,7 +5752,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -5817,10 +5764,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -5844,9 +5787,10 @@
         "path": "/webhooks/{webhook_gid}"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:delete_webhook"
+          "operation:delete_webhook",
+          "write:delete_webhook"
         ]
       },
       "cli": {
@@ -5889,7 +5833,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -5901,10 +5845,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -14997,9 +14937,10 @@
         "path": "/access_requests/{access_request_gid}/reject"
       },
       "runtime": {
-        "enabled": false,
+        "enabled": true,
         "targets": [
-          "operation:reject_access_request"
+          "operation:reject_access_request",
+          "write:reject_access_request"
         ]
       },
       "cli": {
@@ -15042,7 +14983,7 @@
         },
         "reverse_etl": {
           "declared": true,
-          "enabled": false
+          "enabled": true
         }
       },
       "foundations": null,
@@ -15054,10 +14995,6 @@
         {
           "kind": "fixture_proof",
           "evidence": "canonical operation has no matching checked-in fixture"
-        },
-        {
-          "kind": "runtime_reachability",
-          "evidence": "canonical operation has no enabled declaration-owned runtime command"
         }
       ],
       "absence": null
@@ -137369,7 +137306,6 @@
       "id": "runtime_reachability",
       "evidence": "canonical operation has no enabled declaration-owned runtime command",
       "source_ids": [
-        "asana.rest.approveAccessRequest",
         "asana.rest.createAccessRequest",
         "asana.rest.createAllocation",
         "asana.rest.createAttachmentForObject",
@@ -137382,27 +137318,7 @@
         "asana.rest.createTimeTrackingCategory",
         "asana.rest.createTimesheetApprovalStatus",
         "asana.rest.createWebhook",
-        "asana.rest.deleteAllocation",
-        "asana.rest.deleteAttachment",
-        "asana.rest.deleteBudget",
-        "asana.rest.deleteCustomField",
-        "asana.rest.deleteGoal",
-        "asana.rest.deleteMembership",
-        "asana.rest.deleteOooEntry",
-        "asana.rest.deletePortfolio",
-        "asana.rest.deleteProjectBrief",
-        "asana.rest.deleteProjectStatus",
-        "asana.rest.deleteProjectTemplate",
-        "asana.rest.deleteRate",
-        "asana.rest.deleteRole",
-        "asana.rest.deleteStatus",
-        "asana.rest.deleteStory",
-        "asana.rest.deleteTaskTemplate",
-        "asana.rest.deleteTimeTrackingCategory",
-        "asana.rest.deleteTimeTrackingEntry",
-        "asana.rest.deleteWebhook",
         "asana.rest.getMembership",
-        "asana.rest.rejectAccessRequest",
         "asana.rest.removeCustomFieldSettingForGoal",
         "asana.rest.removeCustomFieldSettingForPortfolio",
         "asana.rest.removeCustomFieldSettingForProject",

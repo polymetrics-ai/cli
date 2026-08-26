@@ -881,6 +881,13 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 		}
 		return err
 	}
+	config, err := keyValues(flags.values["config"])
+	if err != nil {
+		return err
+	}
+	if err := commandrunner.PreflightSourceBoundOrigin(connector, path, config); err != nil {
+		return err
+	}
 	approval, err := prepareReverseApprovalCarrier(flags, os.Stdin)
 	if err != nil {
 		return err

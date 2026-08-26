@@ -449,22 +449,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.deleteAllocation at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/allocations/{allocation_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.deleteAllocation",
-            "method": "DELETE",
-            "path": "/allocations/{allocation_gid}"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -869,22 +854,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.deleteAttachment at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/attachments/{attachment_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.deleteAttachment",
-            "method": "DELETE",
-            "path": "/attachments/{attachment_gid}"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -1335,22 +1305,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.deleteBudget at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/budgets/{budget_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.deleteBudget",
-            "method": "DELETE",
-            "path": "/budgets/{budget_gid}"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -1753,22 +1708,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.deleteCustomField at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/custom_fields/{custom_field_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.deleteCustomField",
-            "method": "DELETE",
-            "path": "/custom_fields/{custom_field_gid}"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -2219,22 +2159,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.deleteGoal at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/goals/{goal_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.deleteGoal",
-            "method": "DELETE",
-            "path": "/goals/{goal_gid}"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -2637,22 +2562,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.deleteMembership at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/memberships/{membership_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.deleteMembership",
-            "method": "DELETE",
-            "path": "/memberships/{membership_gid}"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -3057,22 +2967,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.deleteOooEntry at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/ooo_entries/{ooo_entry_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.deleteOooEntry",
-            "method": "DELETE",
-            "path": "/ooo_entries/{ooo_entry_gid}"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -3475,22 +3370,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.deletePortfolio at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/portfolios/{portfolio_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.deletePortfolio",
-            "method": "DELETE",
-            "path": "/portfolios/{portfolio_gid}"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -3893,22 +3773,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.deleteProjectBrief at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/project_briefs/{project_brief_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.deleteProjectBrief",
-            "method": "DELETE",
-            "path": "/project_briefs/{project_brief_gid}"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -4311,22 +4176,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.deleteProjectStatus at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/project_statuses/{project_status_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.deleteProjectStatus",
-            "method": "DELETE",
-            "path": "/project_statuses/{project_status_gid}"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -4777,22 +4627,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.deleteProjectTemplate at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/project_templates/{project_template_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.deleteProjectTemplate",
-            "method": "DELETE",
-            "path": "/project_templates/{project_template_gid}"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -5664,22 +5499,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.deleteRate at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/rates/{rate_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.deleteRate",
-            "method": "DELETE",
-            "path": "/rates/{rate_gid}"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -6084,22 +5904,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.deleteRole at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/roles/{role_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.deleteRole",
-            "method": "DELETE",
-            "path": "/roles/{role_gid}"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -6921,22 +6726,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.deleteStatus at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/status_updates/{status_update_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.deleteStatus",
-            "method": "DELETE",
-            "path": "/status_updates/{status_update_gid}"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -7341,22 +7131,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.deleteStory at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/stories/{story_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.deleteStory",
-            "method": "DELETE",
-            "path": "/stories/{story_gid}"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -8226,22 +8001,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.deleteTaskTemplate at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/task_templates/{task_template_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.deleteTaskTemplate",
-            "method": "DELETE",
-            "path": "/task_templates/{task_template_gid}"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -9067,22 +8827,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.deleteTimeTrackingCategory at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/time_tracking_categories/{time_tracking_category_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.deleteTimeTrackingCategory",
-            "method": "DELETE",
-            "path": "/time_tracking_categories/{time_tracking_category_gid}"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -9533,22 +9278,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.deleteTimeTrackingEntry at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/time_tracking_entries/{time_tracking_entry_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.deleteTimeTrackingEntry",
-            "method": "DELETE",
-            "path": "/time_tracking_entries/{time_tracking_entry_gid}"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -9953,22 +9683,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.deleteWebhook at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/webhooks/{webhook_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.deleteWebhook",
-            "method": "DELETE",
-            "path": "/webhooks/{webhook_gid}"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -101264,22 +100979,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.approveAccessRequest at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/access_requests/{access_request_gid}/approve\"].post",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.approveAccessRequest",
-            "method": "POST",
-            "path": "/access_requests/{access_request_gid}/approve"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -101656,22 +101356,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation asana.rest.rejectAccessRequest at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/access_requests/{access_request_gid}/reject\"].post",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "asana.rest.rejectAccessRequest",
-            "method": "POST",
-            "path": "/access_requests/{access_request_gid}/reject"
-          },
-          "reason": "Asana provider mutation has no declaration-owned executable action."
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -228238,111 +227923,6 @@
       "foundation": "cli-request-schema-foundation-r1",
       "location": "request body",
       "reason": "unbounded request schema object has dynamic additionalProperties"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.approveAccessRequest at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/access_requests/{access_request_gid}/approve\"].post",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.deleteAllocation at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/allocations/{allocation_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.deleteAttachment at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/attachments/{attachment_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.deleteBudget at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/budgets/{budget_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.deleteCustomField at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/custom_fields/{custom_field_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.deleteGoal at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/goals/{goal_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.deleteMembership at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/memberships/{membership_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.deleteOooEntry at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/ooo_entries/{ooo_entry_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.deletePortfolio at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/portfolios/{portfolio_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.deleteProjectBrief at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/project_briefs/{project_brief_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.deleteProjectStatus at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/project_statuses/{project_status_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.deleteProjectTemplate at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/project_templates/{project_template_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.deleteRate at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/rates/{rate_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.deleteRole at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/roles/{role_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.deleteStatus at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/status_updates/{status_update_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.deleteStory at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/stories/{story_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.deleteTaskTemplate at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/task_templates/{task_template_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.deleteTimeTrackingCategory at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/time_tracking_categories/{time_tracking_category_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.deleteTimeTrackingEntry at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/time_tracking_entries/{time_tracking_entry_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.deleteWebhook at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/webhooks/{webhook_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation asana.rest.rejectAccessRequest at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/access_requests/{access_request_gid}/reject\"].post",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: Asana provider mutation has no declaration-owned executable action."
     },
     {
       "foundation": "source-cited-partial-mutation-coverage-foundation-r1",

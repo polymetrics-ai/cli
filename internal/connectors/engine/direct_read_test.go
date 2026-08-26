@@ -109,6 +109,38 @@ func TestPreflightSourceBoundStreamReadRequiresDeclaredRecordAndPaginationSemant
 	}
 }
 
+func TestReadRejectsSourceBoundStreamDriftBeforeOriginOrAuthentication(t *testing.T) {
+	base := Bundle{
+		Operations: []OperationSpec{{
+			ID: "get_workspaces", Kind: "stream_etl",
+			SourceOperation: &SourceOperationBinding{ID: "asana.rest.getWorkspaces", Method: http.MethodGet, Path: "/workspaces"},
+			Composite:       &CompositeOperationSpec{Steps: []string{"stream:workspaces"}},
+		}},
+		HTTP:    HTTPBase{Pagination: &PaginationSpec{Type: "next_url", NextURLPath: "next_page.uri"}},
+		Streams: []StreamSpec{{Name: "workspaces", Path: "/workspaces", Records: RecordsSpec{Path: "data"}, SchemaRef: "schemas/workspaces.json"}},
+	}
+	for _, test := range []struct {
+		name   string
+		mutate func(*Bundle)
+		want   string
+	}{
+		{name: "path", mutate: func(b *Bundle) { b.Streams[0].Path = "/users" }, want: "does not match locked source endpoint"},
+		{name: "method", mutate: func(b *Bundle) { b.Streams[0].Method = http.MethodPost }, want: "does not match locked source endpoint"},
+		{name: "records", mutate: func(b *Bundle) { b.Streams[0].Records.Path = "" }, want: "lacks declared record semantics"},
+		{name: "pagination", mutate: func(b *Bundle) { b.HTTP.Pagination = nil }, want: "lacks declared pagination semantics"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			bundle := base
+			bundle.Streams = append([]StreamSpec(nil), base.Streams...)
+			test.mutate(&bundle)
+			err := Read(context.Background(), bundle, connectors.ReadRequest{Stream: "workspaces"}, nil, func(connectors.Record) error { return nil })
+			if err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("direct Read source-bound drift error = %v, want %q before route/authentication", err, test.want)
+			}
+		})
+	}
+}
+
 func TestSourceBoundStreamPathMatchesDeclaredFanOutSegmentOnly(t *testing.T) {
 	for _, tc := range []struct {
 		name       string

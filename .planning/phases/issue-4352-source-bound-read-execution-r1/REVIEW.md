@@ -33,3 +33,15 @@ passing.
 ## Required external review
 
 Open a PR to `main` and let the repository's configured Claude review run. Confirm it covers the final commit range; disposition any actionable findings before human merge. The PR remains unmerged by this task.
+
+## r4 local review disposition
+
+The repair was reviewed against the six frozen findings. No raw paging flag or
+generic provider write path remains; origin rejection occurs before App access;
+the App/direct stream boundary validates source route semantics; promoted
+deletes retain typed destructive confirmation and 404 idempotency; and generated
+docs reflect the declaration counts. Local checks are green, including the
+full generator package, source/operation evidence, runtime preflight, canon,
+docs/website generation, and a 212/212 credential-boundary census. A fresh
+independent Codex audit of the pushed SHA remains required before review
+threads can be closed or a human considers merge.

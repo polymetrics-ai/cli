@@ -196,6 +196,39 @@ func Preflight(connector connectors.Connector, path []string) error {
 	return err
 }
 
+// PreflightSourceBoundOrigin refuses a caller-selected origin before the App
+// resolves credentials or constructs authentication state. It is deliberately
+// narrower than generic configuration validation: only a declared
+// source_operation uses the engine's closed origin equivalence.
+func PreflightSourceBoundOrigin(connector connectors.Connector, path []string, config map[string]string) error {
+	cmd, command, err := resolvePreflightCommand(connector, path)
+	if err != nil {
+		return err
+	}
+	if strings.TrimSpace(cmd.SourceOperation) == "" {
+		return nil
+	}
+	preflighter, ok := connector.(connectors.SourceBoundOriginPreflighter)
+	if !ok {
+		return &BlockedCommandError{Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "source-bound command does not expose declared origin preflight"}
+	}
+	cfg := connectors.RuntimeConfig{Config: config}
+	switch cmd.Intent {
+	case "direct_read":
+		if strings.TrimSpace(cmd.Operation) == "" {
+			return &BlockedCommandError{Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "source-bound direct read has no operation"}
+		}
+		return preflighter.PreflightSourceBoundOperationOrigin(cmd.Operation, cfg)
+	case "etl":
+		if strings.TrimSpace(cmd.Stream) == "" {
+			return &BlockedCommandError{Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "source-bound ETL read has no stream"}
+		}
+		return preflighter.PreflightSourceBoundStreamOrigin(cmd.Stream, cfg)
+	default:
+		return &BlockedCommandError{Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "source-bound origin preflight is available only for read commands"}
+	}
+}
+
 func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req Request) (WriteCommand, error) {
 	cmd, command, err := resolvePreflightCommand(connector, req.Path)
 	if err != nil {

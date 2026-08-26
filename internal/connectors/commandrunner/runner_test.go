@@ -34,6 +34,10 @@ type fakeConnector struct {
 	operationReadBindingsErr   error
 	sourceBoundRead            sourceBoundReadPreflightCall
 	sourceBoundReadErr         error
+	sourceBoundOriginOperation string
+	sourceBoundOriginStream    string
+	sourceBoundOriginConfig    connectors.RuntimeConfig
+	sourceBoundOriginErr       error
 	operationJSONVariable      operationStructuredJSONVariablePreflightCall
 	operationJSONVariableErr   error
 	operationJSONBodyField     operationStructuredJSONVariablePreflightCall
@@ -277,6 +281,16 @@ func (f *fakeConnector) PreflightOperationDirectReadBindings(operation string, p
 func (f *fakeConnector) PreflightSourceBoundRead(operation, sourceOperation, method, path string) error {
 	f.sourceBoundRead = sourceBoundReadPreflightCall{operation: operation, sourceOperation: sourceOperation, method: method, path: path}
 	return f.sourceBoundReadErr
+}
+func (f *fakeConnector) PreflightSourceBoundOperationOrigin(operation string, cfg connectors.RuntimeConfig) error {
+	f.sourceBoundOriginOperation = operation
+	f.sourceBoundOriginConfig = cfg
+	return f.sourceBoundOriginErr
+}
+func (f *fakeConnector) PreflightSourceBoundStreamOrigin(stream string, cfg connectors.RuntimeConfig) error {
+	f.sourceBoundOriginStream = stream
+	f.sourceBoundOriginConfig = cfg
+	return f.sourceBoundOriginErr
 }
 func (f *fakeConnector) PreflightOperationStructuredJSONVariable(operation, variable string) error {
 	f.operationJSONVariable = operationStructuredJSONVariablePreflightCall{operation: operation, variable: variable}
@@ -2175,6 +2189,23 @@ func TestRunSourceBoundOperationDirectReadRejectsBeforeDispatch(t *testing.T) {
 	}
 	if connector.operationDirectReadReq.Operation != "get_agent" {
 		t.Fatalf("valid source-bound read did not dispatch fixed operation: %#v", connector.operationDirectReadReq)
+	}
+}
+
+func TestPreflightSourceBoundOriginUsesPublicConfigurationBeforeDispatch(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "agents get-agent", Intent: "direct_read", Availability: "implemented",
+		Operation: "get_agent", SourceOperation: "asana.rest.getAgent", OutputPolicy: "json_redacted",
+		APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/agents/{agent_gid}"}},
+		Flags:      []connectors.CommandSurfaceFlag{{Name: "agent-gid", Type: "string", Required: true, MapsTo: "path.agent_gid"}},
+	}}}}
+	connector.sourceBoundOriginErr = errors.New("rejects configured base_url override")
+	err := PreflightSourceBoundOrigin(connector, []string{"agents", "get-agent"}, map[string]string{"base_url": "https://invalid.example"})
+	if err == nil || !strings.Contains(err.Error(), "configured base_url") {
+		t.Fatalf("source-bound origin preflight error = %v, want configured-origin refusal", err)
+	}
+	if connector.sourceBoundOriginOperation != "get_agent" || connector.sourceBoundOriginConfig.Config["base_url"] != "https://invalid.example" {
+		t.Fatalf("source-bound origin preflight = operation %q config %#v, want declared operation and public overlay", connector.sourceBoundOriginOperation, connector.sourceBoundOriginConfig.Config)
 	}
 }
 

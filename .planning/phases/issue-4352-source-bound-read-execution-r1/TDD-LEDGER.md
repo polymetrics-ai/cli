@@ -19,6 +19,35 @@ Record exact commands, intended red failure, and full green result as each group
 - **Intermediate red:** after copying only the Asana bundle, the same test failed `execution evidence regressed`, proving the isolated workspace also needs Asana's website evidence rather than an implicit repository-tree dependency.
 - **Green:** the isolated workspace now copies the referenced Asana bundle and carries the Asana + GitHub website rows. The exact command passed in `6.906s`; mutation controls inside each fixed-100 test remain negative proof that a changed expected digest still fails.
 
+### r4 six-finding red/green completion
+
+- **AUDIT-001 Red:** the source projection fixture emitted `query.limit`; the
+  retained source-bound surface also exposed provider paging controls. **Green:**
+  `TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL`,
+  `TestSourceBoundReadsRejectRawProviderPagingControls`, and
+  `TestSourceBoundReadHelpUsesClosedPagingFlags` pass; source import and help
+  show no source-owned `offset`/`limit` flag and derived navigation remains.
+- **AUDIT-002 Red:** invalid source origin was admitted only after later app
+  work. **Green:** `TestSourceBoundOriginRejectsBeforeAppOrCredential` uses an
+  uninitialised project and observes the source-origin error, never `missing
+  project` or `missing --credential`; engine/commandrunner preflight tests
+  pass with public configuration only.
+- **AUDIT-003 Red:** `Read` had no source-bound stream route proof. **Green:**
+  `TestReadRejectsSourceBoundStreamDriftBeforeOriginOrAuthentication` rejects
+  method, path, records, and pagination substitutions before origin/auth.
+- **AUDIT-004 Red:** source import/validation exposed 21 eligible Asana
+  mutations without an action, and the first promotion attempt failed
+  validation because command-owned `approval.confirm` flags were invalid.
+  **Green:** the action materializer removes that duplicate mapping; all 94
+  actions execute through the real reverse-ETL test path and the source test
+  proves exactly 19 DELETE + 2 POST endpoint bindings.
+- **AUDIT-005 Red/Green:** recorded above; the final full
+  `go test -timeout 20m ./cmd/connectorgen` additionally completed with pass.
+- **AUDIT-006 Red:** `pm docs validate --connectors-dir docs/connectors`
+  reported stale catalog output. **Green:** `pm docs generate`, website data
+  generation, documentation validation, and the 34 website script tests pass;
+  generated help shows the promoted delete as `implemented`.
+
 ## Lifecycle
 
 - GSD source resolution: `scripts/gsd doctor`, all five required `scripts/gsd sources` commands, and `go run ./cmd/agentcontractgen check` passed before planning.

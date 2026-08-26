@@ -3,7 +3,7 @@
   "docs": "https://developers.asana.com/reference/rest-api-reference (pinned source: https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml)",
   "reviewed_at": "2026-07-31",
   "operation_ledger_version": 1,
-  "scope": "Every HTTP operation in the pinned official Asana OpenAPI paths map is represented exactly once. Existing executable streams/writes stay covered_by. All remaining operations are blocked/planned fixed-target rows; destructive/admin/delete operations are in scope only through named reverse-ETL actions with typed destructive confirmation and plan -> preview -> explicit approval -> execute. The /batch raw subrequest wrapper is disallowed/not-applicable because every underlying operation is represented individually.",
+  "scope": "Every HTTP operation in the pinned official Asana OpenAPI paths map is represented exactly once: 212 executable routes use covered_by, 36 source-backed operations name their exact incomplete foundation, and /batch is the sole not-applicable generic wrapper. Destructive/admin/delete operations are exposed only through named reverse-ETL actions with typed destructive confirmation and plan -> preview -> explicit approval -> execute. The /batch raw subrequest wrapper is disallowed because every underlying documented operation is represented individually.",
   "endpoints": [
     {
       "method": "GET",
@@ -20,35 +20,23 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAccessRequest",
         "source_url": "https://developers.asana.com/reference/createaccessrequest",
-        "notes": "official_operation_id=createAccessRequest; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.createAccessRequest"
       }
     },
     {
       "method": "POST",
       "path": "/access_requests/{access_request_gid}/approve",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/approveaccessrequest",
-        "notes": "official_operation_id=approveAccessRequest; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "approve_access_request"
       }
     },
     {
       "method": "POST",
       "path": "/access_requests/{access_request_gid}/reject",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/rejectaccessrequest",
-        "notes": "official_operation_id=rejectAccessRequest; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "reject_access_request"
       }
     },
     {
@@ -94,22 +82,16 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateAllocation",
         "source_url": "https://developers.asana.com/reference/updateallocation",
-        "notes": "official_operation_id=updateAllocation; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.updateAllocation"
       }
     },
     {
       "method": "DELETE",
       "path": "/allocations/{allocation_gid}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/deleteallocation",
-        "notes": "official_operation_id=deleteAllocation; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "delete_allocation"
       }
     },
     {
@@ -127,9 +109,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAllocation",
         "source_url": "https://developers.asana.com/reference/createallocation",
-        "notes": "official_operation_id=createAllocation; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.createAllocation"
       }
     },
     {
@@ -142,14 +124,8 @@
     {
       "method": "DELETE",
       "path": "/attachments/{attachment_gid}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned destructive attachment operation; blocked until named write action has a typed schema, redaction, idempotency evidence, confirm: \"destructive\", and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/deleteattachment",
-        "notes": "official_operation_id=deleteAttachment; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "delete_attachment"
       }
     },
     {
@@ -167,9 +143,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned bounded attachment upload; blocked until file-upload input mode, JSON response redaction, max-byte policy, multipart fixture evidence, plan -> preview -> approval -> execute, and typed confirmation are authored.",
+        "reason": "missing_foundation=cli-request-encoding-foundation-r1; missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAttachmentForObject",
         "source_url": "https://developers.asana.com/reference/createattachmentforobject",
-        "notes": "official_operation_id=createAttachmentForObject; lane=file_upload"
+        "notes": "source_operation=asana.rest.createAttachmentForObject"
       }
     },
     {
@@ -187,9 +163,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Asana /batch is a generic subrequest wrapper that would expose raw method/path/body passthrough; every underlying documented operation is represented as its own typed row instead.",
+        "reason": "not_applicable=generic_batch_wrapper; source_operation=asana.rest.createBatchRequest",
         "source_url": "https://developers.asana.com/reference/createbatchrequest",
-        "notes": "official_operation_id=createBatchRequest; lane=excluded_not_applicable"
+        "notes": "source_operation=asana.rest.createBatchRequest"
       }
     },
     {
@@ -207,9 +183,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createBudget",
         "source_url": "https://developers.asana.com/reference/createbudget",
-        "notes": "official_operation_id=createBudget; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.createBudget"
       }
     },
     {
@@ -227,22 +203,16 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateBudget",
         "source_url": "https://developers.asana.com/reference/updatebudget",
-        "notes": "official_operation_id=updateBudget; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.updateBudget"
       }
     },
     {
       "method": "DELETE",
       "path": "/budgets/{budget_gid}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/deletebudget",
-        "notes": "official_operation_id=deleteBudget; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "delete_budget"
       }
     },
     {
@@ -297,14 +267,8 @@
     {
       "method": "DELETE",
       "path": "/custom_fields/{custom_field_gid}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/deletecustomfield",
-        "notes": "official_operation_id=deleteCustomField; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "delete_custom_field"
       }
     },
     {
@@ -406,9 +370,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeSupportingRelationship",
         "source_url": "https://developers.asana.com/reference/removesupportingrelationship",
-        "notes": "official_operation_id=removeSupportingRelationship; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.removeSupportingRelationship"
       }
     },
     {
@@ -428,14 +392,8 @@
     {
       "method": "DELETE",
       "path": "/goals/{goal_gid}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/deletegoal",
-        "notes": "official_operation_id=deleteGoal; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "delete_goal"
       }
     },
     {
@@ -481,9 +439,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowers",
         "source_url": "https://developers.asana.com/reference/removefollowers",
-        "notes": "official_operation_id=removeFollowers; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.removeFollowers"
       }
     },
     {
@@ -508,9 +466,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForGoal",
         "source_url": "https://developers.asana.com/reference/removecustomfieldsettingforgoal",
-        "notes": "official_operation_id=removeCustomFieldSettingForGoal; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.removeCustomFieldSettingForGoal"
       }
     },
     {
@@ -535,9 +493,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-openapi30-reference-sibling-foundation-r1; missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createMembership",
         "source_url": "https://developers.asana.com/reference/createmembership",
-        "notes": "official_operation_id=createMembership; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.createMembership"
       }
     },
     {
@@ -548,8 +506,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "Locked source operation asana.rest.getMembership has no field-complete declaration-owned executable route.",
-        "notes": "Named dependency: source_operation=asana.rest.getMembership"
+        "reason": "missing_foundation=cli-openapi30-reference-sibling-foundation-r1; source_operation=asana.rest.getMembership",
+        "notes": "source_operation=asana.rest.getMembership"
       }
     },
     {
@@ -560,22 +518,16 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateMembership",
         "source_url": "https://developers.asana.com/reference/updatemembership",
-        "notes": "official_operation_id=updateMembership; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.updateMembership"
       }
     },
     {
       "method": "DELETE",
       "path": "/memberships/{membership_gid}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/deletemembership",
-        "notes": "official_operation_id=deleteMembership; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "delete_membership"
       }
     },
     {
@@ -595,14 +547,8 @@
     {
       "method": "DELETE",
       "path": "/ooo_entries/{ooo_entry_gid}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/deleteoooentry",
-        "notes": "official_operation_id=deleteOooEntry; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "delete_ooo_entry"
       }
     },
     {
@@ -627,9 +573,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createOrganizationExport",
         "source_url": "https://developers.asana.com/reference/createorganizationexport",
-        "notes": "official_operation_id=createOrganizationExport; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.createOrganizationExport"
       }
     },
     {
@@ -691,14 +637,8 @@
     {
       "method": "DELETE",
       "path": "/portfolios/{portfolio_gid}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/deleteportfolio",
-        "notes": "official_operation_id=deletePortfolio; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "delete_portfolio"
       }
     },
     {
@@ -723,9 +663,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeItemForPortfolio",
         "source_url": "https://developers.asana.com/reference/removeitemforportfolio",
-        "notes": "official_operation_id=removeItemForPortfolio; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.removeItemForPortfolio"
       }
     },
     {
@@ -743,9 +683,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForPortfolio",
         "source_url": "https://developers.asana.com/reference/removecustomfieldsettingforportfolio",
-        "notes": "official_operation_id=removeCustomFieldSettingForPortfolio; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.removeCustomFieldSettingForPortfolio"
       }
     },
     {
@@ -763,9 +703,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeMembersForPortfolio",
         "source_url": "https://developers.asana.com/reference/removemembersforportfolio",
-        "notes": "official_operation_id=removeMembersForPortfolio; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.removeMembersForPortfolio"
       }
     },
     {
@@ -792,14 +732,8 @@
     {
       "method": "DELETE",
       "path": "/project_briefs/{project_brief_gid}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/deleteprojectbrief",
-        "notes": "official_operation_id=deleteProjectBrief; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "delete_project_brief"
       }
     },
     {
@@ -861,14 +795,8 @@
     {
       "method": "DELETE",
       "path": "/project_statuses/{project_status_gid}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/deleteprojectstatus",
-        "notes": "official_operation_id=deleteProjectStatus; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "delete_project_status"
       }
     },
     {
@@ -895,14 +823,8 @@
     {
       "method": "DELETE",
       "path": "/project_templates/{project_template_gid}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/deleteprojecttemplate",
-        "notes": "official_operation_id=deleteProjectTemplate; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "delete_project_template"
       }
     },
     {
@@ -1025,9 +947,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForProject",
         "source_url": "https://developers.asana.com/reference/removecustomfieldsettingforproject",
-        "notes": "official_operation_id=removeCustomFieldSettingForProject; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.removeCustomFieldSettingForProject"
       }
     },
     {
@@ -1052,9 +974,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeMembersForProject",
         "source_url": "https://developers.asana.com/reference/removemembersforproject",
-        "notes": "official_operation_id=removeMembersForProject; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.removeMembersForProject"
       }
     },
     {
@@ -1072,9 +994,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowersForProject",
         "source_url": "https://developers.asana.com/reference/removefollowersforproject",
-        "notes": "official_operation_id=removeFollowersForProject; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.removeFollowersForProject"
       }
     },
     {
@@ -1099,9 +1021,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createRate",
         "source_url": "https://developers.asana.com/reference/createrate",
-        "notes": "official_operation_id=createRate; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.createRate"
       }
     },
     {
@@ -1119,22 +1041,16 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateRate",
         "source_url": "https://developers.asana.com/reference/updaterate",
-        "notes": "official_operation_id=updateRate; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.updateRate"
       }
     },
     {
       "method": "DELETE",
       "path": "/rates/{rate_gid}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/deleterate",
-        "notes": "official_operation_id=deleteRate; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "delete_rate"
       }
     },
     {
@@ -1159,9 +1075,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createRole",
         "source_url": "https://developers.asana.com/reference/createrole",
-        "notes": "official_operation_id=createRole; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.createRole"
       }
     },
     {
@@ -1179,22 +1095,16 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateRole",
         "source_url": "https://developers.asana.com/reference/updaterole",
-        "notes": "official_operation_id=updateRole; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.updateRole"
       }
     },
     {
       "method": "DELETE",
       "path": "/roles/{role_gid}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/deleterole",
-        "notes": "official_operation_id=deleteRole; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "delete_role"
       }
     },
     {
@@ -1263,14 +1173,8 @@
     {
       "method": "DELETE",
       "path": "/status_updates/{status_update_gid}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/deletestatus",
-        "notes": "official_operation_id=deleteStatus; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "delete_status"
       }
     },
     {
@@ -1304,14 +1208,8 @@
     {
       "method": "DELETE",
       "path": "/stories/{story_gid}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/deletestory",
-        "notes": "official_operation_id=deleteStory; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "delete_story"
       }
     },
     {
@@ -1415,14 +1313,8 @@
     {
       "method": "DELETE",
       "path": "/task_templates/{task_template_gid}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/deletetasktemplate",
-        "notes": "official_operation_id=deleteTaskTemplate; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "delete_task_template"
       }
     },
     {
@@ -1545,9 +1437,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeDependenciesForTask",
         "source_url": "https://developers.asana.com/reference/removedependenciesfortask",
-        "notes": "official_operation_id=removeDependenciesForTask; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.removeDependenciesForTask"
       }
     },
     {
@@ -1572,9 +1464,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeDependentsForTask",
         "source_url": "https://developers.asana.com/reference/removedependentsfortask",
-        "notes": "official_operation_id=removeDependentsForTask; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.removeDependentsForTask"
       }
     },
     {
@@ -1592,9 +1484,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeProjectForTask",
         "source_url": "https://developers.asana.com/reference/removeprojectfortask",
-        "notes": "official_operation_id=removeProjectForTask; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.removeProjectForTask"
       }
     },
     {
@@ -1612,9 +1504,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeTagForTask",
         "source_url": "https://developers.asana.com/reference/removetagfortask",
-        "notes": "official_operation_id=removeTagForTask; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.removeTagForTask"
       }
     },
     {
@@ -1632,9 +1524,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowerForTask",
         "source_url": "https://developers.asana.com/reference/removefollowerfortask",
-        "notes": "official_operation_id=removeFollowerForTask; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.removeFollowerForTask"
       }
     },
     {
@@ -1729,9 +1621,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeUserForTeam",
         "source_url": "https://developers.asana.com/reference/removeuserforteam",
-        "notes": "official_operation_id=removeUserForTeam; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.removeUserForTeam"
       }
     },
     {
@@ -1763,22 +1655,16 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateTimeTrackingCategory",
         "source_url": "https://developers.asana.com/reference/updatetimetrackingcategory",
-        "notes": "official_operation_id=updateTimeTrackingCategory; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.updateTimeTrackingCategory"
       }
     },
     {
       "method": "DELETE",
       "path": "/time_tracking_categories/{time_tracking_category_gid}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/deletetimetrackingcategory",
-        "notes": "official_operation_id=deleteTimeTrackingCategory; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "delete_time_tracking_category"
       }
     },
     {
@@ -1803,9 +1689,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createTimeTrackingCategory",
         "source_url": "https://developers.asana.com/reference/createtimetrackingcategory",
-        "notes": "official_operation_id=createTimeTrackingCategory; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.createTimeTrackingCategory"
       }
     },
     {
@@ -1839,14 +1725,8 @@
     {
       "method": "DELETE",
       "path": "/time_tracking_entries/{time_tracking_entry_gid}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/deletetimetrackingentry",
-        "notes": "official_operation_id=deleteTimeTrackingEntry; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "delete_time_tracking_entry"
       }
     },
     {
@@ -1871,9 +1751,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateTimesheetApprovalStatus",
         "source_url": "https://developers.asana.com/reference/updatetimesheetapprovalstatus",
-        "notes": "official_operation_id=updateTimesheetApprovalStatus; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.updateTimesheetApprovalStatus"
       }
     },
     {
@@ -1891,9 +1771,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createTimesheetApprovalStatus",
         "source_url": "https://developers.asana.com/reference/createtimesheetapprovalstatus",
-        "notes": "official_operation_id=createTimesheetApprovalStatus; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.createTimesheetApprovalStatus"
       }
     },
     {
@@ -1988,9 +1868,9 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createWebhook",
         "source_url": "https://developers.asana.com/reference/createwebhook",
-        "notes": "official_operation_id=createWebhook; lane=cdc_changefeed"
+        "notes": "source_operation=asana.rest.createWebhook"
       }
     },
     {
@@ -2008,22 +1888,16 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateWebhook",
         "source_url": "https://developers.asana.com/reference/updatewebhook",
-        "notes": "official_operation_id=updateWebhook; lane=cdc_changefeed"
+        "notes": "source_operation=asana.rest.updateWebhook"
       }
     },
     {
       "method": "DELETE",
       "path": "/webhooks/{webhook_gid}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
-        "source_url": "https://developers.asana.com/reference/deletewebhook",
-        "notes": "official_operation_id=deleteWebhook; lane=cdc_changefeed"
+      "covered_by": {
+        "write": "delete_webhook"
       }
     },
     {
@@ -2083,9 +1957,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeUserForWorkspace",
         "source_url": "https://developers.asana.com/reference/removeuserforworkspace",
-        "notes": "official_operation_id=removeUserForWorkspace; lane=reverse_etl_write"
+        "notes": "source_operation=asana.rest.removeUserForWorkspace"
       }
     },
     {

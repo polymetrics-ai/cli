@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"maps"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -449,7 +450,7 @@ func TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL(t *t
 }`)
 
 	result := sourceImportResult{Operations: []sourceOperationDescriptor{
-		{Connector: "asana", SourceID: "asana.rest.getAccessRequests", ProviderOperationID: "getAccessRequests", Method: "GET", Path: "/access_requests", Request: sourceRequestDescriptor{Query: []sourceParameterDescriptor{{Name: "target", Required: true, Schema: map[string]any{"type": "string"}}, {Name: "limit", Required: false, Schema: map[string]any{"type": "integer"}}}}, Output: sourceOutputDescriptor{Class: sourceOutputJSON}},
+		{Connector: "asana", SourceID: "asana.rest.getAccessRequests", ProviderOperationID: "getAccessRequests", Method: "GET", Path: "/access_requests", Request: sourceRequestDescriptor{Query: []sourceParameterDescriptor{{Name: "target", Required: true, Schema: map[string]any{"type": "string"}}, {Name: "limit", Required: false, Schema: map[string]any{"type": "integer"}}, {Name: "offset", Required: false, Schema: map[string]any{"type": "integer"}}}}, Output: sourceOutputDescriptor{Class: sourceOutputJSON}},
 		{Connector: "asana", SourceID: "asana.rest.getAgent", ProviderOperationID: "getAgent", Method: "GET", Path: "/agents/{agent_gid}", Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{{Name: "agent_gid", Required: true, Schema: map[string]any{"type": "string"}}}}, Output: sourceOutputDescriptor{Class: sourceOutputJSON}},
 		{Connector: "asana", SourceID: "asana.rest.getWorkspaces", ProviderOperationID: "getWorkspaces", Method: "GET", Path: "/workspaces", Pagination: map[string]any{"type": "next_url", "next_url_path": "next_page.uri"}, Output: sourceOutputDescriptor{Class: sourceOutputJSON}},
 		{Connector: "asana", SourceID: "asana.rest.getPending", ProviderOperationID: "getPending", Method: "GET", Path: "/pending", Output: sourceOutputDescriptor{Class: sourceOutputJSON}},
@@ -500,8 +501,8 @@ func TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL(t *t
 	}
 	if command := commands["access-requests get-access-requests"]; command.Intent != "direct_read" || command.Availability != "implemented" || command.SourceOperation != "asana.rest.getAccessRequests" {
 		t.Fatalf("access-requests command = %+v, want bounded implemented direct_read", command)
-	} else if len(command.Flags) != 2 || command.Flags[0].MapsTo != "query.target" || !command.Flags[0].Required || command.Flags[0].Type != "string" || command.Flags[1].MapsTo != "query.limit" || command.Flags[1].Required || command.Flags[1].Type != "integer" {
-		t.Fatalf("access-requests typed query contract = %+v, want required query.target string and optional query.limit integer", command.Flags)
+	} else if len(command.Flags) != 1 || command.Flags[0].MapsTo != "query.target" || !command.Flags[0].Required || command.Flags[0].Type != "string" {
+		t.Fatalf("access-requests typed query contract = %+v, want only required query.target; raw provider paging stays behind --page/--page-cursor", command.Flags)
 	}
 	agent := commands["agents get-agent"]
 	if agent.Intent != "direct_read" || agent.Availability != "implemented" || agent.SourceOperation != "asana.rest.getAgent" {
@@ -533,7 +534,7 @@ func TestRetainedAsanaSourceImportRejectsReadProjectionDrift(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if stdout, stderr, exit := runAsanaSourceImport(t, defsDir, "--read-projection-only"); exit != 0 {
+	if stdout, stderr, exit := runAsanaSourceImport(t, defsDir); exit != 0 {
 		t.Fatalf("generate retained Asana source descriptor exit=%d stdout=%q stderr=%q", exit, stdout, stderr)
 	}
 	if writesAfter, err := os.ReadFile(writesPath); err != nil || !bytes.Equal(writesBefore, writesAfter) {
@@ -743,13 +744,12 @@ func TestRetainedAsanaSourceImportSelectsSourceBackedFanOutETLStreams(t *testing
 
 func TestRetainedAsanaMutationDispositionsCoverEveryDeferredSourceOperation(t *testing.T) {
 	defsDir, bundleDir := copyInstalledAsanaProjectionBundle(t)
-	artifactsBefore := asanaSourceImportPreservedArtifacts(t, bundleDir)
 	absent, err := sourceProjectionReadNonExecutableMutationDispositions(bundleDir)
 	if err != nil {
 		t.Fatalf("read Asana absent-action dispositions: %v", err)
 	}
-	if len(absent) != 21 {
-		t.Fatalf("Asana absent-action dispositions = %d, want 21 without an implemented legacy command", len(absent))
+	if len(absent) != 0 {
+		t.Fatalf("Asana absent-action dispositions = %d, want none: source-complete no-body mutations use the existing reverse-ETL/delete action lane", len(absent))
 	}
 	partial, err := sourceProjectionReadPartialMutationCoverageDispositions(bundleDir)
 	if err != nil {
@@ -765,10 +765,9 @@ func TestRetainedAsanaMutationDispositionsCoverEveryDeferredSourceOperation(t *t
 	if foundations["cli-request-schema-foundation-r1"] != 65 || foundations["source-path-parameter-alias-foundation-r1"] != 4 || len(foundations) != 2 {
 		t.Fatalf("Asana partial-coverage foundations = %+v, want 65 typed-contract and 4 legacy path-alias mappings", foundations)
 	}
-	if stdout, stderr, exit := runAsanaSourceImport(t, defsDir, "--read-projection-only"); exit != 0 {
+	if stdout, stderr, exit := runAsanaSourceImport(t, defsDir); exit != 0 {
 		t.Fatalf("generate retained Asana mutation dispositions exit=%d stdout=%q stderr=%q", exit, stdout, stderr)
 	}
-	assertAsanaSourceImportPreservedArtifacts(t, bundleDir, artifactsBefore)
 
 	descriptorRaw, err := os.ReadFile(filepath.Join(bundleDir, "sources", "asana-operation-descriptor.json"))
 	if err != nil {
@@ -778,12 +777,74 @@ func TestRetainedAsanaMutationDispositionsCoverEveryDeferredSourceOperation(t *t
 	if err := decodeSourceStrictJSON(descriptorRaw, &descriptor); err != nil {
 		t.Fatalf("decode retained Asana descriptor: %v", err)
 	}
+	eligible := 0
+	for _, operation := range descriptor.Operations {
+		if sourceProjectionNoBodyMutationActionEligible(operation) {
+			eligible++
+		}
+	}
+	if eligible != 21 {
+		t.Fatalf("source-complete no-body mutation candidates = %d, want 21", eligible)
+	}
 	surface, err := sourceProjectionExecutionSurface(bundleDir, "asana")
 	if err != nil {
 		t.Fatalf("load Asana execution surface: %v", err)
 	}
 	if findings := validateSourceExecutableCoverage(surface, "sources/asana-operation-descriptor.json", descriptor); len(findings) != 0 {
 		t.Fatalf("retained Asana source dispositions leave executable-coverage findings: %+v", findings)
+	}
+	endpoints := map[string]engine.SurfaceEndpoint{}
+	for _, endpoint := range surface.Surface.Endpoints {
+		endpoints[sourceProjectionEndpointKey(endpoint.Method, endpoint.Path)] = endpoint
+	}
+	actions := map[string]engine.WriteAction{}
+	for _, action := range surface.Writes {
+		actions[action.Name] = action
+	}
+	wantPromoted := map[string]bool{
+		"asana.rest.deleteAllocation": true, "asana.rest.deleteAttachment": true, "asana.rest.deleteBudget": true, "asana.rest.deleteCustomField": true, "asana.rest.deleteGoal": true, "asana.rest.deleteMembership": true, "asana.rest.deleteOooEntry": true, "asana.rest.deletePortfolio": true, "asana.rest.deleteProjectBrief": true, "asana.rest.deleteProjectStatus": true, "asana.rest.deleteProjectTemplate": true, "asana.rest.deleteRate": true, "asana.rest.deleteRole": true, "asana.rest.deleteStatus": true, "asana.rest.deleteStory": true, "asana.rest.deleteTaskTemplate": true, "asana.rest.deleteTimeTrackingCategory": true, "asana.rest.deleteTimeTrackingEntry": true, "asana.rest.deleteWebhook": true, "asana.rest.approveAccessRequest": true, "asana.rest.rejectAccessRequest": true,
+	}
+	deletePromotions, postPromotions := 0, 0
+	for _, operation := range descriptor.Operations {
+		if !wantPromoted[operation.SourceID] {
+			continue
+		}
+		if !sourceProjectionMutationActionIsComplete(surface, operation) {
+			t.Fatalf("source-complete mutation %q did not reach the reverse-ETL/delete action lane", operation.SourceID)
+		}
+		endpoint, found := endpoints[sourceProjectionEndpointKey(operation.Method, operation.Path)]
+		if !found || endpoint.CoveredBy == nil || endpoint.CoveredBy.Write == "" {
+			t.Fatalf("source-complete mutation %q is not bound to an api_surface write endpoint", operation.SourceID)
+		}
+		action := actions[endpoint.CoveredBy.Write]
+		if strings.EqualFold(operation.Method, "DELETE") {
+			deletePromotions++
+			if action.Kind != "delete" || action.Confirm != "destructive" {
+				t.Fatalf("source DELETE %q uses action %+v, want destructive delete action", operation.SourceID, action)
+			}
+		} else if strings.EqualFold(operation.Method, "POST") {
+			postPromotions++
+			if action.Kind != "update" {
+				t.Fatalf("source no-body POST %q uses action %+v, want update action", operation.SourceID, action)
+			}
+		} else {
+			t.Fatalf("source-complete mutation %q has method %s, want DELETE or POST", operation.SourceID, operation.Method)
+		}
+		delete(wantPromoted, operation.SourceID)
+	}
+	if len(wantPromoted) != 0 {
+		t.Fatalf("source-complete mutation promotions missing: %v", maps.Keys(wantPromoted))
+	}
+	if deletePromotions != 19 || postPromotions != 2 {
+		t.Fatalf("source-complete action lanes = DELETE %d, POST %d; want DELETE 19, POST 2", deletePromotions, postPromotions)
+	}
+	if surface.CLISurface == nil {
+		t.Fatal("Asana execution surface has no CLI declaration")
+	}
+	for _, command := range surface.CLISurface.Commands {
+		if strings.HasPrefix(command.Summary, "Planned fixed-target Asana ") {
+			t.Fatalf("source-projected Asana command %q retains a historical planned label", command.Path)
+		}
 	}
 }
 

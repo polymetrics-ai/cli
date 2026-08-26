@@ -296,6 +296,33 @@ func PreflightSourceBoundStreamRead(b Bundle, streamName, sourceOperation, metho
 	return fmt.Errorf("operation %q does not select declared stream %q", op.ID, streamName)
 }
 
+// preflightDeclaredSourceBoundStreamRead applies the same source-bound stream
+// proof to direct engine callers that commandrunner applies to CLI commands.
+// Legacy streams have no SourceOperation and retain their established path.
+func preflightDeclaredSourceBoundStreamRead(b Bundle, stream StreamSpec) error {
+	var sourceBound *OperationSpec
+	for index := range b.Operations {
+		operation := &b.Operations[index]
+		if operation.Kind != "stream_etl" || operation.Composite == nil || operation.SourceOperation == nil {
+			continue
+		}
+		for _, step := range operation.Composite.Steps {
+			if step != "stream:"+stream.Name {
+				continue
+			}
+			if sourceBound != nil {
+				return fmt.Errorf("source-bound stream %q is selected by more than one source-bound operation", stream.Name)
+			}
+			sourceBound = operation
+		}
+	}
+	if sourceBound == nil {
+		return nil
+	}
+	binding := sourceBound.SourceOperation
+	return PreflightSourceBoundStreamRead(b, stream.Name, binding.ID, binding.Method, binding.Path)
+}
+
 // sourceBoundStreamPathMatchesLockedPath accepts only declaration-owned
 // connection values that occupy an entire source path-variable segment. It is
 // deliberately narrower than interpolation: literal route segments must be

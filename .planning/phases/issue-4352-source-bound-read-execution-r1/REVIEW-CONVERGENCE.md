@@ -19,12 +19,42 @@ The review maps provider operations across ETL, reverse ETL, direct read, direct
 
 | ID | Invariant and repair | Required red/green regression | State |
 | --- | --- | --- | --- |
-| AUDIT-001 | Projection must not emit raw paging `offset` or dead/colliding command `limit`; use only the declared closed page contract. | Red: current generated source-bound Asana flags contain raw controls. Green: projection/help/direct APIs omit them while `--page`/`--page-cursor` retain derived navigation. | open |
-| AUDIT-002 | Caller-selected source-bound origin must fail before credential lookup, auth cohort/protected state, or provider I/O. Coordinate rather than duplicate #4351's generic input-ordering repair. | Red: a CLI/App observer sees credential/auth work before rejection. Green: origin error with zero credential reads, auth construction, and requester calls. | open |
-| AUDIT-003 | Source-bound ETL source identity, method, path, records, pagination, and origin must be enforced at direct App `Read`/`ReadWithOutcome`, not only CLI preflight. | Red: direct stream literal drift reaches the later boundary. Green: each mismatch rejects before auth/requester use. | open |
-| AUDIT-004 | Nineteen DELETEs and two no-body POSTs have the existing reverse-ETL/delete action foundation and must be promoted; absence of local action is not a foundation. | Red: 21 source-complete mutations remain declared blocked. Green: all reach the credential boundary through plan → preview → approval → execute; real named gaps remain. | open |
-| AUDIT-005 | Fixed-100 isolated inputs must include every connector its cohort references. | Red: fixed-100 isolated tests name missing Asana input. Green: both tests and full generator package pass deterministically. | open |
-| AUDIT-006 | Generated Asana docs/manual/help/website must state actual source-backed counts, implemented lanes, closed pagination, and only real named gaps. | Red: source-derived semantic assertions find stale counts/blockers. Green: regenerated artifacts assert current truth. | open |
+| AUDIT-001 | Projection must not emit raw paging `offset` or dead/colliding command `limit`; use only the declared closed page contract. | Red: current generated source-bound Asana flags contain raw controls. Green: projection/help/direct APIs omit them while `--page`/`--page-cursor` retain derived navigation. | green; final re-audit pending pushed SHA |
+| AUDIT-002 | Caller-selected source-bound origin must fail before credential lookup, auth cohort/protected state, or provider I/O. Coordinate rather than duplicate #4351's generic input-ordering repair. | Red: a CLI/App observer sees credential/auth work before rejection. Green: origin error with zero credential reads, auth construction, and requester calls. | green; final re-audit pending pushed SHA |
+| AUDIT-003 | Source-bound ETL source identity, method, path, records, pagination, and origin must be enforced at direct App `Read`/`ReadWithOutcome`, not only CLI preflight. | Red: direct stream literal drift reaches the later boundary. Green: each mismatch rejects before auth/requester use. | green; final re-audit pending pushed SHA |
+| AUDIT-004 | Nineteen DELETEs and two no-body POSTs have the existing reverse-ETL/delete action foundation and must be promoted; absence of local action is not a foundation. | Red: 21 source-complete mutations remain declared blocked. Green: all reach the credential boundary through plan → preview → approval → execute; real named gaps remain. | green; final re-audit pending pushed SHA |
+| AUDIT-005 | Fixed-100 isolated inputs must include every connector its cohort references. | Red: fixed-100 isolated tests name missing Asana input. Green: both tests and full generator package pass deterministically. | green; final re-audit pending pushed SHA |
+| AUDIT-006 | Generated Asana docs/manual/help/website must state actual source-backed counts, implemented lanes, closed pagination, and only real named gaps. | Red: source-derived semantic assertions find stale counts/blockers. Green: regenerated artifacts assert current truth. | green; final re-audit pending pushed SHA |
+
+## r4 resolution record before final re-audit
+
+- **AUDIT-001:** `sourceProjectionReadParametersComplete` and
+  `sourceProjectionSyncReadParameters` now exclude provider pagination by the
+  shared paging classifier. The regression includes source `limit` and
+  `offset`, commandrunner rejects both as unknown command flags, and built help
+  renders only `--page` and `--page-cursor` under PAGE FLAGS.
+- **AUDIT-002:** CLI calls `commandrunner.PreflightSourceBoundOrigin` after
+  public `--config` parsing and before `withApp`/credential resolution. The
+  engine implements the public-only source origin preflight for operations and
+  streams. PR #4351 remains open at
+  `fd400c501d99daa22210d42f736742706b4d8f1a`; its generic declaration-admission
+  work is related but not a prerequisite and no local bypass was added.
+- **AUDIT-003:** `engine.Read` and `ReadWithOutcome` invoke the declared
+  source-bound stream proof before origin/authentication. The direct-read test
+  rejects method, path, record, and pagination drift before I/O.
+- **AUDIT-004:** 19 DELETE actions and `approve_access_request` /
+  `reject_access_request` are promoted to 94 declared reverse-ETL actions.
+  Their API endpoints use `covered_by.write`; no generic write executor was
+  introduced. The remaining source rows carry exact foundation or
+  not-applicable notes.
+- **AUDIT-005:** fixed-100 creates a fully isolated Asana + GitHub source and
+  website cohort. Its targeted regression and the final full generator package
+  pass.
+- **AUDIT-006:** the Asana definition, generated manual/skill/catalog, help,
+  website data, operation evidence, and certification subject are regenerated
+  from the actual 106 direct-read + 12 ETL + 94 write surface. The sole generic
+  batch wrapper is explicitly not applicable; every remaining source gap is
+  named.
 
 ## Lens coverage
 

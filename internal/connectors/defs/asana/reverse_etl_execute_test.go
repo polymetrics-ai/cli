@@ -51,15 +51,15 @@ const (
 	originalBlockedReverseETL    = 60
 
 	// reverseETLBoundEndpoints is the measured number of api_surface.json rows
-	// bound to a write action, pinned on its own so the ledger arithmetic can
-	// never be satisfied by dropping covered_by blocks and re-blocking them
-	// under a freshly worded reason.
-	reverseETLBoundEndpoints = 73
+	// bound to a real write action. It includes the source-complete no-body
+	// DELETE/POST promotions, so their source coverage cannot drift back to a
+	// blocked ledger row while the command remains executable.
+	reverseETLBoundEndpoints = 94
 
-	// blockedDestructiveOperations is the number of destructive_action rows
-	// that remain unbound pending connector-local action, command, and fixture
-	// authoring; the shared gate alone does not promote them.
-	blockedDestructiveOperations = 36
+	// blockedDestructiveOperations names only the remaining source-incomplete
+	// destructive rows. The 19 source-complete DELETEs are implemented actions,
+	// not blanket deferrals.
+	blockedDestructiveOperations = 16
 )
 
 func loadBundle(t *testing.T) engine.Bundle {
@@ -136,6 +136,36 @@ func TestSourceBoundReadControlsMaterializeEveryCompleteReadLane(t *testing.T) {
 	}
 }
 
+func TestSourceBoundReadsRejectRawProviderPagingControls(t *testing.T) {
+	bundle := loadBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	for _, command := range connector.CommandSurface().Commands {
+		if command.Intent != "direct_read" || command.SourceOperation == "" {
+			continue
+		}
+		for _, flag := range command.Flags {
+			if flag.Name == "offset" || flag.Name == "limit" || flag.MapsTo == "query.offset" || flag.MapsTo == "query.limit" {
+				t.Fatalf("source-bound direct read %q exposes raw provider paging flag %+v; use the declared --page/--page-cursor contract", command.Path, flag)
+			}
+		}
+	}
+
+	for _, rawPagingFlag := range []string{"offset", "limit"} {
+		t.Run(rawPagingFlag, func(t *testing.T) {
+			_, err := commandrunner.Run(context.Background(), connector, commandrunner.Request{
+				Path:  []string{"agents", "get-agents-for-workspace"},
+				Flags: map[string][]string{"workspace-gid": {"fixture-workspace"}, rawPagingFlag: {"1"}},
+			}, func(connectors.Record) error {
+				t.Fatal("raw paging control reached direct-read execution")
+				return nil
+			})
+			if err == nil || !strings.Contains(err.Error(), "unknown flag --"+rawPagingFlag) {
+				t.Fatalf("raw --%s error = %v, want command-level closed-paging refusal", rawPagingFlag, err)
+			}
+		})
+	}
+}
+
 // TestReverseETLLedgerReconciles accounts for every ledger row that originally
 // carried the typed reverse-ETL blocked reason. A promoted row is bound to a
 // write action; a row that could not be promoted must carry one of the two
@@ -188,9 +218,9 @@ func TestReverseETLLedgerReconciles(t *testing.T) {
 	}
 }
 
-// TestDestructiveOperationsStayBlocked pins the destructive rows that must NOT
-// be promoted by this foundation PR, and requires every already-bound DELETE
-// to carry a typed confirmation challenge through the shared gate.
+// TestDestructiveOperationsStayBlocked pins only the remaining source-incomplete
+// destructive rows, and requires every bound DELETE to carry a typed
+// confirmation challenge through the shared gate.
 func TestDestructiveOperationsStayBlocked(t *testing.T) {
 	b := loadBundle(t)
 	actions := map[string]engine.WriteAction{}
@@ -220,7 +250,7 @@ func TestDestructiveOperationsStayBlocked(t *testing.T) {
 		}
 	}
 	if unbound != blockedDestructiveOperations {
-		t.Fatalf("destructive_action rows still unbound = %d, want %d (connector binding is outside this foundation PR)",
+		t.Fatalf("source-incomplete destructive_action rows still unbound = %d, want %d",
 			unbound, blockedDestructiveOperations)
 	}
 }
@@ -274,7 +304,7 @@ func TestReverseETLWriteActionsExecute(t *testing.T) {
 			if !ok {
 				t.Fatalf("write action %q has no cli_surface command", action.Name)
 			}
-			fixture := loadWriteFixture(t, action.Name)
+			fixture := loadWriteFixture(t, action)
 			path := strings.Fields(cmd.Path)
 
 			// An "implemented" command is a promise the runtime keeps: it must
@@ -413,17 +443,37 @@ type writeFixture struct {
 	} `json:"expect"`
 }
 
-func loadWriteFixture(t *testing.T, action string) writeFixture {
+func loadWriteFixture(t *testing.T, action engine.WriteAction) writeFixture {
 	t.Helper()
-	raw, err := os.ReadFile("fixtures/writes/" + action + ".json")
+	raw, err := os.ReadFile("fixtures/writes/" + action.Name + ".json")
+	if os.IsNotExist(err) && action.BodyType == "none" && action.Confirm == "destructive" {
+		// A source-complete no-body mutation has no payload fixture to hand
+		// author. Its declared path fields are the complete bounded record
+		// contract, so derive synthetic safe values and still execute the real
+		// plan -> preview -> approval -> HTTP request route below. Other actions
+		// retain their explicit sanitized fixtures.
+		record := make(map[string]any, len(action.PathFields))
+		for _, field := range action.PathFields {
+			record[field] = "fixture-" + field
+		}
+		path, interpolateErr := engine.InterpolatePath(action.Path, engine.Vars{Record: record})
+		if interpolateErr != nil {
+			t.Fatalf("derive no-body fixture path for %q: %v", action.Name, interpolateErr)
+		}
+		return writeFixture{Record: record, Expect: struct {
+			Method string         `json:"method"`
+			Path   string         `json:"path"`
+			Body   map[string]any `json:"body,omitempty"`
+		}{Method: action.Method, Path: path}}
+	}
 	if err != nil {
-		t.Fatalf("read sanitized fixture for %q: %v", action, err)
+		t.Fatalf("read sanitized fixture for %q: %v", action.Name, err)
 	}
 	var fx writeFixture
 	dec := json.NewDecoder(bytes.NewReader(raw))
 	dec.UseNumber()
 	if err := dec.Decode(&fx); err != nil {
-		t.Fatalf("parse fixture for %q: %v", action, err)
+		t.Fatalf("parse fixture for %q: %v", action.Name, err)
 	}
 	return fx
 }

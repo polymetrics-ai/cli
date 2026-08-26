@@ -75,3 +75,19 @@ and one deferred GET (`asana.rest.getMembership`,
 `cli-openapi30-reference-sibling-foundation-r1`). The current worktree has not
 changed the raw artifact, source lock, `.gitattributes`, other connectors, or
 another worker's branch. Final validation is serialized with 12 GiB free disk.
+
+## r4 direct-PR completion state
+
+The immutable #4356 review set is frozen and locally green on
+`fm/cli-source-bound-read-execution-r1-continuation`. The final repair adds
+closed source paging, public-only origin preflight before `withApp`, direct
+`Read` source-route proof, 21 existing-lane Asana action promotions, fixed-100
+cohort isolation, and regenerated source-backed documentation/evidence. The
+final built-binary Asana census is `212/212` implemented-or-partial commands at
+the `missing --credential` boundary, with zero provider calls or credentials.
+
+Do next: commit the reviewed repair and planning evidence, non-force push only
+to PR #4356's existing branch, verify its remote SHA/base, then request a fresh
+independent Codex audit. Do not merge. PR #4351 at
+`fd400c501d99daa22210d42f736742706b4d8f1a` is related generic admission work,
+not a blocking dependency for this source-bound preflight.

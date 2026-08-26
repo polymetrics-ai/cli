@@ -708,6 +708,15 @@ type SourceBoundStreamReadPreflighter interface {
 	PreflightSourceBoundStreamRead(stream, sourceOperation, method, path string) error
 }
 
+// SourceBoundOriginPreflighter checks the one declared source origin using
+// public configuration only. Command dispatch invokes it before App credential
+// resolution, so a caller cannot cause source-bound credential/auth state to
+// materialize merely by selecting another provider origin.
+type SourceBoundOriginPreflighter interface {
+	PreflightSourceBoundOperationOrigin(operation string, cfg RuntimeConfig) error
+	PreflightSourceBoundStreamOrigin(stream string, cfg RuntimeConfig) error
+}
+
 // OperationStructuredJSONVariablePreflighter exposes the deliberately narrow
 // admission check for a structured CLI value in a fixed GraphQL operation.
 // The operation declaration remains the only authority for which one

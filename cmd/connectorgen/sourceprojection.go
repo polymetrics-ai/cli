@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io/fs"
 	"math"
+	"net/http"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -288,6 +289,46 @@ func projectSourceDescriptorToBundleMode(bundleDir string, result sourceImportRe
 		write := stringField(command, "write")
 		commandsByWrite[write] = append(commandsByWrite[write], command)
 	}
+	noBodyStats, err := sourceProjectionMaterializeNoBodyMutationActions(writes.root, cli.root, operations.root, result)
+	if err != nil {
+		return stats, err
+	}
+	stats.Writes += noBodyStats.Writes
+	stats.CLI += noBodyStats.CLI
+	stats.Operations += noBodyStats.Operations
+	if noBodyStats.Writes > 0 || noBodyStats.CLI > 0 {
+		actionsByEndpoint = map[string][]*orderedObject{}
+		for _, raw := range arrayField(writes.root, "actions") {
+			action, ok := raw.(*orderedObject)
+			if !ok {
+				continue
+			}
+			key := sourceProjectionEndpointKey(stringField(action, "method"), sourceProjectionPath(stringField(action, "path")))
+			actionsByEndpoint[key] = append(actionsByEndpoint[key], action)
+		}
+		commandsByWrite = map[string][]*orderedObject{}
+		for _, raw := range arrayField(cli.root, "commands") {
+			command, ok := raw.(*orderedObject)
+			if !ok || stringField(command, "write") == "" {
+				continue
+			}
+			write := stringField(command, "write")
+			commandsByWrite[write] = append(commandsByWrite[write], command)
+		}
+	}
+	if api.root != nil {
+		stats.Surface += sourceProjectionMaterializeNoBodyMutationSurfaceEndpoints(api.root, writes.root, cli.root, result)
+	}
+	if sourceProjectionIsAsana(result) {
+		gapStats := sourceProjectionAnnotateAsanaMutationFoundationGaps(operations.root, cli.root, api.root, result)
+		stats.Operations += gapStats.Operations
+		stats.CLI += gapStats.CLI
+		stats.Surface += gapStats.Surface
+		readGapStats := sourceProjectionAnnotateAsanaReadFoundationGaps(operations.root, cli.root, api.root, result)
+		stats.Operations += readGapStats.Operations
+		stats.CLI += readGapStats.CLI
+		stats.Surface += readGapStats.Surface
+	}
 
 	for _, operation := range result.Operations {
 		_, readOnly, readOnlyErr := sourceProjectionReadOnlyDeclaration(declarationBundle, operation)
@@ -452,6 +493,454 @@ func projectSourceDescriptorToBundleMode(bundleDir string, result sourceImportRe
 		}
 	}
 	return stats, nil
+}
+
+// sourceProjectionMaterializeNoBodyMutationActions promotes a source-complete
+// fixed mutation only when its existing rest_write operation and canonical CLI
+// command already identify the exact endpoint. It supplies the established
+// reverse-ETL action envelope (including destructive approval), never a
+// generic HTTP write route.
+func sourceProjectionMaterializeNoBodyMutationActions(writes, cli, operations *orderedObject, result sourceImportResult) (sourceProjectionStats, error) {
+	stats := sourceProjectionStats{}
+	for _, source := range result.Operations {
+		if !sourceProjectionNoBodyMutationActionEligible(source) {
+			continue
+		}
+		operation := sourceProjectionRestWriteOperationForEndpoint(operations, source.Method, source.Path)
+		if operation == nil {
+			// The source projection never invents an operation just to promote a
+			// mutation. Connectors which do not yet declare this endpoint keep
+			// their own explicit foundation disposition; the Asana coverage gate
+			// below proves every eligible Asana endpoint has a real lane.
+			continue
+		}
+		operationID := stringField(operation, "id")
+		command := sourceProjectionReverseETLCommandForOperation(cli, operationID)
+		if operationID == "" || command == nil {
+			continue
+		}
+		if stringField(command, "write") != "" {
+			if sourceProjectionReplaceLegacyPromotedMutationSummary(command) {
+				stats.CLI++
+			}
+			if setOrderedIfDifferent(command, "notes", "Implemented source-bound Asana mutation through the declared reverse-ETL action.") {
+				stats.CLI++
+			}
+			if sourceProjectionRemoveApprovalConfirmFlag(command) {
+				stats.CLI++
+			}
+			continue
+		}
+		if sourceProjectionActionForEndpoint(writes, source.Method, source.Path) != nil {
+			continue
+		}
+		action := newOrderedObject()
+		action.set("name", operationID)
+		if strings.EqualFold(source.Method, http.MethodDelete) {
+			action.set("kind", "delete")
+		} else {
+			action.set("kind", "update")
+		}
+		action.set("method", strings.ToUpper(source.Method))
+		action.set("path", sourceProjectionMutationRecordPath(source.Path))
+		pathFields := make([]any, 0, len(source.Request.Path))
+		redactFields := make([]any, 0, len(source.Request.Path))
+		for _, parameter := range source.Request.Path {
+			if !parameter.Required || !sourceScalarWireSchema(parameter.Schema) {
+				return stats, fmt.Errorf("source operation %s has no bounded typed path action contract", source.SourceID)
+			}
+			pathFields = append(pathFields, parameter.Name)
+			redactFields = append(redactFields, parameter.Name)
+		}
+		action.set("path_fields", pathFields)
+		action.set("body_type", "none")
+		if strings.EqualFold(source.Method, http.MethodDelete) {
+			deleteSpec := newOrderedObject()
+			deleteSpec.set("missing_ok_status", []any{404})
+			deleteSpec.set("idempotent", true)
+			action.set("delete", deleteSpec)
+		}
+		action.set("risk", "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive")
+		action.set("confirm", "destructive")
+		action.set("redact_fields", redactFields)
+		writes.set("actions", append(arrayField(writes, "actions"), action))
+
+		command.set("availability", "implemented")
+		command.set("write", operationID)
+		command.remove("operation")
+		sourceProjectionRemoveApprovalConfirmFlag(command)
+		sourceProjectionReplaceLegacyPromotedMutationSummary(command)
+		command.set("notes", "Implemented source-bound Asana mutation through the declared reverse-ETL action.")
+		operation.set("description", "Implemented source-bound Asana operation mapped to declared reverse-ETL action "+operationID+".")
+		stats.Writes++
+		stats.CLI++
+		stats.Operations++
+	}
+	return stats, nil
+}
+
+// sourceProjectionRemoveApprovalConfirmFlag removes a legacy command-owned
+// echo of the reverse-ETL confirmation carrier. `--confirm` is handled by the
+// shared plan/approval lifecycle, not a record or command mapping; retaining
+// it on a newly implemented command would make the declared CLI invalid and
+// suggest a second execution channel.
+func sourceProjectionRemoveApprovalConfirmFlag(command *orderedObject) bool {
+	flags := arrayField(command, "flags")
+	kept := make([]any, 0, len(flags))
+	changed := false
+	for _, raw := range flags {
+		flag, ok := raw.(*orderedObject)
+		if ok && stringField(flag, "maps_to") == "approval.confirm" {
+			changed = true
+			continue
+		}
+		kept = append(kept, raw)
+	}
+	if changed {
+		command.set("flags", kept)
+	}
+	return changed
+}
+
+// sourceProjectionReplaceLegacyPromotedMutationSummary replaces a historical
+// planning label only once the source-complete operation has a declared,
+// executable reverse-ETL action. It deliberately retains the author-owned
+// operation wording after the standard source-bound prefix.
+func sourceProjectionReplaceLegacyPromotedMutationSummary(command *orderedObject) bool {
+	const prefix = "Planned fixed-target "
+	summary := stringField(command, "summary")
+	if !strings.HasPrefix(summary, prefix) {
+		return false
+	}
+	return setOrderedIfDifferent(command, "summary", "Implemented source-bound "+strings.TrimPrefix(summary, prefix))
+}
+
+func sourceProjectionRestWriteOperationForEndpoint(operations *orderedObject, method, path string) *orderedObject {
+	endpoint := sourceProjectionEndpointKey(method, path)
+	var match *orderedObject
+	for _, raw := range arrayField(operations, "operations") {
+		operation, ok := raw.(*orderedObject)
+		if !ok || stringField(operation, "kind") != "rest_write" {
+			continue
+		}
+		restRaw, declared := operation.get("rest")
+		rest, ok := restRaw.(*orderedObject)
+		if !declared || !ok || sourceProjectionEndpointKey(stringField(rest, "method"), stringField(rest, "path")) != endpoint {
+			continue
+		}
+		if match != nil {
+			return nil
+		}
+		match = operation
+	}
+	return match
+}
+
+func sourceProjectionReverseETLCommandForOperation(cli *orderedObject, operationID string) *orderedObject {
+	var match *orderedObject
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok || stringField(command, "intent") != "reverse_etl" {
+			continue
+		}
+		if stringField(command, "operation") != operationID && stringField(command, "write") != operationID {
+			continue
+		}
+		if match != nil {
+			return nil
+		}
+		match = command
+	}
+	return match
+}
+
+func sourceProjectionNoBodyMutationActionEligible(source sourceOperationDescriptor) bool {
+	return source.Protocol != "graphql" && sourceProjectionMutationMethod(source.Method) && source.Runtime.NonExecutableMutation == nil && source.Runtime.PartialCoverageMutation == nil && !sourceProjectionHasBlockingGap(source.Runtime.Gaps) && source.Request.Body == nil && len(source.Request.Header) == 0 && len(source.Request.Media) == 0 && len(source.Request.Path) > 0
+}
+
+func sourceProjectionActionForEndpoint(writes *orderedObject, method, path string) *orderedObject {
+	endpoint := sourceProjectionEndpointKey(method, path)
+	for _, raw := range arrayField(writes, "actions") {
+		action, ok := raw.(*orderedObject)
+		if ok && sourceProjectionEndpointKey(stringField(action, "method"), sourceProjectionPath(stringField(action, "path"))) == endpoint {
+			return action
+		}
+	}
+	return nil
+}
+
+func sourceProjectionMutationRecordPath(path string) string {
+	return sourceProjectionPathVariableRE.ReplaceAllString(path, "{{ record.$1 }}")
+}
+
+// sourceProjectionMaterializeNoBodyMutationSurfaceEndpoints promotes the
+// source-ledger row only after its exact action and implemented reverse-ETL
+// command exist. This is the mutation equivalent of the source-bound direct
+// read projection: api_surface is a declaration of executable coverage, never
+// a way to make an endpoint executable by itself.
+func sourceProjectionMaterializeNoBodyMutationSurfaceEndpoints(surface, writes, cli *orderedObject, result sourceImportResult) int {
+	actions := map[string]string{}
+	for _, raw := range arrayField(writes, "actions") {
+		action, ok := raw.(*orderedObject)
+		if !ok || stringField(action, "name") == "" {
+			continue
+		}
+		key := sourceProjectionEndpointKey(stringField(action, "method"), sourceProjectionPath(stringField(action, "path")))
+		if _, duplicate := actions[key]; duplicate {
+			delete(actions, key)
+			continue
+		}
+		actions[key] = stringField(action, "name")
+	}
+	commands := map[string]bool{}
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok || stringField(command, "intent") != "reverse_etl" || stringField(command, "availability") != "implemented" || stringField(command, "write") == "" {
+			continue
+		}
+		commands[stringField(command, "write")] = true
+	}
+	sources := map[string]sourceOperationDescriptor{}
+	for _, source := range result.Operations {
+		if sourceProjectionNoBodyMutationActionEligible(source) {
+			sources[sourceProjectionEndpointKey(source.Method, source.Path)] = source
+		}
+	}
+	changed := 0
+	for _, raw := range arrayField(surface, "endpoints") {
+		endpoint, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		key := sourceProjectionEndpointKey(stringField(endpoint, "method"), stringField(endpoint, "path"))
+		if _, sourceComplete := sources[key]; !sourceComplete {
+			continue
+		}
+		write := actions[key]
+		if write == "" || !commands[write] {
+			continue
+		}
+		coverage := newOrderedObject()
+		coverage.set("write", write)
+		current, hasCoverage := endpoint.get("covered_by")
+		if hasCoverage && orderedSemanticEqual(current, coverage) {
+			if endpoint.remove("operation") {
+				changed++
+			}
+			continue
+		}
+		endpoint.remove("operation")
+		endpoint.set("covered_by", coverage)
+		changed++
+	}
+	return changed
+}
+
+func sourceProjectionIsAsana(result sourceImportResult) bool {
+	return len(result.Operations) > 0 && result.Operations[0].Connector == "asana"
+}
+
+// sourceProjectionAnnotateAsanaMutationFoundationGaps preserves every
+// source-backed mutation that is not executable yet, but replaces inherited
+// generic planned wording with the exact current source foundations. These are
+// not a promotion path: availability stays non-executable until the declared
+// action can satisfy those foundations.
+func sourceProjectionAnnotateAsanaMutationFoundationGaps(operations, cli, surface *orderedObject, result sourceImportResult) sourceProjectionStats {
+	stats := sourceProjectionStats{}
+	for _, source := range result.Operations {
+		if !sourceProjectionOperationMutates(source) {
+			continue
+		}
+		operation := sourceProjectionRestWriteOperationForEndpoint(operations, source.Method, source.Path)
+		operationID := ""
+		if operation != nil {
+			operationID = stringField(operation, "id")
+		}
+		command := sourceProjectionCommandForOperation(cli, operationID, source.Method, source.Path)
+		if command == nil {
+			command = sourceProjectionMutationCommandForEndpoint(cli, source.Method, source.Path)
+			if command != nil {
+				operationID = firstNonEmpty(stringField(command, "operation"), stringField(command, "write"))
+				operation = sourceProjectionOperationByID(operations, operationID)
+			}
+		}
+		if command == nil {
+			continue
+		}
+		availability := stringField(command, "availability")
+		if availability != "planned" && availability != "unsupported_api" {
+			continue
+		}
+		note := ""
+		if sourceProjectionHasBlockingGap(source.Runtime.Gaps) && availability == "planned" {
+			note = sourceProjectionMutationFoundationNote(source)
+		} else if availability == "unsupported_api" && source.Path == "/batch" {
+			note = "not_applicable=generic_batch_wrapper; source_operation=" + source.SourceID
+		} else {
+			continue
+		}
+		if setOrderedIfDifferent(command, "notes", note) {
+			stats.CLI++
+		}
+		if sourceProjectionReplaceLegacyUnavailableMutationSummary(command, availability == "unsupported_api") {
+			stats.CLI++
+		}
+		description := "Unavailable source-bound Asana mutation: " + note
+		if availability == "unsupported_api" {
+			description = "Not-applicable source-bound Asana generic wrapper: " + note
+		}
+		if operation != nil && setOrderedIfDifferent(operation, "description", description) {
+			stats.Operations++
+		}
+		if surface == nil {
+			continue
+		}
+		for _, raw := range arrayField(surface, "endpoints") {
+			endpoint, ok := raw.(*orderedObject)
+			if !ok || sourceProjectionEndpointKey(stringField(endpoint, "method"), stringField(endpoint, "path")) != sourceProjectionEndpointKey(source.Method, source.Path) {
+				continue
+			}
+			operationRaw, declared := endpoint.get("operation")
+			classified, ok := operationRaw.(*orderedObject)
+			if !declared || !ok {
+				continue
+			}
+			if setOrderedIfDifferent(classified, "reason", note) {
+				stats.Surface++
+			}
+			if setOrderedIfDifferent(classified, "notes", "source_operation="+source.SourceID) {
+				stats.Surface++
+			}
+		}
+	}
+	return stats
+}
+
+// sourceProjectionMutationCommandForEndpoint locates a declared write command
+// by the provider endpoint it names. File and composite operations do not have
+// a rest_write declaration, but they are still source-ledger rows and must
+// retain their exact unavailable classification rather than old planning prose.
+func sourceProjectionMutationCommandForEndpoint(cli *orderedObject, method, path string) *orderedObject {
+	endpoint := sourceProjectionEndpointKey(method, path)
+	var match *orderedObject
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok || !sourceProjectionCommandHasEndpoint(command, endpoint) {
+			continue
+		}
+		intent := stringField(command, "intent")
+		if intent != "reverse_etl" && intent != "direct_write" {
+			continue
+		}
+		if match != nil {
+			return nil
+		}
+		match = command
+	}
+	return match
+}
+
+func sourceProjectionOperationByID(operations *orderedObject, operationID string) *orderedObject {
+	if operationID == "" {
+		return nil
+	}
+	for _, raw := range arrayField(operations, "operations") {
+		operation, ok := raw.(*orderedObject)
+		if ok && stringField(operation, "id") == operationID {
+			return operation
+		}
+	}
+	return nil
+}
+
+func sourceProjectionMutationFoundationNote(source sourceOperationDescriptor) string {
+	foundations := map[string]bool{}
+	for _, gap := range source.Runtime.Gaps {
+		if sourceProjectionHasBlockingGap([]sourceContractGap{gap}) && gap.Foundation != "" {
+			foundations[gap.Foundation] = true
+		}
+	}
+	names := make([]string, 0, len(foundations))
+	for foundation := range foundations {
+		names = append(names, foundation)
+	}
+	sort.Strings(names)
+	parts := make([]string, 0, len(names)+1)
+	for _, foundation := range names {
+		parts = append(parts, "missing_foundation="+foundation)
+	}
+	if len(parts) == 0 {
+		parts = append(parts, "missing_foundation="+sourceOperationExecutionFoundation)
+	}
+	parts = append(parts, "source_operation="+source.SourceID)
+	return strings.Join(parts, "; ")
+}
+
+// sourceProjectionAnnotateAsanaReadFoundationGaps gives a retained
+// source-bound read the same precise provenance as a mutation gap. The command
+// remains unavailable; this removes only inherited planning prose, not the
+// declared source requirement or the blocked-by-default guard.
+func sourceProjectionAnnotateAsanaReadFoundationGaps(operations, cli, surface *orderedObject, result sourceImportResult) sourceProjectionStats {
+	stats := sourceProjectionStats{}
+	for _, source := range result.Operations {
+		if sourceProjectionOperationMutates(source) || !sourceProjectionHasBlockingGap(source.Runtime.Gaps) {
+			continue
+		}
+		operation := sourceProjectionOperationForEndpoint(operations, source.Method, source.Path)
+		if operation == nil {
+			continue
+		}
+		operationID := stringField(operation, "id")
+		command := sourceProjectionCommandForOperation(cli, operationID, source.Method, source.Path)
+		if command == nil || stringField(command, "availability") != "planned" {
+			continue
+		}
+		note := sourceProjectionMutationFoundationNote(source)
+		if setOrderedIfDifferent(command, "notes", note) {
+			stats.CLI++
+		}
+		const plannedPrefix = "Planned fixed-target "
+		if summary := stringField(command, "summary"); strings.HasPrefix(summary, plannedPrefix) && setOrderedIfDifferent(command, "summary", "Unavailable source-bound "+strings.TrimPrefix(summary, plannedPrefix)) {
+			stats.CLI++
+		}
+		if setOrderedIfDifferent(operation, "description", "Unavailable source-bound Asana read: "+note) {
+			stats.Operations++
+		}
+		if surface == nil {
+			continue
+		}
+		for _, raw := range arrayField(surface, "endpoints") {
+			endpoint, ok := raw.(*orderedObject)
+			if !ok || sourceProjectionEndpointKey(stringField(endpoint, "method"), stringField(endpoint, "path")) != sourceProjectionEndpointKey(source.Method, source.Path) {
+				continue
+			}
+			blocked, declared := endpoint.get("operation")
+			classified, ok := blocked.(*orderedObject)
+			if !declared || !ok {
+				continue
+			}
+			if setOrderedIfDifferent(classified, "reason", note) {
+				stats.Surface++
+			}
+			if setOrderedIfDifferent(classified, "notes", "source_operation="+source.SourceID) {
+				stats.Surface++
+			}
+		}
+	}
+	return stats
+}
+
+func sourceProjectionReplaceLegacyUnavailableMutationSummary(command *orderedObject, notApplicable bool) bool {
+	const prefix = "Planned fixed-target "
+	summary := stringField(command, "summary")
+	if !strings.HasPrefix(summary, prefix) {
+		return false
+	}
+	replacement := "Unavailable source-bound "
+	if notApplicable {
+		replacement = "Not-applicable source-bound "
+	}
+	return setOrderedIfDifferent(command, "summary", replacement+strings.TrimPrefix(summary, prefix))
 }
 
 func validateSourceProjectionExecutionEnvelopes(result sourceImportResult) error {
@@ -935,6 +1424,9 @@ func sourceProjectionReadParametersComplete(rest *orderedObject, source sourceOp
 		{location: "query", parameters: source.Request.Query},
 	} {
 		for _, parameter := range candidate.parameters {
+			if candidate.location == "query" && sourceProjectionProviderPagingParameter(parameter) {
+				continue
+			}
 			// A bounded direct read may intentionally omit an optional provider
 			// filter. Its command then exposes no lossy substitute for that
 			// field; only a caller-required source input must have an executable
@@ -958,8 +1450,10 @@ func sourceProjectionReadParametersComplete(rest *orderedObject, source sourceOp
 	return ""
 }
 
-// sourceProjectionSyncReadParameters imports every scalar caller input from
-// the canonical descriptor, including optional filters. A zero-input read
+// sourceProjectionSyncReadParameters imports every scalar non-paging caller
+// input from the canonical descriptor, including optional filters. Paging
+// controls are deliberately excluded: the declared stream/operation pagination
+// contract is navigated only by --page or --page-cursor. A zero-input read
 // receives an explicit empty parameter list so its bounded direct-read contract
 // is distinguishable from one whose typed inputs were never imported. Optional
 // non-scalar filters deliberately remain omitted: the one-page direct read
@@ -969,6 +1463,24 @@ func sourceProjectionSyncReadParameters(rest *orderedObject, source sourceOperat
 	parameters := arrayField(rest, "parameters")
 	_, declaredParameters := rest.get("parameters")
 	changed := !declaredParameters
+	pagingQuery := make(map[string]bool, len(source.Request.Query))
+	for _, parameter := range source.Request.Query {
+		if sourceProjectionProviderPagingParameter(parameter) {
+			pagingQuery[parameter.Name] = true
+		}
+	}
+	if len(pagingQuery) > 0 {
+		kept := parameters[:0]
+		for _, raw := range parameters {
+			parameter, ok := raw.(*orderedObject)
+			if ok && stringField(parameter, "in") == "query" && pagingQuery[stringField(parameter, "name")] {
+				changed = true
+				continue
+			}
+			kept = append(kept, raw)
+		}
+		parameters = kept
+	}
 	for _, group := range []struct {
 		location   string
 		parameters []sourceParameterDescriptor
@@ -977,6 +1489,9 @@ func sourceProjectionSyncReadParameters(rest *orderedObject, source sourceOperat
 		{location: "query", parameters: source.Request.Query},
 	} {
 		for _, sourceParameter := range group.parameters {
+			if group.location == "query" && pagingQuery[sourceParameter.Name] {
+				continue
+			}
 			if !sourceScalarWireSchema(sourceParameter.Schema) {
 				continue
 			}
@@ -1019,6 +1534,15 @@ func sourceProjectionSyncReadParameters(rest *orderedObject, source sourceOperat
 		rest.set("parameters", parameters)
 	}
 	return changed
+}
+
+// sourceProjectionProviderPagingParameter keeps source-projected reads on the
+// same closed paging classifier as params-import. Source descriptors retain
+// only typed parameter shape, so provider paging descriptions are unavailable
+// here; the shared semantic-name classifier still prevents a second raw
+// navigation channel.
+func sourceProjectionProviderPagingParameter(parameter sourceParameterDescriptor) bool {
+	return isProviderPagingParameter(openAPIParameter{Name: parameter.Name, In: "query"})
 }
 
 func sourceProjectionReadParameterType(schema any) string {
@@ -1106,6 +1630,14 @@ func sourceProjectionMarkOneReadMissingFoundation(command *orderedObject, source
 		changed = true
 	}
 	note := sourceBoundReadMissingFoundationPrefix + reason + "; source_operation=" + source.SourceID
+	if source.Connector == "asana" {
+		note = sourceProjectionMutationFoundationNote(source)
+		const plannedPrefix = "Planned fixed-target "
+		if summary := stringField(command, "summary"); strings.HasPrefix(summary, plannedPrefix) {
+			command.set("summary", "Unavailable source-bound "+strings.TrimPrefix(summary, plannedPrefix))
+			changed = true
+		}
+	}
 	if setOrderedIfDifferent(command, "notes", note) {
 		changed = true
 	}
@@ -1919,8 +2451,14 @@ func sourceProjectionBlockUnreachableReadSurfaceEndpoints(surface *orderedObject
 		operation.set("status", "blocked")
 		operation.set("risk", "low")
 		operation.set("blocked_by_default", true)
-		operation.set("reason", sourceProjectionBlockedReadSurfaceReason(source.SourceID))
-		operation.set("notes", sourceProjectionBlockedReadSurfaceNote(source.SourceID))
+		reason := sourceProjectionBlockedReadSurfaceReason(source.SourceID)
+		note := sourceProjectionBlockedReadSurfaceNote(source.SourceID)
+		if source.Connector == "asana" && sourceProjectionReadHasBlockingGap(source) {
+			reason = sourceProjectionMutationFoundationNote(source)
+			note = "source_operation=" + source.SourceID
+		}
+		operation.set("reason", reason)
+		operation.set("notes", note)
 		if setOrderedIfDifferent(endpoint, "operation", operation) {
 			endpointChanged = true
 		}
