@@ -1,8 +1,8 @@
 {
   "issue": 4329,
-  "state": "current_main_integration_verified_pending_push",
+  "state": "current_main_integration_pushed_audit_ci_pending",
   "base": "main",
   "working_branch": "fix/4329-read-only-mutation-artifacts",
   "scope": "shared connectorgen source-import/projection/coverage behavior and issue evidence only",
-  "next": "commit the source-locked executable-delete regression and evidence, push without force, confirm the PR API base, then obtain the Captain-requested fresh separate audit and wait for CI"
+  "next": "obtain the Captain-requested fresh separate audit of the exact pushed HEAD and wait for every required PR CI check; do not merge"
 }
