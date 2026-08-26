@@ -45,3 +45,12 @@
   a fresh independent audit; no merge was performed. The body editor is
   blocked by GitHub's deprecated `repository.pullRequest.projectCards` GraphQL
   field, so that immutable PR comment is the R2 delivery record.
+
+## Independent exact-SHA audit R3 help-contract repair
+
+- [x] Red first: at exact remote head `f8f6240792fa4364c4890b6ad3fc30bff1a33db6`, `go test -timeout 20m ./cmd/connectorgen -run '^TestSourceRetainHelpAndMigrationDocumentationDescribeIdentityAndWrongSource$' -count=1` failed because rendered `source-retain --help` split `wrong source` across a newline.
+- [x] Green: that exact public-help/migration-document contract passed in 1.123s after a usage-text-only reflow.
+- [x] Full changed suite: `go test -timeout 20m ./cmd/connectorgen -count=1` passed in 156.924s. Aggregate `go test ./...` was not run.
+- [x] Static/generation checks passed: `go vet ./cmd/connectorgen`; tracked-only `connectorgen validate`, `surface-sync --check`, `operation-evidence --check` (1,525 rows; fixed-100), and `certification-subject --check`; `make docs-check-no-build`; and `git diff --check`.
+- [x] The preserved untracked retained-artifact evidence causes root `certification-subject --check` to report local generated-state drift. No artifact was regenerated or staged; the same check passed from a tracked-only archive containing this repair.
+- [ ] Commit/push the minimal repair, record its exact remote head and CI start, and request a fresh independent exact-head audit. No merge.

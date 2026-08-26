@@ -29,8 +29,8 @@ SHA-256 comparison. Its raw byte count/SHA-256 are recorded provenance, not
 the comparison identity. It
 records the fetched byte identity and detected form/version (or undetermined)
 without changing a source lock. Redirected, invalid/bad MIME, credible HTML
-login/error, or (for byte identity) drastically undersized responses are wrong
-source rather than drift; canonical_json raw size is provenance, not a drift
+login/error, or (for byte identity) drastically undersized responses are
+wrong source rather than drift; canonical_json raw size is provenance, not a drift
 gate. HTTP 403 and TLS refusal are BOT-BLOCK and direct the reader to a browser
 capture or provider-owned repository. Builds and source-import remain offline:
 this is an explicit maintenance command only.

@@ -41,6 +41,12 @@ once the main-targeted PR opens.
 - **Accepted R2 citation repair:** a rendered citation fragment must exactly
   name the operation's locked extraction location; any supplied capture
   binding is independently checked even when that fragment is present.
+- **Accepted R3 public-help repair:** `source-retain --help` now renders the
+  existing operator and migration-document phrase `wrong source` contiguously.
+  The change is a literal reflow only: it does not alter response
+  classification, canonical or byte identity, provenance, source locks,
+  retained artifacts, generated connector evidence, or the deferred Batch 6–7
+  citations.
 - **No remaining actionable findings:** review of the R2 production diff,
   red/green tests, full changed package suite, generated checks, clean
   structural boundary, and release checks found no route escape, lock rewrite,
@@ -55,3 +61,10 @@ Makefile gates, clean generated checks, and the prior eight built-binary retain
 commands passed. The exact commands and the retained-artifact preservation
 boundary are recorded in `TDD-LEDGER.md` and `VERIFICATION.md`; no aggregate
 `go test ./...` was run.
+
+For R3, the previously red exact contract test passed after the reflow, the
+complete changed package passed in 156.924s, and `go vet`, tracked-only
+generator checks, documentation validation, and whitespace validation passed.
+The root certification-subject check deliberately remains isolated from the
+preserved untracked live-retention files; it passed in the clean tracked-only
+archive. A fresh independent audit remains required for the repaired SHA.

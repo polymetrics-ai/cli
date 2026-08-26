@@ -36,6 +36,21 @@ Shared `cmd/connectorgen` source-lock retention foundation for issue #4347. Owne
 5. **Red first — canonical raw bytes are provenance.** Lock formatted JSON and serve its minified equivalent with a different byte count and raw SHA-256. `canonical_json` must retain and offline-read that file by the canonical digest while recording the served raw evidence; a byte-identity fixture remains strict.
 6. Run the five focused tests before production edits, then make the smallest shared decoder/classifier changes. Re-run source retain, source import, and operation-evidence focused suites plus a clean tracked snapshot. Preserve all ignored retained artifacts, particularly Zendesk.
 
+## Independent exact-SHA audit R3 help-contract repair plan
+
+1. Reproduce the exact-head public-help regression before production edits:
+   `TestSourceRetainHelpAndMigrationDocumentationDescribeIdentityAndWrongSource`
+   must fail because its operator-facing phrase is split across a rendered
+   newline.
+2. Reflow only `sourceRetainUsage` so the existing, documentation-backed
+   phrase `wrong source` is contiguous in `connectorgen source-retain --help`.
+   Do not alter source identity, fetch classification, lock bytes, generated
+   connector evidence, or Batch 6–7 citations.
+3. Run the focused contract test, the complete changed `cmd/connectorgen`
+   package, `go vet`, source-generation check commands, and a whitespace diff
+   check. Record the exact repaired commit/remote head and request a fresh
+   independent exact-head audit; no merge.
+
 ## Security and correctness boundaries
 
 - Source URLs remain connector-owned, HTTPS/public-address validated, query-bounded, and never accepted from command arguments.
