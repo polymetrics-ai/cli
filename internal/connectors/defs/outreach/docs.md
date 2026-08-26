@@ -3,6 +3,26 @@
 Reads and mutates Outreach REST API v2 JSON:API resources, including standard resources and
 caller-selected custom objects.
 
+## Surface evidence status
+
+The imported provider inventory contains 259 operations: 253 from the pinned OpenAPI 3.0.3
+document and six documented custom-object routes from the rendered Custom Objects reference. The
+operation map is recorded in `sources/outreach-operation-source-lock.json`, its disposition in
+`sources/outreach-declaration-disposition.json`, and the six-lane account in
+`sources/outreach-six-lane-evidence.json`.
+
+The current source-evidence validator cannot yet admit this candidate lock: it rejects its
+candidate-only `source_kind` field, and this candidate did not retain a canonical source descriptor
+or source-artifact manifest. The 259 commands remain declared and preflight-reachable, but this is
+not a source-admission, hash/live-certification, or provider-success claim. No source row is
+removed to hide that dependency.
+
+The source classification is 96 ETL operations and 163 direct-write operations. The CLI labels
+those typed writes `reverse_etl` so that plan/preview/approval safety applies, but reverse-ETL
+destination eligibility remains declaration-pending until an action-specific acknowledgement and
+provider read-back contract is source-evidenced. Outreach documents no independent direct-read,
+binary-download, or binary-upload operation in this inventory.
+
 Readable streams: `prospects`, `accounts`, `sequences`, `mailings`, `account_notes`, `account_note`,
 `account`, `audit_logs`, `batch_items`, `batch_item`, `batches`, `batch`, `call_dispositions`,
 `call_disposition`, `call_purposes`, `call_purpose`, `calls`, `call`, `compliance_requests`,
@@ -973,4 +993,9 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 96 stream-backed endpoint group(s), 163 write-backed endpoint group(s).
+- `sync_transport.json` declares all 96 stream-backed endpoint groups as ETL sources. It declares
+  no source-evidenced destination transport; a typed write command's `reverse_etl` label does not
+  itself establish reverse-ETL delivery eligibility.
+- All 163 typed write actions remain approval-gated. Provider-live certification is pending and the
+  connector currently reports `COMMUNITY BUILD, UNCERTIFIED`; that does not remove CLI reachability
+  or change the approval requirement for any mutation.

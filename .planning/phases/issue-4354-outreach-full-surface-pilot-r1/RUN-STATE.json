@@ -1,0 +1,42 @@
+{
+  "issue": 4354,
+  "connector": "outreach",
+  "base": "main",
+  "base_commit": "060bb7864e3419e09ab10e000bb14ac1ea3724ec",
+  "working_branch": "feat/4354-outreach-full-surface-pilot",
+  "candidate_commit": "18248d233e6abd9d7ec03075a225cf35ee2f5399",
+  "state": "implementation_complete_source_admission_blocked",
+  "gsd": {
+    "mode": "inline-manual-fallback",
+    "reason": "Pi isolated-runtime unavailable; canonical single-worker contract forbids role spawning",
+    "commands_resolved": [
+      "discuss-phase",
+      "plan-phase --tdd",
+      "execute-phase",
+      "verify-work",
+      "code-review"
+    ]
+  },
+  "foundation_dependency": {
+    "pr": 4350,
+    "scope": "schema-v3 source-evidence reader, citation rendering, wrong-source classification",
+    "policy": "do not edit shared reader/validator/generator/schema; retain and report any blocked Outreach rows",
+    "observed": [
+      "source lock parser rejects candidate-only source_kind field",
+      "candidate lacks canonical source descriptor and retained source-artifact manifest"
+    ],
+    "integration_gate": "After this pilot is cleanly committed, integrate only the exact repaired #4350 head after its CI and independent-audit acceptance; then rerun Outreach source admission and representative command-boundary checks."
+  },
+  "implementation": {
+    "candidate_artifacts_imported": 7,
+    "candidate_operation_count": 259,
+    "binary_fixture_tests": "passed",
+    "full_cli_package": "passed (complete process; follow-up cache result ok)",
+    "source_admission": "blocked"
+  },
+  "independent_audit": {
+    "worktree": "/Users/karthiksivadas/karthik-agent-workspace/worktrees/cli-outreach-pilot-audit-r1",
+    "commit": "1d64e22ce",
+    "result": "representative no-credential and fixture-only method/path/source binding checks passed; no provider I/O"
+  }
+}
