@@ -179,6 +179,13 @@ with its named exact foundation, while stale or falsely implemented rows fail.
 
 No provider I/O, credential access, write/delete execution, schema-version
 migration, or Batch-1 connector definition change is part of the R3 repair.
+Exact commit `1d3ac8d273235664c92a84c170d1946ce56a3339` passes the
+full connectorgen, engine, commandrunner, connectors, definitions, safety, app,
+and CLI packages plus vet/build/lint/docs/smoke/generator/boundary/canon/release
+gates. No new local review finding remains before the fresh independent audit.
+The final inline review additionally rejected plain and percent-escaped path
+dot segments; focused safety/authoring/ledger tests and scoped lint pass after
+that hardening.
 
 ## Automated review route
 

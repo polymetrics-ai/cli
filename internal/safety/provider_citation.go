@@ -184,7 +184,13 @@ func canonicalProviderCitationEscapedPath(path string) (string, error) {
 		}
 		index += 2
 	}
-	return canonical.String(), nil
+	normalized := canonical.String()
+	for _, segment := range strings.Split(normalized, "/") {
+		if segment == "." || segment == ".." {
+			return "", fmt.Errorf("provider citation URL path must not contain dot segments")
+		}
+	}
+	return normalized, nil
 }
 
 func providerCitationHexValue(character byte) (byte, bool) {

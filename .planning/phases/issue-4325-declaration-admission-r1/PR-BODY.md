@@ -107,6 +107,11 @@ blocked source mapping with no action or command binding. See
   compatibility only; boundary reports 322 files / 553 connectors / 0 findings;
   exact-head vet, lint, build, docs, smoke, admission, surface-sync, release,
   and GSD workflow gates pass.
+- R3 exact checkpoint `1d3ac8d27`: full connectorgen, safety, engine,
+  commandrunner, connectors, defs, app, and CLI packages pass; vet/build/tidy,
+  lint (including `internal/safety`), docs, local smoke, all applicable
+  generator/certification checks, boundary (323 files / 553 connectors / 0
+  findings), canon, release/archive, and GSD evidence gates pass.
 
 The aggregate `go test -timeout 20m ./...` and serial `make verify` are left
 to CI, per the repository’s per-command-timeout guidance. Full commands and
@@ -122,6 +127,5 @@ are not applicable.
 ## Review Route
 
 The original route was `claude_auto` on this non-draft, `main`-targeted PR. The
-audit repair is a new unreviewed commit and receives one deliberate fresh
-review request after push, plus Firstmate's independent-Codex re-audit handoff.
-Automated findings, if any, require disposition before merge.
+R3 repair receives one deliberate fresh independent exact-head audit request
+after push under Firstmate's route. Findings require disposition before merge.

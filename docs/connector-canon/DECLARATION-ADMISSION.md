@@ -26,7 +26,8 @@ protocol, raw operation ID, and canonical provider endpoint/operation identity.
 The authored URL must already equal its canonical form; admission never rewrites
 evidence. Canonical citations use public HTTPS, lowercase unambiguous DNS hosts
 without a trailing dot, no explicit default `:443`, normalized path escapes,
-and stable ordering for bounded single-valued non-credential query keys. The
+no dot segments, and stable ordering for bounded single-valued non-credential
+query keys. The
 same canonicalizer and identity key are used by authoring admission and the
 compact production ledger. Changing a URL spelling or runtime binding therefore
 cannot disguise a duplicate provider row. Binding uniqueness is checked

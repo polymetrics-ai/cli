@@ -65,6 +65,8 @@ func TestCanonicalProviderCitationURLRejectsUnsafeOrAmbiguousAuthority(t *testin
 		{name: "Unicode DNS label", raw: "https://prøvider.example.test/reference"},
 		{name: "integer-form address", raw: "https://2130706433/reference"},
 		{name: "ambiguous numeric address", raw: "https://127.0.0.01/reference"},
+		{name: "plain dot segment", raw: "https://provider.example.test/docs/../reference"},
+		{name: "escaped dot segment", raw: "https://provider.example.test/docs/%2e%2e/reference"},
 		{name: "credential query", raw: "https://provider.example.test/reference?api_key=value"},
 		{name: "repeated query key", raw: "https://provider.example.test/reference?a=1&a=2"},
 		{name: "empty query marker", raw: "https://provider.example.test/reference?"},

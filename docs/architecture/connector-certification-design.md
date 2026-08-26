@@ -19,8 +19,9 @@ current delivery rules are in [the connector canon](../connector-canon/INDEX.md)
 > bindings. Provenance-row uniqueness uses one shared canonical provider
 > citation identity in authoring and the compact production ledger: stored URLs
 > must already use public HTTPS, lowercase unambiguous DNS hosts, no default
-> `:443`, normalized path escapes, and stable bounded query ordering. It excludes
-> the runtime binding, whose uniqueness is checked independently. Canonical endpoints may differ from
+> `:443`, normalized dot-segment-free path escapes, and stable bounded query
+> ordering. It excludes the runtime binding, whose uniqueness is checked
+> independently. Canonical endpoints may differ from
 > physical runtime routes only through named base-path, placeholder, registered
 > hook, GraphQL transport, query, suffix, or operation-annotation equivalence;
 > arbitrary endpoint substitution fails closed. Deferred targets carry the admitted source and binding identities;

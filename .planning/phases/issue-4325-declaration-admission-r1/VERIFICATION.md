@@ -210,3 +210,37 @@ The boundary analyzer initially flagged the neutral local name
 `canonicalComparable` because normalized text contained the provider token
 `cal-com`. It was renamed to `declaredComparable`; no exception was added, and
 the exact-head whole-tree boundary rerun passed.
+
+## R3 canonical-citation repair verification (2026-08-26)
+
+The repair checkpoint `1d3ac8d273235664c92a84c170d1946ce56a3339` was
+verified from a clean clone inside the disposable task worktree. The preserved
+Stripe and Docker Hub handoffs were absent from that snapshot and remain
+unstaged in the worker tree. A preliminary broad dirty-tree package run failed
+only because the preserved Stripe projection lacks its concurrent
+`foundation_gap.component`; that known handoff failure was not rerun or
+modified. The exact committed snapshot is green.
+
+| Exact command | Result |
+| --- | --- |
+| `go test -count=1 -timeout 20m ./internal/safety ./internal/connectors/engine ./internal/connectors/commandrunner ./internal/connectors ./internal/connectors/defs` | pass (`1.044s`, `18.469s`, `33.958s`, `7.423s`, `10.266s`) |
+| `go test -count=1 -timeout 20m ./cmd/connectorgen` | pass (`280.359s`), including canonical citation adversarial cases, the 243+4 fleet census, and truthfully named Outreach resolver compatibility |
+| `go test -count=1 -timeout 20m ./internal/app` | pass (`337.211s`) |
+| `go test -count=1 -timeout 20m ./internal/cli` | pass (`636.015s`) |
+| `go vet ./...`; `go build -o ./pm ./cmd/pm`; `make tidy-check`; `make lint` | pass; lint includes `internal/safety` and reports 0 issues |
+| `make docs-check-no-build`; `make smoke-no-build`; `make agent-contract-check` | pass; connector docs validate, local-only smoke succeeds, canonical contract is current |
+| `make connectorgen-validate`; `make connectorgen-surface-sync`; `make connectorgen-declaration-admission` | pass; 553 bundles / 0 findings, 0 surface drift, 1 connector / 1 source row / 0 admission findings |
+| `make connectorgen-operation-evidence`; `make github-parity-artifacts-check` | pass; 1,525 operation-evidence rows and 17 GitHub parity tests/artifacts current |
+| `make connectorgen-certification-subject`; `make connectorgen-certification-matrix`; `make connectorgen-certification-candidates`; `make connectorgen-certification-sweep` | pass; subject/matrix/candidates current and GitHub sweep current at 1,616 rows / 1,612 CLI commands |
+| `make connector-boundary`; `make connector-canon-check`; `make release-workflow-check` | pass; 323 files / 553 connectors / 0 findings, canon current, all release/archive checks pass |
+| `scripts/verify-gsd-workflow origin/main`; exact-clone `git status --short` | pass; GSD/TDD evidence present and no tracked verification drift |
+| Post-checkpoint review fix: `go test -count=1 -timeout 20m ./internal/safety`; focused authoring/ledger tests; scoped `golangci-lint` | pass; plain and percent-escaped dot segments now fail closed, 0 lint issues |
+
+The aggregate `go test ./...` and serial `make verify` remain assigned to CI by
+the repository's per-command-timeout guidance; every applicable constituent
+gate was run locally. No provider I/O, credentialed check, write/delete, source
+lock/hash prerequisite, or live certification was performed. This foundation
+still does not prove shipped Outreach commands: final merge validation requires
+the real combined-head Outreach mapping/pilot after #4350 repair with committed
+CLI/source evidence, credential-boundary and zero-transport proof, and a fresh
+independent audit.
