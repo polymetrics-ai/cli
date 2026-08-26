@@ -23,6 +23,11 @@
   for the scoped proof; six-lane evidence inspection; `go vet`, build,
   formatter, lint/docs and generator gates as applicable; `git diff --check`;
   fresh final-SHA audit; GitHub API read-back of the PR base.
+- PR API read-back: [#4358](https://github.com/polymetrics-ai/cli/pull/4358)
+  is an ordinary non-draft PR with `base=main`
+  (`b33983927d863032dac8220949990506e812937d`) and
+  `head=feat/4354-schema-v3-source-projection`
+  (`cdaf4849eee5da74998dc097eb60d6ba7d81b7cd`) at creation.
 
 ## Evidence Table
 

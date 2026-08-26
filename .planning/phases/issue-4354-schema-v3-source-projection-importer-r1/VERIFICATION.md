@@ -94,4 +94,21 @@ reclassify, or promote those rows.
 - [x] Full-suite and unconclusive aggregate evidence are explicitly listed.
 - [x] Independent final-SHA audit records source → descriptor → lane mapping,
   generic-escape review, usable-surface delta, and the exact checked commit.
-- [ ] PR base read-back: pending normal push and ordinary PR creation.
+- [x] PR base read-back: [#4358](https://github.com/polymetrics-ai/cli/pull/4358)
+  GitHub API reports `base=main` at
+  `b33983927d863032dac8220949990506e812937d`, head branch
+  `feat/4354-schema-v3-source-projection`, and creation head
+  `cdaf4849eee5da74998dc097eb60d6ba7d81b7cd`.
+
+## Remote review coverage
+
+- PR: [#4358](https://github.com/polymetrics-ai/cli/pull/4358)
+- Base/head at creation: `main` / `feat/4354-schema-v3-source-projection`
+- Reviewed range requested: `b33983927d863032dac8220949990506e812937d...`
+  `cdaf4849eee5da74998dc097eb60d6ba7d81b7cd`
+- Primary route: `claude_auto` (non-draft PR opened by repository owner).
+- Status: `pending`; no manual Claude command or Copilot fallback has been
+  posted. The API currently reports no check run, review, or comment.
+- Fallback: none unless the automatic review is skipped, fails, or is
+  unavailable; then record the exact blocker before considering one backup
+  route.

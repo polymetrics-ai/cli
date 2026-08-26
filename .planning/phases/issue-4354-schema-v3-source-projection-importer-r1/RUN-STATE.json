@@ -4,7 +4,7 @@
   "base": "main",
   "branch": "feat/4354-schema-v3-source-projection",
   "delivery": "direct-pr",
-  "status": "verified_pending_publication",
+  "status": "pr_open_automated_review_pending",
   "gsd": {
     "mode": "inline-manual-fallback",
     "commands_resolved": [
@@ -16,5 +16,14 @@
     ]
   },
   "usable_surface_delta": 0,
+  "pull_request": {
+    "number": 4358,
+    "url": "https://github.com/polymetrics-ai/cli/pull/4358",
+    "base": "main",
+    "head": "feat/4354-schema-v3-source-projection",
+    "head_sha_at_creation": "cdaf4849eee5da74998dc097eb60d6ba7d81b7cd",
+    "review_route": "claude_auto",
+    "review_status": "pending"
+  },
   "constraint": "The candidate Outreach lock enumerates two provider documents but neither exact raw source artifact is retained in the candidate, current main, or local Git object store. Byte-backed import remains strict and cannot fetch, re-pin, or substitute derived bytes. The active slice adds an explicit declaration-only source-reference path that preserves canonical URLs and operation identities without claiming byte-backed import, credential validity, certification, or executability."
 }
