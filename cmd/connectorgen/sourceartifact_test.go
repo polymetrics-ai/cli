@@ -172,7 +172,7 @@ func TestSourceRetainHelpAndMigrationDocumentationDescribeIdentityAndWrongSource
 	if code := runSourceRetain([]string{"source-retain", "--help"}, &stdout, &stderr); code != 0 {
 		t.Fatalf("source-retain help exit = %d, stderr=%s", code, stderr.String())
 	}
-	for _, want := range []string{"canonical_json", "wrong source", "BOT-BLOCK", "operation\nor parity"} {
+	for _, want := range []string{"canonical_json", "wrong source", "bad MIME", "BOT-BLOCK", "operation\nor parity"} {
 		if !strings.Contains(stdout.String(), want) {
 			t.Fatalf("source-retain help missing %q: %s", want, stdout.String())
 		}
@@ -181,7 +181,7 @@ func TestSourceRetainHelpAndMigrationDocumentationDescribeIdentityAndWrongSource
 	if err != nil {
 		t.Fatalf("read migration conventions: %v", err)
 	}
-	for _, want := range []string{"canonical_json", "wrong source", "BOT-BLOCK", "retained-byte-sha256", "does not silently re-pin"} {
+	for _, want := range []string{"canonical_json", "wrong source", "invalid response\nMIME", "BOT-BLOCK", "retained-byte-sha256", "does not silently re-pin", "citation_binding"} {
 		if !strings.Contains(string(docs), want) {
 			t.Fatalf("migration conventions missing %q", want)
 		}
@@ -470,6 +470,123 @@ func TestSourceRetainReportsWrongSourceBeforeDrift(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestSourceRetainHTTPResponseEvidenceClassifiesPlausibleBadSourcesBeforeDrift(t *testing.T) {
+	t.Parallel()
+	structured := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
+	structuredLock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/alpha-openapi.yaml", structured)
+	structuredLock.Rest.OpenAPI = "3.0.3"
+	loginPage := sourceRetainPaddedHTML(t, `<!doctype html><html><body><form action="/login"><input type="password">sign in to continue</form></body></html>`, len(structured))
+	errorPage := sourceRetainPaddedHTML(t, `<!doctype html><html><head><title>Error 503</title></head><body>the provider reference is temporarily unavailable</body></html>`, len(structured))
+	writeGenericLock := func(t *testing.T, defsRoot string) {
+		t.Helper()
+		digest := sha256.Sum256(structured)
+		raw, err := json.Marshal(map[string]any{
+			"schema_version": 1,
+			"connector":      "alpha",
+			"rest": map[string]any{
+				"source_url": "https://fixtures.polymetrics.invalid/reference",
+				"sha256":     hex.EncodeToString(digest[:]),
+				"bytes":      len(structured),
+			},
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+		sourcesDir := filepath.Join(defsRoot, "alpha", "sources")
+		if err := os.MkdirAll(sourcesDir, 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(filepath.Join(sourcesDir, "alpha-parity-source-lock.json"), raw, 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	for _, tc := range []struct {
+		name      string
+		writeLock func(t *testing.T, defsRoot string)
+		body      []byte
+		content   string
+		wantOK    bool
+	}{
+		{
+			name: "structured source served as HTML",
+			writeLock: func(t *testing.T, defsRoot string) {
+				writeSourceRetainFixtureLock(t, defsRoot, structuredLock)
+			},
+			body:    sourceRetainPaddedHTML(t, "<!doctype html><html><body>provider documentation page</body></html>", len(structured)),
+			content: "text/html; charset=utf-8",
+		},
+		{
+			name: "invalid response MIME",
+			writeLock: func(t *testing.T, defsRoot string) {
+				writeSourceRetainFixtureLock(t, defsRoot, structuredLock)
+			},
+			body:    structured,
+			content: "; charset=utf-8",
+		},
+		{
+			name:      "generic plausible size login page",
+			writeLock: writeGenericLock,
+			body:      loginPage,
+			content:   "text/html",
+		},
+		{
+			name:      "generic plausible size error page",
+			writeLock: writeGenericLock,
+			body:      errorPage,
+			content:   "text/html",
+		},
+		{
+			name: "expected documentation HTML remains retainable",
+			writeLock: func(t *testing.T, defsRoot string) {
+				documentation := []byte("<!doctype html><html><body>documentation navigation sign in help</body></html>")
+				writeSourceRetainFixtureLock(t, defsRoot, sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/reference", documentation))
+			},
+			body:    []byte("<!doctype html><html><body>documentation navigation sign in help</body></html>"),
+			content: "text/html; charset=utf-8",
+			wantOK:  true,
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			defsRoot := t.TempDir()
+			tc.writeLock(t, defsRoot)
+			fetcher := sourceRetainHTTPFixtureFetcher(tc.body, tc.content)
+			var stdout, stderr bytes.Buffer
+			code := runSourceRetainWithFetcher([]string{"source-retain", "alpha", "--defs", defsRoot, "--retrieved-at", "2026-08-24T07:02:03Z", "--license", "fixture-license", "--terms", "fixture-terms"}, &stdout, &stderr, fetcher)
+			if tc.wantOK {
+				if code != 0 || strings.Contains(stderr.String(), "wrong source") {
+					t.Fatalf("source-retain expected HTML exit/stderr = %d/%q, want success", code, stderr.String())
+				}
+				return
+			}
+			if code != 1 || !strings.Contains(stderr.String(), "wrong source") || strings.Contains(stderr.String(), "source-lock refresh required") {
+				t.Fatalf("source-retain exit/stderr = %d/%q, want MIME/body wrong-source classification before drift", code, stderr.String())
+			}
+		})
+	}
+}
+
+func sourceRetainHTTPFixtureFetcher(body []byte, contentType string) httpSourceImportFetcher {
+	return httpSourceImportFetcher{
+		limits: defaultSourceImportLimits(),
+		lookup: batchArtifactLookupIPAddr(func(context.Context, string) ([]net.IPAddr, error) {
+			return []net.IPAddr{{IP: net.ParseIP("8.8.8.8")}}, nil
+		}),
+		client: &http.Client{Transport: sourceImportRoundTripFunc(func(request *http.Request) (*http.Response, error) {
+			header := make(http.Header)
+			header.Set("Content-Type", contentType)
+			return &http.Response{StatusCode: http.StatusOK, Header: header, Body: io.NopCloser(bytes.NewReader(body)), Request: request}, nil
+		})},
+	}
+}
+
+func sourceRetainPaddedHTML(t *testing.T, page string, size int) []byte {
+	t.Helper()
+	if len(page) > size {
+		t.Fatalf("HTML fixture is %d bytes, exceeds requested plausible size %d", len(page), size)
+	}
+	return append([]byte(page), bytes.Repeat([]byte(" "), size-len(page))...)
 }
 
 func TestSourceRetainReportsBotBlockBeforeWrongSourceOrDrift(t *testing.T) {

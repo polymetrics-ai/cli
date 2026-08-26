@@ -1674,10 +1674,13 @@ provenance, while the retained manifest records the raw byte count/SHA-256
 actually fetched. A canonical match with changed raw bytes is not drift and
 does not silently re-pin the lock.
 
-Classify the fetch before comparing its identity. A redirect, login wall, or a
-response drastically smaller than the lock is `wrong source`, not drift;
-correct the URL or publication path before any re-pin. A provider HTTP 403 or
-TLS/certificate failure is `BOT-BLOCK`, not evidence that a source is absent:
+Classify the fetch before comparing its identity. A redirect, invalid response
+MIME, a structured source served as HTML, a credible HTML login/error body (even
+at a plausible byte count), or a response drastically smaller than the lock is
+`wrong source`, not drift; correct the URL or publication path before any
+re-pin. Legitimate HTML documentation remains retainable when its body is not a
+login/error signature and the lock does not declare a non-HTML source. A provider
+HTTP 403 or TLS/certificate failure is `BOT-BLOCK`, not evidence that a source is absent:
 try a browser capture or the provider's own repository before treating the
 connector as unmappable. If a current provider document differs from a pin, do not use
 `source-retain` to make it fit. Preserve the lock first; only the separately
@@ -1704,6 +1707,15 @@ descriptor preserves each operation's document ID, stable artifact, published
 URL, capture identity, and provider operation ID; a document-qualified locked
 `id` is the descriptor source identity even when the provider repeats an
 `operationId` in another document.
+
+For a `rendered_reference`, an operation's `citation_url` cannot be the generic
+published reference page merely because it shares that page's origin. It must
+either carry a non-empty fragment that points to the operation, or carry a
+`citation_binding` whose `capture_url`, `capture_sha256`, `capture_bytes`, and
+`source_location` exactly repeat the document's hash-pinned capture and that
+operation's locked extraction location. The binding makes an explicitly
+captured extraction auditable; it does not authorize a citation fetch or relax
+the captured-byte identity.
 
 A parity lock can likewise retain a bounded query that it already stores, even
 though that older lock shape has no `identity_query` field. Retention records

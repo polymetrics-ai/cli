@@ -147,17 +147,34 @@ type sourceImportArtifact struct {
 	IdentityQuery   bool   `json:"identity_query,omitempty"`
 	Identity        string `json:"identity,omitempty"`
 	CanonicalSHA256 string `json:"canonical_sha256,omitempty"`
+	// RetainExpectedContentType is document metadata carried only along the
+	// retain path. It is never accepted from or emitted into an artifact lock;
+	// source-retain may use an already-declared v3 document content type to
+	// recognise an HTML/error response before comparing pinned identity.
+	RetainExpectedContentType string `json:"-"`
+}
+
+// sourceImportRenderedReferenceCitationBinding names the hash-pinned capture
+// and locked extraction location that make a generic rendered publication URL
+// an exact operation citation. A fragment remains the simpler direct pointer.
+// The citation itself remains provenance only and is never fetched.
+type sourceImportRenderedReferenceCitationBinding struct {
+	CaptureURL     string `json:"capture_url"`
+	CaptureSHA256  string `json:"capture_sha256"`
+	CaptureBytes   int64  `json:"capture_bytes"`
+	SourceLocation string `json:"source_location"`
 }
 
 type sourceImportRESTOperation struct {
-	ID             string `json:"id"`
-	Protocol       string `json:"protocol"`
-	Method         string `json:"method"`
-	Path           string `json:"path"`
-	OperationID    string `json:"operation_id"`
-	Deprecated     bool   `json:"deprecated"`
-	SourceLocation string `json:"source_location"`
-	CitationURL    string `json:"citation_url,omitempty"`
+	ID              string                                        `json:"id"`
+	Protocol        string                                        `json:"protocol"`
+	Method          string                                        `json:"method"`
+	Path            string                                        `json:"path"`
+	OperationID     string                                        `json:"operation_id"`
+	Deprecated      bool                                          `json:"deprecated"`
+	SourceLocation  string                                        `json:"source_location"`
+	CitationURL     string                                        `json:"citation_url,omitempty"`
+	CitationBinding *sourceImportRenderedReferenceCitationBinding `json:"citation_binding,omitempty"`
 }
 
 type sourceImportREST struct {
@@ -637,6 +654,19 @@ type sourceRetainVerifiedArtifactFetcher interface {
 	FetchRetainArtifact(context.Context, sourceImportArtifact) ([]byte, error)
 }
 
+// sourceRetainArtifactFetchResult carries response evidence only as far as
+// source-retain's pre-identity classification. Source import deliberately
+// remains byte-only: MIME is not a substitute for its lock-selected form and
+// inventory validation.
+type sourceRetainArtifactFetchResult struct {
+	Raw         []byte
+	ContentType string
+}
+
+type sourceRetainResponseArtifactFetcher interface {
+	FetchRetainArtifactResponse(context.Context, sourceImportArtifact) (sourceRetainArtifactFetchResult, error)
+}
+
 func fetchSourceImportArtifact(ctx context.Context, fetcher sourceImportFetcher, artifact sourceImportArtifact) ([]byte, error) {
 	if verified, ok := fetcher.(sourceImportVerifiedArtifactFetcher); ok {
 		return verified.FetchArtifact(ctx, artifact)
@@ -644,11 +674,16 @@ func fetchSourceImportArtifact(ctx context.Context, fetcher sourceImportFetcher,
 	return fetcher.Fetch(ctx, artifact.SourceURL)
 }
 
-func fetchSourceRetainArtifact(ctx context.Context, fetcher sourceImportFetcher, artifact sourceImportArtifact) ([]byte, error) {
-	if verified, ok := fetcher.(sourceRetainVerifiedArtifactFetcher); ok {
-		return verified.FetchRetainArtifact(ctx, artifact)
+func fetchSourceRetainArtifact(ctx context.Context, fetcher sourceImportFetcher, artifact sourceImportArtifact) (sourceRetainArtifactFetchResult, error) {
+	if responseFetcher, ok := fetcher.(sourceRetainResponseArtifactFetcher); ok {
+		return responseFetcher.FetchRetainArtifactResponse(ctx, artifact)
 	}
-	return fetchSourceImportArtifact(ctx, fetcher, artifact)
+	if verified, ok := fetcher.(sourceRetainVerifiedArtifactFetcher); ok {
+		raw, err := verified.FetchRetainArtifact(ctx, artifact)
+		return sourceRetainArtifactFetchResult{Raw: raw}, err
+	}
+	raw, err := fetchSourceImportArtifact(ctx, fetcher, artifact)
+	return sourceRetainArtifactFetchResult{Raw: raw}, err
 }
 
 func parseSourceImportLock(raw []byte, expectedConnector string) (sourceImportLock, error) {
@@ -865,7 +900,7 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 				return fmt.Errorf("source lock v3 REST operation %q has invalid path", operation.ID)
 			}
 			if kind == sourceImportDocumentKindRenderedReference {
-				if err := validateSourceImportRenderedReferenceCitation(operation.CitationURL, document.PublishedSource.SourceURL); err != nil {
+				if err := validateSourceImportRenderedReferenceCitation(operation, document); err != nil {
 					return fmt.Errorf("source lock v3 rendered-reference operation %q has invalid citation URL: %w", operation.ID, err)
 				}
 			}
@@ -1180,10 +1215,13 @@ func validateSourceImportBoundedQuery(parsed *url.URL, subject string, requireQu
 }
 
 // validateSourceImportRenderedReferenceCitation keeps an operation citation
-// constrained to the provider publication it documents. Source import never
+// constrained to the provider publication it documents and refuses a generic
+// rendered-reference page as proof of an exact operation. Source import never
 // fetches this URL: the captured artifact bytes and their SHA-256 are the
 // evidence, and a citation remains provenance only.
-func validateSourceImportRenderedReferenceCitation(raw, publishedRaw string) error {
+func validateSourceImportRenderedReferenceCitation(operation sourceImportRESTOperation, document sourceImportRESTDocument) error {
+	raw := operation.CitationURL
+	publishedRaw := document.PublishedSource.SourceURL
 	if raw == "" || raw != strings.TrimSpace(raw) || strings.ContainsAny(raw, "\r\n") {
 		return fmt.Errorf("citation must be a non-empty absolute HTTPS URL")
 	}
@@ -1200,6 +1238,25 @@ func validateSourceImportRenderedReferenceCitation(raw, publishedRaw string) err
 	canonicalCitation.RawFragment = ""
 	if err := validateSourceImportPublishedURL(canonicalCitation.String()); err != nil {
 		return fmt.Errorf("citation: %w", err)
+	}
+	if strings.TrimSpace(citation.Fragment) != "" {
+		return nil
+	}
+	binding := operation.CitationBinding
+	if binding == nil {
+		return fmt.Errorf("citation must include an operation-specific fragment or a verified capture extraction binding")
+	}
+	if binding.CaptureURL != document.PublishedSource.CaptureURL ||
+		!strings.EqualFold(binding.CaptureSHA256, document.PublishedSource.SHA256) ||
+		binding.CaptureBytes != document.PublishedSource.Bytes ||
+		binding.SourceLocation != operation.SourceLocation {
+		return fmt.Errorf("citation capture extraction binding does not match the locked document and operation")
+	}
+	if binding.CaptureURL == "" || binding.SourceLocation == "" || len(binding.CaptureSHA256) != sha256.Size*2 {
+		return fmt.Errorf("citation capture extraction binding is incomplete")
+	}
+	if _, err := hex.DecodeString(binding.CaptureSHA256); err != nil {
+		return fmt.Errorf("citation capture extraction binding has invalid SHA-256: %w", err)
 	}
 	return nil
 }
@@ -8873,29 +8930,39 @@ func (fetcher httpSourceImportFetcher) FetchArtifact(ctx context.Context, artifa
 }
 
 func (fetcher httpSourceImportFetcher) FetchRetainArtifact(ctx context.Context, artifact sourceImportArtifact) ([]byte, error) {
+	result, err := fetcher.FetchRetainArtifactResponse(ctx, artifact)
+	return result.Raw, err
+}
+
+func (fetcher httpSourceImportFetcher) FetchRetainArtifactResponse(ctx context.Context, artifact sourceImportArtifact) (sourceRetainArtifactFetchResult, error) {
 	if err := validateSourceRetainArtifact(artifact); err != nil {
-		return nil, err
+		return sourceRetainArtifactFetchResult{}, err
 	}
-	return fetcher.fetch(ctx, artifact.SourceURL, batchArtifactURLPolicy{allowIdentityQuery: artifact.IdentityQuery})
+	return fetcher.fetchResponse(ctx, artifact.SourceURL, batchArtifactURLPolicy{allowIdentityQuery: artifact.IdentityQuery})
 }
 
 func (fetcher httpSourceImportFetcher) fetch(ctx context.Context, sourceURL string, policy batchArtifactURLPolicy) ([]byte, error) {
+	result, err := fetcher.fetchResponse(ctx, sourceURL, policy)
+	return result.Raw, err
+}
+
+func (fetcher httpSourceImportFetcher) fetchResponse(ctx context.Context, sourceURL string, policy batchArtifactURLPolicy) (sourceRetainArtifactFetchResult, error) {
 	if err := validateSourceImportLimits(fetcher.limits); err != nil {
-		return nil, err
+		return sourceRetainArtifactFetchResult{}, err
 	}
 	if fetcher.lookup == nil {
-		return nil, fmt.Errorf("source importer has no public address resolver")
+		return sourceRetainArtifactFetchResult{}, fmt.Errorf("source importer has no public address resolver")
 	}
 	parsed, err := parseBatchArtifactURLWithPolicy(sourceURL, policy)
 	if err != nil {
-		return nil, fmt.Errorf("validate locked source artifact URL: %w", err)
+		return sourceRetainArtifactFetchResult{}, fmt.Errorf("validate locked source artifact URL: %w", err)
 	}
 	if err := validateBatchArtifactRequestURLWithPolicy(ctx, parsed, fetcher.lookup, policy); err != nil {
-		return nil, fmt.Errorf("validate locked source artifact destination: %w", err)
+		return sourceRetainArtifactFetchResult{}, fmt.Errorf("validate locked source artifact destination: %w", err)
 	}
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, parsed.String(), nil)
 	if err != nil {
-		return nil, err
+		return sourceRetainArtifactFetchResult{}, err
 	}
 	client := fetcher.client
 	if client == nil {
@@ -8903,29 +8970,29 @@ func (fetcher httpSourceImportFetcher) fetch(ctx context.Context, sourceURL stri
 	}
 	response, err := client.Do(request)
 	if err != nil {
-		return nil, err
+		return sourceRetainArtifactFetchResult{}, err
 	}
 	if response.StatusCode != http.StatusOK {
 		if closeErr := response.Body.Close(); closeErr != nil {
 			if response.StatusCode == http.StatusForbidden {
-				return nil, sourceRetainBotBlockError{Reason: fmt.Sprintf("provider returned HTTP %d and its response could not be closed: %v", response.StatusCode, closeErr)}
+				return sourceRetainArtifactFetchResult{}, sourceRetainBotBlockError{Reason: fmt.Sprintf("provider returned HTTP %d and its response could not be closed: %v", response.StatusCode, closeErr)}
 			}
-			return nil, sourceRetainWrongSourceError{Reason: fmt.Sprintf("locked URL returned HTTP %d and its response could not be closed: %v", response.StatusCode, closeErr)}
+			return sourceRetainArtifactFetchResult{}, sourceRetainWrongSourceError{Reason: fmt.Sprintf("locked URL returned HTTP %d and its response could not be closed: %v", response.StatusCode, closeErr)}
 		}
 		if response.StatusCode == http.StatusForbidden {
-			return nil, sourceRetainBotBlockError{Reason: "provider returned HTTP 403 to an automated fetch"}
+			return sourceRetainArtifactFetchResult{}, sourceRetainBotBlockError{Reason: "provider returned HTTP 403 to an automated fetch"}
 		}
-		return nil, sourceRetainWrongSourceError{Reason: fmt.Sprintf("locked URL returned HTTP %d", response.StatusCode)}
+		return sourceRetainArtifactFetchResult{}, sourceRetainWrongSourceError{Reason: fmt.Sprintf("locked URL returned HTTP %d", response.StatusCode)}
 	}
 	raw, readErr := io.ReadAll(io.LimitReader(response.Body, fetcher.limits.MaxArtifactBytes+1))
 	closeErr := response.Body.Close()
 	if readErr != nil {
-		return nil, readErr
+		return sourceRetainArtifactFetchResult{}, readErr
 	}
 	if closeErr != nil {
-		return nil, fmt.Errorf("close source-lock artifact response: %w", closeErr)
+		return sourceRetainArtifactFetchResult{}, fmt.Errorf("close source-lock artifact response: %w", closeErr)
 	}
-	return raw, nil
+	return sourceRetainArtifactFetchResult{Raw: raw, ContentType: response.Header.Get("Content-Type")}, nil
 }
 
 func newSourceImportHTTPClient(lookup batchArtifactLookupIPAddr) *http.Client {

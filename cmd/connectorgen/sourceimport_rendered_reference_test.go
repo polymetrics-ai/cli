@@ -581,6 +581,48 @@ func TestSourceImportVersion3RenderedReferenceRejectsUnverifiableEvidenceAndCita
 	}
 }
 
+func TestSourceImportVersion3RenderedReferenceCitationNeedsPointerOrVerifiedCaptureBinding(t *testing.T) {
+	t.Run("generic publication URL", func(t *testing.T) {
+		raw, _ := sourceImportV3RenderedReferenceLock(t, renderedReferencePublishedURL)
+		if _, err := parseSourceImportLock(raw, "fixture"); err == nil || !strings.Contains(err.Error(), "citation") {
+			t.Fatalf("generic rendered publication citation error = %v, want operation-specific citation refusal", err)
+		}
+	})
+
+	t.Run("capture extraction binding", func(t *testing.T) {
+		raw, page := sourceImportV3RenderedReferenceLock(t, renderedReferencePublishedURL)
+		var lock map[string]any
+		if err := json.Unmarshal(raw, &lock); err != nil {
+			t.Fatal(err)
+		}
+		document := lock["rest"].(map[string]any)["source_documents"].([]any)[0].(map[string]any)
+		operation := document["operations"].([]any)[0].(map[string]any)
+		digest := sha256.Sum256(page)
+		operation["citation_binding"] = map[string]any{
+			"capture_url":     renderedReferenceArtifactURL,
+			"capture_sha256":  hex.EncodeToString(digest[:]),
+			"capture_bytes":   len(page),
+			"source_location": "#list-widgets",
+		}
+		raw, err := json.Marshal(lock)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if _, err := parseSourceImportLock(raw, "fixture"); err != nil {
+			t.Fatalf("verified rendered capture binding rejected: %v", err)
+		}
+
+		operation["citation_binding"].(map[string]any)["capture_sha256"] = strings.Repeat("0", 64)
+		raw, err = json.Marshal(lock)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if _, err := parseSourceImportLock(raw, "fixture"); err == nil || !strings.Contains(err.Error(), "citation") {
+			t.Fatalf("mismatched rendered capture binding error = %v, want citation refusal", err)
+		}
+	})
+}
+
 func TestSourceImportVersion3BundleRejectsArchiveHashMismatch(t *testing.T) {
 	raw, archive := sourceImportV3BundleLock(t)
 	lock, err := parseSourceImportLock(raw, "fixture")

@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"mime"
 	"net"
 	"net/url"
 	"os"
@@ -25,11 +26,11 @@ or parity source lock, verifies the lock-selected identity, and stores the raw
 bytes under sources/artifacts/. Byte identity is exact size plus SHA-256;
 canonical_json identity key-sorts parsed JSON before SHA-256 comparison. It
 records the fetched byte identity and detected form/version (or undetermined)
-without changing a source lock. Redirected, login, or drastically undersized
-responses are wrong source rather than drift; HTTP 403 and TLS refusal are
-BOT-BLOCK and direct the reader to a browser capture or provider-owned
-repository. Builds and source-import remain offline: this is an explicit
-maintenance command only.
+without changing a source lock. Redirected, invalid/bad MIME, credible HTML
+login/error, or drastically undersized responses are wrong source rather than
+drift; HTTP 403 and TLS refusal are BOT-BLOCK and direct the reader to a
+browser capture or provider-owned repository. Builds and source-import remain
+offline: this is an explicit maintenance command only.
 
   <connector>       connector whose source lock is retained
   --defs <dir>      connector defs root (default internal/connectors/defs)
@@ -266,8 +267,9 @@ func sourceRetainRESTArtifacts(raw json.RawMessage) ([]sourceImportArtifact, err
 	}
 	if documentsRaw, found := rest["source_documents"]; found {
 		var documents []struct {
-			Kind     string          `json:"kind"`
-			Artifact json.RawMessage `json:"artifact"`
+			Kind        string          `json:"kind"`
+			ContentType string          `json:"content_type"`
+			Artifact    json.RawMessage `json:"artifact"`
 		}
 		if err := json.Unmarshal(documentsRaw, &documents); err != nil {
 			return nil, fmt.Errorf("parse source lock REST documents: %w", err)
@@ -284,6 +286,7 @@ func sourceRetainRESTArtifacts(raw json.RawMessage) ([]sourceImportArtifact, err
 			if !found {
 				return nil, fmt.Errorf("source lock REST document has no artifact")
 			}
+			artifact.RetainExpectedContentType = document.ContentType
 			artifacts = append(artifacts, artifact)
 		}
 		return artifacts, nil
@@ -349,7 +352,7 @@ func sourceRetainFetchLockedArtifacts(ctx context.Context, lock sourceRetainLock
 	}
 	payloads := make([]sourceRetainPayload, 0, len(lock.Artifacts))
 	for _, artifact := range lock.Artifacts {
-		raw, err := fetchSourceRetainArtifact(ctx, fetcher, artifact)
+		fetched, err := fetchSourceRetainArtifact(ctx, fetcher, artifact)
 		if err != nil {
 			if sourceRetainFetchIsBotBlock(err) {
 				return nil, fmt.Errorf("BOT-BLOCK for locked artifact %s: %w; try a browser capture or the provider's own repository", artifact.SourceURL, err)
@@ -359,10 +362,11 @@ func sourceRetainFetchLockedArtifacts(ctx context.Context, lock sourceRetainLock
 			}
 			return nil, fmt.Errorf("fetch locked source artifact %s: %w", artifact.SourceURL, err)
 		}
+		raw := fetched.Raw
 		if int64(len(raw)) > limits.MaxArtifactBytes {
 			return nil, fmt.Errorf("retained source artifact exceeds byte limit")
 		}
-		if err := sourceRetainClassifyFetchedArtifact(raw, artifact); err != nil {
+		if err := sourceRetainClassifyFetchedArtifact(raw, fetched.ContentType, artifact); err != nil {
 			return nil, err
 		}
 		if err := validateSourceImportArtifactBytes(raw, artifact); err != nil {
@@ -393,16 +397,66 @@ func sourceRetainFetchIsBotBlock(err error) bool {
 	return strings.Contains(lower, "http 403") || strings.Contains(lower, "tls") || strings.Contains(lower, "x509") || strings.Contains(lower, "certificate")
 }
 
-func sourceRetainClassifyFetchedArtifact(raw []byte, artifact sourceImportArtifact) error {
-	lower := bytes.ToLower(bytes.TrimSpace(raw))
-	drasticallySmaller := int64(len(raw))*8 < artifact.Bytes
-	if drasticallySmaller && (bytes.HasPrefix(lower, []byte("<!doctype html")) || bytes.HasPrefix(lower, []byte("<html"))) && (bytes.Contains(lower, []byte("login")) || bytes.Contains(lower, []byte("sign in")) || bytes.Contains(lower, []byte("sign-in"))) {
-		return sourceRetainWrongSourceError{Reason: "received a login wall rather than the locked provider artifact"}
+func sourceRetainClassifyFetchedArtifact(raw []byte, contentType string, artifact sourceImportArtifact) error {
+	if contentType != "" {
+		mediaType, _, err := mime.ParseMediaType(contentType)
+		if err != nil || mediaType == "" {
+			return sourceRetainWrongSourceError{Reason: fmt.Sprintf("locked URL returned invalid response content type %q", contentType)}
+		}
+		mediaType = strings.ToLower(mediaType)
+		if sourceRetainArtifactRequiresStructuredMedia(artifact) && !sourceRetainStructuredMediaType(mediaType) {
+			return sourceRetainWrongSourceError{Reason: fmt.Sprintf("locked structured source was served as %s rather than JSON or YAML", mediaType)}
+		}
+		if sourceRetainArtifactRequiresNonHTMLMedia(artifact) && mediaType == "text/html" {
+			return sourceRetainWrongSourceError{Reason: "locked non-HTML source was served as an HTML page"}
+		}
 	}
+	lower := bytes.ToLower(bytes.TrimSpace(raw))
+	if sourceRetainLooksLikeLoginOrErrorHTML(lower) {
+		return sourceRetainWrongSourceError{Reason: "received an HTML login or error page rather than the locked provider artifact"}
+	}
+	drasticallySmaller := int64(len(raw))*8 < artifact.Bytes
 	if drasticallySmaller {
 		return sourceRetainWrongSourceError{Reason: fmt.Sprintf("received %d bytes where the lock records %d bytes; the URL likely resolves to a landing page or error response", len(raw), artifact.Bytes)}
 	}
 	return nil
+}
+
+func sourceRetainArtifactRequiresStructuredMedia(artifact sourceImportArtifact) bool {
+	if artifact.OpenAPI != "" || artifact.Swagger != "" {
+		return true
+	}
+	mediaType, _, err := mime.ParseMediaType(artifact.RetainExpectedContentType)
+	return err == nil && sourceRetainStructuredMediaType(strings.ToLower(mediaType))
+}
+
+func sourceRetainArtifactRequiresNonHTMLMedia(artifact sourceImportArtifact) bool {
+	if artifact.OpenAPI != "" || artifact.Swagger != "" {
+		return true
+	}
+	mediaType, _, err := mime.ParseMediaType(artifact.RetainExpectedContentType)
+	return err == nil && mediaType != "" && strings.ToLower(mediaType) != "text/html"
+}
+
+func sourceRetainStructuredMediaType(mediaType string) bool {
+	return mediaType == "application/json" || strings.HasSuffix(mediaType, "+json") || mediaType == "application/yaml" || mediaType == "application/x-yaml" || mediaType == "text/yaml"
+}
+
+func sourceRetainLooksLikeLoginOrErrorHTML(raw []byte) bool {
+	if !(bytes.HasPrefix(raw, []byte("<!doctype html")) || bytes.HasPrefix(raw, []byte("<html")) || bytes.Contains(raw, []byte("<html"))) {
+		return false
+	}
+	hasLogin := bytes.Contains(raw, []byte("login")) || bytes.Contains(raw, []byte("log in")) || bytes.Contains(raw, []byte("sign in")) || bytes.Contains(raw, []byte("sign-in"))
+	hasCredentialForm := bytes.Contains(raw, []byte("<form")) || bytes.Contains(raw, []byte("password"))
+	if hasLogin && hasCredentialForm {
+		return true
+	}
+	for _, marker := range [][]byte{[]byte("access denied"), []byte("request blocked"), []byte("security verification"), []byte("error 403"), []byte("error 401"), []byte("<title>error")} {
+		if bytes.Contains(raw, marker) {
+			return true
+		}
+	}
+	return false
 }
 
 func sourceRetainDetectArtifactForm(raw []byte) (string, string) {

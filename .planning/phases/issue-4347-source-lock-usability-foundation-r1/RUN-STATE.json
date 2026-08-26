@@ -2,10 +2,10 @@
   "schema_version": 1,
   "issue": 4347,
   "phase": "issue-4347-source-lock-usability-foundation-r1",
-  "status": "bot_block_followup_in_progress",
+  "status": "independent_audit_r1_gap_closure_in_progress",
   "execution": "inline_manual_gsd_fallback",
   "base_branch": "main",
   "working_branch": "fm/cli-source-lock-usability-foundation-r1",
-  "red_green_evidence": "red_and_green_recorded",
-  "review": "pending"
+  "red_green_evidence": "r1_red_pending",
+  "review": "independent_audit_r1_failed_at_f9d237840ed49737ef92667b7e2173465dcc000d"
 }

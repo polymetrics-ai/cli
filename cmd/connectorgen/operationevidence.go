@@ -495,13 +495,30 @@ func readOperationEvidenceSourceLock(path, connector string) (operationEvidenceS
 		input.Absence = &absence
 		return input, nil
 	}
+	// Version 3 is the document-owned import contract. Decode it through the
+	// exact source-import parser so rest.source_documents[].operations cannot
+	// drift from source import. Version 1/2 evidence intentionally retains its
+	// historical tolerant projection: operation-evidence must still emit a
+	// source-trace gap for a bad digest or account for a duplicate operation,
+	// rather than fail before reporting that observable regression.
+	if lock.SchemaVersion == 3 {
+		strictLock, err := parseSourceImportLock(raw, connector)
+		if err != nil {
+			return operationEvidenceSourceInput{}, fmt.Errorf("parse source lock for %q through source-import schema: %w", connector, err)
+		}
+		return operationEvidenceSourceInputFromImportLock(input, strictLock)
+	}
+	return operationEvidenceSourceInputFromLegacyLock(input, lock)
+}
+
+func operationEvidenceSourceInputFromLegacyLock(input operationEvidenceSourceInput, lock operationEvidenceRawLock) (operationEvidenceSourceInput, error) {
 	documents := make(map[string]operationEvidenceSourceTrace, len(lock.Rest.Documents))
 	for _, document := range lock.Rest.Documents {
 		documents[document.SourceURL] = operationEvidenceSourceTrace{Lock: input.LockPath, URL: document.SourceURL, SHA256: document.SHA256, Bytes: document.Bytes}
 	}
 	for _, operation := range lock.Rest.Operations {
 		if operation.ID == "" || operation.Method == "" || operation.Path == "" {
-			return operationEvidenceSourceInput{}, fmt.Errorf("source lock for %q contains an operation without identity", connector)
+			return operationEvidenceSourceInput{}, fmt.Errorf("source lock for %q contains an operation without identity", input.Connector)
 		}
 		trace := documents[operation.SourceURL]
 		if trace.URL == "" {
@@ -517,15 +534,58 @@ func readOperationEvidenceSourceLock(path, connector string) (operationEvidenceS
 		graphqlBytes = lock.GraphQL.Bytes
 	}
 	for _, field := range lock.GraphQL.QueryFields {
-		input.Operations = append(input.Operations, operationEvidenceSourceOperation{ID: connector + ".graphql.query." + field.Name, Protocol: "graphql", Method: "POST", Path: "/graphql", Trace: operationEvidenceSourceTrace{Lock: input.LockPath, URL: lock.GraphQL.SourceURL, SHA256: graphqlSHA, Bytes: graphqlBytes, Location: fmt.Sprintf("Query.%s:%d", field.Name, field.Line)}})
+		input.Operations = append(input.Operations, operationEvidenceSourceOperation{ID: input.Connector + ".graphql.query." + field.Name, Protocol: "graphql", Method: "POST", Path: "/graphql", Trace: operationEvidenceSourceTrace{Lock: input.LockPath, URL: lock.GraphQL.SourceURL, SHA256: graphqlSHA, Bytes: graphqlBytes, Location: fmt.Sprintf("Query.%s:%d", field.Name, field.Line)}})
 	}
 	for _, field := range lock.GraphQL.MutationFields {
-		input.Operations = append(input.Operations, operationEvidenceSourceOperation{ID: connector + ".graphql.mutation." + field.Name, Protocol: "graphql", Method: "POST", Path: "/graphql", Trace: operationEvidenceSourceTrace{Lock: input.LockPath, URL: lock.GraphQL.SourceURL, SHA256: graphqlSHA, Bytes: graphqlBytes, Location: fmt.Sprintf("Mutation.%s:%d", field.Name, field.Line)}})
+		input.Operations = append(input.Operations, operationEvidenceSourceOperation{ID: input.Connector + ".graphql.mutation." + field.Name, Protocol: "graphql", Method: "POST", Path: "/graphql", Trace: operationEvidenceSourceTrace{Lock: input.LockPath, URL: lock.GraphQL.SourceURL, SHA256: graphqlSHA, Bytes: graphqlBytes, Location: fmt.Sprintf("Mutation.%s:%d", field.Name, field.Line)}})
 	}
 	if len(input.Operations) == 0 {
-		return operationEvidenceSourceInput{}, fmt.Errorf("source lock for %q has no operations and no provider-evidenced absence", connector)
+		return operationEvidenceSourceInput{}, fmt.Errorf("source lock for %q has no operations and no provider-evidenced absence", input.Connector)
 	}
 	return input, nil
+}
+
+func operationEvidenceSourceInputFromImportLock(input operationEvidenceSourceInput, lock sourceImportLock) (operationEvidenceSourceInput, error) {
+	if lock.SchemaVersion == 3 {
+		for _, document := range lock.Rest.SourceDocuments {
+			operationEvidenceAppendRESTOperations(&input, document.Operations, document.Artifact)
+		}
+	} else {
+		operationEvidenceAppendRESTOperations(&input, lock.Rest.Operations, lock.Rest.sourceImportArtifact)
+	}
+	graphqlSHA := firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)
+	graphqlBytes := lock.GraphQL.ProjectionBytes
+	if graphqlBytes <= 0 {
+		graphqlBytes = lock.GraphQL.Bytes
+	}
+	for _, field := range lock.GraphQL.QueryFields {
+		input.Operations = append(input.Operations, operationEvidenceSourceOperation{ID: lock.Connector + ".graphql.query." + field.Name, Protocol: "graphql", Method: "POST", Path: "/graphql", Trace: operationEvidenceSourceTrace{Lock: input.LockPath, URL: lock.GraphQL.SourceURL, SHA256: graphqlSHA, Bytes: graphqlBytes, Location: fmt.Sprintf("Query.%s:%d", field.Name, field.Line)}})
+	}
+	for _, field := range lock.GraphQL.MutationFields {
+		input.Operations = append(input.Operations, operationEvidenceSourceOperation{ID: lock.Connector + ".graphql.mutation." + field.Name, Protocol: "graphql", Method: "POST", Path: "/graphql", Trace: operationEvidenceSourceTrace{Lock: input.LockPath, URL: lock.GraphQL.SourceURL, SHA256: graphqlSHA, Bytes: graphqlBytes, Location: fmt.Sprintf("Mutation.%s:%d", field.Name, field.Line)}})
+	}
+	if len(input.Operations) == 0 {
+		return operationEvidenceSourceInput{}, fmt.Errorf("source lock for %q has no operations and no provider-evidenced absence", lock.Connector)
+	}
+	return input, nil
+}
+
+func operationEvidenceAppendRESTOperations(input *operationEvidenceSourceInput, operations []sourceImportRESTOperation, artifact sourceImportArtifact) {
+	for _, operation := range operations {
+		input.Operations = append(input.Operations, operationEvidenceSourceOperation{
+			ID:       operation.ID,
+			Protocol: firstNonEmpty(operation.Protocol, "rest"),
+			Method:   strings.ToUpper(operation.Method),
+			Path:     operation.Path,
+			Trace: operationEvidenceSourceTrace{
+				Lock:     input.LockPath,
+				URL:      artifact.SourceURL,
+				SHA256:   artifact.SHA256,
+				Bytes:    artifact.Bytes,
+				Location: operation.SourceLocation,
+			},
+		})
+	}
 }
 
 type operationEvidenceCrosswalk struct {
