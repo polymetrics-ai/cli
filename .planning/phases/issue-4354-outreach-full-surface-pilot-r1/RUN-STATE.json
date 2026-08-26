@@ -1,0 +1,25 @@
+{
+  "issue": 4354,
+  "connector": "outreach",
+  "base": "main",
+  "base_commit": "060bb7864e3419e09ab10e000bb14ac1ea3724ec",
+  "working_branch": "feat/4354-outreach-full-surface-pilot",
+  "candidate_commit": "18248d233e6abd9d7ec03075a225cf35ee2f5399",
+  "state": "planned",
+  "gsd": {
+    "mode": "inline-manual-fallback",
+    "reason": "Pi isolated-runtime unavailable; canonical single-worker contract forbids role spawning",
+    "commands_resolved": [
+      "discuss-phase",
+      "plan-phase --tdd",
+      "execute-phase",
+      "verify-work",
+      "code-review"
+    ]
+  },
+  "foundation_dependency": {
+    "pr": 4350,
+    "scope": "schema-v3 source-evidence reader, citation rendering, wrong-source classification",
+    "policy": "do not edit shared reader/validator/generator/schema; retain and report any blocked Outreach rows"
+  }
+}
