@@ -25,6 +25,16 @@
             "in": "query",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "user",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -136,6 +146,21 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -170,6 +195,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -204,6 +234,31 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "division_gid",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "end_at",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "start_at",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -238,6 +293,30 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "division_gid",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "type": "enum",
+            "values": [
+              "active",
+              "revoked"
+            ]
           }
         ]
       },
@@ -272,6 +351,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -360,7 +444,44 @@
       "rest": {
         "method": "GET",
         "path": "/allocations",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "assignee",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "parent",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAllocations",
+        "method": "GET",
+        "path": "/allocations"
       }
     },
     {
@@ -423,6 +544,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -478,6 +604,21 @@
             "in": "query",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -533,6 +674,53 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "actor_gid",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "actor_type",
+            "in": "query",
+            "type": "enum",
+            "values": [
+              "user",
+              "asana",
+              "asana_support",
+              "anonymous",
+              "external_administrator"
+            ]
+          },
+          {
+            "name": "end_at",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "event_type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "resource_gid",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "start_at",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -588,6 +776,11 @@
             "in": "query",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -657,6 +850,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -752,6 +950,21 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -786,6 +999,21 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -820,6 +1048,21 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -854,6 +1097,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -888,6 +1136,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -969,6 +1222,21 @@
             "in": "query",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -1003,6 +1271,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -1037,6 +1310,16 @@
             "in": "query",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "sync",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -1071,6 +1354,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -1105,6 +1393,26 @@
             "in": "query",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "resource_subtype",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -1179,6 +1487,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -1227,7 +1540,59 @@
       "rest": {
         "method": "GET",
         "path": "/goals",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "is_workspace_level",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "portfolio",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "project",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "task",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "team",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getGoals",
+        "method": "GET",
+        "path": "/goals"
       }
     },
     {
@@ -1295,6 +1660,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -1369,6 +1739,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -1396,7 +1771,47 @@
       "rest": {
         "method": "GET",
         "path": "/memberships",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "member",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "parent",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "resource_subtype",
+            "in": "query",
+            "type": "enum",
+            "values": [
+              "project_membership"
+            ]
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getMemberships",
+        "method": "GET",
+        "path": "/memberships"
       }
     },
     {
@@ -1541,6 +1956,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -1602,6 +2022,31 @@
             "in": "query",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -1671,6 +2116,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -1698,7 +2148,44 @@
       "rest": {
         "method": "GET",
         "path": "/portfolio_memberships",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "portfolio",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "user",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getPortfolioMemberships",
+        "method": "GET",
+        "path": "/portfolio_memberships"
       }
     },
     {
@@ -1726,6 +2213,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -1760,6 +2252,26 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "user",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -1794,6 +2306,26 @@
             "in": "query",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "owner",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -1828,6 +2360,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -1883,6 +2420,21 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -2037,6 +2589,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -2092,6 +2649,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -2126,6 +2688,26 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "user",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -2160,6 +2742,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -2194,6 +2781,21 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -2228,6 +2830,21 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -2262,6 +2879,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -2311,6 +2933,11 @@
         "steps": [
           "stream:project_statuses"
         ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectStatusesForProject",
+        "method": "GET",
+        "path": "/projects/{project_gid}/project_statuses"
       }
     },
     {
@@ -2338,6 +2965,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -2386,7 +3018,39 @@
       "rest": {
         "method": "GET",
         "path": "/project_templates",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "team",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectTemplates",
+        "method": "GET",
+        "path": "/project_templates"
       }
     },
     {
@@ -2414,6 +3078,21 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -2509,6 +3188,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -2604,6 +3288,21 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -2638,6 +3337,26 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "archived",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -2672,6 +3391,26 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "archived",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -2706,6 +3445,153 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "completed",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "completed_at.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "completed_at.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "completed_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "completed_on.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "completed_on.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_at.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_at.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_on.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_on.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_at.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_at.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_on.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_on.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "members.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "members.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "owner.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "portfolios.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "sort_ascending",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "type": "enum",
+            "values": [
+              "due_date",
+              "created_at",
+              "completed_at",
+              "modified_at",
+              "relevance"
+            ]
+          },
+          {
+            "name": "start_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "start_on.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "start_on.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "teams.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "text",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -2780,6 +3666,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -2887,7 +3778,39 @@
       "rest": {
         "method": "GET",
         "path": "/rates",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "parent",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "resource",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getRates",
+        "method": "GET",
+        "path": "/rates"
       }
     },
     {
@@ -2950,6 +3873,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -3051,6 +3979,21 @@
             "in": "query",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -3078,7 +4021,39 @@
       "rest": {
         "method": "GET",
         "path": "/roles",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "archived",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getRoles",
+        "method": "GET",
+        "path": "/roles"
       }
     },
     {
@@ -3141,6 +4116,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -3236,6 +4216,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -3325,6 +4310,11 @@
         "steps": [
           "stream:sections"
         ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getSectionsForProject",
+        "method": "GET",
+        "path": "/projects/{project_gid}/sections"
       }
     },
     {
@@ -3392,6 +4382,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -3447,6 +4442,26 @@
             "in": "query",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "created_since",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -3481,6 +4496,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -3530,6 +4550,11 @@
         "steps": [
           "stream:stories"
         ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getStoriesForTask",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/stories"
       }
     },
     {
@@ -3597,6 +4622,21 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -3692,6 +4732,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -3787,6 +4832,21 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -3821,6 +4881,21 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -3848,7 +4923,34 @@
       "rest": {
         "method": "GET",
         "path": "/task_templates",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "project",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTaskTemplates",
+        "method": "GET",
+        "path": "/task_templates"
       }
     },
     {
@@ -3876,6 +4978,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -3992,6 +5099,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -4087,6 +5199,26 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "completed_since",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -4121,6 +5253,26 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "completed_since",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -4155,6 +5307,21 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -4189,6 +5356,26 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "completed_since",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -4223,6 +5410,21 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -4257,6 +5459,21 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -4331,6 +5548,21 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -4565,6 +5797,290 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "assigned_by.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "assigned_by.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "assignee.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "assignee.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "commented_on_by.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "completed",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "completed_at.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "completed_at.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "completed_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "completed_on.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "completed_on.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_at.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_at.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_by.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_by.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_on.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_on.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_at.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_at.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_on.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_on.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "followers.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "followers.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "has_attachment",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "is_blocked",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "is_blocking",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "is_subtask",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "liked_by.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "modified_at.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "modified_at.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "modified_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "modified_on.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "modified_on.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "portfolios.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "projects.all",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "projects.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "projects.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "resource_subtype",
+            "in": "query",
+            "type": "enum",
+            "values": [
+              "default_task",
+              "milestone",
+              "approval",
+              "custom"
+            ]
+          },
+          {
+            "name": "sections.all",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "sections.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "sections.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "sort_ascending",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "type": "enum",
+            "values": [
+              "due_date",
+              "created_at",
+              "completed_at",
+              "likes",
+              "modified_at",
+              "relevance"
+            ]
+          },
+          {
+            "name": "start_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "start_on.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "start_on.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "tags.all",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "tags.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "tags.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "teams.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "text",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -4599,6 +6115,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -4659,6 +6180,21 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -4699,6 +6235,21 @@
             "in": "query",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -4733,6 +6284,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -4799,6 +6355,21 @@
             "in": "query",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -4873,6 +6444,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -4907,6 +6483,31 @@
             "in": "query",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "end_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "start_on",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -4941,6 +6542,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -5036,6 +6642,31 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -5070,6 +6701,26 @@
             "in": "query",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "is_archived",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -5139,6 +6790,21 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -5173,6 +6839,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -5221,7 +6892,69 @@
       "rest": {
         "method": "GET",
         "path": "/time_tracking_entries",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "attributable_to",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "entered_on_end_date",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "entered_on_start_date",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "portfolio",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "task",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "timesheet_approval_status",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "user",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimeTrackingEntries",
+        "method": "GET",
+        "path": "/time_tracking_entries"
       }
     },
     {
@@ -5249,6 +6982,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -5323,6 +7061,41 @@
             "in": "query",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "approval_statuses",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "from_date",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "to_date",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "user",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -5411,6 +7184,34 @@
               "team",
               "user"
             ]
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "type": "enum",
+            "values": [
+              "custom_field",
+              "portfolio",
+              "project",
+              "tag",
+              "task",
+              "user"
+            ]
           }
         ]
       },
@@ -5445,6 +7246,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -5485,6 +7291,11 @@
             "in": "query",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -5545,6 +7356,16 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -5599,6 +7420,21 @@
             "in": "query",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -5633,6 +7469,16 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -5667,6 +7513,16 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -5707,6 +7563,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -5741,6 +7602,26 @@
             "in": "query",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "resource",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -5810,6 +7691,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -5905,6 +7791,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -5939,6 +7830,21 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -6025,6 +7931,11 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
           }
         ]
       },
@@ -6099,6 +8010,16 @@
             "in": "path",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "sync",
+            "in": "query",
+            "type": "string"
           }
         ]
       },

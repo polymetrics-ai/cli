@@ -66,6 +66,69 @@ func (s sourceProjectionStats) Changed() bool {
 	return s.Writes+s.Operations+s.CLI+s.Surface+s.Missing > 0
 }
 
+// sourceProjectionMaterializeDirectReadSurfaceEndpoints replaces only a
+// legacy blocked API record once its exact canonical command has already been
+// materialized. Source metadata by itself cannot promote a route; the command
+// must be implemented, source-bound, and name the same method/path. Stream
+// coverage remains stream-owned.
+func sourceProjectionMaterializeDirectReadSurfaceEndpoints(surface, cli *orderedObject, result sourceImportResult) int {
+	byEndpoint := map[string]sourceOperationDescriptor{}
+	for _, source := range result.Operations {
+		if source.Protocol == "graphql" || sourceProjectionMutationMethod(source.Method) || sourceProjectionReadHasBlockingGap(source) {
+			continue
+		}
+		endpoint := sourceProjectionEndpointKey(source.Method, source.Path)
+		if _, duplicate := byEndpoint[endpoint]; duplicate {
+			delete(byEndpoint, endpoint)
+			continue
+		}
+		byEndpoint[endpoint] = source
+	}
+	changed := 0
+	for _, raw := range arrayField(surface, "endpoints") {
+		endpoint, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		key := sourceProjectionEndpointKey(stringField(endpoint, "method"), stringField(endpoint, "path"))
+		source, found := byEndpoint[key]
+		if !found {
+			continue
+		}
+		paths := sourceProjectionImplementedDirectReadCommandPaths(cli, key, source.SourceID)
+		if len(paths) == 0 {
+			continue
+		}
+		coverage := directReadCoverage(paths)
+		current, hasCoverage := endpoint.get("covered_by")
+		if hasCoverage && orderedSemanticEqual(current, coverage) {
+			if endpoint.remove("operation") {
+				changed++
+			}
+			continue
+		}
+		endpoint.remove("operation")
+		endpoint.set("covered_by", coverage)
+		changed++
+	}
+	return changed
+}
+
+func sourceProjectionImplementedDirectReadCommandPaths(cli *orderedObject, endpoint, sourceID string) []string {
+	paths := make([]string, 0)
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok || stringField(command, "intent") != "direct_read" || stringField(command, "availability") != "implemented" || stringField(command, "source_operation") != sourceID || !sourceProjectionCommandHasEndpoint(command, endpoint) {
+			continue
+		}
+		if path := stringField(command, "path"); path != "" {
+			paths = append(paths, path)
+		}
+	}
+	sort.Strings(paths)
+	return paths
+}
+
 type sourceActionContract struct {
 	Fields           map[string]any
 	BareStringFields map[string]bool
@@ -358,6 +421,9 @@ func projectSourceDescriptorToBundleMode(bundleDir string, result sourceImportRe
 			}
 		}
 	}
+	if materializeReads && api.root != nil {
+		stats.Surface += sourceProjectionMaterializeDirectReadSurfaceEndpoints(api.root, cli.root, result)
+	}
 	if stats.Missing > 0 {
 		return stats, fmt.Errorf("%d source operation(s) have no complete executable action", stats.Missing)
 	}
@@ -438,6 +504,7 @@ type sourceProjectionReadStats struct {
 }
 
 const sourceBoundReadMissingFoundationPrefix = "missing_foundation=source-bound-read-execution-r1: "
+const sourceProjectionLegacyPlannedReadNote = "Planned ETL/direct read metadata only; no raw provider request execution is exposed."
 
 // sourceProjectionMaterializeReadOperation is the narrow bridge from a
 // locked, non-mutating source descriptor to an existing declaration-owned
@@ -450,14 +517,14 @@ func sourceProjectionMaterializeReadOperation(operations, cli, streams *orderedO
 		return sourceProjectionReadStats{}, nil
 	}
 	if sourceProjectionReadHasBlockingGap(source) {
-		return sourceProjectionMarkReadMissingFoundation(cli, source, "locked source contract has an unresolved foundation gap"), nil
+		return sourceProjectionMarkReadMissingFoundation(cli, source, sourceProjectionReadFoundationReason(source)), nil
 	}
 	if sourceProjectionSourceEndpointCount(inventory, source.Method, source.Path) != 1 {
 		return sourceProjectionMarkReadMissingFoundation(cli, source, "exact source binding is ambiguous for this method/path"), nil
 	}
 	op := sourceProjectionOperationForEndpoint(operations, source.Method, source.Path)
 	if op == nil {
-		op = sourceProjectionStreamOperationForEndpoint(operations, cli, source.Method, source.Path)
+		op = sourceProjectionStreamOperationForEndpoint(operations, cli, streams, source.Method, source.Path)
 	}
 	if op == nil {
 		return sourceProjectionMarkReadMissingFoundation(cli, source, "no declaration-owned REST or stream operation has this exact method/path"), nil
@@ -470,7 +537,7 @@ func sourceProjectionMaterializeReadOperation(operations, cli, streams *orderedO
 	if command == nil && stringField(op, "kind") == "stream_etl" {
 		command = sourceProjectionCommandForStreamOperation(cli, op, source.Method, source.Path)
 	}
-	if command == nil {
+	if command == nil && stringField(op, "kind") != "stream_etl" {
 		return sourceProjectionMarkReadMissingFoundation(cli, source, "no unambiguous canonical command is bound to declaration operation "+operationID), nil
 	}
 
@@ -478,9 +545,6 @@ func sourceProjectionMaterializeReadOperation(operations, cli, streams *orderedO
 	case "rest_read":
 		return sourceProjectionMaterializeDirectRead(op, command, source)
 	case "stream_etl":
-		if stringField(command, "intent") != "etl" || stringField(command, "availability") != "implemented" || stringField(command, "stream") == "" {
-			return sourceProjectionReadStats{}, nil
-		}
 		return sourceProjectionMaterializeStreamRead(op, command, streams, source)
 	default:
 		return sourceProjectionMarkReadMissingFoundation(cli, source, "operation "+operationID+" has no read executor kind"), nil
@@ -522,7 +586,7 @@ func sourceProjectionOperationForEndpoint(operations *orderedObject, method, pat
 	return match
 }
 
-func sourceProjectionStreamOperationForEndpoint(operations, cli *orderedObject, method, path string) *orderedObject {
+func sourceProjectionStreamOperationForEndpoint(operations, cli, streams *orderedObject, method, path string) *orderedObject {
 	endpoint := sourceProjectionEndpointKey(method, path)
 	streamName := ""
 	for _, raw := range arrayField(cli, "commands") {
@@ -536,13 +600,17 @@ func sourceProjectionStreamOperationForEndpoint(operations, cli *orderedObject, 
 		}
 		streamName = name
 	}
-	if streamName == "" {
-		return nil
-	}
 	var match *orderedObject
 	for _, raw := range arrayField(operations, "operations") {
 		operation, ok := raw.(*orderedObject)
-		if !ok || stringField(operation, "kind") != "stream_etl" || !sourceProjectionOperationSelectsStream(operation, streamName) {
+		if !ok || stringField(operation, "kind") != "stream_etl" {
+			continue
+		}
+		selectedStream := sourceProjectionOperationStreamName(operation)
+		if selectedStream == "" || (streamName != "" && selectedStream != streamName) {
+			continue
+		}
+		if streamName == "" && !sourceProjectionDeclaredStreamEndpointMatches(streams, selectedStream, method, path) {
 			continue
 		}
 		if match != nil {
@@ -551,6 +619,21 @@ func sourceProjectionStreamOperationForEndpoint(operations, cli *orderedObject, 
 		match = operation
 	}
 	return match
+}
+
+func sourceProjectionDeclaredStreamEndpointMatches(streams *orderedObject, streamName, method, path string) bool {
+	for _, raw := range arrayField(streams, "streams") {
+		stream, ok := raw.(*orderedObject)
+		if !ok || stringField(stream, "name") != streamName {
+			continue
+		}
+		streamMethod := stringField(stream, "method")
+		if streamMethod == "" {
+			streamMethod = "GET"
+		}
+		return strings.EqualFold(streamMethod, method) && sourceProjectionStreamPathMatchesSourcePath(stringField(stream, "path"), path)
+	}
+	return false
 }
 
 func sourceProjectionCommandForOperation(cli *orderedObject, operationID, method, path string) *orderedObject {
@@ -620,7 +703,7 @@ func sourceProjectionMaterializeDirectRead(operation, command *orderedObject, so
 	if !positiveNumberValue(rest, "max_bytes") || stringField(operation, "output_policy") == "" {
 		return sourceProjectionMarkOneReadMissingFoundation(command, source, "operation lacks a bounded response cap or output policy"), nil
 	}
-	if sourceProjectionSyncRequiredReadParameters(rest, source) {
+	if sourceProjectionSyncReadParameters(rest, source) {
 		stats.Operations++
 	}
 	if reason := sourceProjectionReadParametersComplete(rest, source); reason != "" {
@@ -654,6 +737,12 @@ func sourceProjectionMaterializeDirectRead(operation, command *orderedObject, so
 	if sourceProjectionClearReadMissingFoundation(command) || sourceProjectionClearBlockedReadNote(command, source.SourceID) {
 		commandChanged = true
 	}
+	if sourceProjectionClearLegacyPlannedReadNote(command) {
+		commandChanged = true
+	}
+	if sourceProjectionClearLegacyPlannedReadSummary(command) {
+		commandChanged = true
+	}
 	if commandChanged {
 		stats.CLI++
 	}
@@ -661,8 +750,13 @@ func sourceProjectionMaterializeDirectRead(operation, command *orderedObject, so
 }
 
 func sourceProjectionMaterializeStreamRead(operation, command, streams *orderedObject, source sourceOperationDescriptor) (sourceProjectionReadStats, error) {
-	streamName := stringField(command, "stream")
-	if streamName == "" || stringField(command, "intent") != "etl" || stringField(command, "availability") != "implemented" {
+	streamName := ""
+	if command == nil || stringField(command, "stream") == "" {
+		streamName = sourceProjectionOperationStreamName(operation)
+	} else {
+		streamName = stringField(command, "stream")
+	}
+	if streamName == "" {
 		return sourceProjectionMarkOneReadMissingFoundation(command, source, "source-backed ETL requires an already implemented named stream"), nil
 	}
 	if source.Pagination == nil {
@@ -675,17 +769,63 @@ func sourceProjectionMaterializeStreamRead(operation, command, streams *orderedO
 	if sourceProjectionSetSourceOperation(operation, source) {
 		stats.Operations++
 	}
+	if command == nil {
+		return stats, nil
+	}
 	commandChanged := command.remove("operation")
+	if setOrderedIfDifferent(command, "intent", "etl") {
+		commandChanged = true
+	}
+	if setOrderedIfDifferent(command, "availability", "implemented") {
+		commandChanged = true
+	}
+	if setOrderedIfDifferent(command, "stream", streamName) {
+		commandChanged = true
+	}
 	if setOrderedIfDifferent(command, "source_operation", source.SourceID) {
 		commandChanged = true
 	}
+	if setOrderedIfDifferent(command, "api_surface", derivedAPISurface(source.Method, source.Path)) {
+		commandChanged = true
+	}
+	if command.remove("flags") {
+		commandChanged = true
+	}
 	if sourceProjectionClearReadMissingFoundation(command) {
+		commandChanged = true
+	}
+	if sourceProjectionClearLegacyPlannedReadNote(command) {
+		commandChanged = true
+	}
+	if sourceProjectionClearLegacyPlannedReadSummary(command) {
 		commandChanged = true
 	}
 	if commandChanged {
 		stats.CLI++
 	}
 	return stats, nil
+}
+
+// sourceProjectionClearLegacyPlannedReadSummary removes the generated
+// declaration-era prefix only after the same command has been materialized as
+// a source-bound executor.  It deliberately leaves an author-owned summary
+// alone unless it matches the historical generated form, so projection never
+// uses source import as a general documentation rewriter.
+func sourceProjectionClearLegacyPlannedReadSummary(command *orderedObject) bool {
+	summary := stringField(command, "summary")
+	const prefix = "Planned fixed-target "
+	if !strings.HasPrefix(summary, prefix) {
+		return false
+	}
+	readPrefixEnd := strings.Index(summary[len(prefix):], " read: ")
+	if readPrefixEnd < 0 {
+		return false
+	}
+	materialized := summary[len(prefix)+readPrefixEnd+len(" read: "):]
+	if materialized == "" {
+		return false
+	}
+	return setOrderedIfDifferent(command, "summary", materialized)
 }
 
 func sourceProjectionStreamMatchesReadOperation(operation, streams *orderedObject, streamName string, source sourceOperationDescriptor) bool {
@@ -751,7 +891,7 @@ func sourceProjectionStreamPathMatchesSourcePath(streamPath, sourcePath string) 
 		if streamParts[index] == sourceParts[index] {
 			continue
 		}
-		if sourceProjectionConfigPathSegment(streamParts[index]) && sourceProjectionSourcePathSegment(sourceParts[index]) {
+		if (sourceProjectionConfigPathSegment(streamParts[index]) || sourceProjectionFanOutPathSegment(streamParts[index])) && sourceProjectionSourcePathSegment(sourceParts[index]) {
 			continue
 		}
 		return false
@@ -761,6 +901,10 @@ func sourceProjectionStreamPathMatchesSourcePath(streamPath, sourcePath string) 
 
 func sourceProjectionConfigPathSegment(segment string) bool {
 	return strings.HasPrefix(segment, "{{ config.") && strings.HasSuffix(segment, " }}") && len(strings.TrimSuffix(strings.TrimPrefix(segment, "{{ config."), " }}")) > 0
+}
+
+func sourceProjectionFanOutPathSegment(segment string) bool {
+	return segment == "{{ fanout.id }}"
 }
 
 func sourceProjectionSourcePathSegment(segment string) bool {
@@ -814,15 +958,17 @@ func sourceProjectionReadParametersComplete(rest *orderedObject, source sourceOp
 	return ""
 }
 
-// sourceProjectionSyncRequiredReadParameters imports the caller inputs a
-// source-bound direct read cannot omit.  It consumes the canonical descriptor
-// produced from the retained provider material, never a command spelling or a
-// runtime request.  Optional non-scalar filters deliberately remain omitted:
-// the one-page direct read stays useful without inventing a serialization
-// surface that the source contract did not prove PM can execute.
-func sourceProjectionSyncRequiredReadParameters(rest *orderedObject, source sourceOperationDescriptor) bool {
+// sourceProjectionSyncReadParameters imports every scalar caller input from
+// the canonical descriptor, including optional filters. A zero-input read
+// receives an explicit empty parameter list so its bounded direct-read contract
+// is distinguishable from one whose typed inputs were never imported. Optional
+// non-scalar filters deliberately remain omitted: the one-page direct read
+// stays useful without inventing a serialization surface that the source
+// contract did not prove PM can execute.
+func sourceProjectionSyncReadParameters(rest *orderedObject, source sourceOperationDescriptor) bool {
 	parameters := arrayField(rest, "parameters")
-	changed := false
+	_, declaredParameters := rest.get("parameters")
+	changed := !declaredParameters
 	for _, group := range []struct {
 		location   string
 		parameters []sourceParameterDescriptor
@@ -831,7 +977,7 @@ func sourceProjectionSyncRequiredReadParameters(rest *orderedObject, source sour
 		{location: "query", parameters: source.Request.Query},
 	} {
 		for _, sourceParameter := range group.parameters {
-			if !sourceParameter.Required || !sourceScalarWireSchema(sourceParameter.Schema) {
+			if !sourceScalarWireSchema(sourceParameter.Schema) {
 				continue
 			}
 			typeName := sourceProjectionReadParameterType(sourceParameter.Schema)
@@ -856,8 +1002,12 @@ func sourceProjectionSyncRequiredReadParameters(rest *orderedObject, source sour
 			if setOrderedIfDifferent(declared, "type", typeName) {
 				changed = true
 			}
-			if required, _ := declared.get("required"); required != true {
-				declared.set("required", true)
+			if sourceParameter.Required {
+				if required, _ := declared.get("required"); required != true {
+					declared.set("required", true)
+					changed = true
+				}
+			} else if declared.remove("required") {
 				changed = true
 			}
 			if sourceProjectionSetReadParameterEnum(declared, sourceParameter.Schema) {
@@ -955,15 +1105,6 @@ func sourceProjectionMarkOneReadMissingFoundation(command *orderedObject, source
 		command.set("availability", "planned")
 		changed = true
 	}
-	if notes := stringField(command, "notes"); notes != "" && !strings.HasPrefix(notes, sourceBoundReadMissingFoundationPrefix) {
-		// An author-owned foundation note can cover a broader composite than the
-		// source-bound read bridge (for example, a read/write workflow). Preserve
-		// it rather than replacing its explanation with a narrower one.
-		if changed {
-			return sourceProjectionReadStats{CLI: 1}
-		}
-		return sourceProjectionReadStats{}
-	}
 	note := sourceBoundReadMissingFoundationPrefix + reason + "; source_operation=" + source.SourceID
 	if setOrderedIfDifferent(command, "notes", note) {
 		changed = true
@@ -974,12 +1115,34 @@ func sourceProjectionMarkOneReadMissingFoundation(command *orderedObject, source
 	return sourceProjectionReadStats{}
 }
 
+func sourceProjectionReadFoundationReason(source sourceOperationDescriptor) string {
+	foundations := make([]string, 0, len(source.Runtime.Gaps))
+	for _, gap := range source.Runtime.Gaps {
+		if !sourceProjectionHasBlockingGap([]sourceContractGap{gap}) {
+			continue
+		}
+		foundations = append(foundations, gap.Foundation)
+	}
+	sort.Strings(foundations)
+	if len(foundations) == 0 {
+		return "missing foundation " + sourceOperationExecutionFoundation
+	}
+	return "missing foundation " + strings.Join(foundations, ",")
+}
+
 func sourceProjectionClearReadMissingFoundation(command *orderedObject) bool {
 	notes := stringField(command, "notes")
 	if strings.HasPrefix(notes, sourceBoundReadMissingFoundationPrefix) {
 		return command.remove("notes")
 	}
 	return false
+}
+
+func sourceProjectionClearLegacyPlannedReadNote(command *orderedObject) bool {
+	if stringField(command, "notes") != sourceProjectionLegacyPlannedReadNote {
+		return false
+	}
+	return command.remove("notes")
 }
 
 // sourceProjectionClearBlockedReadNote removes only the exact source-derived
@@ -3387,7 +3550,7 @@ func sourceRESTOperationIsDeclaredReachable(bundle engine.Bundle, source sourceO
 		if method == "" {
 			method = "GET"
 		}
-		if sourceProjectionEndpointKey(method, stream.Path) == endpoint && sourceProjectionDeclaredStream(bundle, stream.Name, source.SourceID, allowSourceBoundPartial) {
+		if strings.EqualFold(method, source.Method) && sourceProjectionStreamPathMatchesSourcePath(stream.Path, source.Path) && sourceProjectionDeclaredStream(bundle, stream.Name, source.SourceID, allowSourceBoundPartial) {
 			return true
 		}
 	}
@@ -3748,57 +3911,21 @@ func sourceProjectionAnnotateUnreachableReadGaps(bundle engine.Bundle, result *s
 }
 
 // sourceProjectionReadOnlyResult retains the complete provider descriptor but
-// limits a bundle projection to GET operations with an already declaration-owned
-// canonical command. A complete REST read may be promoted into the bounded
-// direct-read lane; a stream remains ETL only when it was already implemented
-// with a named stream. This source-bound bridge seals an exact provider identity
-// and never rewrites a write or delete contract.
+// selects every non-mutating GET for the closed materializer. The materializer
+// alone decides whether an exact declaration-owned REST operation can become a
+// bounded direct read, an existing stream proves ETL semantics, or a named
+// foundation must remain visible. Pre-filtering against a historical status
+// would let planned/deferred metadata hide an otherwise complete provider
+// contract.
 func sourceProjectionReadOnlyResult(bundleDir string, result sourceImportResult) (sourceImportResult, error) {
+	_ = bundleDir // Callers retain the argument while this lane becomes capability-based.
 	filtered := result
 	filtered.Operations = make([]sourceOperationDescriptor, 0, len(result.Operations))
-	operationsRaw, err := os.ReadFile(filepath.Join(bundleDir, "operations.json"))
-	if err != nil {
-		if os.IsNotExist(err) {
-			return filtered, nil
-		}
-		return sourceImportResult{}, fmt.Errorf("operations.json: %w", err)
-	}
-	cliRaw, err := os.ReadFile(filepath.Join(bundleDir, "cli_surface.json"))
-	if err != nil {
-		if os.IsNotExist(err) {
-			return filtered, nil
-		}
-		return sourceImportResult{}, fmt.Errorf("cli_surface.json: %w", err)
-	}
-	var operations, cli orderedJSON
-	if err := json.Unmarshal(operationsRaw, &operations); err != nil {
-		return sourceImportResult{}, fmt.Errorf("operations.json: %w", err)
-	}
-	if err := json.Unmarshal(cliRaw, &cli); err != nil {
-		return sourceImportResult{}, fmt.Errorf("cli_surface.json: %w", err)
-	}
 	for _, operation := range result.Operations {
 		if sourceProjectionOperationMutates(operation) || operation.Protocol == "graphql" || !strings.EqualFold(operation.Method, "GET") {
 			continue
 		}
-		declared := sourceProjectionOperationForEndpoint(operations.root, operation.Method, operation.Path)
-		if declared == nil {
-			declared = sourceProjectionStreamOperationForEndpoint(operations.root, cli.root, operation.Method, operation.Path)
-		}
-		if declared == nil {
-			continue
-		}
-		command := sourceProjectionCommandForOperation(cli.root, stringField(declared, "id"), operation.Method, operation.Path)
-		if command == nil && stringField(declared, "kind") == "stream_etl" {
-			command = sourceProjectionCommandForStreamOperation(cli.root, declared, operation.Method, operation.Path)
-		}
-		if command == nil {
-			continue
-		}
-		if stringField(declared, "kind") == "rest_read" ||
-			(stringField(declared, "kind") == "stream_etl" && stringField(command, "intent") == "etl" && stringField(command, "availability") == "implemented" && stringField(command, "stream") != "") {
-			filtered.Operations = append(filtered.Operations, operation)
-		}
+		filtered.Operations = append(filtered.Operations, operation)
 	}
 	return filtered, nil
 }

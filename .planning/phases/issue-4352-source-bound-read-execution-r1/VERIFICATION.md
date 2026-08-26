@@ -2,6 +2,27 @@
 
 Status: verified locally, pending PR automation and human gate.
 
+## Final post-rebase repair run
+
+- `go test -timeout 20m -count=1 ./cmd/connectorgen` passed after the V3
+  operation-evidence regeneration.
+- `go test -timeout 20m -count=1 ./internal/connectors/engine`,
+  `./internal/connectors/commandrunner`, and `./internal/connectors/defs/asana`
+  passed. Focused checks cover fan-out route substitution, configured-origin
+  rejection before auth/I/O, direct-vs-stream proof, missing foundation, and
+  direct-write/reverse-ETL/delete regression.
+- `go run ./cmd/connectorgen source-import asana --read-projection-only --check`,
+  `validate internal/connectors/defs`, `surface-sync internal/connectors/defs
+  --check`, and `operation-evidence --check` passed. The last reports 1,774
+  rows and 5 rollups, including all 249 Asana source rows.
+- `./pm docs validate --connectors-dir docs/connectors`, the selected
+  `TestGoldenTranscripts`/`TestSkillsGenerateMatchesTrackedSkills`, and
+  `npm --prefix website run gen:website-data` passed. `git diff --check` passed.
+- Scoped `go vet` for `cmd/connectorgen`, engine, commandrunner, and Asana
+  passed; a freshly built binary in `/tmp/pm-source-bound-read-KcTH0F` returned
+  `missing --credential` (exit 1) for `access-requests get-access-requests`
+  with only `--target fixture-target`, before any provider I/O.
+
 ## Focused red/green proof
 
 - Red: `go test ./cmd/connectorgen -run '^TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL$' -count=1` failed before production changes because `get_access_requests` carried no source binding.

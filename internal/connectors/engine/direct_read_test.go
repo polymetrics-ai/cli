@@ -109,6 +109,25 @@ func TestPreflightSourceBoundStreamReadRequiresDeclaredRecordAndPaginationSemant
 	}
 }
 
+func TestSourceBoundStreamPathMatchesDeclaredFanOutSegmentOnly(t *testing.T) {
+	for _, tc := range []struct {
+		name       string
+		streamPath string
+		lockedPath string
+		want       bool
+	}{
+		{name: "declared fan out", streamPath: "/projects/{{ fanout.id }}/sections", lockedPath: "/projects/{project_gid}/sections", want: true},
+		{name: "fan out cannot substitute route", streamPath: "/projects/{{ fanout.id }}/stories", lockedPath: "/projects/{project_gid}/sections", want: false},
+		{name: "arbitrary record interpolation is not accepted", streamPath: "/projects/{{ record.path }}/sections", lockedPath: "/projects/{project_gid}/sections", want: false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := sourceBoundStreamPathMatchesLockedPath(tc.streamPath, tc.lockedPath); got != tc.want {
+				t.Fatalf("sourceBoundStreamPathMatchesLockedPath(%q, %q) = %t, want %t", tc.streamPath, tc.lockedPath, got, tc.want)
+			}
+		})
+	}
+}
+
 func TestDirectReadAllowsSlashBearingRefPathVariables(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/repos/octo/hello/git/ref/heads/main" {

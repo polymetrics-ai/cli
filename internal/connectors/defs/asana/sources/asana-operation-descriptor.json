@@ -11864,14 +11864,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "closed-source-operation-execution-foundation-r1",
-            "location": "source operation asana.rest.getAllocations",
-            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-          }
-        ]
+        "merge_blocked": false
       }
     },
     {
@@ -20145,14 +20138,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "closed-source-operation-execution-foundation-r1",
-            "location": "source operation asana.rest.getGoals",
-            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-          }
-        ]
+        "merge_blocked": false
       }
     },
     {
@@ -27019,14 +27005,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "closed-source-operation-execution-foundation-r1",
-            "location": "source operation asana.rest.getMemberships",
-            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-          }
-        ]
+        "merge_blocked": false
       }
     },
     {
@@ -30582,14 +30561,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "closed-source-operation-execution-foundation-r1",
-            "location": "source operation asana.rest.getPortfolioMemberships",
-            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-          }
-        ]
+        "merge_blocked": false
       }
     },
     {
@@ -39692,14 +39664,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "closed-source-operation-execution-foundation-r1",
-            "location": "source operation asana.rest.getProjectTemplates",
-            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-          }
-        ]
+        "merge_blocked": false
       }
     },
     {
@@ -46379,14 +46344,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "closed-source-operation-execution-foundation-r1",
-            "location": "source operation asana.rest.getProjectStatusesForProject",
-            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-          }
-        ]
+        "merge_blocked": false
       }
     },
     {
@@ -46914,14 +46872,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "closed-source-operation-execution-foundation-r1",
-            "location": "source operation asana.rest.getSectionsForProject",
-            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-          }
-        ]
+        "merge_blocked": false
       }
     },
     {
@@ -48880,14 +48831,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "closed-source-operation-execution-foundation-r1",
-            "location": "source operation asana.rest.getRates",
-            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-          }
-        ]
+        "merge_blocked": false
       }
     },
     {
@@ -50604,14 +50548,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "closed-source-operation-execution-foundation-r1",
-            "location": "source operation asana.rest.getRoles",
-            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-          }
-        ]
+        "merge_blocked": false
       }
     },
     {
@@ -58150,14 +58087,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "closed-source-operation-execution-foundation-r1",
-            "location": "source operation asana.rest.getTaskTemplates",
-            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-          }
-        ]
+        "merge_blocked": false
       }
     },
     {
@@ -64739,14 +64669,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "closed-source-operation-execution-foundation-r1",
-            "location": "source operation asana.rest.getStoriesForTask",
-            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-          }
-        ]
+        "merge_blocked": false
       }
     },
     {
@@ -76494,14 +76417,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "closed-source-operation-execution-foundation-r1",
-            "location": "source operation asana.rest.getTimeTrackingEntries",
-            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-          }
-        ]
+        "merge_blocked": false
       }
     },
     {
@@ -90801,14 +90717,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "closed-source-operation-execution-foundation-r1",
-            "location": "source operation asana.rest.getCustomFieldsForWorkspace",
-            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-          }
-        ]
+        "merge_blocked": false
       }
     },
     {
@@ -98140,14 +98049,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "closed-source-operation-execution-foundation-r1",
-            "location": "source operation asana.rest.getTeamsForWorkspace",
-            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-          }
-        ]
+        "merge_blocked": false
       }
     },
     {
@@ -100427,14 +100329,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "closed-source-operation-execution-foundation-r1",
-            "location": "source operation asana.rest.getWorkspaceMembershipsForWorkspace",
-            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-          }
-        ]
+        "merge_blocked": false
       }
     },
     {
@@ -228343,81 +228238,6 @@
       "foundation": "cli-request-schema-foundation-r1",
       "location": "request body",
       "reason": "unbounded request schema object has dynamic additionalProperties"
-    },
-    {
-      "foundation": "closed-source-operation-execution-foundation-r1",
-      "location": "source operation asana.rest.getAllocations",
-      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-    },
-    {
-      "foundation": "closed-source-operation-execution-foundation-r1",
-      "location": "source operation asana.rest.getCustomFieldsForWorkspace",
-      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-    },
-    {
-      "foundation": "closed-source-operation-execution-foundation-r1",
-      "location": "source operation asana.rest.getGoals",
-      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-    },
-    {
-      "foundation": "closed-source-operation-execution-foundation-r1",
-      "location": "source operation asana.rest.getMemberships",
-      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-    },
-    {
-      "foundation": "closed-source-operation-execution-foundation-r1",
-      "location": "source operation asana.rest.getPortfolioMemberships",
-      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-    },
-    {
-      "foundation": "closed-source-operation-execution-foundation-r1",
-      "location": "source operation asana.rest.getProjectStatusesForProject",
-      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-    },
-    {
-      "foundation": "closed-source-operation-execution-foundation-r1",
-      "location": "source operation asana.rest.getProjectTemplates",
-      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-    },
-    {
-      "foundation": "closed-source-operation-execution-foundation-r1",
-      "location": "source operation asana.rest.getRates",
-      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-    },
-    {
-      "foundation": "closed-source-operation-execution-foundation-r1",
-      "location": "source operation asana.rest.getRoles",
-      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-    },
-    {
-      "foundation": "closed-source-operation-execution-foundation-r1",
-      "location": "source operation asana.rest.getSectionsForProject",
-      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-    },
-    {
-      "foundation": "closed-source-operation-execution-foundation-r1",
-      "location": "source operation asana.rest.getStoriesForTask",
-      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-    },
-    {
-      "foundation": "closed-source-operation-execution-foundation-r1",
-      "location": "source operation asana.rest.getTaskTemplates",
-      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-    },
-    {
-      "foundation": "closed-source-operation-execution-foundation-r1",
-      "location": "source operation asana.rest.getTeamsForWorkspace",
-      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-    },
-    {
-      "foundation": "closed-source-operation-execution-foundation-r1",
-      "location": "source operation asana.rest.getTimeTrackingEntries",
-      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-    },
-    {
-      "foundation": "closed-source-operation-execution-foundation-r1",
-      "location": "source operation asana.rest.getWorkspaceMembershipsForWorkspace",
-      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
     },
     {
       "foundation": "source-cited-non-executable-mutation-foundation-r1",

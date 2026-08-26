@@ -14,12 +14,16 @@ Provide a shared, closed source-bound read execution foundation. A mapped source
   mutation whose locked request contract still needs a named shared foundation.
   It requires exact source ID/method/path and a matching incomplete action; it
   cannot downgrade, invent, or conceal an operation.
-- Source-bound three already executable bounded Asana direct-read controls plus
-  the existing workspace ETL control:
-  - `asana.rest.getAccessRequests` — `paths["/access_requests"].get`
-  - `asana.rest.getAgentsForWorkspace` — `paths["/workspaces/{workspace_gid}/agents"].get`
-  - `asana.rest.getAgent` — `paths["/agents/{agent_gid}"].get`
-  - `asana.rest.getWorkspaces` — `paths["/workspaces"].get`
+- Captain correction `021.msg` supersedes the historical 9/100 partition:
+  source import materializes all source-complete retained Asana GET contracts
+  in their true executor lane—106 bounded direct reads and 12 exact
+  record/schema/pagination-backed ETL streams. Only
+  `asana.rest.getMembership` remains deferred, explicitly naming
+  `cli-openapi30-reference-sibling-foundation-r1`.
+- The ETL fan-out proof uses exact locked identities and locations:
+  - `asana.rest.getProjectStatusesForProject` — `paths["/projects/{project_gid}/project_statuses"].get`
+  - `asana.rest.getSectionsForProject` — `paths["/projects/{project_gid}/sections"].get`
+  - `asana.rest.getStoriesForTask` — `paths["/tasks/{task_gid}/stories"].get`
 
 The source locations above are from `data/connector-operation-mapping-reports/100-connectors/batch-1/asana.json`.
 
@@ -57,11 +61,11 @@ The source locations above are from `data/connector-operation-mapping-reports/10
 - No credentials were read, logged, or stored; no provider calls were made.
 - No arbitrary URL, method, path, header, body, shell, HTTP write, SQL write, or curl escape hatch was added.
 - Legacy ETL, direct-write, reverse-ETL, binary, and delete behavior is covered by the runner/Asana regressions.
-- This does **not** claim any of Batch-1's 100 planned Asana GETs are
-  implemented: this PR source-binds the nine already executable controls.
-  Every planned row still needs its own exact declaration, typed contract, and
-  honest direct-read/stream semantics before promotion. Unsupported rows stay
-  declaration-pending or named `missing_foundation`.
+- Every eligible historical Batch-1 planned GET is now generated from its
+  concrete locked contract, not merely status-promoted. A future lock refresh
+  must rerun source import/check and leave any non-scalar/header/body or absent
+  typed contract deferred with a concrete named foundation; it must never use
+  historical `planned` metadata to hide an otherwise capable source operation.
 - The retained Asana mutation inventory is 21 absent non-executable actions,
   65 implemented reverse-ETL request-schema gaps, and 4 implemented delete
   path-parameter alias gaps. The 69 existing commands remain implemented;

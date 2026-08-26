@@ -1,8 +1,9 @@
 # Run state — #4352
 
-Current phase: implementation, focused verification, and local review complete; PR creation and external automated review remain.
+Current phase: final local verification and review complete; PR #4353 update,
+external automated review, and human merge gate remain. Do not merge.
 
-Base: `main` at `060bb7864e3419e09ab10e000bb14ac1ea3724ec`.
+Base: `main` at `b33983927d863032dac8220949990506e812937d` after the required rebase.
 
 Firstmate inbox dispositions:
 
@@ -63,3 +64,14 @@ PR #4353. The byte-pinned Asana artifact remains unchanged at
 SHA-256 `cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56`
 and 3,066,750 bytes; both the source lock and retained-artifacts manifest
 match it, and `.gitattributes` exempts only that file from whitespace checks.
+
+Captain correction status (`021.msg` and `023.msg`): the historical 9/100
+partition is superseded. Source import now evaluates every non-mutating locked
+GET by capability and is deterministic against historical status drift: a
+complete exact REST contract becomes bounded `direct_read`; an exact stream
+with records/schema/pagination becomes ETL; and only a concrete named gap may
+remain deferred. The retained Asana result is 106 direct reads, 12 ETL streams,
+and one deferred GET (`asana.rest.getMembership`,
+`cli-openapi30-reference-sibling-foundation-r1`). The current worktree has not
+changed the raw artifact, source lock, `.gitattributes`, other connectors, or
+another worker's branch. Final validation is serialized with 12 GiB free disk.

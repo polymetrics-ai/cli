@@ -83,14 +83,14 @@ directive is the controlling evidence for this gap slice. It is executed
 inline/manual: the canonical contract forbids role spawning and no compatible
 isolated runtime is available.
 
-1. **Restore the admitted read partition.** Red: the current retained-source
-   lane promotes `getAccessRequests`, `getAgentsForWorkspace`, and `getAgent`,
-   even though they were planned at merge base. Green: retain all 100 planned
-   Asana GET rows as planned/declaration-pending; source-bind only the nine
-   merge-base executable controls (`projects`, `tags`, `tasks`,
-   `team-memberships`, `users`, `workspaces`, `custom-fields`, `teams`, and
-   `workspace-memberships`) to exact source identity, method, path, typed
-   contract, and valid stream/direct semantics.
+1. **Classify by current capability, not merge-base status.** Captain `021.msg`
+   supersedes the historical planned partition. Red: a complete locked GET is
+   left planned solely because of its old declaration status. Green: every
+   source-complete JSON GET with a bounded declared REST operation materializes
+   as a source-bound direct read; a list becomes ETL only when its exact stream
+   proves records/schema/pagination; and a genuine gap remains named before
+   provider I/O. No source hash, capture byte count, certification result, or
+   runtime proof participates in that admission decision.
 2. **Separate admission from capture integrity.** Red: mutate capture SHA,
    byte count, capture metadata, or adapter metadata without changing the
    provider operation contract and demonstrate that mapping/declaration status
@@ -112,4 +112,5 @@ isolated runtime is available.
    source import/projection checks, `cmd/connectorgen` package tests, and the
    relevant generated-artifact checks in a clean clone. The unrelated
    blog-annotation website E2E failure is recorded as external CI state and is
-   not changed without a demonstrated connection.
+   not changed without a demonstrated connection. The final capability
+   reconciliation is recorded in `RECONCILIATION.md` and `TDD-LEDGER.md`.

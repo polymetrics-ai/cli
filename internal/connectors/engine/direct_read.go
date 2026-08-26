@@ -310,7 +310,7 @@ func sourceBoundStreamPathMatchesLockedPath(streamPath, lockedPath string) bool 
 		if streamParts[index] == lockedParts[index] {
 			continue
 		}
-		if sourceBoundConfigPathSegment(streamParts[index]) && sourceBoundLockedPathSegment(lockedParts[index]) {
+		if (sourceBoundConfigPathSegment(streamParts[index]) || sourceBoundFanOutPathSegment(streamParts[index])) && sourceBoundLockedPathSegment(lockedParts[index]) {
 			continue
 		}
 		return false
@@ -320,6 +320,10 @@ func sourceBoundStreamPathMatchesLockedPath(streamPath, lockedPath string) bool 
 
 func sourceBoundConfigPathSegment(segment string) bool {
 	return strings.HasPrefix(segment, "{{ config.") && strings.HasSuffix(segment, " }}") && len(strings.TrimSuffix(strings.TrimPrefix(segment, "{{ config."), " }}")) > 0
+}
+
+func sourceBoundFanOutPathSegment(segment string) bool {
+	return segment == "{{ fanout.id }}"
 }
 
 func sourceBoundLockedPathSegment(segment string) bool {

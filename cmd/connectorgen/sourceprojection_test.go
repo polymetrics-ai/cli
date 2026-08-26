@@ -430,7 +430,7 @@ func TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL(t *t
     {"path":"access-requests get-access-requests","summary":"Get access requests","intent":"direct_read","availability":"implemented","operation":"get_access_requests","api_surface":[{"method":"GET","path":"/access_requests"}]},
     {"path":"agents get-agent","summary":"Get an agent","intent":"direct_read","availability":"implemented","operation":"get_agent","flags":[{"name":"agent-gid","type":"string","maps_to":"query.agent_gid"}],"api_surface":[{"method":"GET","path":"/agents/{agent_gid}"}]},
     {"path":"workspaces get-workspaces","summary":"Get workspaces","intent":"etl","availability":"implemented","stream":"workspaces","api_surface":[{"method":"GET","path":"/workspaces"}]},
-    {"path":"pending get-pending","summary":"Get pending","intent":"etl","availability":"planned","operation":"get_pending","api_surface":[{"method":"GET","path":"/pending"}]}
+    {"path":"pending get-pending","summary":"Planned fixed-target Alpha read: Get pending.","intent":"etl","availability":"planned","operation":"get_pending","api_surface":[{"method":"GET","path":"/pending"}]}
   ]
 }`)
 	writeProjectionFixture(t, filepath.Join(bundleDir, "streams.json"), `{
@@ -500,8 +500,8 @@ func TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL(t *t
 	}
 	if command := commands["access-requests get-access-requests"]; command.Intent != "direct_read" || command.Availability != "implemented" || command.SourceOperation != "asana.rest.getAccessRequests" {
 		t.Fatalf("access-requests command = %+v, want bounded implemented direct_read", command)
-	} else if len(command.Flags) != 1 || command.Flags[0].MapsTo != "query.target" || !command.Flags[0].Required || command.Flags[0].Type != "string" {
-		t.Fatalf("access-requests typed query contract = %+v, want required query.target string", command.Flags)
+	} else if len(command.Flags) != 2 || command.Flags[0].MapsTo != "query.target" || !command.Flags[0].Required || command.Flags[0].Type != "string" || command.Flags[1].MapsTo != "query.limit" || command.Flags[1].Required || command.Flags[1].Type != "integer" {
+		t.Fatalf("access-requests typed query contract = %+v, want required query.target string and optional query.limit integer", command.Flags)
 	}
 	agent := commands["agents get-agent"]
 	if agent.Intent != "direct_read" || agent.Availability != "implemented" || agent.SourceOperation != "asana.rest.getAgent" {
@@ -513,7 +513,7 @@ func TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL(t *t
 	if command := commands["workspaces get-workspaces"]; command.Intent != "etl" || command.Availability != "implemented" || command.Stream != "workspaces" || command.Operation != "" || command.SourceOperation != "asana.rest.getWorkspaces" {
 		t.Fatalf("workspace command = %+v, want preserved source-backed ETL stream", command)
 	}
-	if command := commands["pending get-pending"]; command.Intent != "direct_read" || command.Availability != "implemented" || command.Operation != "get_pending" || command.SourceOperation != "asana.rest.getPending" {
+	if command := commands["pending get-pending"]; command.Intent != "direct_read" || command.Availability != "implemented" || command.Operation != "get_pending" || command.SourceOperation != "asana.rest.getPending" || command.Summary != "Get pending." {
 		t.Fatalf("complete planned operation = %+v, want materialized bounded direct read", command)
 	}
 }
@@ -598,6 +598,30 @@ func TestRetainedAsanaSourceImportRejectsReadProjectionDrift(t *testing.T) {
 				})
 			},
 		},
+		{
+			name: "complete direct read marked planned",
+			mutate: func(t *testing.T, bundleDir string) {
+				mutateAsanaCommand(t, filepath.Join(bundleDir, "cli_surface.json"), "access-requests get-access-requests", func(command map[string]any) {
+					command["availability"] = "planned"
+				})
+			},
+		},
+		{
+			name: "complete fan-out ETL marked planned",
+			mutate: func(t *testing.T, bundleDir string) {
+				mutateAsanaCommand(t, filepath.Join(bundleDir, "cli_surface.json"), "sections list", func(command map[string]any) {
+					command["availability"] = "planned"
+				})
+			},
+		},
+		{
+			name: "deferred direct read omits named foundation",
+			mutate: func(t *testing.T, bundleDir string) {
+				mutateAsanaCommand(t, filepath.Join(bundleDir, "cli_surface.json"), "memberships get-membership", func(command map[string]any) {
+					command["notes"] = "planned without a source-cited foundation"
+				})
+			},
+		},
 	} {
 		change := change
 		t.Run(change.name, func(t *testing.T) {
@@ -608,6 +632,112 @@ func TestRetainedAsanaSourceImportRejectsReadProjectionDrift(t *testing.T) {
 				t.Fatalf("retained source check exit=%d stdout=%q stderr=%q, want projection drift refusal", exit, stdout, stderr)
 			}
 		})
+	}
+}
+
+func TestRetainedAsanaSourceImportSelectsSourceBackedFanOutETLStreams(t *testing.T) {
+	defsDir, bundleDir := copyInstalledAsanaProjectionBundle(t)
+	lock, err := loadConnectorSourceImportLock(defsDir, "asana")
+	if err != nil {
+		t.Fatal(err)
+	}
+	fetcher, err := newConnectorSourceImportRetainedArtifactFetcher(defsDir, "asana", defaultSourceImportLimits())
+	if err != nil {
+		t.Fatal(err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, fetcher, defaultSourceImportLimits())
+	if err != nil {
+		t.Fatal(err)
+	}
+	sourceProjectionNormalizeNonBlockingReadGaps(&result)
+	selected, err := sourceProjectionReadOnlyResult(bundleDir, result)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := projectSourceBoundReadDescriptorToBundle(bundleDir, selected, false); err != nil {
+		t.Fatalf("materialize retained source-backed reads before idempotence check: %v", err)
+	}
+	var operationsDocument, cliDocument, streamsDocument orderedJSON
+	for _, document := range []struct {
+		path string
+		into *orderedJSON
+	}{
+		{path: filepath.Join(bundleDir, "operations.json"), into: &operationsDocument},
+		{path: filepath.Join(bundleDir, "cli_surface.json"), into: &cliDocument},
+		{path: filepath.Join(bundleDir, "streams.json"), into: &streamsDocument},
+	} {
+		raw, err := os.ReadFile(document.path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := json.Unmarshal(raw, document.into); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if operation := sourceProjectionStreamOperationForEndpoint(operationsDocument.root, cliDocument.root, streamsDocument.root, "GET", "/projects/{project_gid}/sections"); operation == nil || stringField(operation, "id") != "get_sections_for_project" {
+		t.Fatalf("retained fan-out stream selection = %+v, want get_sections_for_project", operation)
+	}
+	var sectionsSource sourceOperationDescriptor
+	for _, operation := range result.Operations {
+		if operation.SourceID == "asana.rest.getSectionsForProject" {
+			sectionsSource = operation
+			break
+		}
+	}
+	if sectionsSource.SourceID == "" {
+		t.Fatal("retained source import omitted getSectionsForProject")
+	}
+	if len(sectionsSource.Runtime.Gaps) != 0 {
+		t.Fatalf("retained fan-out source contract has unexpected gap: %+v", sectionsSource.Runtime.Gaps)
+	}
+	if operation := sourceProjectionStreamOperationForEndpoint(operationsDocument.root, cliDocument.root, streamsDocument.root, sectionsSource.Method, sectionsSource.Path); operation == nil || stringField(operation, "id") != "get_sections_for_project" {
+		t.Fatalf("retained imported fan-out source = %+v selects operation %+v, want get_sections_for_project", sectionsSource, operation)
+	}
+	sectionsOperation := sourceProjectionStreamOperationForEndpoint(operationsDocument.root, cliDocument.root, streamsDocument.root, sectionsSource.Method, sectionsSource.Path)
+	if !sourceProjectionStreamMatchesReadOperation(sectionsOperation, streamsDocument.root, "sections", sectionsSource) {
+		t.Fatalf("retained fan-out stream does not prove source records/pagination semantics: source=%+v", sectionsSource)
+	}
+	found := map[string]bool{}
+	for _, operation := range selected.Operations {
+		found[operation.SourceID] = true
+	}
+	for _, sourceID := range []string{
+		"asana.rest.getProjectStatusesForProject",
+		"asana.rest.getSectionsForProject",
+		"asana.rest.getStoriesForTask",
+	} {
+		if !found[sourceID] {
+			t.Fatalf("source-backed fan-out ETL operation %q was omitted from projection: %+v", sourceID, found)
+		}
+	}
+	if count := sourceProjectionSourceEndpointCount(selected.Operations, sectionsSource.Method, sectionsSource.Path); count != 1 {
+		t.Fatalf("retained fan-out endpoint source count = %d, want 1", count)
+	}
+	bindingRaw, bound := sectionsOperation.get("source_operation")
+	binding, bindingOK := bindingRaw.(*orderedObject)
+	if !bound || !bindingOK || stringField(binding, "id") != sectionsSource.SourceID || stringField(binding, "method") != "GET" || stringField(binding, "path") != sectionsSource.Path {
+		t.Fatalf("retained fan-out source binding = %+v, want %s GET %s", bindingRaw, sectionsSource.SourceID, sectionsSource.Path)
+	}
+	directStats, err := sourceProjectionMaterializeReadOperation(operationsDocument.root, cliDocument.root, streamsDocument.root, sectionsSource, selected.Operations)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if directStats.Operations != 0 || directStats.CLI != 0 {
+		bound, hasBinding := sectionsOperation.get("source_operation")
+		t.Fatalf("retained fan-out direct materializer = %+v, binding=%+v present=%t, want idempotent exact source binding", directStats, bound, hasBinding)
+	}
+	fanOut := sourceImportResult{}
+	for _, operation := range selected.Operations {
+		if operation.SourceID == "asana.rest.getProjectStatusesForProject" || operation.SourceID == "asana.rest.getSectionsForProject" || operation.SourceID == "asana.rest.getStoriesForTask" {
+			fanOut.Operations = append(fanOut.Operations, operation)
+		}
+	}
+	projection, err := projectSourceBoundReadDescriptorToBundle(bundleDir, fanOut, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if projection.Operations != 0 || projection.CLI != 0 {
+		t.Fatalf("fan-out ETL projection = %+v, want idempotent canonical bindings", projection)
 	}
 }
 
@@ -753,7 +883,10 @@ func assertAsanaRetainedReadSourceContracts(t *testing.T, descriptorPath string)
 		location string
 	}{
 		"asana.rest.getCustomFieldsForWorkspace":         {endpoint: "GET /workspaces/{workspace_gid}/custom_fields", location: `paths["/workspaces/{workspace_gid}/custom_fields"].get`},
+		"asana.rest.getProjectStatusesForProject":        {endpoint: "GET /projects/{project_gid}/project_statuses", location: `paths["/projects/{project_gid}/project_statuses"].get`},
 		"asana.rest.getProjects":                         {endpoint: "GET /projects", location: `paths["/projects"].get`},
+		"asana.rest.getSectionsForProject":               {endpoint: "GET /projects/{project_gid}/sections", location: `paths["/projects/{project_gid}/sections"].get`},
+		"asana.rest.getStoriesForTask":                   {endpoint: "GET /tasks/{task_gid}/stories", location: `paths["/tasks/{task_gid}/stories"].get`},
 		"asana.rest.getTags":                             {endpoint: "GET /tags", location: `paths["/tags"].get`},
 		"asana.rest.getTasks":                            {endpoint: "GET /tasks", location: `paths["/tasks"].get`},
 		"asana.rest.getTeamMemberships":                  {endpoint: "GET /team_memberships", location: `paths["/team_memberships"].get`},
@@ -876,6 +1009,110 @@ func TestSourceProjectionImportsRequiredSourceBoundReadParameters(t *testing.T) 
 	}
 	if command.Notes != "" {
 		t.Fatalf("source-backed command note = %q, want no missing-foundation note", command.Notes)
+	}
+}
+
+func TestSourceProjectionStreamPathMatchesOnlyDeclaredWholeVariableSegments(t *testing.T) {
+	for _, tc := range []struct {
+		name       string
+		streamPath string
+		sourcePath string
+		want       bool
+	}{
+		{name: "fixed config path", streamPath: "/workspaces/{{ config.workspace_id }}/teams", sourcePath: "/workspaces/{workspace_gid}/teams", want: true},
+		{name: "declared fan-out path", streamPath: "/projects/{{ fanout.id }}/sections", sourcePath: "/projects/{project_gid}/sections", want: true},
+		{name: "fan-out cannot change literal route", streamPath: "/projects/{{ fanout.id }}/stories", sourcePath: "/projects/{project_gid}/sections", want: false},
+		{name: "arbitrary interpolation is not source bound", streamPath: "/projects/{{ record.path }}/sections", sourcePath: "/projects/{project_gid}/sections", want: false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := sourceProjectionStreamPathMatchesSourcePath(tc.streamPath, tc.sourcePath); got != tc.want {
+				t.Fatalf("sourceProjectionStreamPathMatchesSourcePath(%q, %q) = %t, want %t", tc.streamPath, tc.sourcePath, got, tc.want)
+			}
+		})
+	}
+}
+
+func TestSourceProjectionMaterializesDeclaredFanOutStreamWithoutInventingDirectRead(t *testing.T) {
+	bundleDir := t.TempDir()
+	writeProjectionFixture(t, filepath.Join(bundleDir, "writes.json"), `{"schema_version":1,"actions":[]}`)
+	operationsPath := filepath.Join(bundleDir, "operations.json")
+	writeProjectionFixture(t, operationsPath, `{
+  "schema_version":1,
+  "operations":[{
+    "id":"get_sections_for_project","kind":"stream_etl","summary":"Sections","risk":"none","approval":"none","output_policy":"json_redacted",
+    "composite":{"steps":["stream:sections"]}
+  }]
+}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), `{"schema_version":1,"commands":[]}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "streams.json"), `{
+  "base":{"pagination":{"type":"next_url","next_url_path":"next_page.uri"}},
+  "streams":[{
+    "name":"sections","path":"/projects/{{ fanout.id }}/sections","records":{"path":"data"},"schema":"schemas/sections.json",
+    "fan_out":{"ids_from":{"request":{"path":"/projects","records_path":"data","id_field":"gid"}},"into":{"path_var":"project_gid"}}
+  }]
+}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"), `{"api":"asana","endpoints":[]}`)
+
+	source := sourceOperationDescriptor{
+		Connector: "asana", SourceID: "asana.rest.getSectionsForProject", Method: "GET", Path: "/projects/{project_gid}/sections",
+		Pagination: map[string]any{"type": "next_url", "next_url_path": "next_page.uri"}, Output: sourceOutputDescriptor{Class: sourceOutputJSON},
+	}
+	selected, err := sourceProjectionReadOnlyResult(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{source}})
+	if err != nil {
+		t.Fatalf("select fan-out ETL source operation: %v", err)
+	}
+	if len(selected.Operations) != 1 || selected.Operations[0].SourceID != source.SourceID {
+		t.Fatalf("selected source operations = %+v, want the declared fan-out stream", selected.Operations)
+	}
+	var operationsDocument, cliDocument, streamsDocument orderedJSON
+	for _, document := range []struct {
+		path string
+		into *orderedJSON
+	}{
+		{path: operationsPath, into: &operationsDocument},
+		{path: filepath.Join(bundleDir, "cli_surface.json"), into: &cliDocument},
+		{path: filepath.Join(bundleDir, "streams.json"), into: &streamsDocument},
+	} {
+		raw, err := os.ReadFile(document.path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := json.Unmarshal(raw, document.into); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if operation := sourceProjectionStreamOperationForEndpoint(operationsDocument.root, cliDocument.root, streamsDocument.root, source.Method, source.Path); operation == nil || stringField(operation, "id") != "get_sections_for_project" {
+		t.Fatalf("fan-out stream operation selection = %+v, want get_sections_for_project", operation)
+	}
+	directStats, err := sourceProjectionMaterializeReadOperation(operationsDocument.root, cliDocument.root, streamsDocument.root, source, selected.Operations)
+	if err != nil {
+		t.Fatalf("materialize fan-out ETL source operation directly: %v", err)
+	}
+	if directStats.Operations != 1 || directStats.CLI != 0 {
+		t.Fatalf("direct fan-out ETL projection stats = %+v, want one operation and no invented CLI command", directStats)
+	}
+	stats, err := projectSourceBoundReadDescriptorToBundle(bundleDir, selected, false)
+	if err != nil {
+		t.Fatalf("materialize fan-out ETL source operation: %v", err)
+	}
+	if stats.Operations != 1 || stats.CLI != 0 {
+		t.Fatalf("fan-out ETL projection stats = %+v, want one operation and no invented CLI command", stats)
+	}
+	var projected struct {
+		Operations []struct {
+			ID              string `json:"id"`
+			SourceOperation *struct {
+				ID     string `json:"id"`
+				Method string `json:"method"`
+				Path   string `json:"path"`
+			} `json:"source_operation"`
+		} `json:"operations"`
+	}
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, operationsPath)), &projected); err != nil {
+		t.Fatalf("decode projected operations: %v", err)
+	}
+	if got := projected.Operations[0].SourceOperation; got == nil || got.ID != source.SourceID || got.Method != "GET" || got.Path != source.Path {
+		t.Fatalf("fan-out ETL source binding = %+v, want exact source operation", got)
 	}
 }
 

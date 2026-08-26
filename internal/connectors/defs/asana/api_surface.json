@@ -8,14 +8,8 @@
     {
       "method": "GET",
       "path": "/access_requests",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getaccessrequests",
-        "notes": "official_operation_id=getAccessRequests; lane=etl_read"
+      "covered_by": {
+        "direct_read": "access-requests get-access-requests"
       }
     },
     {
@@ -60,66 +54,36 @@
     {
       "method": "GET",
       "path": "/workspaces/{workspace_gid}/agents",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getagentsforworkspace",
-        "notes": "official_operation_id=getAgentsForWorkspace; lane=etl_read"
+      "covered_by": {
+        "direct_read": "agents get-agents-for-workspace"
       }
     },
     {
       "method": "GET",
       "path": "/agents/{agent_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getagent",
-        "notes": "official_operation_id=getAgent; lane=etl_read"
+      "covered_by": {
+        "direct_read": "agents get-agent"
       }
     },
     {
       "method": "GET",
       "path": "/workspaces/{workspace_gid}/ai_studio/runs",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getaistudioruns",
-        "notes": "official_operation_id=getAiStudioRuns; lane=etl_read"
+      "covered_by": {
+        "direct_read": "ai-studio-usage-api get-ai-studio-runs"
       }
     },
     {
       "method": "GET",
       "path": "/workspaces/{workspace_gid}/ai_studio/seats",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getaistudioseats",
-        "notes": "official_operation_id=getAiStudioSeats; lane=etl_read"
+      "covered_by": {
+        "direct_read": "ai-studio-usage-api get-ai-studio-seats"
       }
     },
     {
       "method": "GET",
       "path": "/allocations/{allocation_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getallocation",
-        "notes": "official_operation_id=getAllocation; lane=etl_read"
+      "covered_by": {
+        "direct_read": "allocations get-allocation"
       }
     },
     {
@@ -151,14 +115,8 @@
     {
       "method": "GET",
       "path": "/allocations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getallocations",
-        "notes": "official_operation_id=getAllocations; lane=etl_read"
+      "covered_by": {
+        "direct_read": "allocations get-allocations"
       }
     },
     {
@@ -177,14 +135,8 @@
     {
       "method": "GET",
       "path": "/attachments/{attachment_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned bounded attachment metadata read; blocked until connector-local JSON schema, response bounds, redaction policy, and sanitized fixture evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getattachment",
-        "notes": "official_operation_id=getAttachment; lane=etl_read"
+      "covered_by": {
+        "direct_read": "attachments get-attachment"
       }
     },
     {
@@ -203,14 +155,8 @@
     {
       "method": "GET",
       "path": "/attachments",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned bounded attachment metadata read; blocked until connector-local JSON schema, response bounds, redaction policy, and sanitized fixture evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getattachmentsforobject",
-        "notes": "official_operation_id=getAttachmentsForObject; lane=etl_read"
+      "covered_by": {
+        "direct_read": "attachments get-attachments-for-object"
       }
     },
     {
@@ -229,14 +175,8 @@
     {
       "method": "GET",
       "path": "/workspaces/{workspace_gid}/audit_log_events",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
-        "source_url": "https://developers.asana.com/reference/getauditlogevents",
-        "notes": "official_operation_id=getAuditLogEvents; lane=cdc_changefeed"
+      "covered_by": {
+        "direct_read": "audit-log-api get-audit-log-events"
       }
     },
     {
@@ -255,14 +195,8 @@
     {
       "method": "GET",
       "path": "/budgets",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getbudgets",
-        "notes": "official_operation_id=getBudgets; lane=etl_read"
+      "covered_by": {
+        "direct_read": "budgets get-budgets"
       }
     },
     {
@@ -281,14 +215,8 @@
     {
       "method": "GET",
       "path": "/budgets/{budget_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getbudget",
-        "notes": "official_operation_id=getBudget; lane=etl_read"
+      "covered_by": {
+        "direct_read": "budgets get-budget"
       }
     },
     {
@@ -320,53 +248,29 @@
     {
       "method": "GET",
       "path": "/projects/{project_gid}/custom_field_settings",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getcustomfieldsettingsforproject",
-        "notes": "official_operation_id=getCustomFieldSettingsForProject; lane=etl_read"
+      "covered_by": {
+        "direct_read": "custom-field-settings get-custom-field-settings-for-project"
       }
     },
     {
       "method": "GET",
       "path": "/portfolios/{portfolio_gid}/custom_field_settings",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getcustomfieldsettingsforportfolio",
-        "notes": "official_operation_id=getCustomFieldSettingsForPortfolio; lane=etl_read"
+      "covered_by": {
+        "direct_read": "custom-field-settings get-custom-field-settings-for-portfolio"
       }
     },
     {
       "method": "GET",
       "path": "/goals/{goal_gid}/custom_field_settings",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getcustomfieldsettingsforgoal",
-        "notes": "official_operation_id=getCustomFieldSettingsForGoal; lane=etl_read"
+      "covered_by": {
+        "direct_read": "custom-field-settings get-custom-field-settings-for-goal"
       }
     },
     {
       "method": "GET",
       "path": "/teams/{team_gid}/custom_field_settings",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getcustomfieldsettingsforteam",
-        "notes": "official_operation_id=getCustomFieldSettingsForTeam; lane=etl_read"
+      "covered_by": {
+        "direct_read": "custom-field-settings get-custom-field-settings-for-team"
       }
     },
     {
@@ -379,14 +283,8 @@
     {
       "method": "GET",
       "path": "/custom_fields/{custom_field_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getcustomfield",
-        "notes": "official_operation_id=getCustomField; lane=etl_read"
+      "covered_by": {
+        "direct_read": "custom-fields get-custom-field"
       }
     },
     {
@@ -440,40 +338,22 @@
     {
       "method": "GET",
       "path": "/custom_types",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getcustomtypes",
-        "notes": "official_operation_id=getCustomTypes; lane=etl_read"
+      "covered_by": {
+        "direct_read": "custom-types get-custom-types"
       }
     },
     {
       "method": "GET",
       "path": "/custom_types/{custom_type_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getcustomtype",
-        "notes": "official_operation_id=getCustomType; lane=etl_read"
+      "covered_by": {
+        "direct_read": "custom-types get-custom-type"
       }
     },
     {
       "method": "GET",
       "path": "/events",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
-        "source_url": "https://developers.asana.com/reference/getevents",
-        "notes": "official_operation_id=getEvents; lane=cdc_changefeed"
+      "covered_by": {
+        "direct_read": "events get-events"
       }
     },
     {
@@ -493,14 +373,8 @@
     {
       "method": "GET",
       "path": "/goal_relationships/{goal_relationship_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getgoalrelationship",
-        "notes": "official_operation_id=getGoalRelationship; lane=etl_read"
+      "covered_by": {
+        "direct_read": "goal-relationships get-goal-relationship"
       }
     },
     {
@@ -513,14 +387,8 @@
     {
       "method": "GET",
       "path": "/goal_relationships",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getgoalrelationships",
-        "notes": "official_operation_id=getGoalRelationships; lane=etl_read"
+      "covered_by": {
+        "direct_read": "goal-relationships get-goal-relationships"
       }
     },
     {
@@ -546,14 +414,8 @@
     {
       "method": "GET",
       "path": "/goals/{goal_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getgoal",
-        "notes": "official_operation_id=getGoal; lane=etl_read"
+      "covered_by": {
+        "direct_read": "goals get-goal"
       }
     },
     {
@@ -579,14 +441,8 @@
     {
       "method": "GET",
       "path": "/goals",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getgoals",
-        "notes": "official_operation_id=getGoals; lane=etl_read"
+      "covered_by": {
+        "direct_read": "goals get-goals"
       }
     },
     {
@@ -633,14 +489,8 @@
     {
       "method": "GET",
       "path": "/goals/{goal_gid}/parentGoals",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getparentgoalsforgoal",
-        "notes": "official_operation_id=getParentGoalsForGoal; lane=etl_read"
+      "covered_by": {
+        "direct_read": "goals get-parent-goals-for-goal"
       }
     },
     {
@@ -666,27 +516,15 @@
     {
       "method": "GET",
       "path": "/jobs/{job_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
-        "source_url": "https://developers.asana.com/reference/getjob",
-        "notes": "official_operation_id=getJob; lane=cdc_changefeed"
+      "covered_by": {
+        "direct_read": "jobs get-job"
       }
     },
     {
       "method": "GET",
       "path": "/memberships",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getmemberships",
-        "notes": "official_operation_id=getMemberships; lane=etl_read"
+      "covered_by": {
+        "direct_read": "memberships get-memberships"
       }
     },
     {
@@ -743,14 +581,8 @@
     {
       "method": "GET",
       "path": "/ooo_entries/{ooo_entry_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getoooentry",
-        "notes": "official_operation_id=getOooEntry; lane=etl_read"
+      "covered_by": {
+        "direct_read": "ooo-entries get-ooo-entry"
       }
     },
     {
@@ -776,14 +608,8 @@
     {
       "method": "GET",
       "path": "/ooo_entries",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getoooentries",
-        "notes": "official_operation_id=getOooEntries; lane=etl_read"
+      "covered_by": {
+        "direct_read": "ooo-entries get-ooo-entries"
       }
     },
     {
@@ -809,66 +635,36 @@
     {
       "method": "GET",
       "path": "/organization_exports/{organization_export_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getorganizationexport",
-        "notes": "official_operation_id=getOrganizationExport; lane=etl_read"
+      "covered_by": {
+        "direct_read": "organization-exports get-organization-export"
       }
     },
     {
       "method": "GET",
       "path": "/portfolio_memberships",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getportfoliomemberships",
-        "notes": "official_operation_id=getPortfolioMemberships; lane=etl_read"
+      "covered_by": {
+        "direct_read": "portfolio-memberships get-portfolio-memberships"
       }
     },
     {
       "method": "GET",
       "path": "/portfolio_memberships/{portfolio_membership_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getportfoliomembership",
-        "notes": "official_operation_id=getPortfolioMembership; lane=etl_read"
+      "covered_by": {
+        "direct_read": "portfolio-memberships get-portfolio-membership"
       }
     },
     {
       "method": "GET",
       "path": "/portfolios/{portfolio_gid}/portfolio_memberships",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getportfoliomembershipsforportfolio",
-        "notes": "official_operation_id=getPortfolioMembershipsForPortfolio; lane=etl_read"
+      "covered_by": {
+        "direct_read": "portfolio-memberships get-portfolio-memberships-for-portfolio"
       }
     },
     {
       "method": "GET",
       "path": "/portfolios",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getportfolios",
-        "notes": "official_operation_id=getPortfolios; lane=etl_read"
+      "covered_by": {
+        "direct_read": "portfolios get-portfolios"
       }
     },
     {
@@ -881,14 +677,8 @@
     {
       "method": "GET",
       "path": "/portfolios/{portfolio_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getportfolio",
-        "notes": "official_operation_id=getPortfolio; lane=etl_read"
+      "covered_by": {
+        "direct_read": "portfolios get-portfolio"
       }
     },
     {
@@ -914,14 +704,8 @@
     {
       "method": "GET",
       "path": "/portfolios/{portfolio_gid}/items",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getitemsforportfolio",
-        "notes": "official_operation_id=getItemsForPortfolio; lane=etl_read"
+      "covered_by": {
+        "direct_read": "portfolios get-items-for-portfolio"
       }
     },
     {
@@ -994,14 +778,8 @@
     {
       "method": "GET",
       "path": "/project_briefs/{project_brief_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectbrief",
-        "notes": "official_operation_id=getProjectBrief; lane=etl_read"
+      "covered_by": {
+        "direct_read": "project-briefs get-project-brief"
       }
     },
     {
@@ -1034,40 +812,22 @@
     {
       "method": "GET",
       "path": "/project_memberships/{project_membership_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectmembership",
-        "notes": "official_operation_id=getProjectMembership; lane=etl_read"
+      "covered_by": {
+        "direct_read": "project-memberships get-project-membership"
       }
     },
     {
       "method": "GET",
       "path": "/projects/{project_gid}/project_memberships",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectmembershipsforproject",
-        "notes": "official_operation_id=getProjectMembershipsForProject; lane=etl_read"
+      "covered_by": {
+        "direct_read": "project-memberships get-project-memberships-for-project"
       }
     },
     {
       "method": "GET",
       "path": "/project_portfolio_settings/{project_portfolio_setting_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectportfoliosetting",
-        "notes": "official_operation_id=getProjectPortfolioSetting; lane=etl_read"
+      "covered_by": {
+        "direct_read": "project-portfolio-settings get-project-portfolio-setting"
       }
     },
     {
@@ -1080,40 +840,22 @@
     {
       "method": "GET",
       "path": "/projects/{project_gid}/project_portfolio_settings",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectportfoliosettingsforproject",
-        "notes": "official_operation_id=getProjectPortfolioSettingsForProject; lane=etl_read"
+      "covered_by": {
+        "direct_read": "project-portfolio-settings get-project-portfolio-settings-for-project"
       }
     },
     {
       "method": "GET",
       "path": "/portfolios/{portfolio_gid}/project_portfolio_settings",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectportfoliosettingsforportfolio",
-        "notes": "official_operation_id=getProjectPortfolioSettingsForPortfolio; lane=etl_read"
+      "covered_by": {
+        "direct_read": "project-portfolio-settings get-project-portfolio-settings-for-portfolio"
       }
     },
     {
       "method": "GET",
       "path": "/project_statuses/{project_status_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectstatus",
-        "notes": "official_operation_id=getProjectStatus; lane=etl_read"
+      "covered_by": {
+        "direct_read": "project-statuses get-project-status"
       }
     },
     {
@@ -1146,14 +888,8 @@
     {
       "method": "GET",
       "path": "/project_templates/{project_template_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojecttemplate",
-        "notes": "official_operation_id=getProjectTemplate; lane=etl_read"
+      "covered_by": {
+        "direct_read": "project-templates get-project-template"
       }
     },
     {
@@ -1172,27 +908,15 @@
     {
       "method": "GET",
       "path": "/project_templates",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojecttemplates",
-        "notes": "official_operation_id=getProjectTemplates; lane=etl_read"
+      "covered_by": {
+        "direct_read": "project-templates get-project-templates"
       }
     },
     {
       "method": "GET",
       "path": "/teams/{team_gid}/project_templates",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojecttemplatesforteam",
-        "notes": "official_operation_id=getProjectTemplatesForTeam; lane=etl_read"
+      "covered_by": {
+        "direct_read": "project-templates get-project-templates-for-team"
       }
     },
     {
@@ -1219,14 +943,8 @@
     {
       "method": "GET",
       "path": "/projects/{project_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getproject",
-        "notes": "official_operation_id=getProject; lane=etl_read"
+      "covered_by": {
+        "direct_read": "projects get-project"
       }
     },
     {
@@ -1253,27 +971,15 @@
     {
       "method": "GET",
       "path": "/tasks/{task_gid}/projects",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectsfortask",
-        "notes": "official_operation_id=getProjectsForTask; lane=etl_read"
+      "covered_by": {
+        "direct_read": "projects get-projects-for-task"
       }
     },
     {
       "method": "GET",
       "path": "/teams/{team_gid}/projects",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectsforteam",
-        "notes": "official_operation_id=getProjectsForTeam; lane=etl_read"
+      "covered_by": {
+        "direct_read": "projects get-projects-for-team"
       }
     },
     {
@@ -1286,14 +992,8 @@
     {
       "method": "GET",
       "path": "/workspaces/{workspace_gid}/projects",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectsforworkspace",
-        "notes": "official_operation_id=getProjectsForWorkspace; lane=etl_read"
+      "covered_by": {
+        "direct_read": "projects get-projects-for-workspace"
       }
     },
     {
@@ -1306,14 +1006,8 @@
     {
       "method": "GET",
       "path": "/workspaces/{workspace_gid}/projects/search",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned bounded provider-search/direct-read command; blocked until provider search/query foundation #2985 supplies fixed-target query flags, response bounds, and redaction policy.",
-        "source_url": "https://developers.asana.com/reference/searchprojectsforworkspace",
-        "notes": "official_operation_id=searchProjectsForWorkspace; lane=direct_read_query_search"
+      "covered_by": {
+        "direct_read": "projects search-projects-for-workspace"
       }
     },
     {
@@ -1339,14 +1033,8 @@
     {
       "method": "GET",
       "path": "/projects/{project_gid}/task_counts",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettaskcountsforproject",
-        "notes": "official_operation_id=getTaskCountsForProject; lane=etl_read"
+      "covered_by": {
+        "direct_read": "projects get-task-counts-for-project"
       }
     },
     {
@@ -1399,14 +1087,8 @@
     {
       "method": "GET",
       "path": "/rates",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getrates",
-        "notes": "official_operation_id=getRates; lane=etl_read"
+      "covered_by": {
+        "direct_read": "rates get-rates"
       }
     },
     {
@@ -1425,14 +1107,8 @@
     {
       "method": "GET",
       "path": "/rates/{rate_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getrate",
-        "notes": "official_operation_id=getRate; lane=etl_read"
+      "covered_by": {
+        "direct_read": "rates get-rate"
       }
     },
     {
@@ -1464,27 +1140,15 @@
     {
       "method": "GET",
       "path": "/reactions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getreactionsonobject",
-        "notes": "official_operation_id=getReactionsOnObject; lane=etl_read"
+      "covered_by": {
+        "direct_read": "reactions get-reactions-on-object"
       }
     },
     {
       "method": "GET",
       "path": "/roles",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getroles",
-        "notes": "official_operation_id=getRoles; lane=etl_read"
+      "covered_by": {
+        "direct_read": "roles get-roles"
       }
     },
     {
@@ -1503,14 +1167,8 @@
     {
       "method": "GET",
       "path": "/roles/{role_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getrole",
-        "notes": "official_operation_id=getRole; lane=etl_read"
+      "covered_by": {
+        "direct_read": "roles get-role"
       }
     },
     {
@@ -1549,14 +1207,8 @@
     {
       "method": "GET",
       "path": "/sections/{section_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getsection",
-        "notes": "official_operation_id=getSection; lane=etl_read"
+      "covered_by": {
+        "direct_read": "sections get-section"
       }
     },
     {
@@ -1604,14 +1256,8 @@
     {
       "method": "GET",
       "path": "/status_updates/{status_update_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getstatus",
-        "notes": "official_operation_id=getStatus; lane=etl_read"
+      "covered_by": {
+        "direct_read": "status-updates get-status"
       }
     },
     {
@@ -1630,14 +1276,8 @@
     {
       "method": "GET",
       "path": "/status_updates",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getstatusesforobject",
-        "notes": "official_operation_id=getStatusesForObject; lane=etl_read"
+      "covered_by": {
+        "direct_read": "status-updates get-statuses-for-object"
       }
     },
     {
@@ -1650,14 +1290,8 @@
     {
       "method": "GET",
       "path": "/stories/{story_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getstory",
-        "notes": "official_operation_id=getStory; lane=etl_read"
+      "covered_by": {
+        "direct_read": "stories get-story"
       }
     },
     {
@@ -1697,14 +1331,8 @@
     {
       "method": "GET",
       "path": "/goals/{goal_gid}/stories",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getstoriesforgoal",
-        "notes": "official_operation_id=getStoriesForGoal; lane=etl_read"
+      "covered_by": {
+        "direct_read": "stories get-stories-for-goal"
       }
     },
     {
@@ -1731,14 +1359,8 @@
     {
       "method": "GET",
       "path": "/tags/{tag_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettag",
-        "notes": "official_operation_id=getTag; lane=etl_read"
+      "covered_by": {
+        "direct_read": "tags get-tag"
       }
     },
     {
@@ -1758,27 +1380,15 @@
     {
       "method": "GET",
       "path": "/tasks/{task_gid}/tags",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettagsfortask",
-        "notes": "official_operation_id=getTagsForTask; lane=etl_read"
+      "covered_by": {
+        "direct_read": "tags get-tags-for-task"
       }
     },
     {
       "method": "GET",
       "path": "/workspaces/{workspace_gid}/tags",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettagsforworkspace",
-        "notes": "official_operation_id=getTagsForWorkspace; lane=etl_read"
+      "covered_by": {
+        "direct_read": "tags get-tags-for-workspace"
       }
     },
     {
@@ -1791,27 +1401,15 @@
     {
       "method": "GET",
       "path": "/task_templates",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettasktemplates",
-        "notes": "official_operation_id=getTaskTemplates; lane=etl_read"
+      "covered_by": {
+        "direct_read": "task-templates get-task-templates"
       }
     },
     {
       "method": "GET",
       "path": "/task_templates/{task_template_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettasktemplate",
-        "notes": "official_operation_id=getTaskTemplate; lane=etl_read"
+      "covered_by": {
+        "direct_read": "task-templates get-task-template"
       }
     },
     {
@@ -1851,14 +1449,8 @@
     {
       "method": "GET",
       "path": "/tasks/{task_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettask",
-        "notes": "official_operation_id=getTask; lane=etl_read"
+      "covered_by": {
+        "direct_read": "tasks get-task"
       }
     },
     {
@@ -1885,66 +1477,36 @@
     {
       "method": "GET",
       "path": "/projects/{project_gid}/tasks",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettasksforproject",
-        "notes": "official_operation_id=getTasksForProject; lane=etl_read"
+      "covered_by": {
+        "direct_read": "tasks get-tasks-for-project"
       }
     },
     {
       "method": "GET",
       "path": "/sections/{section_gid}/tasks",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettasksforsection",
-        "notes": "official_operation_id=getTasksForSection; lane=etl_read"
+      "covered_by": {
+        "direct_read": "tasks get-tasks-for-section"
       }
     },
     {
       "method": "GET",
       "path": "/tags/{tag_gid}/tasks",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettasksfortag",
-        "notes": "official_operation_id=getTasksForTag; lane=etl_read"
+      "covered_by": {
+        "direct_read": "tasks get-tasks-for-tag"
       }
     },
     {
       "method": "GET",
       "path": "/user_task_lists/{user_task_list_gid}/tasks",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettasksforusertasklist",
-        "notes": "official_operation_id=getTasksForUserTaskList; lane=etl_read"
+      "covered_by": {
+        "direct_read": "tasks get-tasks-for-user-task-list"
       }
     },
     {
       "method": "GET",
       "path": "/tasks/{task_gid}/subtasks",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getsubtasksfortask",
-        "notes": "official_operation_id=getSubtasksForTask; lane=etl_read"
+      "covered_by": {
+        "direct_read": "tasks get-subtasks-for-task"
       }
     },
     {
@@ -1964,14 +1526,8 @@
     {
       "method": "GET",
       "path": "/tasks/{task_gid}/dependencies",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getdependenciesfortask",
-        "notes": "official_operation_id=getDependenciesForTask; lane=etl_read"
+      "covered_by": {
+        "direct_read": "tasks get-dependencies-for-task"
       }
     },
     {
@@ -1997,14 +1553,8 @@
     {
       "method": "GET",
       "path": "/tasks/{task_gid}/dependents",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getdependentsfortask",
-        "notes": "official_operation_id=getDependentsForTask; lane=etl_read"
+      "covered_by": {
+        "direct_read": "tasks get-dependents-for-task"
       }
     },
     {
@@ -2090,40 +1640,22 @@
     {
       "method": "GET",
       "path": "/workspaces/{workspace_gid}/tasks/custom_id/{custom_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettaskforcustomid",
-        "notes": "official_operation_id=getTaskForCustomID; lane=etl_read"
+      "covered_by": {
+        "direct_read": "tasks get-task-for-custom-id"
       }
     },
     {
       "method": "GET",
       "path": "/workspaces/{workspace_gid}/tasks/search",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned bounded provider-search/direct-read command; blocked until provider search/query foundation #2985 supplies fixed-target query flags, response bounds, and redaction policy.",
-        "source_url": "https://developers.asana.com/reference/searchtasksforworkspace",
-        "notes": "official_operation_id=searchTasksForWorkspace; lane=direct_read_query_search"
+      "covered_by": {
+        "direct_read": "tasks search-tasks-for-workspace"
       }
     },
     {
       "method": "GET",
       "path": "/team_memberships/{team_membership_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getteammembership",
-        "notes": "official_operation_id=getTeamMembership; lane=etl_read"
+      "covered_by": {
+        "direct_read": "team-memberships get-team-membership"
       }
     },
     {
@@ -2136,27 +1668,15 @@
     {
       "method": "GET",
       "path": "/teams/{team_gid}/team_memberships",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getteammembershipsforteam",
-        "notes": "official_operation_id=getTeamMembershipsForTeam; lane=etl_read"
+      "covered_by": {
+        "direct_read": "team-memberships get-team-memberships-for-team"
       }
     },
     {
       "method": "GET",
       "path": "/users/{user_gid}/team_memberships",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getteammembershipsforuser",
-        "notes": "official_operation_id=getTeamMembershipsForUser; lane=etl_read"
+      "covered_by": {
+        "direct_read": "team-memberships get-team-memberships-for-user"
       }
     },
     {
@@ -2169,14 +1689,8 @@
     {
       "method": "GET",
       "path": "/teams/{team_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getteam",
-        "notes": "official_operation_id=getTeam; lane=etl_read"
+      "covered_by": {
+        "direct_read": "teams get-team"
       }
     },
     {
@@ -2196,14 +1710,8 @@
     {
       "method": "GET",
       "path": "/users/{user_gid}/teams",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getteamsforuser",
-        "notes": "official_operation_id=getTeamsForUser; lane=etl_read"
+      "covered_by": {
+        "direct_read": "teams get-teams-for-user"
       }
     },
     {
@@ -2229,40 +1737,22 @@
     {
       "method": "GET",
       "path": "/time_periods/{time_period_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimeperiod",
-        "notes": "official_operation_id=getTimePeriod; lane=etl_read"
+      "covered_by": {
+        "direct_read": "time-periods get-time-period"
       }
     },
     {
       "method": "GET",
       "path": "/time_periods",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimeperiods",
-        "notes": "official_operation_id=getTimePeriods; lane=etl_read"
+      "covered_by": {
+        "direct_read": "time-periods get-time-periods"
       }
     },
     {
       "method": "GET",
       "path": "/time_tracking_categories/{time_tracking_category_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimetrackingcategory",
-        "notes": "official_operation_id=getTimeTrackingCategory; lane=etl_read"
+      "covered_by": {
+        "direct_read": "time-tracking-categories get-time-tracking-category"
       }
     },
     {
@@ -2294,27 +1784,15 @@
     {
       "method": "GET",
       "path": "/time_tracking_categories/{time_tracking_category_gid}/time_tracking_entries",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimetrackingentriesfortimetrackingcategory",
-        "notes": "official_operation_id=getTimeTrackingEntriesForTimeTrackingCategory; lane=etl_read"
+      "covered_by": {
+        "direct_read": "time-tracking-categories get-time-tracking-entries-for-time-tracking-category"
       }
     },
     {
       "method": "GET",
       "path": "/time_tracking_categories",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimetrackingcategories",
-        "notes": "official_operation_id=getTimeTrackingCategories; lane=etl_read"
+      "covered_by": {
+        "direct_read": "time-tracking-categories get-time-tracking-categories"
       }
     },
     {
@@ -2333,14 +1811,8 @@
     {
       "method": "GET",
       "path": "/tasks/{task_gid}/time_tracking_entries",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimetrackingentriesfortask",
-        "notes": "official_operation_id=getTimeTrackingEntriesForTask; lane=etl_read"
+      "covered_by": {
+        "direct_read": "time-tracking-entries get-time-tracking-entries-for-task"
       }
     },
     {
@@ -2353,14 +1825,8 @@
     {
       "method": "GET",
       "path": "/time_tracking_entries/{time_tracking_entry_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimetrackingentry",
-        "notes": "official_operation_id=getTimeTrackingEntry; lane=etl_read"
+      "covered_by": {
+        "direct_read": "time-tracking-entries get-time-tracking-entry"
       }
     },
     {
@@ -2386,27 +1852,15 @@
     {
       "method": "GET",
       "path": "/time_tracking_entries",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimetrackingentries",
-        "notes": "official_operation_id=getTimeTrackingEntries; lane=etl_read"
+      "covered_by": {
+        "direct_read": "time-tracking-entries get-time-tracking-entries"
       }
     },
     {
       "method": "GET",
       "path": "/timesheet_approval_statuses/{timesheet_approval_status_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimesheetapprovalstatus",
-        "notes": "official_operation_id=getTimesheetApprovalStatus; lane=etl_read"
+      "covered_by": {
+        "direct_read": "timesheet-approval-statuses get-timesheet-approval-status"
       }
     },
     {
@@ -2425,14 +1879,8 @@
     {
       "method": "GET",
       "path": "/timesheet_approval_statuses",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimesheetapprovalstatuses",
-        "notes": "official_operation_id=getTimesheetApprovalStatuses; lane=etl_read"
+      "covered_by": {
+        "direct_read": "timesheet-approval-statuses get-timesheet-approval-statuses"
       }
     },
     {
@@ -2451,40 +1899,22 @@
     {
       "method": "GET",
       "path": "/workspaces/{workspace_gid}/typeahead",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned bounded provider-search/direct-read command; blocked until provider search/query foundation #2985 supplies fixed-target query flags, response bounds, and redaction policy.",
-        "source_url": "https://developers.asana.com/reference/typeaheadforworkspace",
-        "notes": "official_operation_id=typeaheadForWorkspace; lane=direct_read_query_search"
+      "covered_by": {
+        "direct_read": "typeahead for-workspace"
       }
     },
     {
       "method": "GET",
       "path": "/user_task_lists/{user_task_list_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getusertasklist",
-        "notes": "official_operation_id=getUserTaskList; lane=etl_read"
+      "covered_by": {
+        "direct_read": "user-task-lists get-user-task-list"
       }
     },
     {
       "method": "GET",
       "path": "/users/{user_gid}/user_task_list",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getusertasklistforuser",
-        "notes": "official_operation_id=getUserTaskListForUser; lane=etl_read"
+      "covered_by": {
+        "direct_read": "user-task-lists get-user-task-list-for-user"
       }
     },
     {
@@ -2497,14 +1927,8 @@
     {
       "method": "GET",
       "path": "/users/{user_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getuser",
-        "notes": "official_operation_id=getUser; lane=etl_read"
+      "covered_by": {
+        "direct_read": "users get-user"
       }
     },
     {
@@ -2517,53 +1941,29 @@
     {
       "method": "GET",
       "path": "/users/{user_gid}/favorites",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getfavoritesforuser",
-        "notes": "official_operation_id=getFavoritesForUser; lane=etl_read"
+      "covered_by": {
+        "direct_read": "users get-favorites-for-user"
       }
     },
     {
       "method": "GET",
       "path": "/teams/{team_gid}/users",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getusersforteam",
-        "notes": "official_operation_id=getUsersForTeam; lane=etl_read"
+      "covered_by": {
+        "direct_read": "users get-users-for-team"
       }
     },
     {
       "method": "GET",
       "path": "/workspaces/{workspace_gid}/users",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getusersforworkspace",
-        "notes": "official_operation_id=getUsersForWorkspace; lane=etl_read"
+      "covered_by": {
+        "direct_read": "users get-users-for-workspace"
       }
     },
     {
       "method": "GET",
       "path": "/workspaces/{workspace_gid}/users/{user_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getuserforworkspace",
-        "notes": "official_operation_id=getUserForWorkspace; lane=etl_read"
+      "covered_by": {
+        "direct_read": "users get-user-for-workspace"
       }
     },
     {
@@ -2576,14 +1976,8 @@
     {
       "method": "GET",
       "path": "/webhooks",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
-        "source_url": "https://developers.asana.com/reference/getwebhooks",
-        "notes": "official_operation_id=getWebhooks; lane=cdc_changefeed"
+      "covered_by": {
+        "direct_read": "webhooks get-webhooks"
       }
     },
     {
@@ -2602,14 +1996,8 @@
     {
       "method": "GET",
       "path": "/webhooks/{webhook_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
-        "source_url": "https://developers.asana.com/reference/getwebhook",
-        "notes": "official_operation_id=getWebhook; lane=cdc_changefeed"
+      "covered_by": {
+        "direct_read": "webhooks get-webhook"
       }
     },
     {
@@ -2641,27 +2029,15 @@
     {
       "method": "GET",
       "path": "/workspace_memberships/{workspace_membership_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getworkspacemembership",
-        "notes": "official_operation_id=getWorkspaceMembership; lane=etl_read"
+      "covered_by": {
+        "direct_read": "workspace-memberships get-workspace-membership"
       }
     },
     {
       "method": "GET",
       "path": "/users/{user_gid}/workspace_memberships",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getworkspacemembershipsforuser",
-        "notes": "official_operation_id=getWorkspaceMembershipsForUser; lane=etl_read"
+      "covered_by": {
+        "direct_read": "workspace-memberships get-workspace-memberships-for-user"
       }
     },
     {
@@ -2681,14 +2057,8 @@
     {
       "method": "GET",
       "path": "/workspaces/{workspace_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getworkspace",
-        "notes": "official_operation_id=getWorkspace; lane=etl_read"
+      "covered_by": {
+        "direct_read": "workspaces get"
       }
     },
     {
@@ -2721,14 +2091,8 @@
     {
       "method": "GET",
       "path": "/workspaces/{workspace_gid}/events",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getworkspaceevents",
-        "notes": "official_operation_id=getWorkspaceEvents; lane=etl_read"
+      "covered_by": {
+        "direct_read": "workspaces get-workspace-events"
       }
     }
   ]

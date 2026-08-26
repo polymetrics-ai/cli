@@ -7,6 +7,16 @@
 - A source-bound direct read remains on the fixed `OperationDirectRead` executor and reaches the existing credential check only after no-network preflight.
 - A source-bound collection cannot claim ETL solely because it is a GET: it needs a unique declared stream ETL composite, matching route, records path, schema, and pagination.
 - Existing ETL commands do not require the new source binding. This was verified after a full runner regression caught and corrected the overly broad check.
+- Source-bound stream interpolation permits only a whole-segment declared
+  `{{ config.* }}` or `{{ fanout.id }}` where the locked path has a variable;
+  literal route substitution and record-derived path interpolation are refused.
+- Configured origins are not a source-bound escape hatch: the engine compares
+  `base_url` with the connector's declared origin before authentication or
+  requester construction.
+- Mapping validation is lane-aware and capability-based. A complete source
+  contract that is labelled planned causes source-import drift; a deferred read
+  must retain a concrete named source foundation. Hash/byte/capture metadata
+  remains raw-source integrity evidence, not mapping admission policy.
 - The partial mutation-coverage disposition is exact-source-citation bound and
   accepts only an existing incomplete implemented action plus its named shared
   foundation. It rejects a complete action, an absent action, a non-mutating
