@@ -30,3 +30,11 @@ validation remains required after #4350 repair. This preserves the captain polic
 runnable operations may still earn declaration admission when every source row
 is complete, discoverable, explicitly deferred, and names its missing
 foundation; it does not confer runtime or live usability.
+
+R5 moves the denominator to an independent inventory that selects one exact
+operation from a connector-owned reviewed source lock. It adds a distinct
+provider-evidenced unsupported disposition across all six lanes and validates
+public connector inputs through shared commandrunner rules before credentials.
+Runtime binding uniqueness stays separate from provider-provenance uniqueness;
+retained source bytes/hashes, runtime usability, and live certification remain
+independent certificates.

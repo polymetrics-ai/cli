@@ -2,19 +2,21 @@
 
 ## Acceptance evidence
 
-- The new `connectorgen declaration-admission [dir] [--json]` check requires
+- The `connectorgen declaration-admission [dir] [--json]` check requires an
+  independent `declaration_admission_inventory.json` plus
   `declaration_admission_sources.json` and `declaration_admissions.json` at the
-  definitions root. Nonzero expected counts make missing catalogs, omitted
-  rows, and zero-work runs fail. Its focused tests
+  definitions root. Inventory selections resolve exact operations from
+  connector-owned reviewed source locks; mutable adjacent counts cannot shrink
+  the denominator. Its focused tests
   cover one runnable read; deferred reverse-ETL write/delete and binary
   upload/download rows; a retained importer/descriptor gap; missing,
   duplicate, citation-free, malformed, stale, base-path-mismatched,
   lane-changing, destructive-metadata-free, and falsely implemented rows; and
   a complete zero-runnable connector.
-- The on-disk fixture has only source URL, exact citation, stable source and
-  binding identities, endpoint, lane, command, destructive semantic, and
-  state. Its raw provider operation ID is empty, and it contains neither an
-  artifact nor a hash, proving none is an admission prerequisite.
+- Admission reads the reviewed lock's URL and exact operation identity but
+  does not fetch, retain, open, or rehash its provider artifact. A lock may
+  carry separate retention metadata; those bytes and hashes are not admission
+  prerequisites.
 - Authoring admission and the compact shipped ledger share one provider-
   citation canonicalizer. Stored URLs must already use the public-HTTPS
   canonical form; equivalent host case, default-port, query-order, or escaped-
@@ -244,3 +246,49 @@ still does not prove shipped Outreach commands: final merge validation requires
 the real combined-head Outreach mapping/pilot after #4350 repair with committed
 CLI/source evidence, credential-boundary and zero-transport proof, and a fresh
 independent audit.
+
+## R5 reviewed-source inventory and public-input repair (2026-08-26)
+
+The R5 repair binds admission to one exact operation selected from a
+connector-owned reviewed source lock. Provider provenance owns
+source-operation uniqueness; runtime binding uniqueness remains separate. The
+independent inventory is the denominator, so deleting adjacent catalog rows or
+restoring mutable count fields cannot produce a false pass.
+`unsupported_with_provider_evidence` is discoverable and denominator-visible
+in all six lanes without claiming an executor or missing foundation.
+
+Public connector input validation now shares commandrunner's real flag rules
+and runs after help but before App/credential construction. The first clean
+full CLI run exposed one category regression: unknown command paths became
+validation errors. Its existing controls were red, the wrapper was narrowed,
+and both the focused controls and full package rerun are green.
+
+| Exact clean-head command | Result |
+| --- | --- |
+| `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestDeclarationAdmission'` | pass |
+| `go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run 'TestPreflightProviderEvidencedUnsupportedReturnsTypedTerminal\|TestPreflightRequestValidatesDeclaredInputsWithoutExecutor'` | pass |
+| `go test -count=1 -timeout 20m ./internal/connectors/engine -run 'TestDeclarationTargetLedger\|TestCommandSurfaceProjectsDeferredFoundationGap'` | pass |
+| `go test -count=1 -timeout 20m ./internal/cli -run 'TestGitHubLabelDeleteValidatesRequiredInputBeforeCredentialResolution\|TestConnectorCommandInputDefectsFailBeforeWithApp'` | pass |
+| `go test -count=1 -timeout 20m ./cmd/connectorgen` | pass (`296.568s`) |
+| `go test -count=1 -timeout 20m ./internal/connectors/commandrunner` | pass (`31.489s`) |
+| `go test -count=1 -timeout 20m ./internal/connectors/engine` | pass (`16.322s`) |
+| `go test -count=1 -timeout 20m ./internal/connectors/defs` | pass (`6.291s`) |
+| First `go test -count=1 -timeout 20m ./internal/cli` | red (`745.861s`): four existing unknown-path controls exposed validation/usage drift |
+| Focused rerun of those four controls | pass (`20.528s`) |
+| Final `go test -count=1 -timeout 20m ./internal/cli` | pass (`589.430s`) |
+| `gofmt -w cmd internal`; `go mod tidy`; scoped `go vet`; `go build ./cmd/pm` | pass; no source/module drift |
+| `make docs-check-no-build`; `make smoke-no-build`; `make lint` | pass; docs valid, smoke succeeds, lint reports 0 issues |
+| `make agent-contract-check`; `make connectorgen-validate`; `make connectorgen-surface-sync`; `make connectorgen-declaration-admission` | pass; 553 bundles / 0 findings, 0 surface drift, 1 connector / 1 selected operation / 0 admission findings |
+| `make connectorgen-operation-evidence`; `make github-parity-artifacts-check` | pass; 1,525 evidence rows and 17 GitHub ledger tests/artifacts current |
+| `make connectorgen-certification-subject` | initially stale after declaration changes; regenerated only `current-subject.json` from the clean tree |
+| `make connectorgen-certification-matrix`; `make connectorgen-certification-candidates`; `make connectorgen-certification-sweep` | pass; downstream artifacts current |
+| `make connector-boundary`; `make connector-runtime-preflight`; `make connector-canon-check` | pass; 323 files / 553 connectors / 0 findings, every implemented command passes real preflight, canon current |
+| `make release-workflow-check` | pass, including installed GitHub certification archive proof |
+
+The aggregate `go test ./...`, aggregate `make verify`, and repository-wide
+`go vet ./...` were not launched in this disk-floor window. Repository guidance
+assigns the aggregate suite to CI and requires changed packages and constituent
+gates separately; Firstmate instruction 020 additionally required serialization
+and preference for focused checks while only 16 GiB remained. No provider I/O,
+credential, write/delete execution, live certification, bulk regeneration,
+Stripe definition, or Docker Hub definition was used.

@@ -194,3 +194,29 @@ The direct PR targets `main` and is already open. Its original route was
 fresh independent exact-head audit is requested after push under Firstmate's
 route. Any actionable response requires a recorded disposition before merge;
 this worker will not merge.
+
+## Independent R5 audit disposition (2026-08-26)
+
+1. **Reviewed-source binding accepted.** The independent inventory selects an
+   exact operation in a connector-owned reviewed source lock. Admission checks
+   protocol, source URL, document location, provider operation ID, method, and
+   provider path without fetching or rehashing retained bytes. Unrelated hosts,
+   nonexistent operations, semantic aliases, symlink escapes, and mutable count
+   escape hatches fail closed.
+2. **Provider-evidenced unsupported accepted.** One explicit terminal state is
+   available in all six lanes. It remains discoverable and counted but carries
+   neither an executor selector nor a missing-foundation claim; commandrunner
+   returns typed `system/provider_evidenced_unsupported`.
+3. **Public-input ordering accepted.** Help remains first. Shared flag
+   validation precedes App and credentials for required, unknown, enum, bound,
+   and env-only inputs. An initial full-suite finding that unknown paths became
+   validation errors was fixed narrowly; existing usage/suggestion controls and
+   the complete CLI suite pass.
+4. **Independent denominator accepted.** The compact production ledger and
+   authoring admission use the exact inventory selection; adjacent mutable
+   counts were removed, and omitting source and declaration rows together fails.
+
+No unresolved local R5 finding remains. Clean exact-head package,
+generator/snapshot, boundary, runtime-preflight, canon, lint, build, docs,
+smoke, and release checks pass. The next gate is a fresh independent exact-SHA
+audit and PR CI; this worker does not merge.

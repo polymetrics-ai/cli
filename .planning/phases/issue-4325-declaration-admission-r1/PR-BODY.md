@@ -112,6 +112,12 @@ blocked source mapping with no action or command binding. See
   lint (including `internal/safety`), docs, local smoke, all applicable
   generator/certification checks, boundary (323 files / 553 connectors / 0
   findings), canon, release/archive, and GSD evidence gates pass.
+- R5 clean checkpoint: exact reviewed-source inventory selection, all-six-lane
+  provider-evidenced unsupported state, independent denominator, and pre-app
+  public-input validation pass focused and full changed-package suites. The
+  generator-required certification subject was refreshed; downstream
+  generator/snapshot, boundary, real runtime-preflight, canon, lint, build,
+  docs, smoke, and release/archive gates pass.
 
 The aggregate `go test -timeout 20m ./...` and serial `make verify` are left
 to CI, per the repository’s per-command-timeout guidance. Full commands and
