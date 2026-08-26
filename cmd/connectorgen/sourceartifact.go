@@ -229,7 +229,10 @@ func parseSourceRetainLock(raw []byte, expectedConnector string) (sourceRetainLo
 		Rest          json.RawMessage `json:"rest"`
 		GraphQL       json.RawMessage `json:"graphql"`
 	}
-	if err := json.Unmarshal(raw, &header); err != nil {
+	// Retain intentionally tolerates forward-compatible fields, but it must
+	// reject duplicate members before this partial header selects a fetch URL or
+	// identity. Ordinary json.Unmarshal would silently choose the last member.
+	if err := decodeSourceJSON(raw, &header); err != nil {
 		return sourceRetainLock{}, fmt.Errorf("parse source lock: %w", err)
 	}
 	if header.SchemaVersion <= 0 {

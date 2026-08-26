@@ -68,3 +68,28 @@ generator checks, documentation validation, and whitespace validation passed.
 The root certification-subject check deliberately remains isolated from the
 preserved untracked live-retention files; it passed in the clean tracked-only
 archive. A fresh independent audit remains required for the repaired SHA.
+
+## R4 inline verify-work and code review
+
+The generated `verify-work` and `code-review` prompts were executed inline as
+the documented single-worker fallback. Review was limited to the two partial
+source-lock readers, their order-reversed regressions, and the updated delivery
+evidence.
+
+- `parseSourceRetainLock` now validates the complete raw JSON tree before
+  decoding its retain-only header, so no duplicate member can select a URL or
+  identity before the fetch seam. It uses `decodeSourceJSON`, preserving the
+  intended tolerance of unknown forward-compatible fields.
+- `readOperationEvidenceSourceLock` performs that same recursive validation
+  before deciding skipped/dynamic absence. Both source-document duplicate
+  orders now fail at `/rest/source_documents`; neither may construct
+  `input.Absence`.
+- The review found no route expansion, lock rewrite, fetch on malformed input,
+  import strictness relaxation, provenance regression, or source-mapping
+  change. The existing strict source-import decoder remains untouched.
+
+Focused red/green, all source-retain and operation-evidence tests, the
+completion-tracked full `cmd/connectorgen` suite (173.360s, exit 0), `go vet`,
+lint, build, documentation/smoke, and generator checks are recorded in the
+R4 section of `VERIFICATION.md`. No aggregate `go test ./...` was run. A fresh
+independent exact-head audit remains required after the push.

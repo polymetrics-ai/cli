@@ -57,3 +57,16 @@ lock, or touch ignored retained artifact paths.
    byte count/SHA-256 remain observable provenance only: whitespace or
    minification may change them without turning a canonical match into drift.
    Byte-identity locks retain their exact raw-size and raw-digest requirement.
+
+## Independent exact-SHA audit R4 — 2026-08-26
+
+The R4 audit at `6e23bd9cbcb882c34e37337f1205eab327d43f8b` found two
+remaining partial-decoder trust-boundary gaps. `source-retain` used permissive
+`json.Unmarshal` before selecting a locked URL/identity, and
+`operation-evidence` used it before deciding that a schema-v3 dynamic lock had
+no document inventory. Both paths can treat duplicate object keys as
+last-member-wins before the strict parser sees them. The repair is fixed by the
+existing contract: use the recursive duplicate validator before each partial
+decode while retaining intentional unknown-field tolerance. No source lock,
+artifact, connector mapping, generic citation, or generated declaration is in
+scope.

@@ -51,6 +51,30 @@ Shared `cmd/connectorgen` source-lock retention foundation for issue #4347. Owne
    check. Record the exact repaired commit/remote head and request a fresh
    independent exact-head audit; no merge.
 
+## Independent exact-SHA audit R4 duplicate-member repair plan
+
+1. **Red first — retain lock acquisition is duplicate-free.** Add table-driven
+   source-retain command fixtures for top-level, REST, GraphQL, and identity
+   duplicate members, with the conflicting values in both orders. Each case
+   must reject the lock as a duplicate-member ambiguity before the fetch seam
+   is called; unknown forward-compatible fields remain tolerated.
+2. **Red first — v3 inventory absence is duplicate-free.** Add both orders of
+   a schema-v3 `rest.source_documents` duplicate around a dynamic-state
+   absence fixture. Both must reject at the source-lock boundary with a
+   duplicate-member error, never return `input.Absence`, and never rely on
+   last-member-wins decoding.
+3. Reuse the existing recursive JSON token validator through its permissive
+   (unknown-field tolerant) decode path before either partial decoder makes an
+   acquisition or provider-absence decision. Keep source import's stricter
+   unknown-field and inventory validation unchanged.
+4. Run the targeted red command before production edits. Implement the two
+   fail-closed decode changes, then rerun focused source-retain and
+   operation-evidence tests, the serial `cmd/connectorgen` package suite,
+   generator checks, and a clean tracked snapshot where local ignored retained
+   artifacts would otherwise affect generated-state checks. Record every
+   command/result, commit, push, read the PR base back, and request a fresh
+   exact-head audit; no merge.
+
 ## Security and correctness boundaries
 
 - Source URLs remain connector-owned, HTTPS/public-address validated, query-bounded, and never accepted from command arguments.
@@ -65,3 +89,6 @@ Shared `cmd/connectorgen` source-lock retention foundation for issue #4347. Owne
 - Canonical JSON identity compares only strict, unambiguous canonical JSON. Its
   locked and retained raw digest/count are provenance; byte-identity locks
   remain exact raw-byte comparisons.
+- Every partial lock reader must reject duplicate JSON members before it derives
+  a fetch URL, selected identity, or provider-absence shape. Duplicate-member
+  ambiguity is malformed input, not an order-dependent policy choice.

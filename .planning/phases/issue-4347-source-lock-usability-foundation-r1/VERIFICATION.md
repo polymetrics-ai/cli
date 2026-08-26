@@ -54,3 +54,14 @@
 - [x] Static/generation checks passed: `go vet ./cmd/connectorgen`; tracked-only `connectorgen validate`, `surface-sync --check`, `operation-evidence --check` (1,525 rows; fixed-100), and `certification-subject --check`; `make docs-check-no-build`; and `git diff --check`.
 - [x] The preserved untracked retained-artifact evidence causes root `certification-subject --check` to report local generated-state drift. No artifact was regenerated or staged; the same check passed from a tracked-only archive containing this repair.
 - [ ] Commit/push the minimal repair, record its exact remote head and CI start, and request a fresh independent exact-head audit. No merge.
+
+## Independent exact-SHA audit R4 duplicate-member repair
+
+- [x] Red: both duplicate-member orders prove source-retain could select a URL or identity before rejection, and could call its fetch seam.
+- [x] Red: populated-then-empty duplicate `rest.source_documents` proved operation evidence could project a dynamic schema-v3 lock as absence before rejection.
+- [x] Green: retain and operation-evidence reject recursively duplicated lock JSON through the existing tolerant duplicate validator; source import remains strict. Focused command passed in 1.111s.
+- [x] Focused source-retain and operation-evidence tests pass: `^TestSourceRetain` (1.298s) and `^TestOperationEvidence` (16.974s). The completion-tracked `go test -timeout 20m ./cmd/connectorgen -count=1` passed in 173.360s with exit 0; its command output and exit marker are in the Firstmate task status file.
+- [x] `go vet ./cmd/connectorgen` and `git diff --check` pass. Generator checks pass: `source-import github --check` (1,525 operations, 0 inbound events), `operation-evidence --check` (1,525 rows; 5 rollups; fixed-100), and `surface-sync --check` (553 connectors; zero drift). `certification-subject --check` is stale only in this root because preserved untracked retain artifacts participate in its input; it and `agentcontractgen check` pass read-only from the preserved tracked-only archive.
+- [x] `go build ./cmd/pm`, `make tidy-check`, `make docs-check-no-build`, and `make smoke-no-build` pass. `make lint` was retried after the shared linter lock cleared and passed with 0 issues; `go run ./cmd/connectorgen validate` checked 553 connectors with 0 findings.
+- [x] Inline/manual GSD `verify-work` and `code-review` prompts were resolved after verification. `REVIEW.md` records the R4 scope, security boundary, and no-actionable-finding disposition.
+- [ ] Commit/push the R4 repair, API-read PR #4350 base `main`, and request a fresh independent exact-head audit. No merge.

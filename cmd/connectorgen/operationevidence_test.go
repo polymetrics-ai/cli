@@ -173,6 +173,31 @@ func TestOperationEvidenceRejectsV3InventoryStateClaimingAbsence(t *testing.T) {
 	}
 }
 
+func TestOperationEvidenceRejectsDuplicateV3InventoryBeforeAbsenceProjection(t *testing.T) {
+	t.Parallel()
+	const populated = `[{"id":"retained-document"}]`
+	for _, tc := range []struct {
+		name  string
+		first string
+		last  string
+	}{
+		{name: "populated then empty", first: populated, last: `[]`},
+		{name: "empty then populated", first: `[]`, last: populated},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			path := filepath.Join(t.TempDir(), "github-operation-source-lock.json")
+			raw := []byte(`{"schema_version":3,"connector":"github","state":"dynamic","dynamic":{"reason":"duplicate-fixture","detail":"duplicate source_documents must not become provider absence"},"rest":{"source_documents":` + tc.first + `,"source_documents":` + tc.last + `}}`)
+			if err := os.WriteFile(path, raw, 0o644); err != nil {
+				t.Fatalf("write duplicate v3 source lock: %v", err)
+			}
+			input, err := readOperationEvidenceSourceLock(path, "github")
+			if err == nil || input.Absence != nil || !strings.Contains(err.Error(), "duplicate JSON object member at /rest/source_documents") {
+				t.Fatalf("duplicate v3 source lock input=%+v err=%v, want duplicate rejection before absence projection", input, err)
+			}
+		})
+	}
+}
+
 func TestOperationEvidenceReportsEachMissingEvidenceKind(t *testing.T) {
 	cases := []struct {
 		name   string

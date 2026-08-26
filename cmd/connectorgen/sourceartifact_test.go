@@ -166,6 +166,65 @@ func TestSourceRetainRejectsIncompleteProvenanceBeforeAnyFetch(t *testing.T) {
 	}
 }
 
+func TestSourceRetainRejectsDuplicateLockMembersBeforeFetch(t *testing.T) {
+	t.Parallel()
+	const digest = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	const canonicalDigest = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+	const rest = `"rest":{"source_url":"https://fixtures.polymetrics.invalid/rest.json","sha256":"` + digest + `","bytes":1}`
+	cases := []struct {
+		name string
+		lock string
+	}{
+		{
+			name: "top level connector alpha then beta",
+			lock: `{"schema_version":1,"connector":"alpha","connector":"beta",` + rest + `}`,
+		},
+		{
+			name: "top level connector beta then alpha",
+			lock: `{"schema_version":1,"connector":"beta","connector":"alpha",` + rest + `}`,
+		},
+		{
+			name: "REST source URL first then second",
+			lock: `{"schema_version":1,"connector":"alpha","rest":{"source_url":"https://fixtures.polymetrics.invalid/first.json","source_url":"https://fixtures.polymetrics.invalid/second.json","sha256":"` + digest + `","bytes":1}}`,
+		},
+		{
+			name: "REST source URL second then first",
+			lock: `{"schema_version":1,"connector":"alpha","rest":{"source_url":"https://fixtures.polymetrics.invalid/second.json","source_url":"https://fixtures.polymetrics.invalid/first.json","sha256":"` + digest + `","bytes":1}}`,
+		},
+		{
+			name: "GraphQL source URL first then second",
+			lock: `{"schema_version":1,"connector":"alpha",` + rest + `,"graphql":{"source_url":"https://fixtures.polymetrics.invalid/first.graphql","source_url":"https://fixtures.polymetrics.invalid/second.graphql","sha256":"` + digest + `","bytes":1}}`,
+		},
+		{
+			name: "GraphQL source URL second then first",
+			lock: `{"schema_version":1,"connector":"alpha",` + rest + `,"graphql":{"source_url":"https://fixtures.polymetrics.invalid/second.graphql","source_url":"https://fixtures.polymetrics.invalid/first.graphql","sha256":"` + digest + `","bytes":1}}`,
+		},
+		{
+			name: "identity byte then canonical JSON",
+			lock: `{"schema_version":1,"connector":"alpha","rest":{"source_url":"https://fixtures.polymetrics.invalid/identity.json","sha256":"` + digest + `","bytes":1,"identity":"byte","identity":"canonical_json","canonical_sha256":"` + canonicalDigest + `"}}`,
+		},
+		{
+			name: "identity canonical JSON then byte",
+			lock: `{"schema_version":1,"connector":"alpha","rest":{"source_url":"https://fixtures.polymetrics.invalid/identity.json","sha256":"` + digest + `","bytes":1,"identity":"canonical_json","identity":"byte","canonical_sha256":"` + canonicalDigest + `"}}`,
+		},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			defsRoot := t.TempDir()
+			writeSourceRetainFixtureLockRaw(t, defsRoot, "alpha", []byte(tc.lock))
+			fetches := 0
+			var stdout, stderr bytes.Buffer
+			code := runSourceRetainWithFetcher([]string{"source-retain", "alpha", "--defs", defsRoot, "--retrieved-at", "2026-08-26T06:30:00Z", "--license", "fixture-license", "--terms", "fixture-terms"}, &stdout, &stderr, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+				fetches++
+				return []byte("x"), nil
+			}))
+			if code != 1 || fetches != 0 || !strings.Contains(stderr.String(), "duplicate JSON object member") {
+				t.Fatalf("duplicate lock exit=%d fetches=%d stderr=%q, want duplicate rejection before acquisition", code, fetches, stderr.String())
+			}
+		})
+	}
+}
+
 func TestSourceRetainHelpAndMigrationDocumentationDescribeIdentityAndWrongSource(t *testing.T) {
 	t.Parallel()
 	var stdout, stderr bytes.Buffer

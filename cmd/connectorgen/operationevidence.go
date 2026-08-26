@@ -470,7 +470,10 @@ func readOperationEvidenceSourceLock(path, connector string) (operationEvidenceS
 		return operationEvidenceSourceInput{}, fmt.Errorf("read source lock for %q: %w", connector, err)
 	}
 	var lock operationEvidenceRawLock
-	if err := json.Unmarshal(raw, &lock); err != nil {
+	// This partial reader permits unknown fields for legacy evidence, but a
+	// duplicate member must fail before state/inventory inspection. Otherwise a
+	// last-member-wins decoder could suppress a v3 document inventory as absence.
+	if err := decodeSourceJSON(raw, &lock); err != nil {
 		return operationEvidenceSourceInput{}, fmt.Errorf("parse source lock for %q: %w", connector, err)
 	}
 	if lock.SchemaVersion != 2 && lock.SchemaVersion != 3 {
