@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"reflect"
 	"slices"
 	"strings"
 	"testing"
@@ -90,6 +91,110 @@ func TestOperationEvidenceProjectsGitHubAcrossEveryEvidenceSurface(t *testing.T)
 	graphqlRow, found := artifact.row("github.graphql.mutation.createIpAllowListEntry")
 	if !found || !slices.Contains(graphqlRow.CLI.Paths, "graphql mutation create-ip-allow-list-entry") || graphqlRow.hasGap(operationEvidenceGapCLICommand) {
 		t.Fatalf("GraphQL acronym operation did not retain its exact command evidence: %+v", graphqlRow)
+	}
+}
+
+func TestOperationEvidenceUsesStrictV3DocumentOperationInventory(t *testing.T) {
+	root := operationEvidenceWorkspace(t)
+	baseline, _, stderr := runOperationEvidenceForTest(t, root, "")
+	if stderr != "" {
+		t.Fatalf("baseline operation-evidence diagnostics = %s", stderr)
+	}
+	operationEvidenceRewriteGitHubLockAsV3(t, root)
+	actual, _, stderr := runOperationEvidenceForTest(t, root, "")
+	if stderr != "" {
+		t.Fatalf("v3 operation-evidence diagnostics = %s", stderr)
+	}
+	if actual.rowCount() != baseline.rowCount() {
+		t.Fatalf("v3 document-owned operation inventory row count = %d, want legacy baseline %d", actual.rowCount(), baseline.rowCount())
+	}
+	for _, want := range baseline.Rows {
+		got, found := actual.row(want.SourceID)
+		if !found {
+			t.Fatalf("v3 operation-evidence omitted source row %q", want.SourceID)
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Fatalf("v3 operation-evidence row %q changed:\n got %#v\nwant %#v", want.SourceID, got, want)
+		}
+	}
+	declared, found := actual.row(githubIssuesSourceID)
+	if !found || !declared.Runtime.Enabled {
+		t.Fatalf("v3 declared source row = %#v, want enabled %q", declared, githubIssuesSourceID)
+	}
+	for _, class := range operationEvidenceClasses {
+		if _, found := declared.Classifications[class]; !found {
+			t.Fatalf("v3 declared row lost classification lane %q: %#v", class, declared.Classifications)
+		}
+	}
+	var deferred operationEvidenceRow
+	for _, row := range baseline.Rows {
+		if len(row.Gaps) != 0 || len(row.Foundations) != 0 {
+			deferred = row
+			break
+		}
+	}
+	if deferred.SourceID == "" {
+		t.Fatal("baseline fixture has no deferred source row")
+	}
+	if got, found := actual.row(deferred.SourceID); !found || !reflect.DeepEqual(got, deferred) {
+		t.Fatalf("v3 deferred source row %q = %#v, want %#v", deferred.SourceID, got, deferred)
+	}
+	if _, found := actual.row("github.graphql.mutation.createIpAllowListEntry"); !found {
+		t.Fatal("v3 REST document inventory dropped GraphQL evidence rows")
+	}
+}
+
+func TestOperationEvidenceRejectsV3InventoryStateClaimingAbsence(t *testing.T) {
+	root := operationEvidenceWorkspace(t)
+	operationEvidenceRewriteGitHubLockAsV3(t, root)
+	path := filepath.Join(root, "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json")
+	var documentOperations int
+	mutateOperationEvidenceJSON(t, path, func(lock map[string]any) {
+		rest := lock["rest"].(map[string]any)
+		documentOperations = len(rest["source_documents"].([]any)[0].(map[string]any)["operations"].([]any))
+		lock["state"] = "dynamic"
+		lock["dynamic"] = map[string]any{
+			"reason": "contradictory-fixture-state",
+			"detail": "A document-owned operation inventory exists and must not be projected as absence.",
+		}
+	})
+	if documentOperations != 1220 {
+		t.Fatalf("v3 fixture document operations = %d, want 1220 REST operations", documentOperations)
+	}
+	input, err := readOperationEvidenceSourceLock(path, "github")
+	if err == nil {
+		if input.Absence != nil {
+			t.Fatalf("v3 source document inventory with %d REST operations was classified as absence: %+v", documentOperations, input.Absence)
+		}
+		t.Fatal("contradictory v3 state unexpectedly projected without strict source-import rejection")
+	}
+	if !strings.Contains(err.Error(), "source-import schema") {
+		t.Fatalf("v3 contradictory state error = %v, want strict source-import schema rejection", err)
+	}
+}
+
+func TestOperationEvidenceRejectsDuplicateV3InventoryBeforeAbsenceProjection(t *testing.T) {
+	t.Parallel()
+	const populated = `[{"id":"retained-document"}]`
+	for _, tc := range []struct {
+		name  string
+		first string
+		last  string
+	}{
+		{name: "populated then empty", first: populated, last: `[]`},
+		{name: "empty then populated", first: `[]`, last: populated},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			path := filepath.Join(t.TempDir(), "github-operation-source-lock.json")
+			raw := []byte(`{"schema_version":3,"connector":"github","state":"dynamic","dynamic":{"reason":"duplicate-fixture","detail":"duplicate source_documents must not become provider absence"},"rest":{"source_documents":` + tc.first + `,"source_documents":` + tc.last + `}}`)
+			if err := os.WriteFile(path, raw, 0o644); err != nil {
+				t.Fatalf("write duplicate v3 source lock: %v", err)
+			}
+			input, err := readOperationEvidenceSourceLock(path, "github")
+			if err == nil || input.Absence != nil || !strings.Contains(err.Error(), "duplicate JSON object member at /rest/source_documents") {
+				t.Fatalf("duplicate v3 source lock input=%+v err=%v, want duplicate rejection before absence projection", input, err)
+			}
+		})
 	}
 }
 
@@ -368,6 +473,38 @@ func operationEvidenceWorkspace(t *testing.T) string {
 	}
 	writeOperationEvidenceJSON(t, filepath.Join(root, "website", "data", "connectors.generated.json"), map[string]any{"rows": github})
 	return root
+}
+
+func operationEvidenceRewriteGitHubLockAsV3(t *testing.T, root string) {
+	t.Helper()
+	path := filepath.Join(root, "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json")
+	mutateOperationEvidenceJSON(t, path, func(lock map[string]any) {
+		rest := lock["rest"].(map[string]any)
+		artifact := map[string]any{
+			"source_url": rest["source_url"],
+			"sha256":     rest["sha256"],
+			"bytes":      rest["bytes"],
+			"openapi":    rest["openapi"],
+		}
+		lock["schema_version"] = 3
+		lock["rest"] = map[string]any{
+			"retrieval": "hermetic operation-evidence v3 document inventory fixture",
+			"openapi":   []any{rest["openapi"]},
+			"source_documents": []any{map[string]any{
+				"id":       "github-rest",
+				"artifact": artifact,
+				"published_source": map[string]any{
+					"source_url":  "https://docs.github.com/rest",
+					"capture_url": rest["source_url"],
+					"sha256":      rest["sha256"],
+					"bytes":       rest["bytes"],
+					"adapter":     "operation-evidence-v3-fixture-capture",
+				},
+				"info_version": rest["info_version"],
+				"operations":   rest["operations"],
+			}},
+		}
+	})
 }
 
 func operationEvidenceAbsenceWorkspace(t *testing.T) string {
