@@ -4,7 +4,7 @@
   "base": "main",
   "branch": "feat/4354-schema-v3-source-projection",
   "delivery": "direct-pr",
-  "status": "in_progress_source_reference_projection",
+  "status": "verified_pending_publication",
   "gsd": {
     "mode": "inline-manual-fallback",
     "commands_resolved": [
