@@ -21,7 +21,7 @@
   operation-evidence reader already consume that model when exact retained
   artifacts are available.
 
-## Immutable-artifact block
+## Byte-backed import constraint
 
 The candidate lock records but does not retain the provider bodies:
 
@@ -43,17 +43,18 @@ Read-only evidence:
 `source-import` must receive the exact provider bytes through the
 connector-owned retained-artifact reader. It is prohibited from accepting a
 derived `api_surface.json`, streams, fixtures, a hash-only assertion, a
-replacement provider response, or a network call. Therefore this worker cannot
-honestly implement or green-test the requested importer/projection vertical
-proof from the available, immutable inputs.
+replacement provider response, or a network call. That strict byte-backed
+contract remains unchanged.
 
-## Required unblocking input
+## Source-reference redesign
 
-Provide the two already-captured raw provider documents (or a repository
-commit containing them) whose byte SHA-256 and byte counts exactly equal the
-two lock identities above. With those bytes, the next slice can retain them
-unchanged, express their two source documents in the v3 lock shape, add the
-shared source-kind/citation adapter only where the v3 contract lacks it, and
-run the requested source-import → projection → validation → surface-sync →
-operation-evidence evidence path. A provider re-fetch, re-pin, or derived-byte
-substitute is deliberately not an acceptable substitute.
+The source lock's canonical provider document URLs and operation identities are
+still closed declaration evidence. The foundation can add a separate explicit
+source-reference/declaration path that maps those citations into projection and
+operation evidence without raw bytes. The path must not read the network or
+claim that provider bytes have been verified. It must preserve operation/source
+identity, classify absent operation-contract detail as
+`source_contract_unavailable`, and classify a known but non-executable shape
+as `missing_foundation`. It remains invalid for execution-capable
+materialization; acquiring the original bytes later can use the existing strict
+byte-backed import path without re-pinning.

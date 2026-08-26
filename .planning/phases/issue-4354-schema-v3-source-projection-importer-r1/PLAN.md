@@ -9,12 +9,15 @@
   independently audited, normal non-force publication completed, and local
   scoped gates recorded.
 - Working branch: feat/4354-schema-v3-source-projection
-- Task: Make the canonical source importer/projector admit the immutable
-  retained schema-v3 Outreach provider document and project every source
-  operation into source-backed six-lane evidence. Preserve identity and
-  citations, leave unavailable executor shapes as `missing_foundation`, and
-  prove the change with a second schema-v3 source case. No connector-local
-  generic executor or false `implemented` operation is allowed.
+- Task: Add an explicit declaration-only source-reference path to the canonical
+  importer/projector. It admits the retained Outreach operation lock and its
+  canonical provider document URLs without pretending that unavailable raw
+  bytes were imported. Preserve every cited source/operation identity, leave
+  unavailable contract detail as `source_contract_unavailable` and executor
+  shapes as `missing_foundation`, and prove the shared path with a second
+  schema-v3 source case. Byte-backed importing remains strict; no
+  connector-local generic executor or false `implemented` operation is
+  allowed.
 - Verification: focused red/green/refactor Go tests; `connectorgen`
   source-import/check, validate, surface-sync, and operation-evidence checks
   for the scoped proof; six-lane evidence inspection; `go vet`, build,
@@ -25,8 +28,8 @@
 
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
-| Retained schema-v3 source is admitted without changing its identity | live | A source-import test and the scoped Outreach command assert the exact retained bytes/digest and an operation count; the previous importer rejection is reproduced first. |
-| Import/projection works for a non-Outreach schema-v3 input | live | A minimal independent schema-v3 fixture must project a distinct source operation with its origin/citation; without generic reader support it fails before a projector result exists. |
+| Byte-backed source importing preserves identity | live | Existing byte-backed import tests retain exact byte/digest checks. The new declaration-only path explicitly refuses to claim raw-byte import, credential validity, or certification. |
+| Source-referenced projection works for Outreach and a non-Outreach input | live | Two distinct source-reference fixtures project cited operations through common code, preserving canonical source URLs and operation identities without network access. |
 | Unsupported shapes remain visible and truthful in every lane | live | Projected operation evidence asserts all six classifications and `missing_foundation` rows rather than omission or `implemented` promotion. |
 | Source provenance is not a credential/certification gate | live | Tests reject malformed/unsupported source kinds and identity mismatches while asserting a valid retained hash alone never selects an executor or certification state. |
 | No generic endpoint/command escape is introduced | live | Existing source-import/validation tests and final changed-path audit show execution remains constrained to canonical capability mappings. |
@@ -51,14 +54,16 @@
 
 ## TDD plan
 
-1. **Red — schema-v3 admission:** add a focused importer test based on the
-   retained Outreach lock that asserts the current reader rejects or discards
-   the source before projection, then record the exact failure. Add an
-   independent minimal schema-v3 fixture that exercises the same failure.
-2. **Green — source reader/importer:** change the smallest common reader and
-   importer contract needed to recognize the source form and preserve raw-byte
-   identity, source URLs, descriptor origin, and operation inventory. Reject
-   malformed or unsupported kinds explicitly and retain all existing limits.
+1. **Red — source-reference admission:** add a focused test based on the
+   retained Outreach lock that demonstrates the current byte-backed reader
+   rejects the cited-only source before projection, then record the failure.
+   Add an independent minimal schema-v3 fixture that exercises the same
+   declaration-only failure.
+2. **Green — separate declaration reader/importer:** add the smallest common,
+   explicit source-reference contract needed to preserve source URLs,
+   descriptor origin, and operation inventory without raw bytes. Keep the
+   byte-backed importer unchanged and strict; reject malformed/unsupported
+   reference kinds and retain all existing limits.
 3. **Red/green — projection/evidence:** add an observable source-to-descriptor
    to six-lane mapping test. The test must demonstrate an executor-shaped gap
    becomes a cited `missing_foundation` row rather than being dropped or marked
@@ -76,5 +81,6 @@
 
 The final evidence must name each operation shape identified by the source but
 not supported by an executor as `missing_foundation`. It must distinguish that
-state from malformed source, unavailable source, provenance-digest mismatch,
+state from malformed source, absent source-contract detail
+(`source_contract_unavailable`), byte-backed provenance-digest mismatch,
 credential absence, and certification; none of those are a substitute reason.

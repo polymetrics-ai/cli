@@ -18,6 +18,11 @@
 - No provider network calls, credentials, source re-pins, generic HTTP/write,
   shell, or SQL execution are in scope. If no new command becomes executable,
   the usable-surface delta is explicitly zero.
+- Byte-backed source importing remains a strict retained-artifact contract.
+  The unavailable Outreach bytes do not prevent source-cited declaration
+  mapping: a separate explicit source-reference/declaration path may preserve
+  canonical provider URLs and operation identities, but must label unavailable
+  contract detail `source_contract_unavailable` and cannot certify a command.
 
 ## Inline GSD fallback
 

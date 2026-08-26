@@ -14,8 +14,12 @@ surface is a named gap. It is never silently omitted or represented as `N/A`.
 
 The only non-gap absence is a source lock whose provider evidence explicitly
 declares `skipped` or `dynamic`; the artifact carries that reason and evidence
-verbatim. The projector reads source-lock v2 and v3 inputs but does not own or
-alter their parser or schema.
+verbatim. An explicit declaration-only `source_reference` remains a row: its
+canonical citation and operation identity are visible, while the named
+`source_contract_unavailable` gap prevents its six-lane classification from
+becoming enabled merely because a similarly shaped declaration exists. The
+projector reads source-lock v2 and v3 inputs but does not own or alter their
+parser or schema.
 
 Run the generator after a reviewed source-lock or connector-surface change:
 

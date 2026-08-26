@@ -176,6 +176,12 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 	}
 
 	for _, operation := range result.Operations {
+		// A source reference carries operation identity and a cited provider URL,
+		// not a request/response contract. It may update evidence and validation,
+		// but it must never materialize or mutate a declaration-owned action.
+		if sourceOperationHasFoundationGap(operation, sourceContractUnavailableFoundation) {
+			continue
+		}
 		_, readOnly, readOnlyErr := sourceProjectionReadOnlyDeclaration(declarationBundle, operation)
 		if readOnlyErr != nil {
 			return stats, fmt.Errorf("source operation %s: %w", operation.SourceID, readOnlyErr)

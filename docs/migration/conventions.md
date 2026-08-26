@@ -1759,6 +1759,34 @@ The generated descriptor is an intermediate provider contract for later fixed
 declaration materializers, never an execution command or a generic HTTP escape
 hatch.
 
+### §9.1 Declaration-only source references
+
+An explicit source-reference declaration is the narrow fallback when a reviewed
+lock retains provider operation identities and canonical citation URLs but the
+original provider bytes are unavailable. It is source evidence for mapping,
+not a substitute retained artifact: `source-import` neither reads the network
+nor treats its digest as a credential, certification, or execution gate.
+
+Schema-v3 uses a `rest.source_documents[]` document with
+`kind: "source_reference"`, a `source_reference` identity
+(`source_url`, `sha256`, `bytes`, and declared form/version), and its exact
+operation inventory. The retained pre-v3 Outreach declaration form is also
+accepted only when its `source_kind` is the explicit
+`complete_machine_readable_specification_with_rendered_dynamic_supplement`;
+its per-operation `source_url`, method/path, operation count, and supplemental
+document identities are all checked. No other legacy source kind changes import
+mode.
+
+The descriptor preserves the cited source URL, digest, byte count, operation
+identity, and location, then adds the exact
+`source_contract_unavailable` gap. It has no inferred parameters, request body,
+responses, pagination, authentication, or executor. Source projection must not
+write an action or command for it; operation evidence keeps its declaration and
+six-lane rows visible but cannot classify a lane enabled from that cited-only
+record. When the exact raw bytes later become available, retain them through the
+ordinary strict path without re-pinning and replace the reference only with a
+reviewed byte-backed source declaration.
+
 When migrating an existing lock, preserve the lock first because it may be
 untracked during a connector lane. Add a retained artifact only after its raw
 bytes validate against that lock; then add the matching provenance record.
@@ -1771,8 +1799,9 @@ record the retrieval date before re-pinning and retaining it. There is no
 `--cache-dir` fallback: an untracked cache cannot provide clone recovery and a
 provider fetch is forbidden during source verification.
 
-The lock must pin an OpenAPI 3.0/3.1 or Swagger 2.0 source document; JSON and
-YAML are accepted only in those forms. Each operation descriptor retains the
+Except for the explicit declaration-only source-reference form above, the lock
+must pin an OpenAPI 3.0/3.1 or Swagger 2.0 source document; JSON and YAML are
+accepted only in those forms. Each operation descriptor retains the
 provider `operation_id`, including an empty value, alongside its deterministic
 `source_id`. The source ID falls back to the connector, lower-case method, and
 connector-relative path only when the provider ID is empty. Resolve only

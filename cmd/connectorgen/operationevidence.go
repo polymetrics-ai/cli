@@ -404,11 +404,12 @@ type operationEvidenceSourceInput struct {
 }
 
 type operationEvidenceSourceOperation struct {
-	ID       string
-	Protocol string
-	Method   string
-	Path     string
-	Trace    operationEvidenceSourceTrace
+	ID                        string
+	Protocol                  string
+	Method                    string
+	Path                      string
+	Trace                     operationEvidenceSourceTrace
+	SourceContractUnavailable bool
 }
 
 type operationEvidenceRawLock struct {
@@ -425,9 +426,15 @@ type operationEvidenceRawLock struct {
 		Detail string `json:"detail"`
 	} `json:"dynamic"`
 	Rest struct {
-		SourceURL       string            `json:"source_url"`
-		SHA256          string            `json:"sha256"`
-		Bytes           int64             `json:"bytes"`
+		SourceURL   string `json:"source_url"`
+		SHA256      string `json:"sha256"`
+		Bytes       int64  `json:"bytes"`
+		SourceKind  string `json:"source_kind"`
+		Supplements []struct {
+			SourceURL string `json:"source_url"`
+			SHA256    string `json:"sha256"`
+			Bytes     int64  `json:"bytes"`
+		} `json:"supplements"`
 		SourceDocuments []json.RawMessage `json:"source_documents"`
 		Documents       []struct {
 			SourceURL string `json:"source_url"`
@@ -511,7 +518,7 @@ func readOperationEvidenceSourceLock(path, connector string) (operationEvidenceS
 	// historical tolerant projection: operation-evidence must still emit a
 	// source-trace gap for a bad digest or account for a duplicate operation,
 	// rather than fail before reporting that observable regression.
-	if lock.SchemaVersion == 3 {
+	if lock.SchemaVersion == 3 || (lock.SchemaVersion == 2 && lock.Rest.SourceKind != "") {
 		strictLock, err := parseSourceImportLock(raw, connector)
 		if err != nil {
 			return operationEvidenceSourceInput{}, fmt.Errorf("parse source lock for %q through source-import schema: %w", connector, err)
@@ -558,10 +565,22 @@ func operationEvidenceSourceInputFromLegacyLock(input operationEvidenceSourceInp
 func operationEvidenceSourceInputFromImportLock(input operationEvidenceSourceInput, lock sourceImportLock) (operationEvidenceSourceInput, error) {
 	if lock.SchemaVersion == 3 {
 		for _, document := range lock.Rest.SourceDocuments {
-			operationEvidenceAppendRESTOperations(&input, document.Operations, document.Artifact)
+			operationEvidenceAppendRESTOperations(&input, document.Operations, document.sourceArtifact(), document.isSourceReference())
+		}
+	} else if lock.isLegacySourceReference() {
+		artifacts, err := sourceImportLegacyReferenceArtifacts(lock)
+		if err != nil {
+			return operationEvidenceSourceInput{}, err
+		}
+		for _, operation := range lock.Rest.Operations {
+			artifact, found := artifacts[operation.SourceURL]
+			if !found {
+				return operationEvidenceSourceInput{}, fmt.Errorf("source-reference operation %q cites an undeclared source URL", operation.ID)
+			}
+			operationEvidenceAppendRESTOperations(&input, []sourceImportRESTOperation{operation}, artifact, true)
 		}
 	} else {
-		operationEvidenceAppendRESTOperations(&input, lock.Rest.Operations, lock.Rest.sourceImportArtifact)
+		operationEvidenceAppendRESTOperations(&input, lock.Rest.Operations, lock.Rest.sourceImportArtifact, false)
 	}
 	graphqlSHA := firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)
 	graphqlBytes := lock.GraphQL.ProjectionBytes
@@ -580,7 +599,7 @@ func operationEvidenceSourceInputFromImportLock(input operationEvidenceSourceInp
 	return input, nil
 }
 
-func operationEvidenceAppendRESTOperations(input *operationEvidenceSourceInput, operations []sourceImportRESTOperation, artifact sourceImportArtifact) {
+func operationEvidenceAppendRESTOperations(input *operationEvidenceSourceInput, operations []sourceImportRESTOperation, artifact sourceImportArtifact, sourceContractUnavailable bool) {
 	for _, operation := range operations {
 		input.Operations = append(input.Operations, operationEvidenceSourceOperation{
 			ID:       operation.ID,
@@ -594,6 +613,7 @@ func operationEvidenceAppendRESTOperations(input *operationEvidenceSourceInput, 
 				Bytes:    artifact.Bytes,
 				Location: operation.SourceLocation,
 			},
+			SourceContractUnavailable: sourceContractUnavailable,
 		})
 	}
 }
@@ -769,6 +789,9 @@ func projectOperationEvidenceRow(root, connector string, source operationEvidenc
 	if row.Source.URL == "" || row.Source.SHA256 == "" || row.Source.Bytes <= 0 || row.Source.Location == "" {
 		row.addGap(operationEvidenceGapSourceTrace, "source lock lacks a complete provider trace")
 	}
+	if source.SourceContractUnavailable {
+		row.addGap(sourceContractUnavailableFoundation, "provider operation is cited by a closed source reference, but retained source bytes and execution-contract detail are source_contract_unavailable")
+	}
 	var endpoint *engine.SurfaceEndpoint
 	if loadErr == nil {
 		endpoint = operationEvidenceSurfaceEndpoint(bundle, source)
@@ -811,15 +834,26 @@ func projectOperationEvidenceRow(root, connector string, source operationEvidenc
 		return row.finalize()
 	}
 	operationEvidenceClassify(&row, commands, disposition.ParityClass)
+	if source.SourceContractUnavailable {
+		for _, class := range operationEvidenceClasses {
+			value := row.Classifications[class]
+			value.Enabled = false
+			row.Classifications[class] = value
+		}
+	}
 	if len(commands) == 0 {
 		row.addGap(operationEvidenceGapCLICommand, "canonical operation has no generated CLI command")
 	}
 	if len(websiteCommands) == 0 {
 		row.addGap(operationEvidenceGapWebsiteRow, "canonical operation has no generated website command row")
 	}
-	row.Runtime.Enabled = len(targets.names()) > 0 && operationEvidenceHasEnabledCommand(commands)
+	row.Runtime.Enabled = !source.SourceContractUnavailable && len(targets.names()) > 0 && operationEvidenceHasEnabledCommand(commands)
 	if !row.Runtime.Enabled {
-		row.addGap(operationEvidenceGapRuntimeReachability, "canonical operation has no enabled declaration-owned runtime command")
+		evidence := "canonical operation has no enabled declaration-owned runtime command"
+		if source.SourceContractUnavailable {
+			evidence = "canonical declaration cannot become source-backed runtime evidence while the operation contract is source_contract_unavailable"
+		}
+		row.addGap(operationEvidenceGapRuntimeReachability, evidence)
 	}
 	row.Fixtures.Paths = operationEvidenceFixturePaths(root, connector, source, targets, commands)
 	if len(row.Fixtures.Paths) == 0 {
