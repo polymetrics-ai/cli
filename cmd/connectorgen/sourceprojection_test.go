@@ -2372,6 +2372,115 @@ func TestSourceProjectionWriteDisabledMutationArtifactsPreserveExecutableDeletes
 	}
 }
 
+// Regression acceptance for #4329: an exact, source-locked provider delete
+// with a real reverse-ETL action remains executable. capabilities.write=false
+// only retains mutations that lack this declaration-owned foundation; it must
+// not suppress a usable delete route as a safety policy.
+func TestSourceProjectionWriteDisabledMutationArtifactsPreserveSourceLockedExecutableDeletes(t *testing.T) {
+	tests := []struct {
+		connector   string
+		lockFile    string
+		operationID string
+		action      engine.WriteAction
+		command     engine.CLICommand
+	}{
+		{
+			connector:   "sentry",
+			lockFile:    "sentry-operation-source-lock.json",
+			operationID: "deleteOrganizationDashboard",
+			action: engine.WriteAction{
+				Name:         "delete_organization_dashboard",
+				Kind:         "delete",
+				Method:       "DELETE",
+				Path:         "/api/0/organizations/{{ record.organization_id_or_slug }}/dashboards/{{ record.dashboard_id }}/",
+				PathFields:   []string{"organization_id_or_slug", "dashboard_id"},
+				RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"organization_id_or_slug":{"type":"string","minLength":1},"dashboard_id":{"type":"string","minLength":1}},"required":["organization_id_or_slug","dashboard_id"]}`),
+				Risk:         "destructive",
+			},
+			command: engine.CLICommand{
+				Path: "dashboards delete", Intent: "reverse_etl", Availability: "implemented", Write: "delete_organization_dashboard",
+				Flags: []engine.CLIFlag{
+					{Name: "organization-id-or-slug", Type: "string", MapsTo: "record.organization_id_or_slug", Required: true},
+					{Name: "dashboard-id", Type: "string", MapsTo: "record.dashboard_id", Required: true},
+				},
+			},
+		},
+		{
+			connector:   "vercel",
+			lockFile:    "vercel-operation-source-lock.json",
+			operationID: "deleteStorageStoresBlobById",
+			action: engine.WriteAction{
+				Name:         "delete_storage_blob",
+				Kind:         "delete",
+				Method:       "DELETE",
+				Path:         "/storage/stores/blob/{{ record.id }}",
+				PathFields:   []string{"id"},
+				RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"id":{"type":"string","minLength":1}},"required":["id"]}`),
+				Risk:         "destructive",
+			},
+			command: engine.CLICommand{
+				Path: "storage blobs delete", Intent: "reverse_etl", Availability: "implemented", Write: "delete_storage_blob",
+				Flags: []engine.CLIFlag{
+					{Name: "id", Type: "string", MapsTo: "record.id", Required: true},
+				},
+			},
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.connector, func(t *testing.T) {
+			raw, err := os.ReadFile(filepath.Join("testdata", "issue4329", tc.lockFile))
+			if err != nil {
+				t.Fatal(err)
+			}
+			lock, err := parseSourceImportLock(raw, tc.connector)
+			if err != nil {
+				t.Fatalf("parse preserved %s source lock: %v", tc.connector, err)
+			}
+			var operation sourceOperationDescriptor
+			for _, candidate := range lock.Rest.Operations {
+				if candidate.OperationID != tc.operationID {
+					continue
+				}
+				operation = sourceOperationDescriptor{
+					Connector: tc.connector, SourceID: candidate.OperationID, Method: candidate.Method, Path: candidate.Path,
+					ProviderOperationID: candidate.OperationID,
+					Source:              sourceImportSource{URL: lock.Rest.SourceURL, SHA256: lock.Rest.SHA256, Bytes: lock.Rest.Bytes, Location: candidate.SourceLocation, Form: "openapi", Version: lock.Rest.OpenAPI},
+				}
+				break
+			}
+			if operation.SourceID == "" || !sourceProjectionOperationMutates(operation) {
+				t.Fatalf("source-locked executable delete %q = %#v", tc.operationID, operation)
+			}
+
+			tc.command.APISurface = []engine.CLISurfaceEndpointRef{{Method: operation.Method, Path: operation.Path}}
+			bundle := engine.Bundle{
+				Name:       tc.connector,
+				Metadata:   engine.Metadata{Name: tc.connector, Capabilities: engine.Capabilities{Read: true, Write: false}},
+				Writes:     []engine.WriteAction{tc.action},
+				CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{tc.command}},
+			}
+			if !sourceProjectionMutationActionIsComplete(bundle, operation) {
+				t.Fatalf("source-locked %s delete action is not complete", tc.connector)
+			}
+			if !sourceProjectionMutationClaimsImplementedAction(bundle, operation) {
+				t.Fatalf("source-locked %s reverse-ETL command does not claim its exact provider operation", tc.connector)
+			}
+
+			result := sourceImportResult{Operations: []sourceOperationDescriptor{operation}}
+			if got := sourceProjectionApplyWriteDisabledMutationArtifacts(bundle, &result); got != 0 {
+				t.Fatalf("automatic mutation artifact count = %d, want 0 for executable %s delete", got, tc.connector)
+			}
+			if result.Operations[0].Runtime.NonExecutableMutation != nil {
+				t.Fatalf("executable %s delete received a non-executable mutation artifact: %#v", tc.connector, result.Operations[0].Runtime)
+			}
+			if findings := validateSourceExecutableCoverage(bundle, "sources/"+tc.connector+"-operation-descriptor.json", sourceImportDescriptorDocument{Operations: result.Operations}); len(findings) != 0 {
+				t.Fatalf("source-locked %s executable delete coverage findings = %+v", tc.connector, findings)
+			}
+		})
+	}
+}
+
 func TestSourceProjectionWriteCapableBundlesDoNotAutoDeferMutations(t *testing.T) {
 	operation := sourceCitedMutationTestOperation("vercel", "deleteStorageStoresBlobById", "DELETE", "/storage/stores/blob/{id}")
 	bundle := engine.Bundle{

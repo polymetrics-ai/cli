@@ -17,12 +17,18 @@
 - No other local findings. The helper is fail-closed without a retained provider
   citation, does not alter a manual disposition, and does not downgrade an
   executable or implemented action claim.
+- Current-main integration: merged `origin/main` at
+  `1324c52bab0b224ed8958858af7676b8b8e191b4` with no conflicts. The added
+  source-lock regression checks actual Sentry and Vercel delete endpoints and
+  their declared `reverse_etl` command/action relationship, rather than a
+  hand-constructed citation. It confirms the artifact rule never serves as a
+  policy gate for a complete executable delete.
 
 ## Required independent review
 
-After the audit-fix commit is pushed, obtain a fresh independent Codex audit of
-that exact SHA. Record its result in the PR review coverage before requesting
-merge.
+After the current-main integration commit is pushed, obtain the Captain-requested
+fresh independent Codex audit of that exact SHA. Record its result in the PR
+review coverage before requesting merge.
 
 ## Automated review route
 

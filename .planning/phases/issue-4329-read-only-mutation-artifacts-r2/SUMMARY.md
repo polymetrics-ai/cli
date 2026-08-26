@@ -6,9 +6,12 @@ explicitly declares no write capability and no complete declaration-owned
 action exists. It leaves real executable delete/reverse-ETL actions intact.
 
 The tests load byte-identical full Sentry/Vercel source locks, retain each
-classified mutation, and validate real read/mutation pairs. The code and tests
-change no connector bundle or user command; source-bound materialization of
-those connectors remains the named downstream gap to a binary credential probe.
+classified mutation, validate real read/mutation pairs, and—after a clean
+merge of current main—prove their exact source-locked delete operations stay
+implemented reverse-ETL actions when their complete declared foundation exists.
+The code and tests change no connector bundle or user command; source-bound
+materialization of those connectors remains the named downstream gap to a
+binary credential probe.
 
 Local verification is recorded in `VERIFICATION.md`; remote PR/audit/CI gates
 remain pending.

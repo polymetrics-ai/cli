@@ -2,8 +2,9 @@
 
 ## Status
 
-Local verification is complete for the audit-fix commit. A fresh independent
-audit of that exact pushed SHA and required remote CI remain pending.
+Local verification is complete for the current-main integration. A fresh
+independent audit of the exact integration SHA and required remote CI remain
+pending after push.
 
 ## Completed evidence
 
@@ -26,17 +27,24 @@ audit of that exact pushed SHA and required remote CI remain pending.
   `listOrganizationProjects`/`createOrganizationDashboard` and
   `getProjects`/`deleteStorageStoresBlobById` pairs with a declared GET route.
   Projection leaves `writes.json` and `cli_surface.json` byte-identical.
+- Current-main acceptance additionally loads the exact source-lock deletes
+  `deleteOrganizationDashboard` at
+  `/api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/`
+  and `deleteStorageStoresBlobById` at `/storage/stores/blob/{id}`. Each has
+  a declaration-owned destructive action plus `availability: implemented`,
+  `intent: reverse_etl` CLI route. With `metadata.capabilities.write=false`,
+  each remains action-first (zero automatic artifact count) and returns zero
+  executable-coverage findings.
 
 ## Local command results
 
-- `GOFLAGS=-p=3 go test -count=1 -timeout 20m ./cmd/connectorgen` — PASS (153.286s; audit-fix final run).
-- `GOFLAGS=-p=3 go test -count=1 -timeout 20m ./internal/connectors/engine` — PASS (13.126s).
-- `GOFLAGS=-p=3 go test -count=1 -timeout 20m ./internal/connectors/commandrunner` — PASS (21.799s).
-- `GOFLAGS=-p=3 go test -count=1 -timeout 20m ./internal/cli` — PASS (441.520s).
-- `go vet ./...` — PASS.
-- `go build ./cmd/pm` — PASS.
-- `make connectorgen-validate connectorgen-surface-sync connectorgen-operation-evidence` — PASS. The generator validated 553 connectors; surface sync corrected 0 fields; operation evidence is current (1525 rows). The broader tidy, lint, agent-contract, boundary, canon, and release gates passed on the preceding equivalent code slice.
-- `make docs-check-no-build smoke-no-build` — PASS.
+- `GOFLAGS=-p=3 go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestSourceProjectionIssue4329SourceLocksRetainMutationInventoryAndReadSurface|TestSourceProjectionWriteDisabledMutationArtifactsPreserveExecutableDeletes|TestSourceProjectionWriteDisabledMutationArtifactsPreserveSourceLockedExecutableDeletes)$'` — PASS (1.118s).
+- `GOFLAGS=-p=3 go test -count=1 -timeout 20m ./cmd/connectorgen` — PASS (154.269s) after merging `origin/main` at `1324c52bab0b224ed8958858af7676b8b8e191b4` with no conflicts.
+- `GOFLAGS=-p=3 go test -count=1 -timeout 20m ./internal/connectors/engine` — PASS (14.192s).
+- `GOFLAGS=-p=3 go test -count=1 -timeout 20m ./internal/connectors/commandrunner` — PASS (24.871s); `make connector-runtime-preflight` — PASS (8.737s).
+- `GOFLAGS=-p=3 go test -count=1 -timeout 20m ./internal/cli` — PASS (438.166s).
+- `GOFLAGS=-p=3 go vet ./...`; `GOFLAGS=-p=3 go build ./cmd/pm`; `make tidy-check`; `make lint`; `make docs-check-no-build`; and `make smoke-no-build` — PASS.
+- `make agent-contract-check`; `make connectorgen-validate`; `make connectorgen-surface-sync`; `make connectorgen-declaration-admission`; `make connectorgen-operation-evidence`; `make github-parity-artifacts-check`; `make connectorgen-certification-matrix`; `make connectorgen-certification-candidates`; `make connectorgen-certification-sweep`; `make connector-boundary`; `make connector-canon-check`; and `make release-workflow-check` — PASS. The generator validated 553 connectors, source surface sync made zero corrections, declaration admission found zero findings, operation evidence is current at 1,525 rows, and the boundary scan found zero findings.
 - `git diff --check` and `gofmt -d` over changed Go files — PASS (no output).
 
 ## Built-binary command boundary
@@ -54,8 +62,9 @@ is the only remaining gap to a built-binary credential-boundary proof.
 
 ## Remaining remote gates
 
-- Push the exact green SHA, open a main-targeted PR, and confirm the API reports
+- Push the exact green SHA to the existing PR and confirm its API-reported
   `base.ref=main`.
-- Obtain an independent Codex audit of the exact SHA, then disposition any
+- Obtain the Captain-requested fresh, separate Codex audit of the exact pushed
+  integration SHA, then disposition any
   findings before requesting a merge.
 - Wait for every required PR check to pass. No merge is performed by this task.
