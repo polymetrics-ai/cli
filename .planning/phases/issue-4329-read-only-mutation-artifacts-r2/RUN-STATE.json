@@ -1,0 +1,8 @@
+{
+  "issue": 4329,
+  "state": "planned",
+  "base": "main",
+  "working_branch": "fix/4329-read-only-mutation-artifacts",
+  "scope": "shared connectorgen source-import/projection/coverage behavior and issue evidence only",
+  "next": "write the red source-import regression before production changes"
+}
