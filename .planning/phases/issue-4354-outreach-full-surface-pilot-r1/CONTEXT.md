@@ -2,13 +2,13 @@
 
 ## Task Delivery Header
 
-- Issue: Closes #4354 — feat(connectors): make Outreach full-surface pilot auditable
+- Issue: Refs #4354 — feat(connectors): make Outreach full-surface pilot auditable
 - Base branch: main
 - Merges into: main
-- Delivery: A standalone PR against `main` will be opened as a draft after the evidence and review records are committed. It is not merge-eligible while source admission is blocked, and it is never merged by this task.
+- Delivery: Draft PR #4355 is open against `main`; `gh-axi pr list --state open --base main --head feat/4354-outreach-full-surface-pilot` returned only #4355. It is not merge-eligible while source admission is blocked, and it is never merged by this task.
 - Working branch: feat/4354-outreach-full-surface-pilot
 - Task: Reconstruct and validate only the Outreach connector's source-backed surface from Batch 6–7 candidate `18248d233e6abd9d7ec03075a225cf35ee2f5399`, prove the usable command boundary without provider I/O, and disclose any active shared-foundation dependency.
-- Verification: Source-lock and declaration audits; focused red/green tests; `go build ./cmd/pm`; generated evidence/certification/surface checks; representative fixture-only preflight commands; `git diff --check`; independent clean-worktree run; GitHub API PR-base readback.
+- Verification: Source-lock and declaration audits; focused red/green tests; `go build ./cmd/pm`; generated evidence/certification/surface checks; representative fixture-only preflight commands; `git diff --check`; independent clean-worktree run; GitHub API-backed PR-base readback through `gh-axi`.
 
 ## Evidence Table
 
