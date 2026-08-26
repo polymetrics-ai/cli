@@ -2118,6 +2118,228 @@ func TestSourceProjectionSourceCitedNonExecutableMutationDispositionsCoverAbsent
 	}
 }
 
+func TestSourceProjectionWriteDisabledLockedSourcesRetainMutationArtifacts(t *testing.T) {
+	pathFlags := func(path string) []engine.CLIFlag {
+		flags := make([]engine.CLIFlag, 0)
+		for _, match := range sourceProjectionPathVariableRE.FindAllStringSubmatch(path, -1) {
+			flags = append(flags, engine.CLIFlag{
+				Name:     strings.ReplaceAll(match[1], "_", "-"),
+				Type:     "string",
+				MapsTo:   "path." + match[1],
+				Required: true,
+			})
+		}
+		return flags
+	}
+	tests := []struct {
+		name             string
+		connector        string
+		sourceURL        string
+		sourceSHA        string
+		sourceBytes      int64
+		readID           string
+		readPath         string
+		readLocation     string
+		mutationID       string
+		mutationPath     string
+		mutationLocation string
+		method           string
+	}{
+		{
+			name:             "sentry source lock",
+			connector:        "sentry",
+			sourceURL:        "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+			sourceSHA:        "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
+			sourceBytes:      3868570,
+			readID:           "listOrganizationProjects",
+			readPath:         "/api/0/organizations/{organization_id_or_slug}/projects/",
+			readLocation:     `paths["/api/0/organizations/{organization_id_or_slug}/projects/"].get`,
+			mutationID:       "createOrganizationDashboard",
+			mutationPath:     "/api/0/organizations/{organization_id_or_slug}/dashboards/",
+			mutationLocation: `paths["/api/0/organizations/{organization_id_or_slug}/dashboards/"].post`,
+			method:           "post",
+		},
+		{
+			name:             "vercel source lock",
+			connector:        "vercel",
+			sourceURL:        "https://openapi.vercel.sh/",
+			sourceSHA:        "74cb7ff3dc0b89cc344b13ac9c6d5f1d9b7d7a9356cfd6b5a779da51fd43da28",
+			sourceBytes:      10463249,
+			readID:           "getProjects",
+			readPath:         "/v10/projects",
+			readLocation:     `paths["/v10/projects"].get`,
+			mutationID:       "deleteStorageStoresBlobById",
+			mutationPath:     "/storage/stores/blob/{id}",
+			mutationLocation: `paths["/storage/stores/blob/{id}"].delete`,
+			method:           "delete",
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// These citations are copied from the preserved Sentry and Vercel
+			// source-locked descriptors. Keep the acceptance vectors source-backed
+			// without copying or rewriting either provider document into this branch.
+			result := sourceImportResult{Operations: []sourceOperationDescriptor{
+				{Connector: tc.connector, SourceID: tc.readID, Method: "get", Path: tc.readPath, Source: sourceImportSource{URL: tc.sourceURL, SHA256: tc.sourceSHA, Bytes: tc.sourceBytes, Location: tc.readLocation, Form: "openapi", Version: "3.0.3"}},
+				{Connector: tc.connector, SourceID: tc.mutationID, Method: tc.method, Path: tc.mutationPath, Source: sourceImportSource{URL: tc.sourceURL, SHA256: tc.sourceSHA, Bytes: tc.sourceBytes, Location: tc.mutationLocation, Form: "openapi", Version: "3.0.3"}},
+			}}
+
+			bundle := engine.Bundle{
+				Name: tc.connector,
+				Metadata: engine.Metadata{
+					Name:         tc.connector,
+					Capabilities: engine.Capabilities{Read: true, Write: false},
+				},
+				CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+					Path:         "projects list",
+					Intent:       "direct_read",
+					Availability: "implemented",
+					APISurface:   []engine.CLISurfaceEndpointRef{{Method: "GET", Path: tc.readPath}},
+					Flags:        pathFlags(tc.readPath),
+				}}},
+			}
+			if got := sourceProjectionApplyWriteDisabledMutationArtifacts(bundle, &result); got != 1 {
+				t.Fatalf("automatic mutation artifact count = %d, want 1", got)
+			}
+
+			var read, mutation sourceOperationDescriptor
+			for _, operation := range result.Operations {
+				switch operation.SourceID {
+				case tc.readID:
+					read = operation
+				case tc.mutationID:
+					mutation = operation
+				}
+			}
+			if read.SourceID == "" || read.Runtime.NonExecutableMutation != nil {
+				t.Fatalf("read operation = %#v, want retained executable read without mutation artifact", read)
+			}
+			if !sourceProjectionHasNonExecutableMutationDisposition(mutation) {
+				t.Fatalf("mutation operation = %#v, want cited non-executable artifact", mutation)
+			}
+			if mutation.Source.URL != tc.sourceURL || mutation.Source.SHA256 != tc.sourceSHA || mutation.Source.Bytes != tc.sourceBytes || mutation.Source.Location != tc.mutationLocation {
+				t.Fatalf("mutation provider source = %#v, want exact retained source-lock citation", mutation.Source)
+			}
+			if mutation.Runtime.NonExecutableMutation.Source.SourceID != tc.mutationID ||
+				!strings.EqualFold(mutation.Runtime.NonExecutableMutation.Source.Method, tc.method) ||
+				mutation.Runtime.NonExecutableMutation.Source.Path != tc.mutationPath {
+				t.Fatalf("mutation citation = %#v, want exact locked source identity", mutation.Runtime.NonExecutableMutation.Source)
+			}
+			if !sourceOperationHasFoundationGap(mutation, sourceNonExecutableMutationDispositionFoundation) || !strings.Contains(sourceProjectionNonExecutableMutationRuntimeGap(mutation, *mutation.Runtime.NonExecutableMutation).Location, tc.sourceURL) {
+				t.Fatalf("mutation gap = %#v, want named source-cited foundation", mutation.Runtime.Gaps)
+			}
+			if findings := validateSourceExecutableCoverage(bundle, "sources/"+tc.connector+"-operation-descriptor.json", sourceImportDescriptorDocument{Operations: result.Operations}); len(findings) != 0 {
+				t.Fatalf("read-only source executable coverage findings = %+v", findings)
+			}
+
+			bundleDir := t.TempDir()
+			writesPath := filepath.Join(bundleDir, "writes.json")
+			cliPath := filepath.Join(bundleDir, "cli_surface.json")
+			const emptyWrites = `{"schema_version":1,"actions":[]}`
+			cliRaw, err := json.Marshal(engine.CLISurface{Commands: []engine.CLICommand{{
+				Path: "projects list", Summary: "list", Intent: "direct_read", Availability: "implemented",
+				APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: tc.readPath}}, Flags: pathFlags(tc.readPath),
+			}}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			cli := string(cliRaw)
+			writeProjectionFixture(t, writesPath, emptyWrites)
+			writeProjectionFixture(t, cliPath, cli)
+			stats, err := projectSourceDescriptorToBundle(bundleDir, result, false)
+			if err != nil || stats.Changed() {
+				t.Fatalf("source projection = stats:%+v err:%v, want no fabricated write or command", stats, err)
+			}
+			if gotWrites, gotCLI := readProjectionFixture(t, writesPath), readProjectionFixture(t, cliPath); gotWrites != emptyWrites || gotCLI != cli {
+				t.Fatalf("source projection fabricated a write or command:\nwrites=%s\ncli=%s", gotWrites, gotCLI)
+			}
+		})
+	}
+}
+
+func TestSourceProjectionWriteDisabledMutationArtifactsPreserveExecutableDeletes(t *testing.T) {
+	operation := sourceCitedMutationTestOperation("sentry", "deleteOrganizationDashboard", "DELETE", "/api/0/dashboards/current/")
+	bundle := engine.Bundle{
+		Name:     "sentry",
+		Metadata: engine.Metadata{Name: "sentry", Capabilities: engine.Capabilities{Read: true, Write: false}},
+		Writes: []engine.WriteAction{{
+			Name: "delete_dashboard", Kind: "delete", Method: "DELETE",
+			Path:         "/api/0/dashboards/current/",
+			RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{}}`),
+			Risk:         "destructive",
+		}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path: "dashboards delete", Intent: "reverse_etl", Availability: "implemented", Write: "delete_dashboard",
+		}}},
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{operation}}
+	if got := sourceProjectionApplyWriteDisabledMutationArtifacts(bundle, &result); got != 0 {
+		t.Fatalf("automatic mutation artifact count = %d, want 0 for executable delete", got)
+	}
+	if result.Operations[0].Runtime.NonExecutableMutation != nil {
+		t.Fatalf("executable delete received a non-executable mutation artifact: %#v", result.Operations[0].Runtime)
+	}
+	if findings := validateSourceExecutableCoverage(bundle, "sources/sentry-operation-descriptor.json", sourceImportDescriptorDocument{Operations: result.Operations}); len(findings) != 0 {
+		t.Fatalf("executable delete coverage findings = %+v", findings)
+	}
+}
+
+func TestSourceProjectionWriteCapableBundlesDoNotAutoDeferMutations(t *testing.T) {
+	operation := sourceCitedMutationTestOperation("vercel", "deleteStorageStoresBlobById", "DELETE", "/storage/stores/blob/{id}")
+	bundle := engine.Bundle{
+		Name:       "vercel",
+		Metadata:   engine.Metadata{Name: "vercel", Capabilities: engine.Capabilities{Read: true, Write: true}},
+		CLISurface: &engine.CLISurface{},
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{operation}}
+	if got := sourceProjectionApplyWriteDisabledMutationArtifacts(bundle, &result); got != 0 {
+		t.Fatalf("automatic mutation artifact count = %d, want 0 for write-capable bundle", got)
+	}
+	if result.Operations[0].Runtime.NonExecutableMutation != nil {
+		t.Fatalf("write-capable mutation received a non-executable artifact: %#v", result.Operations[0].Runtime)
+	}
+	if findings := validateSourceExecutableCoverage(bundle, "sources/vercel-operation-descriptor.json", sourceImportDescriptorDocument{Operations: result.Operations}); len(findings) != 1 || !strings.Contains(findings[0].Message, "no executable action") {
+		t.Fatalf("write-capable mutation coverage findings = %+v, want missing-action refusal", findings)
+	}
+}
+
+func TestSourceProjectionWriteDisabledMutationArtifactsRequireProviderCitation(t *testing.T) {
+	operation := sourceCitedMutationTestOperation("sentry", "deleteOrganizationDashboard", "DELETE", "/api/0/dashboards/current/")
+	operation.Source = sourceImportSource{}
+	bundle := engine.Bundle{
+		Name:     "sentry",
+		Metadata: engine.Metadata{Name: "sentry", Capabilities: engine.Capabilities{Read: true, Write: false}},
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{operation}}
+	if got := sourceProjectionApplyWriteDisabledMutationArtifacts(bundle, &result); got != 0 {
+		t.Fatalf("automatic mutation artifact count = %d, want 0 without a provider citation", got)
+	}
+	if result.Operations[0].Runtime.NonExecutableMutation != nil {
+		t.Fatalf("uncited mutation received a non-executable artifact: %#v", result.Operations[0].Runtime)
+	}
+}
+
+func TestSourceProjectionWriteDisabledMutationArtifactsRetainGraphQLMutations(t *testing.T) {
+	operation := sourceCitedMutationTestOperation("sentry", "sentry.graphql.mutation.resolve", "POST", "/graphql")
+	operation.Protocol = "graphql"
+	operation.GraphQL = &sourceGraphQLOperationDescriptor{Root: "Mutation", Name: "resolveIssue"}
+	bundle := engine.Bundle{
+		Name:     "sentry",
+		Metadata: engine.Metadata{Name: "sentry", Capabilities: engine.Capabilities{Read: true, Write: false}},
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{operation}}
+	if got := sourceProjectionApplyWriteDisabledMutationArtifacts(bundle, &result); got != 1 {
+		t.Fatalf("automatic mutation artifact count = %d, want 1 for a GraphQL mutation", got)
+	}
+	if !sourceProjectionHasNonExecutableMutationDisposition(result.Operations[0]) {
+		t.Fatalf("GraphQL mutation = %#v, want cited non-executable artifact", result.Operations[0].Runtime)
+	}
+	if findings := validateSourceExecutableCoverage(bundle, "sources/sentry-operation-descriptor.json", sourceImportDescriptorDocument{Operations: result.Operations}); len(findings) != 0 {
+		t.Fatalf("GraphQL mutation coverage findings = %+v", findings)
+	}
+}
+
 func TestSourceProjectionSourceCitedNonExecutableMutationDispositionRejectsCompleteAction(t *testing.T) {
 	operation := sourceProjectionTestOperation()
 	operation.Connector = "sentry"

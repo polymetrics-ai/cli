@@ -1,8 +1,8 @@
 {
   "issue": 4329,
-  "state": "planned",
+  "state": "verified_local_pending_pr",
   "base": "main",
   "working_branch": "fix/4329-read-only-mutation-artifacts",
   "scope": "shared connectorgen source-import/projection/coverage behavior and issue evidence only",
-  "next": "write the red source-import regression before production changes"
+  "next": "commit the verified slice, push, open the main-targeted PR, record API base/audit/CI"
 }

@@ -35,6 +35,11 @@ const (
 	sourceReadOnlyOperationFoundation = "source-read-only-operation-foundation-r1"
 	sourceReadOnlyOperationModel      = "read_only"
 	sourceReadOnlyPolicy              = "source-cited-read-only-operations-r1"
+	// sourceWriteDisabledMutationArtifactReason is attached only to a mutation
+	// whose connector explicitly declares no write capability. The matching
+	// provider citation and named non-executable foundation make that absence
+	// auditable without fabricating an action or a runnable command.
+	sourceWriteDisabledMutationArtifactReason = "connector declares no write capability and has no complete declaration-owned executable action"
 	// JSON-valued command flags carry a complete named field through the
 	// declaration-owned body path. They are not an unbounded replacement for a
 	// request body, so keep their encoded input explicitly bounded.
@@ -471,6 +476,57 @@ func sourceProjectionApplyNonExecutableMutationDispositions(bundle engine.Bundle
 		}
 	}
 	return nil
+}
+
+// sourceProjectionApplyWriteDisabledMutationArtifacts retains a provider
+// mutation when the connector has explicitly opted out of writes. It uses the
+// same source-cited non-executable mutation artifact as a manual disposition,
+// but derives it from the locked provider operation on every source import so
+// no local source document, action, request schema, transport, or CLI command
+// has to be invented merely to make the read surface validate.
+//
+// An executable action or implemented action claim always wins. Those
+// operations remain ordinary executable coverage, including delete and reverse
+// ETL actions; the write-disabled declaration is never a safety suppression.
+func sourceProjectionApplyWriteDisabledMutationArtifacts(bundle engine.Bundle, result *sourceImportResult) int {
+	if result == nil || bundle.Metadata.Name == "" || bundle.Metadata.Capabilities.Write {
+		return 0
+	}
+
+	artifacts := 0
+	for index := range result.Operations {
+		operation := &result.Operations[index]
+		if !sourceProjectionOperationMutates(*operation) || operation.Runtime.NonExecutableMutation != nil {
+			continue
+		}
+		if _, declared, err := sourceProjectionReadOnlyDeclaration(bundle, *operation); err != nil || declared {
+			// A malformed or mutating `read_only` row must remain a validation
+			// failure. Do not cover it with a separate mutation artifact.
+			continue
+		}
+		if sourceProjectionMutationActionIsComplete(bundle, *operation) || sourceProjectionMutationClaimsImplementedAction(bundle, *operation) {
+			continue
+		}
+		disposition := sourceNonExecutableMutationDisposition{
+			Source: sourceOperationCitation{
+				SourceID: operation.SourceID,
+				Method:   operation.Method,
+				Path:     operation.Path,
+			},
+			Reason: sourceWriteDisabledMutationArtifactReason,
+		}
+		if sourceProjectionValidateNonExecutableMutationDispositionCitation(*operation, disposition) != nil {
+			// Source import normally guarantees this provenance. Keep the helper
+			// fail-closed as well so callers cannot synthesize an artifact from a
+			// mutation-shaped value without a retained provider citation.
+			continue
+		}
+		operation.Runtime.NonExecutableMutation = &disposition
+		operation.Runtime.Gaps = sourceSortedGaps(append(operation.Runtime.Gaps, sourceProjectionNonExecutableMutationRuntimeGap(*operation, disposition)))
+		operation.Runtime.MergeBlocked = true
+		artifacts++
+	}
+	return artifacts
 }
 
 func sourceProjectionValidateNonExecutableMutationDispositionCitation(operation sourceOperationDescriptor, disposition sourceNonExecutableMutationDisposition) error {
@@ -1087,7 +1143,7 @@ func sourceProjectionReadOnlyDeclaration(bundle engine.Bundle, source sourceOper
 	if err != nil || !declared {
 		return declaration, declared, err
 	}
-	if sourceProjectionMutationMethod(source.Method) {
+	if sourceProjectionOperationMutates(source) {
 		return sourceReadOnlyDeclaration{}, true, errors.New("read-only declaration cannot cover a mutating source operation")
 	}
 	return declaration, true, nil
@@ -2885,6 +2941,14 @@ func sourceProjectionExecutionSurface(bundleDir, connector string) (engine.Bundl
 		path   string
 		decode func([]byte) error
 	}{
+		{path: "metadata.json", decode: func(raw []byte) error {
+			var value engine.Metadata
+			if err := json.Unmarshal(raw, &value); err != nil {
+				return err
+			}
+			bundle.Metadata = value
+			return nil
+		}},
 		{path: "spec.json", decode: func(raw []byte) error {
 			spec, err := engine.CompileSchema(json.RawMessage(raw))
 			if err != nil {
