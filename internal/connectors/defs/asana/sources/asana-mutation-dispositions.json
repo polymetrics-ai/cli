@@ -1,0 +1,796 @@
+{
+  "schema_version": 1,
+  "dispositions": [
+    {
+      "source": {
+        "source_id": "asana.rest.deleteAllocation",
+        "method": "DELETE",
+        "path": "/allocations/{allocation_gid}"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteAttachment",
+        "method": "DELETE",
+        "path": "/attachments/{attachment_gid}"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteBudget",
+        "method": "DELETE",
+        "path": "/budgets/{budget_gid}"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteCustomField",
+        "method": "DELETE",
+        "path": "/custom_fields/{custom_field_gid}"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteGoal",
+        "method": "DELETE",
+        "path": "/goals/{goal_gid}"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteMembership",
+        "method": "DELETE",
+        "path": "/memberships/{membership_gid}"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteOooEntry",
+        "method": "DELETE",
+        "path": "/ooo_entries/{ooo_entry_gid}"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deletePortfolio",
+        "method": "DELETE",
+        "path": "/portfolios/{portfolio_gid}"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteProjectBrief",
+        "method": "DELETE",
+        "path": "/project_briefs/{project_brief_gid}"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteProjectStatus",
+        "method": "DELETE",
+        "path": "/project_statuses/{project_status_gid}"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteProjectTemplate",
+        "method": "DELETE",
+        "path": "/project_templates/{project_template_gid}"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteRate",
+        "method": "DELETE",
+        "path": "/rates/{rate_gid}"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteRole",
+        "method": "DELETE",
+        "path": "/roles/{role_gid}"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteStatus",
+        "method": "DELETE",
+        "path": "/status_updates/{status_update_gid}"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteStory",
+        "method": "DELETE",
+        "path": "/stories/{story_gid}"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteTaskTemplate",
+        "method": "DELETE",
+        "path": "/task_templates/{task_template_gid}"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteTimeTrackingCategory",
+        "method": "DELETE",
+        "path": "/time_tracking_categories/{time_tracking_category_gid}"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteTimeTrackingEntry",
+        "method": "DELETE",
+        "path": "/time_tracking_entries/{time_tracking_entry_gid}"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteWebhook",
+        "method": "DELETE",
+        "path": "/webhooks/{webhook_gid}"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.approveAccessRequest",
+        "method": "POST",
+        "path": "/access_requests/{access_request_gid}/approve"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.rejectAccessRequest",
+        "method": "POST",
+        "path": "/access_requests/{access_request_gid}/reject"
+      },
+      "reason": "Asana provider mutation has no declaration-owned executable action."
+    }
+  ],
+  "partial_coverage_dispositions": [
+    {
+      "source": {
+        "source_id": "asana.rest.createCustomField",
+        "method": "POST",
+        "path": "/custom_fields"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createEnumOptionForCustomField",
+        "method": "POST",
+        "path": "/custom_fields/{custom_field_gid}/enum_options"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.insertEnumOptionForCustomField",
+        "method": "POST",
+        "path": "/custom_fields/{custom_field_gid}/enum_options/insert"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createGraphExport",
+        "method": "POST",
+        "path": "/exports/graph"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createResourceExport",
+        "method": "POST",
+        "path": "/exports/resource"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createGoal",
+        "method": "POST",
+        "path": "/goals"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.addCustomFieldSettingForGoal",
+        "method": "POST",
+        "path": "/goals/{goal_gid}/addCustomFieldSetting"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.addFollowers",
+        "method": "POST",
+        "path": "/goals/{goal_gid}/addFollowers"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.addSupportingRelationship",
+        "method": "POST",
+        "path": "/goals/{goal_gid}/addSupportingRelationship"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createGoalMetric",
+        "method": "POST",
+        "path": "/goals/{goal_gid}/setMetric"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.updateGoalMetric",
+        "method": "POST",
+        "path": "/goals/{goal_gid}/setMetricCurrentValue"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createStoryForGoal",
+        "method": "POST",
+        "path": "/goals/{goal_gid}/stories"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createOooEntry",
+        "method": "POST",
+        "path": "/ooo_entries"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createPortfolio",
+        "method": "POST",
+        "path": "/portfolios"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.addCustomFieldSettingForPortfolio",
+        "method": "POST",
+        "path": "/portfolios/{portfolio_gid}/addCustomFieldSetting"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.addItemForPortfolio",
+        "method": "POST",
+        "path": "/portfolios/{portfolio_gid}/addItem"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.addMembersForPortfolio",
+        "method": "POST",
+        "path": "/portfolios/{portfolio_gid}/addMembers"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.duplicatePortfolio",
+        "method": "POST",
+        "path": "/portfolios/{portfolio_gid}/duplicate"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.instantiateProject",
+        "method": "POST",
+        "path": "/project_templates/{project_template_gid}/instantiateProject"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createProject",
+        "method": "POST",
+        "path": "/projects"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.addCustomFieldSettingForProject",
+        "method": "POST",
+        "path": "/projects/{project_gid}/addCustomFieldSetting"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.addFollowersForProject",
+        "method": "POST",
+        "path": "/projects/{project_gid}/addFollowers"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.addMembersForProject",
+        "method": "POST",
+        "path": "/projects/{project_gid}/addMembers"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.duplicateProject",
+        "method": "POST",
+        "path": "/projects/{project_gid}/duplicate"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createProjectBrief",
+        "method": "POST",
+        "path": "/projects/{project_gid}/project_briefs"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createProjectStatusForProject",
+        "method": "POST",
+        "path": "/projects/{project_gid}/project_statuses"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.projectSaveAsTemplate",
+        "method": "POST",
+        "path": "/projects/{project_gid}/saveAsTemplate"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createSectionForProject",
+        "method": "POST",
+        "path": "/projects/{project_gid}/sections"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.insertSectionForProject",
+        "method": "POST",
+        "path": "/projects/{project_gid}/sections/insert"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.triggerRule",
+        "method": "POST",
+        "path": "/rule_triggers/{rule_trigger_gid}/run"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.addTaskForSection",
+        "method": "POST",
+        "path": "/sections/{section_gid}/addTask"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createStatusForObject",
+        "method": "POST",
+        "path": "/status_updates"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createTag",
+        "method": "POST",
+        "path": "/tags"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.instantiateTask",
+        "method": "POST",
+        "path": "/task_templates/{task_template_gid}/instantiateTask"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createTask",
+        "method": "POST",
+        "path": "/tasks"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.addDependenciesForTask",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/addDependencies"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.addDependentsForTask",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/addDependents"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.addFollowersForTask",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/addFollowers"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.addProjectForTask",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/addProject"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.addTagForTask",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/addTag"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.duplicateTask",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/duplicate"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.setParentForTask",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/setParent"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createStoryForTask",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/stories"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createSubtaskForTask",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/subtasks"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createTimeTrackingEntry",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/time_tracking_entries"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createTeam",
+        "method": "POST",
+        "path": "/teams"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.addUserForTeam",
+        "method": "POST",
+        "path": "/teams/{team_gid}/addUser"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createProjectForTeam",
+        "method": "POST",
+        "path": "/teams/{team_gid}/projects"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.addUserForWorkspace",
+        "method": "POST",
+        "path": "/workspaces/{workspace_gid}/addUser"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createProjectForWorkspace",
+        "method": "POST",
+        "path": "/workspaces/{workspace_gid}/projects"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.createTagForWorkspace",
+        "method": "POST",
+        "path": "/workspaces/{workspace_gid}/tags"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.updateCustomField",
+        "method": "PUT",
+        "path": "/custom_fields/{custom_field_gid}"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.updateEnumOption",
+        "method": "PUT",
+        "path": "/enum_options/{enum_option_gid}"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.updateGoalRelationship",
+        "method": "PUT",
+        "path": "/goal_relationships/{goal_relationship_gid}"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.updateGoal",
+        "method": "PUT",
+        "path": "/goals/{goal_gid}"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.updateOooEntry",
+        "method": "PUT",
+        "path": "/ooo_entries/{ooo_entry_gid}"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.updatePortfolio",
+        "method": "PUT",
+        "path": "/portfolios/{portfolio_gid}"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.updateProjectBrief",
+        "method": "PUT",
+        "path": "/project_briefs/{project_brief_gid}"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.updateProjectPortfolioSetting",
+        "method": "PUT",
+        "path": "/project_portfolio_settings/{project_portfolio_setting_gid}"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.updateStory",
+        "method": "PUT",
+        "path": "/stories/{story_gid}"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.updateTeam",
+        "method": "PUT",
+        "path": "/teams/{team_gid}"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.updateTimeTrackingEntry",
+        "method": "PUT",
+        "path": "/time_tracking_entries/{time_tracking_entry_gid}"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.updateUser",
+        "method": "PUT",
+        "path": "/users/{user_gid}"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.updateWorkspace",
+        "method": "PUT",
+        "path": "/workspaces/{workspace_gid}"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.updateUserForWorkspace",
+        "method": "PUT",
+        "path": "/workspaces/{workspace_gid}/users/{user_gid}"
+      },
+      "foundation": "cli-request-schema-foundation-r1",
+      "reason": "Provider request contract requires cli-request-schema-foundation-r1; the existing action remains available only for its declared typed subset."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteProject",
+        "method": "DELETE",
+        "path": "/projects/{project_gid}"
+      },
+      "foundation": "source-path-parameter-alias-foundation-r1",
+      "reason": "Provider path parameter naming has no source-to-declared action alias mapping; the existing action remains available through its declared typed path input."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteSection",
+        "method": "DELETE",
+        "path": "/sections/{section_gid}"
+      },
+      "foundation": "source-path-parameter-alias-foundation-r1",
+      "reason": "Provider path parameter naming has no source-to-declared action alias mapping; the existing action remains available through its declared typed path input."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteTag",
+        "method": "DELETE",
+        "path": "/tags/{tag_gid}"
+      },
+      "foundation": "source-path-parameter-alias-foundation-r1",
+      "reason": "Provider path parameter naming has no source-to-declared action alias mapping; the existing action remains available through its declared typed path input."
+    },
+    {
+      "source": {
+        "source_id": "asana.rest.deleteTask",
+        "method": "DELETE",
+        "path": "/tasks/{task_gid}"
+      },
+      "foundation": "source-path-parameter-alias-foundation-r1",
+      "reason": "Provider path parameter naming has no source-to-declared action alias mapping; the existing action remains available through its declared typed path input."
+    }
+  ]
+}

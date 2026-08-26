@@ -24,7 +24,14 @@
         "method": "GET",
         "path": "/access_requests",
         "max_bytes": 1048576,
-        "parameters": []
+        "parameters": [
+          {
+            "name": "target",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
       }
     },
     {
@@ -1930,6 +1937,11 @@
         "steps": [
           "stream:projects"
         ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjects",
+        "method": "GET",
+        "path": "/projects"
       }
     },
     {
@@ -2920,6 +2932,11 @@
         "steps": [
           "stream:tags"
         ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTags",
+        "method": "GET",
+        "path": "/tags"
       }
     },
     {
@@ -3163,6 +3180,11 @@
         "steps": [
           "stream:tasks"
         ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTasks",
+        "method": "GET",
+        "path": "/tasks"
       }
     },
     {
@@ -3711,6 +3733,11 @@
         "steps": [
           "stream:team_memberships"
         ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTeamMemberships",
+        "method": "GET",
+        "path": "/team_memberships"
       }
     },
     {
@@ -4342,6 +4369,11 @@
         "steps": [
           "stream:users"
         ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getUsers",
+        "method": "GET",
+        "path": "/users"
       }
     },
     {

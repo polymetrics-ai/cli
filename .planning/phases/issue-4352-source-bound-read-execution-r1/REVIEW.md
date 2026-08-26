@@ -7,10 +7,18 @@
 - A source-bound direct read remains on the fixed `OperationDirectRead` executor and reaches the existing credential check only after no-network preflight.
 - A source-bound collection cannot claim ETL solely because it is a GET: it needs a unique declared stream ETL composite, matching route, records path, schema, and pagination.
 - Existing ETL commands do not require the new source binding. This was verified after a full runner regression caught and corrected the overly broad check.
+- The partial mutation-coverage disposition is exact-source-citation bound and
+  accepts only an existing incomplete implemented action plus its named shared
+  foundation. It rejects a complete action, an absent action, a non-mutating
+  source operation, and an unrelated foundation; the legacy path-alias category
+  additionally requires a demonstrable provider/local path-field-name mismatch.
 
 ## Findings
 
-No unresolved code finding. The two repository-wide commands noted in `VERIFICATION.md` exceeded this local runner's limit and are intentionally left to PR/CI rather than treated as passing.
+No unresolved code finding. The serialized source-lock audit and this branch's
+complete `cmd/connectorgen` package test passed; the two repository-wide
+commands noted in `VERIFICATION.md` remain CI/PR checks and are not treated as
+passing.
 
 ## Required external review
 

@@ -12,7 +12,24 @@
 
 The three new direct commands are `access-requests get-access-requests`, `agents get-agents-for-workspace`, and `agents get-agent`. `workspaces list` is only an exact-source-bound ETL control; it was already executable.
 
-This does not claim all Batch-1 Asana reads are implemented. Of the stated baseline 100 planned GET rows, three are now materialized controls and 97 still need exact source descriptor/typed operation materialization. Any row without a bounded direct-read contract or source-backed stream semantics stays declaration-pending or has a named missing foundation.
+This does not claim any of Batch-1's 100 planned Asana GET rows are newly
+implemented. The retained source import binds the nine already executable
+controls (three bounded direct reads and six declared streams) to their locked
+source identities. Batch 1 must still materialize an exact declaration-owned
+operation/command, typed required path/query/body inputs, bounded direct-read
+output or proven stream records/pagination semantics, and an executable
+runtime preflight for each of the 100 planned GET rows before promotion. Any
+row without those source-backed semantics stays declaration-pending or has a
+named missing foundation.
+
+The same shared mapping closure now records every retained Asana mutation
+without changing a command's executor: 21 absent actions are source-cited
+non-executable declarations, 65 existing reverse-ETL actions name the missing
+typed request-schema foundation, and 4 legacy delete actions name their
+source-to-local path-parameter alias foundation. Other connector batches reuse
+this by retaining their own locked descriptor plus exact operation-granular
+dispositions; no connector-local shim or runtime certification is required for
+declaration admission.
 
 ## Integration prerequisites
 

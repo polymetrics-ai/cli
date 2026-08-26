@@ -421,11 +421,19 @@
       "source_url": "https://developers.asana.com/reference/getaccessrequests",
       "api_surface": [
         {
-          "method": "GET",
+          "method": "get",
           "path": "/access_requests"
         }
       ],
-      "output_policy": "json_redacted"
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "target",
+          "type": "string",
+          "required": true,
+          "maps_to": "query.target"
+        }
+      ]
     },
     {
       "path": "access-requests create-access-request",
@@ -549,7 +557,7 @@
       ],
       "api_surface": [
         {
-          "method": "GET",
+          "method": "get",
           "path": "/workspaces/{workspace_gid}/agents"
         }
       ],
@@ -575,7 +583,7 @@
       ],
       "api_surface": [
         {
-          "method": "GET",
+          "method": "get",
           "path": "/agents/{agent_gid}"
         }
       ],
@@ -4365,7 +4373,8 @@
           "method": "GET",
           "path": "/projects"
         }
-      ]
+      ],
+      "source_operation": "asana.rest.getProjects"
     },
     {
       "path": "projects create",
@@ -6359,7 +6368,8 @@
           "method": "GET",
           "path": "/tags"
         }
-      ]
+      ],
+      "source_operation": "asana.rest.getTags"
     },
     {
       "path": "tags create",
@@ -6726,7 +6736,8 @@
           "method": "GET",
           "path": "/tasks"
         }
-      ]
+      ],
+      "source_operation": "asana.rest.getTasks"
     },
     {
       "path": "tasks create",
@@ -7801,7 +7812,8 @@
           "method": "GET",
           "path": "/team_memberships"
         }
-      ]
+      ],
+      "source_operation": "asana.rest.getTeamMemberships"
     },
     {
       "path": "team-memberships get-team-memberships-for-team",
@@ -8886,7 +8898,8 @@
           "method": "GET",
           "path": "/users"
         }
-      ]
+      ],
+      "source_operation": "asana.rest.getUsers"
     },
     {
       "path": "users get-user",

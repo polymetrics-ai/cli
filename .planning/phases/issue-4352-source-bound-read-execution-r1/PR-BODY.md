@@ -10,7 +10,12 @@ Provide a shared, closed source-bound read execution foundation. A mapped source
 - Extended source projection to consider non-mutating GETs without changing mutation/write projection. It promotes only existing, exact declarations; it does not create a route or generic HTTP surface.
 - Added no-network engine preflight for source-bound direct reads and stream ETL commands. Stream proof requires one declared composite, the exact source route, records/schema, and pagination.
 - Added a stable `missing_foundation=source-bound-read-execution-r1:` disposition for incomplete typed read contracts before provider dispatch.
-- Materialized three bounded Asana direct-read controls plus an exact-source-bound existing workspace ETL control:
+- Added a source-cited partial-coverage disposition for an already implemented
+  mutation whose locked request contract still needs a named shared foundation.
+  It requires exact source ID/method/path and a matching incomplete action; it
+  cannot downgrade, invent, or conceal an operation.
+- Source-bound three already executable bounded Asana direct-read controls plus
+  the existing workspace ETL control:
   - `asana.rest.getAccessRequests` — `paths["/access_requests"].get`
   - `asana.rest.getAgentsForWorkspace` — `paths["/workspaces/{workspace_gid}/agents"].get`
   - `asana.rest.getAgent` — `paths["/agents/{agent_gid}"].get`
@@ -27,10 +32,16 @@ The source locations above are from `data/connector-operation-mapping-reports/10
 
 ## Testing
 
-- `go test -timeout 20m ./internal/connectors/engine -count=1`
-- `go test -timeout 20m ./internal/connectors/commandrunner -count=1`
-- `go test -timeout 20m ./internal/connectors/defs/asana -count=1`
-- Focused `cmd/connectorgen` source-projection tests
+- `go test -timeout 20m -count=1 ./cmd/connectorgen` — passed in 150.671s
+- `go test -timeout 20m -count=1 ./internal/connectors/engine`
+- `go test -timeout 20m -count=1 ./internal/connectors/commandrunner`
+- Focused Asana source-bound/reverse-ETL/delete and root-help/skill tests
+- `go run ./cmd/connectorgen source-import asana --read-projection-only --check`
+  — 249 operations verified
+- `go run ./cmd/connectorgen validate internal/connectors/defs` — 553
+  connectors, 0 findings
+- `go run ./cmd/connectorgen surface-sync internal/connectors/defs --check` —
+  553 connectors, zero drift
 - `go vet ./...`; `go build ./cmd/pm`; `make tidy-check`; `make docs-check-no-build`; `make lint`; `make agent-contract-check`; `make connectorgen-validate`; `make connectorgen-surface-sync`; `make connector-runtime-preflight`; `make smoke-no-build`; `make connector-canon-check`; `npm --prefix website run typecheck`; `git diff --check`
 - Built-binary preflight in a fresh project: `pm asana access-requests get-access-requests --json` reached `missing --credential` (exit 1), with no configured credential and no provider request.
 
@@ -46,7 +57,15 @@ The source locations above are from `data/connector-operation-mapping-reports/10
 - No credentials were read, logged, or stored; no provider calls were made.
 - No arbitrary URL, method, path, header, body, shell, HTTP write, SQL write, or curl escape hatch was added.
 - Legacy ETL, direct-write, reverse-ETL, binary, and delete behavior is covered by the runner/Asana regressions.
-- This does **not** claim all Batch-1 reads: three of the stated baseline 100 planned Asana GETs are materialized here; 97 still need exact source/typed-contract materialization. Unsupported rows stay declaration-pending or named `missing_foundation`.
+- This does **not** claim any of Batch-1's 100 planned Asana GETs are
+  implemented: this PR source-binds the nine already executable controls.
+  Every planned row still needs its own exact declaration, typed contract, and
+  honest direct-read/stream semantics before promotion. Unsupported rows stay
+  declaration-pending or named `missing_foundation`.
+- The retained Asana mutation inventory is 21 absent non-executable actions,
+  65 implemented reverse-ETL request-schema gaps, and 4 implemented delete
+  path-parameter alias gaps. The 69 existing commands remain implemented;
+  no provider behavior is claimed or invoked.
 
 ## Follow-up / Integration
 

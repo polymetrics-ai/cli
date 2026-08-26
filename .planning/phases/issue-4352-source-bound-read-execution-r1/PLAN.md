@@ -39,11 +39,34 @@ This changes generated connector command execution, not a hand-authored top-leve
 4. **Real locked controls.** Red: identify the Asana `getAccessRequests` source row plus available collection/pagination and path-parameter source rows, then add tests that fail on the current foundation. Green: prove the materialized commands reach the credential boundary without a provider request.
 5. **Regression and verification.** Run focused cross-package tests plus existing direct-write, reverse-ETL, binary, and delete controls. Review the diff for input-boundary escape hatches, error leakage, and behavior regression.
 
+## Audit repair gap plan (F1/F2)
+
+The independent audit of `bfd57d3b8ddc1623b8d514b20d5822924f89b060` found two gaps. This plan is executed inline/manual because the canonical contract forbids spawning roles and no compatible isolated GSD runtime is available.
+
+1. **F1 — generated help artifacts.** Red: reproduce the exact Verify failure at the audited head and identify each stale tracked artifact. Green: regenerate and review only the tracked Asana skill and root help golden artifacts required by the generator, then assert the repository check is clean.
+2. **F2 — hermetic source evidence.** Red: add an assertion driven by a retained, pinned Asana provider artifact/lock and demonstrate that the current fixture-only descriptor construction cannot reject divergent source identity, method/path, typed inputs, or workspace pagination. Green: retain the artifact and exact lock, make the generator-to-bundle assertion consume it, and reject every divergence before any provider I/O. The read-only projection may seal an identity only for a pre-existing `implemented` direct read or stream; it must leave planned commands and every write/delete artifact byte-equivalent.
+3. **Closure.** Re-run the exact Verify checks that failed at the audited head plus focused generator/runtime tests. Do not copy interfaces or changes from #4350/#4351; if a missing landed interface is required, record it as a bounded dependency.
+
+## Captain-authorized mutation mapping repair
+
+The full retained-source validation exposed source-cited mutation coverage that
+cannot be repaired by read execution or by changing any provider behavior. Under
+the narrow `012.msg` authorization, add a connector-owned, operation-granular
+partial-coverage disposition for an already implemented but source-incomplete
+action. It must carry the exact locked source identity/method/path and one
+recognized missing-foundation category; it must reject an absent or fully
+source-covered action. Keep the existing source-cited non-executable
+disposition for genuinely absent actions, preserve every existing executable
+command, and limit surface synchronization to the mutation mapping lane so it
+does not rewrite planned Asana reads. Record red/green evidence, run
+source-import/validate/surface-sync, then serialize the broad generator test
+after the source-lock audit has exited.
+
 ## Expected change boundaries
 
 - `cmd/connectorgen/sourceprojection.go` and its tests
 - `internal/connectors/{engine,commandrunner}/` only where a source-bound operation/read contract requires it, with focused tests
-- Generated, source-backed fixture/artifact files only when required to demonstrate the three named read shapes
+- Generated, source-backed Asana artifacts only where the locked provider contract concretely supports a read binding; remaining Batch-1 rows stay explicitly partial, planned, or foundation-bound rather than being claimed wholesale
 - This phase's `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `RUN-STATE.md`, `SUMMARY.md`, and `REVIEW.md`
 
-No connector-wide Asana operation materialization, certification policy, live provider calls, generic request interface, or edits to another worker's branch belong in this PR.
+No certification policy, live provider calls, generic request interface, or edits to another worker's branch belong in this PR. The retained Asana artifact is solely a hermetic shared-foundation control, not a claim of certification or a substitute for Batch-1 materialization review.

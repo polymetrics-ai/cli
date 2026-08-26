@@ -21,6 +21,32 @@ Status: verified locally, pending PR automation and human gate.
 
 `connector-boundary` and `release-installed-github-certification.sh` exceeded the local per-command runner limit. Their child processes were terminated after confirming they were this task's duplicate validation attempts; they are not recorded as passing and remain CI/PR checks.
 
+## Final F1/F2 and mutation-mapping repair evidence
+
+- The source-lock audit's serialized broad-generator gate exited PASS. On this
+  exact repair head, `go test -timeout 20m -count=1 ./cmd/connectorgen` passed
+  in 150.671s.
+- Focused source-projection tests passed with the retained Asana source lock:
+  the retained import rejects source identity, method/path, typed-input, and
+  workspace pagination drift; partial coverage preserves an implemented
+  incomplete action but rejects a complete action, an unrelated foundation,
+  and a non-mutating operation.
+- `go run ./cmd/connectorgen source-import asana --read-projection-only --check`
+  verified 249 operations; full `validate internal/connectors/defs` reported
+  553 connectors and 0 findings; full `surface-sync ... --check` scanned 553
+  connectors with zero fill/correction drift.
+- On this head, `go test -timeout 20m -count=1` passed for
+  `internal/connectors/{commandrunner,engine}`, the focused Asana
+  source-bound/reverse-ETL/delete controls, the selected generated root-help
+  transcripts, and the generated Asana skill check. `pm docs validate`,
+  `go vet ./cmd/connectorgen`, `go run ./cmd/agentcontractgen check`, and
+  `git diff --check` passed.
+- The source-cited Asana mutation disposition inventory is exact and retained:
+  21 absent actions are non-executable; 65 implemented reverse-ETL actions
+  retain `cli-request-schema-foundation-r1`; 4 implemented delete actions
+  retain `source-path-parameter-alias-foundation-r1`. No action/command was
+  downgraded or invented.
+
 ## Credential boundary
 
 Built a fresh temporary `pm`, initialised a fresh temporary project, and invoked `pm asana access-requests get-access-requests --root <temp> --json` without a credential. It returned `error: missing --credential` (exit 1). No provider credential was configured and no provider request was made.
