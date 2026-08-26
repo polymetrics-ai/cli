@@ -51,6 +51,15 @@ Status: verified locally, pending PR automation and human gate.
   `make lint` passed (0 lint issues).
 - [ ] Rerun the required independent audit at the next pushed SHA.
 
+## Current-main integration #4351
+
+- [x] Red provenance: before integration this branch's merge-base with
+  `origin/main` was `b33983927d863032dac8220949990506e812937d`, not the
+  authorized #4351 main SHA `1324c52bab0b224ed8958858af7676b8b8e191b4`.
+- [ ] Green: current main is merged into the existing PR branch and the
+  isolated Asana built-binary census plus affected source-bound read/delete/ETL
+  and validation gates are recorded.
+
 ## Final post-rebase repair run
 
 - `go test -timeout 20m -count=1 ./cmd/connectorgen` passed after the V3

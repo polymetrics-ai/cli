@@ -106,6 +106,17 @@ Record exact commands, intended red failure, and full green result as each group
   behavior with `read encrypted credential`, then passed with the declared
   source-origin rejection.
 
+### Current-main integration #4351 red/green
+
+- **Red:** before integration, `git merge-base HEAD origin/main` was
+  `b33983927d863032dac8220949990506e812937d`, not the Captain-authorized
+  `origin/main` `1324c52bab0b224ed8958858af7676b8b8e191b4`; therefore this
+  branch did not contain the merged declaration-admission foundation.
+- **Green required:** merge current `origin/main` without force-push or PR
+  merge; resolve only actual conflicts; then rerun the actual isolated Asana
+  credential-boundary census and the source-bound read/delete/ETL validation
+  gates. Record the exact merged SHA and results.
+
 ## Lifecycle
 
 - GSD source resolution: `scripts/gsd doctor`, all five required `scripts/gsd sources` commands, and `go run ./cmd/agentcontractgen check` passed before planning.

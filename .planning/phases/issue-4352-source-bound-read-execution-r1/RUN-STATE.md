@@ -91,3 +91,38 @@ to PR #4356's existing branch, verify its remote SHA/base, then request a fresh
 independent Codex audit. Do not merge. PR #4351 at
 `fd400c501d99daa22210d42f736742706b4d8f1a` is related generic admission work,
 not a blocking dependency for this source-bound preflight.
+
+## Current-main integration delivery header — 2026-08-27
+
+- **Issue:** Refs #4352 — source-bound read execution foundation (existing PR
+  #4356 repair continuation).
+- **Base branch:** `main`.
+- **Merges into:**
+  `fm/cli-source-bound-read-execution-r1-continuation` → `main`.
+- **Delivery:** Existing PR #4356 remains open against `main`, includes
+  `origin/main` at `1324c52bab0b224ed8958858af7676b8b8e191b4`, and has passing
+  source-bound read/delete/ETL validation plus an Asana built-binary
+  credential-boundary census. No PR merge is authorized.
+- **Working branch:** `fm/cli-source-bound-read-execution-r1-continuation`.
+- **Task:** Integrate the Captain-authorized #4351 current-main foundation by
+  a normal merge only; resolve only real integration conflicts; preserve all
+  other work; then prove the shared foundation and Asana source-bound surface
+  still reach the credential boundary without a credential or provider I/O.
+- **Verification:** `git merge --no-ff origin/main`, affected Go packages,
+  source import/validation/surface-sync/operation-evidence/runtime-preflight/
+  canon gates, docs validation, and a newly built isolated `pm` census of all
+  implemented Asana commands.
+- **GSD/manual fallback:** resolved `discuss-phase`, `plan-phase --tdd`,
+  `execute-phase`, `verify-work`, and `code-review` through `scripts/gsd`.
+  The compatible Pi role runtime is unavailable and this task is a bounded
+  integration, so the approved single-worker inline fallback records its
+  red/green and review evidence here instead of spawning roles.
+- **Required skills:** `golang-how-to`, `golang-cli`, `golang-testing`,
+  `golang-error-handling`, `golang-security`, `golang-safety`,
+  `golang-design-patterns`, `golang-structs-interfaces`, `golang-lint`.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| The approved #4351 foundation is in this existing PR branch | live | `git merge-base HEAD origin/main` equals `1324c52...`; before integration it was `b339839...`, so the new foundation was absent. |
+| Existing source-bound behavior retains its credential boundary | live | A freshly built `pm` in an isolated project runs every implemented Asana command and each returns `missing --credential`, rather than a provider result or unknown-command failure. |
+| Delete, ETL, and generated source contracts remain valid | live | Affected Go suites and source-import/validate/surface-sync/operation-evidence/runtime-preflight/canon checks pass after the merge. |
