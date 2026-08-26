@@ -19,8 +19,8 @@ without converting connector-owned definitions or claiming live certification.
   its evidence plus one exact API-surface target; excluded, policy-only,
   duplicate, mismatched, and stale targets are rejected before the declared
   command can return its named missing foundation.
-- Reused the source-import public HTTPS citation policy and the real no-I/O
-  command preflight so citation and resolver semantics cannot drift.
+- Kept citation validation and real command preflight entirely local/no-I/O;
+  the shared canonical citation seam prevents authoring/runtime identity drift.
 - Required semantic destructive metadata from the exact target, including
   non-`DELETE` `destructive_action` operations, and rejected false implemented
   bindings against excluded, policy-only, or duplicate surface rows.
@@ -38,6 +38,10 @@ without converting connector-owned definitions or claiming live certification.
 - Made source-operation uniqueness provenance-only and binding uniqueness a
   separate invariant, so changing a local binding cannot hide a duplicate
   provider row.
+- Canonicalized provider citation identity through one shared authoring/runtime
+  seam: public HTTPS only, lowercase unambiguous DNS host, no default `:443`,
+  normalized escaped path, and stable bounded single-valued query ordering.
+  Authored evidence must already equal that form and is never silently rewritten.
 - Kept canonical provider identities separate from physical runtime endpoints,
   with closed named equivalence for declared base paths/placeholders, registered
   hooks, GraphQL `POST /graphql` transport, queries, suffixes, and operation
@@ -46,8 +50,9 @@ without converting connector-owned definitions or claiming live certification.
   before an executor-specific foundation gap is accepted; runnable GitHub
   delete and GraphQL read/write controls cannot be relabelled deferred.
 - Classified the compact runtime declaration ledger exactly in the production
-  embed inventory and added a real Outreach `/api/v2` ETL/destructive no-I/O
-  integration gate without changing the Outreach bundle.
+  embed inventory. The Outreach regression loads real stream/write shapes but
+  synthesizes the absent discovery projection in memory; it proves generic
+  resolver compatibility only, not shipped CLI or credential-boundary reachability.
 
 The accompanying investigation records the exact distinction: GitHub's cited
 `label delete` endpoint has a typed delete action, CLI binding, fixture, and
@@ -64,6 +69,9 @@ blocked source mapping with no action or command binding. See
 - Per captain clarification 007, individual provider declarations and CLI
   projections remain in their mapping lane; this PR commits only generic
   admission semantics and regression infrastructure.
+- Final merge validation still requires a real combined-head Outreach
+  mapping/pilot after #4350 repair: committed CLI commands and source evidence,
+  credential-boundary proof, zero transport calls, and a fresh exact-head audit.
 
 ## TDD and GSD Evidence
 
@@ -95,9 +103,10 @@ blocked source mapping with no action or command binding. See
 - R2 exact head `f97dede07`: all 477 connectorgen tests/examples pass across
   deterministic shards; engine, commandrunner, connector, definitions, Notion
   hook, app, and CLI packages pass; the fleet census proves 243 non-GraphQL and
-  4 GraphQL aliases; real Outreach passes; boundary reports 322 files / 553
-  connectors / 0 findings; exact-head vet, lint, build, docs, smoke, admission,
-  surface-sync, release, and GSD workflow gates pass.
+  4 GraphQL aliases; the Outreach test proves synthetic-discovery resolver
+  compatibility only; boundary reports 322 files / 553 connectors / 0 findings;
+  exact-head vet, lint, build, docs, smoke, admission, surface-sync, release,
+  and GSD workflow gates pass.
 
 The aggregate `go test -timeout 20m ./...` and serial `make verify` are left
 to CI, per the repository’s per-command-timeout guidance. Full commands and

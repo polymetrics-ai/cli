@@ -15,6 +15,7 @@ import (
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/failures"
+	"polymetrics.ai/internal/safety"
 )
 
 var declarationAdmissionActionTemplateRE = regexp.MustCompile(`\{\{\s*(?:config|record)\.([-A-Za-z0-9_]+)\s*\}\}`)
@@ -301,8 +302,11 @@ func declarationAdmissionFindings(bundle engine.Bundle, document declarationAdmi
 			continue
 		}
 		sources[source.ID] = source
-		if !declarationAdmissionProviderURL(source.SourceURL) {
+		canonicalSourceURL, citationErr := safety.CanonicalProviderCitationURL(source.SourceURL)
+		if citationErr != nil {
 			add("source operation " + source.ID + " has no valid provider source URL")
+		} else if canonicalSourceURL != source.SourceURL {
+			add("source operation " + source.ID + " has no canonical provider source URL")
 		}
 		if strings.TrimSpace(source.Location) == "" {
 			add("source operation " + source.ID + " has no exact provider operation citation")
@@ -326,11 +330,13 @@ func declarationAdmissionFindings(bundle engine.Bundle, document declarationAdmi
 			add("source operation " + source.ID + ": " + err.Error())
 			continue
 		}
-		identity := declarationAdmissionSourceIdentity(source)
-		if previous, duplicate := identities[identity]; duplicate {
-			add(fmt.Sprintf("duplicate exact provider operation identity for source operations %s and %s", previous, source.ID))
-		} else {
-			identities[identity] = source.ID
+		if canonicalSourceURL != "" {
+			identity := declarationAdmissionSourceIdentity(source, canonicalSourceURL)
+			if previous, duplicate := identities[identity]; duplicate {
+				add(fmt.Sprintf("duplicate exact provider operation identity for source operations %s and %s", previous, source.ID))
+			} else {
+				identities[identity] = source.ID
+			}
 		}
 		binding := strings.Join([]string{source.Binding.Kind, source.Binding.ID}, "\x00")
 		if previous, duplicate := bindings[binding]; duplicate {
@@ -366,21 +372,17 @@ func declarationAdmissionFindings(bundle engine.Bundle, document declarationAdmi
 	return findings
 }
 
-func declarationAdmissionProviderURL(raw string) bool {
-	return validateSourceImportPublishedURL(raw) == nil
-}
-
 // declarationAdmissionSourceIdentity is the source-row completeness key. It
 // intentionally does not consult a source lock or importer: a URL plus its
 // exact documented operation is enough to establish the independent admission
 // denominator, but two aliases for that same documented operation are not.
-func declarationAdmissionSourceIdentity(source declarationAdmissionSourceOperation) string {
+func declarationAdmissionSourceIdentity(source declarationAdmissionSourceOperation, canonicalSourceURL string) string {
 	method, path, err := declarationAdmissionCanonicalSourceEndpoint(source)
 	if err != nil {
 		return ""
 	}
 	return strings.Join([]string{
-		source.SourceURL,
+		canonicalSourceURL,
 		source.Location,
 		source.Protocol,
 		source.ProviderOperationID,

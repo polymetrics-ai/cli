@@ -273,6 +273,49 @@ func TestDeclarationAdmissionRejectsCompletenessAndBindingDefects(t *testing.T) 
 	}
 }
 
+func TestDeclarationAdmissionRejectsNoncanonicalProviderCitations(t *testing.T) {
+	tests := []struct {
+		name      string
+		sourceURL string
+		want      string
+	}{
+		{name: "uppercase DNS host", sourceURL: "https://PROVIDER.EXAMPLE.TEST/v1/reference", want: "canonical provider source URL"},
+		{name: "explicit default HTTPS port", sourceURL: "https://provider.example.test:443/v1/reference", want: "canonical provider source URL"},
+		{name: "unstable query order", sourceURL: "https://provider.example.test/v1/reference?b=2&a=1", want: "canonical provider source URL"},
+		{name: "non-normalized escaped path", sourceURL: "https://provider.example.test/v1/%72eference", want: "canonical provider source URL"},
+		{name: "trailing-dot DNS host", sourceURL: "https://provider.example.test./v1/reference", want: "valid provider source URL"},
+		{name: "ambiguous empty DNS label", sourceURL: "https://provider..example.test/v1/reference", want: "valid provider source URL"},
+	}
+
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			bundle, document := declarationAdmissionFixture()
+			document.SourceOperations[0].SourceURL = testCase.sourceURL
+			if findings := declarationAdmissionFindings(bundle, document); !declarationAdmissionFindingContains(findings, testCase.want) {
+				t.Fatalf("findings = %+v, want %q refusal", findings, testCase.want)
+			}
+		})
+	}
+}
+
+func TestDeclarationAdmissionCanonicalCitationIdentityRejectsDuplicateProviderOperationAcrossBindings(t *testing.T) {
+	bundle, document := declarationAdmissionFixture()
+	document.SourceOperations[0].SourceURL = "https://provider.example.test/v1/reference?a=1&b=2"
+	duplicate := document.SourceOperations[0]
+	duplicate.ID = "list-widgets-alias"
+	duplicate.SourceURL = "https://PROVIDER.EXAMPLE.TEST:443/v1/reference?b=2&a=1"
+	duplicate.Binding = declarationAdmissionBinding{Kind: "stream", ID: "widgets_alias"}
+	document.SourceOperations = append(document.SourceOperations, duplicate)
+
+	findings := declarationAdmissionFindings(bundle, document)
+	if !declarationAdmissionFindingContains(findings, "canonical provider source URL") {
+		t.Fatalf("findings = %+v, want noncanonical citation refusal", findings)
+	}
+	if !declarationAdmissionFindingContains(findings, "duplicate exact provider operation identity") {
+		t.Fatalf("findings = %+v, want canonical citation duplicate identity", findings)
+	}
+}
+
 func TestDeclarationAdmissionAuditRepairRejectsWeakIdentityCitationAndDeferredTarget(t *testing.T) {
 	tests := []struct {
 		name string
@@ -549,11 +592,11 @@ func TestDeclarationAdmissionAdmitsGitHubImplementedDeleteControl(t *testing.T) 
 	}
 }
 
-// TestDeclarationAdmissionOutreachRealConnectorIntegrationGate is the
-// post-repair merge gate requested by the captain: one real base-path-backed
-// ETL read and one destructive reverse-ETL write must pass admission, the
-// shared binding resolver, and commandrunner's no-I/O implemented preflight.
-func TestDeclarationAdmissionOutreachRealConnectorIntegrationGate(t *testing.T) {
+// TestDeclarationAdmissionOutreachRealBundleResolverCompatibility loads the
+// real stream/write shapes but synthesizes Outreach's absent discovery surface
+// in memory. It proves only generic admission and resolver compatibility; it is
+// not shipped CLI, credential-boundary, source-evidence, or zero-transport proof.
+func TestDeclarationAdmissionOutreachRealBundleResolverCompatibility(t *testing.T) {
 	root, err := repoRoot()
 	if err != nil {
 		t.Fatalf("repository root: %v", err)
@@ -604,12 +647,12 @@ func TestDeclarationAdmissionOutreachRealConnectorIntegrationGate(t *testing.T) 
 		},
 	}
 	if findings := declarationAdmissionFindings(bundle, document); len(findings) != 0 {
-		t.Fatalf("Outreach integration findings = %+v", findings)
+		t.Fatalf("Outreach real-bundle compatibility findings = %+v", findings)
 	}
 	connector := engine.New(bundle, nil)
 	for _, path := range [][]string{{"prospects", "list"}, {"accounts", "delete"}} {
 		if err := commandrunner.Preflight(connector, path); err != nil {
-			t.Fatalf("Outreach %v implemented preflight: %v", path, err)
+			t.Fatalf("Outreach synthetic-discovery %v preflight: %v", path, err)
 		}
 	}
 }

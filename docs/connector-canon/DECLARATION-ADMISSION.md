@@ -21,13 +21,18 @@ exact document location, optional raw provider operation ID, method/base/path,
 one binding identity, and the provider operation's `none`, `delete`, or
 `destructive` semantic. A provider format may have no raw operation ID; the
 stable source ID, exact citation, endpoint, and binding remain authoritative.
-Source-row uniqueness is provenance-only: URL, document location, protocol,
-raw operation ID, and canonical provider endpoint/operation identity. Changing
-a runtime binding cannot disguise a duplicate provider row. Binding uniqueness
-is checked separately; one command, stream, write action, or operation cannot
-claim two source rows. Together those checks prevent GraphQL operations or
-other actions sharing a transport endpoint from borrowing each other's
-implementation.
+Source-row uniqueness is provenance-only: canonical URL, document location,
+protocol, raw operation ID, and canonical provider endpoint/operation identity.
+The authored URL must already equal its canonical form; admission never rewrites
+evidence. Canonical citations use public HTTPS, lowercase unambiguous DNS hosts
+without a trailing dot, no explicit default `:443`, normalized path escapes,
+and stable ordering for bounded single-valued non-credential query keys. The
+same canonicalizer and identity key are used by authoring admission and the
+compact production ledger. Changing a URL spelling or runtime binding therefore
+cannot disguise a duplicate provider row. Binding uniqueness is checked
+separately; one command, stream, write action, or operation cannot claim two
+source rows. Together those checks prevent GraphQL operations or other actions
+sharing a transport endpoint from borrowing each other's implementation.
 
 Each declaration references one source ID and repeats its exact binding and
 canonical endpoint. It names exactly one lane (`etl`, `reverse_etl`,

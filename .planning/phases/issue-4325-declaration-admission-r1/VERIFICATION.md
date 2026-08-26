@@ -15,6 +15,10 @@
   binding identities, endpoint, lane, command, destructive semantic, and
   state. Its raw provider operation ID is empty, and it contains neither an
   artifact nor a hash, proving none is an admission prerequisite.
+- Authoring admission and the compact shipped ledger share one provider-
+  citation canonicalizer. Stored URLs must already use the public-HTTPS
+  canonical form; equivalent host case, default-port, query-order, or escaped-
+  path spellings cannot split one provider operation into multiple identities.
 - Deferred command metadata is projected into the command surface and rejected
   by `commandrunner` with the typed `system/missing_foundation` classification
   before an executor can perform provider I/O.
@@ -177,7 +181,7 @@ and live certificates remain separate and were not weakened.
 
 | Exact clean-head command | Result |
 | --- | --- |
-| `go test -count=1 -timeout 20m ./cmd/connectorgen -run 'TestImplementedCommandEndpointEquivalenceCoversExactFleet\|TestDeclarationAdmissionOutreachRealConnectorIntegrationGate' -v` | pass; 243 non-GraphQL aliases, 4 GraphQL aliases, and real Outreach ETL/destructive projections |
+| `go test -count=1 -timeout 20m ./cmd/connectorgen -run 'TestImplementedCommandEndpointEquivalenceCoversExactFleet\|TestDeclarationAdmissionOutreachRealBundleResolverCompatibility' -v` | pass; 243 non-GraphQL aliases, 4 GraphQL aliases, and synthetic-discovery resolver compatibility over real Outreach stream/write shapes; not shipped CLI or credential proof |
 | Four deterministic exact-name shards over `go test ./cmd/connectorgen -list '^(Test\|Example)'` | pass; all 477 tests/examples (`188.823s`, `56.415s`, `90.003s`, `75.841s`) |
 | `go test -count=1 -timeout 20m ./internal/connectors/engine` | pass (`19.148s`) |
 | `go test -count=1 -timeout 20m ./internal/connectors/commandrunner` | pass (`30.479s`) |

@@ -67,7 +67,8 @@ func loadDeclarationTargetLedgers(fsys fs.FS) (map[string]*declarationTargetLedg
 	seenIdentities := make(map[string]string, len(catalog.SourceOperations))
 	seenBindings := make(map[string]string, len(catalog.SourceOperations))
 	for index, source := range catalog.SourceOperations {
-		if err := validateDeclarationAdmissionSource(source); err != nil {
+		canonicalSourceURL, err := validateDeclarationAdmissionSource(source)
+		if err != nil {
 			return nil, fmt.Errorf("%s: source operation %d: %w", DeclarationAdmissionSourcesFile, index+1, err)
 		}
 		if _, duplicate := seenSources[source.ID]; duplicate {
@@ -78,7 +79,7 @@ func loadDeclarationTargetLedgers(fsys fs.FS) (map[string]*declarationTargetLedg
 		if err != nil {
 			return nil, fmt.Errorf("%s: source operation %q: %w", DeclarationAdmissionSourcesFile, source.ID, err)
 		}
-		identity := strings.Join([]string{source.SourceURL, source.Location, source.Protocol, source.ProviderOperationID, method, effectivePath}, "\x00")
+		identity := strings.Join([]string{canonicalSourceURL, source.Location, source.Protocol, source.ProviderOperationID, method, effectivePath}, "\x00")
 		if previous, duplicate := seenIdentities[identity]; duplicate {
 			return nil, fmt.Errorf("%s: source operations %q and %q duplicate one exact provider operation", DeclarationAdmissionSourcesFile, previous, source.ID)
 		}
@@ -106,40 +107,46 @@ func loadDeclarationTargetLedgers(fsys fs.FS) (map[string]*declarationTargetLedg
 	return ledgers, nil
 }
 
-func validateDeclarationAdmissionSource(source declarationAdmissionSourceOperation) error {
+func validateDeclarationAdmissionSource(source declarationAdmissionSourceOperation) (string, error) {
 	if !namePattern.MatchString(source.Connector) {
-		return fmt.Errorf("invalid connector %q", source.Connector)
+		return "", fmt.Errorf("invalid connector %q", source.Connector)
 	}
 	values := []struct{ label, value string }{
 		{label: "source identity", value: source.ID},
-		{label: "source URL", value: source.SourceURL},
 		{label: "document location", value: source.Location},
 		{label: "binding identity", value: source.Binding.ID},
 	}
 	for _, item := range values {
 		if item.value == "" || item.value != strings.TrimSpace(item.value) {
-			return fmt.Errorf("%s must be nonempty and canonical", item.label)
+			return "", fmt.Errorf("%s must be nonempty and canonical", item.label)
 		}
 		if err := safety.RejectDangerousChars(item.value, item.label); err != nil {
-			return err
+			return "", err
 		}
 	}
+	canonicalSourceURL, err := safety.CanonicalProviderCitationURL(source.SourceURL)
+	if err != nil {
+		return "", fmt.Errorf("invalid provider citation URL: %w", err)
+	}
+	if canonicalSourceURL != source.SourceURL {
+		return "", fmt.Errorf("source URL must use the canonical provider citation URL")
+	}
 	if source.ProviderOperationID != strings.TrimSpace(source.ProviderOperationID) {
-		return fmt.Errorf("provider operation identity must be canonical when present")
+		return "", fmt.Errorf("provider operation identity must be canonical when present")
 	}
 	if source.Protocol != "rest" && source.Protocol != "graphql" {
-		return fmt.Errorf("unsupported protocol %q", source.Protocol)
+		return "", fmt.Errorf("unsupported protocol %q", source.Protocol)
 	}
 	if !validCommandBinding(source.Binding.Kind, source.Binding.ID) {
-		return fmt.Errorf("invalid binding %q/%q", source.Binding.Kind, source.Binding.ID)
+		return "", fmt.Errorf("invalid binding %q/%q", source.Binding.Kind, source.Binding.ID)
 	}
 	switch source.DestructiveKind {
 	case "none", "delete", "destructive":
 	default:
-		return fmt.Errorf("invalid destructive kind %q", source.DestructiveKind)
+		return "", fmt.Errorf("invalid destructive kind %q", source.DestructiveKind)
 	}
-	_, _, err := declarationAdmissionSourceEndpoint(source)
-	return err
+	_, _, err = declarationAdmissionSourceEndpoint(source)
+	return canonicalSourceURL, err
 }
 
 func declarationAdmissionSourceEndpoint(source declarationAdmissionSourceOperation) (string, string, error) {

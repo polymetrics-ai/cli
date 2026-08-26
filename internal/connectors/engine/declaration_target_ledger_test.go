@@ -1,9 +1,49 @@
 package engine
 
 import (
+	"encoding/json"
+	"strings"
 	"testing"
 	"testing/fstest"
 )
+
+func TestDeclarationTargetLedgerRejectsNoncanonicalProviderCitations(t *testing.T) {
+	tests := []struct {
+		name      string
+		sourceURL string
+		want      string
+	}{
+		{name: "uppercase DNS host", sourceURL: "https://PROVIDER.EXAMPLE.TEST/reference", want: "canonical provider citation URL"},
+		{name: "explicit default HTTPS port", sourceURL: "https://provider.example.test:443/reference", want: "canonical provider citation URL"},
+		{name: "unstable query order", sourceURL: "https://provider.example.test/reference?b=2&a=1", want: "canonical provider citation URL"},
+		{name: "non-normalized escaped path", sourceURL: "https://provider.example.test/%72eference", want: "canonical provider citation URL"},
+		{name: "trailing-dot DNS host", sourceURL: "https://provider.example.test./reference", want: "provider citation URL"},
+		{name: "ambiguous empty DNS label", sourceURL: "https://provider..example.test/reference", want: "provider citation URL"},
+	}
+
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			source := declarationAdmissionSourceOperation{
+				Connector: "acme", ID: "acme.widgets.list", Protocol: "rest",
+				SourceURL: testCase.sourceURL, Location: "Widgets > list", ProviderOperationID: "widgets/list",
+				Method: "GET", Path: "/widgets", Binding: CommandBindingIdentity{Kind: "stream", ID: "widgets"},
+				DestructiveKind: "none",
+			}
+			catalog := declarationAdmissionSourceCatalog{
+				SchemaVersion: 1, Cohort: "test", ExpectedConnectors: 1, ExpectedOperations: 1,
+				SourceOperations: []declarationAdmissionSourceOperation{source},
+			}
+			raw, err := json.Marshal(catalog)
+			if err != nil {
+				t.Fatalf("marshal compact ledger: %v", err)
+			}
+			_, err = loadDeclarationTargetLedgers(fstest.MapFS{DeclarationAdmissionSourcesFile: &fstest.MapFile{Data: raw}})
+			if err == nil || !strings.Contains(err.Error(), testCase.want) {
+				t.Fatalf("load noncanonical compact ledger = %v, want %q refusal", err, testCase.want)
+			}
+		})
+	}
+}
 
 func TestDeclarationTargetLedgerRejectsDuplicateProviderProvenanceAcrossBindings(t *testing.T) {
 	raw := []byte(`{

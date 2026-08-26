@@ -15,7 +15,7 @@ export CGO_ENABLED ?= 1
 # Packages covered by `lint` include declarative connector and canonical agent-contract tooling.
 # Paths are filtered to existing directories so optional local trees do not hard-fail
 # golangci-lint's arg parsing.
-LINT_CANDIDATE_DIRS := internal/connectors/engine internal/connectors/defs internal/connectors/hooks internal/connectors/native internal/connectors/conformance internal/connectors/certify internal/connectors/boundary internal/agentcontract cmd/connectorgen cmd/agentcontractgen cmd/certifytiming
+LINT_CANDIDATE_DIRS := internal/connectors/engine internal/connectors/defs internal/connectors/hooks internal/connectors/native internal/connectors/conformance internal/connectors/certify internal/connectors/boundary internal/safety internal/agentcontract cmd/connectorgen cmd/agentcontractgen cmd/certifytiming
 LINT_PKGS := $(foreach d,$(LINT_CANDIDATE_DIRS),$(if $(wildcard $(d)),./$(d)/...))
 
 fmt:

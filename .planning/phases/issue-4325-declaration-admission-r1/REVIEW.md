@@ -12,8 +12,10 @@
   binding and real no-I/O preflight.
 - Confirmed the two required catalog schemas intentionally contain no source bytes, hash, raw
   body, or typed request schema requirement.
-- Confirmed the admission URL is checked by the same public HTTPS,
-  no-userinfo/no-fragment, bounded secret-safe query policy as source import.
+- Confirmed authoring admission and the compact production ledger use the same
+  provider-citation canonicalizer: public HTTPS, unambiguous lowercase DNS,
+  no default `:443`, normalized path escaping, and bounded stable secret-safe
+  query encoding. Persisted evidence is compared and rejected, never rewritten.
 - Confirmed no connector-owned Batch-1 definition, concurrent Docker Hub
   mapping, generated connector evidence, or live certification record is
   staged for this repair.
@@ -138,26 +140,50 @@ in this PR's committed diff.
    `runtime_declaration_target_ledger`, with deterministic byte attribution.
    Full API surfaces and build-time declaration/source catalogs remain outside
    the runtime embed inventory.
-5. **Captain Outreach integration gate accepted.** The test loads the real
-   Outreach bundle and synthesizes only its absent CLI discovery projection.
-   Its existing `/api/v2/prospects` ETL stream and destructive
-   `/api/v2/accounts/{id}` delete pass admission, canonical/transport
-   resolution, and no-I/O commandrunner preflight without modifying Outreach.
+5. **Captain Outreach compatibility seam accepted; integration claim corrected
+   by R3.** The test loads the real Outreach bundle and synthesizes its absent
+   CLI discovery projection in memory. Its existing stream/write shapes pass
+   generic admission, canonical/transport resolution, and no-I/O commandrunner
+   preflight. This is not shipped CLI, source-evidence, credential-boundary, or
+   zero-transport proof.
 6. **Local boundary finding accepted and fixed.** The provider-policy scanner
    matched `cal-com` inside the neutral local name `canonicalComparable`. The
    variable is now `declaredComparable`; no boundary exception was added, and
    the exact-head whole-tree scan reports 0 findings.
 
-No unresolved local or R2 findings remain on code SHA `f97dede07`. The
+No unresolved local or R2 findings remained on code SHA `f97dede07`; the R3
+audit below supersedes that exact-head conclusion. The
 certificate proves complete source-cited six-lane declaration independently
 of runnable count: an unavailable operation must remain present and deferred
 with its named exact foundation, while stale or falsely implemented rows fail.
 
+## Independent R3 audit disposition (2026-08-26)
+
+1. **DA-002 accepted — raw citation spelling bypassed provenance uniqueness.**
+   One shared `internal/safety` canonicalizer now serves connectorgen authoring
+   and the embedded declaration-target ledger. It rejects unsafe or ambiguous
+   authorities, returns lowercase DNS/no-default-port/normalized-path/stable-
+   query identity, and both consumers require the authored string to match it.
+   Binding uniqueness remains a separate invariant. Focused regressions cover
+   host case, explicit `:443`, query order, path escaping, trailing-dot/empty
+   DNS labels, and the same provider operation under another binding.
+2. **Outreach generic-engine defect claim declined; evidence overclaim
+   accepted and corrected.** The committed Outreach bundle has no discovery
+   surface, so this foundation cannot claim its commands reach credentials.
+   The renamed test truthfully proves only resolver compatibility over real
+   bundle shapes with a synthetic in-memory projection. No connector-owned
+   definition is added here. Final merge validation requires a real combined-
+   head Outreach mapping/pilot after #4350 repair with committed commands,
+   source evidence, credential-boundary and zero-transport proof, then a fresh
+   audit.
+
+No provider I/O, credential access, write/delete execution, schema-version
+migration, or Batch-1 connector definition change is part of the R3 repair.
+
 ## Automated review route
 
 The direct PR targets `main` and is already open. Its original route was
-`claude_auto`; this audit repair creates a new unreviewed commit, so one
-deliberate fresh review request is required after push under the repository's
-review routing policy. Firstmate also requested an independent-Codex re-audit
-handoff on the clean commit. Any actionable response requires a recorded
-disposition before merge; this worker will not merge.
+`claude_auto`; this R3 repair creates a new unreviewed commit, so one deliberate
+fresh independent exact-head audit is requested after push under Firstmate's
+route. Any actionable response requires a recorded disposition before merge;
+this worker will not merge.

@@ -8,13 +8,16 @@
 - Delivery: Pull request #4351 is open against `main`; this expanded slice is
   committed, pushed to its existing branch, and locally verified.
 - Working branch: fm/cli-declaration-admission-certification-r1.
-- Task: Make declaration-first mapping semantics enforceable: every deferred
-  source declaration must name an evidenced missing implementation component,
-  and its command stays discoverable. A policy-only block must not be accepted
-  as a deferred foundation.
-- Verification: Focused declaration-admission and commandrunner tests,
-  actual no-credential deferred preflight, formatting, and the applicable
-  generator/docs/canon checks.
+- Task: Close the R3 DA-002 gap with one shared, fail-closed provider-citation
+  canonicalizer used by authoring admission and the production compact ledger.
+  Correct the prior Outreach test/docs claim without adding connector-owned
+  commands: real Outreach command reachability remains a combined-head mapping
+  and source-lock integration gate after #4350 is repaired.
+- Verification: Focused authoring and compact-ledger red/green tests for host
+  case, explicit `:443`, query order, escaped path canonicality, and duplicate
+  provider provenance under distinct bindings; unchanged fleet-alias coverage;
+  formatting plus applicable generator/static/CI gates; and fresh independent
+  audit after push.
 
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
@@ -24,6 +27,8 @@
 | Deferred command cannot hide behind a policy or excluded endpoint | fake | A hermetic bundle tries to declare a deferred command against an excluded/policy endpoint. The shared runtime resolver refuses it before it can become `missing_foundation`; no provider call can establish this local structural invariant. |
 | Deferred foundation is machine-verifiable and round-trippable | fake | A hermetic source cohort, declaration catalog, and command surface carry the same typed component, evidence, exact source/binding identity, destructive semantic, and canonical target. Tests mutate each independently and observe an admission/preflight failure. |
 | Citation follows the existing safe source-publication policy | fake | A hermetic source row using HTTP, userinfo, a private literal, a fragment, or a credential-shaped query is rejected by the shared local citation validator. |
+| Equivalent citation spellings cannot evade provider-operation uniqueness | fake | Hermetic authoring and production-ledger rows vary DNS host case, default HTTPS port, escaped path, and query order; noncanonical authored forms fail closed and the canonical identity still detects one provider operation claimed under different bindings. Provider I/O cannot prove this local identity invariant. |
+| This foundation does not claim shipped Outreach commands | live | The committed PR delta leaves `internal/connectors/defs/outreach/**` unchanged and the corrected test/docs describe only the generic real-bundle resolver seam. Final merge validation is explicitly gated on a real combined-head Outreach mapping/pilot with committed discovery commands, source evidence, credential-boundary proof, zero transport calls, and a fresh audit after #4350 repair. |
 
 ## Scope boundary
 
@@ -176,26 +181,69 @@ path byte-for-byte.
    a clean committed checkout, then execute `verify-work` and `code-review`
    inline. The generated GSD gap prompts are executed inline because the
    canonical single-worker contract and launch brief forbid role spawning.
-6. **Post-repair merge integration gate (captain steer 014):** load the real
-   Outreach bundle and synthesize only its missing discovery projection in the
-   test. Prove the existing `/api/v2`-based `prospects` ETL stream and
-   destructive `delete_account` write through declaration admission,
-   canonical/transport resolution, and no-I/O commandrunner preflight. This
-   supplements, and does not replace, the exact 243-alias fleet census and
-   GitHub GraphQL/delete controls. No provider request or connector definition
-   change is permitted.
+6. **Real-bundle resolver compatibility (captain steer 014, claim corrected by
+   R3):** load the real Outreach stream/write shapes and synthesize only the
+   absent discovery projection in memory. This proves generic admission,
+   canonical/transport resolution, and no-I/O commandrunner preflight only. It
+   is not shipped CLI, source-evidence, credential-boundary, or zero-transport
+   proof. The real combined-head Outreach mapping/pilot remains a final merge
+   gate after #4350 repair. No provider request or connector definition change
+   is permitted in this PR.
 
 Required skills for this gap wave: `golang-how-to`, `golang-cli`,
 `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`,
 `golang-design-patterns`, `golang-structs-interfaces`, `golang-graphql`,
 `golang-documentation`, and `golang-lint`.
 
-Closure: all six steps are complete on clean code SHA `f97dede07`. The fleet
-census proves 243 non-GraphQL and 4 GraphQL aliases, the real Outreach gate
-passes, all 477 connectorgen tests/examples and every directly integrated Go
-package pass, and the whole-tree boundary scan reports 0 findings without a
+Closure at R2: all six steps completed on clean code SHA `f97dede07`. The fleet
+census proved 243 non-GraphQL and 4 GraphQL aliases; the Outreach test proved
+only synthetic-discovery real-bundle resolver compatibility, as corrected by
+R3. All 477 connectorgen tests/examples and every directly integrated Go
+package passed, and the whole-tree boundary scan reported 0 findings without a
 new exception. `VERIFICATION.md` and `REVIEW.md` contain the exact commands and
-R2 disposition.
+R2 disposition plus the R3 correction.
+
+## Exact-SHA R3 gap closure (2026-08-26)
+
+The independent R3 audit of `9c779a14218d00857c587da6f3499d6b9546c445`
+found one valid High implementation gap and one invalid foundation-level
+claim. This single-worker gap wave uses the generated GSD
+`plan-phase --gaps` / `execute-phase --gaps-only` prompts inline; role spawning
+is forbidden by the canonical contract and launch brief.
+
+1. **Red — canonical provider citation identity (DA-002):** add authoring and
+   production-ledger cases for uppercase DNS hosts, explicit HTTPS `:443`,
+   unstable query ordering, non-normalized escaped paths, and one canonical
+   provider operation claimed under different bindings. The current raw URL
+   key must fail these tests.
+2. **Green — one fail-closed shared canonicalizer:** add the shared URL seam at
+   `internal/safety/provider_citation.go`. It enforces public absolute HTTPS,
+   rejects userinfo/fragments/private literals/ambiguous or trailing-dot DNS
+   hosts/credential-shaped queries, lowercases DNS hosts, removes `:443`,
+   normalizes escaped paths, and stably encodes bounded single-valued query
+   keys. Both `cmd/connectorgen/declarationadmission.go` and
+   `internal/connectors/engine/declaration_target_ledger.go` require the stored
+   URL to equal the canonical result and key uniqueness by that result.
+3. **Schema seam:**
+   `internal/connectors/engine/schema/declaration_admission_sources.schema.json`
+   already represents the citation as a bounded `source_url` string. Schema
+   version 1 remains unchanged; canonicality is a semantic validator invariant,
+   not a rewritten value or a new connector-owned field.
+4. **Outreach claim correction:** rename/reword the in-memory real-bundle test
+   as generic resolver compatibility only. It is not actual Outreach CLI,
+   credential-boundary, or zero-transport proof. Do not add or synthesize a
+   committed Outreach discovery surface in this foundation PR. Record the
+   required combined-head Outreach mapping/pilot gate after #4350 repair.
+5. **Refactor/gate/review:** preserve the 243+4 endpoint-equivalence census,
+   six lanes, no-hash/no-provider-I/O admission rule, and all Stripe/Docker Hub
+   handoffs. Run focused packages and the applicable generated/static CI gates,
+   update verification/review/PR evidence, push #4351, then request a fresh
+   independent exact-head audit. Do not merge.
+
+Required skills loaded for this wave: `golang-how-to`, `golang-testing`,
+`golang-error-handling`, `golang-security`, `golang-safety`,
+`golang-design-patterns`, `golang-structs-interfaces`, and
+`golang-documentation`, plus the `gsd-ns-workflow` routing skill.
 
 ## CLI docs parity
 

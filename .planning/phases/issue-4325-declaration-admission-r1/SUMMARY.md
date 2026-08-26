@@ -21,9 +21,12 @@ uniqueness independently, and replaces endpoint substitution with named
 fail-closed canonical/transport equivalence. Commandrunner now tries its real
 implemented path before accepting an executor-specific deferred foundation,
 and the compact source ledger has one exact production inventory class. A
-clean real-bundle census proves 243 REST/binary aliases plus 4 GraphQL aliases;
-the real Outreach `/api/v2` ETL and destructive shapes pass the no-I/O
-integration gate. This preserves the captain policy that a connector with zero
+clean real-bundle census proves 243 REST/binary aliases plus 4 GraphQL aliases.
+R3 adds one shared fail-closed provider-citation canonicalizer for authoring and
+the compact ledger, so equivalent URL spellings cannot split provenance. The
+Outreach regression proves only real-bundle resolver compatibility with a
+synthetic discovery projection; real combined-head CLI/credential-boundary
+validation remains required after #4350 repair. This preserves the captain policy that a connector with zero
 runnable operations may still earn declaration admission when every source row
 is complete, discoverable, explicitly deferred, and names its missing
 foundation; it does not confer runtime or live usability.
