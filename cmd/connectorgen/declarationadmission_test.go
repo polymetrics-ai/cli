@@ -886,6 +886,227 @@ func TestDeclarationAdmissionCommandLoadsReviewedLockInventoryWithoutReadingReta
 	}
 }
 
+func TestDeclarationAdmissionMappingEvidenceDoesNotRequireRetentionMetadata(t *testing.T) {
+	tests := []struct {
+		name   string
+		mutate func(map[string]any)
+	}{
+		{
+			name: "absent bytes and hash",
+			mutate: func(rest map[string]any) {
+				delete(rest, "bytes")
+				delete(rest, "sha256")
+			},
+		},
+		{
+			name: "malformed byte count",
+			mutate: func(rest map[string]any) {
+				rest["bytes"] = -7
+			},
+		},
+		{
+			name: "malformed hash",
+			mutate: func(rest map[string]any) {
+				rest["sha256"] = "not-a-sha256"
+			},
+		},
+		{
+			name: "wrong retention wire types",
+			mutate: func(rest map[string]any) {
+				rest["bytes"] = "not-a-byte-count"
+				rest["sha256"] = map[string]any{"not": "a hash"}
+			},
+		},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			defsRoot := declarationAdmissionCatalogFixtureDir(t)
+			lockPath := filepath.Join(defsRoot, "cli-surface", "sources", "cli-surface-operation-source-lock.json")
+			var lock map[string]any
+			readDeclarationAdmissionJSON(t, lockPath, &lock)
+			testCase.mutate(lock["rest"].(map[string]any))
+			writeDeclarationAdmissionJSON(t, lockPath, lock)
+
+			raw, err := os.ReadFile(lockPath)
+			if err != nil {
+				t.Fatalf("read mutated source lock: %v", err)
+			}
+			if _, err := parseSourceImportLock(raw, "cli-surface"); err == nil {
+				t.Fatal("full source-import parser accepted invalid retention metadata")
+			}
+
+			report, err := declarationAdmissionPathCheck(defsRoot)
+			if err != nil {
+				t.Fatalf("mapping-only declaration admission rejected retention metadata: %v", err)
+			}
+			if len(report.Findings) != 0 {
+				t.Fatalf("mapping-only declaration admission findings = %+v, want none", report.Findings)
+			}
+		})
+	}
+}
+
+func TestDeclarationAdmissionV3MappingEvidenceDoesNotRequireRetentionMetadata(t *testing.T) {
+	defsRoot := declarationAdmissionCatalogFixtureDir(t)
+	lockPath := filepath.Join(defsRoot, "cli-surface", "sources", "cli-surface-operation-source-lock.json")
+	operation := map[string]any{
+		"id": "provider.rest.widgets.list", "protocol": "rest", "method": "GET", "path": "/widgets",
+		"operation_id": "provider.list-widgets", "deprecated": false, "source_location": "Widgets > List",
+	}
+	lock := map[string]any{
+		"schema_version": 3,
+		"connector":      "cli-surface",
+		"captured_at":    "retention metadata is irrelevant to mapping admission",
+		"rest": map[string]any{
+			"retrieval": "retained artifact capture",
+			"openapi":   []any{"3.0.3"},
+			"source_documents": []any{map[string]any{
+				"id": "primary",
+				"artifact": map[string]any{
+					"source_url": "https://retained.example.test/openapi.json", "sha256": "not-a-sha256", "bytes": -7, "openapi": "3.0.3",
+				},
+				"published_source": map[string]any{
+					"source_url": "https://provider.example.test/openapi.json", "capture_url": 123,
+					"sha256": map[string]any{"not": "a hash"}, "bytes": "not-a-count", "adapter": false,
+				},
+				"operations": []any{operation},
+			}},
+		},
+		"counts": map[string]any{"rest": 1, "graphql_query": 0, "graphql_mutation": 0, "total": 1},
+	}
+	writeDeclarationAdmissionJSON(t, lockPath, lock)
+	raw, err := os.ReadFile(lockPath)
+	if err != nil {
+		t.Fatalf("read v3 source lock: %v", err)
+	}
+	if _, err := parseSourceImportLock(raw, "cli-surface"); err == nil {
+		t.Fatal("full source-import parser accepted malformed v3 retention metadata")
+	}
+	report, err := declarationAdmissionPathCheck(defsRoot)
+	if err != nil {
+		t.Fatalf("v3 mapping-only declaration admission rejected retention metadata: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("v3 mapping-only declaration admission findings = %+v, want none", report.Findings)
+	}
+}
+
+func TestDeclarationAdmissionMappingEvidenceReaderPreservesIdentityValidation(t *testing.T) {
+	tests := []struct {
+		name   string
+		mutate func(map[string]any)
+		want   string
+	}{
+		{
+			name: "connector mismatch",
+			mutate: func(lock map[string]any) {
+				lock["connector"] = "other"
+			},
+			want: "does not match requested connector",
+		},
+		{
+			name: "noncanonical provider URL",
+			mutate: func(lock map[string]any) {
+				lock["rest"].(map[string]any)["source_url"] = "http://provider.example.test/openapi.json"
+			},
+			want: "invalid REST source URL",
+		},
+		{
+			name: "missing protocol",
+			mutate: func(lock map[string]any) {
+				lock["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["protocol"] = ""
+			},
+			want: "incomplete REST operation identity",
+		},
+		{
+			name: "noncanonical provider operation ID",
+			mutate: func(lock map[string]any) {
+				lock["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["operation_id"] = " provider.list-widgets"
+			},
+			want: "incomplete REST operation identity",
+		},
+		{
+			name: "missing method",
+			mutate: func(lock map[string]any) {
+				lock["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["method"] = ""
+			},
+			want: "incomplete REST operation identity",
+		},
+		{
+			name: "invalid path",
+			mutate: func(lock map[string]any) {
+				lock["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["path"] = "widgets"
+			},
+			want: "invalid path",
+		},
+		{
+			name: "missing location",
+			mutate: func(lock map[string]any) {
+				lock["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["source_location"] = ""
+			},
+			want: "incomplete REST operation identity",
+		},
+		{
+			name: "duplicate operation",
+			mutate: func(lock map[string]any) {
+				rest := lock["rest"].(map[string]any)
+				operations := rest["operations"].([]any)
+				rest["operations"] = append(operations, operations[0])
+				counts := lock["counts"].(map[string]any)
+				counts["rest"] = 2
+				counts["total"] = 2
+			},
+			want: "duplicates operation identity",
+		},
+		{
+			name: "count mismatch",
+			mutate: func(lock map[string]any) {
+				lock["counts"].(map[string]any)["total"] = 2
+			},
+			want: "counts do not match",
+		},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			defsRoot := declarationAdmissionCatalogFixtureDir(t)
+			lockPath := filepath.Join(defsRoot, "cli-surface", "sources", "cli-surface-operation-source-lock.json")
+			var lock map[string]any
+			readDeclarationAdmissionJSON(t, lockPath, &lock)
+			testCase.mutate(lock)
+			writeDeclarationAdmissionJSON(t, lockPath, lock)
+			raw, err := os.ReadFile(lockPath)
+			if err != nil {
+				t.Fatalf("read mutated source lock: %v", err)
+			}
+			if _, err := parseDeclarationAdmissionSourceLock(raw, "cli-surface"); err == nil || !strings.Contains(err.Error(), testCase.want) {
+				t.Fatalf("mapping reader error = %v, want %q", err, testCase.want)
+			}
+		})
+	}
+}
+
+func TestDeclarationAdmissionInventoryRequiresSchemaV2(t *testing.T) {
+	v2Root := declarationAdmissionCatalogFixtureDir(t)
+	v2Path := filepath.Join(v2Root, "declaration_admission_inventory.json")
+	var v2 map[string]any
+	readDeclarationAdmissionJSON(t, v2Path, &v2)
+	v2["schema_version"] = 2
+	writeDeclarationAdmissionJSON(t, v2Path, v2)
+	if report, err := declarationAdmissionPathCheck(v2Root); err != nil || len(report.Findings) != 0 {
+		t.Fatalf("schema-v2 inventory admission report=%+v err=%v, want accepted", report, err)
+	}
+
+	legacyRoot := declarationAdmissionCatalogFixtureDir(t)
+	legacyPath := filepath.Join(legacyRoot, "declaration_admission_inventory.json")
+	var legacy map[string]any
+	readDeclarationAdmissionJSON(t, legacyPath, &legacy)
+	legacy["schema_version"] = 1
+	writeDeclarationAdmissionJSON(t, legacyPath, legacy)
+	if report, err := declarationAdmissionPathCheck(legacyRoot); err == nil && len(report.Findings) == 0 {
+		t.Fatalf("legacy schema-v1 inventory passed: report=%+v", report)
+	}
+}
+
 func TestDeclarationAdmissionBindsSourceRowsToReviewedConnectorOwnedLock(t *testing.T) {
 	tests := []struct {
 		name string
@@ -1031,7 +1252,7 @@ func declarationAdmissionCatalogFixtureDir(t *testing.T) string {
 		"declaration_admission_sources.json": sources,
 		"declaration_admissions.json":        declarations,
 		"declaration_admission_inventory.json": map[string]any{
-			"schema_version": 1,
+			"schema_version": 2,
 			"cohort":         "test-cohort",
 			"operations": []any{map[string]any{
 				"connector": "cli-surface", "source_id": "list-widgets",

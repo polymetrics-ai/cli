@@ -21,7 +21,8 @@ import (
 var declarationAdmissionActionTemplateRE = regexp.MustCompile(`\{\{\s*(?:config|record)\.([-A-Za-z0-9_]+)\s*\}\}`)
 
 const (
-	declarationAdmissionSchemaVersion = 2
+	declarationAdmissionSchemaVersion          = 2
+	declarationAdmissionInventorySchemaVersion = 2
 
 	declarationAdmissionStateImplemented = "implemented"
 	declarationAdmissionStateDeferred    = "deferred"
@@ -243,8 +244,8 @@ func declarationAdmissionPathCheck(dir string) (declarationAdmissionReport, erro
 	addCatalogFinding := func(file, message string) {
 		report.Findings = append(report.Findings, Finding{File: file, Rule: "declaration_admission", Message: message})
 	}
-	if inventory.SchemaVersion != 1 || sources.SchemaVersion != declarationAdmissionSchemaVersion || declarations.SchemaVersion != declarationAdmissionSchemaVersion {
-		addCatalogFinding("declaration_admission_inventory.json", "inventory schema_version must be 1 and mutable catalogs must use schema_version 2")
+	if inventory.SchemaVersion != declarationAdmissionInventorySchemaVersion || sources.SchemaVersion != declarationAdmissionSchemaVersion || declarations.SchemaVersion != declarationAdmissionSchemaVersion {
+		addCatalogFinding("declaration_admission_inventory.json", "inventory and mutable catalogs must use schema_version 2")
 	}
 	if strings.TrimSpace(inventory.Cohort) == "" || inventory.Cohort != sources.Cohort || inventory.Cohort != declarations.Cohort {
 		addCatalogFinding("declaration_admission_inventory.json", "source and declaration cohorts do not match the independent inventory")
@@ -309,6 +310,299 @@ type declarationAdmissionReviewedOperation struct {
 	Path                string
 }
 
+// declarationAdmissionReviewedSourceLock is the mapping-only projection of a
+// connector-owned source lock. Retention fields deliberately do not survive
+// this boundary: declaration admission proves operation provenance, while
+// source-import separately proves retained bytes and hashes.
+type declarationAdmissionReviewedSourceLock struct {
+	SchemaVersion int
+	Connector     string
+	Operations    map[string]declarationAdmissionReviewedOperation
+}
+
+type declarationAdmissionSourceLockWire struct {
+	SchemaVersion int                `json:"schema_version"`
+	Connector     string             `json:"connector"`
+	CapturedAt    json.RawMessage    `json:"captured_at,omitempty"`
+	Rest          json.RawMessage    `json:"rest"`
+	GraphQL       json.RawMessage    `json:"graphql,omitempty"`
+	Counts        sourceImportCounts `json:"counts,omitempty"`
+}
+
+type declarationAdmissionSourceArtifactWire struct {
+	SourceURL     string          `json:"source_url"`
+	SHA256        json.RawMessage `json:"sha256"`
+	Bytes         json.RawMessage `json:"bytes"`
+	OpenAPI       json.RawMessage `json:"openapi,omitempty"`
+	Swagger       json.RawMessage `json:"swagger,omitempty"`
+	IdentityQuery json.RawMessage `json:"identity_query,omitempty"`
+}
+
+type declarationAdmissionLegacyRESTWire struct {
+	declarationAdmissionSourceArtifactWire
+	Commit      json.RawMessage                         `json:"commit,omitempty"`
+	InfoVersion json.RawMessage                         `json:"info_version,omitempty"`
+	Operations  []declarationAdmissionRESTOperationWire `json:"operations,omitempty"`
+}
+
+type declarationAdmissionRESTOperationWire struct {
+	ID             string          `json:"id"`
+	Protocol       string          `json:"protocol"`
+	Method         string          `json:"method"`
+	Path           string          `json:"path"`
+	OperationID    string          `json:"operation_id"`
+	Deprecated     json.RawMessage `json:"deprecated"`
+	SourceLocation string          `json:"source_location"`
+	CitationURL    string          `json:"citation_url,omitempty"`
+}
+
+type declarationAdmissionIgnoredArtifactWire struct {
+	SourceURL     json.RawMessage `json:"source_url"`
+	SHA256        json.RawMessage `json:"sha256"`
+	Bytes         json.RawMessage `json:"bytes"`
+	OpenAPI       json.RawMessage `json:"openapi,omitempty"`
+	Swagger       json.RawMessage `json:"swagger,omitempty"`
+	IdentityQuery json.RawMessage `json:"identity_query,omitempty"`
+}
+
+type declarationAdmissionPublishedSourceWire struct {
+	SourceURL  string          `json:"source_url"`
+	CaptureURL json.RawMessage `json:"capture_url"`
+	SHA256     json.RawMessage `json:"sha256"`
+	Bytes      json.RawMessage `json:"bytes"`
+	Adapter    json.RawMessage `json:"adapter"`
+}
+
+type declarationAdmissionRESTDocumentWire struct {
+	ID                string                                  `json:"id"`
+	Kind              string                                  `json:"kind,omitempty"`
+	ContentType       json.RawMessage                         `json:"content_type,omitempty"`
+	Artifact          declarationAdmissionIgnoredArtifactWire `json:"artifact"`
+	PublishedSource   declarationAdmissionPublishedSourceWire `json:"published_source"`
+	InfoVersion       json.RawMessage                         `json:"info_version,omitempty"`
+	UnavailableReason json.RawMessage                         `json:"unavailable_reason,omitempty"`
+	Operations        []declarationAdmissionRESTOperationWire `json:"operations"`
+}
+
+type declarationAdmissionV3RESTWire struct {
+	Retrieval          json.RawMessage                        `json:"retrieval"`
+	OpenAPIVersions    json.RawMessage                        `json:"openapi"`
+	CoverageConfidence json.RawMessage                        `json:"coverage_confidence,omitempty"`
+	SourceDocuments    []declarationAdmissionRESTDocumentWire `json:"source_documents"`
+}
+
+type declarationAdmissionGraphQLFieldWire struct {
+	Root       string          `json:"root"`
+	Name       string          `json:"name"`
+	Line       int             `json:"line"`
+	Signature  string          `json:"signature"`
+	Arguments  json.RawMessage `json:"arguments"`
+	ReturnType json.RawMessage `json:"return_type"`
+	Deprecated json.RawMessage `json:"deprecated"`
+	Preview    json.RawMessage `json:"preview"`
+}
+
+type declarationAdmissionGraphQLWire struct {
+	declarationAdmissionSourceArtifactWire
+	ProjectionSHA256 json.RawMessage                        `json:"projection_sha256,omitempty"`
+	ProjectionBytes  json.RawMessage                        `json:"projection_bytes,omitempty"`
+	QueryFields      []declarationAdmissionGraphQLFieldWire `json:"query_fields"`
+	MutationFields   []declarationAdmissionGraphQLFieldWire `json:"mutation_fields"`
+	TypeSystem       json.RawMessage                        `json:"type_system"`
+}
+
+func parseDeclarationAdmissionSourceLock(raw []byte, expectedConnector string) (declarationAdmissionReviewedSourceLock, error) {
+	var wire declarationAdmissionSourceLockWire
+	if err := decodeSourceStrictJSON(raw, &wire); err != nil {
+		return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("parse source lock mapping evidence: %w", err)
+	}
+	if wire.SchemaVersion != 1 && wire.SchemaVersion != 2 && wire.SchemaVersion != 3 {
+		return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock has unsupported schema version %d", wire.SchemaVersion)
+	}
+	if wire.Connector == "" {
+		return declarationAdmissionReviewedSourceLock{}, errors.New("source lock has no connector")
+	}
+	if expectedConnector != "" && wire.Connector != expectedConnector {
+		return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock connector %q does not match requested connector %q", wire.Connector, expectedConnector)
+	}
+	if err := validateSourceImportConnector(wire.Connector); err != nil {
+		return declarationAdmissionReviewedSourceLock{}, err
+	}
+
+	lock := declarationAdmissionReviewedSourceLock{
+		SchemaVersion: wire.SchemaVersion,
+		Connector:     wire.Connector,
+		Operations:    map[string]declarationAdmissionReviewedOperation{},
+	}
+	addOperation := func(id string, operation declarationAdmissionReviewedOperation) error {
+		if id == "" {
+			return errors.New("source lock has incomplete operation identity")
+		}
+		if _, duplicate := lock.Operations[id]; duplicate {
+			return fmt.Errorf("source lock duplicates operation identity %q", id)
+		}
+		lock.Operations[id] = operation
+		return nil
+	}
+
+	restCount := 0
+	if wire.SchemaVersion < 3 {
+		var rest declarationAdmissionLegacyRESTWire
+		if len(wire.Rest) != 0 {
+			if err := decodeSourceStrictJSON(wire.Rest, &rest); err != nil {
+				return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("parse source lock REST mapping evidence: %w", err)
+			}
+		}
+		if len(rest.Operations) > 0 {
+			if err := validateDeclarationAdmissionMappingSourceURL(rest.SourceURL); err != nil {
+				return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock has invalid REST source URL: %w", err)
+			}
+		}
+		for _, operation := range rest.Operations {
+			if err := validateDeclarationAdmissionMappingRESTOperation(operation); err != nil {
+				return declarationAdmissionReviewedSourceLock{}, err
+			}
+			restCount++
+			if err := addOperation(operation.ID, declarationAdmissionReviewedOperation{
+				Protocol: operation.Protocol, SourceURL: rest.SourceURL, Location: operation.SourceLocation,
+				ProviderOperationID: operation.OperationID, Method: operation.Method, Path: operation.Path,
+			}); err != nil {
+				return declarationAdmissionReviewedSourceLock{}, err
+			}
+		}
+	} else {
+		var rest declarationAdmissionV3RESTWire
+		if len(wire.Rest) != 0 {
+			if err := decodeSourceStrictJSON(wire.Rest, &rest); err != nil {
+				return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("parse source lock v3 REST mapping evidence: %w", err)
+			}
+		}
+		seenDocuments := map[string]struct{}{}
+		seenRoutes := map[string]string{}
+		for index, document := range rest.SourceDocuments {
+			if document.ID == "" || document.ID != strings.TrimSpace(document.ID) || document.ID != strings.ToLower(document.ID) || !sourceImportDocumentID(document.ID) {
+				return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock has invalid v3 REST document ID %q", document.ID)
+			}
+			if _, duplicate := seenDocuments[document.ID]; duplicate {
+				return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock duplicates v3 REST document ID %q", document.ID)
+			}
+			if index > 0 && rest.SourceDocuments[index-1].ID >= document.ID {
+				return declarationAdmissionReviewedSourceLock{}, errors.New("source lock v3 REST source documents are not sorted")
+			}
+			seenDocuments[document.ID] = struct{}{}
+			kind := document.Kind
+			if kind == "" {
+				kind = sourceImportDocumentKindOpenAPI
+			}
+			switch kind {
+			case sourceImportDocumentKindOpenAPI, sourceImportDocumentKindRenderedReference, sourceImportDocumentKindBundle:
+			case sourceImportDocumentKindUnavailable:
+				if len(document.Operations) != 0 {
+					return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 unavailable document %q must not declare operations", document.ID)
+				}
+				continue
+			default:
+				return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 REST document %q has unsupported kind %q", document.ID, kind)
+			}
+			for _, operation := range document.Operations {
+				if err := validateDeclarationAdmissionMappingRESTOperation(operation); err != nil {
+					return declarationAdmissionReviewedSourceLock{}, err
+				}
+				sourceURL := operation.CitationURL
+				if sourceURL == "" {
+					sourceURL = document.PublishedSource.SourceURL
+				}
+				if err := validateDeclarationAdmissionMappingSourceURL(sourceURL); err != nil {
+					return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock operation %q has invalid provider source URL: %w", operation.ID, err)
+				}
+				route := strings.ToUpper(operation.Method) + "\x00" + operation.Path
+				if previous, duplicate := seenRoutes[route]; duplicate {
+					return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 REST route %s %s occurs in both %q and %q", operation.Method, operation.Path, previous, document.ID)
+				}
+				seenRoutes[route] = document.ID
+				restCount++
+				if err := addOperation(operation.ID, declarationAdmissionReviewedOperation{
+					Protocol: operation.Protocol, SourceURL: sourceURL, Location: operation.SourceLocation,
+					ProviderOperationID: operation.OperationID, Method: operation.Method, Path: operation.Path,
+				}); err != nil {
+					return declarationAdmissionReviewedSourceLock{}, err
+				}
+			}
+		}
+	}
+
+	graphqlQueryCount, graphqlMutationCount, err := declarationAdmissionMappingGraphQLOperations(wire.GraphQL, wire.Connector, addOperation)
+	if err != nil {
+		return declarationAdmissionReviewedSourceLock{}, err
+	}
+	if wire.Counts.REST != restCount || wire.Counts.GraphQLQuery != graphqlQueryCount || wire.Counts.GraphQLMutation != graphqlMutationCount || wire.Counts.Total != restCount+graphqlQueryCount+graphqlMutationCount {
+		return declarationAdmissionReviewedSourceLock{}, errors.New("source lock counts do not match mapping operation inventories")
+	}
+	return lock, nil
+}
+
+func validateDeclarationAdmissionMappingSourceURL(sourceURL string) error {
+	canonical, err := safety.CanonicalProviderCitationURL(sourceURL)
+	if err != nil {
+		return err
+	}
+	if canonical != sourceURL {
+		return errors.New("provider source URL is not canonical")
+	}
+	return nil
+}
+
+func validateDeclarationAdmissionMappingRESTOperation(operation declarationAdmissionRESTOperationWire) error {
+	if operation.ID == "" || operation.ID != strings.TrimSpace(operation.ID) || operation.Protocol != "rest" || operation.Method == "" || operation.Method != strings.TrimSpace(operation.Method) || operation.Path == "" || operation.SourceLocation == "" || operation.SourceLocation != strings.TrimSpace(operation.SourceLocation) || operation.OperationID != strings.TrimSpace(operation.OperationID) {
+		return fmt.Errorf("source lock has incomplete REST operation identity %q", operation.ID)
+	}
+	if err := validateSourceImportPath(operation.Path); err != nil {
+		return fmt.Errorf("source lock REST operation %q has invalid path: %w", operation.ID, err)
+	}
+	if operation.CitationURL != "" {
+		if err := validateDeclarationAdmissionMappingSourceURL(operation.CitationURL); err != nil {
+			return fmt.Errorf("source lock REST operation %q has invalid citation URL: %w", operation.ID, err)
+		}
+	}
+	return nil
+}
+
+func declarationAdmissionMappingGraphQLOperations(raw json.RawMessage, connector string, addOperation func(string, declarationAdmissionReviewedOperation) error) (int, int, error) {
+	var graphql declarationAdmissionGraphQLWire
+	if len(raw) != 0 {
+		if err := decodeSourceStrictJSON(raw, &graphql); err != nil {
+			return 0, 0, fmt.Errorf("parse source lock GraphQL mapping evidence: %w", err)
+		}
+	}
+	queryCount := len(graphql.QueryFields)
+	mutationCount := len(graphql.MutationFields)
+	if queryCount+mutationCount > 0 {
+		if err := validateDeclarationAdmissionMappingSourceURL(graphql.SourceURL); err != nil {
+			return 0, 0, fmt.Errorf("source lock has invalid GraphQL source URL: %w", err)
+		}
+	}
+	for _, group := range []struct {
+		kind   string
+		root   string
+		fields []declarationAdmissionGraphQLFieldWire
+	}{{"query", "Query", graphql.QueryFields}, {"mutation", "Mutation", graphql.MutationFields}} {
+		for _, field := range group.fields {
+			if field.Root != group.root || field.Name == "" || field.Name != strings.TrimSpace(field.Name) || field.Line <= 0 || field.Signature == "" || field.Signature != strings.TrimSpace(field.Signature) {
+				return 0, 0, fmt.Errorf("source lock has incomplete GraphQL root identity %q", group.root+"."+field.Name)
+			}
+			id := fmt.Sprintf("%s.graphql.%s.%s", connector, group.kind, field.Name)
+			if err := addOperation(id, declarationAdmissionReviewedOperation{
+				Protocol: "graphql", SourceURL: graphql.SourceURL,
+				Location:            fmt.Sprintf("graphql.%s_fields[%q]@line:%d", group.kind, field.Name, field.Line),
+				ProviderOperationID: field.Root + "." + field.Name, Method: "GRAPHQL", Path: field.Name,
+			}); err != nil {
+				return 0, 0, err
+			}
+		}
+	}
+	return queryCount, mutationCount, nil
+}
+
 func declarationAdmissionReviewedSourceFindings(dir string, inventory declarationAdmissionInventory, sources declarationAdmissionSourceCatalog) []Finding {
 	findings := []Finding{}
 	add := func(connector, message string) {
@@ -324,7 +618,7 @@ func declarationAdmissionReviewedSourceFindings(dir string, inventory declaratio
 	}
 	selectedRows := make(map[string]struct{}, len(inventory.Operations))
 	selectedOperations := make(map[string]string, len(inventory.Operations))
-	lockCache := map[string]sourceImportLock{}
+	lockCache := map[string]declarationAdmissionReviewedSourceLock{}
 	for _, selected := range inventory.Operations {
 		rowKey := selected.Connector + "\x00" + selected.SourceID
 		if _, duplicate := selectedRows[rowKey]; duplicate {
@@ -355,7 +649,7 @@ func declarationAdmissionReviewedSourceFindings(dir string, inventory declaratio
 				add(selected.Connector, fmt.Sprintf("source operation %q cannot read reviewed source lock: %v", selected.SourceID, readErr))
 				continue
 			}
-			lock, err = parseSourceImportLock(raw, selected.Connector)
+			lock, err = parseDeclarationAdmissionSourceLock(raw, selected.Connector)
 			if err != nil {
 				add(selected.Connector, fmt.Sprintf("source operation %q has invalid reviewed source lock: %v", selected.SourceID, err))
 				continue
@@ -413,50 +707,9 @@ func declarationAdmissionOwnedSourceLockPath(dir string, selected declarationAdm
 	return path, nil
 }
 
-func declarationAdmissionReviewedOperationFromLock(lock sourceImportLock, operationID string) (declarationAdmissionReviewedOperation, bool) {
-	if lock.SchemaVersion == 3 {
-		for _, document := range lock.Rest.SourceDocuments {
-			for _, operation := range document.Operations {
-				if operation.ID != operationID {
-					continue
-				}
-				sourceURL := operation.CitationURL
-				if sourceURL == "" {
-					sourceURL = document.PublishedSource.SourceURL
-				}
-				return declarationAdmissionReviewedOperation{
-					Protocol: operation.Protocol, SourceURL: sourceURL, Location: operation.SourceLocation,
-					ProviderOperationID: operation.OperationID, Method: operation.Method, Path: operation.Path,
-				}, true
-			}
-		}
-	} else {
-		for _, operation := range lock.Rest.Operations {
-			if operation.ID == operationID {
-				return declarationAdmissionReviewedOperation{
-					Protocol: operation.Protocol, SourceURL: lock.Rest.SourceURL, Location: operation.SourceLocation,
-					ProviderOperationID: operation.OperationID, Method: operation.Method, Path: operation.Path,
-				}, true
-			}
-		}
-	}
-	for _, group := range []struct {
-		kind   string
-		fields []sourceGraphQLField
-	}{{"query", lock.GraphQL.QueryFields}, {"mutation", lock.GraphQL.MutationFields}} {
-		for _, field := range group.fields {
-			id := fmt.Sprintf("%s.graphql.%s.%s", lock.Connector, group.kind, field.Name)
-			if id != operationID {
-				continue
-			}
-			return declarationAdmissionReviewedOperation{
-				Protocol: "graphql", SourceURL: lock.GraphQL.SourceURL,
-				Location:            fmt.Sprintf("graphql.%s_fields[%q]@line:%d", group.kind, field.Name, field.Line),
-				ProviderOperationID: field.Root + "." + field.Name, Method: "GRAPHQL", Path: field.Name,
-			}, true
-		}
-	}
-	return declarationAdmissionReviewedOperation{}, false
+func declarationAdmissionReviewedOperationFromLock(lock declarationAdmissionReviewedSourceLock, operationID string) (declarationAdmissionReviewedOperation, bool) {
+	operation, found := lock.Operations[operationID]
+	return operation, found
 }
 
 func declarationAdmissionReviewedOperationMismatch(row declarationAdmissionSourceOperation, reviewed declarationAdmissionReviewedOperation) string {

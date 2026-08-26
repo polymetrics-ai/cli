@@ -144,6 +144,32 @@ func TestGitHubLabelDeleteValidatesRequiredInputBeforeCredentialResolution(t *te
 	}
 }
 
+func TestFreshchatConfiguredEnumValidatesBeforeCredentialResolution(t *testing.T) {
+	bundle, err := engine.Load(defs.FS, "freshchat")
+	if err != nil {
+		t.Fatalf("load shipped Freshchat bundle: %v", err)
+	}
+	registry := connectors.NewEmptyRegistry()
+	registry.Register(engine.New(bundle, nil))
+
+	const invalidValue = "not-a-deactivation-state"
+	var invalidOut, invalidErr bytes.Buffer
+	err = runMaybeConnectorCommandWithRegistry(context.Background(), t.TempDir(), "freshchat", []string{
+		"agents", "list",
+		"--config", "agents_is_deactivated=" + invalidValue,
+	}, &invalidOut, &invalidErr, true, registry)
+	combined := invalidOut.String() + invalidErr.String()
+	if err == nil || !strings.Contains(err.Error(), "configured value") {
+		t.Fatalf("invalid Freshchat config error=%v stdout=%s stderr=%s", err, invalidOut.String(), invalidErr.String())
+	}
+	if strings.Contains(combined+err.Error(), invalidValue) {
+		t.Fatalf("invalid Freshchat config value leaked: error=%v stdout=%s stderr=%s", err, invalidOut.String(), invalidErr.String())
+	}
+	if strings.Contains(combined+err.Error(), "missing --credential") {
+		t.Fatalf("invalid Freshchat config reached credential resolution: error=%v stdout=%s stderr=%s", err, invalidOut.String(), invalidErr.String())
+	}
+}
+
 func TestConnectorCommandInputDefectsFailBeforeWithApp(t *testing.T) {
 	minimum := connectors.ExactNumber("2")
 	bundle := engine.Bundle{

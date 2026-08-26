@@ -9,7 +9,8 @@ no provider I/O:
   exact operation ID from a connector-owned
   `<connector>/sources/*-operation-source-lock.json` and assigns its compact
   source ID. Deleting mutable rows or changing adjacent counts cannot shrink
-  this inventory; the v2 catalogs do not accept expected-count fields.
+  this inventory. The inventory and both mutable catalogs require schema v2;
+  legacy inventory v1 and expected-count fields are rejected.
 - `internal/connectors/defs/declaration_admission_sources.json` is the compact
   source cohort used by authoring admission and shipped deferred-target
   preflight. Every row must equal the selected lock operation's provider URL,
@@ -24,10 +25,14 @@ pass or silently expand the certified cohort.
 The checker resolves only connector-owned reviewed lock files and reads no
 provider or retained artifact bytes. A path outside the selected connector's
 `sources/` directory, a nonexistent locked operation, an unrelated URL, or a
-semantic location/endpoint alias fails closed. The reviewed lock already owns
-the retained content identity; declaration admission neither fetches that
-content nor recomputes its byte count or hash. Source retention verification
-remains a separate certificate.
+semantic location/endpoint alias fails closed. Its admission-only lock reader
+validates the supported version, connector ownership, operation inventory,
+canonical provider URL/citation, exact location, protocol, provider operation
+identity, method, route, counts, and duplicates. Retention `bytes`, `sha256`,
+capture metadata, and certificates are outside this reader: they may be absent
+or malformed without changing the mapping certificate. The strict
+`source-import` path still rejects such retention defects. It remains the
+separate retained-source certificate.
 
 Each source row records a stable source ID, protocol, provider HTTPS URL,
 exact document location, optional raw provider operation ID, method/base/path,
@@ -66,11 +71,15 @@ GraphQL operation-to-`POST /graphql`, a declaration-owned query, a known
 provider `.json` suffix, or an operation annotation. A method change or an
 unrelated path is never replaced by the command surface.
 
-Public connector dispatch validates required, unknown, typed, enum, bounded,
-and `env_only` inputs after help handling and before opening the app or resolving
-a credential. A valid invocation still reaches the existing credential-bound
-runtime boundary; admission and credential-free input validation do not make a
-runtime or live usability claim.
+Public connector dispatch validates required, unknown, typed, enum, format,
+empty, byte-capped, range-bounded, cardinality-bounded, and `env_only` inputs
+after help handling and before opening the app or resolving a credential. The
+same coercer validates declaration-owned values carried through `--config`;
+an explicit command flag wins over the corresponding config key, and config
+errors name only the declaration/key rather than echoing the value. A valid
+invocation still reaches the existing credential-bound runtime boundary;
+admission and credential-free input validation do not make a runtime or live
+usability claim.
 
 An admitted `deferred` row instead names one missing implementation component
 with closed evidence. Its discoverable command carries the same gap and an

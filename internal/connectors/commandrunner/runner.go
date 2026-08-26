@@ -160,6 +160,25 @@ type MaximumFlagError struct {
 	Maximum   connectors.ExactNumber
 }
 
+// ConfiguredFlagValueError preserves the declaration and config key that
+// failed without exposing the configured value. The underlying typed error is
+// available to callers through Unwrap for classification, but Error remains a
+// safe public message for pre-credential CLI validation.
+type ConfiguredFlagValueError struct {
+	Command string
+	Flag    string
+	Target  string
+	err     error
+}
+
+func (e *ConfiguredFlagValueError) Error() string {
+	return fmt.Sprintf("configured value for config.%s (--%s) is invalid for command %q", e.Target, e.Flag, e.Command)
+}
+
+func (e *ConfiguredFlagValueError) Unwrap() error {
+	return e.err
+}
+
 func (e *MaximumFlagError) Error() string {
 	return fmt.Sprintf("invalid --%s: value must be at most %s", e.Parameter, e.Maximum.String())
 }
@@ -228,7 +247,7 @@ func PreflightRequest(connector connectors.Connector, req Request) error {
 	if _, err := validateCommandFlagSet(cmd, flags); err != nil {
 		return err
 	}
-	return validateConfiguredFlagMinimums(cmd, req.Config)
+	return validateConfiguredFlagValues(cmd, req.Config, flags)
 }
 
 func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req Request) (WriteCommand, error) {
@@ -1370,7 +1389,7 @@ func streamOverrides(cmd connectors.CommandSurfaceCommand, cfg connectors.Runtim
 		}
 	}
 	runtimeConfig := runtimeConfigWithOverrides(cfg, configOverrides)
-	if err := validateConfiguredFlagMinimums(cmd, runtimeConfig); err != nil {
+	if err := validateConfiguredFlagValues(cmd, runtimeConfig, nil); err != nil {
 		return connectors.RuntimeConfig{}, nil, err
 	}
 	return runtimeConfig, query, nil
@@ -1391,21 +1410,34 @@ func runtimeConfigWithOverrides(cfg connectors.RuntimeConfig, overrides map[stri
 	return out
 }
 
-func validateConfiguredFlagMinimums(cmd connectors.CommandSurfaceCommand, cfg connectors.RuntimeConfig) error {
+func validateConfiguredFlagValues(cmd connectors.CommandSurfaceCommand, cfg connectors.RuntimeConfig, explicitFlags map[string][]string) error {
+	overriddenTargets := map[string]struct{}{}
 	for _, flag := range cmd.Flags {
-		if (flag.Minimum == nil && flag.Maximum == nil) || !strings.HasPrefix(flag.MapsTo, "config.") {
+		target, mapped := strings.CutPrefix(flag.MapsTo, "config.")
+		if !mapped {
 			continue
 		}
-		target := strings.TrimPrefix(flag.MapsTo, "config.")
 		if err := safety.ValidateIdentifier(target, "config parameter"); err != nil {
 			return err
+		}
+		if len(explicitFlags[flag.Name]) > 0 {
+			overriddenTargets[target] = struct{}{}
+		}
+	}
+	for _, flag := range cmd.Flags {
+		target, mapped := strings.CutPrefix(flag.MapsTo, "config.")
+		if !mapped {
+			continue
+		}
+		if _, overridden := overriddenTargets[target]; overridden {
+			continue
 		}
 		value, ok := cfg.Config[target]
 		if !ok {
 			continue
 		}
-		if err := validateFlagNumericRange(flag, value); err != nil {
-			return err
+		if _, err := coerceCommandFlagValue(cmd, flag, []string{value}); err != nil {
+			return &ConfiguredFlagValueError{Command: cmd.Path, Flag: flag.Name, Target: target, err: err}
 		}
 	}
 	return nil
@@ -2658,6 +2690,8 @@ func validateCommandFlagEncodedBytes(flag connectors.CommandSurfaceFlag, value s
 	encoded := ""
 	switch location {
 	case "record":
+		encoded = value
+	case "config":
 		encoded = value
 	case "path":
 		if name == "path" || name == "ref" {

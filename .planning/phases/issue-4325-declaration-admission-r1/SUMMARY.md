@@ -38,3 +38,14 @@ public connector inputs through shared commandrunner rules before credentials.
 Runtime binding uniqueness stays separate from provider-provenance uniqueness;
 retained source bytes/hashes, runtime usability, and live certification remain
 independent certificates.
+
+R6 makes that certificate boundary executable rather than documentary. A
+dedicated admission-only source-lock reader validates the exact owned mapping
+inventory without making retained byte/hash/capture metadata a prerequisite;
+the unchanged source-import parser remains strict about all retention evidence.
+Effective config-carried command values now traverse the same declared
+type/enum/format/emptiness/byte/range/cardinality coercion as argv before App or
+credential construction, while explicit argv retains precedence and errors do
+not expose configured values. The independent inventory is schema v2 and
+legacy v1 is rejected. Clean package, binary-boundary, static, generator,
+snapshot, docs, smoke, boundary, canon, and release checks pass.

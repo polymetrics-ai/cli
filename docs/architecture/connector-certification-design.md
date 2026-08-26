@@ -14,9 +14,9 @@ current delivery rules are in [the connector canon](../connector-canon/INDEX.md)
 > declaration, lane, canonical endpoint, exact command/declaration binding,
 > source-owned destructive semantic, and discoverable command, with a runtime
 > binding, named deferred foundation, or provider-evidenced unsupported
-> disposition. An independently reviewed inventory selects exact operations
-> from connector-owned source locks; the mutable v2 source/declaration catalogs
-> have no expected-count escape hatch.
+> disposition. A schema-v2 independently reviewed inventory selects exact
+> operations from connector-owned source locks; both mutable catalogs are also
+> v2 and have no expected-count escape hatch. Legacy inventory v1 is rejected.
 > Its no-I/O check reuses the real runtime resolver to reject false implemented
 > bindings. Provenance-row uniqueness uses one shared canonical provider
 > citation identity in authoring and the compact production ledger: stored URLs
@@ -32,9 +32,14 @@ current delivery rules are in [the connector canon](../connector-canon/INDEX.md)
 > preflight before accepting any missing-foundation classification. An
 > unsupported disposition stays denominator-visible and discoverable in any of
 > the six lanes, but has no executor/foundation claim and returns its own typed
-> terminal. Admission resolves only the reviewed lock inventory: it does not
-> fetch/read retained bytes, recompute hashes, infer request bodies, resolve
-> credentials, or make a live claim. A
+> terminal. Admission resolves only the reviewed lock's exact mapping evidence.
+> Its dedicated reader accepts absent or malformed retention byte/hash and
+> capture fields, while strict source import continues to reject them. It does
+> not fetch/read retained bytes, recompute hashes, infer request bodies, resolve
+> credentials, or make a live claim. Config-carried declaration values receive
+> the same type/enum/format/empty/byte/range/cardinality validation before App
+> construction as direct flags, with direct flags taking precedence and errors
+> remaining value-redacted. A
 > passing admission result is neither credential-bound runtime usability nor
 > live certification; see
 > [the declaration-admission canon](../connector-canon/DECLARATION-ADMISSION.md).

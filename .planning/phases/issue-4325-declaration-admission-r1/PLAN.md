@@ -8,16 +8,16 @@
 - Delivery: Pull request #4351 is open against `main`; this expanded slice is
   committed, pushed to its existing branch, and locally verified.
 - Working branch: fm/cli-declaration-admission-certification-r1.
-- Task: Close the R5 exact-SHA gaps by binding the admission denominator to
-  exact operations in connector-owned reviewed source locks, adding a
-  provider-evidenced unsupported disposition across all six lanes, validating
-  public connector inputs before credential resolution, and separating the
-  denominator from the mutable declaration rows and counts.
-- Verification: Focused red/green tests for lock ownership and exact operation
-  identity, six-lane unsupported discovery/refusal, denominator deletion,
-  help-first and input-before-credential behavior, unchanged real alias
-  coverage, formatting plus applicable generator/static/CI gates, and a fresh
-  independent exact-head audit after push.
+- Task: Close the frozen R6 exact-SHA gaps by separating declaration mapping
+  evidence from source-import retention metadata, validating effective
+  config-carried declared values before App/credential construction with argv
+  precedence, and migrating the independent admission inventory to schema v2.
+- Verification: Focused red/green tests for absent and malformed retention
+  metadata with strict mapping identity, unchanged strict source-import
+  rejection, config enum/type/format/empty/byte-cap/range/cardinality plus argv
+  precedence before credentials, inventory v2 acceptance/v1 rejection,
+  formatting plus applicable generator/static/CI gates, and a fresh independent
+  exact-head audit after push.
 
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
@@ -29,6 +29,9 @@
 | Citation follows the existing safe source-publication policy | fake | A hermetic source row using HTTP, userinfo, a private literal, a fragment, or a credential-shaped query is rejected by the shared local citation validator. |
 | Equivalent citation spellings cannot evade provider-operation uniqueness | fake | Hermetic authoring and production-ledger rows vary DNS host case, default HTTPS port, escaped path, and query order; noncanonical authored forms fail closed and the canonical identity still detects one provider operation claimed under different bindings. Provider I/O cannot prove this local identity invariant. |
 | This foundation does not claim shipped Outreach commands | live | The committed PR delta leaves `internal/connectors/defs/outreach/**` unchanged and the corrected test/docs describe only the generic real-bundle resolver seam. Final merge validation is explicitly gated on a real combined-head Outreach mapping/pilot with committed discovery commands, source evidence, credential-boundary proof, zero transport calls, and a fresh audit after #4350 repair. |
+| Mapping admission is independent of retained bytes and hashes | fake | A hermetic connector-owned source lock retains the exact URL/location/protocol/provider-ID/method/path row while omitting or corrupting only retention byte/hash fields; declaration admission accepts it, while the unchanged full source-import parser rejects it. Provider I/O cannot prove a repository schema boundary. |
+| Config-carried declared values fail before App/credentials | live | Public no-credential connector invocations submit invalid enum/type/cardinality config values and observe validation errors rather than `missing --credential`; an explicit valid argv flag overriding an invalid config value reaches the credential boundary. |
+| The independent selection denominator is schema v2 only | fake | Hermetic inventory validation accepts v2 and rejects legacy v1 before cross-catalog admission. A provider call cannot establish local schema compatibility. |
 
 ## Scope boundary
 
@@ -319,3 +322,49 @@ discovery and are covered by commandrunner tests.
 - Red-test checkpoint when the repository’s test convention permits it.
 - Green implementation/documentation checkpoint after targeted gates.
 - Review-fix checkpoint if inspection finds an actionable defect.
+
+## Exact-SHA R6 gap plan (2026-08-26)
+
+The independent R6 audit of exact head
+`ab2c5e3933e0dc1355948d3585b269c46f75754d` is the frozen repair ledger. This
+wave uses `scripts/gsd prompt plan-phase issue-4325-declaration-admission-r1
+--gaps` and `execute-phase ... --gaps-only` inline because the canonical
+single-worker contract and launch brief forbid role spawning. Required skills:
+`golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`,
+`golang-security`, `golang-safety`, `golang-design-patterns`,
+`golang-structs-interfaces`, `golang-documentation`, and `golang-lint`, plus
+`gsd-ns-workflow` and `gsd-ns-review` for the inline lifecycle and review.
+
+1. **Red — mapping evidence is not retention evidence (DA-R6-001):** mutate
+   only `bytes`/`sha256` in the connector-owned reviewed source lock. Admission
+   must accept an absent or malformed retention pair while retaining strict
+   version, connector ownership, URL, location, protocol, provider operation
+   ID, method/path, counts, and duplicate checks. The ordinary source-import
+   parser must continue to reject the same mutations.
+2. **Green — admission-only source-lock reader:** add one narrow reader beside
+   the source-import lock types and call it only from
+   `declarationAdmissionReviewedSourceFindings`. It performs strict JSON and
+   mapping-inventory validation but never validates or reads retained bytes,
+   hashes, capture metadata, or certificates. Do not weaken
+   `parseSourceImportLock`.
+3. **Red — effective config validation before credentials (DA-R6-002):** add
+   commandrunner tests for enum, boolean/integer, date-time, empty, encoded-byte
+   cap, minimum/maximum, and string-array cardinality on `config.*` mappings;
+   add public no-credential Freshchat/config regressions; and prove valid argv
+   overrides an invalid config value.
+4. **Green — one shared configured-value validator:** replace the numeric-only
+   helper with coercion through the declaration-owned command flag validator.
+   Validate only effective config values, skip a config target when an explicit
+   argv value wins, and return redacted config-key/flag-context errors before
+   App construction. Runtime override validation consumes the same helper.
+5. **Red/green — inventory schema v2 (DA-R6-003):** update the inventory
+   metaschema, committed root inventory, authoring constant/check, and hermetic
+   fixtures to v2; add an exact legacy-v1 rejection. No compatibility fallback
+   or connector-specific migration is permitted.
+6. **Refactor/document/gate:** keep declaration admission, source-import
+   retention, runtime preflight, and live certification distinct in the canon;
+   run focused red/green packages, full changed packages, applicable generated
+   and snapshot checks, then `verify-work` and `code-review` inline. Preserve
+   every unstaged Stripe/Docker Hub handoff path byte-for-byte and do not run a
+   provider request, credentialed check, write, delete, or broad connector
+   regeneration.

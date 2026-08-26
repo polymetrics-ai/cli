@@ -224,6 +224,74 @@ func TestPreflightRequestValidatesDeclaredInputsWithoutExecutor(t *testing.T) {
 	}
 }
 
+func TestPreflightRequestValidatesConfiguredDeclaredValuesWithoutExecutor(t *testing.T) {
+	minimum := connectors.ExactNumber("2")
+	maximum := connectors.ExactNumber("4")
+	allowEmpty := false
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "widgets list", Intent: "etl", Availability: "implemented", Stream: "widgets",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "state", Type: "enum", Values: []string{"open", "closed"}, MapsTo: "config.state"},
+			{Name: "enabled", Type: "boolean", MapsTo: "config.enabled"},
+			{Name: "count", Type: "integer", MapsTo: "config.count", Minimum: &minimum, Maximum: &maximum},
+			{Name: "since", Type: "string", Format: "date-time", MapsTo: "config.since"},
+			{Name: "label", Type: "string", AllowEmpty: &allowEmpty, MapsTo: "config.label"},
+			{Name: "token", Type: "string", MapsTo: "config.token", MaxBytes: 4},
+			{Name: "groups", Type: "string_array", MapsTo: "config.groups", MinItems: 2, MaxItems: 3},
+		},
+	}}}}
+	tests := []struct {
+		name   string
+		config map[string]string
+	}{
+		{name: "enum", config: map[string]string{"state": "not-a-state"}},
+		{name: "boolean", config: map[string]string{"enabled": "not-a-boolean"}},
+		{name: "integer", config: map[string]string{"count": "not-an-integer"}},
+		{name: "format", config: map[string]string{"since": "not-a-timestamp"}},
+		{name: "empty", config: map[string]string{"label": "   "}},
+		{name: "byte cap", config: map[string]string{"token": "five!"}},
+		{name: "minimum", config: map[string]string{"count": "1"}},
+		{name: "maximum", config: map[string]string{"count": "5"}},
+		{name: "minimum cardinality", config: map[string]string{"groups": "one"}},
+		{name: "maximum cardinality", config: map[string]string{"groups": "one,two,three,four"}},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			err := PreflightRequest(connector, Request{
+				Path:   []string{"widgets", "list"},
+				Config: connectors.RuntimeConfig{Config: testCase.config},
+			})
+			if err == nil {
+				t.Fatal("configured request preflight accepted an invalid declared value")
+			}
+			for _, value := range testCase.config {
+				if value != "" && strings.Contains(err.Error(), value) {
+					t.Fatalf("configured request preflight leaked value %q in %q", value, err.Error())
+				}
+			}
+			if !strings.Contains(err.Error(), "configured value") {
+				t.Fatalf("configured request preflight error = %q, want redacted configured-value context", err.Error())
+			}
+		})
+	}
+
+	valid := connectors.RuntimeConfig{Config: map[string]string{
+		"state": "closed", "enabled": "true", "count": "4",
+		"since": "2026-08-26T07:30:00Z", "label": "ready", "token": "four", "groups": "one,two",
+	}}
+	if err := PreflightRequest(connector, Request{Path: []string{"widgets", "list"}, Config: valid}); err != nil {
+		t.Fatalf("valid configured request preflight: %v", err)
+	}
+
+	if err := PreflightRequest(connector, Request{
+		Path:   []string{"widgets", "list"},
+		Flags:  map[string][]string{"state": {"open"}},
+		Config: connectors.RuntimeConfig{Config: map[string]string{"state": "not-a-state"}},
+	}); err != nil {
+		t.Fatalf("explicit argv did not override invalid config value: %v", err)
+	}
+}
+
 type preflightFakeConnector struct {
 	*fakeConnector
 	preflightErr error

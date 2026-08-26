@@ -53,6 +53,15 @@ without converting connector-owned definitions or claiming live certification.
   embed inventory. The Outreach regression loads real stream/write shapes but
   synthesizes the absent discovery projection in memory; it proves generic
   resolver compatibility only, not shipped CLI or credential-boundary reachability.
+- Split admission's source-lock reader from strict source-import retention
+  parsing. Admission validates exact version/ownership/URL/citation/location/
+  protocol/provider-ID/method/path/count/duplicate mapping evidence even when
+  retention bytes or hashes are absent or malformed; source import still
+  rejects those retention defects.
+- Applied the full declaration-owned type, enum, format, empty, byte-cap,
+  minimum/maximum, and cardinality coercion to effective `config.*` values
+  before App/credential construction, with argv precedence and value-redacted
+  errors. Migrated the independent inventory to schema v2 and reject v1.
 
 The accompanying investigation records the exact distinction: GitHub's cited
 `label delete` endpoint has a typed delete action, CLI binding, fixture, and
@@ -63,7 +72,9 @@ blocked source mapping with no action or command binding. See
 ## Scope and Safety
 
 - No provider I/O, credentials, writes, deletes, retained source artifacts,
-  hashes, generated connector evidence, or Batch-1 connector definitions.
+  hashes, regenerated connector-owned evidence, or Batch-1 connector
+  definitions. The repository-required generic certification subject was the
+  only regenerated artifact.
 - Source-lock, surface-sync, runtime preflight, credential-bound binary proof,
   and live certification remain strict and separate.
 - Per captain clarification 007, individual provider declarations and CLI
@@ -118,6 +129,11 @@ blocked source mapping with no action or command binding. See
   generator-required certification subject was refreshed; downstream
   generator/snapshot, boundary, real runtime-preflight, canon, lint, build,
   docs, smoke, and release/archive gates pass.
+- R6 focused red/green: mapping admission accepts absent/malformed retention
+  metadata while the unchanged importer rejects it; config-carried enum/type/
+  format/empty/byte/range/cardinality defects fail through the shared coercer
+  and argv precedence passes; inventory v2 passes and v1 fails. Full-package
+  and repository gate results are recorded in `VERIFICATION.md`.
 
 The aggregate `go test -timeout 20m ./...` and serial `make verify` are left
 to CI, per the repository’s per-command-timeout guidance. Full commands and
@@ -133,5 +149,6 @@ are not applicable.
 ## Review Route
 
 The original route was `claude_auto` on this non-draft, `main`-targeted PR. The
-R3 repair receives one deliberate fresh independent exact-head audit request
-after push under Firstmate's route. Findings require disposition before merge.
+R6 repair receives one deliberate fresh independent exact-head audit request
+after push under Firstmate's route. Findings require disposition before merge;
+this worker does not merge.

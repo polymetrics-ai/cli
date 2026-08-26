@@ -109,9 +109,10 @@ type CommandSurfaceFlag struct {
 	// can name the flag the user actually typed.
 	MaxItems int
 	MinItems int
-	// MaxBytes bounds the exact percent-encoded value for path/query targets.
-	// It is projected from the source operation parameter or from the engine's
-	// conservative fallback and enforced again by the executor.
+	// MaxBytes bounds the exact percent-encoded value for path/query targets and
+	// the raw UTF-8 bytes for record/config targets. It is projected from the
+	// source operation parameter or from the engine's conservative fallback and
+	// enforced again by the executor.
 	MaxBytes int
 	// MaxBytesOrigin and MaxBytesPolicyVersion identify MaxBytes as a PM
 	// execution limit. They prevent generated help and inspection output from

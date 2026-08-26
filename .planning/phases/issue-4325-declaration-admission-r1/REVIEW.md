@@ -220,3 +220,35 @@ No unresolved local R5 finding remains. Clean exact-head package,
 generator/snapshot, boundary, runtime-preflight, canon, lint, build, docs,
 smoke, and release checks pass. The next gate is a fresh independent exact-SHA
 audit and PR CI; this worker does not merge.
+
+## Independent R6 audit disposition and inline review (2026-08-26)
+
+1. **DA-R6-001 accepted — mapping admission used the retention parser.** A
+   dedicated admission-only wire projection now treats retained artifact,
+   byte/hash, capture, and certificate fields as opaque. It still uses strict
+   JSON and rejects unsupported versions, wrong connector ownership,
+   noncanonical URLs/citations, incomplete operation identity, invalid paths,
+   duplicate operations/routes/documents, and count drift. The unchanged full
+   source-import parser rejects every absent/malformed retention test mutation.
+2. **DA-R6-002 accepted — config carriers bypassed full coercion.** One
+   effective-config helper calls the existing declaration-owned coercer for
+   type, enum, format, emptiness, raw config byte cap, numeric range, and array
+   cardinality. `PreflightRequest` runs it before App; runtime overrides reuse
+   it; explicit argv suppresses only the config target it replaces. The public
+   error preserves typed classification through `Unwrap` but never prints the
+   configured value. Clean-binary Freshchat proof reaches validation for an
+   invalid config and missing credentials only when a valid argv override wins.
+3. **DA-R6-003 accepted — inventory version mismatch.** The metaschema,
+   checker constant, production inventory, and hermetic fixture require schema
+   v2; an exact regression rejects legacy v1.
+4. **Inline cross-file review clean.** The review compared the new mapping
+   reader with `parseSourceImportLock`, followed preflight through CLI and
+   runtime override call sites, checked value-redaction and precedence, and
+   inspected the generated subject diff. No broad connector regeneration or
+   weakening of runtime/live/source-import checks was found. Only the required
+   two-field certification-subject fingerprint refresh remains generated.
+
+No unresolved local R6 finding remains. The exact generic diff passes full
+affected packages plus vet, lint, build, docs, smoke, generator/snapshot,
+boundary, canon, and release checks in the clean checkout. A fresh independent
+exact-head audit and PR CI remain external gates; this worker will not merge.

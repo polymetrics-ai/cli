@@ -292,3 +292,40 @@ gates separately; Firstmate instruction 020 additionally required serialization
 and preference for focused checks while only 16 GiB remained. No provider I/O,
 credential, write/delete execution, live certification, bulk regeneration,
 Stripe definition, or Docker Hub definition was used.
+
+## R6 declaration/retention boundary and effective-config verification (2026-08-26)
+
+The exact R6 generic diff was validated from the clean nested checkout rooted
+at audited head `ab2c5e3933e0dc1355948d3585b269c46f75754d`. Only the generic
+foundation paths were applied there; the preserved Stripe and Docker Hub
+handoffs were absent. Admission now consumes strict mapping evidence without
+consuming retention evidence, while source import still rejects the same
+missing or malformed byte/hash fields. Effective `config.*` values are fully
+coerced before App/credentials, explicit argv wins, and public errors name only
+the declaration target and flag. Inventory schema v2 is mandatory.
+
+| Exact clean-checkout command | Result |
+| --- | --- |
+| `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestDeclarationAdmission'` | pass, including legacy/v3 retention independence, strict mapping identity, inventory v2, and legacy-v1 rejection |
+| `go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run 'TestPreflightRequestValidatesConfiguredDeclaredValuesWithoutExecutor\|TestPreflightRequestValidatesDeclaredInputsWithoutExecutor'` | pass for enum/type/format/empty/byte/range/cardinality, redaction, and argv precedence |
+| `go test -count=1 -timeout 20m ./internal/cli -run '^TestFreshchatConfiguredEnumValidatesBeforeCredentialResolution$'` | pass using the shipped Freshchat bundle and isolated registry |
+| `go test -count=1 -timeout 20m ./cmd/connectorgen` | pass (`330.178s`) |
+| `go test -count=1 -timeout 20m ./internal/connectors/commandrunner` | pass (`34.497s`) |
+| `go test -count=1 -timeout 20m ./internal/connectors/engine ./internal/connectors/defs` | pass (`19.286s`, `7.255s`) |
+| `go test -count=1 -timeout 20m ./internal/cli` | pass (`608.975s`) |
+| Built `pm`; invalid `freshchat agents list --config agents_sort_order=sideways --json` | exit 3 validation before credentials; output is redacted |
+| Same invocation plus `--sort-order asc` | argv override succeeds through input preflight and reaches exit 1 `missing --credential`; no provider call |
+| `make tidy-check`; `go vet ./...`; `make lint`; `make agent-contract-check`; `make build` | pass; module files unchanged, lint reports 0 issues, canonical contract current |
+| `make connectorgen-validate`; `make connectorgen-surface-sync`; `make connectorgen-declaration-admission` | pass; 553 bundles / 0 findings, 0 surface drift, 1 connector / 1 selected operation / 0 admission findings |
+| `make connectorgen-operation-evidence`; `make github-parity-artifacts-check` | pass; 1,525 evidence rows and all 17 GitHub ledger tests/artifacts current |
+| `make connectorgen-certification-subject` | initially reported required declaration fingerprint drift; regenerated only `internal/connectors/certifications/current-subject.json`, then passed |
+| `make connectorgen-certification-matrix`; `make connectorgen-certification-candidates`; `make connectorgen-certification-sweep` | pass; downstream artifacts current, GitHub sweep 1,616 rows / 1,612 commands |
+| `make docs-check-no-build`; `make smoke-no-build` | pass; connector docs validate and local ETL/reverse-ETL smoke succeeds |
+| `make connector-boundary connector-canon-check` | pass; 323 files / 553 connectors / 0 findings and canon current |
+| `make release-workflow-check` | pass, including installed GitHub certification archive proof |
+
+The aggregate `go test -timeout 20m ./...` and serial `make verify` remain
+assigned to CI under the repository's explicit per-command-timeout guidance;
+all affected packages and every applicable non-aggregate constituent gate ran
+locally. No provider I/O, credential use, live proof, provider write/delete,
+retained artifact read/hash, or connector-owned definition change was used.
