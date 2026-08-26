@@ -112,10 +112,36 @@ Record exact commands, intended red failure, and full green result as each group
   `b33983927d863032dac8220949990506e812937d`, not the Captain-authorized
   `origin/main` `1324c52bab0b224ed8958858af7676b8b8e191b4`; therefore this
   branch did not contain the merged declaration-admission foundation.
-- **Green required:** merge current `origin/main` without force-push or PR
-  merge; resolve only actual conflicts; then rerun the actual isolated Asana
-  credential-boundary census and the source-bound read/delete/ETL validation
-  gates. Record the exact merged SHA and results.
+- **Green:** normal merge commit `114a4e3f4` has parents `fe0f6d512` and
+  Captain-authorized `origin/main` `1324c52bab0b224ed8958858af7676b8b8e191b4`.
+  The four true overlaps were commandrunner preflight, engine command model,
+  command-surface synthesis, and the generated certification subject. The
+  resolution retains both #4351 declaration admission and #4356 source-bound
+  origin/route contracts; the subject was regenerated. An automatic merge
+  duplicate config parse in `internal/cli/cli.go` was removed because the new
+  request preflight already parses that exact flag set.
+- **Integration red/green:** the full `./cmd/connectorgen` red result was
+  `proved endpoint aliases = 246 non-GraphQL and 4 GraphQL, want 243 and 4`.
+  The three newly admitted source-bound aliases are expected on this #4356
+  surface, so the exact-fleet assertion was updated to `246/4`; the complete
+  package then passed in `165.432s`.
+- **Current-main green evidence:** `engine` (11.401s), `commandrunner`
+  (21.479s), `app` (269.692s), `cli` (426.131s), Asana defs (5.067s), and
+  defs (2.013s) passed. Source import verified 249 Asana operations;
+  validation checked 553 connectors with zero findings; surface sync made zero
+  corrections; operation evidence is current at 1,774 rows / five rollups
+  with fixed-100 passed. Declaration admission, runtime preflight, canon,
+  connector boundary, docs, website scripts, certification subject/matrix/
+  candidates/sweep, affected `go vet`, tidy, and lint passed.
+- **Current-main binary proof:** rebuilt `pm`, initialized a fresh project with
+  no credential, supplied only non-secret fixture values for required command
+  flags, and invoked every 212 `implemented` Asana command serially. Every
+  invocation exited 1 at `missing --credential` (`212/212`, zero failures),
+  before provider I/O.
+- **Machine constraint:** `npm --prefix website run typecheck` could not start
+  because `tsc` is absent. Aggregate `go test ./...` and `make verify` were
+  not run: the repository contract directs this runner to serial changed
+  packages and individual gates; CI owns the aggregate suite.
 
 ## Lifecycle
 

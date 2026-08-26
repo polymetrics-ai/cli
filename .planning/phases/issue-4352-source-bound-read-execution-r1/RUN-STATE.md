@@ -126,3 +126,22 @@ not a blocking dependency for this source-bound preflight.
 | The approved #4351 foundation is in this existing PR branch | live | `git merge-base HEAD origin/main` equals `1324c52...`; before integration it was `b339839...`, so the new foundation was absent. |
 | Existing source-bound behavior retains its credential boundary | live | A freshly built `pm` in an isolated project runs every implemented Asana command and each returns `missing --credential`, rather than a provider result or unknown-command failure. |
 | Delete, ETL, and generated source contracts remain valid | live | Affected Go suites and source-import/validate/surface-sync/operation-evidence/runtime-preflight/canon checks pass after the merge. |
+
+## Current-main integration result — 2026-08-27
+
+Normal merge commit `114a4e3f4` integrates
+`1324c52bab0b224ed8958858af7676b8b8e191b4` without force push or PR merge.
+Four genuine overlaps were resolved by retaining both contracts: #4351
+declaration admission/foundation metadata and #4356 source-bound operation
+identity/origin preflight. The certification subject was regenerated. The sole
+automatic-merge compile issue was a redundant second CLI config parse, removed
+because `PreflightRequest` already parses the same flags. The full generator
+red/green count changed from 243 to 246 non-GraphQL admitted aliases (GraphQL
+remains four) and passed on rerun.
+
+All requested local source-bound read/delete/ETL gates are green, including
+the fresh `212/212` built-binary Asana `missing --credential` census. Website
+typecheck is not runnable locally because `tsc` is absent; aggregate
+`go test ./...` and `make verify` are intentionally left to CI. Next: commit
+this evidence checkpoint, non-force push only to the existing #4356 branch,
+verify remote head/base, then leave the PR open for the separate fresh audit.

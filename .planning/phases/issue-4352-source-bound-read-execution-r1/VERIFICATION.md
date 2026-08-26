@@ -56,9 +56,31 @@ Status: verified locally, pending PR automation and human gate.
 - [x] Red provenance: before integration this branch's merge-base with
   `origin/main` was `b33983927d863032dac8220949990506e812937d`, not the
   authorized #4351 main SHA `1324c52bab0b224ed8958858af7676b8b8e191b4`.
-- [ ] Green: current main is merged into the existing PR branch and the
-  isolated Asana built-binary census plus affected source-bound read/delete/ETL
-  and validation gates are recorded.
+- [x] Green: normal merge `114a4e3f4` has current `origin/main`
+  `1324c52bab0b224ed8958858af7676b8b8e191b4` as a parent. Four true conflicts
+  were compositionally resolved: #4351 admission/deferred metadata is retained
+  alongside #4356 source-operation identity and origin preflight; the
+  certification subject was regenerated. A merge-introduced redundant CLI
+  config parse was removed.
+- [x] The full `cmd/connectorgen` integration red (`246/4`, not `243/4`
+  endpoint aliases) was corrected as the expected #4356 source-bound surface;
+  the complete package passed in 165.432s. Engine (11.401s), commandrunner
+  (21.479s), App (269.692s), CLI (426.131s), Asana defs (5.067s), and defs
+  (2.013s) passed.
+- [x] Source import verified 249 Asana operations; validation checked 553
+  connectors with zero findings; surface sync had zero corrections; operation
+  evidence is current at 1,774 rows / five rollups with fixed-100 passed.
+  Declaration admission, runtime preflight, canon, connector boundary clean
+  (324 files / 553 connectors), agent-contract, docs, website-data generation,
+  website scripts (34/34), certification subject/matrix/candidates/sweep,
+  affected `go vet`, tidy, and lint all passed.
+- [x] Rebuilt `pm`, initialized one fresh credential-free project, and ran all
+  212 implemented Asana commands serially with only non-secret fixture values
+  for required flags: `212/212` exited 1 at `missing --credential`; zero
+  failures and no credential/provider use.
+- [ ] Website typecheck was attempted but not runnable (`tsc: command not
+  found`). Aggregate `go test ./...` and `make verify` remain CI-owned due the
+  per-command runner limit; they are not recorded as local passes.
 
 ## Final post-rebase repair run
 
