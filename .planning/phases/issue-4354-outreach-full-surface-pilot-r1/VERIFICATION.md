@@ -10,5 +10,6 @@
 - [ ] **Blocked:** `connectorgen validate` rejects `source_kind`; global operation evidence reports drift; the certification matrix says Outreach is not allowlisted; and certification sweep is missing. Exact commands/results are in `REVIEW.md`.
 - [ ] **Blocked:** website catalog lists Outreach but `cliSurface: null`; no hand-authored `docs/cli` page exists. This must be fixed after source admission.
 - [x] The generated Outreach skill and all nine root-help golden forms are current. A complete `go test -timeout 20m ./internal/cli` process completed, and the follow-up cache read returned `ok   polymetrics.ai/internal/cli (cached)`.
-- [ ] Pending final `git diff --check` and independent clean-worktree usability rerun after commit.
+- [x] Independent clean-worktree usability proof at detached `1d64e22ce` in `/Users/karthiksivadas/karthik-agent-workspace/worktrees/cli-outreach-pilot-audit-r1`: build, initialized isolated project, and ETL/write/delete no-credential commands pass; the fixture-only binary test passes in 43.036s.
+- [ ] Pending final `git diff --check` after recording the audit checkpoint.
 - [ ] Pending draft PR base readback/API title/delivery record after push.

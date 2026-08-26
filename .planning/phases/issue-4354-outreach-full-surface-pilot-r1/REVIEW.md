@@ -22,6 +22,7 @@
 - `go test -timeout 20m -v ./internal/connectors/commandrunner -run '^TestEveryImplementedCommandPassesRuntimePreflight$' -count=1`: pass (14.906s).
 - `go test -timeout 20m ./internal/cli`: complete; the final cache confirmation returned `ok   polymetrics.ai/internal/cli (cached)`.
 - `go run ./cmd/agentcontractgen check`: pass.
+- Independent detached worktree (`cli-outreach-pilot-audit-r1` at `1d64e22ce`): `go build -o /tmp/pm-outreach-pilot-audit ./cmd/pm`, an initialized empty project, representative ETL/write/delete commands all stopped at `missing --credential`, and the focused binary test passed in 43.036s.
 - Expected blocked checks are unchanged: `connectorgen validate …outreach --json` rejects `source_kind`; `operation-evidence . --check` reports global generated-artifact drift; certification matrix says Outreach is not allowlisted; certification sweep says its generated file is missing.
 
 ## Findings / disposition
