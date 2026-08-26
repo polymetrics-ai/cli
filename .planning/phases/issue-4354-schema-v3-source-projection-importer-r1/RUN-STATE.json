@@ -4,7 +4,7 @@
   "base": "main",
   "branch": "feat/4354-schema-v3-source-projection",
   "delivery": "direct-pr",
-  "status": "pr_open_automated_review_pending",
+  "status": "pr_repair_pushed_ci_and_audit_pending",
   "gsd": {
     "mode": "inline-manual-fallback",
     "commands_resolved": [
@@ -22,8 +22,10 @@
     "base": "main",
     "head": "feat/4354-schema-v3-source-projection",
     "head_sha_at_creation": "cdaf4849eee5da74998dc097eb60d6ba7d81b7cd",
+    "repair_sha": "013c997d158542457406f30b7d1b096d5cd794fa",
     "review_route": "claude_auto",
     "review_status": "pending"
   },
-  "constraint": "The candidate Outreach lock enumerates two provider documents but neither exact raw source artifact is retained in the candidate, current main, or local Git object store. Byte-backed import remains strict and cannot fetch, re-pin, or substitute derived bytes. The active slice adds an explicit declaration-only source-reference path that preserves canonical URLs and operation identities without claiming byte-backed import, credential validity, certification, or executability."
+  "constraint": "The candidate Outreach lock enumerates two provider documents but neither exact raw source artifact is retained in the candidate, current main, or local Git object store. Byte-backed import remains strict and cannot fetch, re-pin, or substitute derived bytes. The active slice adds an explicit declaration-only source-reference path that preserves canonical URLs and operation identities without claiming byte-backed import, credential validity, certification, or executability.",
+  "verify_repair": "Verify runs 32978972653 and 32978973162 exposed a stale line-layout help assertion, not an importer regression. Commit 013c997d158542457406f30b7d1b096d5cd794fa strengthens the contract assertion; focused red/green, full cmd/connectorgen, scoped vet, and diff checks passed before normal push."
 }

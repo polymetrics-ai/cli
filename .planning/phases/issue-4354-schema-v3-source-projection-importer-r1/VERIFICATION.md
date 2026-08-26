@@ -67,10 +67,9 @@ reclassify, or promote those rows.
 
 - [ ] Full `go test -timeout 20m ./...`: CI authority. The local command is
   intentionally not used as one aggregate per repository guidance.
-- [ ] Complete `go test ./cmd/connectorgen` aggregate: started locally, but the
-  execution harness returned at its 30-second collection boundary before it
-  supplied an exit status. Focused and retained-artifact subsets above passed;
-  this aggregate is not claimed as a pass.
+- [x] Complete `go test -timeout 20m ./cmd/connectorgen -count=1`: the attached
+  repair verification completed with exit 0 in `146.529s` after the
+  source-import help-contract assertion was corrected.
 - [ ] Live Outreach/provider certification, credential use, or provider calls:
   prohibited and not attempted.
 - [ ] A built-binary credential-boundary proof: not applicable because usable
@@ -112,3 +111,15 @@ reclassify, or promote those rows.
 - Fallback: none unless the automatic review is skipped, fails, or is
   unavailable; then record the exact blocker before considering one backup
   route.
+
+## Verify repair follow-up
+
+- GitHub Verify runs `32978972653` and `32978973162` failed only because the
+  historical help test asserted a layout-sensitive contiguous `retained
+  artifact` string. The importer itself remained correct and strict.
+- The repair commit `013c997d158542457406f30b7d1b096d5cd794fa` asserts the
+  substantive byte-backed and declaration-only source-reference contracts,
+  plus the precise non-executable `source_contract_unavailable` gap.
+- Focused red, focused green, full `cmd/connectorgen`, scoped vet, and diff
+  checks passed; the repair was pushed normally. A fresh CI run and independent
+  audit remain pending for the repaired head.
