@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "connector": "outreach",
+  "status": "candidate_inventory_imported_source_admission_blocked",
+  "source_inventory": {
+    "operation_count": 259,
+    "document_count": 2,
+    "documents": [
+      {
+        "role": "primary_machine_readable_openapi",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+        "sha256": "d1f697f6558fda68cd6d8059044e323c20849aeebf303e15c43e0eb9875e2ef6",
+        "bytes": 1384297,
+        "openapi_version": "3.0.3",
+        "operation_count": 253
+      },
+      {
+        "role": "rendered_dynamic_custom_objects_supplement",
+        "source_url": "https://developers.outreach.io/api/custom-objects",
+        "source_location": "Custom Objects via API: generic CRUD endpoint declaration",
+        "sha256": "2e74714a933b74cb9a83ddbdb18eeb0b9d045115102ed7465021a45db19e3dda",
+        "bytes": 422602,
+        "operation_count": 6
+      }
+    ],
+    "method_counts": {
+      "DELETE": 36,
+      "GET": 96,
+      "POST": 93,
+      "PATCH": 34
+    },
+    "operation_lock": "outreach-operation-source-lock.json",
+    "disposition": "outreach-declaration-disposition.json"
+  },
+  "lanes": [
+    {
+      "lane": "etl",
+      "source_operation_count": 96,
+      "command_count": 96,
+      "runtime_state": "implemented_preflight_reached",
+      "evidence": "Every provider GET is mapped to an ETL stream and an implemented CLI command; fixture proof covers `outreach prospects list`."
+    },
+    {
+      "lane": "reverse_etl",
+      "source_operation_count": 0,
+      "command_count": 163,
+      "runtime_state": "explicitly_not_source_claimed_declaration_pending",
+      "evidence": "The CLI labels the 163 typed write commands as reverse_etl, but the disposition classifies their provider operations as direct_write and records reverse-ETL eligibility as declaration-pending because there is no action-owned source evidence for per-record acknowledgement and read-back. This evidence does not promote them to a source-validated reverse-ETL lane."
+    },
+    {
+      "lane": "direct_read",
+      "source_operation_count": 0,
+      "command_count": 0,
+      "runtime_state": "not_applicable",
+      "evidence": "All 96 provider GET operations are ETL streams. The imported provider inventory declares no independent page-wise direct-read operation, so none is fabricated."
+    },
+    {
+      "lane": "direct_write",
+      "source_operation_count": 163,
+      "typed_write_action_count": 163,
+      "command_count": 163,
+      "runtime_state": "implemented_preflight_reached_source_admission_blocked",
+      "evidence": "POST/PATCH/DELETE operations have exact typed writes.json method/path contracts and implemented command bindings. `delete account apply` represents 36 documented destructive DELETE operations without a safety exclusion."
+    },
+    {
+      "lane": "binary_download",
+      "source_operation_count": 0,
+      "command_count": 0,
+      "runtime_state": "not_applicable",
+      "evidence": "The pinned OpenAPI document and custom-object supplement enumerate JSON:API operations only; no binary-download operation is captured."
+    },
+    {
+      "lane": "binary_upload",
+      "source_operation_count": 0,
+      "command_count": 0,
+      "runtime_state": "not_applicable",
+      "evidence": "The pinned OpenAPI document and custom-object supplement enumerate JSON:API operations only; no binary-upload operation is captured."
+    }
+  ],
+  "command_state": {
+    "canonical_command_count": 259,
+    "availability": {
+      "implemented": 259,
+      "partial": 0,
+      "declared": 0,
+      "deferred": 0
+    },
+    "non_executable_cli_rows": [],
+    "qualification": "This is a command-surface declaration count, not a source-admission, hash-certification, live-certification, or provider-success claim."
+  },
+  "source_admission": {
+    "validator_accepted": false,
+    "blocking_checks": [
+      {
+        "command": "go run ./cmd/connectorgen validate internal/connectors/defs/outreach --json",
+        "result": "parse source lock: json: unknown field source_kind"
+      },
+      {
+        "command": "go run ./cmd/connectorgen source-import outreach --out /tmp/outreach-source-descriptor.json --check",
+        "result": "parse source lock: json: unknown field source_kind"
+      },
+      {
+        "command": "go run ./cmd/connectorgen surface-sync <isolated-outreach-defs-root> --check",
+        "result": "outreach source projection: canonical source descriptor is missing"
+      }
+    ],
+    "missing_candidate_artifacts": [
+      "sources/outreach-operation-descriptor.json",
+      "sources/outreach-source-artifacts.json",
+      "retained primary and rendered source bytes required to reconstruct a source-backed descriptor without refetching"
+    ],
+    "shared_foundation_dependency": {
+      "pr": "https://github.com/polymetrics-ai/cli/pull/4350",
+      "scope": "schema-v3 source-evidence reader, citation rendering, and wrong-source classification",
+      "rule": "No shared reader, validator, generator, or schema change is made in this connector pilot; every candidate row remains retained."
+    }
+  },
+  "runtime_fixture_proof": {
+    "test": "internal/cli/outreach_full_surface_pilot_test.go",
+    "credential_boundary": [
+      "outreach prospects list",
+      "outreach create account note apply --data <fixture-json>",
+      "outreach delete account apply --id fixture-account --confirm destructive"
+    ],
+    "source_binding": "A local httptest server observes exactly GET /api/v2/prospects. Caller-supplied --method, --path, and --source-url are rejected before a request."
+  }
+}

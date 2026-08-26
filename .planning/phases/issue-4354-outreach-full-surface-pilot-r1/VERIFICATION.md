@@ -1,13 +1,14 @@
 # Verification checklist — #4354
 
-- [ ] Candidate-to-main delta contains only seven Outreach artifact paths before any local correction.
-- [ ] Source lock, declaration disposition, API surface and CLI surface reconcile on every captured operation.
-- [ ] Six-lane counts/evidence are recorded, including explicit zero/not-applicable binary lanes when warranted.
-- [ ] Existing source-evidence validation result is captured; any schema-v3 block identifies PR #4350 and is not bypassed.
-- [ ] Focused red/green tests are recorded with observable assertions.
-- [ ] `pm` builds and representative valid ETL, direct-write/reverse-ETL, and delete paths reach `missing --credential` through fixture transport.
-- [ ] Wrong source identity/method/path is rejected pre-request.
-- [ ] Connector validation, surface sync, certification/evidence and scoped tests pass or are truthfully reported as blocked.
-- [ ] CLI help/manual/website parity is verified or marked inapplicable with evidence.
-- [ ] `git diff --check` and independent clean-worktree usability pass.
-- [ ] PR base API readback equals `main`; PR has a Conventional Commit title and complete delivery record.
+- [x] Candidate-to-main delta contains exactly seven Outreach artifact paths: `api_surface.json`, `cli_surface.json`, `docs.md`, custom-object audit, declaration disposition, source lock, and `sync_transport.json`.
+- [ ] **Blocked:** source lock/disposition/API/CLI reconciliation is not validator-admitted. Strict source import rejects `source_kind`; the canonical descriptor and retained artifacts are absent. All 259 candidate rows are retained.
+- [x] Six-lane evidence is recorded in `internal/connectors/defs/outreach/sources/outreach-six-lane-evidence.json`: ETL 96, direct-write 163, reverse-ETL 0 provider-class rows/declaration-pending, direct-read 0 N/A, binary download 0 N/A, binary upload 0 N/A.
+- [x] Existing source-evidence failure is captured with PR #4350 as the shared owner and no bypass.
+- [x] Focused red/green evidence is recorded in `TDD-LEDGER.md`; focused binary tests, generated Outreach skill currentness, and updated root-help golden transcript pass.
+- [x] `pm` build and representative valid ETL, typed-write/reverse-ETL label, and destructive delete reach `missing --credential` in an isolated fixture-only project.
+- [x] A local `httptest` proof rejects caller `--method`, `--path`, and `--source-url` before a request, then observes exactly `GET /api/v2/prospects` for the valid command.
+- [ ] **Blocked:** `connectorgen validate` rejects `source_kind`; global operation evidence reports drift; the certification matrix says Outreach is not allowlisted; and certification sweep is missing. Exact commands/results are in `REVIEW.md`.
+- [ ] **Blocked:** website catalog lists Outreach but `cliSurface: null`; no hand-authored `docs/cli` page exists. This must be fixed after source admission.
+- [x] The generated Outreach skill and all nine root-help golden forms are current. A complete `go test -timeout 20m ./internal/cli` process completed, and the follow-up cache read returned `ok   polymetrics.ai/internal/cli (cached)`.
+- [ ] Pending final `git diff --check` and independent clean-worktree usability rerun after commit.
+- [ ] Pending draft PR base readback/API title/delivery record after push.

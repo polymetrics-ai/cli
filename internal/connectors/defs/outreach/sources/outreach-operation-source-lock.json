@@ -1,0 +1,2636 @@
+{
+  "schema_version": 2,
+  "connector": "outreach",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+    "source_kind": "complete_machine_readable_specification_with_rendered_dynamic_supplement",
+    "sha256": "d1f697f6558fda68cd6d8059044e323c20849aeebf303e15c43e0eb9875e2ef6",
+    "bytes": 1384297,
+    "openapi": "3.0.3",
+    "info_version": "Outreach REST API v2 (https://api.outreach.io/api/v2)",
+    "operation_counts": {
+      "DELETE": 36,
+      "GET": 96,
+      "POST": 93,
+      "PATCH": 34
+    },
+    "supplements": [
+      {
+        "source_url": "https://developers.outreach.io/api/custom-objects",
+        "source_location": "Custom Objects via API: generic CRUD endpoint declaration",
+        "operation_count": 6,
+        "bytes": 422602,
+        "sha256": "2e74714a933b74cb9a83ddbdb18eeb0b9d045115102ed7465021a45db19e3dda"
+      }
+    ],
+    "operations": [
+      {
+        "id": "outreach.rest.delete.ApiV2AccountNotesId0",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/accountNotes/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/accountNotes/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2AccountsId1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/accounts/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2CallDispositionsId2",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/callDispositions/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/callDispositions/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2CallPurposesId3",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/callPurposes/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/callPurposes/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2CallsId4",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/calls/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/calls/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2ContentCategoriesId5",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/contentCategories/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/contentCategories/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2ContentCategoryMembershipsId6",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/contentCategoryMemberships/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/contentCategoryMemberships/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2ContentCategoryOwnershipsId7",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/contentCategoryOwnerships/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/contentCategoryOwnerships/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2CustomObjectsObjectNameId8",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/customObjects/{objectName}/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "Custom Objects via API: generic CRUD endpoint declaration",
+        "source_url": "https://developers.outreach.io/api/custom-objects"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2EmailAddressesId9",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/emailAddresses/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/emailAddresses/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2FavoritesId10",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/favorites/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/favorites/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2MailboxesId11",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/mailboxes/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/mailboxes/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2OpportunitiesId12",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/opportunities/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/opportunities/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2OpportunityProspectRolesId13",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/opportunityProspectRoles/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/opportunityProspectRoles/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2OpportunityStagesId14",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/opportunityStages/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/opportunityStages/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2PersonasId15",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/personas/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/personas/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2PhoneNumbersId16",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/phoneNumbers/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/phoneNumbers/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2ProductsId17",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/products/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/products/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2ProfilesId18",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/profiles/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/profiles/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2ProspectNotesId19",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/prospectNotes/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/prospectNotes/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2ProspectsId20",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/prospects/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/prospects/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2PurchasesId21",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/purchases/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/purchases/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2RecipientsId22",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/recipients/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/recipients/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2RolesId23",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/roles/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/roles/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2RulesetsId24",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/rulesets/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/rulesets/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2SequencesId25",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/sequences/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequences/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2SequenceStatesId26",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/sequenceStates/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequenceStates/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2SequenceTemplatesId27",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/sequenceTemplates/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequenceTemplates/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2SnippetsId28",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/snippets/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/snippets/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2StagesId29",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/stages/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/stages/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2TaskDispositionsId30",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/taskDispositions/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/taskDispositions/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2TaskPurposesId31",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/taskPurposes/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/taskPurposes/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2TasksId32",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/tasks/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/tasks/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2TeamsId33",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/teams/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/teams/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2TemplatesId34",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/templates/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/templates/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.delete.ApiV2WebhooksId35",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/api/v2/webhooks/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/webhooks/{id}\"].delete",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2AccountNotes36",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accountNotes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/accountNotes\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2AccountNotesId37",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accountNotes/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/accountNotes/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Accounts38",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/accounts\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2AccountsId39",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/accounts/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/accounts/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2AuditLogs40",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/auditLogs",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/auditLogs\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Batches41",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/batches",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2BatchesId42",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/batches/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2BatchItems43",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/batchItems",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batchItems\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2BatchItemsId44",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/batchItems/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batchItems/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2CallDispositions45",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/callDispositions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/callDispositions\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2CallDispositionsId46",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/callDispositions/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/callDispositions/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2CallPurposes47",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/callPurposes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/callPurposes\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2CallPurposesId48",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/callPurposes/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/callPurposes/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Calls49",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/calls",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/calls\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2CallsId50",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/calls/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/calls/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2ComplianceRequests51",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/complianceRequests",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/complianceRequests\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2ComplianceRequestsId52",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/complianceRequests/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/complianceRequests/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2ContentCategories53",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/contentCategories",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/contentCategories\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2ContentCategoriesId54",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/contentCategories/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/contentCategories/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2ContentCategoryMemberships55",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/contentCategoryMemberships",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/contentCategoryMemberships\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2ContentCategoryMembershipsId56",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/contentCategoryMemberships/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/contentCategoryMemberships/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2ContentCategoryOwnerships57",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/contentCategoryOwnerships",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/contentCategoryOwnerships\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2CustomObjectsObjectName58",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/customObjects/{objectName}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "Custom Objects via API: generic CRUD endpoint declaration",
+        "source_url": "https://developers.outreach.io/api/custom-objects"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2CustomObjectsObjectNameId59",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/customObjects/{objectName}/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "Custom Objects via API: generic CRUD endpoint declaration",
+        "source_url": "https://developers.outreach.io/api/custom-objects"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Duties60",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/duties",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/duties\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2EmailAddresses61",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/emailAddresses",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/emailAddresses\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2EmailAddressesId62",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/emailAddresses/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/emailAddresses/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Events63",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/events",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/events\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2EventsId64",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/events/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/events/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Favorites65",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/favorites",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/favorites\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2FavoritesId66",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/favorites/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/favorites/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2ImportsId67",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/imports/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/imports/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2KaiaRecordings68",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/kaiaRecordings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/kaiaRecordings\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2KaiaRecordingsId69",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/kaiaRecordings/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/kaiaRecordings/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2MailAliases70",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/mailAliases",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/mailAliases\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2MailAliasesId71",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/mailAliases/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/mailAliases/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Mailboxes72",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/mailboxes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/mailboxes\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2MailboxesId73",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/mailboxes/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/mailboxes/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Mailings74",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/mailings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/mailings\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2MailingsId75",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/mailings/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/mailings/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Opportunities76",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/opportunities",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/opportunities\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2OpportunitiesId77",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/opportunities/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/opportunities/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2OpportunityProspectRoles78",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/opportunityProspectRoles",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/opportunityProspectRoles\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2OpportunityProspectRolesId79",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/opportunityProspectRoles/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/opportunityProspectRoles/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2OpportunityStages80",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/opportunityStages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/opportunityStages\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2OpportunityStagesId81",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/opportunityStages/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/opportunityStages/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2OrgSettingsId82",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/orgSettings/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/orgSettings/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Personas83",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/personas",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/personas\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2PersonasId84",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/personas/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/personas/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2PhoneNumbers85",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/phoneNumbers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/phoneNumbers\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2PhoneNumbersId86",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/phoneNumbers/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/phoneNumbers/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Products87",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/products",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/products\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2ProductsId88",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/products/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/products/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Profiles89",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/profiles",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/profiles\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2ProfilesId90",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/profiles/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/profiles/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2ProspectNotes91",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/prospectNotes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/prospectNotes\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2ProspectNotesId92",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/prospectNotes/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/prospectNotes/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Prospects93",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/prospects",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/prospects\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2ProspectsId94",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/prospects/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/prospects/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Purchases95",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/purchases",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/purchases\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2PurchasesId96",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/purchases/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/purchases/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Recipients97",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/recipients",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/recipients\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2RecipientsId98",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/recipients/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/recipients/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Roles99",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/roles",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/roles\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2RolesId100",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/roles/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/roles/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Rulesets101",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/rulesets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/rulesets\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2RulesetsId102",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/rulesets/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/rulesets/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Schema103",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/schema",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "Custom Objects via API: generic CRUD endpoint declaration",
+        "source_url": "https://developers.outreach.io/api/custom-objects"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Sequences104",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/sequences",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequences\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2SequencesId105",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/sequences/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequences/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2SequenceStates106",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/sequenceStates",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequenceStates\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2SequenceStatesId107",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/sequenceStates/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequenceStates/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2SequenceSteps108",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/sequenceSteps",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequenceSteps\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2SequenceStepsId109",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/sequenceSteps/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequenceSteps/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2SequenceTemplates110",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/sequenceTemplates",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequenceTemplates\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2SequenceTemplatesId111",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/sequenceTemplates/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequenceTemplates/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Snippets112",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/snippets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/snippets\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2SnippetsId113",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/snippets/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/snippets/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Stages114",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/stages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/stages\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2StagesId115",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/stages/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/stages/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2TaskDispositions116",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/taskDispositions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/taskDispositions\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2TaskDispositionsId117",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/taskDispositions/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/taskDispositions/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2TaskPriorities118",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/taskPriorities",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/taskPriorities\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2TaskPrioritiesId119",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/taskPriorities/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/taskPriorities/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2TaskPurposes120",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/taskPurposes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/taskPurposes\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2TaskPurposesId121",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/taskPurposes/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/taskPurposes/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Tasks122",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/tasks",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/tasks\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2TasksId123",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/tasks/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/tasks/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Teams124",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/teams",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/teams\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2TeamsId125",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/teams/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/teams/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Templates126",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/templates",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/templates\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2TemplatesId127",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/templates/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/templates/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Users128",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/users\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2UsersId129",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/users/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/users/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2Webhooks130",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/webhooks",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/webhooks\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.get.ApiV2WebhooksId131",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/api/v2/webhooks/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/webhooks/{id}\"].get",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2AccountNotes132",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accountNotes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/accountNotes\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Accounts133",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/accounts",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/accounts\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesIdActionsCancel134",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/{id}/actions/cancel",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/{id}/actions/cancel\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesIdActionsConfirm135",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/{id}/actions/confirm",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/{id}/actions/confirm\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsAccountAddTags136",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/accountAddTags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/accountAddTags\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsAccountsAddAssignments137",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/accountsAddAssignments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/accountsAddAssignments\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsAccountsAssignOwner138",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/accountsAssignOwner",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/accountsAssignOwner\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsAccountsBulkModify139",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/accountsBulkModify",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/accountsBulkModify\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsAccountsDestroyAll140",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/accountsDestroyAll",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/accountsDestroyAll\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsAccountsRemoveAllAssignments141",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/accountsRemoveAllAssignments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/accountsRemoveAllAssignments\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsAccountsRemoveAssignments142",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/accountsRemoveAssignments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/accountsRemoveAssignments\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsAccountsRemoveTags143",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/accountsRemoveTags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/accountsRemoveTags\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsCustomObjectBulkDelete144",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/customObjectBulkDelete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/customObjectBulkDelete\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsCustomObjectBulkModify145",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/customObjectBulkModify",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/customObjectBulkModify\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsProspectsAddAssignments146",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/prospectsAddAssignments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/prospectsAddAssignments\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsProspectsAddTags147",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/prospectsAddTags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/prospectsAddTags\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsProspectsAddToSequence148",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/prospectsAddToSequence",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/prospectsAddToSequence\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsProspectsAssignAccount149",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/prospectsAssignAccount",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/prospectsAssignAccount\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsProspectsAssignOpportunity150",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/prospectsAssignOpportunity",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/prospectsAssignOpportunity\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsProspectsAssignOwner151",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/prospectsAssignOwner",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/prospectsAssignOwner\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsProspectsBulkModify152",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/prospectsBulkModify",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/prospectsBulkModify\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsProspectsDestroyAll153",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/prospectsDestroyAll",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/prospectsDestroyAll\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsProspectsFinishAll154",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/prospectsFinishAll",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/prospectsFinishAll\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsProspectsPauseAll155",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/prospectsPauseAll",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/prospectsPauseAll\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsProspectsRemoveAllAssignments156",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/prospectsRemoveAllAssignments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/prospectsRemoveAllAssignments\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsProspectsRemoveAssignments157",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/prospectsRemoveAssignments",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/prospectsRemoveAssignments\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2BatchesActionsProspectsRemoveTags158",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/batches/actions/prospectsRemoveTags",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/batches/actions/prospectsRemoveTags\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2CallDispositions159",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/callDispositions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/callDispositions\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2CallPurposes160",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/callPurposes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/callPurposes\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Calls161",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/calls",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/calls\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2ComplianceRequests162",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/complianceRequests",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/complianceRequests\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2ContentCategories163",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/contentCategories",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/contentCategories\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2ContentCategoryMemberships164",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/contentCategoryMemberships",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/contentCategoryMemberships\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2ContentCategoryOwnerships165",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/contentCategoryOwnerships",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/contentCategoryOwnerships\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2CustomDuties166",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/customDuties",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/customDuties\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2CustomObjectsObjectName167",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/customObjects/{objectName}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "Custom Objects via API: generic CRUD endpoint declaration",
+        "source_url": "https://developers.outreach.io/api/custom-objects"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2EmailAddresses168",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/emailAddresses",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/emailAddresses\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Favorites169",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/favorites",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/favorites\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2ImportsActionsAccountsImport170",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/imports/actions/accountsImport",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/imports/actions/accountsImport\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2ImportsActionsBulkUpsert171",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/imports/actions/bulkUpsert",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/imports/actions/bulkUpsert\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2ImportsActionsCustomObjectBulkUpsert172",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/imports/actions/customObjectBulkUpsert",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/imports/actions/customObjectBulkUpsert\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2ImportsActionsGenerateUploadLink173",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/imports/actions/generateUploadLink",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/imports/actions/generateUploadLink\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2ImportsActionsProspectsImport174",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/imports/actions/prospectsImport",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/imports/actions/prospectsImport\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2ImportsActionsValidateUpload175",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/imports/actions/validateUpload",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/imports/actions/validateUpload\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2KaiaVoiceImports176",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/kaiaVoiceImports",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/kaiaVoiceImports\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Mailboxes177",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/mailboxes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/mailboxes\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2MailboxesIdActionsLinkEwsMasterAccount178",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/mailboxes/{id}/actions/linkEwsMasterAccount",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/mailboxes/{id}/actions/linkEwsMasterAccount\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2MailboxesIdActionsTestSend179",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/mailboxes/{id}/actions/testSend",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/mailboxes/{id}/actions/testSend\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2MailboxesIdActionsTestSync180",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/mailboxes/{id}/actions/testSync",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/mailboxes/{id}/actions/testSync\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2MailboxesIdActionsUnlinkEwsMasterAccount181",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/mailboxes/{id}/actions/unlinkEwsMasterAccount",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/mailboxes/{id}/actions/unlinkEwsMasterAccount\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Mailings182",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/mailings",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/mailings\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Opportunities183",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/opportunities",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/opportunities\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2OpportunityProspectRoles184",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/opportunityProspectRoles",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/opportunityProspectRoles\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2OpportunityStages185",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/opportunityStages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/opportunityStages\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Personas186",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/personas",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/personas\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2PhoneNumbers187",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/phoneNumbers",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/phoneNumbers\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Products188",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/products",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/products\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Profiles189",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/profiles",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/profiles\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2ProspectNotes190",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/prospectNotes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/prospectNotes\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Prospects191",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/prospects",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/prospects\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Purchases192",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/purchases",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/purchases\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Recipients193",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/recipients",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/recipients\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Roles194",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/roles",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/roles\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Rulesets195",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/rulesets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/rulesets\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Sequences196",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/sequences",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequences\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2SequencesIdActionsActivate197",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/sequences/{id}/actions/activate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequences/{id}/actions/activate\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2SequencesIdActionsDeactivate198",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/sequences/{id}/actions/deactivate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequences/{id}/actions/deactivate\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2SequenceStates199",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/sequenceStates",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequenceStates\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2SequenceStatesIdActionsFinish200",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/sequenceStates/{id}/actions/finish",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequenceStates/{id}/actions/finish\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2SequenceStatesIdActionsPause201",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/sequenceStates/{id}/actions/pause",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequenceStates/{id}/actions/pause\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2SequenceStatesIdActionsResume202",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/sequenceStates/{id}/actions/resume",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequenceStates/{id}/actions/resume\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2SequenceSteps203",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/sequenceSteps",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequenceSteps\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2SequenceTemplates204",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/sequenceTemplates",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequenceTemplates\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2SequenceTemplatesIdActionsActivate205",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/sequenceTemplates/{id}/actions/activate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequenceTemplates/{id}/actions/activate\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2SequenceTemplatesIdActionsDeactivate206",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/sequenceTemplates/{id}/actions/deactivate",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequenceTemplates/{id}/actions/deactivate\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Snippets207",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/snippets",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/snippets\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Stages208",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/stages",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/stages\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2TaskDispositions209",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/taskDispositions",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/taskDispositions\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2TaskPurposes210",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/taskPurposes",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/taskPurposes\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Tasks211",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/tasks",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/tasks\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2TasksIdActionsAdvance212",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/tasks/{id}/actions/advance",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/tasks/{id}/actions/advance\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2TasksIdActionsDeliver213",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/tasks/{id}/actions/deliver",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/tasks/{id}/actions/deliver\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2TasksIdActionsLogMeetInPerson214",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/tasks/{id}/actions/logMeetInPerson",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/tasks/{id}/actions/logMeetInPerson\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2TasksIdActionsMarkComplete215",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/tasks/{id}/actions/markComplete",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/tasks/{id}/actions/markComplete\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2TasksIdActionsReassignOwner216",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/tasks/{id}/actions/reassignOwner",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/tasks/{id}/actions/reassignOwner\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2TasksIdActionsReschedule217",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/tasks/{id}/actions/reschedule",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/tasks/{id}/actions/reschedule\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2TasksIdActionsSnooze218",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/tasks/{id}/actions/snooze",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/tasks/{id}/actions/snooze\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2TasksIdActionsUpdateNote219",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/tasks/{id}/actions/updateNote",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/tasks/{id}/actions/updateNote\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2TasksIdActionsUpdateOpportunityAssociation220",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/tasks/{id}/actions/updateOpportunityAssociation",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/tasks/{id}/actions/updateOpportunityAssociation\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Teams221",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/teams",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/teams\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Templates222",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/templates",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/templates\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Users223",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/users",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/users\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.post.ApiV2Webhooks224",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/api/v2/webhooks",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/webhooks\"].post",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2AccountNotesId225",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/accountNotes/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/accountNotes/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2AccountsId226",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/accounts/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/accounts/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2CallDispositionsId227",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/callDispositions/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/callDispositions/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2CallPurposesId228",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/callPurposes/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/callPurposes/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2ContentCategoriesId229",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/contentCategories/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/contentCategories/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2CustomObjectsObjectNameId230",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/customObjects/{objectName}/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": "Custom Objects via API: generic CRUD endpoint declaration",
+        "source_url": "https://developers.outreach.io/api/custom-objects"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2EmailAddressesId231",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/emailAddresses/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/emailAddresses/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2MailboxesId232",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/mailboxes/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/mailboxes/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2OpportunitiesId233",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/opportunities/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/opportunities/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2OpportunityProspectRolesId234",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/opportunityProspectRoles/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/opportunityProspectRoles/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2OpportunityStagesId235",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/opportunityStages/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/opportunityStages/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2OrgSettingsId236",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/orgSettings/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/orgSettings/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2PersonasId237",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/personas/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/personas/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2PhoneNumbersId238",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/phoneNumbers/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/phoneNumbers/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2ProductsId239",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/products/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/products/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2ProfilesId240",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/profiles/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/profiles/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2ProspectNotesId241",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/prospectNotes/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/prospectNotes/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2ProspectsId242",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/prospects/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/prospects/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2PurchasesId243",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/purchases/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/purchases/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2RecipientsId244",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/recipients/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/recipients/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2RolesId245",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/roles/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/roles/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2RulesetsId246",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/rulesets/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/rulesets/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2SequencesId247",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/sequences/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequences/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2SequenceStepsId248",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/sequenceSteps/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequenceSteps/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2SequenceTemplatesId249",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/sequenceTemplates/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/sequenceTemplates/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2SnippetsId250",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/snippets/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/snippets/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2StagesId251",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/stages/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/stages/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2TaskDispositionsId252",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/taskDispositions/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/taskDispositions/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2TaskPurposesId253",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/taskPurposes/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/taskPurposes/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2TasksId254",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/tasks/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/tasks/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2TeamsId255",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/teams/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/teams/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2TemplatesId256",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/templates/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/templates/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2UsersId257",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/users/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/users/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      },
+      {
+        "id": "outreach.rest.patch.ApiV2WebhooksId258",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/api/v2/webhooks/{id}",
+        "operation_id": null,
+        "deprecated": false,
+        "source_location": ".paths[\"/webhooks/{id}\"].patch",
+        "source_url": "https://api.outreach.io/api/v2/schema/openapi.json"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 259,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 259
+  },
+  "operations_found": {
+    "rest": 259,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 259
+  },
+  "coverage_confidence": {
+    "level": "complete_machine_readable_specification_with_rendered_dynamic_supplement",
+    "basis": "Parsed every operation in the provider-published OpenAPI 3.0.3 document at https://api.outreach.io/api/v2/schema/openapi.json, then added the provider’s documented generic custom-object routes from https://developers.outreach.io/api/custom-objects. Outreach documents that per-account custom-object schemas are dynamic, while these six generic route shapes are fixed."
+  }
+}
