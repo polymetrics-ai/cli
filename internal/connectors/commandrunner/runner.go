@@ -2,6 +2,7 @@ package commandrunner
 
 import (
 	"context"
+	"crypto/sha256"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -15,6 +16,7 @@ import (
 	"strings"
 	"time"
 	"unicode"
+	"unicode/utf8"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/failures"
@@ -45,6 +47,11 @@ type Request struct {
 	DestRoot string
 	// FileName optionally names the downloaded file within DestRoot.
 	FileName string
+	// PlanContinuation permits already-planned required values to remain
+	// withheld while previewing or executing a persisted reverse plan. It does
+	// not relax unknown-flag, type, enum, format, size, range, cardinality, or
+	// effective-config validation, all of which still run before state lookup.
+	PlanContinuation bool
 }
 
 type Result struct {
@@ -99,6 +106,20 @@ type binaryUploadActionPreflighter interface {
 	PreflightBinaryUploadAction(name string) ([]connectors.BinaryUploadSource, error)
 }
 
+// deferredCommandPreflighter is the declaration-runtime seam for a command
+// that is intentionally not executable yet. It proves an honest exact target
+// before commandrunner returns missing_foundation, without resolving a
+// credential or making a provider request.
+type deferredCommandPreflighter interface {
+	PreflightDeferredCommand(connectors.CommandSurfaceCommand) error
+}
+
+// implementedCommandPreflighter is the engine-owned, lane-complete binding
+// resolver shared with declaration admission.
+type implementedCommandPreflighter interface {
+	PreflightImplementedCommand(connectors.CommandSurfaceCommand) error
+}
+
 // structuredJSONRecordPreflighter is deliberately narrower than a generic
 // JSON parser. The engine owns the raw record schema, so it alone decides
 // whether a named, top-level record field may accept one structured JSON
@@ -142,6 +163,25 @@ type MinimumFlagError struct {
 type MaximumFlagError struct {
 	Parameter string
 	Maximum   connectors.ExactNumber
+}
+
+// ConfiguredFlagValueError preserves the declaration and config key that
+// failed without exposing the configured value. The underlying typed error is
+// available to callers through Unwrap for classification, but Error remains a
+// safe public message for pre-credential CLI validation.
+type ConfiguredFlagValueError struct {
+	Command string
+	Flag    string
+	Target  string
+	err     error
+}
+
+func (e *ConfiguredFlagValueError) Error() string {
+	return fmt.Sprintf("configured value for config.%s (--%s) is invalid for command %q", e.Target, e.Flag, e.Command)
+}
+
+func (e *ConfiguredFlagValueError) Unwrap() error {
+	return e.err
 }
 
 func (e *MaximumFlagError) Error() string {
@@ -194,6 +234,25 @@ func (e *BlockedCommandError) Unwrap() error {
 func Preflight(connector connectors.Connector, path []string) error {
 	_, _, err := resolvePreflightCommand(connector, path)
 	return err
+}
+
+// PreflightRequest validates one public command invocation without credentials
+// and without calling an executor. It resolves the same executable command as
+// Preflight and shares the exact flag coercion/requiredness rules used while
+// constructing runtime requests.
+func PreflightRequest(connector connectors.Connector, req Request) error {
+	cmd, _, err := resolvePreflightCommand(connector, req.Path)
+	if err != nil {
+		return err
+	}
+	flags := req.Flags
+	if cmd.Intent == "direct_read" {
+		flags = withoutDirectReadPageFlags(flags)
+	}
+	if _, err := validateCommandFlagSetForPreflight(cmd, flags, req.PlanContinuation); err != nil {
+		return err
+	}
+	return validateConfiguredFlagValues(cmd, req.Config, flags)
 }
 
 func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req Request) (WriteCommand, error) {
@@ -444,22 +503,97 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	if !ok {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: "unknown command"}
 	}
-	if cmd.Availability == "implemented" {
-		if err := preflightStructuredJSONFlags(connector, cmd); err != nil {
+	if cmd.Availability == "unsupported_with_provider_evidence" {
+		if cmd.Unsupported == nil || strings.TrimSpace(cmd.Unsupported.Reason) == "" ||
+			strings.TrimSpace(cmd.Unsupported.Target.SourceID) == "" ||
+			strings.TrimSpace(cmd.Unsupported.Target.Method) == "" || strings.TrimSpace(cmd.Unsupported.Target.Path) == "" ||
+			cmd.Foundation != nil || cmd.Stream != "" || cmd.Write != "" || cmd.Operation != "" {
 			return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
-				Connector:    connector.Name(),
-				Command:      command,
-				Intent:       cmd.Intent,
-				Availability: cmd.Availability,
-				Reason:       err.Error(),
+				Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability,
+				Reason: "provider-evidenced unsupported command has invalid source disposition metadata",
 			}
+		}
+		return connectors.CommandSurfaceCommand{}, command, unsupportedCommandError(connector.Name(), command, cmd)
+	}
+	if cmd.Availability == "deferred" {
+		implemented := cmd
+		implemented.Availability = "implemented"
+		implemented.Foundation = nil
+		if _, err := preflightImplementedCommand(connector, implemented, command); err == nil {
+			return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+				Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability,
+				Reason: "deferred command is stale: the exact command passes implemented runtime preflight",
+			}
+		}
+		preflighter, supported := connector.(deferredCommandPreflighter)
+		if !supported {
+			return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+				Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability,
+				Reason: "connector does not expose exact deferred-command target preflight",
+			}
+		}
+		if err := preflighter.PreflightDeferredCommand(cmd); err != nil {
+			return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+				Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability,
+				Reason: fmt.Sprintf("deferred command target is not admissible: %v", err),
+			}
+		}
+		return connectors.CommandSurfaceCommand{}, command, deferredCommandError(connector.Name(), command, cmd)
+	}
+	if cmd.Availability == "implemented" {
+		implemented, err := preflightImplementedCommand(connector, cmd, command)
+		return implemented, command, err
+	}
+	return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+		Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: blockReason(cmd),
+	}
+}
+
+func unsupportedCommandError(connectorName, command string, cmd connectors.CommandSurfaceCommand) *BlockedCommandError {
+	reason := boundedFailureMessage(cmd.Unsupported.Reason, 700)
+	message := "provider-evidenced unsupported operation: " + reason
+	classification, err := failures.New(failures.Input{
+		Domain: failures.DomainSystem, Code: "provider_evidenced_unsupported", Message: message,
+		DispatchKind: failures.DispatchKindDeclaredButUnroutableCommand,
+		References: []failures.Reference{
+			{Kind: failures.ReferenceKindConnector, Value: boundedFailureReference(connectorName)},
+			{Kind: failures.ReferenceKindCommand, Value: boundedFailureReference(strings.ReplaceAll(command, " ", "_"))},
+			{Kind: failures.ReferenceKindSource, Value: boundedFailureReference(cmd.Unsupported.Target.SourceID)},
+		},
+	}, nil)
+	if err != nil {
+		classification, _ = failures.New(failures.Input{
+			Domain: failures.DomainSystem, Code: "provider_evidenced_unsupported", Message: "provider-evidenced operation is unsupported",
+			DispatchKind: failures.DispatchKindDeclaredButUnroutableCommand,
+		}, nil)
+	}
+	return &BlockedCommandError{
+		Connector: connectorName, Command: command, Intent: cmd.Intent, Availability: cmd.Availability,
+		Reason: message, Failure: classification,
+	}
+}
+
+// preflightImplementedCommand is the executable commandrunner contract. A
+// deferred row is tested through this exact helper before it may report a
+// missing foundation, preventing runnable commands from being relabelled.
+func preflightImplementedCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand, command string) (connectors.CommandSurfaceCommand, error) {
+	if preflighter, supported := connector.(implementedCommandPreflighter); supported {
+		if err := preflighter.PreflightImplementedCommand(cmd); err != nil {
+			return connectors.CommandSurfaceCommand{}, &BlockedCommandError{
+				Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability,
+				Reason: fmt.Sprintf("implemented command binding is not admissible: %v", err),
+			}
+		}
+	}
+	if err := preflightStructuredJSONFlags(connector, cmd); err != nil {
+		return connectors.CommandSurfaceCommand{}, &BlockedCommandError{
+			Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: err.Error(),
 		}
 	}
 	if cmd.Operation != "" && cmd.Intent != "binary_download" && cmd.Intent != "text_export" &&
 		cmd.Intent != "status_check" &&
-		(cmd.Intent != "direct_read" || cmd.Availability != "implemented") &&
-		(cmd.Intent != "direct_write" || cmd.Availability != "implemented") {
-		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+		cmd.Intent != "direct_read" && cmd.Intent != "direct_write" {
+		return connectors.CommandSurfaceCommand{}, &BlockedCommandError{
 			Connector:    connector.Name(),
 			Command:      command,
 			Intent:       cmd.Intent,
@@ -469,47 +603,47 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	}
 	if (cmd.Intent == "binary_download" || cmd.Intent == "text_export") && cmd.Availability == "implemented" {
 		if err := validateBinaryDownloadCommand(connector, cmd); err != nil {
-			return connectors.CommandSurfaceCommand{}, command, err
+			return connectors.CommandSurfaceCommand{}, err
 		}
-		return cmd, command, nil
+		return cmd, nil
 	}
 	if cmd.Intent == "status_check" && cmd.Availability == "implemented" {
 		if err := validateStatusCheckCommand(connector, cmd); err != nil {
-			return connectors.CommandSurfaceCommand{}, command, err
+			return connectors.CommandSurfaceCommand{}, err
 		}
-		return cmd, command, nil
+		return cmd, nil
 	}
 	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" && cmd.Operation != "" {
 		if err := validateOperationDirectReadCommand(connector, cmd); err != nil {
-			return connectors.CommandSurfaceCommand{}, command, err
+			return connectors.CommandSurfaceCommand{}, err
 		}
-		return cmd, command, nil
+		return cmd, nil
 	}
 	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
 		if err := validateDirectReadCommand(connector, cmd); err != nil {
-			return connectors.CommandSurfaceCommand{}, command, err
+			return connectors.CommandSurfaceCommand{}, err
 		}
-		return cmd, command, nil
+		return cmd, nil
 	}
 	if cmd.Intent == "direct_write" && cmd.Availability == "implemented" {
 		if err := validateOperationDirectWriteCommand(connector, cmd); err != nil {
-			return connectors.CommandSurfaceCommand{}, command, err
+			return connectors.CommandSurfaceCommand{}, err
 		}
-		return cmd, command, nil
+		return cmd, nil
 	}
 	if cmd.Intent == "etl" && cmd.Availability == "implemented" && cmd.Stream != "" {
-		return cmd, command, nil
+		return cmd, nil
 	}
 	if cmd.Intent == "binary_upload" && cmd.Availability == "implemented" && cmd.Write != "" {
 		if err := validateBinaryUploadCommand(connector, cmd); err != nil {
-			return connectors.CommandSurfaceCommand{}, command, err
+			return connectors.CommandSurfaceCommand{}, err
 		}
-		return cmd, command, nil
+		return cmd, nil
 	}
 	if cmd.Intent == "reverse_etl" && cmd.Availability == "implemented" && cmd.Write != "" {
 		if preflighter, ok := connector.(declarativeWritePreflighter); ok {
 			if err := preflighter.PreflightWriteAction(cmd.Write); err != nil {
-				return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+				return connectors.CommandSurfaceCommand{}, &BlockedCommandError{
 					Connector:    connector.Name(),
 					Command:      command,
 					Intent:       cmd.Intent,
@@ -518,15 +652,92 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 				}
 			}
 		}
-		return cmd, command, nil
+		return cmd, nil
 	}
-	return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+	return connectors.CommandSurfaceCommand{}, &BlockedCommandError{
 		Connector:    connector.Name(),
 		Command:      command,
 		Intent:       cmd.Intent,
 		Availability: cmd.Availability,
 		Reason:       blockReason(cmd),
 	}
+}
+
+func deferredCommandError(connectorName, command string, cmd connectors.CommandSurfaceCommand) *BlockedCommandError {
+	reason := "deferred command has no named missing foundation"
+	var failure *failures.Classification
+	if cmd.Foundation != nil && strings.TrimSpace(cmd.Foundation.ID) != "" && strings.TrimSpace(cmd.Foundation.Reason) != "" {
+		foundationID := boundedFailureIdentifier(cmd.Foundation.ID)
+		foundationReason := boundedFailureMessage(cmd.Foundation.Reason, 700)
+		reason = fmt.Sprintf("missing foundation %q: %s", foundationID, foundationReason)
+		classification, err := failures.New(failures.Input{
+			Domain:       failures.DomainSystem,
+			Code:         "missing_foundation",
+			Message:      reason,
+			DispatchKind: failures.DispatchKindDeclaredButUnroutableCommand,
+			References: []failures.Reference{
+				{Kind: failures.ReferenceKindConnector, Value: boundedFailureReference(connectorName)},
+				{Kind: failures.ReferenceKindCommand, Value: boundedFailureReference(strings.ReplaceAll(command, " ", "_"))},
+			},
+		}, nil)
+		if err != nil {
+			classification, _ = failures.New(failures.Input{
+				Domain: failures.DomainSystem, Code: "missing_foundation", Message: "missing declared foundation",
+				DispatchKind: failures.DispatchKindDeclaredButUnroutableCommand,
+			}, nil)
+		}
+		failure = classification
+	}
+	return &BlockedCommandError{
+		Connector: connectorName, Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: reason, Failure: failure,
+	}
+}
+
+func boundedFailureIdentifier(raw string) string {
+	value := strings.TrimSpace(safety.SanitizeTerminal(raw))
+	if value != "" && len(value) <= 128 && failureReferenceSafe(value) {
+		return value
+	}
+	return failureDigest(raw)
+}
+
+func boundedFailureReference(raw string) string {
+	value := strings.TrimSpace(safety.SanitizeTerminal(raw))
+	if value != "" && len(value) <= 256 && failureReferenceSafe(value) {
+		return value
+	}
+	return failureDigest(raw)
+}
+
+func boundedFailureMessage(raw string, maximum int) string {
+	value := strings.TrimSpace(safety.SanitizeTerminal(raw))
+	if value == "" {
+		return "declared foundation is unavailable"
+	}
+	for len(value) > maximum {
+		_, size := utf8.DecodeLastRuneInString(value)
+		if size <= 0 {
+			return "declared foundation is unavailable"
+		}
+		value = value[:len(value)-size]
+	}
+	return value
+}
+
+func failureReferenceSafe(value string) bool {
+	for _, character := range value {
+		if (character >= 'a' && character <= 'z') || (character >= 'A' && character <= 'Z') ||
+			(character >= '0' && character <= '9') || strings.ContainsRune("._:/-", character) {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
+func failureDigest(raw string) string {
+	digest := sha256.Sum256([]byte(raw))
+	return fmt.Sprintf("sha256-%x", digest[:12])
 }
 
 func validateBinaryUploadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
@@ -1065,6 +1276,24 @@ func commandPath(path []string) string {
 	return strings.Join(path, " ")
 }
 
+// CommandPathSegments parses a declaration-owned command path into the exact
+// segments commandrunner resolves. It rejects alternate whitespace spellings,
+// empty segments, and unsafe identifiers so a certification row cannot claim
+// a command that the runtime parser can never dispatch.
+func CommandPathSegments(raw string) ([]string, error) {
+	if raw == "" || raw != strings.TrimSpace(raw) {
+		return nil, fmt.Errorf("command path must be non-empty and trimmed")
+	}
+	parts := strings.Split(raw, " ")
+	if strings.Join(parts, " ") != raw {
+		return nil, fmt.Errorf("command path must use one ASCII space between segments")
+	}
+	if err := validateCommandPath(parts); err != nil {
+		return nil, err
+	}
+	return parts, nil
+}
+
 func validateCommandPath(path []string) error {
 	if len(path) == 0 {
 		return &BlockedCommandError{Reason: "missing command path"}
@@ -1117,17 +1346,8 @@ func blockReason(cmd connectors.CommandSurfaceCommand) string {
 }
 
 func streamOverrides(cmd connectors.CommandSurfaceCommand, cfg connectors.RuntimeConfig, flags map[string][]string) (connectors.RuntimeConfig, map[string]string, error) {
-	allowed := map[string]connectors.CommandSurfaceFlag{}
-	for _, flag := range cmd.Flags {
-		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
-			return connectors.RuntimeConfig{}, nil, err
-		}
-		allowed[flag.Name] = flag
-	}
-	if err := validateCanonicalFlagOccurrences(cmd, flags); err != nil {
-		return connectors.RuntimeConfig{}, nil, err
-	}
-	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+	allowed, err := validateCommandFlagSet(cmd, flags)
+	if err != nil {
 		return connectors.RuntimeConfig{}, nil, err
 	}
 
@@ -1174,7 +1394,7 @@ func streamOverrides(cmd connectors.CommandSurfaceCommand, cfg connectors.Runtim
 		}
 	}
 	runtimeConfig := runtimeConfigWithOverrides(cfg, configOverrides)
-	if err := validateConfiguredFlagMinimums(cmd, runtimeConfig); err != nil {
+	if err := validateConfiguredFlagValues(cmd, runtimeConfig, nil); err != nil {
 		return connectors.RuntimeConfig{}, nil, err
 	}
 	return runtimeConfig, query, nil
@@ -1195,21 +1415,34 @@ func runtimeConfigWithOverrides(cfg connectors.RuntimeConfig, overrides map[stri
 	return out
 }
 
-func validateConfiguredFlagMinimums(cmd connectors.CommandSurfaceCommand, cfg connectors.RuntimeConfig) error {
+func validateConfiguredFlagValues(cmd connectors.CommandSurfaceCommand, cfg connectors.RuntimeConfig, explicitFlags map[string][]string) error {
+	overriddenTargets := map[string]struct{}{}
 	for _, flag := range cmd.Flags {
-		if (flag.Minimum == nil && flag.Maximum == nil) || !strings.HasPrefix(flag.MapsTo, "config.") {
+		target, mapped := strings.CutPrefix(flag.MapsTo, "config.")
+		if !mapped {
 			continue
 		}
-		target := strings.TrimPrefix(flag.MapsTo, "config.")
 		if err := safety.ValidateIdentifier(target, "config parameter"); err != nil {
 			return err
+		}
+		if len(explicitFlags[flag.Name]) > 0 {
+			overriddenTargets[target] = struct{}{}
+		}
+	}
+	for _, flag := range cmd.Flags {
+		target, mapped := strings.CutPrefix(flag.MapsTo, "config.")
+		if !mapped {
+			continue
+		}
+		if _, overridden := overriddenTargets[target]; overridden {
+			continue
 		}
 		value, ok := cfg.Config[target]
 		if !ok {
 			continue
 		}
-		if err := validateFlagNumericRange(flag, value); err != nil {
-			return err
+		if _, err := coerceCommandFlagValue(cmd, flag, []string{value}); err != nil {
+			return &ConfiguredFlagValueError{Command: cmd.Path, Flag: flag.Name, Target: target, err: err}
 		}
 	}
 	return nil
@@ -1363,6 +1596,58 @@ func parseDateTimeValue(value, label string) (time.Time, error) {
 		return time.Time{}, fmt.Errorf("invalid %s, want ISO-8601/RFC3339 timestamp", label)
 	}
 	return parsed, nil
+}
+
+// validateCommandFlagSet is the one credential-free validation boundary for
+// declared command inputs. Runtime mapping helpers use the returned declaration
+// map, so the public preflight and executor request builders cannot drift on
+// requiredness, multiplicity, unknown flags, types, enums, bounds, formats, or
+// encoded-size limits.
+func validateCommandFlagSet(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]connectors.CommandSurfaceFlag, error) {
+	return validateCommandFlagSetForPreflight(cmd, flags, false)
+}
+
+func validateCommandFlagSetForPreflight(cmd connectors.CommandSurfaceCommand, flags map[string][]string, allowOmittedRequired bool) (map[string]connectors.CommandSurfaceFlag, error) {
+	allowed := make(map[string]connectors.CommandSurfaceFlag, len(cmd.Flags))
+	for _, flag := range cmd.Flags {
+		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
+			return nil, err
+		}
+		if _, duplicate := allowed[flag.Name]; duplicate {
+			return nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s is declared more than once", flag.Name)}
+		}
+		allowed[flag.Name] = flag
+	}
+	if err := validateCanonicalFlagOccurrences(cmd, flags); err != nil {
+		return nil, err
+	}
+	if !allowOmittedRequired {
+		if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+			return nil, err
+		}
+	}
+	names := make([]string, 0, len(flags))
+	for name := range flags {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		values := flags[name]
+		if len(values) == 0 {
+			continue
+		}
+		if err := safety.ValidateIdentifier(name, "flag name"); err != nil {
+			return nil, err
+		}
+		flag, ok := allowed[name]
+		if !ok {
+			return nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
+		}
+		if _, err := coerceCommandFlagValue(cmd, flag, values); err != nil {
+			return nil, err
+		}
+	}
+	return allowed, nil
 }
 
 func validateRequiredCommandFlags(cmd connectors.CommandSurfaceCommand, flags map[string][]string) error {
@@ -1716,17 +2001,8 @@ func validateFlagFormat(flag connectors.CommandSurfaceFlag, value string) error 
 }
 
 func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, error) {
-	allowed := map[string]connectors.CommandSurfaceFlag{}
-	for _, flag := range cmd.Flags {
-		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
-			return nil, nil, err
-		}
-		allowed[flag.Name] = flag
-	}
-	if err := validateCanonicalFlagOccurrences(cmd, flags); err != nil {
-		return nil, nil, err
-	}
-	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+	allowed, err := validateCommandFlagSet(cmd, flags)
+	if err != nil {
 		return nil, nil, err
 	}
 
@@ -1789,17 +2065,8 @@ func operationDirectWriteOverrides(cmd connectors.CommandSurfaceCommand, flags m
 }
 
 func operationDirectOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string, materialize func(string, map[string]any) (map[string]any, error)) (map[string]string, map[string]string, map[string]string, map[string][]string, map[string]any, *string, error) {
-	allowed := map[string]connectors.CommandSurfaceFlag{}
-	for _, flag := range cmd.Flags {
-		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
-			return nil, nil, nil, nil, nil, nil, err
-		}
-		allowed[flag.Name] = flag
-	}
-	if err := validateCanonicalFlagOccurrences(cmd, flags); err != nil {
-		return nil, nil, nil, nil, nil, nil, err
-	}
-	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+	allowed, err := validateCommandFlagSet(cmd, flags)
+	if err != nil {
 		return nil, nil, nil, nil, nil, nil, err
 	}
 
@@ -2133,17 +2400,8 @@ func stringifyCommandValue(value any) string {
 }
 
 func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (connectors.Record, error) {
-	allowed := map[string]connectors.CommandSurfaceFlag{}
-	for _, flag := range cmd.Flags {
-		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
-			return nil, err
-		}
-		allowed[flag.Name] = flag
-	}
-	if err := validateCanonicalFlagOccurrences(cmd, flags); err != nil {
-		return nil, err
-	}
-	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+	allowed, err := validateCommandFlagSet(cmd, flags)
+	if err != nil {
 		return nil, err
 	}
 	if err := validateRecordFlagTargets(cmd); err != nil {
@@ -2443,6 +2701,8 @@ func validateCommandFlagEncodedBytes(flag connectors.CommandSurfaceFlag, value s
 	encoded := ""
 	switch location {
 	case "record":
+		encoded = value
+	case "config":
 		encoded = value
 	case "path":
 		if name == "path" || name == "ref" {
