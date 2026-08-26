@@ -504,7 +504,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "approve_access_request"
     },
     {
@@ -532,7 +532,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "reject_access_request"
     },
     {
@@ -780,7 +780,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "delete_allocation"
     },
     {
@@ -917,7 +917,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "delete_attachment"
     },
     {
@@ -1037,7 +1037,6 @@
           "path": "/workspaces/{workspace_gid}/audit_log_events"
         }
       ],
-      "notes": "Blocked until CDC/changefeed foundations #2986/#2988 supply truthfulness and lifecycle evidence.",
       "source_operation": "asana.rest.getAuditLogEvents",
       "output_policy": "json_redacted"
     },
@@ -1234,7 +1233,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "delete_budget"
     },
     {
@@ -1809,7 +1808,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "delete_custom_field"
     },
     {
@@ -2062,7 +2061,6 @@
           "path": "/events"
         }
       ],
-      "notes": "Blocked until CDC/changefeed foundations #2986/#2988 supply truthfulness and lifecycle evidence.",
       "source_operation": "asana.rest.getEvents",
       "output_policy": "json_redacted",
       "flags": [
@@ -2532,7 +2530,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "delete_goal"
     },
     {
@@ -3026,7 +3024,6 @@
           "path": "/jobs/{job_gid}"
         }
       ],
-      "notes": "Blocked until CDC/changefeed foundations #2986/#2988 supply truthfulness and lifecycle evidence.",
       "source_operation": "asana.rest.getJob",
       "output_policy": "json_redacted"
     },
@@ -3202,7 +3199,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "delete_membership"
     },
     {
@@ -3308,7 +3305,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "delete_ooo_entry"
     },
     {
@@ -3815,7 +3812,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "delete_portfolio"
     },
     {
@@ -4256,7 +4253,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "delete_project_brief"
     },
     {
@@ -4563,7 +4560,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "delete_project_status"
     },
     {
@@ -4699,7 +4696,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "delete_project_template"
     },
     {
@@ -5724,7 +5721,6 @@
         }
       ],
       "output_policy": "json_redacted",
-      "notes": "Blocked until provider-search foundation #2985 supplies bounded query execution.",
       "source_operation": "asana.rest.searchProjectsForWorkspace"
     },
     {
@@ -6224,7 +6220,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "delete_rate"
     },
     {
@@ -6433,7 +6429,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "delete_role"
     },
     {
@@ -6778,7 +6774,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "delete_status"
     },
     {
@@ -6980,7 +6976,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "delete_story"
     },
     {
@@ -7487,7 +7483,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "delete_task_template"
     },
     {
@@ -8915,7 +8911,6 @@
         }
       ],
       "output_policy": "json_redacted",
-      "notes": "Blocked until provider-search foundation #2985 supplies bounded query execution.",
       "source_operation": "asana.rest.searchTasksForWorkspace"
     },
     {
@@ -9594,7 +9589,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "delete_time_tracking_category"
     },
     {
@@ -9935,7 +9930,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "delete_time_tracking_entry"
     },
     {
@@ -10229,7 +10224,6 @@
         }
       ],
       "output_policy": "json_redacted",
-      "notes": "Blocked until provider-search foundation #2985 supplies bounded query execution.",
       "source_operation": "asana.rest.typeaheadForWorkspace"
     },
     {
@@ -10595,7 +10589,6 @@
           "path": "/webhooks"
         }
       ],
-      "notes": "Blocked until CDC/changefeed foundations #2986/#2988 supply truthfulness and lifecycle evidence.",
       "source_operation": "asana.rest.getWebhooks",
       "output_policy": "json_redacted",
       "flags": [
@@ -10672,7 +10665,6 @@
           "path": "/webhooks/{webhook_gid}"
         }
       ],
-      "notes": "Blocked until CDC/changefeed foundations #2986/#2988 supply truthfulness and lifecycle evidence.",
       "source_operation": "asana.rest.getWebhook",
       "output_policy": "json_redacted"
     },
@@ -10740,7 +10732,7 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound Asana mutation through the declared reverse-ETL action.",
+      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
       "write": "delete_webhook"
     },
     {

@@ -3213,7 +3213,13 @@ func restPaginationQueryParameters(spec PaginationSpec) []string {
 		appendName(valueOrDefault(spec.StartIndexParam, defaultStartIndexParam))
 		appendName(valueOrDefault(spec.CountParam, defaultStartIndexCount))
 		appendName(spec.SizeParam)
-	case "next_url", "link_header", "none", "":
+	case "next_url":
+		appendName(spec.SizeParam)
+		appendName(spec.LimitParam)
+		appendName(spec.OffsetParam)
+	case "link_header":
+		appendName(spec.SizeParam)
+	case "none", "":
 		// These have no operation query mechanics to verify.
 	}
 	return names

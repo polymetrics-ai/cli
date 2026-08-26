@@ -2,7 +2,7 @@
   "schema_version": 1,
   "generated_command": "go run ./cmd/connectorgen operation-evidence",
   "provenance": {
-    "source_projection_sha256": "419dc6ab9fea10d1a708fa8352a454dc5536f557447eb9641a99eae1976d07b7",
+    "source_projection_sha256": "786d424ddd359593c2fe2e76ce9ce7d9387961d9739561ed8cf66c67df5f98c2",
     "relevant_config_sha256": "4b59f27395f5127578bce027786ba9c3f1829b044281e39467a2c1b182ee6ffe"
   },
   "rows": [

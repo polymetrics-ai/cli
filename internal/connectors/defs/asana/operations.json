@@ -48,7 +48,7 @@
       "id": "create_access_request",
       "kind": "rest_write",
       "summary": "Create an access request",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAccessRequest",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAccessRequest",
       "source_url": "https://developers.asana.com/reference/createaccessrequest",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -152,6 +152,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -240,6 +260,26 @@
             "in": "query",
             "type": "string"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -287,6 +327,26 @@
               "active",
               "revoked"
             ]
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -339,7 +399,7 @@
       "id": "update_allocation",
       "kind": "rest_write",
       "summary": "Update an allocation",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateAllocation",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateAllocation",
       "source_url": "https://developers.asana.com/reference/updateallocation",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -436,6 +496,26 @@
             "in": "query",
             "type": "string"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -448,7 +528,7 @@
       "id": "create_allocation",
       "kind": "rest_write",
       "summary": "Create an allocation",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAllocation",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAllocation",
       "source_url": "https://developers.asana.com/reference/createallocation",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -570,6 +650,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -582,7 +682,7 @@
       "id": "create_attachment_for_object",
       "kind": "file_upload",
       "summary": "Upload an attachment",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-encoding-foundation-r1; missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAttachmentForObject",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-encoding-foundation-r1; missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAttachmentForObject",
       "source_url": "https://developers.asana.com/reference/createattachmentforobject",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -662,6 +762,26 @@
             "in": "query",
             "type": "string"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -674,7 +794,7 @@
       "id": "create_batch_request",
       "kind": "composite",
       "summary": "Submit parallel requests",
-      "description": "Not-applicable source-bound Asana generic wrapper: not_applicable=generic_batch_wrapper; source_operation=asana.rest.createBatchRequest",
+      "description": "Not-applicable source-bound provider generic wrapper: not_applicable=generic_batch_wrapper; source_operation=asana.rest.createBatchRequest",
       "source_url": "https://developers.asana.com/reference/createbatchrequest",
       "risk": "high",
       "approval": "not exposed; generic batch subrequests are disallowed to avoid raw API passthrough",
@@ -734,7 +854,7 @@
       "id": "create_budget",
       "kind": "rest_write",
       "summary": "Create a budget",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createBudget",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createBudget",
       "source_url": "https://developers.asana.com/reference/createbudget",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -808,7 +928,7 @@
       "id": "update_budget",
       "kind": "rest_write",
       "summary": "Update a budget",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateBudget",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateBudget",
       "source_url": "https://developers.asana.com/reference/updatebudget",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -896,6 +1016,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -935,6 +1075,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -973,6 +1133,26 @@
             "name": "opt_pretty",
             "in": "query",
             "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -1137,6 +1317,26 @@
             "name": "opt_pretty",
             "in": "query",
             "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -1304,6 +1504,26 @@
             "in": "query",
             "type": "string"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -1316,7 +1536,7 @@
       "id": "remove_supporting_relationship",
       "kind": "rest_write",
       "summary": "Removes a supporting goal relationship",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeSupportingRelationship",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeSupportingRelationship",
       "source_url": "https://developers.asana.com/reference/removesupportingrelationship",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -1467,6 +1687,26 @@
             "in": "query",
             "type": "string"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -1479,7 +1719,7 @@
       "id": "remove_followers",
       "kind": "rest_write",
       "summary": "Remove a collaborator from a goal",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowers",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowers",
       "source_url": "https://developers.asana.com/reference/removefollowers",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -1558,7 +1798,7 @@
       "id": "remove_custom_field_setting_for_goal",
       "kind": "rest_write",
       "summary": "Remove a custom field from a goal",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForGoal",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForGoal",
       "source_url": "https://developers.asana.com/reference/removecustomfieldsettingforgoal",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -1676,6 +1916,26 @@
               "project_membership"
             ]
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -1688,7 +1948,7 @@
       "id": "create_membership",
       "kind": "rest_write",
       "summary": "Create a membership",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-openapi30-reference-sibling-foundation-r1; missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createMembership",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-openapi30-reference-sibling-foundation-r1; missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createMembership",
       "source_url": "https://developers.asana.com/reference/createmembership",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -1723,7 +1983,7 @@
       "id": "get_membership",
       "kind": "rest_read",
       "summary": "Get a membership",
-      "description": "Unavailable source-bound Asana read: missing_foundation=cli-openapi30-reference-sibling-foundation-r1; source_operation=asana.rest.getMembership",
+      "description": "Unavailable source-bound provider read: missing_foundation=cli-openapi30-reference-sibling-foundation-r1; source_operation=asana.rest.getMembership",
       "source_url": "https://developers.asana.com/reference/getmembership",
       "risk": "none",
       "approval": "none; read-only fixed-target operation remains bounded and redacted",
@@ -1744,7 +2004,7 @@
       "id": "update_membership",
       "kind": "rest_write",
       "summary": "Update a membership",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateMembership",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateMembership",
       "source_url": "https://developers.asana.com/reference/updatemembership",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -1908,6 +2168,26 @@
             "in": "query",
             "type": "string"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -1920,7 +2200,7 @@
       "id": "create_organization_export",
       "kind": "rest_write",
       "summary": "Create an organization export request",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createOrganizationExport",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createOrganizationExport",
       "source_url": "https://developers.asana.com/reference/createorganizationexport",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -2030,6 +2310,26 @@
             "in": "query",
             "type": "string"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -2113,6 +2413,26 @@
             "in": "query",
             "type": "string"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -2154,6 +2474,26 @@
           },
           {
             "name": "owner",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
             "in": "query",
             "type": "string"
           }
@@ -2256,6 +2596,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -2268,7 +2628,7 @@
       "id": "remove_item_for_portfolio",
       "kind": "rest_write",
       "summary": "Remove a portfolio item",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeItemForPortfolio",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeItemForPortfolio",
       "source_url": "https://developers.asana.com/reference/removeitemforportfolio",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -2308,7 +2668,7 @@
       "id": "remove_custom_field_setting_for_portfolio",
       "kind": "rest_write",
       "summary": "Remove a custom field from a portfolio",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForPortfolio",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForPortfolio",
       "source_url": "https://developers.asana.com/reference/removecustomfieldsettingforportfolio",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -2348,7 +2708,7 @@
       "id": "remove_members_for_portfolio",
       "kind": "rest_write",
       "summary": "Remove users from a portfolio",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeMembersForPortfolio",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeMembersForPortfolio",
       "source_url": "https://developers.asana.com/reference/removemembersforportfolio",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -2519,6 +2879,26 @@
             "in": "query",
             "type": "string"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -2597,6 +2977,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -2635,6 +3035,26 @@
             "name": "opt_pretty",
             "in": "query",
             "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -2825,6 +3245,26 @@
             "in": "query",
             "type": "string"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -2863,6 +3303,26 @@
             "name": "opt_pretty",
             "in": "query",
             "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -3064,6 +3524,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -3108,6 +3588,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -3151,6 +3651,26 @@
             "name": "opt_pretty",
             "in": "query",
             "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -3345,7 +3865,7 @@
       "id": "remove_custom_field_setting_for_project",
       "kind": "rest_write",
       "summary": "Remove a custom field from a project",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForProject",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForProject",
       "source_url": "https://developers.asana.com/reference/removecustomfieldsettingforproject",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -3424,7 +3944,7 @@
       "id": "remove_members_for_project",
       "kind": "rest_write",
       "summary": "Remove users from a project",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeMembersForProject",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeMembersForProject",
       "source_url": "https://developers.asana.com/reference/removemembersforproject",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -3464,7 +3984,7 @@
       "id": "remove_followers_for_project",
       "kind": "rest_write",
       "summary": "Remove followers from a project",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowersForProject",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowersForProject",
       "source_url": "https://developers.asana.com/reference/removefollowersforproject",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -3535,6 +4055,26 @@
             "in": "query",
             "type": "string"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -3547,7 +4087,7 @@
       "id": "create_rate",
       "kind": "rest_write",
       "summary": "Create a rate",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createRate",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createRate",
       "source_url": "https://developers.asana.com/reference/createrate",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -3621,7 +4161,7 @@
       "id": "update_rate",
       "kind": "rest_write",
       "summary": "Update a rate",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateRate",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateRate",
       "source_url": "https://developers.asana.com/reference/updaterate",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -3715,6 +4255,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -3758,6 +4318,26 @@
             "in": "query",
             "type": "string"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -3770,7 +4350,7 @@
       "id": "create_role",
       "kind": "rest_write",
       "summary": "Create a role",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createRole",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createRole",
       "source_url": "https://developers.asana.com/reference/createrole",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -3844,7 +4424,7 @@
       "id": "update_role",
       "kind": "rest_write",
       "summary": "Update a role",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateRole",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateRole",
       "source_url": "https://developers.asana.com/reference/updaterole",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -4163,6 +4743,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -4327,6 +4927,26 @@
             "name": "opt_pretty",
             "in": "query",
             "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -4528,6 +5148,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -4566,6 +5206,26 @@
             "name": "opt_pretty",
             "in": "query",
             "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -4870,6 +5530,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -4914,6 +5594,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -4952,6 +5652,26 @@
             "name": "opt_pretty",
             "in": "query",
             "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -4997,6 +5717,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -5035,6 +5775,26 @@
             "name": "opt_pretty",
             "in": "query",
             "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -5075,6 +5835,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -5087,7 +5867,7 @@
       "id": "remove_dependencies_for_task",
       "kind": "rest_write",
       "summary": "Unlink dependencies from a task",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeDependenciesForTask",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeDependenciesForTask",
       "source_url": "https://developers.asana.com/reference/removedependenciesfortask",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -5154,6 +5934,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -5166,7 +5966,7 @@
       "id": "remove_dependents_for_task",
       "kind": "rest_write",
       "summary": "Unlink dependents from a task",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeDependentsForTask",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeDependentsForTask",
       "source_url": "https://developers.asana.com/reference/removedependentsfortask",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -5206,7 +6006,7 @@
       "id": "remove_project_for_task",
       "kind": "rest_write",
       "summary": "Remove a project from a task",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeProjectForTask",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeProjectForTask",
       "source_url": "https://developers.asana.com/reference/removeprojectfortask",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -5246,7 +6046,7 @@
       "id": "remove_tag_for_task",
       "kind": "rest_write",
       "summary": "Remove a tag from a task",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeTagForTask",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeTagForTask",
       "source_url": "https://developers.asana.com/reference/removetagfortask",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -5286,7 +6086,7 @@
       "id": "remove_follower_for_task",
       "kind": "rest_write",
       "summary": "Remove followers from a task",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowerForTask",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowerForTask",
       "source_url": "https://developers.asana.com/reference/removefollowerfortask",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -5776,6 +6576,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -5820,6 +6640,26 @@
             "name": "opt_pretty",
             "in": "query",
             "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -5931,6 +6771,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -5943,7 +6803,7 @@
       "id": "remove_user_for_team",
       "kind": "rest_write",
       "summary": "Remove a user from a team",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeUserForTeam",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeUserForTeam",
       "source_url": "https://developers.asana.com/reference/removeuserforteam",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -6059,6 +6919,26 @@
             "in": "query",
             "type": "string"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -6110,7 +6990,7 @@
       "id": "update_time_tracking_category",
       "kind": "rest_write",
       "summary": "Update a time tracking category",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateTimeTrackingCategory",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateTimeTrackingCategory",
       "source_url": "https://developers.asana.com/reference/updatetimetrackingcategory",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -6208,6 +7088,26 @@
             "in": "query",
             "type": "string"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -6252,6 +7152,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -6264,7 +7184,7 @@
       "id": "create_time_tracking_category",
       "kind": "rest_write",
       "summary": "Create a time tracking category",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createTimeTrackingCategory",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createTimeTrackingCategory",
       "source_url": "https://developers.asana.com/reference/createtimetrackingcategory",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -6325,6 +7245,26 @@
             "name": "opt_pretty",
             "in": "query",
             "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
           }
         ]
       },
@@ -6459,6 +7399,26 @@
             "in": "query",
             "type": "string"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -6510,7 +7470,7 @@
       "id": "update_timesheet_approval_status",
       "kind": "rest_write",
       "summary": "Update a timesheet approval status",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateTimesheetApprovalStatus",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateTimesheetApprovalStatus",
       "source_url": "https://developers.asana.com/reference/updatetimesheetapprovalstatus",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -6597,6 +7557,26 @@
             "in": "query",
             "type": "string"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -6609,7 +7589,7 @@
       "id": "create_timesheet_approval_status",
       "kind": "rest_write",
       "summary": "Create a timesheet approval status",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createTimesheetApprovalStatus",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createTimesheetApprovalStatus",
       "source_url": "https://developers.asana.com/reference/createtimesheetapprovalstatus",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -6926,6 +7906,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -7093,6 +8093,26 @@
             "in": "query",
             "type": "string"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -7105,7 +8125,7 @@
       "id": "create_webhook",
       "kind": "rest_write",
       "summary": "Establish a webhook",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createWebhook",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createWebhook",
       "source_url": "https://developers.asana.com/reference/createwebhook",
       "risk": "medium",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -7179,7 +8199,7 @@
       "id": "update_webhook",
       "kind": "rest_write",
       "summary": "Update a webhook",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateWebhook",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateWebhook",
       "source_url": "https://developers.asana.com/reference/updatewebhook",
       "risk": "medium",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -7306,6 +8326,26 @@
             "in": "query",
             "type": "boolean"
           }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
         ]
       },
       "source_operation": {
@@ -7409,7 +8449,7 @@
       "id": "remove_user_for_workspace",
       "kind": "rest_write",
       "summary": "Remove a user from a workspace or organization",
-      "description": "Unavailable source-bound Asana mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeUserForWorkspace",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeUserForWorkspace",
       "source_url": "https://developers.asana.com/reference/removeuserforworkspace",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",

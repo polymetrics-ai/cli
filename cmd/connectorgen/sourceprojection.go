@@ -58,13 +58,14 @@ var (
 type sourceProjectionStats struct {
 	Writes     int
 	Operations int
+	Streams    int
 	CLI        int
 	Surface    int
 	Missing    int
 }
 
 func (s sourceProjectionStats) Changed() bool {
-	return s.Writes+s.Operations+s.CLI+s.Surface+s.Missing > 0
+	return s.Writes+s.Operations+s.Streams+s.CLI+s.Surface+s.Missing > 0
 }
 
 // sourceProjectionMaterializeDirectReadSurfaceEndpoints replaces only a
@@ -319,16 +320,14 @@ func projectSourceDescriptorToBundleMode(bundleDir string, result sourceImportRe
 	if api.root != nil {
 		stats.Surface += sourceProjectionMaterializeNoBodyMutationSurfaceEndpoints(api.root, writes.root, cli.root, result)
 	}
-	if sourceProjectionIsAsana(result) {
-		gapStats := sourceProjectionAnnotateAsanaMutationFoundationGaps(operations.root, cli.root, api.root, result)
-		stats.Operations += gapStats.Operations
-		stats.CLI += gapStats.CLI
-		stats.Surface += gapStats.Surface
-		readGapStats := sourceProjectionAnnotateAsanaReadFoundationGaps(operations.root, cli.root, api.root, result)
-		stats.Operations += readGapStats.Operations
-		stats.CLI += readGapStats.CLI
-		stats.Surface += readGapStats.Surface
-	}
+	gapStats := sourceProjectionAnnotateMutationFoundationGaps(operations.root, cli.root, api.root, result)
+	stats.Operations += gapStats.Operations
+	stats.CLI += gapStats.CLI
+	stats.Surface += gapStats.Surface
+	readGapStats := sourceProjectionAnnotateReadFoundationGaps(operations.root, cli.root, api.root, result)
+	stats.Operations += readGapStats.Operations
+	stats.CLI += readGapStats.CLI
+	stats.Surface += readGapStats.Surface
 
 	for _, operation := range result.Operations {
 		_, readOnly, readOnlyErr := sourceProjectionReadOnlyDeclaration(declarationBundle, operation)
@@ -383,6 +382,7 @@ func projectSourceDescriptorToBundleMode(bundleDir string, result sourceImportRe
 				return stats, fmt.Errorf("source operation %s: %w", operation.SourceID, err)
 			}
 			stats.Operations += readStats.Operations
+			stats.Streams += readStats.Streams
 			stats.CLI += readStats.CLI
 			continue
 		}
@@ -482,6 +482,11 @@ func projectSourceDescriptorToBundleMode(bundleDir string, result sourceImportRe
 			return stats, err
 		}
 	}
+	if stats.Streams > 0 {
+		if err := writeBundleJSON(streamsPath, streams, streamsRaw); err != nil {
+			return stats, err
+		}
+	}
 	if stats.CLI > 0 {
 		if err := writeBundleJSON(cliPath, cli, cliRaw); err != nil {
 			return stats, err
@@ -510,8 +515,8 @@ func sourceProjectionMaterializeNoBodyMutationActions(writes, cli, operations *o
 		if operation == nil {
 			// The source projection never invents an operation just to promote a
 			// mutation. Connectors which do not yet declare this endpoint keep
-			// their own explicit foundation disposition; the Asana coverage gate
-			// below proves every eligible Asana endpoint has a real lane.
+			// their own explicit foundation disposition; the coverage gate below
+			// proves every eligible endpoint has a real lane.
 			continue
 		}
 		operationID := stringField(operation, "id")
@@ -523,7 +528,7 @@ func sourceProjectionMaterializeNoBodyMutationActions(writes, cli, operations *o
 			if sourceProjectionReplaceLegacyPromotedMutationSummary(command) {
 				stats.CLI++
 			}
-			if setOrderedIfDifferent(command, "notes", "Implemented source-bound Asana mutation through the declared reverse-ETL action.") {
+			if setOrderedIfDifferent(command, "notes", "Implemented source-bound provider mutation through the declared reverse-ETL action.") {
 				stats.CLI++
 			}
 			if sourceProjectionRemoveApprovalConfirmFlag(command) {
@@ -570,8 +575,8 @@ func sourceProjectionMaterializeNoBodyMutationActions(writes, cli, operations *o
 		command.remove("operation")
 		sourceProjectionRemoveApprovalConfirmFlag(command)
 		sourceProjectionReplaceLegacyPromotedMutationSummary(command)
-		command.set("notes", "Implemented source-bound Asana mutation through the declared reverse-ETL action.")
-		operation.set("description", "Implemented source-bound Asana operation mapped to declared reverse-ETL action "+operationID+".")
+		command.set("notes", "Implemented source-bound provider mutation through the declared reverse-ETL action.")
+		operation.set("description", "Implemented source-bound provider operation mapped to declared reverse-ETL action "+operationID+".")
 		stats.Writes++
 		stats.CLI++
 		stats.Operations++
@@ -736,16 +741,12 @@ func sourceProjectionMaterializeNoBodyMutationSurfaceEndpoints(surface, writes, 
 	return changed
 }
 
-func sourceProjectionIsAsana(result sourceImportResult) bool {
-	return len(result.Operations) > 0 && result.Operations[0].Connector == "asana"
-}
-
-// sourceProjectionAnnotateAsanaMutationFoundationGaps preserves every
+// sourceProjectionAnnotateMutationFoundationGaps preserves every
 // source-backed mutation that is not executable yet, but replaces inherited
 // generic planned wording with the exact current source foundations. These are
 // not a promotion path: availability stays non-executable until the declared
 // action can satisfy those foundations.
-func sourceProjectionAnnotateAsanaMutationFoundationGaps(operations, cli, surface *orderedObject, result sourceImportResult) sourceProjectionStats {
+func sourceProjectionAnnotateMutationFoundationGaps(operations, cli, surface *orderedObject, result sourceImportResult) sourceProjectionStats {
 	stats := sourceProjectionStats{}
 	for _, source := range result.Operations {
 		if !sourceProjectionOperationMutates(source) {
@@ -785,9 +786,9 @@ func sourceProjectionAnnotateAsanaMutationFoundationGaps(operations, cli, surfac
 		if sourceProjectionReplaceLegacyUnavailableMutationSummary(command, availability == "unsupported_api") {
 			stats.CLI++
 		}
-		description := "Unavailable source-bound Asana mutation: " + note
+		description := "Unavailable source-bound provider mutation: " + note
 		if availability == "unsupported_api" {
-			description = "Not-applicable source-bound Asana generic wrapper: " + note
+			description = "Not-applicable source-bound provider generic wrapper: " + note
 		}
 		if operation != nil && setOrderedIfDifferent(operation, "description", description) {
 			stats.Operations++
@@ -876,11 +877,11 @@ func sourceProjectionMutationFoundationNote(source sourceOperationDescriptor) st
 	return strings.Join(parts, "; ")
 }
 
-// sourceProjectionAnnotateAsanaReadFoundationGaps gives a retained
+// sourceProjectionAnnotateReadFoundationGaps gives a retained
 // source-bound read the same precise provenance as a mutation gap. The command
 // remains unavailable; this removes only inherited planning prose, not the
 // declared source requirement or the blocked-by-default guard.
-func sourceProjectionAnnotateAsanaReadFoundationGaps(operations, cli, surface *orderedObject, result sourceImportResult) sourceProjectionStats {
+func sourceProjectionAnnotateReadFoundationGaps(operations, cli, surface *orderedObject, result sourceImportResult) sourceProjectionStats {
 	stats := sourceProjectionStats{}
 	for _, source := range result.Operations {
 		if sourceProjectionOperationMutates(source) || !sourceProjectionHasBlockingGap(source.Runtime.Gaps) {
@@ -903,7 +904,7 @@ func sourceProjectionAnnotateAsanaReadFoundationGaps(operations, cli, surface *o
 		if summary := stringField(command, "summary"); strings.HasPrefix(summary, plannedPrefix) && setOrderedIfDifferent(command, "summary", "Unavailable source-bound "+strings.TrimPrefix(summary, plannedPrefix)) {
 			stats.CLI++
 		}
-		if setOrderedIfDifferent(operation, "description", "Unavailable source-bound Asana read: "+note) {
+		if setOrderedIfDifferent(operation, "description", "Unavailable source-bound provider read: "+note) {
 			stats.Operations++
 		}
 		if surface == nil {
@@ -989,6 +990,7 @@ func validateSourceProjectionExecutionEnvelopes(result sourceImportResult) error
 // drift, not partial progress.
 type sourceProjectionReadStats struct {
 	Operations int
+	Streams    int
 	CLI        int
 }
 
@@ -1161,10 +1163,6 @@ func sourceProjectionCommandForStreamOperation(cli, operation *orderedObject, me
 	return match
 }
 
-func sourceProjectionOperationSelectsStream(operation *orderedObject, streamName string) bool {
-	return sourceProjectionOperationStreamName(operation) == streamName
-}
-
 func sourceProjectionOperationStreamName(operation *orderedObject) string {
 	compositeRaw, declared := operation.get("composite")
 	composite, ok := compositeRaw.(*orderedObject)
@@ -1195,6 +1193,11 @@ func sourceProjectionMaterializeDirectRead(operation, command *orderedObject, so
 	if sourceProjectionSyncReadParameters(rest, source) {
 		stats.Operations++
 	}
+	if changed, err := sourceProjectionSyncReadPagination(rest, source); err != nil {
+		return stats, err
+	} else if changed {
+		stats.Operations++
+	}
 	if reason := sourceProjectionReadParametersComplete(rest, source); reason != "" {
 		missing := sourceProjectionMarkOneReadMissingFoundation(command, source, reason)
 		stats.CLI += missing.CLI
@@ -1223,7 +1226,7 @@ func sourceProjectionMaterializeDirectRead(operation, command *orderedObject, so
 	if sourceProjectionRequireSourceReadPathFlags(command, source) {
 		commandChanged = true
 	}
-	if sourceProjectionClearReadMissingFoundation(command) || sourceProjectionClearBlockedReadNote(command, source.SourceID) {
+	if sourceProjectionClearReadMissingFoundation(command) || sourceProjectionClearBlockedReadNote(command, source.SourceID) || sourceProjectionClearHistoricalBlockedReadNote(command) {
 		commandChanged = true
 	}
 	if sourceProjectionClearLegacyPlannedReadNote(command) {
@@ -1251,10 +1254,15 @@ func sourceProjectionMaterializeStreamRead(operation, command, streams *orderedO
 	if source.Pagination == nil {
 		return sourceProjectionMarkOneReadMissingFoundation(command, source, "source pagination semantics are absent; the operation may only be a bounded direct read"), nil
 	}
-	if !sourceProjectionStreamMatchesReadOperation(operation, streams, streamName, source) {
-		return sourceProjectionMarkOneReadMissingFoundation(command, source, "named stream lacks exact source path, record schema, or pagination semantics"), nil
-	}
 	stats := sourceProjectionReadStats{}
+	if sourceProjectionSyncStreamPagination(streams, streamName, source.Pagination) {
+		stats.Streams++
+	}
+	if !sourceProjectionStreamMatchesReadOperation(operation, streams, streamName, source) {
+		missing := sourceProjectionMarkOneReadMissingFoundation(command, source, "named stream lacks exact source path, record schema, or pagination semantics")
+		missing.Streams += stats.Streams
+		return missing, nil
+	}
 	if sourceProjectionSetSourceOperation(operation, source) {
 		stats.Operations++
 	}
@@ -1280,7 +1288,7 @@ func sourceProjectionMaterializeStreamRead(operation, command, streams *orderedO
 	if command.remove("flags") {
 		commandChanged = true
 	}
-	if sourceProjectionClearReadMissingFoundation(command) {
+	if sourceProjectionClearReadMissingFoundation(command) || sourceProjectionClearHistoricalBlockedReadNote(command) {
 		commandChanged = true
 	}
 	if sourceProjectionClearLegacyPlannedReadNote(command) {
@@ -1293,6 +1301,57 @@ func sourceProjectionMaterializeStreamRead(operation, command, streams *orderedO
 		stats.CLI++
 	}
 	return stats, nil
+}
+
+// sourceProjectionSyncStreamPagination admits a source-derived pagination
+// extension only when the existing declared stream already proves the same
+// response-owned pager after those closed controls are removed. This keeps the
+// pre-existing ETL route/record contract intact while making the initial page
+// use the bounded provider window needed to obtain its next URL.
+func sourceProjectionSyncStreamPagination(streams *orderedObject, streamName string, pagination any) bool {
+	for _, raw := range arrayField(streams, "streams") {
+		stream, ok := raw.(*orderedObject)
+		if !ok || stringField(stream, "name") != streamName {
+			continue
+		}
+		if current, declared := stream.get("pagination"); declared {
+			if !sourceProjectionPaginationAddsOnlyClosedControls(current, pagination) {
+				return false
+			}
+			return setOrderedIfDifferent(stream, "pagination", pagination)
+		}
+		baseRaw, declared := streams.get("base")
+		base, ok := baseRaw.(*orderedObject)
+		if !declared || !ok {
+			return false
+		}
+		current, declared := base.get("pagination")
+		if !declared || !sourceProjectionPaginationAddsOnlyClosedControls(current, pagination) {
+			return false
+		}
+		return setOrderedIfDifferent(base, "pagination", pagination)
+	}
+	return false
+}
+
+func sourceProjectionPaginationAddsOnlyClosedControls(current, source any) bool {
+	if orderedSemanticEqual(current, source) {
+		return true
+	}
+	derived, ok := source.(map[string]any)
+	if !ok {
+		return false
+	}
+	base := make(map[string]any, len(derived))
+	for key, value := range derived {
+		switch key {
+		case "size_param", "limit_param", "offset_param", "page_size":
+			continue
+		default:
+			base[key] = value
+		}
+	}
+	return orderedSemanticEqual(current, base)
 }
 
 // sourceProjectionClearLegacyPlannedReadSummary removes the generated
@@ -1536,6 +1595,103 @@ func sourceProjectionSyncReadParameters(rest *orderedObject, source sourceOperat
 	return changed
 }
 
+// sourceProjectionSyncReadPagination materializes source-proven pagination in
+// the operation-owned block. The controls stay out of rest.parameters, so
+// surface-sync can never make a raw paging flag; pagination_parameters proves
+// that the closed engine dialect is backed by this operation's provider
+// contract.
+func sourceProjectionSyncReadPagination(rest *orderedObject, source sourceOperationDescriptor) (bool, error) {
+	if source.Pagination == nil {
+		changed := rest.remove("pagination")
+		if rest.remove("pagination_parameters") {
+			changed = true
+		}
+		return changed, nil
+	}
+	pagination, ok := source.Pagination.(map[string]any)
+	if !ok {
+		return false, fmt.Errorf("source pagination is not an object")
+	}
+	names := sourceProjectionPaginationParameterNames(pagination)
+	byName := make(map[string]sourceParameterDescriptor, len(source.Request.Query))
+	for _, parameter := range source.Request.Query {
+		byName[parameter.Name] = parameter
+	}
+	parameters := make([]any, 0, len(names))
+	for _, name := range names {
+		parameter, found := byName[name]
+		if !found || !sourceScalarWireSchema(parameter.Schema) {
+			return false, fmt.Errorf("source pagination parameter %q is not a scalar query parameter", name)
+		}
+		entry := newOrderedObject()
+		entry.set("name", name)
+		entry.set("in", "query")
+		if typeName := sourceProjectionReadParameterType(parameter.Schema); typeName != "" {
+			entry.set("type", typeName)
+		}
+		if parameter.Required {
+			entry.set("required", true)
+		}
+		parameters = append(parameters, entry)
+	}
+
+	changed := setOrderedIfDifferent(rest, "pagination", pagination)
+	if len(parameters) == 0 {
+		if rest.remove("pagination_parameters") {
+			changed = true
+		}
+		return changed, nil
+	}
+	if setOrderedIfDifferent(rest, "pagination_parameters", parameters) {
+		changed = true
+	}
+	return changed, nil
+}
+
+func sourceProjectionPaginationParameterNames(pagination map[string]any) []string {
+	field := func(key string) string {
+		value, _ := pagination[key].(string)
+		return strings.TrimSpace(value)
+	}
+	names := make([]string, 0, 3)
+	add := func(name string) {
+		if name == "" {
+			return
+		}
+		for _, existing := range names {
+			if existing == name {
+				return
+			}
+		}
+		names = append(names, name)
+	}
+	switch field("type") {
+	case "page_number":
+		add(field("page_param"))
+		add(field("size_param"))
+	case "offset_limit":
+		add(field("offset_param"))
+		add(field("limit_param"))
+		add(field("size_param"))
+	case "cursor":
+		add(field("cursor_param"))
+		add(field("size_param"))
+	case "start_index":
+		add(field("start_index_param"))
+		add(field("count_param"))
+		add(field("size_param"))
+	case "next_url":
+		// A next URL owns the next page, but a documented initial size and
+		// continuation offset are still part of its closed contract.
+		add(field("size_param"))
+		add(field("limit_param"))
+		add(field("offset_param"))
+	case "link_header":
+		add(field("size_param"))
+	}
+	return names
+}
+
 // sourceProjectionProviderPagingParameter keeps source-projected reads on the
 // same closed paging classifier as params-import. Source descriptors retain
 // only typed parameter shape, so provider paging descriptions are unavailable
@@ -1630,7 +1786,7 @@ func sourceProjectionMarkOneReadMissingFoundation(command *orderedObject, source
 		changed = true
 	}
 	note := sourceBoundReadMissingFoundationPrefix + reason + "; source_operation=" + source.SourceID
-	if source.Connector == "asana" {
+	if sourceProjectionReadHasBlockingGap(source) {
 		note = sourceProjectionMutationFoundationNote(source)
 		const plannedPrefix = "Planned fixed-target "
 		if summary := stringField(command, "summary"); strings.HasPrefix(summary, plannedPrefix) {
@@ -1664,7 +1820,7 @@ func sourceProjectionReadFoundationReason(source sourceOperationDescriptor) stri
 
 func sourceProjectionClearReadMissingFoundation(command *orderedObject) bool {
 	notes := stringField(command, "notes")
-	if strings.HasPrefix(notes, sourceBoundReadMissingFoundationPrefix) {
+	if strings.HasPrefix(notes, sourceBoundReadMissingFoundationPrefix) || strings.HasPrefix(notes, "missing_foundation=closed-source-operation-execution-foundation-r1; source_operation=") {
 		return command.remove("notes")
 	}
 	return false
@@ -1682,6 +1838,17 @@ func sourceProjectionClearLegacyPlannedReadNote(command *orderedObject) bool {
 // those can describe a broader workflow dependency than this one operation.
 func sourceProjectionClearBlockedReadNote(command *orderedObject, sourceID string) bool {
 	if stringField(command, "notes") != sourceProjectionBlockedReadCommandNote(sourceID) {
+		return false
+	}
+	return command.remove("notes")
+}
+
+// sourceProjectionClearHistoricalBlockedReadNote removes the old generated
+// blocker wording only after this same command has been promoted from a
+// complete source contract. A real current foundation remains represented by
+// the exact missing_foundation note and is never cleared here.
+func sourceProjectionClearHistoricalBlockedReadNote(command *orderedObject) bool {
+	if !strings.HasPrefix(stringField(command, "notes"), "Blocked until ") {
 		return false
 	}
 	return command.remove("notes")
@@ -2453,7 +2620,7 @@ func sourceProjectionBlockUnreachableReadSurfaceEndpoints(surface *orderedObject
 		operation.set("blocked_by_default", true)
 		reason := sourceProjectionBlockedReadSurfaceReason(source.SourceID)
 		note := sourceProjectionBlockedReadSurfaceNote(source.SourceID)
-		if source.Connector == "asana" && sourceProjectionReadHasBlockingGap(source) {
+		if sourceProjectionReadHasBlockingGap(source) {
 			reason = sourceProjectionMutationFoundationNote(source)
 			note = "source_operation=" + source.SourceID
 		}

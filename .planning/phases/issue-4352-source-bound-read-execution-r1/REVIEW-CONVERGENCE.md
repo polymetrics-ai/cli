@@ -63,3 +63,50 @@ Architecture/data flow, declaration reachability, happy/bad/edge behavior, CLI/A
 ## Fix and re-review protocol
 
 Production work may now address only this frozen set and required generated artifacts. Each dependency group records exact files/symbols, intended regression, observed red failure, green result, and staged file list before its coherent fast-forward checkpoint. A new finding is classified `initial_snapshot_miss`, `fix_created:<sha>`, `requirement_changed:<decision>`, or `new_external_evidence:<source>` and requires another cycle. Final acceptance is a fresh independent Codex audit of the whole original PR change plus repair delta at the pushed code SHA; a later artifact-only audit commit may name that code SHA only if it changes no behavior.
+
+## Fresh independent audit — repair SHA `35888c27c51b8c1168c2d6f08ffa505f5ffdb6bd`
+
+The required independent `codex review --base
+b33983927d863032dac8220949990506e812937d` completed after the first repair
+push. It found two actionable `fix_created:35888c27` findings, both within the
+already frozen AUDIT-001/AUDIT-006 scope. The tracked-skill parity test also
+provided an AUDIT-006 `initial_snapshot_miss` red result.
+
+| Finding | Classification | Red evidence | Required green result |
+| --- | --- | --- | --- |
+| F3 / AUDIT-001 | `fix_created:35888c27` | 52 source-bound next-URL reads have no derived `limit` on page one; a returned `?limit=...&offset=...` continuation fails the closed cursor admission. | The source descriptor derives `next_url` plus its exact `limit` size and `offset` continuation controls; neither becomes a raw command flag, page one sends the bounded limit, and `--page-cursor` admits the provider continuation. |
+| F4 / AUDIT-006 | `fix_created:35888c27` | Eight source-complete implemented reads still render historical `Blocked until …` notes. | Promotion clears that historical blocker note only for the now source-complete command; truly missing foundations remain exact named gaps. |
+| F5 / AUDIT-006 | `initial_snapshot_miss` | `TestSkillsGenerateMatchesTrackedSkills` fails because `docs/skills/pm-asana/SKILL.md` still lists raw `--limit` and `--offset`. | `pm skills generate --dir docs/skills` updates the tracked skill and generated docs/website/manual validation is clean. |
+
+No source lock, retained provider byte, credential, provider state, or unrelated
+worktree is in scope for this convergence slice. The follow-up must be pushed
+normally, then independently re-audited at its exact remote SHA.
+
+## Follow-up resolution and pre-push proof
+
+- **F3 / AUDIT-001 Green:** `TestOperationDirectReadNextURLUsesClosedLimitOffsetContinuation`
+  proves page one sends `limit=100`, a provider-issued `limit`/`offset`
+  continuation is accepted only through `--page-cursor`, and the generated
+  direct command owns neither raw flag. The full `./cmd/connectorgen` package
+  passed in `182.924s`; the final source import check verified all 249 Asana
+  operations.
+- **F4 / AUDIT-006 Green:** source-complete reads clear only inherited
+  historical `Blocked until …` notes. The final declaration scan finds neither
+  raw direct-read paging flags nor historical blocker notes.
+- **F5 / AUDIT-006 Green:** tracked Asana skill/manual, root-help goldens, and
+  website catalog were regenerated. `go test -timeout 20m -count=1
+  ./internal/cli` passed in `420.427s`; connector docs validation and 34
+  website script tests passed.
+- The whole-tree connector-boundary gate initially rejected Asana-specific
+  shared projection branches. The final implementation makes the source-gap
+  annotation generic; rerun result is clean (317 files, 553 connectors).
+- The final credential-bound binary census is `212/212` implemented Asana
+  commands at `missing --credential` (exit 1), with no configured credential
+  or provider I/O. `validate` is clean for 553 connectors, surface-sync has
+  zero corrections, operation evidence is current at 1,774 rows/5 rollups with
+  fixed-100 passed, runtime preflight/canon are green, and certification
+  subject/matrix/candidates/sweep are current.
+
+The next and only acceptance action is a normal push of the reviewed commit to
+the existing #4356 branch followed by a fresh independent audit of that exact
+remote SHA. Do not merge.

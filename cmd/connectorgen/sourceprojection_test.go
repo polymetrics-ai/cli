@@ -428,7 +428,7 @@ func TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL(t *t
 	writeProjectionFixture(t, cliPath, `{
   "schema_version": 1,
   "commands": [
-    {"path":"access-requests get-access-requests","summary":"Get access requests","intent":"direct_read","availability":"implemented","operation":"get_access_requests","api_surface":[{"method":"GET","path":"/access_requests"}]},
+    {"path":"access-requests get-access-requests","summary":"Get access requests","intent":"direct_read","availability":"implemented","operation":"get_access_requests","notes":"Blocked until a historical certification lane completes.","api_surface":[{"method":"GET","path":"/access_requests"}]},
     {"path":"agents get-agent","summary":"Get an agent","intent":"direct_read","availability":"implemented","operation":"get_agent","flags":[{"name":"agent-gid","type":"string","maps_to":"query.agent_gid"}],"api_surface":[{"method":"GET","path":"/agents/{agent_gid}"}]},
     {"path":"workspaces get-workspaces","summary":"Get workspaces","intent":"etl","availability":"implemented","stream":"workspaces","api_surface":[{"method":"GET","path":"/workspaces"}]},
     {"path":"pending get-pending","summary":"Planned fixed-target Alpha read: Get pending.","intent":"etl","availability":"planned","operation":"get_pending","api_surface":[{"method":"GET","path":"/pending"}]}
@@ -450,7 +450,7 @@ func TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL(t *t
 }`)
 
 	result := sourceImportResult{Operations: []sourceOperationDescriptor{
-		{Connector: "asana", SourceID: "asana.rest.getAccessRequests", ProviderOperationID: "getAccessRequests", Method: "GET", Path: "/access_requests", Request: sourceRequestDescriptor{Query: []sourceParameterDescriptor{{Name: "target", Required: true, Schema: map[string]any{"type": "string"}}, {Name: "limit", Required: false, Schema: map[string]any{"type": "integer"}}, {Name: "offset", Required: false, Schema: map[string]any{"type": "integer"}}}}, Output: sourceOutputDescriptor{Class: sourceOutputJSON}},
+		{Connector: "asana", SourceID: "asana.rest.getAccessRequests", ProviderOperationID: "getAccessRequests", Method: "GET", Path: "/access_requests", Request: sourceRequestDescriptor{Query: []sourceParameterDescriptor{{Name: "target", Required: true, Schema: map[string]any{"type": "string"}}, {Name: "limit", Required: false, Schema: map[string]any{"type": "integer"}}, {Name: "offset", Required: false, Schema: map[string]any{"type": "integer"}}}}, Pagination: map[string]any{"type": "next_url", "next_url_path": "next_page.uri", "size_param": "limit", "limit_param": "limit", "offset_param": "offset", "page_size": 100}, Output: sourceOutputDescriptor{Class: sourceOutputJSON}},
 		{Connector: "asana", SourceID: "asana.rest.getAgent", ProviderOperationID: "getAgent", Method: "GET", Path: "/agents/{agent_gid}", Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{{Name: "agent_gid", Required: true, Schema: map[string]any{"type": "string"}}}}, Output: sourceOutputDescriptor{Class: sourceOutputJSON}},
 		{Connector: "asana", SourceID: "asana.rest.getWorkspaces", ProviderOperationID: "getWorkspaces", Method: "GET", Path: "/workspaces", Pagination: map[string]any{"type": "next_url", "next_url_path": "next_page.uri"}, Output: sourceOutputDescriptor{Class: sourceOutputJSON}},
 		{Connector: "asana", SourceID: "asana.rest.getPending", ProviderOperationID: "getPending", Method: "GET", Path: "/pending", Output: sourceOutputDescriptor{Class: sourceOutputJSON}},
@@ -461,7 +461,14 @@ func TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL(t *t
 
 	var operations struct {
 		Operations []struct {
-			ID              string `json:"id"`
+			ID   string `json:"id"`
+			REST struct {
+				Pagination           map[string]any `json:"pagination"`
+				PaginationParameters []struct {
+					Name string `json:"name"`
+					In   string `json:"in"`
+				} `json:"pagination_parameters"`
+			} `json:"rest"`
 			SourceOperation *struct {
 				ID     string `json:"id"`
 				Method string `json:"method"`
@@ -487,6 +494,22 @@ func TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL(t *t
 			t.Fatalf("operation %s source binding = %q, want %q", id, got, want)
 		}
 	}
+	for _, operation := range operations.Operations {
+		if operation.ID != "get_access_requests" {
+			continue
+		}
+		wantPagination := map[string]any{"type": "next_url", "next_url_path": "next_page.uri", "size_param": "limit", "limit_param": "limit", "offset_param": "offset", "page_size": float64(100)}
+		if !reflect.DeepEqual(operation.REST.Pagination, wantPagination) {
+			t.Fatalf("source-bound direct-read pagination = %#v, want %#v", operation.REST.Pagination, wantPagination)
+		}
+		gotParameters := make([]string, 0, len(operation.REST.PaginationParameters))
+		for _, parameter := range operation.REST.PaginationParameters {
+			gotParameters = append(gotParameters, parameter.In+"."+parameter.Name)
+		}
+		if !reflect.DeepEqual(gotParameters, []string{"query.limit", "query.offset"}) {
+			t.Fatalf("source-bound direct-read pagination parameters = %#v, want limit/offset only", gotParameters)
+		}
+	}
 	if got := bound["get_pending"]; got != "asana.rest.getPending GET /pending" {
 		t.Fatalf("complete planned read operation binding = %q, want exact source identity", got)
 	}
@@ -503,6 +526,8 @@ func TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL(t *t
 		t.Fatalf("access-requests command = %+v, want bounded implemented direct_read", command)
 	} else if len(command.Flags) != 1 || command.Flags[0].MapsTo != "query.target" || !command.Flags[0].Required || command.Flags[0].Type != "string" {
 		t.Fatalf("access-requests typed query contract = %+v, want only required query.target; raw provider paging stays behind --page/--page-cursor", command.Flags)
+	} else if command.Notes != "" {
+		t.Fatalf("promoted source-bound command note = %q, want historical blocker cleared", command.Notes)
 	}
 	agent := commands["agents get-agent"]
 	if agent.Intent != "direct_read" || agent.Availability != "implemented" || agent.SourceOperation != "asana.rest.getAgent" {
@@ -723,7 +748,7 @@ func TestRetainedAsanaSourceImportSelectsSourceBackedFanOutETLStreams(t *testing
 	if err != nil {
 		t.Fatal(err)
 	}
-	if directStats.Operations != 0 || directStats.CLI != 0 {
+	if directStats.Operations != 0 || directStats.Streams != 0 || directStats.CLI != 0 {
 		bound, hasBinding := sectionsOperation.get("source_operation")
 		t.Fatalf("retained fan-out direct materializer = %+v, binding=%+v present=%t, want idempotent exact source binding", directStats, bound, hasBinding)
 	}
@@ -848,32 +873,6 @@ func TestRetainedAsanaMutationDispositionsCoverEveryDeferredSourceOperation(t *t
 	}
 }
 
-func asanaSourceImportPreservedArtifacts(t *testing.T, bundleDir string) map[string][]byte {
-	t.Helper()
-	artifacts := make(map[string][]byte, 6)
-	for _, name := range []string{"api_surface.json", "cli_surface.json", "operations.json", "spec.json", "streams.json", "writes.json"} {
-		raw, err := os.ReadFile(filepath.Join(bundleDir, name))
-		if err != nil {
-			t.Fatalf("read %s: %v", name, err)
-		}
-		artifacts[name] = raw
-	}
-	return artifacts
-}
-
-func assertAsanaSourceImportPreservedArtifacts(t *testing.T, bundleDir string, before map[string][]byte) {
-	t.Helper()
-	for name, want := range before {
-		got, err := os.ReadFile(filepath.Join(bundleDir, name))
-		if err != nil {
-			t.Fatalf("read %s after retained source import: %v", name, err)
-		}
-		if !bytes.Equal(got, want) {
-			t.Fatalf("read-only source import rewrote %s", name)
-		}
-	}
-}
-
 func copyInstalledAsanaProjectionBundle(t *testing.T) (string, string) {
 	t.Helper()
 	root, err := repoRoot()
@@ -966,8 +965,16 @@ func assertAsanaRetainedReadSourceContracts(t *testing.T, descriptorPath string)
 		t.Fatalf("retained custom-fields source contract = %+v, want required string workspace_gid path input", customFields.Request.Path)
 	}
 	workspaces := byID["asana.rest.getWorkspaces"]
-	if !reflect.DeepEqual(workspaces.Pagination, map[string]any{"type": "next_url", "next_url_path": "next_page.uri"}) {
-		t.Fatalf("retained workspace pagination = %+v, want next_page.uri next_url", workspaces.Pagination)
+	wantPagination := map[string]any{
+		"type":          "next_url",
+		"next_url_path": "next_page.uri",
+		"size_param":    "limit",
+		"limit_param":   "limit",
+		"offset_param":  "offset",
+		"page_size":     json.Number("100"),
+	}
+	if !reflect.DeepEqual(workspaces.Pagination, wantPagination) {
+		t.Fatalf("retained workspace pagination = %+v, want closed limit/offset next_url contract %+v", workspaces.Pagination, wantPagination)
 	}
 }
 
@@ -1279,7 +1286,7 @@ func TestSourceProjectionDowngradesUnboundImplementedAPICommandForSourceGap(t *t
 		t.Fatalf("unbound command did not become source-bound partial capability:\n%s", projected)
 	}
 	projectedSurface := readProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"))
-	if strings.Contains(projectedSurface, `"covered_by"`) || !strings.Contains(projectedSurface, `"model": "direct_read"`) || !strings.Contains(projectedSurface, source.SourceID) || !strings.Contains(projectedSurface, "Named dependency:") {
+	if strings.Contains(projectedSurface, `"covered_by"`) || !strings.Contains(projectedSurface, `"model": "direct_read"`) || !strings.Contains(projectedSurface, source.SourceID) || !strings.Contains(projectedSurface, sourceOperationExecutionFoundation) {
 		t.Fatalf("source-bound partial command retained executable API coverage:\n%s", projectedSurface)
 	}
 }

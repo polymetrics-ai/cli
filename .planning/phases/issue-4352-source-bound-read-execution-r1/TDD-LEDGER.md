@@ -48,6 +48,47 @@ Record exact commands, intended red failure, and full green result as each group
   generation, documentation validation, and the 34 website script tests pass;
   generated help shows the promoted delete as `implemented`.
 
+### Fresh-audit follow-up red/green ledger
+
+- **F3 / AUDIT-001 Red:** the independent audit exercised a source-promoted
+  Asana next-URL list and found that the generated operation omitted its
+  provider-declared `limit`/`offset` pagination contract. Page one named no
+  `limit`, and a returned continuation was refused as an undeclared query
+  parameter. **Green required:** an engine regression proves page one sends
+  the derived bounded `limit`, page two is reached only through
+  `--page-cursor`, and no raw paging flag is exposed.
+- **F4 / AUDIT-006 Red:** eight source-complete implemented reads rendered a
+  contradictory historical `Blocked until …` note. **Green required:**
+  projection removes that legacy blocker during source-complete promotion and
+  generated manual/help/website output contains no such note on an implemented
+  source-bound command.
+- **F5 / AUDIT-006 Red:** `go test -timeout 20m -count=1 ./internal/cli -run
+  '^TestSkillsGenerateMatchesTrackedSkills$'` fails on tracked
+  `docs/skills/pm-asana/SKILL.md`, which still exposes raw `--limit` and
+  `--offset`. **Green required:** regenerate through `pm skills generate`,
+  then the tracked-skill test and docs/website checks pass.
+
+### Follow-up completed red/green evidence
+
+- **F3 / AUDIT-001 Red:** the independent review found that an otherwise
+  source-complete next-URL list request sent no `limit`, then rejected Asana's
+  returned `limit`/`offset` continuation. **Green:**
+  `TestOperationDirectReadNextURLUsesClosedLimitOffsetContinuation` passes:
+  the first request uses `limit=100`, the cursor reaches page two, and no raw
+  pagination CLI flag is introduced.
+- **F4 / AUDIT-006 Red:** eight promoted reads retained `Blocked until …` in
+  their generated command notes. **Green:** source-complete promotion clears
+  that historical note; the final JSON scan over all source-bound direct reads
+  returns an empty result.
+- **F5 / AUDIT-006 Red:** the full CLI suite failed because the tracked Asana
+  skill exposed old raw paging flags. **Green:** `pm skills generate`, docs
+  generation, and website data generation refreshed tracked output; the final
+  full CLI package passed in `420.427s`.
+- **Boundary/lint Red:** generic source projection still selected behavior by
+  connector name and retained dead helpers. **Green:** source-gap annotation
+  is connector-neutral, `make connector-boundary` reports no findings, and
+  `make lint` reports 0 issues.
+
 ## Lifecycle
 
 - GSD source resolution: `scripts/gsd doctor`, all five required `scripts/gsd sources` commands, and `go run ./cmd/agentcontractgen check` passed before planning.

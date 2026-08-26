@@ -6246,7 +6246,7 @@ func importSourceOperation(documentContext sourceImportDocumentContext, doc map[
 		}
 		sourceID = locked.ID
 	}
-	pagination, err := sourcePagination(operation, responses, resolver)
+	pagination, err := sourcePagination(operation, responses, request.Query, resolver)
 	if err != nil {
 		return sourceOperationDescriptor{}, fmt.Errorf("%s: %w", location, err)
 	}
@@ -8043,7 +8043,7 @@ func sourceOutputClassForMediaType(mediaType string) (sourceOutputClass, error) 
 	return sourceOutputBinary, nil
 }
 
-func sourcePagination(operation map[string]any, responses []sourceResponseDescriptor, resolver *sourceReferenceResolver) (any, error) {
+func sourcePagination(operation map[string]any, responses []sourceResponseDescriptor, query []sourceParameterDescriptor, resolver *sourceReferenceResolver) (any, error) {
 	var keys []string
 	for key := range operation {
 		if strings.Contains(strings.ToLower(key), "pagination") {
@@ -8057,7 +8057,7 @@ func sourcePagination(operation map[string]any, responses []sourceResponseDescri
 	if len(keys) == 1 {
 		return resolver.resolve(operation[keys[0]])
 	}
-	return sourceInferredNextURLPagination(responses), nil
+	return sourceInferredNextURLPagination(responses, query), nil
 }
 
 // sourceInferredNextURLPagination recognizes the fully declared response
@@ -8067,7 +8067,7 @@ func sourcePagination(operation map[string]any, responses []sourceResponseDescri
 // generic response link into an ETL claim.  The returned dialect is the
 // engine's closed next_url paginator and contains only provider-owned field
 // names from the retained response schema.
-func sourceInferredNextURLPagination(responses []sourceResponseDescriptor) any {
+func sourceInferredNextURLPagination(responses []sourceResponseDescriptor, query []sourceParameterDescriptor) any {
 	paths := map[string]bool{}
 	for _, response := range responses {
 		if !sourceSuccessfulResponseStatus(response.Status) {
@@ -8098,9 +8098,52 @@ func sourceInferredNextURLPagination(responses []sourceResponseDescriptor) any {
 		return nil
 	}
 	for path := range paths {
-		return map[string]any{"type": "next_url", "next_url_path": path}
+		pagination := map[string]any{"type": "next_url", "next_url_path": path}
+		if pageSize, ok := sourceInferredNextURLLimitOffsetPageSize(query); ok {
+			// The source response owns continuation through next_page.uri, but
+			// Asana's source contract produces that URI only after an initial
+			// bounded limit request. These remain engine-owned pagination
+			// controls, never raw command flags: size_param drives page one and
+			// offset_param admits the provider-returned continuation URL.
+			pagination["size_param"] = "limit"
+			pagination["limit_param"] = "limit"
+			pagination["offset_param"] = "offset"
+			pagination["page_size"] = pageSize
+		}
+		return pagination
 	}
 	return nil
+}
+
+// sourceInferredNextURLLimitOffsetPageSize recognizes the exact bounded
+// limit/offset pair behind a next_page.uri response. The response shape proves
+// the continuation authority; the two typed query declarations prove which
+// source-owned controls the declarative engine may send and subsequently admit
+// in that returned URL. This narrow derivation deliberately does not infer a
+// pager from parameter names alone.
+func sourceInferredNextURLLimitOffsetPageSize(query []sourceParameterDescriptor) (int, bool) {
+	var limit, offset *sourceParameterDescriptor
+	for index := range query {
+		parameter := &query[index]
+		switch parameter.Name {
+		case "limit":
+			limit = parameter
+		case "offset":
+			offset = parameter
+		}
+	}
+	if limit == nil || offset == nil || !sourceScalarWireSchema(offset.Schema) {
+		return 0, false
+	}
+	schema, ok := limit.Schema.(map[string]any)
+	if !ok || schema["type"] != "integer" {
+		return 0, false
+	}
+	maximum := sourcePositiveInteger(schema["maximum"])
+	if maximum <= 0 || maximum > int64(math.MaxInt) {
+		return 0, false
+	}
+	return int(maximum), true
 }
 
 func sourceNextPageURIPath(schema any) (string, bool) {

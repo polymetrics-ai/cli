@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"strconv"
 	"strings"
 	"sync"
@@ -1459,5 +1460,53 @@ func TestDirectReadCursorURLKeepsTheCallerQuery(t *testing.T) {
 	}
 	if !strings.Contains(queries[1], "page=2") {
 		t.Fatalf("cursor request query = %q, want the provider's page=2 preserved", queries[1])
+	}
+}
+
+// A source-bound Asana list carries a response-owned next URL, but its source
+// contract requires `limit` on page one and returns `limit`/`offset` in the
+// continuation. Those fields must stay in the operation pagination block: the
+// caller never receives raw flags, yet the engine can send and admit them.
+func TestOperationDirectReadNextURLUsesClosedLimitOffsetContinuation(t *testing.T) {
+	var serverURL string
+	requests := make([]string, 0, 2)
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/attachments" {
+			t.Fatalf("path = %q, want /attachments", r.URL.Path)
+		}
+		requests = append(requests, r.URL.RawQuery)
+		if got := r.URL.Query().Get("limit"); got != "100" {
+			t.Fatalf("limit = %q, want derived page size 100", got)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		if r.URL.Query().Get("offset") == "" {
+			_, _ = fmt.Fprintf(w, `{"data":[{"gid":"1"}],"next_page":{"uri":%q}}`, serverURL+"/attachments?limit=100&offset=100")
+			return
+		}
+		_, _ = w.Write([]byte(`{"data":[{"gid":"2"}],"next_page":null}`))
+	}))
+	defer srv.Close()
+	serverURL = srv.URL
+
+	bundle := operationPaginatedBundle(srv.URL, &PaginationSpec{
+		Type: "next_url", NextURLPath: "next_page.uri",
+		SizeParam: "limit", LimitParam: "limit", OffsetParam: "offset", PageSize: 100,
+	}, []OperationParameter{{Name: "limit", In: "query", Type: "integer"}, {Name: "offset", In: "query", Type: "string"}}, "/attachments")
+	first, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{Operation: "acme.list", OutputPolicy: "json_redacted"}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead(page 1): %v", err)
+	}
+	if first.Page.NextCursor == "" {
+		t.Fatal("page 1 did not return a next-url cursor")
+	}
+	second, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{Operation: "acme.list", PageCursor: first.Page.NextCursor, OutputPolicy: "json_redacted"}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead(page 2): %v", err)
+	}
+	if got := arrayAtLen(t, second.Body, "data"); got != 1 {
+		t.Fatalf("page 2 records = %d, want 1", got)
+	}
+	if !reflect.DeepEqual(requests, []string{"limit=100", "limit=100&offset=100"}) {
+		t.Fatalf("requests = %#v, want derived limit then returned limit/offset cursor", requests)
 	}
 }

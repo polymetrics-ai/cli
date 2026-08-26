@@ -17,6 +17,27 @@
 
 Status: verified locally, pending PR automation and human gate.
 
+## r4 follow-up final local run
+
+- `go test -timeout 20m -count=1 ./cmd/connectorgen` passed in `182.924s`;
+  `./internal/connectors/engine`, `./internal/connectors/commandrunner`,
+  `./internal/connectors/defs/asana`, and `./internal/cli` passed (the CLI run
+  completed in `420.427s`).
+- `go vet` over all affected packages, `make lint`, `make tidy-check`,
+  `make docs-check-no-build`, `go run ./cmd/agentcontractgen check`, and
+  `make connector-canon-check` passed. `npm --prefix website run test:scripts`
+  passed 34 tests. Website `typecheck` could not run because this worktree has
+  no `tsc` executable; this is an environment prerequisite, not a product
+  test result.
+- Source import (249 Asana operations), full validation (553 connectors),
+  surface-sync (zero corrections), operation evidence (1,774 rows/5 rollups;
+  fixed-100 passed), runtime preflight, connector boundary (clean), and all
+  certification checks passed after final regeneration.
+- The fresh built `pm` censused all 212 implemented Asana commands in a new
+  credential-free project: every command exited 1 with `missing --credential`.
+- [ ] The required independent exact-SHA audit remains pending until the
+  normal fast-forward repair commit is pushed to #4356.
+
 ## Final post-rebase repair run
 
 - `go test -timeout 20m -count=1 ./cmd/connectorgen` passed after the V3
