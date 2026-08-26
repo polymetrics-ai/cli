@@ -1077,8 +1077,19 @@ func TestSourceImportCommandContractAndMigrationDocumentation(t *testing.T) {
 			t.Fatalf("source-import help exposes %s: %s", forbidden, stdout.String())
 		}
 	}
-	if !strings.Contains(stdout.String(), "source-import <connector>") || !strings.Contains(stdout.String(), "retained artifact") || strings.Contains(stdout.String(), "--cache-dir") {
-		t.Fatalf("source-import help is incomplete: %s", stdout.String())
+	for _, required := range []string{
+		"source-import <connector>",
+		"byte-backed",
+		"declaration-only source reference",
+		"source_contract_unavailable",
+		"retained content-addressed document artifacts",
+	} {
+		if !strings.Contains(stdout.String(), required) {
+			t.Fatalf("source-import help is missing %q: %s", required, stdout.String())
+		}
+	}
+	if strings.Contains(stdout.String(), "--cache-dir") {
+		t.Fatalf("source-import help exposes obsolete cache flag: %s", stdout.String())
 	}
 	stdout.Reset()
 	stderr.Reset()

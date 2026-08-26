@@ -63,3 +63,42 @@ reuse or weaken it.
 
 Pending. Record error-wrapping, defensive-copy, ordering, provenance, and
 generic-escape review outcomes after the final implementation.
+
+## Verify repair red
+
+2026-08-26 — GitHub Verify runs `32978972653` and `32978973162` both failed
+at the same source-import help contract. Local reproduction:
+
+```text
+go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportCommandContractAndMigrationDocumentation$' -count=1
+FAIL: source-import help is incomplete
+```
+
+The new correct help text wraps the historical literal `retained artifact`
+across a line boundary and explicitly introduces the safe declaration-only
+source-reference path. The assertion must move from fragile layout-dependent
+text to the real contract: byte-backed retained documents remain strict and
+the reference path emits `source_contract_unavailable`; no importer behavior
+will change for this repair.
+
+## Verify repair green
+
+2026-08-26 — the assertion now checks the explicit closed contracts instead of
+line layout. It requires byte-backed provenance language, the declaration-only
+reference path, its precise `source_contract_unavailable` gap, and retained
+content-addressed document behavior while continuing to refuse arbitrary
+request/cache flags.
+
+```text
+go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportCommandContractAndMigrationDocumentation$' -count=1
+PASS
+
+go test -timeout 20m ./cmd/connectorgen -count=1
+PASS (146.529s)
+
+go vet ./cmd/connectorgen
+PASS
+
+git diff --check
+PASS
+```
