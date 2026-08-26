@@ -347,7 +347,13 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 32 stream-backed endpoint group(s), 36 write-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  binary_payload=29, deprecated=1, destructive_admin=5, duplicate_of=16, non_data_endpoint=16,
-  out_of_scope=247, requires_elevated_scope=46.
+- `sync_transport.json` declares all 32 stream-backed endpoint groups as ETL sources and the
+  fixture/dry `customers(id) → update_customer` typed-destination proof. It has keyed delivery,
+  durable warehouse acknowledgement, and all closed modes. Foundation
+  `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` supplies persisted App/CLI destination dispatch; this
+  declaration still needs its installed App/CLI fixture path and provider-live certification.
+- Every declared typed action has an explicit reverse-ETL eligibility disposition:
+  `update_customer` is the bound proof and the other 35 are declaration-pending their exact source
+  mappings and conformance. Other source-locked mutations await connector-owned typed contracts and CLI bindings;
+  finance, destructive kind, privileged scope, binary form, and provider-live certification remain
+  execution/certification metadata, not omission reasons.

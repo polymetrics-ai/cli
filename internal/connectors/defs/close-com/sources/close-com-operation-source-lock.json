@@ -1,0 +1,2743 @@
+{
+  "schema_version": 3,
+  "connector": "close-com",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "retrieval": "Migrated schema-version 2 complete_machine_readable_specification source-lock capture.",
+    "openapi": [
+      "3.1.0"
+    ],
+    "coverage_confidence": {
+      "level": "complete_machine_readable_specification",
+      "basis": "Parsed every operation in the provider-published OpenAPI 3.1.0 document at https://api.close.com/api/openapi.json."
+    },
+    "source_documents": [
+      {
+        "id": "primary",
+        "kind": "openapi",
+        "artifact": {
+          "source_url": "https://api.close.com/api/openapi.json",
+          "sha256": "0dcf3303e9d7b875429c4247a4b6c6419a6e7676b3155c7596d15436c1d9aa94",
+          "bytes": 1340508,
+          "openapi": "3.1.0"
+        },
+        "published_source": {
+          "source_url": "https://api.close.com/api/openapi.json",
+          "capture_url": "https://api.close.com/api/openapi.json",
+          "sha256": "0dcf3303e9d7b875429c4247a4b6c6419a6e7676b3155c7596d15436c1d9aa94",
+          "bytes": 1340508,
+          "adapter": "schema-v2-source-lock-migration"
+        },
+        "info_version": "Close API v1 public OpenAPI specification",
+        "operations": [
+          {
+            "id": "close-com.rest.delete.ActivitiesCallsDelete0",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/activity/call/{id}/",
+            "operation_id": "activities.calls_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/call/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.ActivitiesCustomActivitiesDelete1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/activity/custom/{id}/",
+            "operation_id": "activities.custom_activities_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/custom/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.ActivitiesEmailsDelete2",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/activity/email/{id}/",
+            "operation_id": "activities.emails_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/email/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.ActivitiesEmailThreadsDelete3",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/activity/emailthread/{id}/",
+            "operation_id": "activities.email_threads_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/emailthread/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.ActivitiesFormSubmissionsDelete4",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/activity/form_submission/{id}/",
+            "operation_id": "activities.form_submissions_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/form_submission/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.ActivitiesImportUpdatesDelete5",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/activity/import_update/{id}/",
+            "operation_id": "activities.import_updates_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/import_update/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.ActivitiesMeetingsDelete6",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/activity/meeting/{id}/",
+            "operation_id": "activities.meetings_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/meeting/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.ActivitiesNotesDelete7",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/activity/note/{id}/",
+            "operation_id": "activities.notes_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/note/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.ActivitiesSmsDelete8",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/activity/sms/{id}/",
+            "operation_id": "activities.sms_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/sms/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.ActivitiesLeadStatusChangesDelete9",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/activity/status_change/lead/{id}/",
+            "operation_id": "activities.lead_status_changes_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/status_change/lead/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.ActivitiesOpportunityStatusChangesDelete10",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/activity/status_change/opportunity/{id}/",
+            "operation_id": "activities.opportunity_status_changes_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/status_change/opportunity/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.ActivitiesTaskCompletionsDelete11",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/activity/task_completed/{id}/",
+            "operation_id": "activities.task_completions_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/task_completed/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.ActivitiesWhatsappMessagesDelete12",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/activity/whatsapp_message/{id}/",
+            "operation_id": "activities.whatsapp_messages_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/whatsapp_message/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.BlockedPhoneNumbersDelete13",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/blocked_phone_number/{id}/",
+            "operation_id": "blocked_phone_numbers_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/blocked_phone_number/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.CommentsDelete14",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/comment/{id}/",
+            "operation_id": "comments_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/comment/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.ContactsDelete15",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/contact/{id}/",
+            "operation_id": "contacts_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/contact/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.CustomActivityTypesDelete16",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/custom_activity/{id}/",
+            "operation_id": "custom_activity_types_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_activity/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.CustomFieldsActivityDelete17",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/custom_field/activity/{id}/",
+            "operation_id": "custom_fields.activity_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/activity/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.CustomFieldsContactDelete18",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/custom_field/contact/{id}/",
+            "operation_id": "custom_fields.contact_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/contact/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.CustomFieldsCustomObjectDelete19",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/custom_field/custom_object_type/{id}/",
+            "operation_id": "custom_fields.custom_object_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/custom_object_type/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.CustomFieldsLeadDelete20",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/custom_field/lead/{id}/",
+            "operation_id": "custom_fields.lead_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/lead/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.CustomFieldsOpportunityDelete21",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/custom_field/opportunity/{id}/",
+            "operation_id": "custom_fields.opportunity_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/opportunity/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.CustomFieldsSharedDelete22",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/custom_field/shared/{id}/",
+            "operation_id": "custom_fields.shared_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/shared/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.CustomFieldsSharedDeleteAssociation23",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/custom_field/shared/{scf_id}/association/{object_type}/",
+            "operation_id": "custom_fields.shared_delete_association",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/shared/{scf_id}/association/{object_type}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.CustomObjectTypesDelete24",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/custom_object_type/{id}/",
+            "operation_id": "custom_object_types_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_object_type/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.CustomObjectsDelete25",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/custom_object/{id}/",
+            "operation_id": "custom_objects_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_object/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.EmailTemplatesDelete26",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/email_template/{id}/",
+            "operation_id": "email_templates_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/email_template/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.GroupsRemoveMember27",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/group/{group_id}/member/{user_id}/",
+            "operation_id": "groups_remove_member",
+            "deprecated": false,
+            "source_location": ".paths[\"/group/{group_id}/member/{user_id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.GroupsDelete28",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/group/{id}/",
+            "operation_id": "groups_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/group/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.IntegrationLinksDelete29",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/integration_link/{id}/",
+            "operation_id": "integration_links_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/integration_link/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.LeadsDelete30",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/lead/{id}/",
+            "operation_id": "leads_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/lead/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.MembershipsDelete31",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/membership/{id}/",
+            "operation_id": "memberships_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/membership/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.OpportunitiesDelete32",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/opportunity/{id}/",
+            "operation_id": "opportunities_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/opportunity/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.OutcomesDelete33",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/outcome/{id}/",
+            "operation_id": "outcomes_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/outcome/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.PhoneNumbersDelete34",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/phone_number/{id}/",
+            "operation_id": "phone_numbers_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/phone_number/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.PipelinesDelete35",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/pipeline/{id}/",
+            "operation_id": "pipelines_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/pipeline/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.PlaybooksDelete36",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/playbook/{id}/",
+            "operation_id": "playbooks_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/playbook/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.RolesDelete37",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/role/{id}/",
+            "operation_id": "roles_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/role/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.SmartViewsDelete38",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/saved_search/{id}/",
+            "operation_id": "smart_views_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/saved_search/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.SchedulingLinksDelete39",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/scheduling_link/{id}/",
+            "operation_id": "scheduling_links_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/scheduling_link/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.SchedulingLinksDeleteIntegration40",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/scheduling_link/integration/{source_id}/",
+            "operation_id": "scheduling_links_delete_integration",
+            "deprecated": false,
+            "source_location": ".paths[\"/scheduling_link/integration/{source_id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.SendAsDeleteByUser41",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/send_as/",
+            "operation_id": "send_as_delete_by_user",
+            "deprecated": false,
+            "source_location": ".paths[\"/send_as/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.SendAsDelete42",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/send_as/{id}/",
+            "operation_id": "send_as_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/send_as/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.SequencesDeleteSubscription43",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/sequence_subscription/{id}/",
+            "operation_id": "sequences_delete_subscription",
+            "deprecated": false,
+            "source_location": ".paths[\"/sequence_subscription/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.SequencesDelete44",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/sequence/{id}/",
+            "operation_id": "sequences_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/sequence/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.SchedulingLinksDeleteShared45",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/shared_scheduling_link/{id}/",
+            "operation_id": "scheduling_links_delete_shared",
+            "deprecated": false,
+            "source_location": ".paths[\"/shared_scheduling_link/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.SmsTemplatesDelete46",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/sms_template/{id}/",
+            "operation_id": "sms_templates_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/sms_template/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.LeadStatusesDelete47",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/status/lead/{id}/",
+            "operation_id": "lead_statuses_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/status/lead/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.OpportunityStatusesDelete48",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/status/opportunity/{id}/",
+            "operation_id": "opportunity_statuses_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/status/opportunity/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.TasksDelete49",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/task/{id}/",
+            "operation_id": "tasks_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/task/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.UnsubscribedEmailsDelete50",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/unsubscribe/email/{email_address}/",
+            "operation_id": "unsubscribed_emails_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/unsubscribe/email/{email_address}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.delete.WebhooksDelete51",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/webhook/{id}/",
+            "operation_id": "webhooks_delete",
+            "deprecated": false,
+            "source_location": ".paths[\"/webhook/{id}/\"].delete"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesList52",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/",
+            "operation_id": "activities_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesCallsList53",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/call/",
+            "operation_id": "activities.calls_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/call/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesCallsGet54",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/call/{id}/",
+            "operation_id": "activities.calls_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/call/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesCreationsList55",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/created/",
+            "operation_id": "activities.creations_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/created/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesCreationsGet56",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/created/{id}/",
+            "operation_id": "activities.creations_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/created/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesCustomActivitiesList57",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/custom/",
+            "operation_id": "activities.custom_activities_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/custom/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesCustomActivitiesGet58",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/custom/{id}/",
+            "operation_id": "activities.custom_activities_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/custom/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesEmailsList59",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/email/",
+            "operation_id": "activities.emails_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/email/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesEmailsGet60",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/email/{id}/",
+            "operation_id": "activities.emails_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/email/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesEmailThreadsList61",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/emailthread/",
+            "operation_id": "activities.email_threads_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/emailthread/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesEmailThreadsGet62",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/emailthread/{id}/",
+            "operation_id": "activities.email_threads_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/emailthread/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesFormSubmissionsList63",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/form_submission/",
+            "operation_id": "activities.form_submissions_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/form_submission/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesFormSubmissionsGet64",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/form_submission/{id}/",
+            "operation_id": "activities.form_submissions_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/form_submission/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesImportUpdatesList65",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/import_update/",
+            "operation_id": "activities.import_updates_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/import_update/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesImportUpdatesGet66",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/import_update/{id}/",
+            "operation_id": "activities.import_updates_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/import_update/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesLeadMergesList67",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/lead_merge/",
+            "operation_id": "activities.lead_merges_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/lead_merge/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesLeadMergesGet68",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/lead_merge/{id}/",
+            "operation_id": "activities.lead_merges_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/lead_merge/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesMeetingsList69",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/meeting/",
+            "operation_id": "activities.meetings_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/meeting/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesMeetingsGet70",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/meeting/{id}/",
+            "operation_id": "activities.meetings_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/meeting/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesNotesList71",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/note/",
+            "operation_id": "activities.notes_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/note/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesNotesGet72",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/note/{id}/",
+            "operation_id": "activities.notes_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/note/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesSmsList73",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/sms/",
+            "operation_id": "activities.sms_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/sms/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesSmsGet74",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/sms/{id}/",
+            "operation_id": "activities.sms_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/sms/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesLeadStatusChangesList75",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/status_change/lead/",
+            "operation_id": "activities.lead_status_changes_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/status_change/lead/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesLeadStatusChangesGet76",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/status_change/lead/{id}/",
+            "operation_id": "activities.lead_status_changes_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/status_change/lead/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesOpportunityStatusChangesList77",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/status_change/opportunity/",
+            "operation_id": "activities.opportunity_status_changes_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/status_change/opportunity/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesOpportunityStatusChangesGet78",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/status_change/opportunity/{id}/",
+            "operation_id": "activities.opportunity_status_changes_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/status_change/opportunity/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesTaskCompletionsList79",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/task_completed/",
+            "operation_id": "activities.task_completions_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/task_completed/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesTaskCompletionsGet80",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/task_completed/{id}/",
+            "operation_id": "activities.task_completions_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/task_completed/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesWhatsappMessagesList81",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/whatsapp_message/",
+            "operation_id": "activities.whatsapp_messages_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/whatsapp_message/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ActivitiesWhatsappMessagesGet82",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/activity/whatsapp_message/{id}/",
+            "operation_id": "activities.whatsapp_messages_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/whatsapp_message/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.BlockedPhoneNumbersList83",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/blocked_phone_number/",
+            "operation_id": "blocked_phone_numbers_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/blocked_phone_number/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.BlockedPhoneNumbersGet84",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/blocked_phone_number/{id}/",
+            "operation_id": "blocked_phone_numbers_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/blocked_phone_number/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.BlockedPhoneNumbersGetSettings85",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/blocked_phone_number/settings/",
+            "operation_id": "blocked_phone_numbers_get_settings",
+            "deprecated": false,
+            "source_location": ".paths[\"/blocked_phone_number/settings/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.BulkActionsDeleteList86",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/bulk_action/delete/",
+            "operation_id": "bulk_actions.delete_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/bulk_action/delete/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.BulkActionsDeleteGet87",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/bulk_action/delete/{id}/",
+            "operation_id": "bulk_actions.delete_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/bulk_action/delete/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.BulkActionsEditList88",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/bulk_action/edit/",
+            "operation_id": "bulk_actions.edit_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/bulk_action/edit/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.BulkActionsEditGet89",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/bulk_action/edit/{id}/",
+            "operation_id": "bulk_actions.edit_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/bulk_action/edit/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.BulkActionsEmailList90",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/bulk_action/email/",
+            "operation_id": "bulk_actions.email_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/bulk_action/email/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.BulkActionsEmailGet91",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/bulk_action/email/{id}/",
+            "operation_id": "bulk_actions.email_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/bulk_action/email/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.BulkActionsSequenceSubscriptionsList92",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/bulk_action/sequence_subscription/",
+            "operation_id": "bulk_actions.sequence_subscriptions_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/bulk_action/sequence_subscription/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.BulkActionsSequenceSubscriptionsGet93",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/bulk_action/sequence_subscription/{id}/",
+            "operation_id": "bulk_actions.sequence_subscriptions_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/bulk_action/sequence_subscription/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CommentsListThreads94",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/comment_thread/",
+            "operation_id": "comments_list_threads",
+            "deprecated": false,
+            "source_location": ".paths[\"/comment_thread/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CommentsGetThread95",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/comment_thread/{id}/",
+            "operation_id": "comments_get_thread",
+            "deprecated": false,
+            "source_location": ".paths[\"/comment_thread/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CommentsList96",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/comment/",
+            "operation_id": "comments_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/comment/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CommentsGet97",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/comment/{id}/",
+            "operation_id": "comments_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/comment/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ConnectedAccountsList98",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/connected_account/",
+            "operation_id": "connected_accounts_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/connected_account/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ConnectedAccountsGet99",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/connected_account/{id}/",
+            "operation_id": "connected_accounts_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/connected_account/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ContactsList100",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/contact/",
+            "operation_id": "contacts_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/contact/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ContactsGet101",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/contact/{id}/",
+            "operation_id": "contacts_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/contact/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomActivityTypesList102",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_activity/",
+            "operation_id": "custom_activity_types_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_activity/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomActivityTypesGet103",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_activity/{id}/",
+            "operation_id": "custom_activity_types_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_activity/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomFieldSchemasGet104",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_field_schema/{object_type}/",
+            "operation_id": "custom_field_schemas_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field_schema/{object_type}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomFieldsActivityList105",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_field/activity/",
+            "operation_id": "custom_fields.activity_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/activity/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomFieldsActivityGet106",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_field/activity/{id}/",
+            "operation_id": "custom_fields.activity_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/activity/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomFieldsContactList107",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_field/contact/",
+            "operation_id": "custom_fields.contact_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/contact/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomFieldsContactGet108",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_field/contact/{id}/",
+            "operation_id": "custom_fields.contact_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/contact/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomFieldsCustomObjectList109",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_field/custom_object_type/",
+            "operation_id": "custom_fields.custom_object_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/custom_object_type/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomFieldsCustomObjectGet110",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_field/custom_object_type/{id}/",
+            "operation_id": "custom_fields.custom_object_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/custom_object_type/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomFieldsLeadList111",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_field/lead/",
+            "operation_id": "custom_fields.lead_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/lead/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomFieldsLeadGet112",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_field/lead/{id}/",
+            "operation_id": "custom_fields.lead_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/lead/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomFieldsOpportunityList113",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_field/opportunity/",
+            "operation_id": "custom_fields.opportunity_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/opportunity/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomFieldsOpportunityGet114",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_field/opportunity/{id}/",
+            "operation_id": "custom_fields.opportunity_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/opportunity/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomFieldsSharedList115",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_field/shared/",
+            "operation_id": "custom_fields.shared_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/shared/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomFieldsSharedGet116",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_field/shared/{id}/",
+            "operation_id": "custom_fields.shared_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/shared/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomFieldsSharedGetAssociation117",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_field/shared/{scf_id}/association/{object_type}/",
+            "operation_id": "custom_fields.shared_get_association",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/shared/{scf_id}/association/{object_type}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomObjectTypesList118",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_object_type/",
+            "operation_id": "custom_object_types_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_object_type/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomObjectTypesGet119",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_object_type/{id}/",
+            "operation_id": "custom_object_types_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_object_type/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomObjectsList120",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_object/",
+            "operation_id": "custom_objects_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_object/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.CustomObjectsGet121",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_object/{id}/",
+            "operation_id": "custom_objects_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_object/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.DialersList122",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/dialer/",
+            "operation_id": "dialers_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/dialer/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.DialersGet123",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/dialer/{id}/",
+            "operation_id": "dialers_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/dialer/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.EmailTemplatesList124",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/email_template/",
+            "operation_id": "email_templates_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/email_template/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.EmailTemplatesGet125",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/email_template/{id}/",
+            "operation_id": "email_templates_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/email_template/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.EmailTemplatesRender126",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/email_template/{id}/render/",
+            "operation_id": "email_templates_render",
+            "deprecated": false,
+            "source_location": ".paths[\"/email_template/{id}/render/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.EventsList127",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/event/",
+            "operation_id": "events_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/event/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.EventsGet128",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/event/{id}/",
+            "operation_id": "events_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/event/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ExportsList129",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/export/",
+            "operation_id": "exports_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/export/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ExportsGet130",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/export/{id}/",
+            "operation_id": "exports_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/export/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ExportsListLead131",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/export/lead/",
+            "operation_id": "exports_list_lead",
+            "deprecated": false,
+            "source_location": ".paths[\"/export/lead/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ExportsGetLead132",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/export/lead/{id}/",
+            "operation_id": "exports_get_lead",
+            "deprecated": false,
+            "source_location": ".paths[\"/export/lead/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ExportsListOpportunity133",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/export/opportunity/",
+            "operation_id": "exports_list_opportunity",
+            "deprecated": false,
+            "source_location": ".paths[\"/export/opportunity/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ExportsGetOpportunity134",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/export/opportunity/{id}/",
+            "operation_id": "exports_get_opportunity",
+            "deprecated": false,
+            "source_location": ".paths[\"/export/opportunity/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.FormsList135",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/form/",
+            "operation_id": "forms_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/form/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.FormsFetch136",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/form/{id}/",
+            "operation_id": "forms_fetch",
+            "deprecated": false,
+            "source_location": ".paths[\"/form/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.GroupsList137",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/group/",
+            "operation_id": "groups_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/group/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.GroupsGet138",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/group/{id}/",
+            "operation_id": "groups_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/group/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.IntegrationLinksList139",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/integration_link/",
+            "operation_id": "integration_links_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/integration_link/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.IntegrationLinksGet140",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/integration_link/{id}/",
+            "operation_id": "integration_links_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/integration_link/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.LeadsList141",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/lead/",
+            "operation_id": "leads_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/lead/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.LeadsGet142",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/lead/{id}/",
+            "operation_id": "leads_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/lead/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.UsersGetMe143",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/me/",
+            "operation_id": "users_get_me",
+            "deprecated": false,
+            "source_location": ".paths[\"/me/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.MembershipsGetPinnedViews144",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/membership/{id}/pinned_views/",
+            "operation_id": "memberships_get_pinned_views",
+            "deprecated": false,
+            "source_location": ".paths[\"/membership/{id}/pinned_views/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.OpportunitiesList145",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunity/",
+            "operation_id": "opportunities_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/opportunity/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.OpportunitiesGet146",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunity/{id}/",
+            "operation_id": "opportunities_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/opportunity/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.OrganizationsGet147",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/organization/{id}/",
+            "operation_id": "organizations_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/organization/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.OutcomesList148",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/outcome/",
+            "operation_id": "outcomes_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/outcome/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.OutcomesGet149",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/outcome/{id}/",
+            "operation_id": "outcomes_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/outcome/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.PhoneNumbersList150",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/phone_number/",
+            "operation_id": "phone_numbers_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/phone_number/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.PhoneNumbersGet151",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/phone_number/{id}/",
+            "operation_id": "phone_numbers_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/phone_number/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.PipelinesList152",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/pipeline/",
+            "operation_id": "pipelines_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/pipeline/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.PipelinesGet153",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/pipeline/{id}/",
+            "operation_id": "pipelines_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/pipeline/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.PlaybooksList154",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/playbook/",
+            "operation_id": "playbooks_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/playbook/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.PlaybooksGet155",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/playbook/{id}/",
+            "operation_id": "playbooks_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/playbook/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ReportingListActivityMetrics156",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/report/activity/metrics/",
+            "operation_id": "reporting_list_activity_metrics",
+            "deprecated": false,
+            "source_location": ".paths[\"/report/activity/metrics/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ReportingGetCustom157",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/report/custom/{org_id}/",
+            "operation_id": "reporting_get_custom",
+            "deprecated": false,
+            "source_location": ".paths[\"/report/custom/{org_id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ReportingGetSentEmails158",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/report/sent_emails/{org_id}/",
+            "operation_id": "reporting_get_sent_emails",
+            "deprecated": false,
+            "source_location": ".paths[\"/report/sent_emails/{org_id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ReportingGetLeadStatuses159",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/report/statuses/lead/{org_id}/",
+            "operation_id": "reporting_get_lead_statuses",
+            "deprecated": false,
+            "source_location": ".paths[\"/report/statuses/lead/{org_id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.ReportingGetOpportunityStatuses160",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/report/statuses/opportunity/{org_id}/",
+            "operation_id": "reporting_get_opportunity_statuses",
+            "deprecated": false,
+            "source_location": ".paths[\"/report/statuses/opportunity/{org_id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.RolesList161",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/role/",
+            "operation_id": "roles_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/role/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.RolesGet162",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/role/{id}/",
+            "operation_id": "roles_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/role/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.SmartViewsList163",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/saved_search/",
+            "operation_id": "smart_views_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/saved_search/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.SmartViewsGet164",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/saved_search/{id}/",
+            "operation_id": "smart_views_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/saved_search/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.SchedulingLinksList165",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/scheduling_link/",
+            "operation_id": "scheduling_links_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/scheduling_link/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.SchedulingLinksGet166",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/scheduling_link/{id}/",
+            "operation_id": "scheduling_links_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/scheduling_link/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.SendAsList167",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/send_as/",
+            "operation_id": "send_as_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/send_as/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.SendAsGet168",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/send_as/{id}/",
+            "operation_id": "send_as_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/send_as/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.SequencesListSubscriptions169",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/sequence_subscription/",
+            "operation_id": "sequences_list_subscriptions",
+            "deprecated": false,
+            "source_location": ".paths[\"/sequence_subscription/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.SequencesGetSubscription170",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/sequence_subscription/{id}/",
+            "operation_id": "sequences_get_subscription",
+            "deprecated": false,
+            "source_location": ".paths[\"/sequence_subscription/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.SequencesList171",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/sequence/",
+            "operation_id": "sequences_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/sequence/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.SequencesGet172",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/sequence/{id}/",
+            "operation_id": "sequences_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/sequence/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.SchedulingLinksListShared173",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/shared_scheduling_link/",
+            "operation_id": "scheduling_links_list_shared",
+            "deprecated": false,
+            "source_location": ".paths[\"/shared_scheduling_link/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.SchedulingLinksGetShared174",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/shared_scheduling_link/{id}/",
+            "operation_id": "scheduling_links_get_shared",
+            "deprecated": false,
+            "source_location": ".paths[\"/shared_scheduling_link/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.SmsTemplatesList175",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/sms_template/",
+            "operation_id": "sms_templates_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/sms_template/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.SmsTemplatesGet176",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/sms_template/{id}/",
+            "operation_id": "sms_templates_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/sms_template/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.LeadStatusesList177",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/status/lead/",
+            "operation_id": "lead_statuses_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/status/lead/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.LeadStatusesGet178",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/status/lead/{id}/",
+            "operation_id": "lead_statuses_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/status/lead/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.OpportunityStatusesList179",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/status/opportunity/",
+            "operation_id": "opportunity_statuses_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/status/opportunity/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.OpportunityStatusesGet180",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/status/opportunity/{id}/",
+            "operation_id": "opportunity_statuses_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/status/opportunity/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.TasksList181",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/task/",
+            "operation_id": "tasks_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/task/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.TasksGet182",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/task/{id}/",
+            "operation_id": "tasks_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/task/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.UnsubscribedEmailsList183",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/unsubscribe/email/",
+            "operation_id": "unsubscribed_emails_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/unsubscribe/email/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.UsersList184",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/user/",
+            "operation_id": "users_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/user/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.UsersGet185",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/user/{id}/",
+            "operation_id": "users_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/user/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.UsersListAvailabilities186",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/user/availability/",
+            "operation_id": "users_list_availabilities",
+            "deprecated": false,
+            "source_location": ".paths[\"/user/availability/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.WebhooksList187",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/webhook/",
+            "operation_id": "webhooks_list",
+            "deprecated": false,
+            "source_location": ".paths[\"/webhook/\"].get"
+          },
+          {
+            "id": "close-com.rest.get.WebhooksGet188",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/webhook/{id}/",
+            "operation_id": "webhooks_get",
+            "deprecated": false,
+            "source_location": ".paths[\"/webhook/{id}/\"].get"
+          },
+          {
+            "id": "close-com.rest.post.ActivitiesCallsCreate189",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/activity/call/",
+            "operation_id": "activities.calls_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/call/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.ActivitiesCustomActivitiesCreate190",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/activity/custom/",
+            "operation_id": "activities.custom_activities_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/custom/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.ActivitiesEmailsCreate191",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/activity/email/",
+            "operation_id": "activities.emails_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/email/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.ActivitiesMeetingsCreateIntegration192",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/activity/meeting/{id}/integration/",
+            "operation_id": "activities.meetings_create_integration",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/meeting/{id}/integration/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.ActivitiesNotesCreate193",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/activity/note/",
+            "operation_id": "activities.notes_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/note/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.ActivitiesSmsCreate194",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/activity/sms/",
+            "operation_id": "activities.sms_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/sms/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.ActivitiesLeadStatusChangesCreate195",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/activity/status_change/lead/",
+            "operation_id": "activities.lead_status_changes_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/status_change/lead/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.ActivitiesOpportunityStatusChangesCreate196",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/activity/status_change/opportunity/",
+            "operation_id": "activities.opportunity_status_changes_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/status_change/opportunity/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.ActivitiesWhatsappMessagesCreate197",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/activity/whatsapp_message/",
+            "operation_id": "activities.whatsapp_messages_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/whatsapp_message/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.BlockedPhoneNumbersCreate198",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/blocked_phone_number/",
+            "operation_id": "blocked_phone_numbers_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/blocked_phone_number/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.BulkActionsDeleteCreate199",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/bulk_action/delete/",
+            "operation_id": "bulk_actions.delete_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/bulk_action/delete/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.BulkActionsEditCreate200",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/bulk_action/edit/",
+            "operation_id": "bulk_actions.edit_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/bulk_action/edit/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.BulkActionsEmailCreate201",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/bulk_action/email/",
+            "operation_id": "bulk_actions.email_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/bulk_action/email/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.BulkActionsSequenceSubscriptionsCreate202",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/bulk_action/sequence_subscription/",
+            "operation_id": "bulk_actions.sequence_subscriptions_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/bulk_action/sequence_subscription/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.CommentsCreate203",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/comment/",
+            "operation_id": "comments_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/comment/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.ContactsCreate204",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/contact/",
+            "operation_id": "contacts_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/contact/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.CustomActivityTypesCreate205",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/custom_activity/",
+            "operation_id": "custom_activity_types_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_activity/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.CustomFieldsActivityCreate206",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/custom_field/activity/",
+            "operation_id": "custom_fields.activity_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/activity/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.CustomFieldsContactCreate207",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/custom_field/contact/",
+            "operation_id": "custom_fields.contact_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/contact/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.CustomFieldsCustomObjectCreate208",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/custom_field/custom_object_type/",
+            "operation_id": "custom_fields.custom_object_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/custom_object_type/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.CustomFieldsLeadCreate209",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/custom_field/lead/",
+            "operation_id": "custom_fields.lead_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/lead/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.CustomFieldsOpportunityCreate210",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/custom_field/opportunity/",
+            "operation_id": "custom_fields.opportunity_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/opportunity/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.CustomFieldsSharedCreate211",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/custom_field/shared/",
+            "operation_id": "custom_fields.shared_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/shared/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.CustomFieldsSharedCreateAssociation212",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/custom_field/shared/{scf_id}/association/",
+            "operation_id": "custom_fields.shared_create_association",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/shared/{scf_id}/association/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.CustomObjectTypesCreate213",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/custom_object_type/",
+            "operation_id": "custom_object_types_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_object_type/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.CustomObjectsCreate214",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/custom_object/",
+            "operation_id": "custom_objects_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_object/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.EmailTemplatesCreate215",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/email_template/",
+            "operation_id": "email_templates_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/email_template/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.FieldEnrichmentCreate216",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/enrich_field/",
+            "operation_id": "field_enrichment_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/enrich_field/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.ExportsCreateLead217",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/export/lead/",
+            "operation_id": "exports_create_lead",
+            "deprecated": false,
+            "source_location": ".paths[\"/export/lead/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.ExportsCreateOpportunity218",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/export/opportunity/",
+            "operation_id": "exports_create_opportunity",
+            "deprecated": false,
+            "source_location": ".paths[\"/export/opportunity/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.FilesCreate219",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/files/upload/",
+            "operation_id": "files_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/files/upload/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.GroupsCreate220",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/group/",
+            "operation_id": "groups_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/group/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.GroupsAddMember221",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/group/{group_id}/member/",
+            "operation_id": "groups_add_member",
+            "deprecated": false,
+            "source_location": ".paths[\"/group/{group_id}/member/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.IntegrationLinksCreate222",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/integration_link/",
+            "operation_id": "integration_links_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/integration_link/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.LeadsCreate223",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/lead/",
+            "operation_id": "leads_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/lead/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.LeadsMerge224",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/lead/merge/",
+            "operation_id": "leads_merge",
+            "deprecated": false,
+            "source_location": ".paths[\"/lead/merge/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.MembershipsCreate225",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/membership/",
+            "operation_id": "memberships_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/membership/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.OpportunitiesCreate226",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/opportunity/",
+            "operation_id": "opportunities_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/opportunity/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.OutcomesCreate227",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/outcome/",
+            "operation_id": "outcomes_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/outcome/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.PhoneNumbersCreate228",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/phone_number/request/internal/",
+            "operation_id": "phone_numbers_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/phone_number/request/internal/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.PipelinesCreate229",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/pipeline/",
+            "operation_id": "pipelines_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/pipeline/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.PlaybooksCreate230",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/playbook/",
+            "operation_id": "playbooks_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/playbook/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.PlaybooksArchive231",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/playbook/{id}/archive/",
+            "operation_id": "playbooks_archive",
+            "deprecated": false,
+            "source_location": ".paths[\"/playbook/{id}/archive/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.PlaybooksUnarchive232",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/playbook/{id}/unarchive/",
+            "operation_id": "playbooks_unarchive",
+            "deprecated": false,
+            "source_location": ".paths[\"/playbook/{id}/unarchive/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.ReportingGetActivity233",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/report/activity/",
+            "operation_id": "reporting_get_activity",
+            "deprecated": false,
+            "source_location": ".paths[\"/report/activity/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.ReportingGetFunnelStages234",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/report/funnel/opportunity/stages/",
+            "operation_id": "reporting_get_funnel_stages",
+            "deprecated": false,
+            "source_location": ".paths[\"/report/funnel/opportunity/stages/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.ReportingGetFunnelTotals235",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/report/funnel/opportunity/totals/",
+            "operation_id": "reporting_get_funnel_totals",
+            "deprecated": false,
+            "source_location": ".paths[\"/report/funnel/opportunity/totals/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.RolesCreate236",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/role/",
+            "operation_id": "roles_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/role/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.SmartViewsCreate237",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/saved_search/",
+            "operation_id": "smart_views_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/saved_search/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.SchedulingLinksCreate238",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/scheduling_link/",
+            "operation_id": "scheduling_links_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/scheduling_link/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.SchedulingLinksCreateIntegration239",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/scheduling_link/integration/",
+            "operation_id": "scheduling_links_create_integration",
+            "deprecated": false,
+            "source_location": ".paths[\"/scheduling_link/integration/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.SendAsCreate240",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/send_as/",
+            "operation_id": "send_as_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/send_as/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.SendAsBulkCreate241",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/send_as/bulk/",
+            "operation_id": "send_as_bulk_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/send_as/bulk/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.SequencesCreateSubscription242",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/sequence_subscription/",
+            "operation_id": "sequences_create_subscription",
+            "deprecated": false,
+            "source_location": ".paths[\"/sequence_subscription/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.SequencesCreate243",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/sequence/",
+            "operation_id": "sequences_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/sequence/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.SchedulingLinksCreateSharedAssociation244",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/shared_scheduling_link_association/",
+            "operation_id": "scheduling_links_create_shared_association",
+            "deprecated": false,
+            "source_location": ".paths[\"/shared_scheduling_link_association/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.SchedulingLinksDeleteSharedAssociation245",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/shared_scheduling_link_association/unmap/",
+            "operation_id": "scheduling_links_delete_shared_association",
+            "deprecated": false,
+            "source_location": ".paths[\"/shared_scheduling_link_association/unmap/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.SchedulingLinksCreateShared246",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/shared_scheduling_link/",
+            "operation_id": "scheduling_links_create_shared",
+            "deprecated": false,
+            "source_location": ".paths[\"/shared_scheduling_link/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.SmsTemplatesCreate247",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/sms_template/",
+            "operation_id": "sms_templates_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/sms_template/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.LeadStatusesCreate248",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/status/lead/",
+            "operation_id": "lead_statuses_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/status/lead/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.OpportunityStatusesCreate249",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/status/opportunity/",
+            "operation_id": "opportunity_statuses_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/status/opportunity/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.TasksCreate250",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/task/",
+            "operation_id": "tasks_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/task/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.UnsubscribedEmailsCreate251",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/unsubscribe/email/",
+            "operation_id": "unsubscribed_emails_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/unsubscribe/email/\"].post"
+          },
+          {
+            "id": "close-com.rest.post.WebhooksCreate252",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/webhook/",
+            "operation_id": "webhooks_create",
+            "deprecated": false,
+            "source_location": ".paths[\"/webhook/\"].post"
+          },
+          {
+            "id": "close-com.rest.put.ActivitiesCallsUpdate253",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/activity/call/{id}/",
+            "operation_id": "activities.calls_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/call/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.ActivitiesCustomActivitiesUpdate254",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/activity/custom/{id}/",
+            "operation_id": "activities.custom_activities_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/custom/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.ActivitiesEmailsUpdate255",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/activity/email/{id}/",
+            "operation_id": "activities.emails_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/email/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.ActivitiesMeetingsUpdate256",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/activity/meeting/{id}/",
+            "operation_id": "activities.meetings_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/meeting/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.ActivitiesNotesUpdate257",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/activity/note/{id}/",
+            "operation_id": "activities.notes_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/note/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.ActivitiesSmsUpdate258",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/activity/sms/{id}/",
+            "operation_id": "activities.sms_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/sms/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.ActivitiesWhatsappMessagesUpdate259",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/activity/whatsapp_message/{id}/",
+            "operation_id": "activities.whatsapp_messages_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/activity/whatsapp_message/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.BlockedPhoneNumbersUpdate260",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/blocked_phone_number/{id}/",
+            "operation_id": "blocked_phone_numbers_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/blocked_phone_number/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.BlockedPhoneNumbersUpdateSettings261",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/blocked_phone_number/settings/",
+            "operation_id": "blocked_phone_numbers_update_settings",
+            "deprecated": false,
+            "source_location": ".paths[\"/blocked_phone_number/settings/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.CommentsUpdate262",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/comment/{id}/",
+            "operation_id": "comments_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/comment/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.ContactsUpdate263",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/contact/{id}/",
+            "operation_id": "contacts_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/contact/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.CustomActivityTypesUpdate264",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/custom_activity/{id}/",
+            "operation_id": "custom_activity_types_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_activity/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.CustomFieldSchemasUpdate265",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/custom_field_schema/{object_type}/",
+            "operation_id": "custom_field_schemas_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field_schema/{object_type}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.CustomFieldsActivityUpdate266",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/custom_field/activity/{id}/",
+            "operation_id": "custom_fields.activity_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/activity/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.CustomFieldsContactUpdate267",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/custom_field/contact/{id}/",
+            "operation_id": "custom_fields.contact_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/contact/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.CustomFieldsCustomObjectUpdate268",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/custom_field/custom_object_type/{id}/",
+            "operation_id": "custom_fields.custom_object_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/custom_object_type/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.CustomFieldsLeadUpdate269",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/custom_field/lead/{id}/",
+            "operation_id": "custom_fields.lead_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/lead/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.CustomFieldsOpportunityUpdate270",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/custom_field/opportunity/{id}/",
+            "operation_id": "custom_fields.opportunity_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/opportunity/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.CustomFieldsSharedUpdate271",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/custom_field/shared/{id}/",
+            "operation_id": "custom_fields.shared_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/shared/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.CustomFieldsSharedUpdateAssociation272",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/custom_field/shared/{scf_id}/association/{object_type}/",
+            "operation_id": "custom_fields.shared_update_association",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_field/shared/{scf_id}/association/{object_type}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.CustomObjectTypesUpdate273",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/custom_object_type/{id}/",
+            "operation_id": "custom_object_types_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_object_type/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.CustomObjectsUpdate274",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/custom_object/{id}/",
+            "operation_id": "custom_objects_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/custom_object/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.EmailTemplatesUpdate275",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/email_template/{id}/",
+            "operation_id": "email_templates_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/email_template/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.GroupsUpdate276",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/group/{id}/",
+            "operation_id": "groups_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/group/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.IntegrationLinksUpdate277",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/integration_link/{id}/",
+            "operation_id": "integration_links_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/integration_link/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.LeadsUpdate278",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/lead/{id}/",
+            "operation_id": "leads_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/lead/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.MembershipsBulkUpdate279",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/membership/",
+            "operation_id": "memberships_bulk_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/membership/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.MembershipsUpdate280",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/membership/{id}/",
+            "operation_id": "memberships_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/membership/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.MembershipsUpdatePinnedViews281",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/membership/{id}/pinned_views/",
+            "operation_id": "memberships_update_pinned_views",
+            "deprecated": false,
+            "source_location": ".paths[\"/membership/{id}/pinned_views/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.OpportunitiesUpdate282",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/opportunity/{id}/",
+            "operation_id": "opportunities_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/opportunity/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.OrganizationsUpdate283",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/organization/{id}/",
+            "operation_id": "organizations_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/organization/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.OutcomesUpdate284",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/outcome/{id}/",
+            "operation_id": "outcomes_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/outcome/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.PhoneNumbersUpdate285",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/phone_number/{id}/",
+            "operation_id": "phone_numbers_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/phone_number/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.PipelinesUpdate286",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/pipeline/{id}/",
+            "operation_id": "pipelines_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/pipeline/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.PlaybooksUpdate287",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/playbook/{id}/",
+            "operation_id": "playbooks_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/playbook/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.RolesUpdate288",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/role/{id}/",
+            "operation_id": "roles_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/role/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.SmartViewsUpdate289",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/saved_search/{id}/",
+            "operation_id": "smart_views_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/saved_search/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.SchedulingLinksUpdate290",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/scheduling_link/{id}/",
+            "operation_id": "scheduling_links_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/scheduling_link/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.SequencesUpdateSubscription291",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/sequence_subscription/{id}/",
+            "operation_id": "sequences_update_subscription",
+            "deprecated": false,
+            "source_location": ".paths[\"/sequence_subscription/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.SequencesUpdate292",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/sequence/{id}/",
+            "operation_id": "sequences_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/sequence/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.SchedulingLinksUpdateShared293",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/shared_scheduling_link/{id}/",
+            "operation_id": "scheduling_links_update_shared",
+            "deprecated": false,
+            "source_location": ".paths[\"/shared_scheduling_link/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.SmsTemplatesUpdate294",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/sms_template/{id}/",
+            "operation_id": "sms_templates_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/sms_template/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.LeadStatusesUpdate295",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/status/lead/{id}/",
+            "operation_id": "lead_statuses_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/status/lead/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.OpportunityStatusesUpdate296",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/status/opportunity/{id}/",
+            "operation_id": "opportunity_statuses_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/status/opportunity/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.TasksBulkUpdate297",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/task/",
+            "operation_id": "tasks_bulk_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/task/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.TasksUpdate298",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/task/{id}/",
+            "operation_id": "tasks_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/task/{id}/\"].put"
+          },
+          {
+            "id": "close-com.rest.put.WebhooksUpdate299",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/webhook/{id}/",
+            "operation_id": "webhooks_update",
+            "deprecated": false,
+            "source_location": ".paths[\"/webhook/{id}/\"].put"
+          }
+        ]
+      }
+    ]
+  },
+  "counts": {
+    "rest": 300,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 300
+  }
+}

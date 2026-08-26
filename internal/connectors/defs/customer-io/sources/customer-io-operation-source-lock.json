@@ -1,0 +1,1537 @@
+{
+  "schema_version": 3,
+  "connector": "customer-io",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "retrieval": "Migrated schema-version 2 complete_machine_readable_specification source-lock capture.",
+    "openapi": [
+      "3.1.0"
+    ],
+    "coverage_confidence": {
+      "level": "complete_machine_readable_specification",
+      "basis": "Parsed every operation in the provider-published OpenAPI 3.1.0 document at https://docs.customer.io/files/journeys-app.json."
+    },
+    "source_documents": [
+      {
+        "id": "primary",
+        "kind": "openapi",
+        "artifact": {
+          "source_url": "https://docs.customer.io/files/journeys-app.json",
+          "sha256": "530247ec5c40de4c6dd62f2154e952b2e99184a9bf60243e44503984b8182f6d",
+          "bytes": 10503986,
+          "openapi": "3.1.0"
+        },
+        "published_source": {
+          "source_url": "https://docs.customer.io/files/journeys-app.json",
+          "capture_url": "https://docs.customer.io/files/journeys-app.json",
+          "sha256": "530247ec5c40de4c6dd62f2154e952b2e99184a9bf60243e44503984b8182f6d",
+          "bytes": 10503986,
+          "adapter": "schema-v2-source-lock-migration"
+        },
+        "info_version": "Customer.io App API v1 (https://api.customer.io/v1, or https://api-eu.customer.io/v1 for the EU region)",
+        "operations": [
+          {
+            "id": "customer-io.rest.delete.DeleteAsset0",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/assets/files/{id}",
+            "operation_id": "deleteAsset",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/assets/files/{id}\"].delete"
+          },
+          {
+            "id": "customer-io.rest.delete.DeleteAssetFolder1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/assets/folders/{id}",
+            "operation_id": "deleteAssetFolder",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/assets/folders/{id}\"].delete"
+          },
+          {
+            "id": "customer-io.rest.delete.DeleteCollection2",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/collections/{collection_id}",
+            "operation_id": "deleteCollection",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/collections/{collection_id}\"].delete"
+          },
+          {
+            "id": "customer-io.rest.delete.DeleteComponent3",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/design_studio/components/{id}",
+            "operation_id": "deleteComponent",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/components/{id}\"].delete"
+          },
+          {
+            "id": "customer-io.rest.delete.DeleteEmail4",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/design_studio/emails/{id}",
+            "operation_id": "deleteEmail",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/emails/{id}\"].delete"
+          },
+          {
+            "id": "customer-io.rest.delete.DeleteEmailTranslation5",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/design_studio/emails/{id}/languages/{language}",
+            "operation_id": "deleteEmailTranslation",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/emails/{id}/languages/{language}\"].delete"
+          },
+          {
+            "id": "customer-io.rest.delete.DeleteFolder6",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/design_studio/folders/{id}",
+            "operation_id": "deleteFolder",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/folders/{id}\"].delete"
+          },
+          {
+            "id": "customer-io.rest.delete.DeleteSuppression7",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/esp/suppression/{suppression_type}/{email_address}",
+            "operation_id": "deleteSuppression",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/esp/suppression/{suppression_type}/{email_address}\"].delete"
+          },
+          {
+            "id": "customer-io.rest.delete.DeleteNewsletters8",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/newsletters/{newsletter_id}",
+            "operation_id": "deleteNewsletters",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}\"].delete"
+          },
+          {
+            "id": "customer-io.rest.delete.DeleteNewsletterLanguageVariant9",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/newsletters/{newsletter_id}/language/{language}",
+            "operation_id": "deleteNewsletterLanguageVariant",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/language/{language}\"].delete"
+          },
+          {
+            "id": "customer-io.rest.delete.DeleteNewsletterTestLanguageVariant10",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}",
+            "operation_id": "deleteNewsletterTestLanguageVariant",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}\"].delete"
+          },
+          {
+            "id": "customer-io.rest.delete.DeleteWebhook11",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/reporting_webhooks/{webhook_id}",
+            "operation_id": "deleteWebhook",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/reporting_webhooks/{webhook_id}\"].delete"
+          },
+          {
+            "id": "customer-io.rest.delete.DeleteManSegment12",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/segments/{segment_id}",
+            "operation_id": "deleteManSegment",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/segments/{segment_id}\"].delete"
+          },
+          {
+            "id": "customer-io.rest.delete.DeleteSnippet13",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/snippets/{snippet_name}",
+            "operation_id": "deleteSnippet",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/snippets/{snippet_name}\"].delete"
+          },
+          {
+            "id": "customer-io.rest.get.ListActivities14",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/activities",
+            "operation_id": "listActivities",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/activities\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListAssets15",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/assets",
+            "operation_id": "listAssets",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/assets\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetAsset16",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/assets/files/{id}",
+            "operation_id": "getAsset",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/assets/files/{id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListAssetFolders17",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/assets/folders",
+            "operation_id": "listAssetFolders",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/assets/folders\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetAssetFolder18",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/assets/folders/{id}",
+            "operation_id": "getAssetFolder",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/assets/folders/{id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListBroadcasts19",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/broadcasts",
+            "operation_id": "listBroadcasts",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/broadcasts\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetBroadcast20",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/broadcasts/{broadcast_id}",
+            "operation_id": "getBroadcast",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/broadcasts/{broadcast_id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.BroadcastActions21",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/broadcasts/{broadcast_id}/actions",
+            "operation_id": "broadcastActions",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/broadcasts/{broadcast_id}/actions\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetBroadcastAction22",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}",
+            "operation_id": "getBroadcastAction",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/broadcasts/{broadcast_id}/actions/{action_id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetBroadcastActionLanguage23",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/language/{language}",
+            "operation_id": "getBroadcastActionLanguage",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/broadcasts/{broadcast_id}/actions/{action_id}/language/{language}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.BroadcastActionMetrics24",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/metrics",
+            "operation_id": "broadcastActionMetrics",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/broadcasts/{broadcast_id}/actions/{action_id}/metrics\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.BroadcastActionLinks25",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/metrics/links",
+            "operation_id": "broadcastActionLinks",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/broadcasts/{broadcast_id}/actions/{action_id}/metrics/links\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.BroadcastMessages26",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/broadcasts/{broadcast_id}/messages",
+            "operation_id": "broadcastMessages",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/broadcasts/{broadcast_id}/messages\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.BroadcastMetrics27",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/broadcasts/{broadcast_id}/metrics",
+            "operation_id": "broadcastMetrics",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/broadcasts/{broadcast_id}/metrics\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.BroadcastLinks28",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/broadcasts/{broadcast_id}/metrics/links",
+            "operation_id": "broadcastLinks",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/broadcasts/{broadcast_id}/metrics/links\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListBroadcastTriggers29",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/broadcasts/{broadcast_id}/triggers",
+            "operation_id": "listBroadcastTriggers",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/broadcasts/{broadcast_id}/triggers\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListCampaigns30",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/campaigns",
+            "operation_id": "listCampaigns",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/campaigns\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.BroadcastStatus31",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/campaigns/{broadcast_id}/triggers/{trigger_id}",
+            "operation_id": "broadcastStatus",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/campaigns/{broadcast_id}/triggers/{trigger_id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.BroadcastErrors32",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/campaigns/{broadcast_id}/triggers/{trigger_id}/errors",
+            "operation_id": "broadcastErrors",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/campaigns/{broadcast_id}/triggers/{trigger_id}/errors\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetCampaigns33",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/campaigns/{campaign_id}",
+            "operation_id": "getCampaigns",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/campaigns/{campaign_id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListCampaignActions34",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/campaigns/{campaign_id}/actions",
+            "operation_id": "listCampaignActions",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/campaigns/{campaign_id}/actions\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetCampaignAction35",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/campaigns/{campaign_id}/actions/{action_id}",
+            "operation_id": "getCampaignAction",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/campaigns/{campaign_id}/actions/{action_id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetCampaignActionTranslation36",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/language/{language}",
+            "operation_id": "getCampaignActionTranslation",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/campaigns/{campaign_id}/actions/{action_id}/language/{language}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.CampaignActionMetrics37",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/metrics",
+            "operation_id": "campaignActionMetrics",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/campaigns/{campaign_id}/actions/{action_id}/metrics\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.CampaignActionLinks38",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/metrics/links",
+            "operation_id": "campaignActionLinks",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/campaigns/{campaign_id}/actions/{action_id}/metrics/links\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.CampaignJourneyMetrics39",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/campaigns/{campaign_id}/journey_metrics",
+            "operation_id": "campaignJourneyMetrics",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/campaigns/{campaign_id}/journey_metrics\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetCampaignMessages40",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/campaigns/{campaign_id}/messages",
+            "operation_id": "getCampaignMessages",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/campaigns/{campaign_id}/messages\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.CampaignMetrics41",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/campaigns/{campaign_id}/metrics",
+            "operation_id": "campaignMetrics",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/campaigns/{campaign_id}/metrics\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.CampaignLinkMetrics42",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/campaigns/{campaign_id}/metrics/links",
+            "operation_id": "campaignLinkMetrics",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/campaigns/{campaign_id}/metrics/links\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetCollections43",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/collections",
+            "operation_id": "getCollections",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/collections\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetCollection44",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/collections/{collection_id}",
+            "operation_id": "getCollection",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/collections/{collection_id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetCollectionContents45",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/collections/{collection_id}/content",
+            "operation_id": "getCollectionContents",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/collections/{collection_id}/content\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetPeopleEmail46",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/customers",
+            "operation_id": "getPeopleEmail",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/customers\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetPersonActivities47",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/customers/{customer_id}/activities",
+            "operation_id": "getPersonActivities",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/customers/{customer_id}/activities\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetPersonAttributes48",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/customers/{customer_id}/attributes",
+            "operation_id": "getPersonAttributes",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/customers/{customer_id}/attributes\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetPersonMessages49",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/customers/{customer_id}/messages",
+            "operation_id": "getPersonMessages",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/customers/{customer_id}/messages\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetPersonOptouts50",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/customers/{customer_id}/optouts",
+            "operation_id": "getPersonOptouts",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/customers/{customer_id}/optouts\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetPersonRelationships51",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/customers/{customer_id}/relationships",
+            "operation_id": "getPersonRelationships",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/customers/{customer_id}/relationships\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetPersonSegments52",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/customers/{customer_id}/segments",
+            "operation_id": "getPersonSegments",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/customers/{customer_id}/segments\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetPersonSubscriptionPreferences53",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/customers/{customer_id}/subscription_preferences",
+            "operation_id": "getPersonSubscriptionPreferences",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/customers/{customer_id}/subscription_preferences\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListComponents54",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/design_studio/components",
+            "operation_id": "listComponents",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/components\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetComponent55",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/design_studio/components/{id}",
+            "operation_id": "getComponent",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/components/{id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListEmails56",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/design_studio/emails",
+            "operation_id": "listEmails",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/emails\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetEmail57",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/design_studio/emails/{id}",
+            "operation_id": "getEmail",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/emails/{id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListEmailTranslations58",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/design_studio/emails/{id}/languages",
+            "operation_id": "listEmailTranslations",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/emails/{id}/languages\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetEmailTranslation59",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/design_studio/emails/{id}/languages/{language}",
+            "operation_id": "getEmailTranslation",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/emails/{id}/languages/{language}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListFolders60",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/design_studio/folders",
+            "operation_id": "listFolders",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/folders\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetFolder61",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/design_studio/folders/{id}",
+            "operation_id": "getFolder",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/folders/{id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetDomainSuppressionsByType62",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/esp/domains/{domain_name}/suppression/{suppression_type}",
+            "operation_id": "getDomainSuppressionsByType",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/esp/domains/{domain_name}/suppression/{suppression_type}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetSuppression63",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/esp/search_suppression/{email_address}",
+            "operation_id": "getSuppression",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/esp/search_suppression/{email_address}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetSuppressionByType64",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/esp/suppression/{suppression_type}",
+            "operation_id": "getSuppressionByType",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/esp/suppression/{suppression_type}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListExports65",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/exports",
+            "operation_id": "listExports",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/exports\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetExport66",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/exports/{export_id}",
+            "operation_id": "getExport",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/exports/{export_id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.DownloadExport67",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/exports/{export_id}/download",
+            "operation_id": "downloadExport",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/exports/{export_id}/download\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetImport68",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/imports/{import_id}",
+            "operation_id": "getImport",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/imports/{import_id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetCioAllowlist69",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/info/ip_addresses",
+            "operation_id": "getCioAllowlist",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/info/ip_addresses\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetLiveNotification70",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/live_notifications/{instance_id}",
+            "operation_id": "getLiveNotification",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/live_notifications/{instance_id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListMessages71",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/messages",
+            "operation_id": "listMessages",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/messages\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetMessage72",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/messages/{message_id}",
+            "operation_id": "getMessage",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/messages/{message_id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetArchivedMessage73",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/messages/{message_id}/archived_message",
+            "operation_id": "getArchivedMessage",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/messages/{message_id}/archived_message\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListNewsletters74",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/newsletters",
+            "operation_id": "listNewsletters",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetNewsletters75",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/newsletters/{newsletter_id}",
+            "operation_id": "getNewsletters",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListNewsletterVariants76",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/newsletters/{newsletter_id}/contents",
+            "operation_id": "listNewsletterVariants",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/contents\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetNewsletterVariant77",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}",
+            "operation_id": "getNewsletterVariant",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/contents/{content_id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetVariantMetrics78",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}/metrics",
+            "operation_id": "getVariantMetrics",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/contents/{content_id}/metrics\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetVariantLinks79",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}/metrics/links",
+            "operation_id": "getVariantLinks",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/contents/{content_id}/metrics/links\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetNewsletterVariantTranslation80",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/newsletters/{newsletter_id}/language/{language}",
+            "operation_id": "getNewsletterVariantTranslation",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/language/{language}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetNewsletterMsgMeta81",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/newsletters/{newsletter_id}/messages",
+            "operation_id": "getNewsletterMsgMeta",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/messages\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetNewsletterMetrics82",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/newsletters/{newsletter_id}/metrics",
+            "operation_id": "getNewsletterMetrics",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/metrics\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetNewsletterLinks83",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/newsletters/{newsletter_id}/metrics/links",
+            "operation_id": "getNewsletterLinks",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/metrics/links\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetNewsletterVariantTranslationTest84",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}",
+            "operation_id": "getNewsletterVariantTranslationTest",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetNewsletterTestGroups85",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/newsletters/{newsletter_id}/test_groups",
+            "operation_id": "getNewsletterTestGroups",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/test_groups\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetObjectTypes86",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/object_types",
+            "operation_id": "getObjectTypes",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/object_types\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetObjectAttributes87",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/objects/{object_type_id}/{object_id}/attributes",
+            "operation_id": "getObjectAttributes",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/objects/{object_type_id}/{object_id}/attributes\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetObjectRelationships88",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/objects/{object_type_id}/{object_id}/relationships",
+            "operation_id": "getObjectRelationships",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/objects/{object_type_id}/{object_id}/relationships\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetOptouts89",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/optouts",
+            "operation_id": "getOptouts",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/optouts\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListWebhooks90",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/reporting_webhooks",
+            "operation_id": "listWebhooks",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/reporting_webhooks\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetWebhook91",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/reporting_webhooks/{webhook_id}",
+            "operation_id": "getWebhook",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/reporting_webhooks/{webhook_id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListSegments92",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/segments",
+            "operation_id": "listSegments",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/segments\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetSegment93",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/segments/{segment_id}",
+            "operation_id": "getSegment",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/segments/{segment_id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetSegmentCount94",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/segments/{segment_id}/customer_count",
+            "operation_id": "getSegmentCount",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/segments/{segment_id}/customer_count\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetSegmentMembership95",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/segments/{segment_id}/membership",
+            "operation_id": "getSegmentMembership",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/segments/{segment_id}/membership\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetSegmentDependencies96",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/segments/{segment_id}/used_by",
+            "operation_id": "getSegmentDependencies",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/segments/{segment_id}/used_by\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListSenders97",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/sender_identities",
+            "operation_id": "listSenders",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/sender_identities\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetSender98",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/sender_identities/{sender_id}",
+            "operation_id": "getSender",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/sender_identities/{sender_id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetSenderUsage99",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/sender_identities/{sender_id}/used_by",
+            "operation_id": "getSenderUsage",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/sender_identities/{sender_id}/used_by\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListSnippets100",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/snippets",
+            "operation_id": "listSnippets",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/snippets\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetSubscriptionCenterToken101",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/subscription_center/{customer_id}/token",
+            "operation_id": "getSubscriptionCenterToken",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/subscription_center/{customer_id}/token\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetChannels102",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/subscription_channels",
+            "operation_id": "getChannels",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/subscription_channels\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetTopics103",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/subscription_topics",
+            "operation_id": "getTopics",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/subscription_topics\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListTransactional104",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/transactional",
+            "operation_id": "listTransactional",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/transactional\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetTransactional105",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/transactional/{transactional_id}",
+            "operation_id": "getTransactional",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/transactional/{transactional_id}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListTransactionalVariants106",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/transactional/{transactional_id}/contents",
+            "operation_id": "listTransactionalVariants",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/transactional/{transactional_id}/contents\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.GetTransactionalVariant107",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/transactional/{transactional_id}/language/{language}",
+            "operation_id": "getTransactionalVariant",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/transactional/{transactional_id}/language/{language}\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.TransactionalMessages108",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/transactional/{transactional_id}/messages",
+            "operation_id": "transactionalMessages",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/transactional/{transactional_id}/messages\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.TransactionalMetrics109",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/transactional/{transactional_id}/metrics",
+            "operation_id": "transactionalMetrics",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/transactional/{transactional_id}/metrics\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.TransactionalLinks110",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/transactional/{transactional_id}/metrics/links",
+            "operation_id": "transactionalLinks",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/transactional/{transactional_id}/metrics/links\"].get"
+          },
+          {
+            "id": "customer-io.rest.get.ListWorkspaces111",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/workspaces",
+            "operation_id": "listWorkspaces",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/workspaces\"].get"
+          },
+          {
+            "id": "customer-io.rest.post.CreateAsset112",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/assets/files",
+            "operation_id": "createAsset",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/assets/files\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.CreateAssetFolder113",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/assets/folders",
+            "operation_id": "createAssetFolder",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/assets/folders\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.TriggerBroadcast114",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/campaigns/{broadcast_id}/triggers",
+            "operation_id": "triggerBroadcast",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/campaigns/{broadcast_id}/triggers\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.AddCollection115",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/collections",
+            "operation_id": "addCollection",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/collections\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.GetPeopleFilter116",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/customers",
+            "operation_id": "getPeopleFilter",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/customers\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.GetPeopleById117",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/customers/attributes",
+            "operation_id": "getPeopleById",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/customers/attributes\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.UpdateAttributeMetadata118",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/data_index/attributes",
+            "operation_id": "updateAttributeMetadata",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/data_index/attributes\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.UpdateEventMetadata119",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/data_index/events",
+            "operation_id": "updateEventMetadata",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/data_index/events\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.CreateComponent120",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/design_studio/components",
+            "operation_id": "createComponent",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/components\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.CreateEmail121",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/design_studio/emails",
+            "operation_id": "createEmail",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/emails\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.CreateEmailTranslation122",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/design_studio/emails/{id}/languages",
+            "operation_id": "createEmailTranslation",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/emails/{id}/languages\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.CreateFolder123",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/design_studio/folders",
+            "operation_id": "createFolder",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/folders\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.PostSuppression124",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/esp/suppression/{suppression_type}/{email_address}",
+            "operation_id": "postSuppression",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/esp/suppression/{suppression_type}/{email_address}\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.ExportPeopleData125",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/exports/customers",
+            "operation_id": "exportPeopleData",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/exports/customers\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.ExportDeliveriesData126",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/exports/deliveries",
+            "operation_id": "exportDeliveriesData",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/exports/deliveries\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.Import127",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/imports",
+            "operation_id": "import",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/imports\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.EndLiveNotification128",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/live_notifications/end",
+            "operation_id": "endLiveNotification",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/live_notifications/end\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.StartLiveNotification129",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/live_notifications/start",
+            "operation_id": "startLiveNotification",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/live_notifications/start\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.UpdateLiveNotification130",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/live_notifications/update",
+            "operation_id": "updateLiveNotification",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/live_notifications/update\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.CreateNewsletter131",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/newsletters",
+            "operation_id": "createNewsletter",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.CreateNewsletterLanguageVariant132",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/newsletters/{newsletter_id}/language",
+            "operation_id": "createNewsletterLanguageVariant",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/language\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.ScheduleNewsletter133",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/newsletters/{newsletter_id}/schedule",
+            "operation_id": "scheduleNewsletter",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/schedule\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.SendNewsletter134",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/newsletters/{newsletter_id}/send",
+            "operation_id": "sendNewsletter",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/send\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.CreateNewsletterTestLanguageVariant135",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language",
+            "operation_id": "createNewsletterTestLanguageVariant",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.CreateNewsletterTestGroup136",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/newsletters/{newsletter_id}/test_groups",
+            "operation_id": "createNewsletterTestGroup",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/test_groups\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.GetObjectsFilter137",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/objects",
+            "operation_id": "getObjectsFilter",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/objects\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.CreateWebhook138",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/reporting_webhooks",
+            "operation_id": "createWebhook",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/reporting_webhooks\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.CreateManSegment139",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/segments",
+            "operation_id": "createManSegment",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/segments\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.SendEmail140",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/send/email",
+            "operation_id": "sendEmail",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/send/email\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.SendInApp141",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/send/in_app",
+            "operation_id": "sendInApp",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/send/in_app\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.SendInboxMessage142",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/send/inbox_message",
+            "operation_id": "sendInboxMessage",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/send/inbox_message\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.SendPush143",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/send/push",
+            "operation_id": "sendPush",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/send/push\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.SendSMS144",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/send/sms",
+            "operation_id": "sendSMS",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/send/sms\"].post"
+          },
+          {
+            "id": "customer-io.rest.post.CreateSnippet145",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/snippets",
+            "operation_id": "createSnippet",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/snippets\"].post"
+          },
+          {
+            "id": "customer-io.rest.put.UpdateAsset146",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/assets/files/{id}",
+            "operation_id": "updateAsset",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/assets/files/{id}\"].put"
+          },
+          {
+            "id": "customer-io.rest.put.UpdateAssetFolder147",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/assets/folders/{id}",
+            "operation_id": "updateAssetFolder",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/assets/folders/{id}\"].put"
+          },
+          {
+            "id": "customer-io.rest.put.UpdateBroadcastAction148",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}",
+            "operation_id": "updateBroadcastAction",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/broadcasts/{broadcast_id}/actions/{action_id}\"].put"
+          },
+          {
+            "id": "customer-io.rest.put.UpdateBroadcastActionLanguage149",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/language/{language}",
+            "operation_id": "updateBroadcastActionLanguage",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/broadcasts/{broadcast_id}/actions/{action_id}/language/{language}\"].put"
+          },
+          {
+            "id": "customer-io.rest.put.UpdateCampaignAction150",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/campaigns/{campaign_id}/actions/{action_id}",
+            "operation_id": "updateCampaignAction",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/campaigns/{campaign_id}/actions/{action_id}\"].put"
+          },
+          {
+            "id": "customer-io.rest.put.UpdateCampaignActionTranslation151",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/language/{language}",
+            "operation_id": "updateCampaignActionTranslation",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/campaigns/{campaign_id}/actions/{action_id}/language/{language}\"].put"
+          },
+          {
+            "id": "customer-io.rest.put.UpdateCollection152",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/collections/{collection_id}",
+            "operation_id": "updateCollection",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/collections/{collection_id}\"].put"
+          },
+          {
+            "id": "customer-io.rest.put.UpdateCollectionContents153",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/collections/{collection_id}/content",
+            "operation_id": "updateCollectionContents",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/collections/{collection_id}/content\"].put"
+          },
+          {
+            "id": "customer-io.rest.put.UpdatePersonOptouts154",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/customers/{customer_id}/optouts",
+            "operation_id": "updatePersonOptouts",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/customers/{customer_id}/optouts\"].put"
+          },
+          {
+            "id": "customer-io.rest.put.UpdateComponent155",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/design_studio/components/{id}",
+            "operation_id": "updateComponent",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/components/{id}\"].put"
+          },
+          {
+            "id": "customer-io.rest.put.UpdateEmail156",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/design_studio/emails/{id}",
+            "operation_id": "updateEmail",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/emails/{id}\"].put"
+          },
+          {
+            "id": "customer-io.rest.put.UpdateEmailTranslation157",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/design_studio/emails/{id}/languages/{language}",
+            "operation_id": "updateEmailTranslation",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/emails/{id}/languages/{language}\"].put"
+          },
+          {
+            "id": "customer-io.rest.put.UpdateFolder158",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/design_studio/folders/{id}",
+            "operation_id": "updateFolder",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/design_studio/folders/{id}\"].put"
+          },
+          {
+            "id": "customer-io.rest.put.UpdateNewsletterVariant159",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}",
+            "operation_id": "updateNewsletterVariant",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/contents/{content_id}\"].put"
+          },
+          {
+            "id": "customer-io.rest.put.UpdateNewsletterVariantTranslation160",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/newsletters/{newsletter_id}/language/{language}",
+            "operation_id": "updateNewsletterVariantTranslation",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/language/{language}\"].put"
+          },
+          {
+            "id": "customer-io.rest.put.UpdateNewsletterTestTranslation161",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}",
+            "operation_id": "updateNewsletterTestTranslation",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}\"].put"
+          },
+          {
+            "id": "customer-io.rest.put.UpdateWebhook162",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/reporting_webhooks/{webhook_id}",
+            "operation_id": "updateWebhook",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/reporting_webhooks/{webhook_id}\"].put"
+          },
+          {
+            "id": "customer-io.rest.put.UpdateSnippets163",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/snippets",
+            "operation_id": "updateSnippets",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/snippets\"].put"
+          },
+          {
+            "id": "customer-io.rest.put.UpdateTransactional164",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/transactional/{transactional_id}/content/{content_id}",
+            "operation_id": "updateTransactional",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/transactional/{transactional_id}/content/{content_id}\"].put"
+          },
+          {
+            "id": "customer-io.rest.put.UpdateTransactionalVariant165",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/transactional/{transactional_id}/language/{language}",
+            "operation_id": "updateTransactionalVariant",
+            "deprecated": false,
+            "source_location": ".paths[\"/v1/transactional/{transactional_id}/language/{language}\"].put"
+          }
+        ]
+      }
+    ]
+  },
+  "counts": {
+    "rest": 166,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 166
+  }
+}

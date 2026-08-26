@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/" },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "workspace": {
+          "id": "ws_fixture_1",
+          "name": "Fixture Workspace",
+          "slug": "fixture-workspace"
+        }
+      }
+    }
+  }
+}

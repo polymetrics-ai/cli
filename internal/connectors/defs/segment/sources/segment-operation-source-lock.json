@@ -1,0 +1,1852 @@
+{
+  "schema_version": 3,
+  "connector": "segment",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "retrieval": "Migrated schema-version 2 complete_machine_readable_specification source-lock capture.",
+    "openapi": [
+      "3.0.3"
+    ],
+    "coverage_confidence": {
+      "level": "complete_machine_readable_specification",
+      "basis": "Parsed every operation in the provider-published OpenAPI 3.0.3 document at https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js."
+    },
+    "source_documents": [
+      {
+        "id": "primary",
+        "kind": "openapi",
+        "artifact": {
+          "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js",
+          "sha256": "5a673840956c31408be41cb681ba4548a45334a48584de9f94282959e8ae0978",
+          "bytes": 2393872,
+          "openapi": "3.0.3"
+        },
+        "published_source": {
+          "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js",
+          "capture_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js",
+          "sha256": "5a673840956c31408be41cb681ba4548a45334a48584de9f94282959e8ae0978",
+          "bytes": 2393872,
+          "adapter": "schema-v2-source-lock-migration"
+        },
+        "info_version": "Segment Public API 73.2.0 OpenAPI specification emitted by the provider documentation",
+        "operations": [
+          {
+            "id": "segment.rest.delete.DeleteCredential0",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/credentials/{credentialId}",
+            "operation_id": "deleteCredential",
+            "deprecated": false,
+            "source_location": ".paths[\"/credentials/{credentialId}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.RemoveFilterFromDestination1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/destination/{destinationId}/filters/{filterId}",
+            "operation_id": "removeFilterFromDestination",
+            "deprecated": false,
+            "source_location": ".paths[\"/destination/{destinationId}/filters/{filterId}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.DeleteDestination2",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/destinations/{destinationId}",
+            "operation_id": "deleteDestination",
+            "deprecated": false,
+            "source_location": ".paths[\"/destinations/{destinationId}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.RemoveSubscriptionFromDestination3",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/destinations/{destinationId}/subscriptions/{id}",
+            "operation_id": "removeSubscriptionFromDestination",
+            "deprecated": false,
+            "source_location": ".paths[\"/destinations/{destinationId}/subscriptions/{id}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.DeleteFilterById4",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/filters/{id}",
+            "operation_id": "deleteFilterById",
+            "deprecated": false,
+            "source_location": ".paths[\"/filters/{id}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.DeleteFunction5",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/functions/{functionId}",
+            "operation_id": "deleteFunction",
+            "deprecated": false,
+            "source_location": ".paths[\"/functions/{functionId}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.RemoveUsersFromUserGroup6",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/group/{userGroupId}/users",
+            "operation_id": "removeUsersFromUserGroup",
+            "deprecated": false,
+            "source_location": ".paths[\"/group/{userGroupId}/users\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.DeleteUserGroup7",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/groups/{userGroupId}",
+            "operation_id": "deleteUserGroup",
+            "deprecated": false,
+            "source_location": ".paths[\"/groups/{userGroupId}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.DeleteInsertFunctionInstance8",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/insert-function-instances/{instanceId}",
+            "operation_id": "deleteInsertFunctionInstance",
+            "deprecated": false,
+            "source_location": ".paths[\"/insert-function-instances/{instanceId}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.DeleteInvites9",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/invites",
+            "operation_id": "deleteInvites",
+            "deprecated": false,
+            "source_location": ".paths[\"/invites\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.DeleteLabel10",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/labels/{key}/{value}",
+            "operation_id": "deleteLabel",
+            "deprecated": false,
+            "source_location": ".paths[\"/labels/{key}/{value}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.DeleteReverseEtlModel11",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/reverse-etl-models/{modelId}",
+            "operation_id": "deleteReverseEtlModel",
+            "deprecated": false,
+            "source_location": ".paths[\"/reverse-etl-models/{modelId}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.DeleteSource12",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/sources/{sourceId}",
+            "operation_id": "deleteSource",
+            "deprecated": false,
+            "source_location": ".paths[\"/sources/{sourceId}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.DeleteLivePluginCode13",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/sources/{sourceId}/live-plugins/delete-code",
+            "operation_id": "deleteLivePluginCode",
+            "deprecated": false,
+            "source_location": ".paths[\"/sources/{sourceId}/live-plugins/delete-code\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.RemoveWriteKeyFromSource14",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/sources/{sourceId}/writekey/{writeKey}",
+            "operation_id": "removeWriteKeyFromSource",
+            "deprecated": false,
+            "source_location": ".paths[\"/sources/{sourceId}/writekey/{writeKey}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.RemoveActivationFromAudience15",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/spaces/{spaceId}/audiences/{audienceId}/activations/{id}",
+            "operation_id": "removeActivationFromAudience",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/{audienceId}/activations/{id}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.RemoveDestinationFromAudience16",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections/{destinationId}",
+            "operation_id": "removeDestinationFromAudience",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/{audienceId}/destination-connections/{destinationId}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.RemoveAudienceFromSpace17",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/spaces/{spaceId}/audiences/{id}",
+            "operation_id": "removeAudienceFromSpace",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/{id}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.RemoveAudienceScheduleFromAudience18",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}",
+            "operation_id": "removeAudienceScheduleFromAudience",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.RemoveComputedTraitFromSpace19",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/spaces/{spaceId}/computed-traits/{id}",
+            "operation_id": "removeComputedTraitFromSpace",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/computed-traits/{id}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.RemoveProfilesWarehouseFromSpace20",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}",
+            "operation_id": "removeProfilesWarehouseFromSpace",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/profiles-warehouses/{warehouseId}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.DeleteTrackingPlan21",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/tracking-plans/{trackingPlanId}",
+            "operation_id": "deleteTrackingPlan",
+            "deprecated": false,
+            "source_location": ".paths[\"/tracking-plans/{trackingPlanId}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.RemoveRulesFromTrackingPlan22",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/tracking-plans/{trackingPlanId}/rules",
+            "operation_id": "removeRulesFromTrackingPlan",
+            "deprecated": false,
+            "source_location": ".paths[\"/tracking-plans/{trackingPlanId}/rules\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.RemoveSourceFromTrackingPlan23",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/tracking-plans/{trackingPlanId}/sources",
+            "operation_id": "removeSourceFromTrackingPlan",
+            "deprecated": false,
+            "source_location": ".paths[\"/tracking-plans/{trackingPlanId}/sources\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.DeleteTransformation24",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/transformations/{transformationId}",
+            "operation_id": "deleteTransformation",
+            "deprecated": false,
+            "source_location": ".paths[\"/transformations/{transformationId}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.DeleteUsers25",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/users",
+            "operation_id": "deleteUsers",
+            "deprecated": false,
+            "source_location": ".paths[\"/users\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.DeleteWarehouse26",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/warehouses/{warehouseId}",
+            "operation_id": "deleteWarehouse",
+            "deprecated": false,
+            "source_location": ".paths[\"/warehouses/{warehouseId}\"].delete"
+          },
+          {
+            "id": "segment.rest.delete.RemoveSourceConnectionFromWarehouse27",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}",
+            "operation_id": "removeSourceConnectionFromWarehouse",
+            "deprecated": false,
+            "source_location": ".paths[\"/warehouses/{warehouseId}/connected-sources/{sourceId}\"].delete"
+          },
+          {
+            "id": "segment.rest.get.GetWorkspace28",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/",
+            "operation_id": "getWorkspace",
+            "deprecated": false,
+            "source_location": ".paths[\"/\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListAuditEvents29",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/audit-events",
+            "operation_id": "listAuditEvents",
+            "deprecated": false,
+            "source_location": ".paths[\"/audit-events\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetDestinationsCatalog30",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/catalog/destinations",
+            "operation_id": "getDestinationsCatalog",
+            "deprecated": false,
+            "source_location": ".paths[\"/catalog/destinations\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetDestinationMetadata31",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/catalog/destinations/{destinationMetadataId}",
+            "operation_id": "getDestinationMetadata",
+            "deprecated": false,
+            "source_location": ".paths[\"/catalog/destinations/{destinationMetadataId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetSourcesCatalog32",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/catalog/sources",
+            "operation_id": "getSourcesCatalog",
+            "deprecated": false,
+            "source_location": ".paths[\"/catalog/sources\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetSourceMetadata33",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/catalog/sources/{sourceMetadataId}",
+            "operation_id": "getSourceMetadata",
+            "deprecated": false,
+            "source_location": ".paths[\"/catalog/sources/{sourceMetadataId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetWarehousesCatalog34",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/catalog/warehouses",
+            "operation_id": "getWarehousesCatalog",
+            "deprecated": false,
+            "source_location": ".paths[\"/catalog/warehouses\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetWarehouseMetadata35",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/catalog/warehouses/{warehouseMetadataId}",
+            "operation_id": "getWarehouseMetadata",
+            "deprecated": false,
+            "source_location": ".paths[\"/catalog/warehouses/{warehouseMetadataId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListCredentials36",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/credentials",
+            "operation_id": "listCredentials",
+            "deprecated": false,
+            "source_location": ".paths[\"/credentials\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetCredential37",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/credentials/{credentialId}",
+            "operation_id": "getCredential",
+            "deprecated": false,
+            "source_location": ".paths[\"/credentials/{credentialId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListCredentialConsumers38",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/credentials/{credentialId}/consumers",
+            "operation_id": "listCredentialConsumers",
+            "deprecated": false,
+            "source_location": ".paths[\"/credentials/{credentialId}/consumers\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetEgressFailedMetricsFromDeliveryOverview39",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/delivery-overview/failed-delivery",
+            "operation_id": "getEgressFailedMetricsFromDeliveryOverview",
+            "deprecated": false,
+            "source_location": ".paths[\"/delivery-overview/failed-delivery\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetIngressFailedMetricsFromDeliveryOverview40",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/delivery-overview/failed-on-ingest",
+            "operation_id": "getIngressFailedMetricsFromDeliveryOverview",
+            "deprecated": false,
+            "source_location": ".paths[\"/delivery-overview/failed-on-ingest\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetFilteredAtDestinationMetricsFromDeliveryOverview41",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/delivery-overview/filtered-at-destination",
+            "operation_id": "getFilteredAtDestinationMetricsFromDeliveryOverview",
+            "deprecated": false,
+            "source_location": ".paths[\"/delivery-overview/filtered-at-destination\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetFilteredAtSourceMetricsFromDeliveryOverview42",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/delivery-overview/filtered-at-source",
+            "operation_id": "getFilteredAtSourceMetricsFromDeliveryOverview",
+            "deprecated": false,
+            "source_location": ".paths[\"/delivery-overview/filtered-at-source\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetEgressSuccessMetricsFromDeliveryOverview43",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/delivery-overview/successful-delivery",
+            "operation_id": "getEgressSuccessMetricsFromDeliveryOverview",
+            "deprecated": false,
+            "source_location": ".paths[\"/delivery-overview/successful-delivery\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetIngressSuccessMetricsFromDeliveryOverview44",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/delivery-overview/successfully-received",
+            "operation_id": "getIngressSuccessMetricsFromDeliveryOverview",
+            "deprecated": false,
+            "source_location": ".paths[\"/delivery-overview/successfully-received\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListFiltersFromDestination45",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/destination/{destinationId}/filters",
+            "operation_id": "listFiltersFromDestination",
+            "deprecated": false,
+            "source_location": ".paths[\"/destination/{destinationId}/filters\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetFilterInDestination46",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/destination/{destinationId}/filters/{filterId}",
+            "operation_id": "getFilterInDestination",
+            "deprecated": false,
+            "source_location": ".paths[\"/destination/{destinationId}/filters/{filterId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListDestinations47",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/destinations",
+            "operation_id": "listDestinations",
+            "deprecated": false,
+            "source_location": ".paths[\"/destinations\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetDestination48",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/destinations/{destinationId}",
+            "operation_id": "getDestination",
+            "deprecated": false,
+            "source_location": ".paths[\"/destinations/{destinationId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListDeliveryMetricsSummaryFromDestination49",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/destinations/{destinationId}/delivery-metrics",
+            "operation_id": "listDeliveryMetricsSummaryFromDestination",
+            "deprecated": false,
+            "source_location": ".paths[\"/destinations/{destinationId}/delivery-metrics\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListSubscriptionsFromDestination50",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/destinations/{destinationId}/subscriptions",
+            "operation_id": "listSubscriptionsFromDestination",
+            "deprecated": false,
+            "source_location": ".paths[\"/destinations/{destinationId}/subscriptions\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetSubscriptionFromDestination51",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/destinations/{destinationId}/subscriptions/{id}",
+            "operation_id": "getSubscriptionFromDestination",
+            "deprecated": false,
+            "source_location": ".paths[\"/destinations/{destinationId}/subscriptions/{id}\"].get"
+          },
+          {
+            "id": "segment.rest.get.Echo52",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/echo",
+            "operation_id": "echo",
+            "deprecated": false,
+            "source_location": ".paths[\"/echo\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetEventsVolumeFromWorkspace53",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/events/volume",
+            "operation_id": "getEventsVolumeFromWorkspace",
+            "deprecated": false,
+            "source_location": ".paths[\"/events/volume\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListFiltersForSpace54",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/filters",
+            "operation_id": "listFiltersForSpace",
+            "deprecated": false,
+            "source_location": ".paths[\"/filters\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetFilterById55",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/filters/{id}",
+            "operation_id": "getFilterById",
+            "deprecated": false,
+            "source_location": ".paths[\"/filters/{id}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListFunctions56",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/functions",
+            "operation_id": "listFunctions",
+            "deprecated": false,
+            "source_location": ".paths[\"/functions\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetFunction57",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/functions/{functionId}",
+            "operation_id": "getFunction",
+            "deprecated": false,
+            "source_location": ".paths[\"/functions/{functionId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListFunctionVersions58",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/functions/{functionId}/versions",
+            "operation_id": "listFunctionVersions",
+            "deprecated": false,
+            "source_location": ".paths[\"/functions/{functionId}/versions\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetFunctionVersion59",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/functions/{functionId}/versions/{versionId}",
+            "operation_id": "getFunctionVersion",
+            "deprecated": false,
+            "source_location": ".paths[\"/functions/{functionId}/versions/{versionId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListUserGroups60",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/groups",
+            "operation_id": "listUserGroups",
+            "deprecated": false,
+            "source_location": ".paths[\"/groups\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetUserGroup61",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/groups/{userGroupId}",
+            "operation_id": "getUserGroup",
+            "deprecated": false,
+            "source_location": ".paths[\"/groups/{userGroupId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListInvitesFromUserGroup62",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/groups/{userGroupId}/invites",
+            "operation_id": "listInvitesFromUserGroup",
+            "deprecated": false,
+            "source_location": ".paths[\"/groups/{userGroupId}/invites\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListUsersFromUserGroup63",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/groups/{userGroupId}/users",
+            "operation_id": "listUsersFromUserGroup",
+            "deprecated": false,
+            "source_location": ".paths[\"/groups/{userGroupId}/users\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListInsertFunctionInstances64",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/insert-function-instances",
+            "operation_id": "listInsertFunctionInstances",
+            "deprecated": false,
+            "source_location": ".paths[\"/insert-function-instances\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetInsertFunctionInstance65",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/insert-function-instances/{instanceId}",
+            "operation_id": "getInsertFunctionInstance",
+            "deprecated": false,
+            "source_location": ".paths[\"/insert-function-instances/{instanceId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListInvites66",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/invites",
+            "operation_id": "listInvites",
+            "deprecated": false,
+            "source_location": ".paths[\"/invites\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListLabels67",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/labels",
+            "operation_id": "listLabels",
+            "deprecated": false,
+            "source_location": ".paths[\"/labels\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListWorkspaceRegulations68",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/regulations",
+            "operation_id": "listWorkspaceRegulations",
+            "deprecated": false,
+            "source_location": ".paths[\"/regulations\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetRegulation69",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/regulations/{regulateId}",
+            "operation_id": "getRegulation",
+            "deprecated": false,
+            "source_location": ".paths[\"/regulations/{regulateId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListRegulationsFromSource70",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/regulations/sources/{sourceId}",
+            "operation_id": "listRegulationsFromSource",
+            "deprecated": false,
+            "source_location": ".paths[\"/regulations/sources/{sourceId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListReverseEtlModels71",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/reverse-etl-models",
+            "operation_id": "listReverseEtlModels",
+            "deprecated": false,
+            "source_location": ".paths[\"/reverse-etl-models\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetReverseEtlModel72",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/reverse-etl-models/{modelId}",
+            "operation_id": "getReverseEtlModel",
+            "deprecated": false,
+            "source_location": ".paths[\"/reverse-etl-models/{modelId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListReverseETLSyncStatusesFromModelAndSubscriptionId73",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/reverse-etl-models/{modelId}/subscriptionId/{subscriptionId}/syncs",
+            "operation_id": "listReverseETLSyncStatusesFromModelAndSubscriptionId",
+            "deprecated": false,
+            "source_location": ".paths[\"/reverse-etl-models/{modelId}/subscriptionId/{subscriptionId}/syncs\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetReverseETLSyncStatus74",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/reverse-etl-models/{modelId}/syncs/{syncId}",
+            "operation_id": "getReverseETLSyncStatus",
+            "deprecated": false,
+            "source_location": ".paths[\"/reverse-etl-models/{modelId}/syncs/{syncId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListRoles75",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/roles",
+            "operation_id": "listRoles",
+            "deprecated": false,
+            "source_location": ".paths[\"/roles\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListSources76",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/sources",
+            "operation_id": "listSources",
+            "deprecated": false,
+            "source_location": ".paths[\"/sources\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetSource77",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/sources/{sourceId}",
+            "operation_id": "getSource",
+            "deprecated": false,
+            "source_location": ".paths[\"/sources/{sourceId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListConnectedDestinationsFromSource78",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/sources/{sourceId}/connected-destinations",
+            "operation_id": "listConnectedDestinationsFromSource",
+            "deprecated": false,
+            "source_location": ".paths[\"/sources/{sourceId}/connected-destinations\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListConnectedWarehousesFromSource79",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/sources/{sourceId}/connected-warehouses",
+            "operation_id": "listConnectedWarehousesFromSource",
+            "deprecated": false,
+            "source_location": ".paths[\"/sources/{sourceId}/connected-warehouses\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetLatestFromLivePlugins80",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/sources/{sourceId}/live-plugins/latest",
+            "operation_id": "getLatestFromLivePlugins",
+            "deprecated": false,
+            "source_location": ".paths[\"/sources/{sourceId}/live-plugins/latest\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListSchemaSettingsInSource81",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/sources/{sourceId}/settings",
+            "operation_id": "listSchemaSettingsInSource",
+            "deprecated": false,
+            "source_location": ".paths[\"/sources/{sourceId}/settings\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListSpaces82",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces",
+            "operation_id": "listSpaces",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetSpace83",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}",
+            "operation_id": "getSpace",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListAudiences84",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/audiences",
+            "operation_id": "listAudiences",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListActivationsFromAudience85",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/audiences/{audienceId}/activations",
+            "operation_id": "listActivationsFromAudience",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/{audienceId}/activations\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetActivationFromAudience86",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/audiences/{audienceId}/activations/{id}",
+            "operation_id": "getActivationFromAudience",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/{audienceId}/activations/{id}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListDestinationsFromAudience87",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections",
+            "operation_id": "listDestinationsFromAudience",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/{audienceId}/destination-connections\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetAudience88",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/audiences/{id}",
+            "operation_id": "getAudience",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/{id}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListAudienceConsumersFromSpaceAndAudience89",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/audiences/{id}/audience-references",
+            "operation_id": "listAudienceConsumersFromSpaceAndAudience",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/{id}/audience-references\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListAudienceSchedulesFromSpaceAndAudience90",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/audiences/{id}/schedules",
+            "operation_id": "listAudienceSchedulesFromSpaceAndAudience",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/{id}/schedules\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetAudienceScheduleFromSpaceAndAudience91",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}",
+            "operation_id": "getAudienceScheduleFromSpaceAndAudience",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetAudiencePreview92",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/audiences/previews/{id}",
+            "operation_id": "getAudiencePreview",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/previews/{id}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListSupportedDestinationsFromAudience93",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/audienceType/{audienceType}/supported-destinations",
+            "operation_id": "listSupportedDestinationsFromAudience",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audienceType/{audienceType}/supported-destinations\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListComputedTraits94",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/computed-traits",
+            "operation_id": "listComputedTraits",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/computed-traits\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetComputedTrait95",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/computed-traits/{id}",
+            "operation_id": "getComputedTrait",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/computed-traits/{id}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListPropertiesFromEntity96",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/entities/{entitySlug}/properties",
+            "operation_id": "listPropertiesFromEntity",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/entities/{entitySlug}/properties\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListSampleValuesFromEntityProperty97",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/entities/{entitySlug}/properties/{propertyName}/sample-values",
+            "operation_id": "listSampleValuesFromEntityProperty",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/entities/{entitySlug}/properties/{propertyName}/sample-values\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListEntityPaths98",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/entity-paths",
+            "operation_id": "listEntityPaths",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/entity-paths\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListEvents99",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/events",
+            "operation_id": "listEvents",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/events\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListPropertiesFromEvent100",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/events/{eventName}/properties",
+            "operation_id": "listPropertiesFromEvent",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/events/{eventName}/properties\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListSampleValuesFromEventProperty101",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/events/{eventName}/properties/{propertyName}/sample-values",
+            "operation_id": "listSampleValuesFromEventProperty",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/events/{eventName}/properties/{propertyName}/sample-values\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListProfilesWarehouseInSpace102",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/profiles-warehouses",
+            "operation_id": "listProfilesWarehouseInSpace",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/profiles-warehouses\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListSelectiveSyncsFromWarehouseAndSpace103",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}/selective-syncs",
+            "operation_id": "listSelectiveSyncsFromWarehouseAndSpace",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/profiles-warehouses/{warehouseId}/selective-syncs\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListTraits104",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/traits",
+            "operation_id": "listTraits",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/traits\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListSampleValuesFromTrait105",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/spaces/{spaceId}/traits/{traitKey}/sample-values",
+            "operation_id": "listSampleValuesFromTrait",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/traits/{traitKey}/sample-values\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListSuppressions106",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/suppressions",
+            "operation_id": "listSuppressions",
+            "deprecated": false,
+            "source_location": ".paths[\"/suppressions\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListTrackingPlans107",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tracking-plans",
+            "operation_id": "listTrackingPlans",
+            "deprecated": false,
+            "source_location": ".paths[\"/tracking-plans\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetTrackingPlan108",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tracking-plans/{trackingPlanId}",
+            "operation_id": "getTrackingPlan",
+            "deprecated": false,
+            "source_location": ".paths[\"/tracking-plans/{trackingPlanId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListRulesFromTrackingPlan109",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tracking-plans/{trackingPlanId}/rules",
+            "operation_id": "listRulesFromTrackingPlan",
+            "deprecated": false,
+            "source_location": ".paths[\"/tracking-plans/{trackingPlanId}/rules\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListSourcesFromTrackingPlan110",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tracking-plans/{trackingPlanId}/sources",
+            "operation_id": "listSourcesFromTrackingPlan",
+            "deprecated": false,
+            "source_location": ".paths[\"/tracking-plans/{trackingPlanId}/sources\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListTransformations111",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/transformations",
+            "operation_id": "listTransformations",
+            "deprecated": false,
+            "source_location": ".paths[\"/transformations\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetTransformation112",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/transformations/{transformationId}",
+            "operation_id": "getTransformation",
+            "deprecated": false,
+            "source_location": ".paths[\"/transformations/{transformationId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetDailyWorkspaceAPICallsUsage113",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/usage/api-calls/daily",
+            "operation_id": "getDailyWorkspaceAPICallsUsage",
+            "deprecated": false,
+            "source_location": ".paths[\"/usage/api-calls/daily\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetDailyPerSourceAPICallsUsage114",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/usage/api-calls/sources/daily",
+            "operation_id": "getDailyPerSourceAPICallsUsage",
+            "deprecated": false,
+            "source_location": ".paths[\"/usage/api-calls/sources/daily\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetDailyWorkspaceMTUUsage115",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/usage/mtu/daily",
+            "operation_id": "getDailyWorkspaceMTUUsage",
+            "deprecated": false,
+            "source_location": ".paths[\"/usage/mtu/daily\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetDailyPerSourceMTUUsage116",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/usage/mtu/sources/daily",
+            "operation_id": "getDailyPerSourceMTUUsage",
+            "deprecated": false,
+            "source_location": ".paths[\"/usage/mtu/sources/daily\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListUsers117",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users",
+            "operation_id": "listUsers",
+            "deprecated": false,
+            "source_location": ".paths[\"/users\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetUser118",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}",
+            "operation_id": "getUser",
+            "deprecated": false,
+            "source_location": ".paths[\"/users/{userId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListUserGroupsFromUser119",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/groups",
+            "operation_id": "listUserGroupsFromUser",
+            "deprecated": false,
+            "source_location": ".paths[\"/users/{userId}/groups\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListWarehouses120",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/warehouses",
+            "operation_id": "listWarehouses",
+            "deprecated": false,
+            "source_location": ".paths[\"/warehouses\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetWarehouse121",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/warehouses/{warehouseId}",
+            "operation_id": "getWarehouse",
+            "deprecated": false,
+            "source_location": ".paths[\"/warehouses/{warehouseId}\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetAdvancedSyncScheduleFromWarehouse122",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/warehouses/{warehouseId}/advanced-sync-schedule",
+            "operation_id": "getAdvancedSyncScheduleFromWarehouse",
+            "deprecated": false,
+            "source_location": ".paths[\"/warehouses/{warehouseId}/advanced-sync-schedule\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListConnectedSourcesFromWarehouse123",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/warehouses/{warehouseId}/connected-sources",
+            "operation_id": "listConnectedSourcesFromWarehouse",
+            "deprecated": false,
+            "source_location": ".paths[\"/warehouses/{warehouseId}/connected-sources\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListSelectiveSyncsFromWarehouseAndSource124",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}/selective-syncs",
+            "operation_id": "listSelectiveSyncsFromWarehouseAndSource",
+            "deprecated": false,
+            "source_location": ".paths[\"/warehouses/{warehouseId}/connected-sources/{sourceId}/selective-syncs\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListSyncsFromWarehouseAndSource125",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}/syncs",
+            "operation_id": "listSyncsFromWarehouseAndSource",
+            "deprecated": false,
+            "source_location": ".paths[\"/warehouses/{warehouseId}/connected-sources/{sourceId}/syncs\"].get"
+          },
+          {
+            "id": "segment.rest.get.GetConnectionStateFromWarehouse126",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/warehouses/{warehouseId}/connection-state",
+            "operation_id": "getConnectionStateFromWarehouse",
+            "deprecated": false,
+            "source_location": ".paths[\"/warehouses/{warehouseId}/connection-state\"].get"
+          },
+          {
+            "id": "segment.rest.get.ListSyncsFromWarehouse127",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/warehouses/{warehouseId}/syncs",
+            "operation_id": "listSyncsFromWarehouse",
+            "deprecated": false,
+            "source_location": ".paths[\"/warehouses/{warehouseId}/syncs\"].get"
+          },
+          {
+            "id": "segment.rest.post.CreateCredential128",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/credentials",
+            "operation_id": "createCredential",
+            "deprecated": false,
+            "source_location": ".paths[\"/credentials\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateDownload129",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/customer-insights/download",
+            "operation_id": "createDownload",
+            "deprecated": false,
+            "source_location": ".paths[\"/customer-insights/download\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateDbtModelSyncTrigger130",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/dbt-model-syncs/trigger",
+            "operation_id": "createDbtModelSyncTrigger",
+            "deprecated": false,
+            "source_location": ".paths[\"/dbt-model-syncs/trigger\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateFilterForDestination131",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/destination/{destinationId}/filters",
+            "operation_id": "createFilterForDestination",
+            "deprecated": false,
+            "source_location": ".paths[\"/destination/{destinationId}/filters\"].post"
+          },
+          {
+            "id": "segment.rest.post.PreviewDestinationFilter132",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/destination/filters/preview",
+            "operation_id": "previewDestinationFilter",
+            "deprecated": false,
+            "source_location": ".paths[\"/destination/filters/preview\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateDestination133",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/destinations",
+            "operation_id": "createDestination",
+            "deprecated": false,
+            "source_location": ".paths[\"/destinations\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateDestinationSubscription134",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/destinations/{destinationId}/subscriptions",
+            "operation_id": "createDestinationSubscription",
+            "deprecated": false,
+            "source_location": ".paths[\"/destinations/{destinationId}/subscriptions\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateFilterForSpace135",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/filters",
+            "operation_id": "createFilterForSpace",
+            "deprecated": false,
+            "source_location": ".paths[\"/filters\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateFunction136",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/functions",
+            "operation_id": "createFunction",
+            "deprecated": false,
+            "source_location": ".paths[\"/functions\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateFunctionDeployment137",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/functions/{functionId}/deploy",
+            "operation_id": "createFunctionDeployment",
+            "deprecated": false,
+            "source_location": ".paths[\"/functions/{functionId}/deploy\"].post"
+          },
+          {
+            "id": "segment.rest.post.RestoreFunctionVersion138",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/functions/{functionId}/versions",
+            "operation_id": "restoreFunctionVersion",
+            "deprecated": false,
+            "source_location": ".paths[\"/functions/{functionId}/versions\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateUserGroup139",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/groups",
+            "operation_id": "createUserGroup",
+            "deprecated": false,
+            "source_location": ".paths[\"/groups\"].post"
+          },
+          {
+            "id": "segment.rest.post.AddPermissionsToUserGroup140",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/groups/{userGroupId}/permissions",
+            "operation_id": "addPermissionsToUserGroup",
+            "deprecated": false,
+            "source_location": ".paths[\"/groups/{userGroupId}/permissions\"].post"
+          },
+          {
+            "id": "segment.rest.post.AddUsersToUserGroup141",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/groups/{userGroupId}/users",
+            "operation_id": "addUsersToUserGroup",
+            "deprecated": false,
+            "source_location": ".paths[\"/groups/{userGroupId}/users\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateInsertFunctionInstance142",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/insert-function-instances",
+            "operation_id": "createInsertFunctionInstance",
+            "deprecated": false,
+            "source_location": ".paths[\"/insert-function-instances\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateInvites143",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/invites",
+            "operation_id": "createInvites",
+            "deprecated": false,
+            "source_location": ".paths[\"/invites\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateLabel144",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/labels",
+            "operation_id": "createLabel",
+            "deprecated": false,
+            "source_location": ".paths[\"/labels\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateWorkspaceRegulation145",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/regulations",
+            "operation_id": "createWorkspaceRegulation",
+            "deprecated": false,
+            "source_location": ".paths[\"/regulations\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateCloudSourceRegulation146",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/regulations/cloudsources/{sourceId}",
+            "operation_id": "createCloudSourceRegulation",
+            "deprecated": false,
+            "source_location": ".paths[\"/regulations/cloudsources/{sourceId}\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateSourceRegulation147",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/regulations/sources/{sourceId}",
+            "operation_id": "createSourceRegulation",
+            "deprecated": false,
+            "source_location": ".paths[\"/regulations/sources/{sourceId}\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateReverseEtlModel148",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/reverse-etl-models",
+            "operation_id": "createReverseEtlModel",
+            "deprecated": false,
+            "source_location": ".paths[\"/reverse-etl-models\"].post"
+          },
+          {
+            "id": "segment.rest.post.CancelReverseETLSyncForModel149",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/reverse-etl-models/{modelId}/syncs/{syncId}/cancel",
+            "operation_id": "cancelReverseETLSyncForModel",
+            "deprecated": false,
+            "source_location": ".paths[\"/reverse-etl-models/{modelId}/syncs/{syncId}/cancel\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateReverseETLManualSync150",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/reverse-etl-syncs",
+            "operation_id": "createReverseETLManualSync",
+            "deprecated": false,
+            "source_location": ".paths[\"/reverse-etl-syncs\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateSource151",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/sources",
+            "operation_id": "createSource",
+            "deprecated": false,
+            "source_location": ".paths[\"/sources\"].post"
+          },
+          {
+            "id": "segment.rest.post.AddLabelsToSource152",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/sources/{sourceId}/labels",
+            "operation_id": "addLabelsToSource",
+            "deprecated": false,
+            "source_location": ".paths[\"/sources/{sourceId}/labels\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateLivePlugin153",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/sources/{sourceId}/live-plugins/create",
+            "operation_id": "createLivePlugin",
+            "deprecated": false,
+            "source_location": ".paths[\"/sources/{sourceId}/live-plugins/create\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateWriteKeyForSource154",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/sources/{sourceId}/writekey",
+            "operation_id": "createWriteKeyForSource",
+            "deprecated": false,
+            "source_location": ".paths[\"/sources/{sourceId}/writekey\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateAudience155",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/spaces/{spaceId}/audiences",
+            "operation_id": "createAudience",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences\"].post"
+          },
+          {
+            "id": "segment.rest.post.AddDestinationToAudience156",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections",
+            "operation_id": "addDestinationToAudience",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/{audienceId}/destination-connections\"].post"
+          },
+          {
+            "id": "segment.rest.post.AddActivationToAudience157",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections/{connectionId}/activations",
+            "operation_id": "addActivationToAudience",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/{audienceId}/destination-connections/{connectionId}/activations\"].post"
+          },
+          {
+            "id": "segment.rest.post.ForceExecuteAudienceRun158",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/spaces/{spaceId}/audiences/{audienceId}/runs",
+            "operation_id": "forceExecuteAudienceRun",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/{audienceId}/runs\"].post"
+          },
+          {
+            "id": "segment.rest.post.AddAudienceScheduleToAudience159",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/spaces/{spaceId}/audiences/{id}/schedules",
+            "operation_id": "addAudienceScheduleToAudience",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/{id}/schedules\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateAudiencePreview160",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/spaces/{spaceId}/audiences/previews",
+            "operation_id": "createAudiencePreview",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/previews\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateComputedTrait161",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/spaces/{spaceId}/computed-traits",
+            "operation_id": "createComputedTrait",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/computed-traits\"].post"
+          },
+          {
+            "id": "segment.rest.post.BatchQueryMessagingSubscriptionsForSpace162",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/spaces/{spaceId}/messaging-subscriptions/batch",
+            "operation_id": "batchQueryMessagingSubscriptionsForSpace",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/messaging-subscriptions/batch\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateProfilesWarehouse163",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/spaces/{spaceId}/profiles-warehouses",
+            "operation_id": "createProfilesWarehouse",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/profiles-warehouses\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateTrackingPlan164",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/tracking-plans",
+            "operation_id": "createTrackingPlan",
+            "deprecated": false,
+            "source_location": ".paths[\"/tracking-plans\"].post"
+          },
+          {
+            "id": "segment.rest.post.AddSourceToTrackingPlan165",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/tracking-plans/{trackingPlanId}/sources",
+            "operation_id": "addSourceToTrackingPlan",
+            "deprecated": false,
+            "source_location": ".paths[\"/tracking-plans/{trackingPlanId}/sources\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateTransformation166",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/transformations",
+            "operation_id": "createTransformation",
+            "deprecated": false,
+            "source_location": ".paths[\"/transformations\"].post"
+          },
+          {
+            "id": "segment.rest.post.AddPermissionsToUser167",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/permissions",
+            "operation_id": "addPermissionsToUser",
+            "deprecated": false,
+            "source_location": ".paths[\"/users/{userId}/permissions\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateWarehouse168",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/warehouses",
+            "operation_id": "createWarehouse",
+            "deprecated": false,
+            "source_location": ".paths[\"/warehouses\"].post"
+          },
+          {
+            "id": "segment.rest.post.AddConnectionFromSourceToWarehouse169",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}",
+            "operation_id": "addConnectionFromSourceToWarehouse",
+            "deprecated": false,
+            "source_location": ".paths[\"/warehouses/{warehouseId}/connected-sources/{sourceId}\"].post"
+          },
+          {
+            "id": "segment.rest.post.CreateValidationInWarehouse170",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/warehouses/validation",
+            "operation_id": "createValidationInWarehouse",
+            "deprecated": false,
+            "source_location": ".paths[\"/warehouses/validation\"].post"
+          },
+          {
+            "id": "segment.rest.put.ReplaceUsersInUserGroup171",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/group/{userGroupId}/users",
+            "operation_id": "replaceUsersInUserGroup",
+            "deprecated": false,
+            "source_location": ".paths[\"/group/{userGroupId}/users\"].put"
+          },
+          {
+            "id": "segment.rest.put.ReplacePermissionsForUserGroup172",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/groups/{userGroupId}/permissions",
+            "operation_id": "replacePermissionsForUserGroup",
+            "deprecated": false,
+            "source_location": ".paths[\"/groups/{userGroupId}/permissions\"].put"
+          },
+          {
+            "id": "segment.rest.put.ReplaceLabelsInSource173",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/sources/{sourceId}/labels",
+            "operation_id": "replaceLabelsInSource",
+            "deprecated": false,
+            "source_location": ".paths[\"/sources/{sourceId}/labels\"].put"
+          },
+          {
+            "id": "segment.rest.put.ReplaceMessagingSubscriptionsInSpaces174",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/spaces/{spaceId}/messaging-subscriptions",
+            "operation_id": "replaceMessagingSubscriptionsInSpaces",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/messaging-subscriptions\"].put"
+          },
+          {
+            "id": "segment.rest.put.ReplaceRulesInTrackingPlan175",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/tracking-plans/{trackingPlanId}/rules",
+            "operation_id": "replaceRulesInTrackingPlan",
+            "deprecated": false,
+            "source_location": ".paths[\"/tracking-plans/{trackingPlanId}/rules\"].put"
+          },
+          {
+            "id": "segment.rest.put.ReplacePermissionsForUser176",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/users/{userId}/permissions",
+            "operation_id": "replacePermissionsForUser",
+            "deprecated": false,
+            "source_location": ".paths[\"/users/{userId}/permissions\"].put"
+          },
+          {
+            "id": "segment.rest.put.ReplaceAdvancedSyncScheduleForWarehouse177",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/warehouses/{warehouseId}/advanced-sync-schedule",
+            "operation_id": "replaceAdvancedSyncScheduleForWarehouse",
+            "deprecated": false,
+            "source_location": ".paths[\"/warehouses/{warehouseId}/advanced-sync-schedule\"].put"
+          },
+          {
+            "id": "segment.rest.patch.UpdateCredential178",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/credentials/{credentialId}",
+            "operation_id": "updateCredential",
+            "deprecated": false,
+            "source_location": ".paths[\"/credentials/{credentialId}\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateFilterForDestination179",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/destination/{destinationId}/filters/{filterId}",
+            "operation_id": "updateFilterForDestination",
+            "deprecated": false,
+            "source_location": ".paths[\"/destination/{destinationId}/filters/{filterId}\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateDestination180",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/destinations/{destinationId}",
+            "operation_id": "updateDestination",
+            "deprecated": false,
+            "source_location": ".paths[\"/destinations/{destinationId}\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateSubscriptionForDestination181",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/destinations/{destinationId}/subscriptions/{id}",
+            "operation_id": "updateSubscriptionForDestination",
+            "deprecated": false,
+            "source_location": ".paths[\"/destinations/{destinationId}/subscriptions/{id}\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateFilterById182",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/filters/{id}",
+            "operation_id": "updateFilterById",
+            "deprecated": false,
+            "source_location": ".paths[\"/filters/{id}\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateFunction183",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/functions/{functionId}",
+            "operation_id": "updateFunction",
+            "deprecated": false,
+            "source_location": ".paths[\"/functions/{functionId}\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateUserGroup184",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/groups/{userGroupId}",
+            "operation_id": "updateUserGroup",
+            "deprecated": false,
+            "source_location": ".paths[\"/groups/{userGroupId}\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateInsertFunctionInstance185",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/insert-function-instances/{instanceId}",
+            "operation_id": "updateInsertFunctionInstance",
+            "deprecated": false,
+            "source_location": ".paths[\"/insert-function-instances/{instanceId}\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateReverseEtlModel186",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/reverse-etl-models/{modelId}",
+            "operation_id": "updateReverseEtlModel",
+            "deprecated": false,
+            "source_location": ".paths[\"/reverse-etl-models/{modelId}\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateSource187",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/sources/{sourceId}",
+            "operation_id": "updateSource",
+            "deprecated": false,
+            "source_location": ".paths[\"/sources/{sourceId}\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateSchemaSettingsInSource188",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/sources/{sourceId}/settings",
+            "operation_id": "updateSchemaSettingsInSource",
+            "deprecated": false,
+            "source_location": ".paths[\"/sources/{sourceId}/settings\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateActivationForAudience189",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/spaces/{spaceId}/audiences/{audienceId}/activations/{id}",
+            "operation_id": "updateActivationForAudience",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/{audienceId}/activations/{id}\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateDestinationForAudience190",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections/{destinationId}",
+            "operation_id": "updateDestinationForAudience",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/{audienceId}/destination-connections/{destinationId}\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateAudienceForSpace191",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/spaces/{spaceId}/audiences/{id}",
+            "operation_id": "updateAudienceForSpace",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/{id}\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateAudienceScheduleForAudience192",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}",
+            "operation_id": "updateAudienceScheduleForAudience",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateComputedTraitForSpace193",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/spaces/{spaceId}/computed-traits/{id}",
+            "operation_id": "updateComputedTraitForSpace",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/computed-traits/{id}\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateProfilesWarehouseForSpaceWarehouse194",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}",
+            "operation_id": "updateProfilesWarehouseForSpaceWarehouse",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/profiles-warehouses/{warehouseId}\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateSelectiveSyncForWarehouseAndSpace195",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}/selective-syncs",
+            "operation_id": "updateSelectiveSyncForWarehouseAndSpace",
+            "deprecated": false,
+            "source_location": ".paths[\"/spaces/{spaceId}/profiles-warehouses/{warehouseId}/selective-syncs\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateTrackingPlan196",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/tracking-plans/{trackingPlanId}",
+            "operation_id": "updateTrackingPlan",
+            "deprecated": false,
+            "source_location": ".paths[\"/tracking-plans/{trackingPlanId}\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateRulesInTrackingPlan197",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/tracking-plans/{trackingPlanId}/rules",
+            "operation_id": "updateRulesInTrackingPlan",
+            "deprecated": false,
+            "source_location": ".paths[\"/tracking-plans/{trackingPlanId}/rules\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateTransformation198",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/transformations/{transformationId}",
+            "operation_id": "updateTransformation",
+            "deprecated": false,
+            "source_location": ".paths[\"/transformations/{transformationId}\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateWarehouse199",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/warehouses/{warehouseId}",
+            "operation_id": "updateWarehouse",
+            "deprecated": false,
+            "source_location": ".paths[\"/warehouses/{warehouseId}\"].patch"
+          },
+          {
+            "id": "segment.rest.patch.UpdateSelectiveSyncForWarehouse200",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/warehouses/{warehouseId}/selective-sync",
+            "operation_id": "updateSelectiveSyncForWarehouse",
+            "deprecated": false,
+            "source_location": ".paths[\"/warehouses/{warehouseId}/selective-sync\"].patch"
+          }
+        ]
+      }
+    ]
+  },
+  "counts": {
+    "rest": 201,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 201
+  }
+}

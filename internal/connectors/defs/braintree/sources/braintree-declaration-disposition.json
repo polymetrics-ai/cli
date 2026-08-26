@@ -1,0 +1,3280 @@
+{
+  "schema_version": 1,
+  "connector": "braintree",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/braintree-operation-source-lock.json",
+    "source_url": "https://developer.paypal.com/braintree/docs",
+    "source_sha256": "40b3627dad662e0f02da27cf115a5aad70f5623be473642b693f32c71d9b5460",
+    "source_bytes": 106218,
+    "source_operation_count": 73
+  },
+  "summary": {
+    "api_surface_rows": 73,
+    "exact_source_rows": 73,
+    "declared_operations": 73,
+    "declared_percent": 100,
+    "enabled_operations": 10,
+    "enabled_percent": 13.7,
+    "disabled_operations": 63,
+    "documented_deletes": 6,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 18
+      },
+      {
+        "key": "direct_write",
+        "count": 45
+      },
+      {
+        "key": "etl",
+        "count": 10
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 10,
+    "writes_actions": 0,
+    "terminal_commands": 10,
+    "live_certification": "pending",
+    "gap_ids": [],
+    "foundation_gaps": [],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 63
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-braintree",
+          "evidence": "docs/sync-transport-definition.md:15-38 lists the declaration fields; internal/connectors/defs/braintree/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration and conformance evidence; no engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-destination-definition-braintree",
+          "evidence": "docs/sync-transport-definition.md defines the destination contract; internal/connectors/defs/braintree/sync_transport.json and a connector-owned typed writes.json action are absent.",
+          "minimal_change": "Author a closed connector-owned typed writes.json action, then declare exact source bindings, per-mode strategy, acknowledgement, fixture, and conformance evidence in sync_transport.json using the #4304 declarative typed-destination foundation."
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "sync-transport-destination-definition-braintree",
+      "sync-transport-source-definition-braintree",
+      "typed-operation-contract-braintree"
+    ],
+    "declaration_pending": [
+      {
+        "id": "typed-operation-contract-braintree",
+        "count": 63
+      },
+      {
+        "id": "sync-transport-destination-definition-braintree",
+        "count": 45
+      }
+    ],
+    "runnable_cli_surface_commands": 10,
+    "typed_write_actions": 0,
+    "endpoint_bound_cli_commands": 10,
+    "endpoint_bound_typed_write_actions": 0
+  },
+  "source_only_dispositions": [],
+  "notes": [
+    "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
+    "An enabled source operation has an API-surface command or typed write-action binding; unbound streams and operations are declaration-pending.",
+    "Direct writes remain direct_write operations. #4304 now provides the connector-neutral typed-destination foundation; no connector-owned typed writes.json action exists for these rows, so reverse-ETL declaration remains pending rather than foundation-gapped.",
+    "2026-08-25 declaration-first ETL command materialization: enabled 10 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists."
+  ],
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/transactions",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/transactions",
+        "operation": null,
+        "covered_by": {
+          "stream": "transactions"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdTransactions0",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"transactions list\" binds GET /merchants/{merchant_id}/transactions; streams.json stream \"transactions\" is the execution component and the built binary must stop at missing --credential before provider I/O."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable ETL command \"transactions list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdTransactions0",
+        "command": {
+          "path": "transactions list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/transactions",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/transactions/{transaction_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/transactions/{transaction_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdTransactionsTransactionId1",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "single transaction lookup by id; the transactions stream covers the same transaction resource family for sync",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "single transaction lookup by id; the transactions stream covers the same transaction resource family for sync"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/transactions/search",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/transactions/search",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdTransactionsSearch2",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "SDK search method for transactions; represented by the transactions list stream on the legacy gateway HTTP shape",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "SDK search method for transactions; represented by the transactions list stream on the legacy gateway HTTP shape"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/customers",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/customers",
+        "operation": null,
+        "covered_by": {
+          "stream": "customers"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdCustomers3",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"customers list\" binds GET /merchants/{merchant_id}/customers; streams.json stream \"customers\" is the execution component and the built binary must stop at missing --credential before provider I/O."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable ETL command \"customers list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdCustomers3",
+        "command": {
+          "path": "customers list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/customers",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/customers/{customer_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/customers/{customer_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdCustomersCustomerId4",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "single customer lookup by id; covered by the customers stream's resource shape",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "single customer lookup by id; covered by the customers stream's resource shape"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/customers/search",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/customers/search",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdCustomersSearch5",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "SDK customer search method; represented by the customers list stream on the legacy gateway HTTP shape",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "SDK customer search method; represented by the customers list stream on the legacy gateway HTTP shape"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/subscriptions",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/subscriptions",
+        "operation": null,
+        "covered_by": {
+          "stream": "subscriptions"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdSubscriptions6",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"subscriptions list\" binds GET /merchants/{merchant_id}/subscriptions; streams.json stream \"subscriptions\" is the execution component and the built binary must stop at missing --credential before provider I/O."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable ETL command \"subscriptions list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdSubscriptions6",
+        "command": {
+          "path": "subscriptions list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/subscriptions",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/subscriptions/{subscription_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/subscriptions/{subscription_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdSubscriptionsSubscriptionId7",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[7]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "single subscription lookup by id; covered by the subscriptions stream's resource shape",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "single subscription lookup by id; covered by the subscriptions stream's resource shape"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/subscriptions/search",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/subscriptions/search",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdSubscriptionsSearch8",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[8]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "SDK subscription search method; represented by the subscriptions stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "SDK subscription search method; represented by the subscriptions stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/add_ons",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/add_ons",
+        "operation": null,
+        "covered_by": {
+          "stream": "add_ons"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdAddOns9",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[9]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"add-ons list\" binds GET /merchants/{merchant_id}/add_ons; streams.json stream \"add_ons\" is the execution component and the built binary must stop at missing --credential before provider I/O."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable ETL command \"add-ons list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdAddOns9",
+        "command": {
+          "path": "add-ons list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/add_ons",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/discounts",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/discounts",
+        "operation": null,
+        "covered_by": {
+          "stream": "discounts"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdDiscounts10",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[10]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"discounts list\" binds GET /merchants/{merchant_id}/discounts; streams.json stream \"discounts\" is the execution component and the built binary must stop at missing --credential before provider I/O."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable ETL command \"discounts list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdDiscounts10",
+        "command": {
+          "path": "discounts list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/discounts",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/plans",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/plans",
+        "operation": null,
+        "covered_by": {
+          "stream": "plans"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdPlans11",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[11]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"plans list\" binds GET /merchants/{merchant_id}/plans; streams.json stream \"plans\" is the execution component and the built binary must stop at missing --credential before provider I/O."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable ETL command \"plans list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdPlans11",
+        "command": {
+          "path": "plans list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/plans",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/plans/{plan_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/plans/{plan_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdPlansPlanId12",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[12]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "single plan lookup by id; covered by the plans stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "single plan lookup by id; covered by the plans stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/merchant_accounts",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/merchant_accounts",
+        "operation": null,
+        "covered_by": {
+          "stream": "merchant_accounts"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdMerchantAccounts13",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[13]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"merchant-accounts list\" binds GET /merchants/{merchant_id}/merchant_accounts; streams.json stream \"merchant_accounts\" is the execution component and the built binary must stop at missing --credential before provider I/O."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable ETL command \"merchant-accounts list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdMerchantAccounts13",
+        "command": {
+          "path": "merchant-accounts list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/merchant_accounts",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/merchant_accounts/{merchant_account_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/merchant_accounts/{merchant_account_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdMerchantAccountsMerchantAccountId14",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[14]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "single merchant-account lookup by id; covered by the merchant_accounts stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "single merchant-account lookup by id; covered by the merchant_accounts stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/payment_methods",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/payment_methods",
+        "operation": null,
+        "covered_by": {
+          "stream": "payment_methods"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdPaymentMethods15",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[15]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"payment-methods list\" binds GET /merchants/{merchant_id}/payment_methods; streams.json stream \"payment_methods\" is the execution component and the built binary must stop at missing --credential before provider I/O."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable ETL command \"payment-methods list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdPaymentMethods15",
+        "command": {
+          "path": "payment-methods list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/payment_methods",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/payment_methods/{token}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/payment_methods/{token}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdPaymentMethodsToken16",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[16]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "single vaulted payment-method lookup by token; covered by the payment_methods stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "single vaulted payment-method lookup by token; covered by the payment_methods stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/disputes",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/disputes",
+        "operation": null,
+        "covered_by": {
+          "stream": "disputes"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdDisputes17",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[17]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"disputes list\" binds GET /merchants/{merchant_id}/disputes; streams.json stream \"disputes\" is the execution component and the built binary must stop at missing --credential before provider I/O."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable ETL command \"disputes list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdDisputes17",
+        "command": {
+          "path": "disputes list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/disputes",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/disputes/{dispute_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/disputes/{dispute_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdDisputesDisputeId18",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[18]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "single dispute lookup by id; covered by the disputes stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "single dispute lookup by id; covered by the disputes stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/apple_pay/registered_domains",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/apple_pay/registered_domains",
+        "operation": null,
+        "covered_by": {
+          "stream": "apple_pay_domains"
+        }
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdApplePayRegisteredDomains19",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[19]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"apple-pay-domains list\" binds GET /merchants/{merchant_id}/apple_pay/registered_domains; streams.json stream \"apple_pay_domains\" is the execution component and the built binary must stop at missing --credential before provider I/O."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable ETL command \"apple-pay-domains list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdApplePayRegisteredDomains19",
+        "command": {
+          "path": "apple-pay-domains list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/apple_pay/registered_domains",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/credit_cards/expiring_between",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/credit_cards/expiring_between",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdCreditCardsExpiringBetween20",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[20]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "date-window lookup for expiring cards; requires caller-supplied start/end dates and does not define a stable list-all sync stream",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "date-window lookup for expiring cards; requires caller-supplied start/end dates and does not define a stable list-all sync stream"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/credit_card_verifications/search",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/credit_card_verifications/search",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdCreditCardVerificationsSearch21",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[21]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "ad hoc verification search keyed by caller criteria; not a fixed list/detail resource and tied to payment-method verification workflow data",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "ad hoc verification search keyed by caller criteria; not a fixed list/detail resource and tied to payment-method verification workflow data"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/transactions/{transaction_id}/line_items",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/transactions/{transaction_id}/line_items",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdTransactionsTransactionIdLineItems22",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[22]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "line items are enumerable only under an already-known transaction id; adding a transaction fan_out was deferred for this gateway connector",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "line items are enumerable only under an already-known transaction id; adding a transaction fan_out was deferred for this gateway connector"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/reports/transaction_level_fees",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/reports/transaction_level_fees",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdReportsTransactionLevelFees23",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[23]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "fee report requires caller-supplied report criteria and returns computed reporting data rather than a stable resource collection",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "fee report requires caller-supplied report criteria and returns computed reporting data rather than a stable resource collection"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/settlement_batch_summary",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/settlement_batch_summary",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdSettlementBatchSummary24",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[24]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "settlement batch summary is a parameterized generated report, not a list/detail collection with a stable record id",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "settlement batch summary is a parameterized generated report, not a list/detail collection with a stable record id"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/transactions",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/transactions",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdTransactions25",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[25]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "transaction sale is documented as an XML API POST/SDK payment-processing call with nested XML body and nonce/payment-method requirements; not expressible as this dialect's JSON/form single-record write",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "transaction sale is documented as an XML API POST/SDK payment-processing call with nested XML body and nonce/payment-method requirements; not expressible as this dialect's JSON/form single-record write"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/transactions/{transaction_id}/submit_for_settlement",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/transactions/{transaction_id}/submit_for_settlement",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdTransactionsTransactionIdSubmitForSettlement26",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[26]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "captures an authorized payment and moves funds; payment lifecycle side effect, not a safe reverse-ETL record mutation",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "captures an authorized payment and moves funds; payment lifecycle side effect, not a safe reverse-ETL record mutation"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/transactions/{transaction_id}/submit_for_partial_settlement",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/transactions/{transaction_id}/submit_for_partial_settlement",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdTransactionsTransactionIdSubmitForPartialSettlement27",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[27]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "captures part of an authorized payment; payment lifecycle side effect requiring payment-specific validation",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "captures part of an authorized payment; payment lifecycle side effect requiring payment-specific validation"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/transactions/{transaction_id}/refund",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/transactions/{transaction_id}/refund",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdTransactionsTransactionIdRefund28",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[28]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "refunds a real transaction; irreversible money-movement side effect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "refunds a real transaction; irreversible money-movement side effect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/transactions/{transaction_id}/void",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/transactions/{transaction_id}/void",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdTransactionsTransactionIdVoid29",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[29]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "voids an authorized transaction; payment lifecycle side effect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "voids an authorized transaction; payment lifecycle side effect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/transactions/{transaction_id}/clone",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/transactions/{transaction_id}/clone",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdTransactionsTransactionIdClone30",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[30]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "clones a previous payment transaction through an SDK/XML request body; not a flat JSON/form record mutation",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "clones a previous payment transaction through an SDK/XML request body; not a flat JSON/form record mutation"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/merchants/{merchant_id}/transactions/{transaction_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/merchants/{merchant_id}/transactions/{transaction_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.put.MerchantsMerchantIdTransactionsTransactionId31",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[31]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "transaction detail update is an XML/SDK body shape with payment-specific validation, not expressible by the flat write dialect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "transaction detail update is an XML/SDK body shape with payment-specific validation, not expressible by the flat write dialect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/transactions/{transaction_id}/hold_in_escrow",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/transactions/{transaction_id}/hold_in_escrow",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdTransactionsTransactionIdHoldInEscrow32",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[32]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "marketplace escrow lifecycle action; elevated money-movement side effect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "marketplace escrow lifecycle action; elevated money-movement side effect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/transactions/{transaction_id}/release_from_escrow",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/transactions/{transaction_id}/release_from_escrow",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdTransactionsTransactionIdReleaseFromEscrow33",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[33]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "marketplace escrow release moves funds; elevated money-movement side effect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "marketplace escrow release moves funds; elevated money-movement side effect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/transactions/{transaction_id}/cancel_release",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/transactions/{transaction_id}/cancel_release",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdTransactionsTransactionIdCancelRelease34",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[34]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "marketplace escrow lifecycle action; elevated money-movement side effect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "marketplace escrow lifecycle action; elevated money-movement side effect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/transactions/{transaction_id}/adjust_authorization",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/transactions/{transaction_id}/adjust_authorization",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdTransactionsTransactionIdAdjustAuthorization35",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[35]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "changes an authorization amount; payment lifecycle side effect rather than data sync",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "changes an authorization amount; payment lifecycle side effect rather than data sync"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/customers",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/customers",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdCustomers36",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[36]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "customer creation is documented through SDK/XML request bodies with nested customer/payment-method/address data; the flat JSON/form write dialect cannot express the correct wire body",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "customer creation is documented through SDK/XML request bodies with nested customer/payment-method/address data; the flat JSON/form write dialect cannot express the correct wire body"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/merchants/{merchant_id}/customers/{customer_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/merchants/{merchant_id}/customers/{customer_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.put.MerchantsMerchantIdCustomersCustomerId37",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[37]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "customer update shares the SDK/XML nested body shape used by customer creation",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "customer update shares the SDK/XML nested body shape used by customer creation"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/merchants/{merchant_id}/customers/{customer_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/merchants/{merchant_id}/customers/{customer_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.delete.MerchantsMerchantIdCustomersCustomerId38",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[38]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "deletes a vaulted customer and associated payment methods/addresses",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "deletes a vaulted customer and associated payment methods/addresses"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/customers/{customer_id}/addresses",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/customers/{customer_id}/addresses",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdCustomersCustomerIdAddresses39",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[39]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "address creation is a nested per-customer XML/SDK sub-resource; not a top-level JSON/form write",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "address creation is a nested per-customer XML/SDK sub-resource; not a top-level JSON/form write"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/customers/{customer_id}/addresses/{address_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/customers/{customer_id}/addresses/{address_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdCustomersCustomerIdAddressesAddressId40",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[40]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "address detail requires a caller-supplied customer id and address id; no top-level address list endpoint exists to sync",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "address detail requires a caller-supplied customer id and address id; no top-level address list endpoint exists to sync"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/merchants/{merchant_id}/customers/{customer_id}/addresses/{address_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/merchants/{merchant_id}/customers/{customer_id}/addresses/{address_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.put.MerchantsMerchantIdCustomersCustomerIdAddressesAddressId41",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[41]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "address update is nested under customer and uses XML/SDK body construction outside the flat write dialect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "address update is nested under customer and uses XML/SDK body construction outside the flat write dialect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/merchants/{merchant_id}/customers/{customer_id}/addresses/{address_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/merchants/{merchant_id}/customers/{customer_id}/addresses/{address_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.delete.MerchantsMerchantIdCustomersCustomerIdAddressesAddressId42",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[42]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "deletes a vaulted customer address",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "deletes a vaulted customer address"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/subscriptions",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/subscriptions",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdSubscriptions43",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[43]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "subscription creation is an XML/SDK billing workflow with nested plan/payment method/add-on/discount fields; not expressible as a flat JSON/form write",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "subscription creation is an XML/SDK billing workflow with nested plan/payment method/add-on/discount fields; not expressible as a flat JSON/form write"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/merchants/{merchant_id}/subscriptions/{subscription_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/merchants/{merchant_id}/subscriptions/{subscription_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.put.MerchantsMerchantIdSubscriptionsSubscriptionId44",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[44]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "subscription update shares the XML/SDK nested billing body shape",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "subscription update shares the XML/SDK nested billing body shape"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/merchants/{merchant_id}/subscriptions/{subscription_id}/cancel",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/merchants/{merchant_id}/subscriptions/{subscription_id}/cancel",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.put.MerchantsMerchantIdSubscriptionsSubscriptionIdCancel45",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[45]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "cancels recurring billing for a customer subscription",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "cancels recurring billing for a customer subscription"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/subscriptions/{subscription_id}/retry_charge",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/subscriptions/{subscription_id}/retry_charge",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdSubscriptionsSubscriptionIdRetryCharge46",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[46]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "attempts a real subscription charge; money-movement side effect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "attempts a real subscription charge; money-movement side effect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/payment_methods",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/payment_methods",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdPaymentMethods47",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[47]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "vaults PCI-scoped payment method data or nonces through SDK/XML flows; not safe as a generic reverse-ETL write",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "vaults PCI-scoped payment method data or nonces through SDK/XML flows; not safe as a generic reverse-ETL write"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/merchants/{merchant_id}/payment_methods/{token}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/merchants/{merchant_id}/payment_methods/{token}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.put.MerchantsMerchantIdPaymentMethodsToken48",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[48]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "updates vaulted payment method data; PCI/payment workflow scope outside ordinary data sync",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "updates vaulted payment method data; PCI/payment workflow scope outside ordinary data sync"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/merchants/{merchant_id}/payment_methods/{token}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/merchants/{merchant_id}/payment_methods/{token}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.delete.MerchantsMerchantIdPaymentMethodsToken49",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[49]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "deletes a vaulted payment method token",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "deletes a vaulted payment method token"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/payment_methods/{token}/grant",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/payment_methods/{token}/grant",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdPaymentMethodsTokenGrant50",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[50]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "Braintree Auth grant/revoke payment-method sharing workflow requiring connected-merchant authorization",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "Braintree Auth grant/revoke payment-method sharing workflow requiring connected-merchant authorization"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/payment_methods/{token}/revoke",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/payment_methods/{token}/revoke",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdPaymentMethodsTokenRevoke51",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[51]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "Braintree Auth grant/revoke payment-method sharing workflow requiring connected-merchant authorization",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "Braintree Auth grant/revoke payment-method sharing workflow requiring connected-merchant authorization"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/payment_method_nonces",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/payment_method_nonces",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdPaymentMethodNonces52",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[52]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "generates or looks up a transient payment-method nonce, not durable syncable account data",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "generates or looks up a transient payment-method nonce, not durable syncable account data"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/payment_method_nonces/{nonce}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/payment_method_nonces/{nonce}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdPaymentMethodNoncesNonce53",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[53]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "transient nonce lookup; not a stable resource collection",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "transient nonce lookup; not a stable resource collection"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/credit_cards",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/credit_cards",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdCreditCards54",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[54]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "vaults PCI-scoped credit card data through SDK/XML flows",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "vaults PCI-scoped credit card data through SDK/XML flows"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchants/{merchant_id}/credit_cards/{token}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/merchants/{merchant_id}/credit_cards/{token}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.get.MerchantsMerchantIdCreditCardsToken55",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[55]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "credit card detail is one payment-method subtype; covered by the payment_methods stream at the generic vaulted-method layer",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "credit card detail is one payment-method subtype; covered by the payment_methods stream at the generic vaulted-method layer"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/merchants/{merchant_id}/credit_cards/{token}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/merchants/{merchant_id}/credit_cards/{token}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.put.MerchantsMerchantIdCreditCardsToken56",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[56]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "updates PCI-scoped vaulted card details",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "updates PCI-scoped vaulted card details"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/merchants/{merchant_id}/credit_cards/{token}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/merchants/{merchant_id}/credit_cards/{token}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.delete.MerchantsMerchantIdCreditCardsToken57",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[57]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "deletes a vaulted credit card payment method",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "deletes a vaulted credit card payment method"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/credit_card_verifications",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/credit_card_verifications",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdCreditCardVerifications58",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[58]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "initiates a payment-method verification workflow, not a durable record mutation",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "initiates a payment-method verification workflow, not a durable record mutation"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/merchant_accounts",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/merchant_accounts",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdMerchantAccounts59",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[59]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "creates a sub-merchant/merchant account; account administration beyond normal data sync",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "creates a sub-merchant/merchant account; account administration beyond normal data sync"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/merchant_accounts/create_for_currency",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/merchant_accounts/create_for_currency",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdMerchantAccountsCreateForCurrency60",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[60]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "Braintree Auth merchant-account provisioning for a currency; admin/account setup workflow",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "Braintree Auth merchant-account provisioning for a currency; admin/account setup workflow"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/merchants/{merchant_id}/merchant_accounts/{merchant_account_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/merchants/{merchant_id}/merchant_accounts/{merchant_account_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.put.MerchantsMerchantIdMerchantAccountsMerchantAccountId61",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[61]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "updates merchant account onboarding/business details; elevated account administration",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "updates merchant account onboarding/business details; elevated account administration"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/plans",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/plans",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdPlans62",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[62]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "creates recurring billing plan configuration; account/billing administration rather than sync data",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "creates recurring billing plan configuration; account/billing administration rather than sync data"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/merchants/{merchant_id}/plans/{plan_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/merchants/{merchant_id}/plans/{plan_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.put.MerchantsMerchantIdPlansPlanId63",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[63]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "updates recurring billing plan configuration",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "updates recurring billing plan configuration"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/client_token",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/client_token",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdClientToken64",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[64]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "generates a client authorization token for checkout SDKs, not a data resource",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "generates a client authorization token for checkout SDKs, not a data resource"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/apple_pay/register_domain",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/apple_pay/register_domain",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdApplePayRegisterDomain65",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[65]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "registers a domain for Apple Pay checkout; account/payment-method configuration side effect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "registers a domain for Apple Pay checkout; account/payment-method configuration side effect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/merchants/{merchant_id}/apple_pay/registered_domains/{domain}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/merchants/{merchant_id}/apple_pay/registered_domains/{domain}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.delete.MerchantsMerchantIdApplePayRegisteredDomainsDomain66",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[66]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "unregisters a domain for Apple Pay checkout; account/payment-method configuration side effect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "unregisters a domain for Apple Pay checkout; account/payment-method configuration side effect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/disputes/{dispute_id}/accept",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/disputes/{dispute_id}/accept",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdDisputesDisputeIdAccept67",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[67]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "accepts liability for a dispute/chargeback; financial/legal workflow side effect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "accepts liability for a dispute/chargeback; financial/legal workflow side effect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/disputes/{dispute_id}/evidence",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/disputes/{dispute_id}/evidence",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdDisputesDisputeIdEvidence68",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[68]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "dispute evidence submission is a workflow action with text/file variants, not a syncable record mutation",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "dispute evidence submission is a workflow action with text/file variants, not a syncable record mutation"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/disputes/{dispute_id}/evidence/files",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/disputes/{dispute_id}/evidence/files",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdDisputesDisputeIdEvidenceFiles69",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[69]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "uploads a dispute evidence file; binary upload outside json/form/none body construction",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "uploads a dispute evidence file; binary upload outside json/form/none body construction"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/merchants/{merchant_id}/disputes/{dispute_id}/evidence/{evidence_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/merchants/{merchant_id}/disputes/{dispute_id}/evidence/{evidence_id}",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.delete.MerchantsMerchantIdDisputesDisputeIdEvidenceEvidenceId70",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[70]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "removes submitted dispute evidence from a chargeback workflow",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "removes submitted dispute evidence from a chargeback workflow"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/disputes/{dispute_id}/finalize",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/disputes/{dispute_id}/finalize",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdDisputesDisputeIdFinalize71",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[71]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "finalizes chargeback evidence submission; irreversible workflow action",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "finalizes chargeback evidence submission; irreversible workflow action"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/merchants/{merchant_id}/document_uploads",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/merchants/{merchant_id}/document_uploads",
+        "operation": null,
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/braintree-operation-source-lock.json",
+        "source_id": "braintree.rest.post.MerchantsMerchantIdDocumentUploads72",
+        "source_url": "https://developer.paypal.com/braintree/docs",
+        "source_location": "api_surface.json:endpoints[72]",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-braintree",
+          "evidence": "uploads an evidence/document file; binary payload not expressible by the declarative write dialect",
+          "minimal_change": "Add a connector-owned typed operation contract and runnable binding from the pinned public source, or retain this source disposition with its documented reason; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The source operation has no runnable command or typed action binding.",
+        "evidence": "uploads an evidence/document file; binary payload not expressible by the declarative write dialect"
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-braintree",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "declaration-pending",
+          "reason": "No connector-owned typed writes.json action or CLI command yet binds this exact source operation. This is an unauthored declaration, not a foundation gap or safety exclusion."
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,771 @@
+{
+  "schema_version": 3,
+  "connector": "braintree",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "retrieval": "Migrated schema-version 2 provider-documentation source-lock capture.",
+    "openapi": [],
+    "coverage_confidence": {
+      "level": "documented",
+      "basis": "The schema-version 2 braintree source lock pins the public provider documentation capture and its operation inventory; it makes no completeness claim."
+    },
+    "source_documents": [
+      {
+        "id": "primary",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://developer.paypal.com/braintree/docs",
+          "sha256": "40b3627dad662e0f02da27cf115a5aad70f5623be473642b693f32c71d9b5460",
+          "bytes": 106218
+        },
+        "published_source": {
+          "source_url": "https://developer.paypal.com/braintree/docs",
+          "capture_url": "https://developer.paypal.com/braintree/docs",
+          "sha256": "40b3627dad662e0f02da27cf115a5aad70f5623be473642b693f32c71d9b5460",
+          "bytes": 106218,
+          "adapter": "schema-v2-source-lock-migration"
+        },
+        "info_version": "Braintree Gateway server-side and XML API",
+        "operations": [
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdTransactions0",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/transactions",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[0]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdTransactionsTransactionId1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/transactions/{transaction_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[1]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdTransactionsSearch2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/transactions/search",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[2]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdCustomers3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/customers",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[3]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdCustomersCustomerId4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/customers/{customer_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[4]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdCustomersSearch5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/customers/search",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[5]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdSubscriptions6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/subscriptions",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[6]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdSubscriptionsSubscriptionId7",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/subscriptions/{subscription_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[7]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdSubscriptionsSearch8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/subscriptions/search",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[8]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdAddOns9",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/add_ons",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[9]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdDiscounts10",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/discounts",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[10]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdPlans11",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/plans",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[11]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdPlansPlanId12",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/plans/{plan_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[12]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdMerchantAccounts13",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/merchant_accounts",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[13]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdMerchantAccountsMerchantAccountId14",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/merchant_accounts/{merchant_account_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[14]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdPaymentMethods15",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/payment_methods",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[15]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdPaymentMethodsToken16",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/payment_methods/{token}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[16]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdDisputes17",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/disputes",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[17]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdDisputesDisputeId18",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/disputes/{dispute_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[18]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdApplePayRegisteredDomains19",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/apple_pay/registered_domains",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[19]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdCreditCardsExpiringBetween20",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/credit_cards/expiring_between",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[20]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdCreditCardVerificationsSearch21",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/credit_card_verifications/search",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[21]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdTransactionsTransactionIdLineItems22",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/transactions/{transaction_id}/line_items",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[22]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdReportsTransactionLevelFees23",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/reports/transaction_level_fees",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[23]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdSettlementBatchSummary24",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/settlement_batch_summary",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[24]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdTransactions25",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/transactions",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[25]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdTransactionsTransactionIdSubmitForSettlement26",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/transactions/{transaction_id}/submit_for_settlement",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[26]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdTransactionsTransactionIdSubmitForPartialSettlement27",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/transactions/{transaction_id}/submit_for_partial_settlement",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[27]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdTransactionsTransactionIdRefund28",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/transactions/{transaction_id}/refund",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[28]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdTransactionsTransactionIdVoid29",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/transactions/{transaction_id}/void",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[29]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdTransactionsTransactionIdClone30",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/transactions/{transaction_id}/clone",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[30]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.put.MerchantsMerchantIdTransactionsTransactionId31",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/merchants/{merchant_id}/transactions/{transaction_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[31]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdTransactionsTransactionIdHoldInEscrow32",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/transactions/{transaction_id}/hold_in_escrow",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[32]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdTransactionsTransactionIdReleaseFromEscrow33",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/transactions/{transaction_id}/release_from_escrow",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[33]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdTransactionsTransactionIdCancelRelease34",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/transactions/{transaction_id}/cancel_release",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[34]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdTransactionsTransactionIdAdjustAuthorization35",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/transactions/{transaction_id}/adjust_authorization",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[35]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdCustomers36",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/customers",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[36]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.put.MerchantsMerchantIdCustomersCustomerId37",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/merchants/{merchant_id}/customers/{customer_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[37]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.delete.MerchantsMerchantIdCustomersCustomerId38",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/merchants/{merchant_id}/customers/{customer_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[38]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdCustomersCustomerIdAddresses39",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/customers/{customer_id}/addresses",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[39]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdCustomersCustomerIdAddressesAddressId40",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/customers/{customer_id}/addresses/{address_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[40]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.put.MerchantsMerchantIdCustomersCustomerIdAddressesAddressId41",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/merchants/{merchant_id}/customers/{customer_id}/addresses/{address_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[41]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.delete.MerchantsMerchantIdCustomersCustomerIdAddressesAddressId42",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/merchants/{merchant_id}/customers/{customer_id}/addresses/{address_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[42]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdSubscriptions43",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/subscriptions",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[43]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.put.MerchantsMerchantIdSubscriptionsSubscriptionId44",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/merchants/{merchant_id}/subscriptions/{subscription_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[44]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.put.MerchantsMerchantIdSubscriptionsSubscriptionIdCancel45",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/merchants/{merchant_id}/subscriptions/{subscription_id}/cancel",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[45]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdSubscriptionsSubscriptionIdRetryCharge46",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/subscriptions/{subscription_id}/retry_charge",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[46]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdPaymentMethods47",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/payment_methods",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[47]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.put.MerchantsMerchantIdPaymentMethodsToken48",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/merchants/{merchant_id}/payment_methods/{token}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[48]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.delete.MerchantsMerchantIdPaymentMethodsToken49",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/merchants/{merchant_id}/payment_methods/{token}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[49]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdPaymentMethodsTokenGrant50",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/payment_methods/{token}/grant",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[50]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdPaymentMethodsTokenRevoke51",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/payment_methods/{token}/revoke",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[51]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdPaymentMethodNonces52",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/payment_method_nonces",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[52]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdPaymentMethodNoncesNonce53",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/payment_method_nonces/{nonce}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[53]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdCreditCards54",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/credit_cards",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[54]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.get.MerchantsMerchantIdCreditCardsToken55",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/merchants/{merchant_id}/credit_cards/{token}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[55]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.put.MerchantsMerchantIdCreditCardsToken56",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/merchants/{merchant_id}/credit_cards/{token}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[56]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.delete.MerchantsMerchantIdCreditCardsToken57",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/merchants/{merchant_id}/credit_cards/{token}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[57]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdCreditCardVerifications58",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/credit_card_verifications",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[58]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdMerchantAccounts59",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/merchant_accounts",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[59]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdMerchantAccountsCreateForCurrency60",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/merchant_accounts/create_for_currency",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[60]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.put.MerchantsMerchantIdMerchantAccountsMerchantAccountId61",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/merchants/{merchant_id}/merchant_accounts/{merchant_account_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[61]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdPlans62",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/plans",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[62]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.put.MerchantsMerchantIdPlansPlanId63",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/merchants/{merchant_id}/plans/{plan_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[63]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdClientToken64",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/client_token",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[64]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdApplePayRegisterDomain65",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/apple_pay/register_domain",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[65]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.delete.MerchantsMerchantIdApplePayRegisteredDomainsDomain66",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/merchants/{merchant_id}/apple_pay/registered_domains/{domain}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[66]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdDisputesDisputeIdAccept67",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/disputes/{dispute_id}/accept",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[67]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdDisputesDisputeIdEvidence68",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/disputes/{dispute_id}/evidence",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[68]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdDisputesDisputeIdEvidenceFiles69",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/disputes/{dispute_id}/evidence/files",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[69]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.delete.MerchantsMerchantIdDisputesDisputeIdEvidenceEvidenceId70",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/merchants/{merchant_id}/disputes/{dispute_id}/evidence/{evidence_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[70]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdDisputesDisputeIdFinalize71",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/disputes/{dispute_id}/finalize",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[71]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          },
+          {
+            "id": "braintree.rest.post.MerchantsMerchantIdDocumentUploads72",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/merchants/{merchant_id}/document_uploads",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[72]",
+            "citation_url": "https://developer.paypal.com/braintree/docs"
+          }
+        ]
+      }
+    ]
+  },
+  "counts": {
+    "rest": 73,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 73
+  }
+}

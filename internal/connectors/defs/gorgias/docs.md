@@ -137,8 +137,18 @@ allowlist or bounded final media contract, so the closed binary executor does no
   (`update_customer_custom_field_values`, `update_ticket_custom_fields`) cover the same data via a
   `{id, value}` array and are implemented.
 - **`GET /api/tickets/{ticket_id}/messages` ("List messages of a ticket") is provider-deprecated,
-  not executable.** The OpenAPI document marks it `deprecated: true`, and its own description says to
-  use `GET /api/messages` instead — implemented here as the `messages` stream.
+  but executable.** The OpenAPI document marks it `deprecated: true` and recommends
+  `GET /api/messages`; both remain reachable: the legacy route is `pm gorgias tickets messages list
+  --ticket-id <id> --json`, while `messages` remains the ETL stream.
+- **Declarative typed destination proof.** `sync_transport.json` declares every Gorgias ETL stream
+  as a `declarative_stream_source` and binds `update_ticket` to `tickets` with the exact `id` and
+  `status` source fields. The route is keyed, warehouse-acknowledged, and has explicit strategies
+  for overwrite, append, and upsert modes. Foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57`
+  supplies persisted App/CLI dispatch and exact action selection; this declaration still needs an
+  installed App/CLI fixture path, and provider-live certification remains pending. The declaration
+  disposition records all 61 typed-action eligibility decisions; the remaining ordinary actions are
+  declaration-pending exact source mappings and conformance evidence, while multipart `upload_file`
+  needs a separate bounded binary/multipart destination contract and remains reachable as `files upload`.
 - **Direct reads use `json_redacted`.** That is the only general-purpose output policy the runtime
   supports for direct reads (`commandrunner.supportedDirectReadOutputPolicies`).
 - **Flags exist for scalar fields only.** An object, array, or union-typed field is supplied by the

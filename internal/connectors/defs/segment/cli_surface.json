@@ -1,0 +1,107 @@
+{
+  "tagline": "Read Segment source-locked ETL records.",
+  "usage": "pm segment <command> [flags]",
+  "source_cli": {
+    "name": "Segment provider API",
+    "docs": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js",
+    "reference": "Pinned schema-v3 source documents; each ETL command retains its exact provider operation route and citation.",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "etl",
+      "title": "ETL streams",
+      "commands": [
+        "workspace",
+        "sources",
+        "destinations"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Segment request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit."
+    }
+  ],
+  "commands": [
+    {
+      "path": "workspace list",
+      "summary": "Read Workspace as Segment ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workspace",
+      "source_cli_path": "GET /",
+      "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/"
+        }
+      ],
+      "examples": [
+        "pm segment workspace list --json"
+      ],
+      "notes": "Pinned source operation segment.rest.get.GetWorkspace28 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "sources list",
+      "summary": "Read Sources as Segment ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sources",
+      "source_cli_path": "GET /sources",
+      "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sources"
+        }
+      ],
+      "examples": [
+        "pm segment sources list --json"
+      ],
+      "notes": "Pinned source operation segment.rest.get.ListSources76 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "destinations list",
+      "summary": "Read Destinations as Segment ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "destinations",
+      "source_cli_path": "GET /destinations",
+      "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/destinations"
+        }
+      ],
+      "examples": [
+        "pm segment destinations list --json"
+      ],
+      "notes": "Pinned source operation segment.rest.get.ListDestinations47 from source document primary; streams.json is the declared execution component."
+    }
+  ]
+}

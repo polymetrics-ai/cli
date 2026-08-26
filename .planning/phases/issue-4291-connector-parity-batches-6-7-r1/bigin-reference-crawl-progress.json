@@ -1,0 +1,1573 @@
+{
+  "schema_version": 1,
+  "connector": "zoho-bigin",
+  "parser_version": 4,
+  "cache_reset_reason": "The previous extractor omitted the provider-rendered /bigin/bulk/v2 endpoint family; the current parser includes ordinary and bulk v2 operations before counting.",
+  "pages": {
+    "https://www.bigin.com/developer/docs/apis/v2/": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:27:47.485Z",
+      "http_status": 200,
+      "sha256": "f06704251737d3330153c8e39bf428abfa1d099a920f2356c25e7a0454dbf80e",
+      "bytes": 8018,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/whats-new.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:27:48.448Z",
+      "http_status": 200,
+      "sha256": "b85f124a67e5101b4e28d4ca5f17667cc2d4050663836f214290fcf1486597d1",
+      "bytes": 10314,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/api-changelog.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:27:49.813Z",
+      "http_status": 200,
+      "sha256": "6520a478a09d33ba627115c13718123387745c614cb9e77c4fbd00676d20bf5b",
+      "bytes": 16280,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/oauth-overview.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:27:50.842Z",
+      "http_status": 200,
+      "sha256": "2e38b4feb1a0f09b5be5f64178e554d36954d8db1c48de3075c135c5c67d9448",
+      "bytes": 8797,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/scopes.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:27:52.364Z",
+      "http_status": 200,
+      "sha256": "5d791b0f23f1d0263ef0ca4ac86c6c903b89e274d289c37df851c560a87fb16b",
+      "bytes": 33513,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/register-client.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:27:53.545Z",
+      "http_status": 200,
+      "sha256": "0e7b68feb8ce648045a47f61996c1208cdcf3543bbe17e25d94150dcb772befe",
+      "bytes": 13582,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/authorization-code-flow.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:27:55.422Z",
+      "http_status": 200,
+      "sha256": "22f907800b7c53f7fad471b0c3dda4c35f1f8665369287d6eb4dfd4df838842e",
+      "bytes": 8625,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/auth-request.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:27:56.593Z",
+      "http_status": 200,
+      "sha256": "6d6680b9b988bc5c0acef5c05b388f088d6be259c6a5e47eded132a6dfc50486",
+      "bytes": 10604,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/request-user-grant-permissions.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:27:57.850Z",
+      "http_status": 200,
+      "sha256": "69ef20af3d5864f683a7b6c8c63af090e9b938bced691fa54b8ba7a83f3d64c0",
+      "bytes": 9850,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/access-refresh.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:27:58.714Z",
+      "http_status": 200,
+      "sha256": "6e743e15a7e5cc7c2e53e34ff5f1a2c103fa21297eb8620dbe77681ff6ec550d",
+      "bytes": 18703,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/use-access-token-api-request.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:00.069Z",
+      "http_status": 200,
+      "sha256": "e394bff9c33122408ce82cf27b47bf74b4320509b920cf3026e34d699fd908e4",
+      "bytes": 7121,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/settings/modules"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/refresh.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:01.169Z",
+      "http_status": 200,
+      "sha256": "f50d61e52a307a3d032efbff6f6db487915d761ae3de3d1d6397bcf5d7f6ebe5",
+      "bytes": 15161,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/revoke-tokens.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:02.891Z",
+      "http_status": 200,
+      "sha256": "007301946e9c8d689015a9b3886f9a08d8a2b37cb3ccf1b1d1e73122bde58cc3",
+      "bytes": 10555,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/self-client-overview.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:03.973Z",
+      "http_status": 200,
+      "sha256": "37bc1a1c63640f08301a3bacbd6397a1c19354c18fd432f34cb4e417a48ad80a",
+      "bytes": 8602,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/self-client-generate-code.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:05.151Z",
+      "http_status": 200,
+      "sha256": "05233b72fc7700bf7d15362880fbc8ad6d2d7edcdc70dcc2b3e6dd628ac9ec99",
+      "bytes": 8183,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/self-client-get-access-token.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:06.244Z",
+      "http_status": 200,
+      "sha256": "75beee02bed1b742f114a0913c26566518914a53c982ad877fde9fc2f6228601",
+      "bytes": 16332,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/self-client-use-access-tokens.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:07.099Z",
+      "http_status": 200,
+      "sha256": "f4de5509a61dbf4e1729a249dac4b852f556468d3075a37b2e5016c7caa30bf4",
+      "bytes": 7038,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/settings/modules"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/self-client-refresh-token-usage.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:08.773Z",
+      "http_status": 200,
+      "sha256": "54fb468b5b0e89bc9a69dcd407aa93a9eaf30aef4f2534287806054adcf88c71",
+      "bytes": 13926,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/self-client-revoke-refresh-token.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:10.359Z",
+      "http_status": 200,
+      "sha256": "f636835f2c6e4db2f2b7c333ae940f3acb12794464162ee2c15bb34555411282",
+      "bytes": 10688,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/multi-dc.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:12.383Z",
+      "http_status": 200,
+      "sha256": "12f78d124f91f32eb360f5347bd49a3d0750f32a99d03d6f008db42aa3e3d67b",
+      "bytes": 10325,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/api-limits.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:13.144Z",
+      "http_status": 200,
+      "sha256": "56feb6e953c772328b20dc9398d38bf9220d78ae9b6233b8b3dda50f86474491",
+      "bytes": 13219,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/gdpr-compliance.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:14.089Z",
+      "http_status": 200,
+      "sha256": "b8e185b62b681ad1414a6266a1793ac354ba3a8e480c9d9eb1e55c5c14de866e",
+      "bytes": 7945,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/hipaa-compliance.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:15.476Z",
+      "http_status": 200,
+      "sha256": "713182da62c47b54b82909f99f25bc70b25e467508b2fed95164aa017203f09c",
+      "bytes": 20398,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/status-codes.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:16.261Z",
+      "http_status": 200,
+      "sha256": "2066e57cb338943e3833b4e56c4af3e4b36cec2ee5d9d20d91a1945228c61824",
+      "bytes": 19340,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/request-methods.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:17.439Z",
+      "http_status": 200,
+      "sha256": "b4f6ec9531e1c2e23d830995f401697636274b7bfe824a19bbfdbd6fe27dc0ce",
+      "bytes": 7117,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/modules-api.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:18.237Z",
+      "http_status": 200,
+      "sha256": "280e9550798f4dd2d1164cae702a7d014b2e810ff6e31d332df5294dd68d8a75",
+      "bytes": 49259,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/settings/modules"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/get-org-data.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:19.606Z",
+      "http_status": 200,
+      "sha256": "1040192a8138663c954b099ed0b0297bc8bcdf11f4f30065e50bd618905cd3c9",
+      "bytes": 21524,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/org"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/upload-org-img.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:20.718Z",
+      "http_status": 200,
+      "sha256": "c442de56820a398bc8c57c0fd1c16b8b96a709940878b5e1b7340602628388ba",
+      "bytes": 13334,
+      "operations": [
+        {
+          "method": "POST",
+          "path": "/org/photo"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/get-roles.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:21.631Z",
+      "http_status": 200,
+      "sha256": "17fb41243781fdcf3bbf7ec1df7fffeacaabc007a8016c1c11834fa8deb5a7a3",
+      "bytes": 16184,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/settings/roles"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/get-profiles.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:23.140Z",
+      "http_status": 200,
+      "sha256": "fc7e4376c6fb9392fa06aab79c8945d73e2b4ef7687c9cbe903b34a0db5f3754",
+      "bytes": 16405,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/settings/profiles"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/get-users.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:24.488Z",
+      "http_status": 200,
+      "sha256": "f95b63a7417d5f0a6c8e2c6f9e1b634c85e2d31ad7ffe033632398082d0260d2",
+      "bytes": 44823,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/users"
+        },
+        {
+          "method": "GET",
+          "path": "/users/{user_id}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/add-user.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:25.456Z",
+      "http_status": 200,
+      "sha256": "62abf7c67b38cc201e65243f3de4deaf9e8e27a982f4e0e6ac6527aac748fa3c",
+      "bytes": 16352,
+      "operations": [
+        {
+          "method": "POST",
+          "path": "/users"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/update-user.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:26.342Z",
+      "http_status": 200,
+      "sha256": "09faf36966b92eed7cec6db858d619736cec10ac09d2f2c37c81c7825dad79a5",
+      "bytes": 24024,
+      "operations": [
+        {
+          "method": "PUT",
+          "path": "/users"
+        },
+        {
+          "method": "PUT",
+          "path": "/users/{user_id}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/delete-user.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:27.334Z",
+      "http_status": 200,
+      "sha256": "ac9bf1cccf3d646df7ff2172193a55fbbbe38910a0d3fc2edf6c041a1635d109",
+      "bytes": 14497,
+      "operations": [
+        {
+          "method": "DELETE",
+          "path": "/users/{user_id}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/change-record-owner.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:28.471Z",
+      "http_status": 200,
+      "sha256": "cea8aeb4f7d52e86f4214596f04cc693a5656622cd0d92600a8f7e67ac6f1081",
+      "bytes": 21531,
+      "operations": [
+        {
+          "method": "POST",
+          "path": "/{module_api_name}/{record_id}/actions/change_owner"
+        },
+        {
+          "method": "POST",
+          "path": "/{module_api_name}/actions/change_owner"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/get-attachments.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:29.424Z",
+      "http_status": 200,
+      "sha256": "097ff408428dbb3b852e5b1c496398ffd75e16578285c3a8a4f1502fb7e9325f",
+      "bytes": 21072,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/{module_api_name}/{record_id}/Attachments"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/upload-attachment.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:30.510Z",
+      "http_status": 200,
+      "sha256": "88c4a35566c7c945bc5ba820e07de14851f5fd4b314a3cf4c25d6ece222761b0",
+      "bytes": 21364,
+      "operations": [
+        {
+          "method": "POST",
+          "path": "/{module_api_name}/{record_id}/Attachments"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/download-attachments.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:31.559Z",
+      "http_status": 200,
+      "sha256": "9a5da88db62e03885303b8afd15ec97e2b122d44f06f9212de6f8f3724b0f8f6",
+      "bytes": 18710,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/{module_api_name}/{record_id}/Attachments/{attachment_id}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/delete-attachments.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:32.316Z",
+      "http_status": 200,
+      "sha256": "e4f3d015ac5198d3a74cfc380d98905420bc268f679668c6cd18be0e27c47043",
+      "bytes": 19562,
+      "operations": [
+        {
+          "method": "DELETE",
+          "path": "/{module_api_name}/{record_id}/Attachments/{attachment_id}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/upload-image.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:33.086Z",
+      "http_status": 200,
+      "sha256": "9c4a9e7be4689b9da51bb0be72889fd2a08af1d5d8e904714e4d387759a622b6",
+      "bytes": 18560,
+      "operations": [
+        {
+          "method": "POST",
+          "path": "/{module_api_name}/{record_id}/photo"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/download-image.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:34.010Z",
+      "http_status": 200,
+      "sha256": "889123093828c721fa924e60d8f06f779b645d3d41ea40acb58e8b90df1de1c0",
+      "bytes": 16893,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/{module_api_name}/{record_id}/photo"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/delete-image.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:35.329Z",
+      "http_status": 200,
+      "sha256": "a4915c4a2d90f514ab177fae4c05623c6e239368fa784aa71da5933b9b4f374a",
+      "bytes": 17453,
+      "operations": [
+        {
+          "method": "DELETE",
+          "path": "/{module_api_name}/{record_id}/photo"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/get-records.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:36.699Z",
+      "http_status": 200,
+      "sha256": "6e0f68e4cc82e9ffb318d49225b0f6e7c8eb49a7968620219773803ecc2057af",
+      "bytes": 124218,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/{module_api_name}"
+        },
+        {
+          "method": "GET",
+          "path": "/{module_api_name}/{record_id}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/get-team-pipeline-records.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:37.721Z",
+      "http_status": 200,
+      "sha256": "a51bf8e92451c76b8b70c9b4c7b4abe242f32f22dd5fcc3f2b9f093f315cf720",
+      "bytes": 19849,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/{module_api_name}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/insert-records.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:39.246Z",
+      "http_status": 200,
+      "sha256": "e9e97bb08a3e00691dcb16e4cb061e654847d9c26f9f667fd18beb32ee8968b5",
+      "bytes": 65685,
+      "operations": [
+        {
+          "method": "POST",
+          "path": "/{module_api_name}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/update-records.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:40.277Z",
+      "http_status": 200,
+      "sha256": "88802ba343133647ea30c2c9f0a183f8d19594bbb788287286863c1aeff804e2",
+      "bytes": 24675,
+      "operations": [
+        {
+          "method": "PUT",
+          "path": "/{module_api_name}"
+        },
+        {
+          "method": "PUT",
+          "path": "/{module_api_name}/{record_id}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/upsert-records.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:41.734Z",
+      "http_status": 200,
+      "sha256": "82d04af6f1d96a181ccd95818a54886df0dfc8714949be5587797e955c29cb0d",
+      "bytes": 22489,
+      "operations": [
+        {
+          "method": "POST",
+          "path": "/{module_api_name}/upsert"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/delete-records.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:42.571Z",
+      "http_status": 200,
+      "sha256": "045ddbf73cf564926945aa3e266e6bad1ae00b89acba9b9af17f1abe7b38d8ba",
+      "bytes": 19991,
+      "operations": [
+        {
+          "method": "DELETE",
+          "path": "/{module_api_name}"
+        },
+        {
+          "method": "DELETE",
+          "path": "/{module_api_name}/{record_id}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/search-records.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:43.560Z",
+      "http_status": 200,
+      "sha256": "770a2c1987036024ff14e24a56de66e334c8b3a5113e119e390e6d36b14a35b9",
+      "bytes": 48626,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/{module_api_name}/search"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/module-records-count.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:44.727Z",
+      "http_status": 200,
+      "sha256": "d4be310d3490e277726c7163dc5f83119fda4f5466ea7d2988b2a6b600545044",
+      "bytes": 13515,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/{module_api_name}/actions/count"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/get-deleted-records.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:45.759Z",
+      "http_status": 200,
+      "sha256": "58bc265d67c1330aecb389f86d59d55ed23a3af5943e3cef0e961e1a130cc4a5",
+      "bytes": 19274,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/{module_api_name}/{record_id}/deleted"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/get-related-records.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:46.566Z",
+      "http_status": 200,
+      "sha256": "1807a756a031c1903e6c0a38d24ced509c6509da5969b393b9ac00709326c216",
+      "bytes": 17486,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/{module_api_name}/{record_id}/{related_list_api_name}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/get-team-pipeline-records-related-to-contact.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:47.706Z",
+      "http_status": 200,
+      "sha256": "fdf8c0d2ad0897440e2b9828d8c372603218269ab22d212ed9766c3e8c9cc1bc",
+      "bytes": 14833,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/{module_api_name}/{contact_id}/{module_api_name}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/update-related-records.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:48.673Z",
+      "http_status": 200,
+      "sha256": "b3193a1cec3a73b0dacd8a1f84f788f994634b7004558bebadfd5cd337f1dadb",
+      "bytes": 21370,
+      "operations": [
+        {
+          "method": "PUT",
+          "path": "/{module_api_name}/{record_id}/{related_list_api_name}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/delink.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:49.790Z",
+      "http_status": 200,
+      "sha256": "4b73b50b6cfb031279d0a52f11e1f37eaa26f75490575d3abe5ff791b562e71f",
+      "bytes": 21850,
+      "operations": [
+        {
+          "method": "DELETE",
+          "path": "/{module_api_name}/{record_id}/{related_list_api_name}"
+        },
+        {
+          "method": "DELETE",
+          "path": "/{module_api_name}/{record_id}/{related_list_api_name}/{related_record_id}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/get-tag-list.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:50.608Z",
+      "http_status": 200,
+      "sha256": "98f7509af512b390e3da7eadbe9df81126a4b604e0aadc5b8e9e24a6cba064bb",
+      "bytes": 21612,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/settings/tags"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/get-record-count-specific-tag.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:52.369Z",
+      "http_status": 200,
+      "sha256": "ff407af4a79a5fe11c7cec7e38b811a68e79a563fbfd540b7c2802ef22baaf61",
+      "bytes": 18430,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/settings/tags/{tag_id}/actions/records_count"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/create-tags.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:53.214Z",
+      "http_status": 200,
+      "sha256": "2820f6000e65242cb5340320b21d55781d562ffb6c6318bacf337405d87f14a8",
+      "bytes": 21555,
+      "operations": [
+        {
+          "method": "POST",
+          "path": "/settings/tags"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/update-tags.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:54.686Z",
+      "http_status": 200,
+      "sha256": "ce811c0afc822281556bbf3ff1718c7fe8de271f70731fd22de75b37860f9c85",
+      "bytes": 26020,
+      "operations": [
+        {
+          "method": "PUT",
+          "path": "/settings/tags"
+        },
+        {
+          "method": "PUT",
+          "path": "/settings/tags/{tag_id}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/delete-tags.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:56.218Z",
+      "http_status": 200,
+      "sha256": "609bf6edafea97438dc91e871669eff751b7c6f2ec082aa1312a9801088c7809",
+      "bytes": 15405,
+      "operations": [
+        {
+          "method": "DELETE",
+          "path": "/settings/tags/{tag_id}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/add-tags-records.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:57.429Z",
+      "http_status": 200,
+      "sha256": "eb449e25fd60cd1721c13a0433fa067da5e3017dd7b2c513d88f93fecc8ec340",
+      "bytes": 24027,
+      "operations": [
+        {
+          "method": "POST",
+          "path": "/{module_api_name}/{record_id}/actions/add_tags"
+        },
+        {
+          "method": "POST",
+          "path": "/{module_api_name}/actions/add_tags"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/remove-tags.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:58.580Z",
+      "http_status": 200,
+      "sha256": "39c9034bbe05cfec7bfc50f7d99ddb3321933fa6d22e20c2b960bdcfa4b6cb58",
+      "bytes": 24340,
+      "operations": [
+        {
+          "method": "POST",
+          "path": "/{module_api_name}/{record_id}/actions/remove_tags"
+        },
+        {
+          "method": "POST",
+          "path": "/{module_api_name}/actions/remove_tags"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/get-notes.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:28:59.640Z",
+      "http_status": 200,
+      "sha256": "257e361b066673e5a5516868927f4ab1e6524a1a72bd779101df4f807d740fee",
+      "bytes": 26500,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/{module_api_name}/{record_id}/Notes"
+        },
+        {
+          "method": "GET",
+          "path": "/Notes"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/create-notes.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:00.939Z",
+      "http_status": 200,
+      "sha256": "b9879c9b68ce8d8d8cd1b87556ec501fe8853eaa0c3a2d94c50ddb685f69a3eb",
+      "bytes": 32352,
+      "operations": [
+        {
+          "method": "POST",
+          "path": "/{module_api_name}/{record_id}/Notes"
+        },
+        {
+          "method": "POST",
+          "path": "/Notes"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/delete-notes.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:02.333Z",
+      "http_status": 200,
+      "sha256": "859a82d06b661fdba2925b7ebbda66c3927bd8060d158b00be38ebeea24fd780",
+      "bytes": 25468,
+      "operations": [
+        {
+          "method": "DELETE",
+          "path": "/{module_api_name}/{record_id}/Notes/{note_id}"
+        },
+        {
+          "method": "DELETE",
+          "path": "/Notes"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/update-notes.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:03.182Z",
+      "http_status": 200,
+      "sha256": "05de012288a8587a05b3ff8bb077d5d3dd78378855fbcc61ced0211af09e8fd2",
+      "bytes": 23315,
+      "operations": [
+        {
+          "method": "PUT",
+          "path": "/{module_api_name}/{record_id}/Notes/{note_id}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/get-files.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:05.058Z",
+      "http_status": 200,
+      "sha256": "9d32672c98df1afa7d11397773619b08370e54ccea22438ccb2dda9898c87d6a",
+      "bytes": 10559,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/files"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/upload-files.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:05.833Z",
+      "http_status": 200,
+      "sha256": "4ed11f74ade90c6a9ce000f648115435c915f562ce4b3da65bc7bb2fafd9becb",
+      "bytes": 12446,
+      "operations": [
+        {
+          "method": "POST",
+          "path": "/files"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/get-from-addresses.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:06.617Z",
+      "http_status": 200,
+      "sha256": "740aa9fac523bb71fc53806f767832d8a606c8003b4080bd29310aa193884e38",
+      "bytes": 13509,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/settings/emails/actions/from_addresses"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/send-mail.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:07.831Z",
+      "http_status": 200,
+      "sha256": "9c1926806250e9914a9252f8a8bea05d47d5da7ea1974b89b530e4132028e4e2",
+      "bytes": 18427,
+      "operations": [
+        {
+          "method": "POST",
+          "path": "/{module_api_name}/{record_id}/actions/send_mail"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/module-meta.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:09.050Z",
+      "http_status": 200,
+      "sha256": "0e0da9eb96aeb99ab781aad77a7565a1176c193277432f6f03754e9171f76c61",
+      "bytes": 37046,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/settings/modules/{module_api_name}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/field-meta.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:10.157Z",
+      "http_status": 200,
+      "sha256": "651145eaa58b52e7a87723be032a78ffdffa4dc853c73b64866a9021d1693efd",
+      "bytes": 96162,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/settings/fields"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/layouts-meta-data.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:11.475Z",
+      "http_status": 200,
+      "sha256": "c87ce7344ce08b087dc0234498e4aa575ec662ae8d04743a111a2c6ced0622f8",
+      "bytes": 304192,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/settings/layouts"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/related-list-meta.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:12.269Z",
+      "http_status": 200,
+      "sha256": "105a3a3496dc65ee81ec712868dba4715785afb915632948a1b2d79b76981e78",
+      "bytes": 23174,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/settings/related_lists"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/custom-view-meta.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:13.712Z",
+      "http_status": 200,
+      "sha256": "09f69ab470c824df1d05758c0399e06bd0adeb9bb6f9e853dafed23c8f50cef3",
+      "bytes": 94953,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/settings/custom_views"
+        },
+        {
+          "method": "GET",
+          "path": "/settings/custom_views/{custom_view_id}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/bulk-read/overview.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:14.811Z",
+      "http_status": 200,
+      "sha256": "f4f28df50a0fc0f966b1db3ce552ee746e38f0bc5128c1472db0195708a6a79e",
+      "bytes": 7163,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/bulk-read/create-job.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:15.621Z",
+      "http_status": 200,
+      "sha256": "0e41ba511a4313adb4329bf7e4046e3fcb7aa60dbb73a81dd01c94dc2c5032a8",
+      "bytes": 32782,
+      "operations": [
+        {
+          "method": "POST",
+          "path": "/bigin/bulk/v2/read"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/bulk-read/job-details.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:16.472Z",
+      "http_status": 200,
+      "sha256": "f9ec8c43c032f441df4c20b26f26889e7423b762d41ab099eee4063595c1f709",
+      "bytes": 23759,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/bigin/bulk/v2/read/{job_id}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/bulk-read/download-result.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:17.507Z",
+      "http_status": 200,
+      "sha256": "981123cd4be72f631a6066ab666ce36d03e06eab00ca4053a883a734a884435a",
+      "bytes": 13069,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/bigin/bulk/v2/read/{job_id}/result"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/bulk-read/limitations.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:18.464Z",
+      "http_status": 200,
+      "sha256": "b518522a487989a82bcaeb72d8507e1553f8bb8b5fe9cea01cad1893f492bc26",
+      "bytes": 9235,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/bulk-write/overview.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:19.400Z",
+      "http_status": 200,
+      "sha256": "5e20b8679631d887b8170a257fd994a098983051d05296bd9ce2480149ed7aea",
+      "bytes": 8413,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/bulk-write/upload-file.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:20.203Z",
+      "http_status": 200,
+      "sha256": "f2d697d315fb05592dfc5ac20c39e979257f83439148e72720ab2aa6cf519dc5",
+      "bytes": 13680,
+      "operations": [
+        {
+          "method": "POST",
+          "path": "/upload"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/bulk-write/create-job.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:21.215Z",
+      "http_status": 200,
+      "sha256": "9fe618a34c80b61a14fe35bc8f5f4c5174b9cf0edb3da28248e2156d17fe5acc",
+      "bytes": 25665,
+      "operations": [
+        {
+          "method": "POST",
+          "path": "/bigin/bulk/v2/write"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/bulk-write/job-details.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:22.468Z",
+      "http_status": 200,
+      "sha256": "cd837a635c7eae8d11b4ffc45a0a93a040645bb18225887601ff3edd39863ab2",
+      "bytes": 23509,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/bigin/bulk/v2/write/{job_id}"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/bulk-write/download-result.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:23.347Z",
+      "http_status": 200,
+      "sha256": "3b7b836b79bdaeac0d476f80a2e9f2ae080dce8b18000b43beab9eaf5d394a07",
+      "bytes": 7267,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/bulk-write/limitations.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:24.335Z",
+      "http_status": 200,
+      "sha256": "6c9047fc0da18bdb9ee85668471236dc816aa7060c60664eb5157168ae7f72f3",
+      "bytes": 7760,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/notifications/overview.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:25.558Z",
+      "http_status": 200,
+      "sha256": "2ea61c649bb685ca79bd46adba94bee60d84f0691d87d2f04bfb94e7bf10b5ac",
+      "bytes": 7808,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/notifications/enable.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:26.406Z",
+      "http_status": 200,
+      "sha256": "bbb38c992067e34e8983c4dff261e98cd8adab566d573fa5ba95a6ba00e5c48b",
+      "bytes": 19132,
+      "operations": [
+        {
+          "method": "POST",
+          "path": "/actions/watch"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/notifications/get-details.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:27.561Z",
+      "http_status": 200,
+      "sha256": "f963b18128e527efc376d239b52e7c3c05c9b7898f64ccd478adc5db49eebf22",
+      "bytes": 16657,
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/actions/watch"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/notifications/update-details.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:28.780Z",
+      "http_status": 200,
+      "sha256": "4df931c212de26a77603c6755e65880311d24a31f138d83da4f74c7e18f9104b",
+      "bytes": 16454,
+      "operations": [
+        {
+          "method": "PUT",
+          "path": "/actions/watch"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/notifications/update-info.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:30.902Z",
+      "http_status": 200,
+      "sha256": "f7062c7dc4fa006099ea4dc6bd4edf7bfac76f09641f6c89775ef3dd21322054",
+      "bytes": 16071,
+      "operations": [
+        {
+          "method": "PATCH",
+          "path": "/actions/watch"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/notifications/disable.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:32.272Z",
+      "http_status": 200,
+      "sha256": "01bd6498b2923bd53feedb94d9baed71180a18f7b65a05252b6dbbb1b140ab34",
+      "bytes": 12049,
+      "operations": [
+        {
+          "method": "DELETE",
+          "path": "/actions/watch"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/notifications/specific-disable.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:33.173Z",
+      "http_status": 200,
+      "sha256": "e495360b8b03b1d7d959a9192d32a173368972a88554674ae7610c6faba28b5b",
+      "bytes": 14116,
+      "operations": [
+        {
+          "method": "PATCH",
+          "path": "/actions/watch"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/coql-overview.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:34.512Z",
+      "http_status": 200,
+      "sha256": "b3b5d073c7f07bdfa6f66ab4fb14fe33be885bdafeb7b4e3530fd888add4c291",
+      "bytes": 8556,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/construct-coql-query.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:35.268Z",
+      "http_status": 200,
+      "sha256": "7b14b7b88427ed6cad92544bc833082c41f7f85d0e2cd275727b38cb8e0cb2ae",
+      "bytes": 12695,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/get-records-coql.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:36.136Z",
+      "http_status": 200,
+      "sha256": "9cfd0fb98e23347adae8fb0de42e5ea4874e20a9da7aa20268582fd0e48cb31b",
+      "bytes": 26017,
+      "operations": [
+        {
+          "method": "POST",
+          "path": "/coql"
+        }
+      ]
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/bigin-apis-postman.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:37.695Z",
+      "http_status": 200,
+      "sha256": "5fc0e6d3e686b9eb30b3b318eaadc240df866d4ea26af8e10ec7bf9fc82eb489",
+      "bytes": 16716,
+      "operations": []
+    },
+    "https://www.bigin.com/developer/docs/apis/v2/oauth-faqs.html": {
+      "status": "retrieved",
+      "retrieved_at": "2026-08-19T17:29:38.791Z",
+      "http_status": 200,
+      "sha256": "7b416aabd5d3f09561744e429cbfc11a41c9bbabe3476983f42bb8e55dbcb68d",
+      "bytes": 32671,
+      "operations": []
+    }
+  },
+  "sitemap": {
+    "url": "https://www.bigin.com/sitemap.xml",
+    "retrieved_at": "2026-08-19T17:28:19.946Z",
+    "sha256": "e33f0780f09ec0ad60bd2ffc56de75ee819a5ed787ef847b993db5ff366e0a53",
+    "bytes": 791952,
+    "v2_pages_total": 98
+  },
+  "state": "complete",
+  "resume_from": null,
+  "pages_retrieved": 98,
+  "pages_total": 98,
+  "coverage_confidence": {
+    "level": "complete_rendered_reference",
+    "basis": "Retrieved every one of 98 Bigin v2 API-reference pages enumerated by the provider sitemap at https://www.bigin.com/sitemap.xml; deduplicated the provider's displayed method/path pairs across regional host variants."
+  },
+  "operations": [
+    {
+      "method": "DELETE",
+      "path": "/{module_api_name}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-records.html"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{module_api_name}/{record_id}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-records.html"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{module_api_name}/{record_id}/{related_list_api_name}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/delink.html"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{module_api_name}/{record_id}/{related_list_api_name}/{related_record_id}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/delink.html"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{module_api_name}/{record_id}/Attachments/{attachment_id}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-attachments.html"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{module_api_name}/{record_id}/Notes/{note_id}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-notes.html"
+    },
+    {
+      "method": "DELETE",
+      "path": "/{module_api_name}/{record_id}/photo",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-image.html"
+    },
+    {
+      "method": "DELETE",
+      "path": "/actions/watch",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/notifications/disable.html"
+    },
+    {
+      "method": "DELETE",
+      "path": "/Notes",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-notes.html"
+    },
+    {
+      "method": "DELETE",
+      "path": "/settings/tags/{tag_id}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-tags.html"
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{user_id}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-user.html"
+    },
+    {
+      "method": "GET",
+      "path": "/{module_api_name}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-records.html"
+    },
+    {
+      "method": "GET",
+      "path": "/{module_api_name}/{contact_id}/{module_api_name}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-team-pipeline-records-related-to-contact.html"
+    },
+    {
+      "method": "GET",
+      "path": "/{module_api_name}/{record_id}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-records.html"
+    },
+    {
+      "method": "GET",
+      "path": "/{module_api_name}/{record_id}/{related_list_api_name}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-related-records.html"
+    },
+    {
+      "method": "GET",
+      "path": "/{module_api_name}/{record_id}/Attachments",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-attachments.html"
+    },
+    {
+      "method": "GET",
+      "path": "/{module_api_name}/{record_id}/Attachments/{attachment_id}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/download-attachments.html"
+    },
+    {
+      "method": "GET",
+      "path": "/{module_api_name}/{record_id}/deleted",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-deleted-records.html"
+    },
+    {
+      "method": "GET",
+      "path": "/{module_api_name}/{record_id}/Notes",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-notes.html"
+    },
+    {
+      "method": "GET",
+      "path": "/{module_api_name}/{record_id}/photo",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/download-image.html"
+    },
+    {
+      "method": "GET",
+      "path": "/{module_api_name}/actions/count",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/module-records-count.html"
+    },
+    {
+      "method": "GET",
+      "path": "/{module_api_name}/search",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/search-records.html"
+    },
+    {
+      "method": "GET",
+      "path": "/actions/watch",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/notifications/get-details.html"
+    },
+    {
+      "method": "GET",
+      "path": "/bigin/bulk/v2/read/{job_id}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/bulk-read/job-details.html"
+    },
+    {
+      "method": "GET",
+      "path": "/bigin/bulk/v2/read/{job_id}/result",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/bulk-read/download-result.html"
+    },
+    {
+      "method": "GET",
+      "path": "/bigin/bulk/v2/write/{job_id}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/bulk-write/job-details.html"
+    },
+    {
+      "method": "GET",
+      "path": "/files",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-files.html"
+    },
+    {
+      "method": "GET",
+      "path": "/Notes",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-notes.html"
+    },
+    {
+      "method": "GET",
+      "path": "/org",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-org-data.html"
+    },
+    {
+      "method": "GET",
+      "path": "/settings/custom_views",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/custom-view-meta.html"
+    },
+    {
+      "method": "GET",
+      "path": "/settings/custom_views/{custom_view_id}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/custom-view-meta.html"
+    },
+    {
+      "method": "GET",
+      "path": "/settings/emails/actions/from_addresses",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-from-addresses.html"
+    },
+    {
+      "method": "GET",
+      "path": "/settings/fields",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/field-meta.html"
+    },
+    {
+      "method": "GET",
+      "path": "/settings/layouts",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/layouts-meta-data.html"
+    },
+    {
+      "method": "GET",
+      "path": "/settings/modules",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/use-access-token-api-request.html"
+    },
+    {
+      "method": "GET",
+      "path": "/settings/modules/{module_api_name}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/module-meta.html"
+    },
+    {
+      "method": "GET",
+      "path": "/settings/profiles",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-profiles.html"
+    },
+    {
+      "method": "GET",
+      "path": "/settings/related_lists",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/related-list-meta.html"
+    },
+    {
+      "method": "GET",
+      "path": "/settings/roles",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-roles.html"
+    },
+    {
+      "method": "GET",
+      "path": "/settings/tags",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-tag-list.html"
+    },
+    {
+      "method": "GET",
+      "path": "/settings/tags/{tag_id}/actions/records_count",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-record-count-specific-tag.html"
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-users.html"
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-users.html"
+    },
+    {
+      "method": "PATCH",
+      "path": "/actions/watch",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/notifications/update-info.html"
+    },
+    {
+      "method": "POST",
+      "path": "/{module_api_name}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/insert-records.html"
+    },
+    {
+      "method": "POST",
+      "path": "/{module_api_name}/{record_id}/actions/add_tags",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/add-tags-records.html"
+    },
+    {
+      "method": "POST",
+      "path": "/{module_api_name}/{record_id}/actions/change_owner",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/change-record-owner.html"
+    },
+    {
+      "method": "POST",
+      "path": "/{module_api_name}/{record_id}/actions/remove_tags",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/remove-tags.html"
+    },
+    {
+      "method": "POST",
+      "path": "/{module_api_name}/{record_id}/actions/send_mail",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/send-mail.html"
+    },
+    {
+      "method": "POST",
+      "path": "/{module_api_name}/{record_id}/Attachments",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/upload-attachment.html"
+    },
+    {
+      "method": "POST",
+      "path": "/{module_api_name}/{record_id}/Notes",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/create-notes.html"
+    },
+    {
+      "method": "POST",
+      "path": "/{module_api_name}/{record_id}/photo",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/upload-image.html"
+    },
+    {
+      "method": "POST",
+      "path": "/{module_api_name}/actions/add_tags",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/add-tags-records.html"
+    },
+    {
+      "method": "POST",
+      "path": "/{module_api_name}/actions/change_owner",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/change-record-owner.html"
+    },
+    {
+      "method": "POST",
+      "path": "/{module_api_name}/actions/remove_tags",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/remove-tags.html"
+    },
+    {
+      "method": "POST",
+      "path": "/{module_api_name}/upsert",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/upsert-records.html"
+    },
+    {
+      "method": "POST",
+      "path": "/actions/watch",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/notifications/enable.html"
+    },
+    {
+      "method": "POST",
+      "path": "/bigin/bulk/v2/read",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/bulk-read/create-job.html"
+    },
+    {
+      "method": "POST",
+      "path": "/bigin/bulk/v2/write",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/bulk-write/create-job.html"
+    },
+    {
+      "method": "POST",
+      "path": "/coql",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-records-coql.html"
+    },
+    {
+      "method": "POST",
+      "path": "/files",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/upload-files.html"
+    },
+    {
+      "method": "POST",
+      "path": "/Notes",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/create-notes.html"
+    },
+    {
+      "method": "POST",
+      "path": "/org/photo",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/upload-org-img.html"
+    },
+    {
+      "method": "POST",
+      "path": "/settings/tags",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/create-tags.html"
+    },
+    {
+      "method": "POST",
+      "path": "/upload",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/bulk-write/upload-file.html"
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/add-user.html"
+    },
+    {
+      "method": "PUT",
+      "path": "/{module_api_name}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/update-records.html"
+    },
+    {
+      "method": "PUT",
+      "path": "/{module_api_name}/{record_id}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/update-records.html"
+    },
+    {
+      "method": "PUT",
+      "path": "/{module_api_name}/{record_id}/{related_list_api_name}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/update-related-records.html"
+    },
+    {
+      "method": "PUT",
+      "path": "/{module_api_name}/{record_id}/Notes/{note_id}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/update-notes.html"
+    },
+    {
+      "method": "PUT",
+      "path": "/actions/watch",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/notifications/update-details.html"
+    },
+    {
+      "method": "PUT",
+      "path": "/settings/tags",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/update-tags.html"
+    },
+    {
+      "method": "PUT",
+      "path": "/settings/tags/{tag_id}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/update-tags.html"
+    },
+    {
+      "method": "PUT",
+      "path": "/users",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/update-user.html"
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{user_id}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/update-user.html"
+    }
+  ],
+  "counts": {
+    "GET": 32,
+    "POST": 22,
+    "PUT": 9,
+    "PATCH": 1,
+    "DELETE": 11,
+    "total": 75
+  }
+}

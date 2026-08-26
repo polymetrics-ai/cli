@@ -1,36 +1,2224 @@
 {
-  "api": "Iterable REST API (https://api.iterable.com/api)",
+  "api": "Iterable API",
   "docs": "https://api.iterable.com/api/docs",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave migration: the 3 legacy-parity read streams only (lists, campaigns, templates); legacy iterable connector is read-only, so there are no write endpoints in or out of scope",
+  "reviewed_at": "2026-08-19",
+  "operation_ledger_version": 2,
+  "scope": "Complete provider-artifact inventory generated from the cited official machine-readable specification (148 documented HTTP operations). Existing executable bindings are retained only when their method/path matches the provider artifact; every other operation is explicitly blocked pending a connector-owned declaration.",
+  "artifacts": [
+    {
+      "id": "iterable-openapi-2026-08-19",
+      "url": "https://api.iterable.com/api-docs",
+      "retrieved_at": "2026-08-19",
+      "sha256": "0b1ae1058635c09386aba007807aa08d54f89969ad48e8e7717d279ef0cab431"
+    }
+  ],
   "endpoints": [
     {
-      "method": "GET",
-      "path": "/lists",
-      "covered_by": {
-        "stream": "lists"
+      "method": "DELETE",
+      "path": "/catalogs/{catalogName}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/catalogs/{catalogName}/items",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/catalogs/{catalogName}/items/{itemId}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/export/{jobId}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/lists/{listId}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/metadata/{table}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/metadata/{table}/{key}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/snippets/{identifier}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{email}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/byUserId/{userId}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     },
     {
       "method": "GET",
       "path": "/campaigns",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
       "covered_by": {
         "stream": "campaigns"
       }
     },
     {
       "method": "GET",
+      "path": "/campaigns/{id}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaigns/metrics",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaigns/recurring/{id}/childCampaigns",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/{catalogName}/fieldMappings",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/{catalogName}/items",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/{catalogName}/items/{itemId}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/channels",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email/viewInBrowser",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/embedded-messaging/messages",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{email}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/byUserId/{userId}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/experiments",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/experiments/{experimentId}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/experiments/{experimentId}/variants",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/experiments/metrics",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/{jobId}/files",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/data.csv",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/data.json",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/jobs",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/userEvents",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inApp/getMessages",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inApp/getPriorityMessage",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inApp/web/getMessages",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/journeys",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "covered_by": {
+        "stream": "lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{listId}/size",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/getUsers",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/previewUsers",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messageTypes",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata/{table}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metadata/{table}/{key}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{identifier}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
       "path": "/templates",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
       "covered_by": {
         "stream": "templates"
       }
     },
     {
-      "method": "*",
-      "path": "/*",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy iterable connector only implements lists/campaigns/templates reads"
+      "method": "GET",
+      "path": "/templates/email/get",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/templates/embedded/get",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/templates/getByClientTemplateId",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/templates/inapp/get",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/templates/push/get",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/templates/sms/get",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{email}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/byUserId",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/byUserId/{userId}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/forgotten",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/forgottenUserIds",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/getByEmail",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/getFields",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/getSentMessages",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/catalogs/{catalogName}/items/{itemId}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/jwts/invalidate",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/{campaignId}/schedule",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/{campaignId}/send",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/abort",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/activateTriggered",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/archive",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/cancel",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/create",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/deactivateTriggered",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/trigger",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs/{catalogName}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs/{catalogName}/items",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/commerce/trackPurchase",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/commerce/updateCart",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/email/cancel",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/email/target",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/embedded-messaging/events/click",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/embedded-messaging/events/received",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/embedded-messaging/events/session",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/inAppConsume",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/track",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/trackBulk",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/trackInAppClick",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/trackInAppClose",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/trackInAppDelivery",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/trackInAppOpen",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/trackPushOpen",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/trackWebPushClick",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/export/start",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inApp/cancel",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inApp/target",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/subscribe",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/unsubscribe",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/push/cancel",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/push/target",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sms/cancel",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sms/target",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/snippets",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/subscribeToDoubleOptIn",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/bulkDelete",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/email/preview",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/email/proof",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/email/update",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/email/upsert",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/embedded/update",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/embedded/upsert",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/inapp/preview",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/inapp/proof",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/inapp/update",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/inapp/upsert",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/push/proof",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/push/update",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/push/upsert",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/sms/proof",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/sms/update",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates/sms/upsert",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/bulkUpdate",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/bulkUpdateSubscriptions",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/disableDevice",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/forget",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/merge",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/registerBrowserToken",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/registerDeviceToken",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/unforget",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/update",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/updateEmail",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/updateSubscriptions",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/verify/sms/begin",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/verify/sms/check",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webPush/cancel",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webPush/target",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/whatsApp/cancel",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/whatsApp/target",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workflows/triggerWorkflow",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/catalogs/{catalogName}/fieldMappings",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/catalogs/{catalogName}/items/{itemId}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/metadata/{table}/{key}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/snippets/{identifier}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/subscriptions/{subscriptionGroup}/{subscriptionGroupId}",
+      "provenance": {
+        "artifact": "iterable-openapi-2026-08-19",
+        "source_url": "https://api.iterable.com/api-docs"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
       }
     }
   ]

@@ -1,0 +1,1069 @@
+{
+  "schema_version": 3,
+  "connector": "gorgias",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "retrieval": "Migrated schema-version 2 complete_machine_readable_specification source-lock capture.",
+    "openapi": [
+      "3.1.0"
+    ],
+    "coverage_confidence": {
+      "level": "complete_machine_readable_specification",
+      "basis": "Parsed every operation in the provider-published OpenAPI 3.1.0 document at https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r."
+    },
+    "source_documents": [
+      {
+        "id": "primary",
+        "kind": "openapi",
+        "artifact": {
+          "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+          "sha256": "b824de51f33dfa90c6c6115eef74ff4b62277634a471347b01d769176f161897",
+          "bytes": 852105,
+          "openapi": "3.1.0"
+        },
+        "published_source": {
+          "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+          "capture_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+          "sha256": "b824de51f33dfa90c6c6115eef74ff4b62277634a471347b01d769176f161897",
+          "bytes": 852105,
+          "adapter": "schema-v2-source-lock-migration"
+        },
+        "info_version": "Gorgias REST API public OpenAPI specification",
+        "operations": [
+          {
+            "id": "gorgias.rest.delete.DeleteCustomers0",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/customers",
+            "operation_id": "delete-customers",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/customers\"].delete"
+          },
+          {
+            "id": "gorgias.rest.delete.DeleteCustomerCustomFieldValue1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/customers/{customer_id}/custom-fields/{id}",
+            "operation_id": "delete-customer-custom-field-value",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/customers/{customer_id}/custom-fields/{id}\"].delete"
+          },
+          {
+            "id": "gorgias.rest.delete.DeleteCustomer2",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/customers/{id}",
+            "operation_id": "delete-customer",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/customers/{id}\"].delete"
+          },
+          {
+            "id": "gorgias.rest.delete.DeleteIntegration3",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/integrations/{id}",
+            "operation_id": "delete-integration",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/integrations/{id}\"].delete"
+          },
+          {
+            "id": "gorgias.rest.delete.CancelJob4",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/jobs/{id}",
+            "operation_id": "cancel-job",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/jobs/{id}\"].delete"
+          },
+          {
+            "id": "gorgias.rest.delete.DeleteMacro5",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/macros/{id}",
+            "operation_id": "delete-macro",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/macros/{id}\"].delete"
+          },
+          {
+            "id": "gorgias.rest.delete.DeleteVoiceCallRecording6",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/phone/voice-call-recordings/{id}",
+            "operation_id": "delete-voice-call-recording",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/phone/voice-call-recordings/{id}\"].delete"
+          },
+          {
+            "id": "gorgias.rest.delete.DeleteRule7",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/rules/{id}",
+            "operation_id": "delete-rule",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/rules/{id}\"].delete"
+          },
+          {
+            "id": "gorgias.rest.delete.DeleteTags8",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/tags",
+            "operation_id": "delete-tags",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tags\"].delete"
+          },
+          {
+            "id": "gorgias.rest.delete.DeleteTag9",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/tags/{id}",
+            "operation_id": "delete-tag",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tags/{id}\"].delete"
+          },
+          {
+            "id": "gorgias.rest.delete.DeleteTeam10",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/teams/{id}",
+            "operation_id": "delete-team",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/teams/{id}\"].delete"
+          },
+          {
+            "id": "gorgias.rest.delete.DeleteTicket11",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/tickets/{id}",
+            "operation_id": "delete-ticket",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tickets/{id}\"].delete"
+          },
+          {
+            "id": "gorgias.rest.delete.DeleteTicketCustomField12",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/tickets/{ticket_id}/custom-fields/{id}",
+            "operation_id": "delete-ticket-custom-field",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tickets/{ticket_id}/custom-fields/{id}\"].delete"
+          },
+          {
+            "id": "gorgias.rest.delete.DeleteTicketMessage13",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/tickets/{ticket_id}/messages/{id}",
+            "operation_id": "delete-ticket-message",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tickets/{ticket_id}/messages/{id}\"].delete"
+          },
+          {
+            "id": "gorgias.rest.delete.DeleteTicketTags14",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/tickets/{ticket_id}/tags",
+            "operation_id": "delete-ticket-tags",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tickets/{ticket_id}/tags\"].delete"
+          },
+          {
+            "id": "gorgias.rest.delete.DeleteUser15",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/users/{id}",
+            "operation_id": "delete-user",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/users/{id}\"].delete"
+          },
+          {
+            "id": "gorgias.rest.delete.DeleteView16",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/views/{id}",
+            "operation_id": "delete-view",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/views/{id}\"].delete"
+          },
+          {
+            "id": "gorgias.rest.delete.DeleteWidget17",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/widgets/{id}",
+            "operation_id": "delete-widget",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/widgets/{id}\"].delete"
+          },
+          {
+            "id": "gorgias.rest.get.DownloadFile18",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/{file_type}/download/{domain_hash}/{resource_name}",
+            "operation_id": "download-file",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/{file_type}/download/{domain_hash}/{resource_name}\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetAccount19",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/account",
+            "operation_id": "get-account",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/account\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListAccountSettings20",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/account/settings",
+            "operation_id": "list-account-settings",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/account/settings\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListCustomFields21",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/custom-fields",
+            "operation_id": "list-custom-fields",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/custom-fields\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetCustomField22",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/custom-fields/{id}",
+            "operation_id": "get-custom-field",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/custom-fields/{id}\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListCustomers23",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/customers",
+            "operation_id": "list-customers",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/customers\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListCustomerCustomFieldsValues24",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/customers/{customer_id}/custom-fields",
+            "operation_id": "list-customer-custom-fields-values",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/customers/{customer_id}/custom-fields\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetCustomer25",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/customers/{id}",
+            "operation_id": "get-customer",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/customers/{id}\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListEvents26",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/events",
+            "operation_id": "list-events",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/events\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetEvent27",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/events/{id}",
+            "operation_id": "get-event",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/events/{id}\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListIntegrations28",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/integrations",
+            "operation_id": "list-integrations",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/integrations\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetIntegration29",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/integrations/{id}",
+            "operation_id": "get-integration",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/integrations/{id}\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListJobs30",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/jobs",
+            "operation_id": "list-jobs",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/jobs\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetJob31",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/jobs/{id}",
+            "operation_id": "get-job",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/jobs/{id}\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListMacros32",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/macros",
+            "operation_id": "list-macros",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/macros\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetMacro33",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/macros/{id}",
+            "operation_id": "get-macro",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/macros/{id}\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListMessages34",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/messages",
+            "operation_id": "list-messages",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/messages\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.SearchMetricCards35",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/metric-cards",
+            "operation_id": "search-metric-cards",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/metric-cards\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetMetricCard36",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/metric-cards/{slug}",
+            "operation_id": "get-metric-card",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/metric-cards/{slug}\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListVoiceCallEvents37",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/phone/voice-call-events",
+            "operation_id": "list-voice-call-events",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/phone/voice-call-events\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetVoiceCallEvent38",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/phone/voice-call-events/{id}",
+            "operation_id": "get-voice-call-event",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/phone/voice-call-events/{id}\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListVoiceCallRecordings39",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/phone/voice-call-recordings",
+            "operation_id": "list-voice-call-recordings",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/phone/voice-call-recordings\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetVoiceCallRecording40",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/phone/voice-call-recordings/{id}",
+            "operation_id": "get-voice-call-recording",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/phone/voice-call-recordings/{id}\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListVoiceCalls41",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/phone/voice-calls",
+            "operation_id": "list-voice-calls",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/phone/voice-calls\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetVoiceCall42",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/phone/voice-calls/{id}",
+            "operation_id": "get-voice-call",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/phone/voice-calls/{id}\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListRules43",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/rules",
+            "operation_id": "list-rules",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/rules\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetRule44",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/rules/{id}",
+            "operation_id": "get-rule",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/rules/{id}\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListSatisfactionSurveys45",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/satisfaction-surveys",
+            "operation_id": "list-satisfaction-surveys",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/satisfaction-surveys\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetSatisfactionSurvey46",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/satisfaction-surveys/{id}",
+            "operation_id": "get-satisfaction-survey",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/satisfaction-surveys/{id}\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListTags47",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tags",
+            "operation_id": "list-tags",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tags\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetTag48",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tags/{id}",
+            "operation_id": "get-tag",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tags/{id}\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListTeams49",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/teams",
+            "operation_id": "list-teams",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/teams\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetTeam50",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/teams/{id}",
+            "operation_id": "get-team",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/teams/{id}\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListTickets51",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tickets",
+            "operation_id": "list-tickets",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tickets\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetTicket52",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tickets/{id}",
+            "operation_id": "get-ticket",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tickets/{id}\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListTicketCustomFields53",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tickets/{ticket_id}/custom-fields",
+            "operation_id": "list-ticket-custom-fields",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tickets/{ticket_id}/custom-fields\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListTicketMessages54",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tickets/{ticket_id}/messages",
+            "operation_id": "list-ticket-messages",
+            "deprecated": true,
+            "source_location": ".paths[\"/api/tickets/{ticket_id}/messages\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetTicketMessage55",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tickets/{ticket_id}/messages/{id}",
+            "operation_id": "get-ticket-message",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tickets/{ticket_id}/messages/{id}\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListTicketTags56",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tickets/{ticket_id}/tags",
+            "operation_id": "list-ticket-tags",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tickets/{ticket_id}/tags\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListUsers57",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/users",
+            "operation_id": "list-users",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/users\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetUser58",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/users/{id}",
+            "operation_id": "get-user",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/users/{id}\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListViews59",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/views",
+            "operation_id": "list-views",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/views\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetView60",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/views/{id}",
+            "operation_id": "get-view",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/views/{id}\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListViewItems61",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/views/{view_id}/items",
+            "operation_id": "list-view-items",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/views/{view_id}/items\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.ListWidgets62",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/widgets",
+            "operation_id": "list-widgets",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/widgets\"].get"
+          },
+          {
+            "id": "gorgias.rest.get.GetWidget63",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/widgets/{id}",
+            "operation_id": "get-widget",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/widgets/{id}\"].get"
+          },
+          {
+            "id": "gorgias.rest.post.CreateAccountSetting64",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/account/settings",
+            "operation_id": "create-account-setting",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/account/settings\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.CreateCustomField65",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/custom-fields",
+            "operation_id": "create-custom-field",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/custom-fields\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.CreateCustomer66",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/customers",
+            "operation_id": "create-customer",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/customers\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.CreateIntegration67",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/integrations",
+            "operation_id": "create-integration",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/integrations\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.CreateJob68",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/jobs",
+            "operation_id": "create-job",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/jobs\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.CreateMacro69",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/macros",
+            "operation_id": "create-macro",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/macros\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.CreateMetricCardFeedback70",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/metric-cards/{slug}/feedback",
+            "operation_id": "create-metric-card-feedback",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/metric-cards/{slug}/feedback\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.GetStatistic71",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/reporting/stats",
+            "operation_id": "get-statistic",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/reporting/stats\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.CreateRule72",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/rules",
+            "operation_id": "create-rule",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/rules\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.UpdateRulesPriorities73",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/rules/priorities",
+            "operation_id": "update-rules-priorities",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/rules/priorities\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.CreateSatisfactionSurvey74",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/satisfaction-surveys",
+            "operation_id": "create-satisfaction-survey",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/satisfaction-surveys\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.Search75",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/search",
+            "operation_id": "search",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/search\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.GetLegacyStatistic76",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/stats/{name}",
+            "operation_id": "get-legacy-statistic",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/stats/{name}\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.DownloadLegacyStatistic77",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/stats/{name}/download",
+            "operation_id": "download-legacy-statistic",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/stats/{name}/download\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.CreateTag78",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/tags",
+            "operation_id": "create-tag",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tags\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.CreateTeam79",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/teams",
+            "operation_id": "create-team",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/teams\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.CreateTicket80",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/tickets",
+            "operation_id": "create-ticket",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tickets\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.CreateTicketMessage81",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/tickets/{ticket_id}/messages",
+            "operation_id": "create-ticket-message",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tickets/{ticket_id}/messages\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.CreateTicketTags82",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/tickets/{ticket_id}/tags",
+            "operation_id": "create-ticket-tags",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tickets/{ticket_id}/tags\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.ApiUpload83",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/upload",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": ".paths[\"/api/upload\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.CreateUser84",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/users",
+            "operation_id": "create-user",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/users\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.CreateView85",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/views",
+            "operation_id": "create-view",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/views\"].post"
+          },
+          {
+            "id": "gorgias.rest.post.CreateWidget86",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/widgets",
+            "operation_id": "create-widget",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/widgets\"].post"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateAccountSetting87",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/account/settings/{id}",
+            "operation_id": "update-account-setting",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/account/settings/{id}\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateCustomFields88",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/custom-fields",
+            "operation_id": "update-custom-fields",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/custom-fields\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateCustomField89",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/custom-fields/{id}",
+            "operation_id": "update-custom-field",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/custom-fields/{id}\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateCustomerCustomFieldValues90",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/customers/{customer_id}/custom-fields",
+            "operation_id": "update-customer-custom-field-values",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/customers/{customer_id}/custom-fields\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateCustomerCustomFieldValue91",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/customers/{customer_id}/custom-fields/{id}",
+            "operation_id": "update-customer-custom-field-value",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/customers/{customer_id}/custom-fields/{id}\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateCustomerData92",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/customers/{customer_id}/data",
+            "operation_id": "update-customer-data",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/customers/{customer_id}/data\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateCustomer93",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/customers/{id}",
+            "operation_id": "update-customer",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/customers/{id}\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.MergeCustomers94",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/customers/merge",
+            "operation_id": "merge-customers",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/customers/merge\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateIntegration95",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/integrations/{id}",
+            "operation_id": "update-integration",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/integrations/{id}\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateJob96",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/jobs/{id}",
+            "operation_id": "update-job",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/jobs/{id}\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateMacro97",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/macros/{id}",
+            "operation_id": "update-macro",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/macros/{id}\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.BulkArchiveMacros98",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/macros/archive",
+            "operation_id": "bulk-archive-macros",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/macros/archive\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.BulkUnarchiveMacros99",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/macros/unarchive",
+            "operation_id": "bulk-unarchive-macros",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/macros/unarchive\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateRule100",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/rules/{id}",
+            "operation_id": "update-rule",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/rules/{id}\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateSatisfactionSurvey101",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/satisfaction-surveys/{id}",
+            "operation_id": "update-satisfaction-survey",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/satisfaction-surveys/{id}\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.MergeTags102",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/tags/{destination_tag_id}/merge",
+            "operation_id": "merge-tags",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tags/{destination_tag_id}/merge\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateTag103",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/tags/{id}",
+            "operation_id": "update-tag",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tags/{id}\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateTeam104",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/teams/{id}",
+            "operation_id": "update-team",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/teams/{id}\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateTicket105",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/tickets/{id}",
+            "operation_id": "update-ticket",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tickets/{id}\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateTicketCustomFields106",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/tickets/{ticket_id}/custom-fields",
+            "operation_id": "update-ticket-custom-fields",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tickets/{ticket_id}/custom-fields\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateTicketCustomField107",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/tickets/{ticket_id}/custom-fields/{id}",
+            "operation_id": "update-ticket-custom-field",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tickets/{ticket_id}/custom-fields/{id}\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateTicketMessage108",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/tickets/{ticket_id}/messages/{id}",
+            "operation_id": "update-ticket-message",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tickets/{ticket_id}/messages/{id}\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateTicketTags109",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/tickets/{ticket_id}/tags",
+            "operation_id": "update-ticket-tags",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/tickets/{ticket_id}/tags\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateUser110",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/users/{id}",
+            "operation_id": "update-user",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/users/{id}\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateView111",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/views/{id}",
+            "operation_id": "update-view",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/views/{id}\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateViewItems112",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/views/{view_id}/items",
+            "operation_id": "update-view-items",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/views/{view_id}/items\"].put"
+          },
+          {
+            "id": "gorgias.rest.put.UpdateWidget113",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/api/widgets/{id}",
+            "operation_id": "update-widget",
+            "deprecated": false,
+            "source_location": ".paths[\"/api/widgets/{id}\"].put"
+          }
+        ]
+      }
+    ]
+  },
+  "counts": {
+    "rest": 114,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 114
+  }
+}

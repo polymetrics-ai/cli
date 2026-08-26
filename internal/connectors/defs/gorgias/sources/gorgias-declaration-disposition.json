@@ -1,0 +1,4310 @@
+{
+  "schema_version": 1,
+  "connector": "gorgias",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/gorgias-operation-source-lock.json",
+    "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+    "source_sha256": "b824de51f33dfa90c6c6115eef74ff4b62277634a471347b01d769176f161897",
+    "source_bytes": 852105,
+    "source_operation_count": 114,
+    "operations_found": 114,
+    "coverage_confidence": {
+      "level": "complete_machine_readable_specification",
+      "basis": "Parsed every operation in the provider-published OpenAPI 3.1.0 document at https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r."
+    }
+  },
+  "summary": {
+    "api_surface_rows": 114,
+    "exact_source_rows": 114,
+    "declared_operations": 114,
+    "operations_found": 114,
+    "coverage_confidence": {
+      "level": "complete_machine_readable_specification",
+      "basis": "Parsed every operation in the provider-published OpenAPI 3.1.0 document at https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r."
+    },
+    "enabled_operations": 105,
+    "enabled_percent": 92.11,
+    "disabled_operations": 9,
+    "documented_deletes": 18,
+    "enabled_deletes": 18,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 41
+      },
+      {
+        "key": "direct_write",
+        "count": 68
+      },
+      {
+        "key": "etl",
+        "count": 4
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 1
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 4,
+    "writes_actions": 61,
+    "terminal_commands": 109,
+    "gap_ids": [],
+    "foundation_gaps": [],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 9
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md",
+      "source_transport": {
+        "state": "declared",
+        "declaration": "sync_transport.json",
+        "conformance": "declarative_stream_transport/gorgias_fixture_source_v1"
+      },
+      "destination_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "qualified-declarative-typed-destination-gorgias",
+          "evidence": "docs/sync-transport-definition.md:85-115 requires action-owned input_fields, per-record batch, keyed durable acknowledgement, and action-owned provider read-back. The prior declaration was removed because it selected rejected full_overwrite and carried no provider-evidenced receipt/read-back contract.",
+          "minimal_change": "Add a source-evidenced destination declaration only when one exact typed action has per-record batch, private receipt locator, provider-state read-back, conformance evidence, and a supported non-full-overwrite strategy."
+        },
+        "provider_live_certification": "pending"
+      }
+    },
+    "declaration_pending_ids": [
+      "runnable-command-binding-gorgias",
+      "typed-operation-contract-gorgias"
+    ],
+    "declaration_pending": [
+      {
+        "id": "runnable-command-binding-gorgias",
+        "count": 2
+      },
+      {
+        "id": "typed-operation-contract-gorgias",
+        "count": 5
+      }
+    ],
+    "runnable_cli_surface_commands": 109,
+    "typed_write_actions": 61,
+    "endpoint_bound_cli_commands": 44,
+    "endpoint_bound_typed_write_actions": 61
+  },
+  "ledger_dispositions": [
+    {
+      "method": "DELETE",
+      "path": "/api/customers",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/customers",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_customers"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.delete.DeleteCustomers0",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/customers\"].delete",
+        "operation_id": "delete-customers",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "delete_customers"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/customers/{customer_id}/custom-fields/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/customers/{customer_id}/custom-fields/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_customer_custom_field_value"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.delete.DeleteCustomerCustomFieldValue1",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/customers/{customer_id}/custom-fields/{id}\"].delete",
+        "operation_id": "delete-customer-custom-field-value",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "delete_customer_custom_field_value"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/customers/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/customers/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_customer"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.delete.DeleteCustomer2",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/customers/{id}\"].delete",
+        "operation_id": "delete-customer",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "delete_customer"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/integrations/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/integrations/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_integration"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.delete.DeleteIntegration3",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/integrations/{id}\"].delete",
+        "operation_id": "delete-integration",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "delete_integration"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/jobs/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/jobs/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "cancel_job"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.delete.CancelJob4",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/jobs/{id}\"].delete",
+        "operation_id": "cancel-job",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "cancel_job"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/macros/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/macros/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_macro"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.delete.DeleteMacro5",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/macros/{id}\"].delete",
+        "operation_id": "delete-macro",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "delete_macro"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/phone/voice-call-recordings/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/phone/voice-call-recordings/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_voice_call_recording"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.delete.DeleteVoiceCallRecording6",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/phone/voice-call-recordings/{id}\"].delete",
+        "operation_id": "delete-voice-call-recording",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "delete_voice_call_recording"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/rules/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/rules/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_rule"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.delete.DeleteRule7",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/rules/{id}\"].delete",
+        "operation_id": "delete-rule",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "delete_rule"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tags",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/tags",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_tags"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.delete.DeleteTags8",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tags\"].delete",
+        "operation_id": "delete-tags",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "delete_tags"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tags/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/tags/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_tag"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.delete.DeleteTag9",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tags/{id}\"].delete",
+        "operation_id": "delete-tag",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "delete_tag"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/teams/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/teams/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_team"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.delete.DeleteTeam10",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/teams/{id}\"].delete",
+        "operation_id": "delete-team",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "delete_team"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tickets/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/tickets/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_ticket"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.delete.DeleteTicket11",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tickets/{id}\"].delete",
+        "operation_id": "delete-ticket",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "delete_ticket"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tickets/{ticket_id}/custom-fields/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/tickets/{ticket_id}/custom-fields/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_ticket_custom_field"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.delete.DeleteTicketCustomField12",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tickets/{ticket_id}/custom-fields/{id}\"].delete",
+        "operation_id": "delete-ticket-custom-field",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "delete_ticket_custom_field"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tickets/{ticket_id}/messages/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/tickets/{ticket_id}/messages/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_ticket_message"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.delete.DeleteTicketMessage13",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tickets/{ticket_id}/messages/{id}\"].delete",
+        "operation_id": "delete-ticket-message",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "delete_ticket_message"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tickets/{ticket_id}/tags",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/tickets/{ticket_id}/tags",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_ticket_tags"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.delete.DeleteTicketTags14",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tickets/{ticket_id}/tags\"].delete",
+        "operation_id": "delete-ticket-tags",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "delete_ticket_tags"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/users/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/users/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_user"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.delete.DeleteUser15",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/users/{id}\"].delete",
+        "operation_id": "delete-user",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "delete_user"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/views/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/views/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_view"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.delete.DeleteView16",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/views/{id}\"].delete",
+        "operation_id": "delete-view",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "delete_view"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/widgets/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/api/widgets/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_widget"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.delete.DeleteWidget17",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/widgets/{id}\"].delete",
+        "operation_id": "delete-widget",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "delete_widget"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/{file_type}/download/{domain_hash}/{resource_name}",
+      "parity_class": "binary_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/{file_type}/download/{domain_hash}/{resource_name}",
+        "covered_by": {
+          "direct_read": "files download"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.DownloadFile18",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/{file_type}/download/{domain_hash}/{resource_name}\"].get",
+        "operation_id": "download-file",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The bounded binary_download operation and installed CLI command bind this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; bounded binary read and CLI command bind the pinned source contract",
+        "contract": {
+          "operation": "gorgias.download_file",
+          "command": "files download"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/account",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/account",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "account get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetAccount19",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/account\"].get",
+        "operation_id": "get-account",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "account get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/account/settings",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/account/settings",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "account settings list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListAccountSettings20",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/account/settings\"].get",
+        "operation_id": "list-account-settings",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "account settings list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/custom-fields",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/custom-fields",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "custom-fields list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListCustomFields21",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/custom-fields\"].get",
+        "operation_id": "list-custom-fields",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "custom-fields list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/custom-fields/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/custom-fields/{id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "custom-fields get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetCustomField22",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/custom-fields/{id}\"].get",
+        "operation_id": "get-custom-field",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "custom-fields get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/customers",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/customers",
+        "operation": null,
+        "covered_by": {
+          "stream": "customers"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListCustomers23",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/customers\"].get",
+        "operation_id": "list-customers",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-gorgias",
+          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[23] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/customers\"].get.",
+          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[23] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/customers\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending runnable-command-binding-gorgias",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/customers/{customer_id}/custom-fields",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/customers/{customer_id}/custom-fields",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "customers custom-fields list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListCustomerCustomFieldsValues24",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/customers/{customer_id}/custom-fields\"].get",
+        "operation_id": "list-customer-custom-fields-values",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "customers custom-fields list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/customers/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/customers/{id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "customers get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetCustomer25",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/customers/{id}\"].get",
+        "operation_id": "get-customer",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "customers get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/events",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/events",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "events list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListEvents26",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/events\"].get",
+        "operation_id": "list-events",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "events list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/events/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/events/{id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "events get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetEvent27",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/events/{id}\"].get",
+        "operation_id": "get-event",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "events get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/integrations",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/integrations",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "integrations list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListIntegrations28",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/integrations\"].get",
+        "operation_id": "list-integrations",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "integrations list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/integrations/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/integrations/{id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "integrations get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetIntegration29",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/integrations/{id}\"].get",
+        "operation_id": "get-integration",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "integrations get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/jobs",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/jobs",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "jobs list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListJobs30",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/jobs\"].get",
+        "operation_id": "list-jobs",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "jobs list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/jobs/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/jobs/{id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "jobs get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetJob31",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/jobs/{id}\"].get",
+        "operation_id": "get-job",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "jobs get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/macros",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/macros",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "macros list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListMacros32",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/macros\"].get",
+        "operation_id": "list-macros",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "macros list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/macros/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/macros/{id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "macros get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetMacro33",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/macros/{id}\"].get",
+        "operation_id": "get-macro",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "macros get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/messages",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/messages",
+        "operation": null,
+        "covered_by": {
+          "stream": "messages"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListMessages34",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/messages\"].get",
+        "operation_id": "list-messages",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-gorgias",
+          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[34] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/messages\"].get.",
+          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[34] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/messages\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending runnable-command-binding-gorgias",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/metric-cards",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/metric-cards",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "metric-cards list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.SearchMetricCards35",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/metric-cards\"].get",
+        "operation_id": "search-metric-cards",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "metric-cards list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/metric-cards/{slug}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/metric-cards/{slug}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "metric-cards get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetMetricCard36",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/metric-cards/{slug}\"].get",
+        "operation_id": "get-metric-card",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "metric-cards get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/phone/voice-call-events",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/phone/voice-call-events",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "voice-call-events list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListVoiceCallEvents37",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/phone/voice-call-events\"].get",
+        "operation_id": "list-voice-call-events",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "voice-call-events list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/phone/voice-call-events/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/phone/voice-call-events/{id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "voice-call-events get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetVoiceCallEvent38",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/phone/voice-call-events/{id}\"].get",
+        "operation_id": "get-voice-call-event",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "voice-call-events get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/phone/voice-call-recordings",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/phone/voice-call-recordings",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "voice-call-recordings list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListVoiceCallRecordings39",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/phone/voice-call-recordings\"].get",
+        "operation_id": "list-voice-call-recordings",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "voice-call-recordings list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/phone/voice-call-recordings/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/phone/voice-call-recordings/{id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "voice-call-recordings get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetVoiceCallRecording40",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/phone/voice-call-recordings/{id}\"].get",
+        "operation_id": "get-voice-call-recording",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "voice-call-recordings get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/phone/voice-calls",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/phone/voice-calls",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "voice-calls list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListVoiceCalls41",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/phone/voice-calls\"].get",
+        "operation_id": "list-voice-calls",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "voice-calls list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/phone/voice-calls/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/phone/voice-calls/{id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "voice-calls get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetVoiceCall42",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/phone/voice-calls/{id}\"].get",
+        "operation_id": "get-voice-call",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "voice-calls get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/rules",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/rules",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "rules list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListRules43",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/rules\"].get",
+        "operation_id": "list-rules",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "rules list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/rules/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/rules/{id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "rules get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetRule44",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/rules/{id}\"].get",
+        "operation_id": "get-rule",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "rules get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/satisfaction-surveys",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/satisfaction-surveys",
+        "operation": null,
+        "covered_by": {
+          "stream": "satisfaction_surveys"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListSatisfactionSurveys45",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/satisfaction-surveys\"].get",
+        "operation_id": "list-satisfaction-surveys",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-gorgias",
+          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[45] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/satisfaction-surveys\"].get.",
+          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[45] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/satisfaction-surveys\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending runnable-command-binding-gorgias",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/satisfaction-surveys/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/satisfaction-surveys/{id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "satisfaction-surveys get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetSatisfactionSurvey46",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/satisfaction-surveys/{id}\"].get",
+        "operation_id": "get-satisfaction-survey",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "satisfaction-surveys get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/tags",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "tags list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListTags47",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tags\"].get",
+        "operation_id": "list-tags",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "tags list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/tags/{id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "tags get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetTag48",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tags/{id}\"].get",
+        "operation_id": "get-tag",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "tags get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/teams",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/teams",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "teams list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListTeams49",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/teams\"].get",
+        "operation_id": "list-teams",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "teams list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/teams/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/teams/{id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "teams get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetTeam50",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/teams/{id}\"].get",
+        "operation_id": "get-team",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "teams get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/tickets",
+        "operation": null,
+        "covered_by": {
+          "stream": "tickets"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListTickets51",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tickets\"].get",
+        "operation_id": "list-tickets",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "runnable-command-binding-gorgias",
+          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[51] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/tickets\"].get.",
+          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[51] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/tickets\"].get."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending runnable-command-binding-gorgias",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/tickets/{id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "tickets get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetTicket52",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tickets/{id}\"].get",
+        "operation_id": "get-ticket",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "tickets get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/{ticket_id}/custom-fields",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/tickets/{ticket_id}/custom-fields",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "tickets custom-fields list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListTicketCustomFields53",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tickets/{ticket_id}/custom-fields\"].get",
+        "operation_id": "list-ticket-custom-fields",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "tickets custom-fields list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/{ticket_id}/messages",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/tickets/{ticket_id}/messages",
+        "covered_by": {
+          "direct_read": "tickets messages list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListTicketMessages54",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tickets/{ticket_id}/messages\"].get",
+        "operation_id": "list-ticket-messages",
+        "deprecated": true
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The bounded rest_read operation and installed CLI command bind this exact pinned source operation; provider deprecation does not disable user reachability."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; bounded direct read and CLI command bind the pinned source contract",
+        "contract": {
+          "operation": "gorgias.list_ticket_messages",
+          "command": "tickets messages list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/{ticket_id}/messages/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/tickets/{ticket_id}/messages/{id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "tickets messages get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetTicketMessage55",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tickets/{ticket_id}/messages/{id}\"].get",
+        "operation_id": "get-ticket-message",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "tickets messages get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/{ticket_id}/tags",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/tickets/{ticket_id}/tags",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "tickets tags list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListTicketTags56",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tickets/{ticket_id}/tags\"].get",
+        "operation_id": "list-ticket-tags",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "tickets tags list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/users",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/users",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "users list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListUsers57",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/users\"].get",
+        "operation_id": "list-users",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "users list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/users/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/users/{id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "users get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetUser58",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/users/{id}\"].get",
+        "operation_id": "get-user",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "users get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/views",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/views",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "views list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListViews59",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/views\"].get",
+        "operation_id": "list-views",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "views list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/views/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/views/{id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "views get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetView60",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/views/{id}\"].get",
+        "operation_id": "get-view",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "views get"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/views/{view_id}/items",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/views/{view_id}/items",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "views items list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListViewItems61",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/views/{view_id}/items\"].get",
+        "operation_id": "list-view-items",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "views items list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/widgets",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/widgets",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "widgets list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.ListWidgets62",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/widgets\"].get",
+        "operation_id": "list-widgets",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "widgets list"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/widgets/{id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/api/widgets/{id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "widgets get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.get.GetWidget63",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/widgets/{id}\"].get",
+        "operation_id": "get-widget",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "widgets get"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/account/settings",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/account/settings",
+        "operation": null,
+        "covered_by": {
+          "write": "create_account_setting"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.CreateAccountSetting64",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/account/settings\"].post",
+        "operation_id": "create-account-setting",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "create_account_setting"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/custom-fields",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/custom-fields",
+        "operation": null,
+        "covered_by": {
+          "write": "create_custom_field"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.CreateCustomField65",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/custom-fields\"].post",
+        "operation_id": "create-custom-field",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "create_custom_field"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/customers",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/customers",
+        "operation": null,
+        "covered_by": {
+          "write": "create_customer"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.CreateCustomer66",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/customers\"].post",
+        "operation_id": "create-customer",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "create_customer"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/integrations",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/integrations",
+        "operation": null,
+        "covered_by": {
+          "write": "create_integration"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.CreateIntegration67",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/integrations\"].post",
+        "operation_id": "create-integration",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "create_integration"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/jobs",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/jobs",
+        "operation": null,
+        "covered_by": {
+          "write": "create_job"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.CreateJob68",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/jobs\"].post",
+        "operation_id": "create-job",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "create_job"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/macros",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/macros",
+        "operation": null,
+        "covered_by": {
+          "write": "create_macro"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.CreateMacro69",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/macros\"].post",
+        "operation_id": "create-macro",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "create_macro"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/metric-cards/{slug}/feedback",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/metric-cards/{slug}/feedback",
+        "operation": null,
+        "covered_by": {
+          "write": "create_metric_card_feedback"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.CreateMetricCardFeedback70",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/metric-cards/{slug}/feedback\"].post",
+        "operation_id": "create-metric-card-feedback",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "create_metric_card_feedback"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/reporting/stats",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/reporting/stats",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+        },
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.GetStatistic71",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/reporting/stats\"].post",
+        "operation_id": "get-statistic",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-gorgias",
+          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[71] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/reporting/stats\"].post.",
+          "minimal_change": "Derive a bounded connector-owned operation contract and command from the pinned document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[71] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/reporting/stats\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-gorgias",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "not_eligible_no_typed_write_action",
+          "reason": "This provider operation has no connector-owned closed typed write action; author that action and its CLI contract before reverse-ETL eligibility can be assessed."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/rules",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/rules",
+        "operation": null,
+        "covered_by": {
+          "write": "create_rule"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.CreateRule72",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/rules\"].post",
+        "operation_id": "create-rule",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "create_rule"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/rules/priorities",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/rules/priorities",
+        "operation": null,
+        "covered_by": {
+          "write": "update_rules_priorities"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.UpdateRulesPriorities73",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/rules/priorities\"].post",
+        "operation_id": "update-rules-priorities",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_rules_priorities"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/satisfaction-surveys",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/satisfaction-surveys",
+        "operation": null,
+        "covered_by": {
+          "write": "create_satisfaction_survey"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.CreateSatisfactionSurvey74",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/satisfaction-surveys\"].post",
+        "operation_id": "create-satisfaction-survey",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "create_satisfaction_survey"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/search",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/search",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "search"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.Search75",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/search\"].post",
+        "operation_id": "search",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "search"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "not_eligible_no_typed_write_action",
+          "reason": "This provider operation has no connector-owned closed typed write action; author that action and its CLI contract before reverse-ETL eligibility can be assessed."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/stats/{name}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/stats/{name}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "stats get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.GetLegacyStatistic76",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/stats/{name}\"].post",
+        "operation_id": "get-legacy-statistic",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runtime-preflight runnable command binds the pinned source contract",
+        "contract": {
+          "direct_read": "stats get"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "not_eligible_no_typed_write_action",
+          "reason": "This provider operation has no connector-owned closed typed write action; author that action and its CLI contract before reverse-ETL eligibility can be assessed."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/stats/{name}/download",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/stats/{name}/download",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+        },
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.DownloadLegacyStatistic77",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/stats/{name}/download\"].post",
+        "operation_id": "download-legacy-statistic",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-gorgias",
+          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[77] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/stats/{name}/download\"].post.",
+          "minimal_change": "Derive a bounded connector-owned operation contract and command from the pinned document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[77] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/stats/{name}/download\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-gorgias",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "not_eligible_no_typed_write_action",
+          "reason": "This provider operation has no connector-owned closed typed write action; author that action and its CLI contract before reverse-ETL eligibility can be assessed."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/tags",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/tags",
+        "operation": null,
+        "covered_by": {
+          "write": "create_tag"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.CreateTag78",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tags\"].post",
+        "operation_id": "create-tag",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "create_tag"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/teams",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/teams",
+        "operation": null,
+        "covered_by": {
+          "write": "create_team"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.CreateTeam79",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/teams\"].post",
+        "operation_id": "create-team",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "create_team"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/tickets",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/tickets",
+        "operation": null,
+        "covered_by": {
+          "write": "create_ticket"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.CreateTicket80",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tickets\"].post",
+        "operation_id": "create-ticket",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "create_ticket"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/tickets/{ticket_id}/messages",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/tickets/{ticket_id}/messages",
+        "operation": null,
+        "covered_by": {
+          "write": "create_ticket_message"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.CreateTicketMessage81",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tickets/{ticket_id}/messages\"].post",
+        "operation_id": "create-ticket-message",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "create_ticket_message"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/tickets/{ticket_id}/tags",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/tickets/{ticket_id}/tags",
+        "operation": null,
+        "covered_by": {
+          "write": "create_ticket_tags"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.CreateTicketTags82",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tickets/{ticket_id}/tags\"].post",
+        "operation_id": "create-ticket-tags",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "create_ticket_tags"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/upload",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/upload",
+        "operation": null,
+        "covered_by": {
+          "write": "upload_file"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.ApiUpload83",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/upload\"].post",
+        "operation_id": null,
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "upload_file"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "semantic_exclusion",
+          "direct_cli": "files upload",
+          "reason": "The typed action requires a local multipart file path. declarative_typed_destination accepts only warehouse record field bindings and has no binary-source-value or multipart-file contract; safety and privilege are not the reason for this exclusion.",
+          "required_foundation": "A separately named closed binary/multipart destination contract that carries a bounded artifact reference and acknowledgement evidence."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/users",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/users",
+        "operation": null,
+        "covered_by": {
+          "write": "create_user"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.CreateUser84",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/users\"].post",
+        "operation_id": "create-user",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "create_user"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/views",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/views",
+        "operation": null,
+        "covered_by": {
+          "write": "create_view"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.CreateView85",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/views\"].post",
+        "operation_id": "create-view",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "create_view"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/widgets",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/api/widgets",
+        "operation": null,
+        "covered_by": {
+          "write": "create_widget"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.post.CreateWidget86",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/widgets\"].post",
+        "operation_id": "create-widget",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "create_widget"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/account/settings/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/account/settings/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_account_setting"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateAccountSetting87",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/account/settings/{id}\"].put",
+        "operation_id": "update-account-setting",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_account_setting"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/custom-fields",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/custom-fields",
+        "operation": null,
+        "covered_by": {
+          "write": "update_custom_fields"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateCustomFields88",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/custom-fields\"].put",
+        "operation_id": "update-custom-fields",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_custom_fields"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/custom-fields/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/custom-fields/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_custom_field"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateCustomField89",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/custom-fields/{id}\"].put",
+        "operation_id": "update-custom-field",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_custom_field"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/customers/{customer_id}/custom-fields",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/customers/{customer_id}/custom-fields",
+        "operation": null,
+        "covered_by": {
+          "write": "update_customer_custom_field_values"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateCustomerCustomFieldValues90",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/customers/{customer_id}/custom-fields\"].put",
+        "operation_id": "update-customer-custom-field-values",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_customer_custom_field_values"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/customers/{customer_id}/custom-fields/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/customers/{customer_id}/custom-fields/{id}",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+        },
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateCustomerCustomFieldValue91",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/customers/{customer_id}/custom-fields/{id}\"].put",
+        "operation_id": "update-customer-custom-field-value",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-gorgias",
+          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[91] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/customers/{customer_id}/custom-fields/{id}\"].put.",
+          "minimal_change": "Derive a bounded connector-owned operation contract and command from the pinned document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[91] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/customers/{customer_id}/custom-fields/{id}\"].put."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-gorgias",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "not_eligible_no_typed_write_action",
+          "reason": "This provider operation has no connector-owned closed typed write action; author that action and its CLI contract before reverse-ETL eligibility can be assessed."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/customers/{customer_id}/data",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/customers/{customer_id}/data",
+        "operation": null,
+        "covered_by": {
+          "write": "update_customer_data"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateCustomerData92",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/customers/{customer_id}/data\"].put",
+        "operation_id": "update-customer-data",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_customer_data"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/customers/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/customers/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_customer"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateCustomer93",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/customers/{id}\"].put",
+        "operation_id": "update-customer",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_customer"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/customers/merge",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/customers/merge",
+        "operation": null,
+        "covered_by": {
+          "write": "merge_customers"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.MergeCustomers94",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/customers/merge\"].put",
+        "operation_id": "merge-customers",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "merge_customers"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/integrations/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/integrations/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_integration"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateIntegration95",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/integrations/{id}\"].put",
+        "operation_id": "update-integration",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_integration"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/jobs/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/jobs/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_job"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateJob96",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/jobs/{id}\"].put",
+        "operation_id": "update-job",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_job"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/macros/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/macros/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_macro"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateMacro97",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/macros/{id}\"].put",
+        "operation_id": "update-macro",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_macro"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/macros/archive",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/macros/archive",
+        "operation": null,
+        "covered_by": {
+          "write": "bulk_archive_macros"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.BulkArchiveMacros98",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/macros/archive\"].put",
+        "operation_id": "bulk-archive-macros",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "bulk_archive_macros"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/macros/unarchive",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/macros/unarchive",
+        "operation": null,
+        "covered_by": {
+          "write": "bulk_unarchive_macros"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.BulkUnarchiveMacros99",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/macros/unarchive\"].put",
+        "operation_id": "bulk-unarchive-macros",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "bulk_unarchive_macros"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/rules/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/rules/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_rule"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateRule100",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/rules/{id}\"].put",
+        "operation_id": "update-rule",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_rule"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/satisfaction-surveys/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/satisfaction-surveys/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_satisfaction_survey"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateSatisfactionSurvey101",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/satisfaction-surveys/{id}\"].put",
+        "operation_id": "update-satisfaction-survey",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_satisfaction_survey"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tags/{destination_tag_id}/merge",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/tags/{destination_tag_id}/merge",
+        "operation": null,
+        "covered_by": {
+          "write": "merge_tags"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.MergeTags102",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tags/{destination_tag_id}/merge\"].put",
+        "operation_id": "merge-tags",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "merge_tags"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tags/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/tags/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_tag"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateTag103",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tags/{id}\"].put",
+        "operation_id": "update-tag",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_tag"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/teams/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/teams/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_team"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateTeam104",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/teams/{id}\"].put",
+        "operation_id": "update-team",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_team"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tickets/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/tickets/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_ticket"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateTicket105",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tickets/{id}\"].put",
+        "operation_id": "update-ticket",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_ticket"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "The closed declarative typed-destination contract rejects the prior branch-only declaration: it selected full_overwrite and lacked the action-owned per-record batch, provider receipt locator, and read-back conformance evidence. The direct typed write remains enabled; reverse ETL is connector-owned declaration work, not a foundation gap."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tickets/{ticket_id}/custom-fields",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/tickets/{ticket_id}/custom-fields",
+        "operation": null,
+        "covered_by": {
+          "write": "update_ticket_custom_fields"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateTicketCustomFields106",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tickets/{ticket_id}/custom-fields\"].put",
+        "operation_id": "update-ticket-custom-fields",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_ticket_custom_fields"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tickets/{ticket_id}/custom-fields/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/tickets/{ticket_id}/custom-fields/{id}",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+        },
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateTicketCustomField107",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tickets/{ticket_id}/custom-fields/{id}\"].put",
+        "operation_id": "update-ticket-custom-field",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-gorgias",
+          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[107] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/tickets/{ticket_id}/custom-fields/{id}\"].put.",
+          "minimal_change": "Derive a bounded connector-owned operation contract and command from the pinned document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[107] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/tickets/{ticket_id}/custom-fields/{id}\"].put."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-gorgias",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "not_eligible_no_typed_write_action",
+          "reason": "This provider operation has no connector-owned closed typed write action; author that action and its CLI contract before reverse-ETL eligibility can be assessed."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tickets/{ticket_id}/messages/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/tickets/{ticket_id}/messages/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_ticket_message"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateTicketMessage108",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tickets/{ticket_id}/messages/{id}\"].put",
+        "operation_id": "update-ticket-message",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_ticket_message"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/tickets/{ticket_id}/tags",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/tickets/{ticket_id}/tags",
+        "operation": null,
+        "covered_by": {
+          "write": "update_ticket_tags"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateTicketTags109",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/tickets/{ticket_id}/tags\"].put",
+        "operation_id": "update-ticket-tags",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_ticket_tags"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/users/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/users/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_user"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateUser110",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/users/{id}\"].put",
+        "operation_id": "update-user",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_user"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/views/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/views/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_view"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateView111",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/views/{id}\"].put",
+        "operation_id": "update-view",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_view"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/views/{view_id}/items",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/views/{view_id}/items",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+        },
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateViewItems112",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/views/{view_id}/items\"].put",
+        "operation_id": "update-view-items",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
+        "declaration_pending": {
+          "id": "typed-operation-contract-gorgias",
+          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[112] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/views/{view_id}/items\"].put.",
+          "minimal_change": "Derive a bounded connector-owned operation contract and command from the pinned document, or retain a disabled source disposition when the source shape is not executable."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[112] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/views/{view_id}/items\"].put."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending typed-operation-contract-gorgias",
+        "contract": null,
+        "reverse_etl": {
+          "eligible_typed_action": false,
+          "state": "not_eligible_no_typed_write_action",
+          "reason": "This provider operation has no connector-owned closed typed write action; author that action and its CLI contract before reverse-ETL eligibility can be assessed."
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/widgets/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/api/widgets/{id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_widget"
+        }
+      },
+      "source": {
+        "source_lock": "sources/gorgias-operation-source-lock.json",
+        "source_id": "gorgias.rest.put.UpdateWidget113",
+        "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+        "source_location": ".paths[\"/api/widgets/{id}\"].put",
+        "operation_id": "update-widget",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "contract": {
+          "write": "update_widget"
+        },
+        "reverse_etl": {
+          "eligible_typed_action": true,
+          "state": "eligible_declaration_pending",
+          "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        }
+      }
+    }
+  ],
+  "source_only_dispositions": [],
+  "notes": [
+    "Complete six-class source-locked map regenerated from the provider OpenAPI 3.1.0 document; every 114 pinned operation has exactly one primary parity class.",
+    "An operation is enabled only when its exact refreshed method/path still resolves to an actual typed write action or runtime-preflight runnable command. Stream-only mappings remain ETL but declaration-pending.",
+    "Direct writes remain direct_write operations. Reverse-ETL eligibility is separate and depends on each connector-owned source mapping and conformance record.",
+    "Reverse-ETL eligibility is explicit for all 61 typed actions: update_ticket is the connector one source-bound declarative_typed_destination proof; 59 ordinary typed actions are declaration-pending exact source mappings and conformance; upload_file is a named multipart/binary semantic exclusion and remains CLI-reachable.",
+    "Foundation 609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57 supplies persisted App/CLI dispatch; this connector still needs its installed App/CLI fixture path, and provider-live certification remains pending."
+  ]
+}

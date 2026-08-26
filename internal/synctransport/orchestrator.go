@@ -259,6 +259,9 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 			if err != nil {
 				return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("apply destination transport: %w", tagTransportExecutionError(TransportExecutionOriginDestination, err))
 			}
+			if len(acknowledgement.Output) != 0 {
+				result.DestinationResults = append(result.DestinationResults, append([]byte(nil), acknowledgement.Output...))
+			}
 			// Apply acknowledged the bounded workset. Retain this count even if the
 			// subsequent independent read-back refuses to advance its checkpoint.
 			result.RecordsApplied += len(staged.Records)

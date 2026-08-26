@@ -1,82 +1,2546 @@
 {
-  "api": "Freshdesk REST API v2",
-  "docs": "https://developers.freshdesk.com/api/#change_log",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Freshdesk surface (conversations, time entries, solutions/articles, canned responses, business hours, webhooks, etc.) is out of scope outside this connector's current declared surface; this connector is read-only, matching legacy",
+  "api": "Freshdesk REST API v2 public reference",
+  "docs": "https://developers.freshdesk.com/api/",
+  "reviewed_at": "2026-08-19",
+  "operation_ledger_version": 2,
+  "scope": "Complete provider-reference inventory generated from every endpoint section in the cited rendered reference (170 unique HTTP operations). Existing executable bindings are retained only where their method/path matches; all other provider operations are explicitly blocked pending a connector-owned declaration.",
+  "artifacts": [
+    {
+      "id": "freshdesk-rendered-reference-2026-08-19",
+      "url": "https://developers.freshdesk.com/api/",
+      "retrieved_at": "2026-08-19",
+      "sha256": "e70f8e31ed12141e248ddd06e753bb951c95da3a4ec16af3763b8d9363ab7e29"
+    }
+  ],
   "endpoints": [
     {
-      "method": "GET",
-      "path": "/tickets",
-      "covered_by": {
-        "stream": "tickets"
+      "method": "DELETE",
+      "path": "/admin/groups/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/skills/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/ticket_fields/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/ticket_fields/{id}/sections/{section_id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/agents/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/attachments/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/automations/{automation_type_id}/rules/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/collaboration/messages/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/collaboration/threads/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/companies/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/company_field/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contact_field/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{id}/hard_delete",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_objects/schemas/schema-id/records/{record-id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/email/mailboxes/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/groups/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ticket-forms/{form-id}/fields/{field-id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ticket-forms/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/time_entries/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     },
     {
       "method": "GET",
-      "path": "/contacts",
-      "covered_by": {
-        "stream": "contacts"
+      "path": "/account",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
       }
     },
     {
       "method": "GET",
-      "path": "/companies",
-      "covered_by": {
-        "stream": "companies"
+      "path": "/admin/groups",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/groups/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/groups/{id}/agents",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/skills/",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/skills/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/ticket_fields",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/ticket_fields/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/ticket_fields/{id}/sections",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/ticket_fields/{id}/sections/{section_id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
       }
     },
     {
       "method": "GET",
       "path": "/agents",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
       "covered_by": {
         "stream": "agents"
       }
     },
     {
       "method": "GET",
+      "path": "/agents/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/agents/{id}/availability",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/agents/autocomplete",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/agents/me",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/automations/{automation_type_id}/rules",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/automations/{automation_type_id}/rules/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/business_hours",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/business_hours/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canned_response_folders",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canned_response_folders/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canned_response_folders/{id}/responses",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canned_responses/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/channels/outbound-messages/{message-id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collaboration/messages/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collaboration/messages/{id}/generate-quote",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collaboration/threads/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "covered_by": {
+        "stream": "companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/autocomplete",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/imports",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company_fields",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company_fields/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contact_fields",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contact_fields/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/autocomplete",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/imports",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_objects/schemas",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_objects/schemas/{schema-id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_objects/schemas/{schema-id}/records/{record-id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_objects/schemas/schema_id/records",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_objects/schemas/schema_id/records/count",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_objects/schemas/schema-id/records",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer-satisfaction/surveys",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer-satisfaction/surveys/{survey_id}/responses",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email_configs",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email_configs/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email/mailboxes",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email/mailboxes/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email/settings",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
       "path": "/groups",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
       "covered_by": {
         "stream": "groups"
       }
     },
     {
       "method": "GET",
+      "path": "/groups/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/email/bcc",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/roles",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/roles/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scenario_automations.json",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/companies",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/contacts",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/tickets",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/helpdesk",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sla_policies",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/surveys",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/surveys/satisfaction_ratings",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket_fields",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket-forms",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket-forms/{form-id}/fields/{field-id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket-forms/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "covered_by": {
+        "stream": "tickets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
       "path": "/tickets/{id}/conversations",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
       }
     },
     {
       "method": "GET",
       "path": "/tickets/{id}/time_entries",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
       }
     },
     {
       "method": "GET",
-      "path": "/solutions/categories",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/tickets/{ticket_id}/satisfaction_ratings",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
       }
     },
     {
       "method": "GET",
-      "path": "/canned-response-folders",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/time_entries",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/admin/groups/{id}/agents",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/account/export",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/groups",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/skills",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/ticket_fields",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admin/ticket_fields/{id}/sections",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/agents/",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/agents/bulk",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/automations/{automation_type_id}/rules",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/canned_response_folder",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/canned_responses",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/canned_responses/bulk",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/outbound-messages",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/collaboration/messages",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/collaboration/threads",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies/export",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/company_fields",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contact_fields",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contact-activities",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/export",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/merge",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_objects/schemas/schema-id/records/",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer-satisfaction/surveys/{survey_id}/responses",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/email/mailboxes",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sla_policies",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ticket-forms",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ticket-forms/{form-id}/fields/{field-id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
       }
     },
     {
       "method": "POST",
       "path": "/tickets",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented in this bundle; legacy is read-only"
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{id}/forward",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{id}/reply",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{id}/reply_to_forward",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{ticket_id}/notes",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{ticket_id}/satisfaction_ratings",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{ticket_id}/time_entries",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/bulk_delete",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/bulk_update",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/outbound_email",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/groups/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/ticket_fields/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admin/ticket_fields/{id}/sections/{section_id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/agents/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/agents/{id}/availability",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/automations/{automation_type_id}/rules/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/canned_response_folder/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/canned_responses/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/collaboration/messages/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/collaboration/threads/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/companies/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/company_field/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contact_fields/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{id}/make_agent",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{id}/restore",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{id}/send_invite",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/conversations/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom_objects/schemas/schema-id/records/{record-id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/email/mailboxes/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/email/settings",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/groups/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/notifications/email/bcc",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sla_policies/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ticket-forms/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{id}/restore",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/merge",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/time_entries/{id}",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/time_entries/{time_entry_id}/toggle_timer",
+      "provenance": {
+        "artifact": "freshdesk-rendered-reference-2026-08-19",
+        "source_url": "https://developers.freshdesk.com/api/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
       }
     }
   ]

@@ -1,0 +1,2122 @@
+{
+  "schema_version": 3,
+  "connector": "intercom",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "retrieval": "Migrated schema-version 2 official_openapi source-lock capture.",
+    "openapi": [
+      "3.0.1"
+    ],
+    "coverage_confidence": {
+      "level": "complete_machine_readable_specification",
+      "basis": "Parsed every HTTP operation in the provider-published OpenAPI artifact at https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml."
+    },
+    "source_documents": [
+      {
+        "id": "primary",
+        "kind": "openapi",
+        "artifact": {
+          "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml",
+          "sha256": "3416de271f1a9243cdd725dad91ee4d07f4fe520338d26558fe4804ecb8e5afe",
+          "bytes": 1320969,
+          "openapi": "3.0.1"
+        },
+        "published_source": {
+          "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml",
+          "capture_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml",
+          "sha256": "3416de271f1a9243cdd725dad91ee4d07f4fe520338d26558fe4804ecb8e5afe",
+          "bytes": 1320969,
+          "adapter": "schema-v2-source-lock-migration"
+        },
+        "info_version": "2.16",
+        "operations": [
+          {
+            "id": "intercom.rest.delete.deleteContentImportSource",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/ai/content_import_sources/{source_id}",
+            "operation_id": "deleteContentImportSource",
+            "deprecated": false,
+            "source_location": "paths[\"/ai/content_import_sources/{source_id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.deleteExternalPage",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/ai/external_pages/{page_id}",
+            "operation_id": "deleteExternalPage",
+            "deprecated": false,
+            "source_location": "paths[\"/ai/external_pages/{page_id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.deleteArticle",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/articles/{article_id}",
+            "operation_id": "deleteArticle",
+            "deprecated": false,
+            "source_location": "paths[\"/articles/{article_id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.detachTagFromArticle",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/articles/{article_id}/tags/{id}",
+            "operation_id": "detachTagFromArticle",
+            "deprecated": false,
+            "source_location": "paths[\"/articles/{article_id}/tags/{id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.deleteAudience",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/audiences/{id}",
+            "operation_id": "deleteAudience",
+            "deprecated": false,
+            "source_location": "paths[\"/audiences/{id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.deleteCompany",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/companies/{company_id}",
+            "operation_id": "deleteCompany",
+            "deprecated": false,
+            "source_location": "paths[\"/companies/{company_id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.DeleteContact",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/contacts/{contact_id}",
+            "operation_id": "DeleteContact",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{contact_id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.detachContactFromACompany",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/contacts/{contact_id}/companies/{company_id}",
+            "operation_id": "detachContactFromACompany",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{contact_id}/companies/{company_id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.detachSubscriptionTypeToContact",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/contacts/{contact_id}/subscriptions/{subscription_id}",
+            "operation_id": "detachSubscriptionTypeToContact",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{contact_id}/subscriptions/{subscription_id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.detachTagFromContact",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/contacts/{contact_id}/tags/{tag_id}",
+            "operation_id": "detachTagFromContact",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{contact_id}/tags/{tag_id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.detachTagFromContentSnippet",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/content_snippets/{content_snippet_id}/tags/{id}",
+            "operation_id": "detachTagFromContentSnippet",
+            "deprecated": false,
+            "source_location": "paths[\"/content_snippets/{content_snippet_id}/tags/{id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.deleteContentSnippet",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/content_snippets/{id}",
+            "operation_id": "deleteContentSnippet",
+            "deprecated": false,
+            "source_location": "paths[\"/content_snippets/{id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.deleteConversation",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/conversations/{conversation_id}",
+            "operation_id": "deleteConversation",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/{conversation_id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.detachContactFromConversation",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/conversations/{conversation_id}/customers/{contact_id}",
+            "operation_id": "detachContactFromConversation",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/{conversation_id}/customers/{contact_id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.detachTagFromConversation",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/conversations/{conversation_id}/tags/{tag_id}",
+            "operation_id": "detachTagFromConversation",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/{conversation_id}/tags/{tag_id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.deleteConversationAttribute",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/conversations/attributes/{id}",
+            "operation_id": "deleteConversationAttribute",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/attributes/{id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.deleteConversationAttributeOption",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/conversations/attributes/{id}/options/{option_id}",
+            "operation_id": "deleteConversationAttributeOption",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/attributes/{id}/options/{option_id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.deleteCustomObjectInstancesById",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/custom_object_instances/{custom_object_type_identifier}",
+            "operation_id": "deleteCustomObjectInstancesById",
+            "deprecated": false,
+            "source_location": "paths[\"/custom_object_instances/{custom_object_type_identifier}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.deleteCustomObjectInstancesByExternalId",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/custom_object_instances/{custom_object_type_identifier}/{custom_object_instance_id}",
+            "operation_id": "deleteCustomObjectInstancesByExternalId",
+            "deprecated": false,
+            "source_location": "paths[\"/custom_object_instances/{custom_object_type_identifier}/{custom_object_instance_id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.deleteDataConnector",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/data_connectors/{id}",
+            "operation_id": "deleteDataConnector",
+            "deprecated": false,
+            "source_location": "paths[\"/data_connectors/{id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.deleteCollection",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/help_center/collections/{collection_id}",
+            "operation_id": "deleteCollection",
+            "deprecated": false,
+            "source_location": "paths[\"/help_center/collections/{collection_id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.deleteHelpCenterRedirect",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/help_center/help_centers/{help_center_id}/redirects/{id}",
+            "operation_id": "deleteHelpCenterRedirect",
+            "deprecated": false,
+            "source_location": "paths[\"/help_center/help_centers/{help_center_id}/redirects/{id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.deleteInternalArticle",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/internal_articles/{internal_article_id}",
+            "operation_id": "deleteInternalArticle",
+            "deprecated": false,
+            "source_location": "paths[\"/internal_articles/{internal_article_id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.detachTagFromInternalArticle",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/internal_articles/{internal_article_id}/tags/{id}",
+            "operation_id": "detachTagFromInternalArticle",
+            "deprecated": false,
+            "source_location": "paths[\"/internal_articles/{internal_article_id}/tags/{id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.deleteNewsItem",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/news/news_items/{news_item_id}",
+            "operation_id": "deleteNewsItem",
+            "deprecated": false,
+            "source_location": "paths[\"/news/news_items/{news_item_id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.deleteOfficeHoursSchedule",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/office_hours_schedules/{id}",
+            "operation_id": "deleteOfficeHoursSchedule",
+            "deprecated": false,
+            "source_location": "paths[\"/office_hours_schedules/{id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.deleteOfficeHoursException",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}",
+            "operation_id": "deleteOfficeHoursException",
+            "deprecated": false,
+            "source_location": "paths[\"/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.deleteTag",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/tags/{tag_id}",
+            "operation_id": "deleteTag",
+            "deprecated": false,
+            "source_location": "paths[\"/tags/{tag_id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.deleteTicket",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/tickets/{ticket_id}",
+            "operation_id": "deleteTicket",
+            "deprecated": false,
+            "source_location": "paths[\"/tickets/{ticket_id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.unlinkConversationFromTicket",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/tickets/{ticket_id}/linked_conversations/{id}",
+            "operation_id": "unlinkConversationFromTicket",
+            "deprecated": false,
+            "source_location": "paths[\"/tickets/{ticket_id}/linked_conversations/{id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.delete.detachTagFromTicket",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/tickets/{ticket_id}/tags/{tag_id}",
+            "operation_id": "detachTagFromTicket",
+            "deprecated": false,
+            "source_location": "paths[\"/tickets/{ticket_id}/tags/{tag_id}\"].delete"
+          },
+          {
+            "id": "intercom.rest.get.listAdmins",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/admins",
+            "operation_id": "listAdmins",
+            "deprecated": false,
+            "source_location": "paths[\"/admins\"].get"
+          },
+          {
+            "id": "intercom.rest.get.retrieveAdmin",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/admins/{admin_id}",
+            "operation_id": "retrieveAdmin",
+            "deprecated": false,
+            "source_location": "paths[\"/admins/{admin_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listActivityLogEventTypes",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/admins/activity_log_event_types",
+            "operation_id": "listActivityLogEventTypes",
+            "deprecated": false,
+            "source_location": "paths[\"/admins/activity_log_event_types\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listActivityLogs",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/admins/activity_logs",
+            "operation_id": "listActivityLogs",
+            "deprecated": false,
+            "source_location": "paths[\"/admins/activity_logs\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listContentImportSources",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/ai/content_import_sources",
+            "operation_id": "listContentImportSources",
+            "deprecated": false,
+            "source_location": "paths[\"/ai/content_import_sources\"].get"
+          },
+          {
+            "id": "intercom.rest.get.getContentImportSource",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/ai/content_import_sources/{source_id}",
+            "operation_id": "getContentImportSource",
+            "deprecated": false,
+            "source_location": "paths[\"/ai/content_import_sources/{source_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listExternalPages",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/ai/external_pages",
+            "operation_id": "listExternalPages",
+            "deprecated": false,
+            "source_location": "paths[\"/ai/external_pages\"].get"
+          },
+          {
+            "id": "intercom.rest.get.getExternalPage",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/ai/external_pages/{page_id}",
+            "operation_id": "getExternalPage",
+            "deprecated": false,
+            "source_location": "paths[\"/ai/external_pages/{page_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listArticles",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/articles",
+            "operation_id": "listArticles",
+            "deprecated": false,
+            "source_location": "paths[\"/articles\"].get"
+          },
+          {
+            "id": "intercom.rest.get.retrieveArticle",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/articles/{article_id}",
+            "operation_id": "retrieveArticle",
+            "deprecated": false,
+            "source_location": "paths[\"/articles/{article_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listArticleVersions",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/articles/{article_id}/versions",
+            "operation_id": "listArticleVersions",
+            "deprecated": false,
+            "source_location": "paths[\"/articles/{article_id}/versions\"].get"
+          },
+          {
+            "id": "intercom.rest.get.retrieveArticleVersion",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/articles/{article_id}/versions/{id}",
+            "operation_id": "retrieveArticleVersion",
+            "deprecated": false,
+            "source_location": "paths[\"/articles/{article_id}/versions/{id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.retrieveArticleDraft",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/articles/{id}/draft",
+            "operation_id": "retrieveArticleDraft",
+            "deprecated": false,
+            "source_location": "paths[\"/articles/{id}/draft\"].get"
+          },
+          {
+            "id": "intercom.rest.get.searchArticles",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/articles/search",
+            "operation_id": "searchArticles",
+            "deprecated": false,
+            "source_location": "paths[\"/articles/search\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listAudiences",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/audiences",
+            "operation_id": "listAudiences",
+            "deprecated": false,
+            "source_location": "paths[\"/audiences\"].get"
+          },
+          {
+            "id": "intercom.rest.get.retrieveAudience",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/audiences/{id}",
+            "operation_id": "retrieveAudience",
+            "deprecated": false,
+            "source_location": "paths[\"/audiences/{id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listAwayStatusReasons",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/away_status_reasons",
+            "operation_id": "listAwayStatusReasons",
+            "deprecated": false,
+            "source_location": "paths[\"/away_status_reasons\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listBrands",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/brands",
+            "operation_id": "listBrands",
+            "deprecated": false,
+            "source_location": "paths[\"/brands\"].get"
+          },
+          {
+            "id": "intercom.rest.get.retrieveBrand",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/brands/{id}",
+            "operation_id": "retrieveBrand",
+            "deprecated": false,
+            "source_location": "paths[\"/brands/{id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listCalls",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/calls",
+            "operation_id": "listCalls",
+            "deprecated": false,
+            "source_location": "paths[\"/calls\"].get"
+          },
+          {
+            "id": "intercom.rest.get.showCall",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/calls/{call_id}",
+            "operation_id": "showCall",
+            "deprecated": false,
+            "source_location": "paths[\"/calls/{call_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.showCallRecording",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/calls/{call_id}/recording",
+            "operation_id": "showCallRecording",
+            "deprecated": false,
+            "source_location": "paths[\"/calls/{call_id}/recording\"].get"
+          },
+          {
+            "id": "intercom.rest.get.showCallTranscript",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/calls/{call_id}/transcript",
+            "operation_id": "showCallTranscript",
+            "deprecated": false,
+            "source_location": "paths[\"/calls/{call_id}/transcript\"].get"
+          },
+          {
+            "id": "intercom.rest.get.retrieveCompany",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/companies",
+            "operation_id": "retrieveCompany",
+            "deprecated": false,
+            "source_location": "paths[\"/companies\"].get"
+          },
+          {
+            "id": "intercom.rest.get.RetrieveACompanyById",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/companies/{company_id}",
+            "operation_id": "RetrieveACompanyById",
+            "deprecated": false,
+            "source_location": "paths[\"/companies/{company_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.ListAttachedContacts",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/companies/{company_id}/contacts",
+            "operation_id": "ListAttachedContacts",
+            "deprecated": false,
+            "source_location": "paths[\"/companies/{company_id}/contacts\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listCompanyNotes",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/companies/{company_id}/notes",
+            "operation_id": "listCompanyNotes",
+            "deprecated": false,
+            "source_location": "paths[\"/companies/{company_id}/notes\"].get"
+          },
+          {
+            "id": "intercom.rest.get.ListAttachedSegmentsForCompanies",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/companies/{company_id}/segments",
+            "operation_id": "ListAttachedSegmentsForCompanies",
+            "deprecated": false,
+            "source_location": "paths[\"/companies/{company_id}/segments\"].get"
+          },
+          {
+            "id": "intercom.rest.get.scrollOverAllCompanies",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/companies/scroll",
+            "operation_id": "scrollOverAllCompanies",
+            "deprecated": false,
+            "source_location": "paths[\"/companies/scroll\"].get"
+          },
+          {
+            "id": "intercom.rest.get.ListContacts",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/contacts",
+            "operation_id": "ListContacts",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts\"].get"
+          },
+          {
+            "id": "intercom.rest.get.ShowContact",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/contacts/{contact_id}",
+            "operation_id": "ShowContact",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{contact_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listCompaniesForAContact",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/contacts/{contact_id}/companies",
+            "operation_id": "listCompaniesForAContact",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{contact_id}/companies\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listNotes",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/contacts/{contact_id}/notes",
+            "operation_id": "listNotes",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{contact_id}/notes\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listSegmentsForAContact",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/contacts/{contact_id}/segments",
+            "operation_id": "listSegmentsForAContact",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{contact_id}/segments\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listSubscriptionsForAContact",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/contacts/{contact_id}/subscriptions",
+            "operation_id": "listSubscriptionsForAContact",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{contact_id}/subscriptions\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listTagsForAContact",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/contacts/{contact_id}/tags",
+            "operation_id": "listTagsForAContact",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{contact_id}/tags\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listContactBanners",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/contacts/{id}/banners",
+            "operation_id": "listContactBanners",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{id}/banners\"].get"
+          },
+          {
+            "id": "intercom.rest.get.ListContactMergeHistory",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/contacts/{id}/merge_history",
+            "operation_id": "ListContactMergeHistory",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{id}/merge_history\"].get"
+          },
+          {
+            "id": "intercom.rest.get.ShowContactByExternalId",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/contacts/find_by_external_id/{external_id}",
+            "operation_id": "ShowContactByExternalId",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/find_by_external_id/{external_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listContentSnippets",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/content_snippets",
+            "operation_id": "listContentSnippets",
+            "deprecated": false,
+            "source_location": "paths[\"/content_snippets\"].get"
+          },
+          {
+            "id": "intercom.rest.get.getContentSnippet",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/content_snippets/{id}",
+            "operation_id": "getContentSnippet",
+            "deprecated": false,
+            "source_location": "paths[\"/content_snippets/{id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.searchContent",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/content/search",
+            "operation_id": "searchContent",
+            "deprecated": false,
+            "source_location": "paths[\"/content/search\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listConversations",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/conversations",
+            "operation_id": "listConversations",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations\"].get"
+          },
+          {
+            "id": "intercom.rest.get.retrieveConversation",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/conversations/{conversation_id}",
+            "operation_id": "retrieveConversation",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/{conversation_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listHandlingEvents",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/conversations/{id}/handling_events",
+            "operation_id": "listHandlingEvents",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/{id}/handling_events\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listSideConversations",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/conversations/{id}/side_conversations",
+            "operation_id": "listSideConversations",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/{id}/side_conversations\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listConversationAttributes",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/conversations/attributes",
+            "operation_id": "listConversationAttributes",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/attributes\"].get"
+          },
+          {
+            "id": "intercom.rest.get.getConversationAttribute",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/conversations/attributes/{id}",
+            "operation_id": "getConversationAttribute",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/attributes/{id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listDeletedConversationIds",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/conversations/deleted",
+            "operation_id": "listDeletedConversationIds",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/deleted\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listCustomObjectInstances",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_object_instances/{custom_object_type_identifier}",
+            "operation_id": "listCustomObjectInstances",
+            "deprecated": false,
+            "source_location": "paths[\"/custom_object_instances/{custom_object_type_identifier}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.getCustomObjectInstancesById",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/custom_object_instances/{custom_object_type_identifier}/{custom_object_instance_id}",
+            "operation_id": "getCustomObjectInstancesById",
+            "deprecated": false,
+            "source_location": "paths[\"/custom_object_instances/{custom_object_type_identifier}/{custom_object_instance_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.lisDataAttributes",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/data_attributes",
+            "operation_id": "lisDataAttributes",
+            "deprecated": false,
+            "source_location": "paths[\"/data_attributes\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listDataConnectors",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/data_connectors",
+            "operation_id": "listDataConnectors",
+            "deprecated": false,
+            "source_location": "paths[\"/data_connectors\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listDataConnectorExecutionResults",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/data_connectors/{data_connector_id}/execution_results",
+            "operation_id": "listDataConnectorExecutionResults",
+            "deprecated": false,
+            "source_location": "paths[\"/data_connectors/{data_connector_id}/execution_results\"].get"
+          },
+          {
+            "id": "intercom.rest.get.showDataConnectorExecutionResult",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/data_connectors/{data_connector_id}/execution_results/{id}",
+            "operation_id": "showDataConnectorExecutionResult",
+            "deprecated": false,
+            "source_location": "paths[\"/data_connectors/{data_connector_id}/execution_results/{id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.RetrieveDataConnector",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/data_connectors/{id}",
+            "operation_id": "RetrieveDataConnector",
+            "deprecated": false,
+            "source_location": "paths[\"/data_connectors/{id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.downloadDataExport",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/download/content/data/{job_identifier}",
+            "operation_id": "downloadDataExport",
+            "deprecated": false,
+            "source_location": "paths[\"/download/content/data/{job_identifier}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.download_reporting_data_job_identifier",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/download/reporting_data/{job_identifier}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "paths[\"/download/reporting_data/{job_identifier}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listEmails",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/emails",
+            "operation_id": "listEmails",
+            "deprecated": false,
+            "source_location": "paths[\"/emails\"].get"
+          },
+          {
+            "id": "intercom.rest.get.retrieveEmail",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/emails/{id}",
+            "operation_id": "retrieveEmail",
+            "deprecated": false,
+            "source_location": "paths[\"/emails/{id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.lisDataEvents",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/events",
+            "operation_id": "lisDataEvents",
+            "deprecated": false,
+            "source_location": "paths[\"/events\"].get"
+          },
+          {
+            "id": "intercom.rest.get.getDataExport",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/export/content/data/{job_identifier}",
+            "operation_id": "getDataExport",
+            "deprecated": false,
+            "source_location": "paths[\"/export/content/data/{job_identifier}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.export_reporting_data_job_identifier",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/export/reporting_data/{job_identifier}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "paths[\"/export/reporting_data/{job_identifier}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.export_reporting_data_get_datasets",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/export/reporting_data/get_datasets",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "paths[\"/export/reporting_data/get_datasets\"].get"
+          },
+          {
+            "id": "intercom.rest.get.exportWorkflow",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/export/workflows/{id}",
+            "operation_id": "exportWorkflow",
+            "deprecated": false,
+            "source_location": "paths[\"/export/workflows/{id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.collectFinVoiceCallById",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fin_voice/collect/{id}",
+            "operation_id": "collectFinVoiceCallById",
+            "deprecated": false,
+            "source_location": "paths[\"/fin_voice/collect/{id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.collectFinVoiceCallsByConversationId",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fin_voice/conversation/{conversation_id}",
+            "operation_id": "collectFinVoiceCallsByConversationId",
+            "deprecated": false,
+            "source_location": "paths[\"/fin_voice/conversation/{conversation_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.collectFinVoiceCallByExternalId",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fin_voice/external_id/{external_id}",
+            "operation_id": "collectFinVoiceCallByExternalId",
+            "deprecated": false,
+            "source_location": "paths[\"/fin_voice/external_id/{external_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.collectFinVoiceCallByPhoneNumber",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fin_voice/phone_number/{phone_number}",
+            "operation_id": "collectFinVoiceCallByPhoneNumber",
+            "deprecated": false,
+            "source_location": "paths[\"/fin_voice/phone_number/{phone_number}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listAllCollections",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/help_center/collections",
+            "operation_id": "listAllCollections",
+            "deprecated": false,
+            "source_location": "paths[\"/help_center/collections\"].get"
+          },
+          {
+            "id": "intercom.rest.get.retrieveCollection",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/help_center/collections/{collection_id}",
+            "operation_id": "retrieveCollection",
+            "deprecated": false,
+            "source_location": "paths[\"/help_center/collections/{collection_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listHelpCenters",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/help_center/help_centers",
+            "operation_id": "listHelpCenters",
+            "deprecated": false,
+            "source_location": "paths[\"/help_center/help_centers\"].get"
+          },
+          {
+            "id": "intercom.rest.get.retrieveHelpCenter",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/help_center/help_centers/{help_center_id}",
+            "operation_id": "retrieveHelpCenter",
+            "deprecated": false,
+            "source_location": "paths[\"/help_center/help_centers/{help_center_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listHelpCenterRedirects",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/help_center/help_centers/{help_center_id}/redirects",
+            "operation_id": "listHelpCenterRedirects",
+            "deprecated": false,
+            "source_location": "paths[\"/help_center/help_centers/{help_center_id}/redirects\"].get"
+          },
+          {
+            "id": "intercom.rest.get.retrieveHelpCenterRedirect",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/help_center/help_centers/{help_center_id}/redirects/{id}",
+            "operation_id": "retrieveHelpCenterRedirect",
+            "deprecated": false,
+            "source_location": "paths[\"/help_center/help_centers/{help_center_id}/redirects/{id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listInternalArticles",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/internal_articles",
+            "operation_id": "listInternalArticles",
+            "deprecated": false,
+            "source_location": "paths[\"/internal_articles\"].get"
+          },
+          {
+            "id": "intercom.rest.get.retrieveInternalArticle",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/internal_articles/{internal_article_id}",
+            "operation_id": "retrieveInternalArticle",
+            "deprecated": false,
+            "source_location": "paths[\"/internal_articles/{internal_article_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.searchInternalArticles",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/internal_articles/search",
+            "operation_id": "searchInternalArticles",
+            "deprecated": false,
+            "source_location": "paths[\"/internal_articles/search\"].get"
+          },
+          {
+            "id": "intercom.rest.get.getIpAllowlist",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/ip_allowlist",
+            "operation_id": "getIpAllowlist",
+            "deprecated": false,
+            "source_location": "paths[\"/ip_allowlist\"].get"
+          },
+          {
+            "id": "intercom.rest.get.jobsStatus",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/jobs/status/{job_id}",
+            "operation_id": "jobsStatus",
+            "deprecated": false,
+            "source_location": "paths[\"/jobs/status/{job_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listMacros",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/macros",
+            "operation_id": "listMacros",
+            "deprecated": false,
+            "source_location": "paths[\"/macros\"].get"
+          },
+          {
+            "id": "intercom.rest.get.getMacro",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/macros/{id}",
+            "operation_id": "getMacro",
+            "deprecated": false,
+            "source_location": "paths[\"/macros/{id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.identifyAdmin",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/me",
+            "operation_id": "identifyAdmin",
+            "deprecated": false,
+            "source_location": "paths[\"/me\"].get"
+          },
+          {
+            "id": "intercom.rest.get.getWhatsAppMessageStatus",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/messages/status",
+            "operation_id": "getWhatsAppMessageStatus",
+            "deprecated": false,
+            "source_location": "paths[\"/messages/status\"].get"
+          },
+          {
+            "id": "intercom.rest.get.RetrieveWhatsAppMessageStatus",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/messages/whatsapp/status",
+            "operation_id": "RetrieveWhatsAppMessageStatus",
+            "deprecated": false,
+            "source_location": "paths[\"/messages/whatsapp/status\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listNewsItems",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/news/news_items",
+            "operation_id": "listNewsItems",
+            "deprecated": false,
+            "source_location": "paths[\"/news/news_items\"].get"
+          },
+          {
+            "id": "intercom.rest.get.retrieveNewsItem",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/news/news_items/{news_item_id}",
+            "operation_id": "retrieveNewsItem",
+            "deprecated": false,
+            "source_location": "paths[\"/news/news_items/{news_item_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listNewsfeeds",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/news/newsfeeds",
+            "operation_id": "listNewsfeeds",
+            "deprecated": false,
+            "source_location": "paths[\"/news/newsfeeds\"].get"
+          },
+          {
+            "id": "intercom.rest.get.retrieveNewsfeed",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/news/newsfeeds/{newsfeed_id}",
+            "operation_id": "retrieveNewsfeed",
+            "deprecated": false,
+            "source_location": "paths[\"/news/newsfeeds/{newsfeed_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listLiveNewsfeedItems",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/news/newsfeeds/{newsfeed_id}/items",
+            "operation_id": "listLiveNewsfeedItems",
+            "deprecated": false,
+            "source_location": "paths[\"/news/newsfeeds/{newsfeed_id}/items\"].get"
+          },
+          {
+            "id": "intercom.rest.get.retrieveNote",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/notes/{note_id}",
+            "operation_id": "retrieveNote",
+            "deprecated": false,
+            "source_location": "paths[\"/notes/{note_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listOfficeHoursSchedules",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/office_hours_schedules",
+            "operation_id": "listOfficeHoursSchedules",
+            "deprecated": false,
+            "source_location": "paths[\"/office_hours_schedules\"].get"
+          },
+          {
+            "id": "intercom.rest.get.getOfficeHoursSchedule",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/office_hours_schedules/{id}",
+            "operation_id": "getOfficeHoursSchedule",
+            "deprecated": false,
+            "source_location": "paths[\"/office_hours_schedules/{id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listOfficeHoursExceptions",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions",
+            "operation_id": "listOfficeHoursExceptions",
+            "deprecated": false,
+            "source_location": "paths[\"/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions\"].get"
+          },
+          {
+            "id": "intercom.rest.get.getOfficeHoursException",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}",
+            "operation_id": "getOfficeHoursException",
+            "deprecated": false,
+            "source_location": "paths[\"/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listSegments",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/segments",
+            "operation_id": "listSegments",
+            "deprecated": false,
+            "source_location": "paths[\"/segments\"].get"
+          },
+          {
+            "id": "intercom.rest.get.retrieveSegment",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/segments/{segment_id}",
+            "operation_id": "retrieveSegment",
+            "deprecated": false,
+            "source_location": "paths[\"/segments/{segment_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listSubscriptionTypes",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/subscription_types",
+            "operation_id": "listSubscriptionTypes",
+            "deprecated": false,
+            "source_location": "paths[\"/subscription_types\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listTags",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tags",
+            "operation_id": "listTags",
+            "deprecated": false,
+            "source_location": "paths[\"/tags\"].get"
+          },
+          {
+            "id": "intercom.rest.get.findTag",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tags/{tag_id}",
+            "operation_id": "findTag",
+            "deprecated": false,
+            "source_location": "paths[\"/tags/{tag_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listTeams",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/teams",
+            "operation_id": "listTeams",
+            "deprecated": false,
+            "source_location": "paths[\"/teams\"].get"
+          },
+          {
+            "id": "intercom.rest.get.retrieveTeam",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/teams/{team_id}",
+            "operation_id": "retrieveTeam",
+            "deprecated": false,
+            "source_location": "paths[\"/teams/{team_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.getTeamMetrics",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/teams/{team_id}/metrics",
+            "operation_id": "getTeamMetrics",
+            "deprecated": false,
+            "source_location": "paths[\"/teams/{team_id}/metrics\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listTicketStates",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/ticket_states",
+            "operation_id": "listTicketStates",
+            "deprecated": false,
+            "source_location": "paths[\"/ticket_states\"].get"
+          },
+          {
+            "id": "intercom.rest.get.listTicketTypes",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/ticket_types",
+            "operation_id": "listTicketTypes",
+            "deprecated": false,
+            "source_location": "paths[\"/ticket_types\"].get"
+          },
+          {
+            "id": "intercom.rest.get.getTicketType",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/ticket_types/{ticket_type_id}",
+            "operation_id": "getTicketType",
+            "deprecated": false,
+            "source_location": "paths[\"/ticket_types/{ticket_type_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.getTicket",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tickets/{ticket_id}",
+            "operation_id": "getTicket",
+            "deprecated": false,
+            "source_location": "paths[\"/tickets/{ticket_id}\"].get"
+          },
+          {
+            "id": "intercom.rest.get.retrieveVisitorWithUserId",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/visitors",
+            "operation_id": "retrieveVisitorWithUserId",
+            "deprecated": false,
+            "source_location": "paths[\"/visitors\"].get"
+          },
+          {
+            "id": "intercom.rest.patch.updateDataConnector",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/data_connectors/{id}",
+            "operation_id": "updateDataConnector",
+            "deprecated": false,
+            "source_location": "paths[\"/data_connectors/{id}\"].patch"
+          },
+          {
+            "id": "intercom.rest.post.searchActivityLogs",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/admins/activity_logs/search",
+            "operation_id": "searchActivityLogs",
+            "deprecated": false,
+            "source_location": "paths[\"/admins/activity_logs/search\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createContentImportSource",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/ai/content_import_sources",
+            "operation_id": "createContentImportSource",
+            "deprecated": false,
+            "source_location": "paths[\"/ai/content_import_sources\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createExternalPage",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/ai/external_pages",
+            "operation_id": "createExternalPage",
+            "deprecated": false,
+            "source_location": "paths[\"/ai/external_pages\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createArticle",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/articles",
+            "operation_id": "createArticle",
+            "deprecated": false,
+            "source_location": "paths[\"/articles\"].post"
+          },
+          {
+            "id": "intercom.rest.post.attachTagToArticle",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/articles/{article_id}/tags",
+            "operation_id": "attachTagToArticle",
+            "deprecated": false,
+            "source_location": "paths[\"/articles/{article_id}/tags\"].post"
+          },
+          {
+            "id": "intercom.rest.post.publishArticleDraft",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/articles/{id}/draft/publish",
+            "operation_id": "publishArticleDraft",
+            "deprecated": false,
+            "source_location": "paths[\"/articles/{id}/draft/publish\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createAudience",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/audiences",
+            "operation_id": "createAudience",
+            "deprecated": false,
+            "source_location": "paths[\"/audiences\"].post"
+          },
+          {
+            "id": "intercom.rest.post.listCallsWithTranscripts",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/calls/search",
+            "operation_id": "listCallsWithTranscripts",
+            "deprecated": false,
+            "source_location": "paths[\"/calls/search\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createOrUpdateCompany",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/companies",
+            "operation_id": "createOrUpdateCompany",
+            "deprecated": false,
+            "source_location": "paths[\"/companies\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createCompanyNote",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/companies/{company_id}/notes",
+            "operation_id": "createCompanyNote",
+            "deprecated": false,
+            "source_location": "paths[\"/companies/{company_id}/notes\"].post"
+          },
+          {
+            "id": "intercom.rest.post.listAllCompanies",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/companies/list",
+            "operation_id": "listAllCompanies",
+            "deprecated": false,
+            "source_location": "paths[\"/companies/list\"].post"
+          },
+          {
+            "id": "intercom.rest.post.CreateContact",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/contacts",
+            "operation_id": "CreateContact",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts\"].post"
+          },
+          {
+            "id": "intercom.rest.post.ArchiveContact",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/contacts/{contact_id}/archive",
+            "operation_id": "ArchiveContact",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{contact_id}/archive\"].post"
+          },
+          {
+            "id": "intercom.rest.post.BlockContact",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/contacts/{contact_id}/block",
+            "operation_id": "BlockContact",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{contact_id}/block\"].post"
+          },
+          {
+            "id": "intercom.rest.post.attachContactToACompany",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/contacts/{contact_id}/companies",
+            "operation_id": "attachContactToACompany",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{contact_id}/companies\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createNote",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/contacts/{contact_id}/notes",
+            "operation_id": "createNote",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{contact_id}/notes\"].post"
+          },
+          {
+            "id": "intercom.rest.post.attachSubscriptionTypeToContact",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/contacts/{contact_id}/subscriptions",
+            "operation_id": "attachSubscriptionTypeToContact",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{contact_id}/subscriptions\"].post"
+          },
+          {
+            "id": "intercom.rest.post.attachTagToContact",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/contacts/{contact_id}/tags",
+            "operation_id": "attachTagToContact",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{contact_id}/tags\"].post"
+          },
+          {
+            "id": "intercom.rest.post.UnarchiveContact",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/contacts/{contact_id}/unarchive",
+            "operation_id": "UnarchiveContact",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{contact_id}/unarchive\"].post"
+          },
+          {
+            "id": "intercom.rest.post.dismissContactBanner",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/contacts/{id}/banners/{view_id}/dismiss",
+            "operation_id": "dismissContactBanner",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{id}/banners/{view_id}/dismiss\"].post"
+          },
+          {
+            "id": "intercom.rest.post.MergeContact",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/contacts/merge",
+            "operation_id": "MergeContact",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/merge\"].post"
+          },
+          {
+            "id": "intercom.rest.post.SearchContacts",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/contacts/search",
+            "operation_id": "SearchContacts",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/search\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createContentSnippet",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/content_snippets",
+            "operation_id": "createContentSnippet",
+            "deprecated": false,
+            "source_location": "paths[\"/content_snippets\"].post"
+          },
+          {
+            "id": "intercom.rest.post.attachTagToContentSnippet",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/content_snippets/{content_snippet_id}/tags",
+            "operation_id": "attachTagToContentSnippet",
+            "deprecated": false,
+            "source_location": "paths[\"/content_snippets/{content_snippet_id}/tags\"].post"
+          },
+          {
+            "id": "intercom.rest.post.bulkContentActions",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/content/bulk_actions",
+            "operation_id": "bulkContentActions",
+            "deprecated": false,
+            "source_location": "paths[\"/content/bulk_actions\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createConversation",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/conversations",
+            "operation_id": "createConversation",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations\"].post"
+          },
+          {
+            "id": "intercom.rest.post.convertConversationToTicket",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/conversations/{conversation_id}/convert",
+            "operation_id": "convertConversationToTicket",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/{conversation_id}/convert\"].post"
+          },
+          {
+            "id": "intercom.rest.post.attachContactToConversation",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/conversations/{conversation_id}/customers",
+            "operation_id": "attachContactToConversation",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/{conversation_id}/customers\"].post"
+          },
+          {
+            "id": "intercom.rest.post.manageConversation",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/conversations/{conversation_id}/parts",
+            "operation_id": "manageConversation",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/{conversation_id}/parts\"].post"
+          },
+          {
+            "id": "intercom.rest.post.replyConversation",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/conversations/{conversation_id}/reply",
+            "operation_id": "replyConversation",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/{conversation_id}/reply\"].post"
+          },
+          {
+            "id": "intercom.rest.post.attachTagToConversation",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/conversations/{conversation_id}/tags",
+            "operation_id": "attachTagToConversation",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/{conversation_id}/tags\"].post"
+          },
+          {
+            "id": "intercom.rest.post.mergeConversation",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/conversations/{id}/merge",
+            "operation_id": "mergeConversation",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/{id}/merge\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createConversationAttribute",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/conversations/attributes",
+            "operation_id": "createConversationAttribute",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/attributes\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createConversationAttributeOption",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/conversations/attributes/{id}/options",
+            "operation_id": "createConversationAttributeOption",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/attributes/{id}/options\"].post"
+          },
+          {
+            "id": "intercom.rest.post.redactConversation",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/conversations/redact",
+            "operation_id": "redactConversation",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/redact\"].post"
+          },
+          {
+            "id": "intercom.rest.post.searchConversations",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/conversations/search",
+            "operation_id": "searchConversations",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/search\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createCustomObjectInstances",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/custom_object_instances/{custom_object_type_identifier}",
+            "operation_id": "createCustomObjectInstances",
+            "deprecated": false,
+            "source_location": "paths[\"/custom_object_instances/{custom_object_type_identifier}\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createDataAttribute",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/data_attributes",
+            "operation_id": "createDataAttribute",
+            "deprecated": false,
+            "source_location": "paths[\"/data_attributes\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createDataConnector",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/data_connectors",
+            "operation_id": "createDataConnector",
+            "deprecated": false,
+            "source_location": "paths[\"/data_connectors\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createDataEvent",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/events",
+            "operation_id": "createDataEvent",
+            "deprecated": false,
+            "source_location": "paths[\"/events\"].post"
+          },
+          {
+            "id": "intercom.rest.post.dataEventSummaries",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/events/summaries",
+            "operation_id": "dataEventSummaries",
+            "deprecated": false,
+            "source_location": "paths[\"/events/summaries\"].post"
+          },
+          {
+            "id": "intercom.rest.post.cancelDataExport",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/export/cancel/{job_identifier}",
+            "operation_id": "cancelDataExport",
+            "deprecated": false,
+            "source_location": "paths[\"/export/cancel/{job_identifier}\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createDataExport",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/export/content/data",
+            "operation_id": "createDataExport",
+            "deprecated": false,
+            "source_location": "paths[\"/export/content/data\"].post"
+          },
+          {
+            "id": "intercom.rest.post.export_reporting_data_enqueue",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/export/reporting_data/enqueue",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "paths[\"/export/reporting_data/enqueue\"].post"
+          },
+          {
+            "id": "intercom.rest.post.registerFinVoiceCall",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/fin_voice/register",
+            "operation_id": "registerFinVoiceCall",
+            "deprecated": false,
+            "source_location": "paths[\"/fin_voice/register\"].post"
+          },
+          {
+            "id": "intercom.rest.post.submitFinCsat",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/fin/csat",
+            "operation_id": "submitFinCsat",
+            "deprecated": false,
+            "source_location": "paths[\"/fin/csat\"].post"
+          },
+          {
+            "id": "intercom.rest.post.replyToFin",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/fin/reply",
+            "operation_id": "replyToFin",
+            "deprecated": false,
+            "source_location": "paths[\"/fin/reply\"].post"
+          },
+          {
+            "id": "intercom.rest.post.startFinConversation",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/fin/start",
+            "operation_id": "startFinConversation",
+            "deprecated": false,
+            "source_location": "paths[\"/fin/start\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createCollection",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/help_center/collections",
+            "operation_id": "createCollection",
+            "deprecated": false,
+            "source_location": "paths[\"/help_center/collections\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createHelpCenterRedirect",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/help_center/help_centers/{help_center_id}/redirects",
+            "operation_id": "createHelpCenterRedirect",
+            "deprecated": false,
+            "source_location": "paths[\"/help_center/help_centers/{help_center_id}/redirects\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createInternalArticle",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/internal_articles",
+            "operation_id": "createInternalArticle",
+            "deprecated": false,
+            "source_location": "paths[\"/internal_articles\"].post"
+          },
+          {
+            "id": "intercom.rest.post.attachTagToInternalArticle",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/internal_articles/{internal_article_id}/tags",
+            "operation_id": "attachTagToInternalArticle",
+            "deprecated": false,
+            "source_location": "paths[\"/internal_articles/{internal_article_id}/tags\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createMessage",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/messages",
+            "operation_id": "createMessage",
+            "deprecated": false,
+            "source_location": "paths[\"/messages\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createNewsItem",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/news/news_items",
+            "operation_id": "createNewsItem",
+            "deprecated": false,
+            "source_location": "paths[\"/news/news_items\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createOfficeHoursSchedule",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/office_hours_schedules",
+            "operation_id": "createOfficeHoursSchedule",
+            "deprecated": false,
+            "source_location": "paths[\"/office_hours_schedules\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createOfficeHoursException",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions",
+            "operation_id": "createOfficeHoursException",
+            "deprecated": false,
+            "source_location": "paths[\"/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createPhoneSwitch",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/phone_call_redirects",
+            "operation_id": "createPhoneSwitch",
+            "deprecated": false,
+            "source_location": "paths[\"/phone_call_redirects\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createTag",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/tags",
+            "operation_id": "createTag",
+            "deprecated": false,
+            "source_location": "paths[\"/tags\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createTicketType",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/ticket_types",
+            "operation_id": "createTicketType",
+            "deprecated": false,
+            "source_location": "paths[\"/ticket_types\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createTicketTypeAttribute",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/ticket_types/{ticket_type_id}/attributes",
+            "operation_id": "createTicketTypeAttribute",
+            "deprecated": false,
+            "source_location": "paths[\"/ticket_types/{ticket_type_id}/attributes\"].post"
+          },
+          {
+            "id": "intercom.rest.post.createTicket",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/tickets",
+            "operation_id": "createTicket",
+            "deprecated": false,
+            "source_location": "paths[\"/tickets\"].post"
+          },
+          {
+            "id": "intercom.rest.post.changeTicketType",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/tickets/{ticket_id}/change_type",
+            "operation_id": "changeTicketType",
+            "deprecated": false,
+            "source_location": "paths[\"/tickets/{ticket_id}/change_type\"].post"
+          },
+          {
+            "id": "intercom.rest.post.linkConversationToTicket",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/tickets/{ticket_id}/linked_conversations",
+            "operation_id": "linkConversationToTicket",
+            "deprecated": false,
+            "source_location": "paths[\"/tickets/{ticket_id}/linked_conversations\"].post"
+          },
+          {
+            "id": "intercom.rest.post.replyTicket",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/tickets/{ticket_id}/reply",
+            "operation_id": "replyTicket",
+            "deprecated": false,
+            "source_location": "paths[\"/tickets/{ticket_id}/reply\"].post"
+          },
+          {
+            "id": "intercom.rest.post.attachTagToTicket",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/tickets/{ticket_id}/tags",
+            "operation_id": "attachTagToTicket",
+            "deprecated": false,
+            "source_location": "paths[\"/tickets/{ticket_id}/tags\"].post"
+          },
+          {
+            "id": "intercom.rest.post.enqueueCreateTicket",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/tickets/enqueue",
+            "operation_id": "enqueueCreateTicket",
+            "deprecated": false,
+            "source_location": "paths[\"/tickets/enqueue\"].post"
+          },
+          {
+            "id": "intercom.rest.post.searchTickets",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/tickets/search",
+            "operation_id": "searchTickets",
+            "deprecated": false,
+            "source_location": "paths[\"/tickets/search\"].post"
+          },
+          {
+            "id": "intercom.rest.post.convertVisitor",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/visitors/convert",
+            "operation_id": "convertVisitor",
+            "deprecated": false,
+            "source_location": "paths[\"/visitors/convert\"].post"
+          },
+          {
+            "id": "intercom.rest.put.setAwayAdmin",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/admins/{admin_id}/away",
+            "operation_id": "setAwayAdmin",
+            "deprecated": false,
+            "source_location": "paths[\"/admins/{admin_id}/away\"].put"
+          },
+          {
+            "id": "intercom.rest.put.updateContentImportSource",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/ai/content_import_sources/{source_id}",
+            "operation_id": "updateContentImportSource",
+            "deprecated": false,
+            "source_location": "paths[\"/ai/content_import_sources/{source_id}\"].put"
+          },
+          {
+            "id": "intercom.rest.put.updateExternalPage",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/ai/external_pages/{page_id}",
+            "operation_id": "updateExternalPage",
+            "deprecated": false,
+            "source_location": "paths[\"/ai/external_pages/{page_id}\"].put"
+          },
+          {
+            "id": "intercom.rest.put.updateArticle",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/articles/{article_id}",
+            "operation_id": "updateArticle",
+            "deprecated": false,
+            "source_location": "paths[\"/articles/{article_id}\"].put"
+          },
+          {
+            "id": "intercom.rest.put.stageArticleDraft",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/articles/{id}/draft",
+            "operation_id": "stageArticleDraft",
+            "deprecated": false,
+            "source_location": "paths[\"/articles/{id}/draft\"].put"
+          },
+          {
+            "id": "intercom.rest.put.updateAudience",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/audiences/{id}",
+            "operation_id": "updateAudience",
+            "deprecated": false,
+            "source_location": "paths[\"/audiences/{id}\"].put"
+          },
+          {
+            "id": "intercom.rest.put.UpdateCompany",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/companies/{company_id}",
+            "operation_id": "UpdateCompany",
+            "deprecated": false,
+            "source_location": "paths[\"/companies/{company_id}\"].put"
+          },
+          {
+            "id": "intercom.rest.put.UpdateContact",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/contacts/{contact_id}",
+            "operation_id": "UpdateContact",
+            "deprecated": false,
+            "source_location": "paths[\"/contacts/{contact_id}\"].put"
+          },
+          {
+            "id": "intercom.rest.put.updateContentSnippet",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/content_snippets/{id}",
+            "operation_id": "updateContentSnippet",
+            "deprecated": false,
+            "source_location": "paths[\"/content_snippets/{id}\"].put"
+          },
+          {
+            "id": "intercom.rest.put.updateConversation",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/conversations/{conversation_id}",
+            "operation_id": "updateConversation",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/{conversation_id}\"].put"
+          },
+          {
+            "id": "intercom.rest.put.updateConversationAttribute",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/conversations/attributes/{id}",
+            "operation_id": "updateConversationAttribute",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/attributes/{id}\"].put"
+          },
+          {
+            "id": "intercom.rest.put.updateConversationAttributeOption",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/conversations/attributes/{id}/options/{option_id}",
+            "operation_id": "updateConversationAttributeOption",
+            "deprecated": false,
+            "source_location": "paths[\"/conversations/attributes/{id}/options/{option_id}\"].put"
+          },
+          {
+            "id": "intercom.rest.put.updateDataAttribute",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/data_attributes/{data_attribute_id}",
+            "operation_id": "updateDataAttribute",
+            "deprecated": false,
+            "source_location": "paths[\"/data_attributes/{data_attribute_id}\"].put"
+          },
+          {
+            "id": "intercom.rest.put.updateCollection",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/help_center/collections/{collection_id}",
+            "operation_id": "updateCollection",
+            "deprecated": false,
+            "source_location": "paths[\"/help_center/collections/{collection_id}\"].put"
+          },
+          {
+            "id": "intercom.rest.put.updateInternalArticle",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/internal_articles/{internal_article_id}",
+            "operation_id": "updateInternalArticle",
+            "deprecated": false,
+            "source_location": "paths[\"/internal_articles/{internal_article_id}\"].put"
+          },
+          {
+            "id": "intercom.rest.put.updateIpAllowlist",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/ip_allowlist",
+            "operation_id": "updateIpAllowlist",
+            "deprecated": false,
+            "source_location": "paths[\"/ip_allowlist\"].put"
+          },
+          {
+            "id": "intercom.rest.put.updateNewsItem",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/news/news_items/{news_item_id}",
+            "operation_id": "updateNewsItem",
+            "deprecated": false,
+            "source_location": "paths[\"/news/news_items/{news_item_id}\"].put"
+          },
+          {
+            "id": "intercom.rest.put.updateOfficeHoursSchedule",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/office_hours_schedules/{id}",
+            "operation_id": "updateOfficeHoursSchedule",
+            "deprecated": false,
+            "source_location": "paths[\"/office_hours_schedules/{id}\"].put"
+          },
+          {
+            "id": "intercom.rest.put.updateOfficeHoursException",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}",
+            "operation_id": "updateOfficeHoursException",
+            "deprecated": false,
+            "source_location": "paths[\"/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}\"].put"
+          },
+          {
+            "id": "intercom.rest.put.updateTicketType",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/ticket_types/{ticket_type_id}",
+            "operation_id": "updateTicketType",
+            "deprecated": false,
+            "source_location": "paths[\"/ticket_types/{ticket_type_id}\"].put"
+          },
+          {
+            "id": "intercom.rest.put.updateTicketTypeAttribute",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/ticket_types/{ticket_type_id}/attributes/{attribute_id}",
+            "operation_id": "updateTicketTypeAttribute",
+            "deprecated": false,
+            "source_location": "paths[\"/ticket_types/{ticket_type_id}/attributes/{attribute_id}\"].put"
+          },
+          {
+            "id": "intercom.rest.put.updateTicket",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/tickets/{ticket_id}",
+            "operation_id": "updateTicket",
+            "deprecated": false,
+            "source_location": "paths[\"/tickets/{ticket_id}\"].put"
+          },
+          {
+            "id": "intercom.rest.put.updateVisitor",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/visitors",
+            "operation_id": "updateVisitor",
+            "deprecated": false,
+            "source_location": "paths[\"/visitors\"].put"
+          }
+        ]
+      }
+    ]
+  },
+  "counts": {
+    "rest": 231,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 231
+  }
+}

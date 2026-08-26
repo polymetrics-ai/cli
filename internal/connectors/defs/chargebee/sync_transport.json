@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_stream_source"
+    },
+    "eligible_streams": [
+      "customers",
+      "subscriptions",
+      "invoices",
+      "plans",
+      "items",
+      "item_prices",
+      "item_families",
+      "coupons",
+      "coupon_codes",
+      "coupon_sets",
+      "credit_notes",
+      "transactions",
+      "orders",
+      "quotes",
+      "payment_sources",
+      "events",
+      "hosted_pages",
+      "virtual_bank_accounts",
+      "unbilled_charges",
+      "ramps",
+      "gifts",
+      "alerts",
+      "comments",
+      "promotional_credits",
+      "features",
+      "entitlements",
+      "differential_prices",
+      "price_variants",
+      "products",
+      "webhook_endpoints",
+      "ledger_operations",
+      "ledger_account_balances"
+    ],
+    "modes": [
+      "full_overwrite",
+      "full_append",
+      "incremental_upsert"
+    ],
+    "delivery": {
+      "idempotency": "keyed",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "declarative_stream_transport",
+      "run_id": "chargebee_fixture_source_v1"
+    }
+  }
+}

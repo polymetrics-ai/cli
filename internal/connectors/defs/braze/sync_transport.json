@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_stream_source"
+    },
+    "eligible_streams": [
+      "campaigns",
+      "canvases",
+      "segments",
+      "campaign_details",
+      "canvas_details",
+      "canvas_data_summary",
+      "segment_details",
+      "catalogs",
+      "content_blocks",
+      "email_templates",
+      "feed_cards",
+      "email_hard_bounces",
+      "email_unsubscribes",
+      "sms_invalid_phone_numbers",
+      "kpi_dau",
+      "kpi_mau",
+      "kpi_new_users",
+      "kpi_uninstalls",
+      "sessions",
+      "preference_centers",
+      "scheduled_broadcasts"
+    ],
+    "modes": [
+      "full_overwrite",
+      "full_append",
+      "incremental_upsert"
+    ],
+    "delivery": {
+      "idempotency": "keyed",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "declarative_stream_transport",
+      "run_id": "braze_fixture_source_v1"
+    }
+  }
+}

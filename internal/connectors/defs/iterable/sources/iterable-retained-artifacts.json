@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "iterable",
+  "artifacts": [
+    {
+      "sha256": "0b1ae1058635c09386aba007807aa08d54f89969ad48e8e7717d279ef0cab431",
+      "bytes": 284471,
+      "source_url": "https://api.iterable.com/api-docs",
+      "retrieved_at": "2026-08-24T17:37:20Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

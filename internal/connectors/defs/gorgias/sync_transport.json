@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_stream_source"
+    },
+    "eligible_streams": [
+      "tickets",
+      "customers",
+      "messages",
+      "satisfaction_surveys"
+    ],
+    "modes": [
+      "full_overwrite",
+      "full_append",
+      "incremental_upsert"
+    ],
+    "delivery": {
+      "idempotency": "keyed",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "declarative_stream_transport",
+      "run_id": "gorgias_fixture_source_v1"
+    }
+  }
+}

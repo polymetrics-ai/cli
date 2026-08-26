@@ -1,0 +1,147 @@
+{
+  "tagline": "Read Salesloft source-locked ETL records.",
+  "usage": "pm salesloft <command> [flags]",
+  "source_cli": {
+    "name": "Salesloft provider API",
+    "docs": "https://developers.salesloft.com/docs/api/",
+    "reference": "Pinned schema-v3 source documents; each ETL command retains its exact provider operation route and citation.",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "etl",
+      "title": "ETL streams",
+      "commands": [
+        "people",
+        "accounts",
+        "cadences",
+        "users",
+        "emails"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Salesloft request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit."
+    }
+  ],
+  "commands": [
+    {
+      "path": "people list",
+      "summary": "Read People as Salesloft ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "people",
+      "source_cli_path": "GET /v2/people",
+      "source_url": "https://developers.salesloft.com/docs/api/people-index/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/people"
+        }
+      ],
+      "examples": [
+        "pm salesloft people list --json"
+      ],
+      "notes": "Pinned source operation salesloft.rest.get.V2People109 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "accounts list",
+      "summary": "Read Accounts as Salesloft ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "accounts",
+      "source_cli_path": "GET /v2/accounts",
+      "source_url": "https://developers.salesloft.com/docs/api/accounts-index/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/accounts"
+        }
+      ],
+      "examples": [
+        "pm salesloft accounts list --json"
+      ],
+      "notes": "Pinned source operation salesloft.rest.get.V2Accounts33 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "cadences list",
+      "summary": "Read Cadences as Salesloft ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "cadences",
+      "source_cli_path": "GET /v2/cadences",
+      "source_url": "https://developers.salesloft.com/docs/api/cadences-index/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/cadences"
+        }
+      ],
+      "examples": [
+        "pm salesloft cadences list --json"
+      ],
+      "notes": "Pinned source operation salesloft.rest.get.V2Cadences57 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "users list",
+      "summary": "Read Users as Salesloft ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_cli_path": "GET /v2/users",
+      "source_url": "https://developers.salesloft.com/docs/api/users-index/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users"
+        }
+      ],
+      "examples": [
+        "pm salesloft users list --json"
+      ],
+      "notes": "Pinned source operation salesloft.rest.get.V2Users134 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "emails list",
+      "summary": "Read Emails as Salesloft ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "emails",
+      "source_cli_path": "GET /v2/activities/emails",
+      "source_url": "https://developers.salesloft.com/docs/api/activities-emails-index/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/activities/emails"
+        }
+      ],
+      "examples": [
+        "pm salesloft emails list --json"
+      ],
+      "notes": "Pinned source operation salesloft.rest.get.V2ActivitiesEmails41 from source document primary; streams.json is the declared execution component."
+    }
+  ]
+}

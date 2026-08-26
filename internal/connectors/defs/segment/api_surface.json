@@ -1,1508 +1,3019 @@
 {
-  "api": "Segment Public API (https://docs.segmentapis.com/tag/Getting-Started)",
-  "docs": "https://docs.segmentapis.com/tag/Getting-Started",
-  "reviewed_at": "2026-07-04",
-  "scope": "Current Segment Redocly OpenAPI v73.0.0 exposes 187 documented operations (89 GET, 98 mutations). This bundle keeps the three legacy-parity streams unchanged and quarantines the rest as ENGINE_GAP: complete coverage requires multi-level parent-resource graph discovery/fan-out across spaces, audiences, destinations, warehouses, sources, functions, IAM, and Reverse ETL resources. The extra /workspaces entry is the legacy endpoint used by the existing stream; current docs publish workspace metadata as GET /.",
+  "api": "Segment Public API OpenAPI 3.0.3",
+  "docs": "https://docs.segmentapis.com/",
+  "reviewed_at": "2026-08-19",
+  "operation_ledger_version": 2,
+  "scope": "Complete provider-reference inventory generated from every operation in the cited OpenAPI 3.0.3 document (201 HTTP operations). Existing executable bindings are retained only where their exact method/path still matches the refreshed provider source. Legacy declarations absent from the authoritative source are explicitly recorded as REMOVED in the source lock and disposition ledger.",
+  "artifacts": [
+    {
+      "id": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+      "url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js",
+      "retrieved_at": "2026-08-19",
+      "sha256": "5a673840956c31408be41cb681ba4548a45334a48584de9f94282959e8ae0978"
+    }
+  ],
   "endpoints": [
     {
-      "method": "GET",
-      "path": "/workspaces",
-      "covered_by": {
-        "stream": "workspaces"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections/{connectionId}/activations",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spaces/{spaceId}/audiences/{id}/schedules",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/spaces/{spaceId}/audiences/{id}/schedules",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      "method": "DELETE",
+      "path": "/credentials/{credentialId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     },
     {
       "method": "DELETE",
-      "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/sources/{sourceId}/labels",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/sources/{sourceId}/labels",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/users/{userId}/permissions",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/users/{userId}/permissions",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/groups/{userGroupId}/permissions",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/groups/{userGroupId}/permissions",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/tracking-plans/{trackingPlanId}/sources",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/tracking-plans/{trackingPlanId}/sources",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/tracking-plans/{trackingPlanId}/sources",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/groups/{userGroupId}/users",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/groups/{userGroupId}/users",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/spaces/{spaceId}/messaging-subscriptions/batch",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/reverse-etl-models/{modelId}/syncs/{syncId}/cancel",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spaces/{spaceId}/audiences",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/spaces/{spaceId}/audiences",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/spaces/{spaceId}/audiences/previews",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/regulations/cloudsources/{sourceId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spaces/{spaceId}/computed-traits",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/spaces/{spaceId}/computed-traits",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/dbt-model-syncs/trigger",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/destinations",
-      "covered_by": {
-        "stream": "destinations"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/destinations",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/destinations/{destinationId}/subscriptions",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/destinations/{destinationId}/subscriptions",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/customer-insights/download",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "starts or returns a customer-insights download artifact rather than a simple structured record write"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/destination/{destinationId}/filters",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/destination/{destinationId}/filters",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/filters",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/filters",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/functions",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/functions",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/functions/{functionId}/deploy",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/insert-function-instances",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/insert-function-instances",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/invites",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/invites",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/invites",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/labels",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/labels",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/sources/{sourceId}/live-plugins/create",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "documented Segment mutation beyond the legacy read-only connector; not modeled while Segment remains quarantined for full-surface graph fan-out"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spaces/{spaceId}/profiles-warehouses",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/spaces/{spaceId}/profiles-warehouses",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/reverse-etl-syncs",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/reverse-etl-models",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/reverse-etl-models",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/sources",
-      "covered_by": {
-        "stream": "sources"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/sources",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "documented Segment mutation beyond the legacy read-only connector; not modeled while Segment remains quarantined for full-surface graph fan-out"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/regulations/sources/{sourceId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "deletion/suppression governance endpoint requiring privacy-admin privileges beyond the legacy metadata reader token posture"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/regulations/sources/{sourceId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/tracking-plans",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/tracking-plans",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/transformations",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/transformations",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "documented Segment mutation beyond the legacy read-only connector; not modeled while Segment remains quarantined for full-surface graph fan-out"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/groups",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/groups",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/warehouses/validation",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/warehouses",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/warehouses",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/regulations",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "deletion/suppression governance endpoint requiring privacy-admin privileges beyond the legacy metadata reader token posture"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/regulations",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/sources/{sourceId}/writekey",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/destinations/{destinationId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/destinations/{destinationId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      "path": "/destination/{destinationId}/filters/{filterId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     },
     {
       "method": "DELETE",
       "path": "/destinations/{destinationId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     },
     {
-      "method": "GET",
-      "path": "/filters/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/filters/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      "method": "DELETE",
+      "path": "/destinations/{destinationId}/subscriptions/{id}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     },
     {
       "method": "DELETE",
       "path": "/filters/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/functions/{functionId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/functions/{functionId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     },
     {
       "method": "DELETE",
       "path": "/functions/{functionId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     },
     {
-      "method": "GET",
-      "path": "/insert-function-instances/{instanceId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
+      "method": "DELETE",
+      "path": "/group/{userGroupId}/users",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     },
     {
-      "method": "PATCH",
-      "path": "/insert-function-instances/{instanceId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      "method": "DELETE",
+      "path": "/groups/{userGroupId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     },
     {
       "method": "DELETE",
       "path": "/insert-function-instances/{instanceId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invites",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     },
     {
       "method": "DELETE",
       "path": "/labels/{key}/{value}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/reverse-etl-models/{modelId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sources/{sourceId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     },
     {
       "method": "DELETE",
       "path": "/sources/{sourceId}/live-plugins/delete-code",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/reverse-etl-models/{modelId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/reverse-etl-models/{modelId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/reverse-etl-models/{modelId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/sources/{sourceId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/sources/{sourceId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "documented Segment mutation beyond the legacy read-only connector; not modeled while Segment remains quarantined for full-surface graph fan-out"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/sources/{sourceId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/tracking-plans/{trackingPlanId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/tracking-plans/{trackingPlanId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/tracking-plans/{trackingPlanId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/transformations/{transformationId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/transformations/{transformationId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "documented Segment mutation beyond the legacy read-only connector; not modeled while Segment remains quarantined for full-surface graph fan-out"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/transformations/{transformationId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/groups/{userGroupId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/groups/{userGroupId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/groups/{userGroupId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/users",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/users",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/warehouses/{warehouseId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/warehouses/{warehouseId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/warehouses/{warehouseId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/echo",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "testing echo endpoint, not a data stream"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/spaces/{spaceId}/audiences/{audienceId}/runs",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spaces/{spaceId}/audiences/{audienceId}/activations/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/spaces/{spaceId}/audiences/{audienceId}/activations/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/spaces/{spaceId}/audiences/{audienceId}/activations/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/warehouses/{warehouseId}/advanced-sync-schedule",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/warehouses/{warehouseId}/advanced-sync-schedule",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spaces/{spaceId}/audiences/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/spaces/{spaceId}/audiences/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/spaces/{spaceId}/audiences/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spaces/{spaceId}/audiences/previews/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spaces/{spaceId}/computed-traits/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/spaces/{spaceId}/computed-traits/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/spaces/{spaceId}/computed-traits/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/warehouses/{warehouseId}/connection-state",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/usage/api-calls/sources/daily",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/usage/mtu/sources/daily",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/usage/api-calls/daily",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/usage/mtu/daily",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/catalog/destinations/{destinationMetadataId}",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "static Segment integration catalog metadata rather than account-scoped records; excluded while the full Segment catalog surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/catalog/destinations",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "static Segment integration catalog metadata rather than account-scoped records; excluded while the full Segment catalog surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/delivery-overview/failed-delivery",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/delivery-overview/successful-delivery",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/events/volume",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/delivery-overview/filtered-at-destination",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/delivery-overview/filtered-at-source",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/destination/{destinationId}/filters/{filterId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/destination/{destinationId}/filters/{filterId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/destination/{destinationId}/filters/{filterId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/functions/{functionId}/versions/{versionId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/delivery-overview/failed-on-ingest",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/delivery-overview/successfully-received",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "aggregate usage/monitoring metrics endpoint rather than a syncable Segment configuration or business-object collection; excluded while the full Segment analytics surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/sources/{sourceId}/live-plugins/latest",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/regulations/{regulateId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "deletion/suppression governance endpoint requiring privacy-admin privileges beyond the legacy metadata reader token posture"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/reverse-etl-models/{modelId}/syncs/{syncId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/catalog/sources/{sourceMetadataId}",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "static Segment integration catalog metadata rather than account-scoped records; excluded while the full Segment catalog surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/catalog/sources",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "static Segment integration catalog metadata rather than account-scoped records; excluded while the full Segment catalog surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spaces/{spaceId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/destinations/{destinationId}/subscriptions/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/destinations/{destinationId}/subscriptions/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/destinations/{destinationId}/subscriptions/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/users/{userId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/catalog/warehouses/{warehouseMetadataId}",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "static Segment integration catalog metadata rather than account-scoped records; excluded while the full Segment catalog surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/catalog/warehouses",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "static Segment integration catalog metadata rather than account-scoped records; excluded while the full Segment catalog surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "current Segment OpenAPI exposes workspace metadata at the API root; the existing legacy-parity workspaces stream preserves the older /workspaces endpoint and top-level workspaces array shape until the Segment surface is unblocked"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spaces/{spaceId}/audiences/{audienceId}/activations",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spaces/{spaceId}/audiences/{id}/audience-references",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/audit-events",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/sources/{sourceId}/connected-destinations",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/warehouses/{warehouseId}/connected-sources",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/sources/{sourceId}/connected-warehouses",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/destinations/{destinationId}/delivery-metrics",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/functions/{functionId}/versions",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/functions/{functionId}/versions",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/groups/{userGroupId}/invites",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/reverse-etl-models/{modelId}/subscriptionId/{subscriptionId}/syncs",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/roles",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/tracking-plans/{trackingPlanId}/rules",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/tracking-plans/{trackingPlanId}/rules",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/tracking-plans/{trackingPlanId}/rules",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/tracking-plans/{trackingPlanId}/rules",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/sources/{sourceId}/settings",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/sources/{sourceId}/settings",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "documented Segment mutation beyond the legacy read-only connector; not modeled while Segment remains quarantined for full-surface graph fan-out"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}/selective-syncs",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}/selective-syncs",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}/selective-syncs",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spaces",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "documented top-level Segment surface beyond the three legacy streams; left quarantined with the rest of the full API surface until the graph fan-out gap is resolved"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/spaces/{spaceId}/audienceType/{audienceType}/supported-destinations",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/suppressions",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "deletion/suppression governance endpoint requiring privacy-admin privileges beyond the legacy metadata reader token posture"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/warehouses/{warehouseId}/syncs",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}/syncs",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "nested Segment resource endpoint; complete coverage requires multi-level parent-resource graph discovery/fan-out that the declarative engine cannot express without hand-supplied IDs or silently incomplete reads"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/users/{userId}/groups",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "IAM/audit/security-administrative endpoint requiring workspace-admin privileges beyond the legacy metadata reader token posture"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/destination/filters/preview",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections/{destinationId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections/{destinationId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/group/{userGroupId}/users",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/group/{userGroupId}/users",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     },
     {
       "method": "DELETE",
       "path": "/sources/{sourceId}/writekey/{writeKey}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "administrative mutation that removes, cancels, restores, or deletes Segment workspace configuration; intentionally not exposed while writes remain unsupported by legacy and the full surface is quarantined"
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/activations/{id}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections/{destinationId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/audiences/{id}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/computed-traits/{id}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tracking-plans/{trackingPlanId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tracking-plans/{trackingPlanId}/rules",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tracking-plans/{trackingPlanId}/sources",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/transformations/{transformationId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/warehouses/{warehouseId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "covered_by": {
+        "stream": "workspace"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audit-events",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/destinations",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/destinations/{destinationMetadataId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/sources",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/sources/{sourceMetadataId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/warehouses",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalog/warehouses/{warehouseMetadataId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credentials",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credentials/{credentialId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credentials/{credentialId}/consumers",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/delivery-overview/failed-delivery",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/delivery-overview/failed-on-ingest",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/delivery-overview/filtered-at-destination",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/delivery-overview/filtered-at-source",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/delivery-overview/successful-delivery",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/delivery-overview/successfully-received",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/destination/{destinationId}/filters",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/destination/{destinationId}/filters/{filterId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/destinations",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "covered_by": {
+        "stream": "destinations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/destinations/{destinationId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/destinations/{destinationId}/delivery-metrics",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/destinations/{destinationId}/subscriptions",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/destinations/{destinationId}/subscriptions/{id}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/echo",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/volume",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/filters",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/filters/{id}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/functions",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/functions/{functionId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/functions/{functionId}/versions",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/functions/{functionId}/versions/{versionId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{userGroupId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{userGroupId}/invites",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{userGroupId}/users",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/insert-function-instances",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/insert-function-instances/{instanceId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invites",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/labels",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/regulations",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/regulations/{regulateId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/regulations/sources/{sourceId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reverse-etl-models",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reverse-etl-models/{modelId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reverse-etl-models/{modelId}/subscriptionId/{subscriptionId}/syncs",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reverse-etl-models/{modelId}/syncs/{syncId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/roles",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sources",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "covered_by": {
+        "stream": "sources"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sources/{sourceId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sources/{sourceId}/connected-destinations",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sources/{sourceId}/connected-warehouses",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sources/{sourceId}/live-plugins/latest",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sources/{sourceId}/settings",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audiences",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/activations",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/activations/{id}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audiences/{id}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audiences/{id}/audience-references",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audiences/{id}/schedules",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audiences/previews/{id}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/audienceType/{audienceType}/supported-destinations",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/computed-traits",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/computed-traits/{id}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/entities/{entitySlug}/properties",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/entities/{entitySlug}/properties/{propertyName}/sample-values",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/entity-paths",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/events",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/events/{eventName}/properties",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/events/{eventName}/properties/{propertyName}/sample-values",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/profiles-warehouses",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}/selective-syncs",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/traits",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/spaces/{spaceId}/traits/{traitKey}/sample-values",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/suppressions",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tracking-plans",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tracking-plans/{trackingPlanId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tracking-plans/{trackingPlanId}/rules",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tracking-plans/{trackingPlanId}/sources",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transformations",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transformations/{transformationId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/usage/api-calls/daily",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/usage/api-calls/sources/daily",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/usage/mtu/daily",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/usage/mtu/sources/daily",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/groups",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses/{warehouseId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses/{warehouseId}/advanced-sync-schedule",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses/{warehouseId}/connected-sources",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}/selective-syncs",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}/syncs",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses/{warehouseId}/connection-state",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses/{warehouseId}/syncs",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/credentials",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customer-insights/download",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/dbt-model-syncs/trigger",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/destination/{destinationId}/filters",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/destination/filters/preview",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/destinations",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/destinations/{destinationId}/subscriptions",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/filters",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/functions",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/functions/{functionId}/deploy",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/functions/{functionId}/versions",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups/{userGroupId}/permissions",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups/{userGroupId}/users",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/insert-function-instances",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invites",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/labels",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/regulations",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/regulations/cloudsources/{sourceId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/regulations/sources/{sourceId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reverse-etl-models",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reverse-etl-models/{modelId}/syncs/{syncId}/cancel",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reverse-etl-syncs",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sources",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sources/{sourceId}/labels",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sources/{sourceId}/live-plugins/create",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sources/{sourceId}/writekey",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/audiences",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections/{connectionId}/activations",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/runs",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/audiences/{id}/schedules",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/audiences/previews",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/computed-traits",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/messaging-subscriptions/batch",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/spaces/{spaceId}/profiles-warehouses",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tracking-plans",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tracking-plans/{trackingPlanId}/sources",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transformations",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{userId}/permissions",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/warehouses",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/warehouses/{warehouseId}/connected-sources/{sourceId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/warehouses/validation",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/group/{userGroupId}/users",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/groups/{userGroupId}/permissions",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sources/{sourceId}/labels",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
       }
     },
     {
       "method": "PUT",
       "path": "/spaces/{spaceId}/messaging-subscriptions",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tracking-plans/{trackingPlanId}/rules",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{userId}/permissions",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/warehouses/{warehouseId}/advanced-sync-schedule",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/credentials/{credentialId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/destination/{destinationId}/filters/{filterId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/destinations/{destinationId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/destinations/{destinationId}/subscriptions/{id}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/filters/{id}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/functions/{functionId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/groups/{userGroupId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/insert-function-instances/{instanceId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/reverse-etl-models/{modelId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/sources/{sourceId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/sources/{sourceId}/settings",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/activations/{id}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spaces/{spaceId}/audiences/{audienceId}/destination-connections/{destinationId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spaces/{spaceId}/audiences/{id}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spaces/{spaceId}/audiences/{id}/schedules/{scheduleId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spaces/{spaceId}/computed-traits/{id}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/spaces/{spaceId}/profiles-warehouses/{warehouseId}/selective-syncs",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/tracking-plans/{trackingPlanId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/tracking-plans/{trackingPlanId}/rules",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/transformations/{transformationId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/warehouses/{warehouseId}",
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
       }
     },
     {
       "method": "PATCH",
       "path": "/warehouses/{warehouseId}/selective-sync",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "workspace-configuration or governance mutation requiring broader administrative scopes than the legacy read-only connector declares"
+      "provenance": {
+        "artifact": "segment-public-api-redoc-openapi-3.0.3-2026-08-19",
+        "source_url": "https://docs.segmentapis.com/redocly-state-d321c785b901e70e81af57fa6bb5e8a84d16bf09.js"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
       }
     }
   ]

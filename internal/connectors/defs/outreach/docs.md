@@ -973,4 +973,12 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 96 stream-backed endpoint group(s), 163 write-backed endpoint group(s).
+- `sync_transport.json` declares all 96 stream-backed endpoint groups as ETL sources and the
+  fixture/dry `sequences(id) → activate_sequence` typed-destination proof. It has keyed delivery,
+  durable warehouse acknowledgement, and all closed modes. Foundation
+  `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` supplies persisted App/CLI destination dispatch; this
+  declaration still needs its installed App/CLI fixture path and provider-live certification.
+- Every declared typed action has an explicit reverse-ETL eligibility disposition:
+  `activate_sequence` is the bound proof and the other 162 are declaration-pending their exact source
+  mappings and conformance evidence. Provider-live certification remains pending; it does not remove CLI reachability or
+  change the approval requirement for any mutation.

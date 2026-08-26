@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "gorgias",
+  "artifacts": [
+    {
+      "sha256": "b824de51f33dfa90c6c6115eef74ff4b62277634a471347b01d769176f161897",
+      "bytes": 852105,
+      "source_url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
+      "retrieved_at": "2026-08-24T17:37:20Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

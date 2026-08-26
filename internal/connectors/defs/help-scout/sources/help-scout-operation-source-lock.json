@@ -1,0 +1,1481 @@
+{
+  "schema_version": 3,
+  "connector": "help-scout",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "retrieval": "Migrated schema-version 2 provider-documentation source-lock capture.",
+    "openapi": [],
+    "coverage_confidence": {
+      "level": "documented",
+      "basis": "The schema-version 2 help-scout source lock pins the public provider documentation capture and its operation inventory; it makes no completeness claim."
+    },
+    "source_documents": [
+      {
+        "id": "primary",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://developer.helpscout.com/mailbox-api/",
+          "sha256": "4862f8a5463105cdd88e915325053b1b5ecbed9919f1293ad75e402ec08bca63",
+          "bytes": 6070
+        },
+        "published_source": {
+          "source_url": "https://developer.helpscout.com/mailbox-api/",
+          "capture_url": "https://developer.helpscout.com/mailbox-api/",
+          "sha256": "4862f8a5463105cdd88e915325053b1b5ecbed9919f1293ad75e402ec08bca63",
+          "bytes": 6070,
+          "adapter": "schema-v2-source-lock-migration"
+        },
+        "info_version": "Help Scout Mailbox API v2 (https://developer.helpscout.com/)",
+        "operations": [
+          {
+            "id": "help-scout.rest.get.V2Conversations0",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/conversations",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[0]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2Conversations1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/conversations",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[1]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.delete.V2ConversationsConversationId2",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/conversations/{conversationId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[2]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ConversationsConversationId3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/conversations/{conversationId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[3]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.patch.V2ConversationsConversationId4",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/v2/conversations/{conversationId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[4]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.delete.V2ConversationsConversationIdAttachmentsAttachmentId5",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/conversations/{conversationId}/attachments/{attachmentId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[5]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ConversationsConversationIdAttachmentsAttachmentIdData6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/conversations/{conversationId}/attachments/{attachmentId}/data",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[6]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ConversationsConversationIdAttachmentsAttachmentIdFile7",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/conversations/{conversationId}/attachments/{attachmentId}/file",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[7]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2ConversationsConversationIdChats8",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/conversations/{conversationId}/chats",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[8]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2ConversationsConversationIdCustomer9",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/conversations/{conversationId}/customer",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[9]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2ConversationsConversationIdFields10",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/conversations/{conversationId}/fields",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[10]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2ConversationsConversationIdNotes11",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/conversations/{conversationId}/notes",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[11]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2ConversationsConversationIdPhones12",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/conversations/{conversationId}/phones",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[12]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2ConversationsConversationIdReply13",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/conversations/{conversationId}/reply",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[13]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.delete.V2ConversationsConversationIdSnooze14",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/conversations/{conversationId}/snooze",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[14]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2ConversationsConversationIdSnooze15",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/conversations/{conversationId}/snooze",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[15]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2ConversationsConversationIdTags16",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/conversations/{conversationId}/tags",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[16]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ConversationsConversationIdThreads17",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/conversations/{conversationId}/threads",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[17]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.patch.V2ConversationsConversationIdThreadsThreadId18",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/v2/conversations/{conversationId}/threads/{threadId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[18]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2ConversationsConversationIdThreadsThreadIdAttachments19",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/conversations/{conversationId}/threads/{threadId}/attachments",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[19]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ConversationsConversationIdThreadsThreadIdOriginalSource20",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/conversations/{conversationId}/threads/{threadId}/original-source",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[20]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.delete.V2ConversationsConversationIdThreadsThreadIdSchedule21",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/conversations/{conversationId}/threads/{threadId}/schedule",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[21]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.patch.V2ConversationsConversationIdThreadsThreadIdSchedule22",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/v2/conversations/{conversationId}/threads/{threadId}/schedule",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[22]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2ConversationsConversationIdThreadsThreadIdSchedule23",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/conversations/{conversationId}/threads/{threadId}/schedule",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[23]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2CustomerProperties24",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/customer-properties",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[24]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2CustomerProperties25",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/customer-properties",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[25]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.delete.V2CustomerPropertiesSlug26",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/customer-properties/{slug}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[26]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2Customers27",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/customers",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[27]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2Customers28",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/customers",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[28]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.delete.V2CustomersCustomerId29",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/customers/{customerId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[29]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2CustomersCustomerId30",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/customers/{customerId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[30]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.patch.V2CustomersCustomerId31",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/v2/customers/{customerId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[31]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2CustomersCustomerId32",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/customers/{customerId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[32]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.delete.V2CustomersCustomerIdAddress33",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/customers/{customerId}/address",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[33]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2CustomersCustomerIdAddress34",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/customers/{customerId}/address",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[34]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2CustomersCustomerIdAddress35",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/customers/{customerId}/address",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[35]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2CustomersCustomerIdAddress36",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/customers/{customerId}/address",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[36]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2CustomersCustomerIdChats37",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/customers/{customerId}/chats",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[37]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2CustomersCustomerIdChats38",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/customers/{customerId}/chats",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[38]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.delete.V2CustomersCustomerIdChatsChatId39",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/customers/{customerId}/chats/{chatId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[39]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2CustomersCustomerIdChatsChatId40",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/customers/{customerId}/chats/{chatId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[40]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2CustomersCustomerIdEmails41",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/customers/{customerId}/emails",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[41]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2CustomersCustomerIdEmails42",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/customers/{customerId}/emails",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[42]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.delete.V2CustomersCustomerIdEmailsEmailId43",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/customers/{customerId}/emails/{emailId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[43]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2CustomersCustomerIdEmailsEmailId44",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/customers/{customerId}/emails/{emailId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[44]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2CustomersCustomerIdPhones45",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/customers/{customerId}/phones",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[45]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2CustomersCustomerIdPhones46",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/customers/{customerId}/phones",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[46]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.delete.V2CustomersCustomerIdPhonesPhoneId47",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/customers/{customerId}/phones/{phoneId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[47]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2CustomersCustomerIdPhonesPhoneId48",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/customers/{customerId}/phones/{phoneId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[48]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.patch.V2CustomersCustomerIdProperties49",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/v2/customers/{customerId}/properties",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[49]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2CustomersCustomerIdSocialProfiles50",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/customers/{customerId}/social-profiles",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[50]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2CustomersCustomerIdSocialProfiles51",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/customers/{customerId}/social-profiles",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[51]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.delete.V2CustomersCustomerIdSocialProfilesSocialProfileId52",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/customers/{customerId}/social-profiles/{socialProfileId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[52]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2CustomersCustomerIdSocialProfilesSocialProfileId53",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/customers/{customerId}/social-profiles/{socialProfileId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[53]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2CustomersCustomerIdWebsites54",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/customers/{customerId}/websites",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[54]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2CustomersCustomerIdWebsites55",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/customers/{customerId}/websites",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[55]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.delete.V2CustomersCustomerIdWebsitesWebsiteId56",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/customers/{customerId}/websites/{websiteId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[56]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2CustomersCustomerIdWebsitesWebsiteId57",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/customers/{customerId}/websites/{websiteId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[57]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2Mailboxes58",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/mailboxes",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[58]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2MailboxesMailboxId59",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/mailboxes/{mailboxId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[59]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2MailboxesMailboxIdFields60",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/mailboxes/{mailboxId}/fields",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[60]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2MailboxesMailboxIdFolders61",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/mailboxes/{mailboxId}/folders",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[61]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2MailboxesMailboxIdRouting62",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/mailboxes/{mailboxId}/routing",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[62]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2MailboxesMailboxIdRouting63",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/mailboxes/{mailboxId}/routing",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[63]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2MailboxesMailboxIdSavedReplies64",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/mailboxes/{mailboxId}/saved-replies",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[64]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2MailboxesMailboxIdSavedReplies65",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/mailboxes/{mailboxId}/saved-replies",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[65]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.delete.V2MailboxesMailboxIdSavedRepliesSavedReplyId66",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/mailboxes/{mailboxId}/saved-replies/{savedReplyId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[66]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2MailboxesMailboxIdSavedRepliesSavedReplyId67",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/mailboxes/{mailboxId}/saved-replies/{savedReplyId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[67]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2MailboxesMailboxIdSavedRepliesSavedReplyId68",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/mailboxes/{mailboxId}/saved-replies/{savedReplyId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[68]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2Organizations69",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/organizations",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[69]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2Organizations70",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/organizations",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[70]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2OrganizationsProperties71",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/organizations/properties",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[71]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2OrganizationsProperties72",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/organizations/properties",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[72]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.delete.V2OrganizationsPropertiesSlug73",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/organizations/properties/{slug}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[73]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2OrganizationsPropertiesSlug74",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/organizations/properties/{slug}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[74]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2OrganizationsPropertiesSlug75",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/organizations/properties/{slug}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[75]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.delete.V2OrganizationsOrganizationId76",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/organizations/{organizationId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[76]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2OrganizationsOrganizationId77",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/organizations/{organizationId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[77]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2OrganizationsOrganizationId78",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/organizations/{organizationId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[78]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2OrganizationsOrganizationIdConversations79",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/organizations/{organizationId}/conversations",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[79]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2OrganizationsOrganizationIdCustomers80",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/organizations/{organizationId}/customers",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[80]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.delete.V2OrganizationsOrganizationIdPropertiesSlug81",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/organizations/{organizationId}/properties/{slug}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[81]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2OrganizationsOrganizationIdPropertiesSlug82",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/organizations/{organizationId}/properties/{slug}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[82]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2RatingsRatingId83",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/ratings/{ratingId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[83]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsChat84",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/chat",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[84]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsCompany85",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/company",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[85]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsCompanyCustomersHelped86",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/company/customers-helped",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[86]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsCompanyDrilldown87",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/company/drilldown",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[87]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsConversations88",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/conversations",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[88]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsConversationsBusyTimes89",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/conversations/busy-times",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[89]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsConversationsDrilldown90",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/conversations/drilldown",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[90]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsConversationsFieldsDrilldown91",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/conversations/fields-drilldown",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[91]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsConversationsNew92",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/conversations/new",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[92]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsConversationsNewDrilldown93",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/conversations/new-drilldown",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[93]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsConversationsReceivedMessages94",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/conversations/received-messages",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[94]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsConversationsVolumeByChannel95",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/conversations/volume-by-channel",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[95]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsDocs96",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/docs",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[96]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsEmail97",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/email",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[97]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsHappiness98",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/happiness",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[98]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsHappinessRatings99",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/happiness/ratings",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[99]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsPhone100",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/phone",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[100]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsProductivity101",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/productivity",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[101]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsProductivityFirstResponseTime102",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/productivity/first-response-time",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[102]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsProductivityRepliesSent103",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/productivity/replies-sent",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[103]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsProductivityResolutionTime104",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/productivity/resolution-time",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[104]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsProductivityResolved105",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/productivity/resolved",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[105]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsProductivityResponseTime106",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/productivity/response-time",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[106]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsUser107",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/user",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[107]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsUserChat108",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/user/chat",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[108]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsUserConversationHistory109",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/user/conversation-history",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[109]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsUserCustomersHelped110",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/user/customers-helped",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[110]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsUserDrilldown111",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/user/drilldown",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[111]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsUserHappiness112",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/user/happiness",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[112]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsUserRatings113",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/user/ratings",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[113]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsUserReplies114",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/user/replies",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[114]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2ReportsUserResolutions115",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/reports/user/resolutions",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[115]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2Tags116",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/tags",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[116]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2TagsTagId117",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/tags/{tagId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[117]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2Teams118",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/teams",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[118]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2TeamsTeamIdMembers119",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/teams/{teamId}/members",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[119]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2TeamsTeamIdMembers120",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/teams/{teamId}/members",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[120]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2Users121",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/users",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[121]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2Users122",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/users",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[122]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2UsersMe123",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/users/me",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[123]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2UsersStatus124",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/users/status",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[124]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.delete.V2UsersUserId125",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/users/{userId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[125]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2UsersUserId126",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/users/{userId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[126]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2UsersUserIdConversationReassignment127",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/users/{userId}/conversation-reassignment",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[127]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2UsersUserIdConversationReassignment128",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/users/{userId}/conversation-reassignment",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[128]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2UsersUserIdStatus129",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/users/{userId}/status",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[129]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2UsersUserIdStatus130",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/users/{userId}/status",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[130]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2Webhooks131",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/webhooks",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[131]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2Webhooks132",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/webhooks",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[132]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.delete.V2WebhooksWebhookId133",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/webhooks/{webhookId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[133]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2WebhooksWebhookId134",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/webhooks/{webhookId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[134]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.put.V2WebhooksWebhookId135",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/webhooks/{webhookId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[135]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V2Workflows136",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/workflows",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[136]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.patch.V2WorkflowsWorkflowId137",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/v2/workflows/{workflowId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[137]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.post.V2WorkflowsWorkflowIdRun138",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/workflows/{workflowId}/run",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[138]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/"
+          },
+          {
+            "id": "help-scout.rest.get.V3ConversationsConversationId139",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v3/conversations/{conversationId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[139]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get-v3/"
+          },
+          {
+            "id": "help-scout.rest.get.V3ConversationsConversationIdThreads140",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v3/conversations/{conversationId}/threads",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[140]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list-v3/"
+          },
+          {
+            "id": "help-scout.rest.get.V3Customers141",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v3/customers",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[141]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list-v3/"
+          },
+          {
+            "id": "help-scout.rest.get.V3SystemUsers142",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v3/system-users",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[142]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/list-system-users/"
+          },
+          {
+            "id": "help-scout.rest.get.V3SystemUsersSystemUserId143",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v3/system-users/{systemUserId}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "api_surface.json:endpoints[143]",
+            "citation_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/get-system-user/"
+          }
+        ]
+      }
+    ]
+  },
+  "counts": {
+    "rest": 144,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 144
+  }
+}

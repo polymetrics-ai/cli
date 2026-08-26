@@ -1,0 +1,147 @@
+{
+  "tagline": "Read Intercom source-locked ETL records.",
+  "usage": "pm intercom <command> [flags]",
+  "source_cli": {
+    "name": "Intercom provider API",
+    "docs": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml",
+    "reference": "Pinned schema-v3 source documents; each ETL command retains its exact provider operation route and citation.",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "etl",
+      "title": "ETL streams",
+      "commands": [
+        "contacts",
+        "companies",
+        "conversations",
+        "admins",
+        "tags"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Intercom request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit."
+    }
+  ],
+  "commands": [
+    {
+      "path": "contacts list",
+      "summary": "Read Contacts as Intercom ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_cli_path": "GET /contacts",
+      "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts"
+        }
+      ],
+      "examples": [
+        "pm intercom contacts list --json"
+      ],
+      "notes": "Pinned source operation intercom.rest.get.ListContacts from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "companies list",
+      "summary": "Read Companies as Intercom ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "companies",
+      "source_cli_path": "GET /companies",
+      "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies"
+        }
+      ],
+      "examples": [
+        "pm intercom companies list --json"
+      ],
+      "notes": "Pinned source operation intercom.rest.get.retrieveCompany from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "conversations list",
+      "summary": "Read Conversations as Intercom ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "conversations",
+      "source_cli_path": "GET /conversations",
+      "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/conversations"
+        }
+      ],
+      "examples": [
+        "pm intercom conversations list --json"
+      ],
+      "notes": "Pinned source operation intercom.rest.get.listConversations from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "admins list",
+      "summary": "Read Admins as Intercom ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "admins",
+      "source_cli_path": "GET /admins",
+      "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admins"
+        }
+      ],
+      "examples": [
+        "pm intercom admins list --json"
+      ],
+      "notes": "Pinned source operation intercom.rest.get.listAdmins from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "tags list",
+      "summary": "Read Tags as Intercom ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_cli_path": "GET /tags",
+      "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags"
+        }
+      ],
+      "examples": [
+        "pm intercom tags list --json"
+      ],
+      "notes": "Pinned source operation intercom.rest.get.listTags from source document primary; streams.json is the declared execution component."
+    }
+  ]
+}

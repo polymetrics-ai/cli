@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "close-com",
+  "artifacts": [
+    {
+      "sha256": "0dcf3303e9d7b875429c4247a4b6c6419a6e7676b3155c7596d15436c1d9aa94",
+      "bytes": 1340508,
+      "source_url": "https://api.close.com/api/openapi.json",
+      "retrieved_at": "2026-08-24T17:31:47Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

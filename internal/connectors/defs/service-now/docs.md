@@ -85,6 +85,13 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 3 stream-backed endpoint group(s), 6 write-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  binary_payload=1, destructive_admin=3, duplicate_of=6, out_of_scope=3.
+- `sync_transport.json` declares `incidents`, `users`, and `groups` as ETL sources and the
+  fixture/dry `incidents(sys_id) → update_incident` typed-destination proof. It has keyed delivery,
+  durable warehouse acknowledgement, and all closed modes. Foundation
+  `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` supplies persisted App/CLI destination dispatch; this
+  declaration still needs its installed App/CLI fixture path and provider-live certification.
+- `sources/service-now-declaration-disposition.json` records a separate six-action eligibility
+  ledger because the fixed public Table API templates do not enumerate customer table schema. One
+  exact incident action is bound; the other typed action is declaration-pending exact source mapping
+  and conformance. The
+  dynamic instance schema is a source-boundary constraint, not a safety or privilege exclusion.

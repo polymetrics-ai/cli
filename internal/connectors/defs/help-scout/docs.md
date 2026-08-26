@@ -110,8 +110,19 @@ mailbox, team, tag, webhook, workflow, and user data.
 ## Known limits
 
 - Batch defaults: read_page_size=50.
-- API coverage includes 24 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are blocked in the
-  operation ledger as direct_read=5.
+- `sync_transport.json` declares the 24 current fixture streams and
+  `conversations(id) → update_conversation(conversationId)` plus
+  `customers(id) → update_customer(customerId)` as typed-destination proofs. They have
+  keyed delivery, durable acknowledgement, all closed modes, and fixture/preflight evidence against
+  the persisted App/CLI typed-destination foundation at
+  `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57`. Provider-live certification remains pending.
+- The source inventory remains unproven. Every declared typed action has an explicit eligibility
+  disposition. The other typed actions are declaration-pending their exact source mapping and
+  conformance evidence. Direct-read gaps and source-inventory recovery remain connector work, not a
+  safety or certification exclusion.
+- The five source-locked Mailbox API v3 reads are user-reachable through their generated direct-read
+  commands. Their `mailbox_v3` route is selected by the closed declaration-owned route contract;
+  callers cannot provide a URL and no fallback is available. Fixture proof is recorded, while
+  provider-live certification remains pending.
 - Fixture-only evidence: no live Help Scout credentials, provider calls, provider writes, or
   certification run were used.

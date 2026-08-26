@@ -1,0 +1,3148 @@
+{
+  "schema_version": 3,
+  "connector": "klaviyo",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "retrieval": "Migrated schema-version 2 official_openapi source-lock capture.",
+    "openapi": [
+      "3.0.2"
+    ],
+    "coverage_confidence": {
+      "level": "complete_machine_readable_specification",
+      "basis": "Parsed every HTTP operation in the provider-published OpenAPI artifact at https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json."
+    },
+    "source_documents": [
+      {
+        "id": "primary",
+        "kind": "openapi",
+        "artifact": {
+          "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json",
+          "sha256": "d31f92dcbb1568a27fb2c2fe8df8f5f2b47957f344e06556b97ee8da520beee9",
+          "bytes": 3076461,
+          "openapi": "3.0.2"
+        },
+        "published_source": {
+          "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json",
+          "capture_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json",
+          "sha256": "d31f92dcbb1568a27fb2c2fe8df8f5f2b47957f344e06556b97ee8da520beee9",
+          "bytes": 3076461,
+          "adapter": "schema-v2-source-lock-migration"
+        },
+        "info_version": "2026-07-15",
+        "operations": [
+          {
+            "id": "klaviyo.rest.delete.delete_campaign",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/campaigns/{id}",
+            "operation_id": "delete_campaign",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_catalog_category",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/catalog-categories/{id}",
+            "operation_id": "delete_catalog_category",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-categories/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.remove_items_from_catalog_category",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/catalog-categories/{id}/relationships/items",
+            "operation_id": "remove_items_from_catalog_category",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-categories/{id}/relationships/items\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_catalog_item",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/catalog-items/{id}",
+            "operation_id": "delete_catalog_item",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-items/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.remove_categories_from_catalog_item",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/catalog-items/{id}/relationships/categories",
+            "operation_id": "remove_categories_from_catalog_item",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-items/{id}/relationships/categories\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_catalog_variant",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/catalog-variants/{id}",
+            "operation_id": "delete_catalog_variant",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-variants/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_coupon_code",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/coupon-codes/{id}",
+            "operation_id": "delete_coupon_code",
+            "deprecated": false,
+            "source_location": "paths[\"/api/coupon-codes/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_coupon",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/coupons/{id}",
+            "operation_id": "delete_coupon",
+            "deprecated": false,
+            "source_location": "paths[\"/api/coupons/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_custom_metric",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/custom-metrics/{id}",
+            "operation_id": "delete_custom_metric",
+            "deprecated": false,
+            "source_location": "paths[\"/api/custom-metrics/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_data_source",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/data-sources/{id}",
+            "operation_id": "delete_data_source",
+            "deprecated": false,
+            "source_location": "paths[\"/api/data-sources/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_flow_action",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/flow-actions/{id}",
+            "operation_id": "delete_flow_action",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flow-actions/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_flow",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/flows/{id}",
+            "operation_id": "delete_flow",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flows/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_form",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/forms/{id}",
+            "operation_id": "delete_form",
+            "deprecated": false,
+            "source_location": "paths[\"/api/forms/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_list",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/lists/{id}",
+            "operation_id": "delete_list",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.remove_profiles_from_list",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/lists/{id}/relationships/profiles",
+            "operation_id": "remove_profiles_from_list",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists/{id}/relationships/profiles\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_object_schema_relationship",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/object-schemas/{id}/relationships/object-schemas",
+            "operation_id": "delete_object_schema_relationship",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-schemas/{id}/relationships/object-schemas\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_profile_schema_relationship",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/object-schemas/{id}/relationships/profile-object-schemas",
+            "operation_id": "delete_profile_schema_relationship",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-schemas/{id}/relationships/profile-object-schemas\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_object_type",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/object-types/{id}",
+            "operation_id": "delete_object_type",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-types/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_push_token",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/push-tokens/{id}",
+            "operation_id": "delete_push_token",
+            "deprecated": false,
+            "source_location": "paths[\"/api/push-tokens/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_segment",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/segments/{id}",
+            "operation_id": "delete_segment",
+            "deprecated": false,
+            "source_location": "paths[\"/api/segments/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_tag_group",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/tag-groups/{id}",
+            "operation_id": "delete_tag_group",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tag-groups/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_tag",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/tags/{id}",
+            "operation_id": "delete_tag",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tags/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.remove_tag_from_campaigns",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/tags/{id}/relationships/campaigns",
+            "operation_id": "remove_tag_from_campaigns",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tags/{id}/relationships/campaigns\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.remove_tag_from_flows",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/tags/{id}/relationships/flows",
+            "operation_id": "remove_tag_from_flows",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tags/{id}/relationships/flows\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.remove_tag_from_lists",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/tags/{id}/relationships/lists",
+            "operation_id": "remove_tag_from_lists",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tags/{id}/relationships/lists\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.remove_tag_from_segments",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/tags/{id}/relationships/segments",
+            "operation_id": "remove_tag_from_segments",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tags/{id}/relationships/segments\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_universal_content",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/template-universal-content/{id}",
+            "operation_id": "delete_universal_content",
+            "deprecated": false,
+            "source_location": "paths[\"/api/template-universal-content/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_template",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/templates/{id}",
+            "operation_id": "delete_template",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_web_feed",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/web-feeds/{id}",
+            "operation_id": "delete_web_feed",
+            "deprecated": false,
+            "source_location": "paths[\"/api/web-feeds/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.delete.delete_webhook",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/api/webhooks/{id}",
+            "operation_id": "delete_webhook",
+            "deprecated": false,
+            "source_location": "paths[\"/api/webhooks/{id}\"].delete"
+          },
+          {
+            "id": "klaviyo.rest.get.get_accounts",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/accounts",
+            "operation_id": "get_accounts",
+            "deprecated": false,
+            "source_location": "paths[\"/api/accounts\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_account",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/accounts/{id}",
+            "operation_id": "get_account",
+            "deprecated": false,
+            "source_location": "paths[\"/api/accounts/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_campaign_message",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/campaign-messages/{id}",
+            "operation_id": "get_campaign_message",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaign-messages/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_campaign_for_campaign_message",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/campaign-messages/{id}/campaign",
+            "operation_id": "get_campaign_for_campaign_message",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaign-messages/{id}/campaign\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_image_for_campaign_message",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/campaign-messages/{id}/image",
+            "operation_id": "get_image_for_campaign_message",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaign-messages/{id}/image\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_campaign_id_for_campaign_message",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/campaign-messages/{id}/relationships/campaign",
+            "operation_id": "get_campaign_id_for_campaign_message",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaign-messages/{id}/relationships/campaign\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_image_id_for_campaign_message",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/campaign-messages/{id}/relationships/image",
+            "operation_id": "get_image_id_for_campaign_message",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaign-messages/{id}/relationships/image\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_template_id_for_campaign_message",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/campaign-messages/{id}/relationships/template",
+            "operation_id": "get_template_id_for_campaign_message",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaign-messages/{id}/relationships/template\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_template_for_campaign_message",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/campaign-messages/{id}/template",
+            "operation_id": "get_template_for_campaign_message",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaign-messages/{id}/template\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_campaign_recipient_estimation_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/campaign-recipient-estimation-jobs/{id}",
+            "operation_id": "get_campaign_recipient_estimation_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaign-recipient-estimation-jobs/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_campaign_recipient_estimation",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/campaign-recipient-estimations/{id}",
+            "operation_id": "get_campaign_recipient_estimation",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaign-recipient-estimations/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_campaign_send_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/campaign-send-jobs/{id}",
+            "operation_id": "get_campaign_send_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaign-send-jobs/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_campaigns",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/campaigns",
+            "operation_id": "get_campaigns",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_campaign",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/campaigns/{id}",
+            "operation_id": "get_campaign",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_messages_for_campaign",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/campaigns/{id}/campaign-messages",
+            "operation_id": "get_messages_for_campaign",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns/{id}/campaign-messages\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_message_ids_for_campaign",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/campaigns/{id}/relationships/campaign-messages",
+            "operation_id": "get_message_ids_for_campaign",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns/{id}/relationships/campaign-messages\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_tag_ids_for_campaign",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/campaigns/{id}/relationships/tags",
+            "operation_id": "get_tag_ids_for_campaign",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns/{id}/relationships/tags\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_tags_for_campaign",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/campaigns/{id}/tags",
+            "operation_id": "get_tags_for_campaign",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns/{id}/tags\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_catalog_categories",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-categories",
+            "operation_id": "get_catalog_categories",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-categories\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_catalog_category",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-categories/{id}",
+            "operation_id": "get_catalog_category",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-categories/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_items_for_catalog_category",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-categories/{id}/items",
+            "operation_id": "get_items_for_catalog_category",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-categories/{id}/items\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_item_ids_for_catalog_category",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-categories/{id}/relationships/items",
+            "operation_id": "get_item_ids_for_catalog_category",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-categories/{id}/relationships/items\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_create_categories_jobs",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-category-bulk-create-jobs",
+            "operation_id": "get_bulk_create_categories_jobs",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-category-bulk-create-jobs\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_create_categories_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-category-bulk-create-jobs/{job_id}",
+            "operation_id": "get_bulk_create_categories_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-category-bulk-create-jobs/{job_id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_delete_categories_jobs",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-category-bulk-delete-jobs",
+            "operation_id": "get_bulk_delete_categories_jobs",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-category-bulk-delete-jobs\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_delete_categories_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-category-bulk-delete-jobs/{job_id}",
+            "operation_id": "get_bulk_delete_categories_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-category-bulk-delete-jobs/{job_id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_update_categories_jobs",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-category-bulk-update-jobs",
+            "operation_id": "get_bulk_update_categories_jobs",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-category-bulk-update-jobs\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_update_categories_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-category-bulk-update-jobs/{job_id}",
+            "operation_id": "get_bulk_update_categories_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-category-bulk-update-jobs/{job_id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_create_catalog_items_jobs",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-item-bulk-create-jobs",
+            "operation_id": "get_bulk_create_catalog_items_jobs",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-item-bulk-create-jobs\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_create_catalog_items_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-item-bulk-create-jobs/{job_id}",
+            "operation_id": "get_bulk_create_catalog_items_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-item-bulk-create-jobs/{job_id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_delete_catalog_items_jobs",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-item-bulk-delete-jobs",
+            "operation_id": "get_bulk_delete_catalog_items_jobs",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-item-bulk-delete-jobs\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_delete_catalog_items_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-item-bulk-delete-jobs/{job_id}",
+            "operation_id": "get_bulk_delete_catalog_items_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-item-bulk-delete-jobs/{job_id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_update_catalog_items_jobs",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-item-bulk-update-jobs",
+            "operation_id": "get_bulk_update_catalog_items_jobs",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-item-bulk-update-jobs\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_update_catalog_items_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-item-bulk-update-jobs/{job_id}",
+            "operation_id": "get_bulk_update_catalog_items_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-item-bulk-update-jobs/{job_id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_catalog_items",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-items",
+            "operation_id": "get_catalog_items",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-items\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_catalog_item",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-items/{id}",
+            "operation_id": "get_catalog_item",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-items/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_categories_for_catalog_item",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-items/{id}/categories",
+            "operation_id": "get_categories_for_catalog_item",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-items/{id}/categories\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_category_ids_for_catalog_item",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-items/{id}/relationships/categories",
+            "operation_id": "get_category_ids_for_catalog_item",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-items/{id}/relationships/categories\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_variant_ids_for_catalog_item",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-items/{id}/relationships/variants",
+            "operation_id": "get_variant_ids_for_catalog_item",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-items/{id}/relationships/variants\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_variants_for_catalog_item",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-items/{id}/variants",
+            "operation_id": "get_variants_for_catalog_item",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-items/{id}/variants\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_create_variants_jobs",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-variant-bulk-create-jobs",
+            "operation_id": "get_bulk_create_variants_jobs",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-variant-bulk-create-jobs\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_create_variants_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-variant-bulk-create-jobs/{job_id}",
+            "operation_id": "get_bulk_create_variants_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-variant-bulk-create-jobs/{job_id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_delete_variants_jobs",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-variant-bulk-delete-jobs",
+            "operation_id": "get_bulk_delete_variants_jobs",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-variant-bulk-delete-jobs\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_delete_variants_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-variant-bulk-delete-jobs/{job_id}",
+            "operation_id": "get_bulk_delete_variants_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-variant-bulk-delete-jobs/{job_id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_update_variants_jobs",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-variant-bulk-update-jobs",
+            "operation_id": "get_bulk_update_variants_jobs",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-variant-bulk-update-jobs\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_update_variants_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-variant-bulk-update-jobs/{job_id}",
+            "operation_id": "get_bulk_update_variants_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-variant-bulk-update-jobs/{job_id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_catalog_variants",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-variants",
+            "operation_id": "get_catalog_variants",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-variants\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_catalog_variant",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/catalog-variants/{id}",
+            "operation_id": "get_catalog_variant",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-variants/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_create_coupon_code_jobs",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/coupon-code-bulk-create-jobs",
+            "operation_id": "get_bulk_create_coupon_code_jobs",
+            "deprecated": false,
+            "source_location": "paths[\"/api/coupon-code-bulk-create-jobs\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_create_coupon_codes_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/coupon-code-bulk-create-jobs/{job_id}",
+            "operation_id": "get_bulk_create_coupon_codes_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/coupon-code-bulk-create-jobs/{job_id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_coupon_codes",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/coupon-codes",
+            "operation_id": "get_coupon_codes",
+            "deprecated": false,
+            "source_location": "paths[\"/api/coupon-codes\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_coupon_code",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/coupon-codes/{id}",
+            "operation_id": "get_coupon_code",
+            "deprecated": false,
+            "source_location": "paths[\"/api/coupon-codes/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_coupon_for_coupon_code",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/coupon-codes/{id}/coupon",
+            "operation_id": "get_coupon_for_coupon_code",
+            "deprecated": false,
+            "source_location": "paths[\"/api/coupon-codes/{id}/coupon\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_coupon_id_for_coupon_code",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/coupon-codes/{id}/relationships/coupon",
+            "operation_id": "get_coupon_id_for_coupon_code",
+            "deprecated": false,
+            "source_location": "paths[\"/api/coupon-codes/{id}/relationships/coupon\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_coupons",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/coupons",
+            "operation_id": "get_coupons",
+            "deprecated": false,
+            "source_location": "paths[\"/api/coupons\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_coupon",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/coupons/{id}",
+            "operation_id": "get_coupon",
+            "deprecated": false,
+            "source_location": "paths[\"/api/coupons/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_coupon_codes_for_coupon",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/coupons/{id}/coupon-codes",
+            "operation_id": "get_coupon_codes_for_coupon",
+            "deprecated": false,
+            "source_location": "paths[\"/api/coupons/{id}/coupon-codes\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_coupon_code_ids_for_coupon",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/coupons/{id}/relationships/coupon-codes",
+            "operation_id": "get_coupon_code_ids_for_coupon",
+            "deprecated": false,
+            "source_location": "paths[\"/api/coupons/{id}/relationships/coupon-codes\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_custom_metrics",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/custom-metrics",
+            "operation_id": "get_custom_metrics",
+            "deprecated": false,
+            "source_location": "paths[\"/api/custom-metrics\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_custom_metric",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/custom-metrics/{id}",
+            "operation_id": "get_custom_metric",
+            "deprecated": false,
+            "source_location": "paths[\"/api/custom-metrics/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_metrics_for_custom_metric",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/custom-metrics/{id}/metrics",
+            "operation_id": "get_metrics_for_custom_metric",
+            "deprecated": false,
+            "source_location": "paths[\"/api/custom-metrics/{id}/metrics\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_metric_ids_for_custom_metric",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/custom-metrics/{id}/relationships/metrics",
+            "operation_id": "get_metric_ids_for_custom_metric",
+            "deprecated": false,
+            "source_location": "paths[\"/api/custom-metrics/{id}/relationships/metrics\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_data_sources",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/data-sources",
+            "operation_id": "get_data_sources",
+            "deprecated": false,
+            "source_location": "paths[\"/api/data-sources\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_data_source",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/data-sources/{id}",
+            "operation_id": "get_data_source",
+            "deprecated": false,
+            "source_location": "paths[\"/api/data-sources/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_events",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/events",
+            "operation_id": "get_events",
+            "deprecated": false,
+            "source_location": "paths[\"/api/events\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_event",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/events/{id}",
+            "operation_id": "get_event",
+            "deprecated": false,
+            "source_location": "paths[\"/api/events/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_metric_for_event",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/events/{id}/metric",
+            "operation_id": "get_metric_for_event",
+            "deprecated": false,
+            "source_location": "paths[\"/api/events/{id}/metric\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_profile_for_event",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/events/{id}/profile",
+            "operation_id": "get_profile_for_event",
+            "deprecated": false,
+            "source_location": "paths[\"/api/events/{id}/profile\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_metric_id_for_event",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/events/{id}/relationships/metric",
+            "operation_id": "get_metric_id_for_event",
+            "deprecated": false,
+            "source_location": "paths[\"/api/events/{id}/relationships/metric\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_profile_id_for_event",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/events/{id}/relationships/profile",
+            "operation_id": "get_profile_id_for_event",
+            "deprecated": false,
+            "source_location": "paths[\"/api/events/{id}/relationships/profile\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_flow_action",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/flow-actions/{id}",
+            "operation_id": "get_flow_action",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flow-actions/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_flow_for_flow_action",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/flow-actions/{id}/flow",
+            "operation_id": "get_flow_for_flow_action",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flow-actions/{id}/flow\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_flow_action_messages",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/flow-actions/{id}/flow-messages",
+            "operation_id": "get_flow_action_messages",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flow-actions/{id}/flow-messages\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_flow_id_for_flow_action",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/flow-actions/{id}/relationships/flow",
+            "operation_id": "get_flow_id_for_flow_action",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flow-actions/{id}/relationships/flow\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_message_ids_for_flow_action",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/flow-actions/{id}/relationships/flow-messages",
+            "operation_id": "get_message_ids_for_flow_action",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flow-actions/{id}/relationships/flow-messages\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_flow_message",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/flow-messages/{id}",
+            "operation_id": "get_flow_message",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flow-messages/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_action_for_flow_message",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/flow-messages/{id}/flow-action",
+            "operation_id": "get_action_for_flow_message",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flow-messages/{id}/flow-action\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_action_id_for_flow_message",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/flow-messages/{id}/relationships/flow-action",
+            "operation_id": "get_action_id_for_flow_message",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flow-messages/{id}/relationships/flow-action\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_template_id_for_flow_message",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/flow-messages/{id}/relationships/template",
+            "operation_id": "get_template_id_for_flow_message",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flow-messages/{id}/relationships/template\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_template_for_flow_message",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/flow-messages/{id}/template",
+            "operation_id": "get_template_for_flow_message",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flow-messages/{id}/template\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_flows",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/flows",
+            "operation_id": "get_flows",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flows\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_flow",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/flows/{id}",
+            "operation_id": "get_flow",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flows/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_actions_for_flow",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/flows/{id}/flow-actions",
+            "operation_id": "get_actions_for_flow",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flows/{id}/flow-actions\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_action_ids_for_flow",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/flows/{id}/relationships/flow-actions",
+            "operation_id": "get_action_ids_for_flow",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flows/{id}/relationships/flow-actions\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_tag_ids_for_flow",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/flows/{id}/relationships/tags",
+            "operation_id": "get_tag_ids_for_flow",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flows/{id}/relationships/tags\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_tags_for_flow",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/flows/{id}/tags",
+            "operation_id": "get_tags_for_flow",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flows/{id}/tags\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_form_version",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/form-versions/{id}",
+            "operation_id": "get_form_version",
+            "deprecated": false,
+            "source_location": "paths[\"/api/form-versions/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_form_for_form_version",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/form-versions/{id}/form",
+            "operation_id": "get_form_for_form_version",
+            "deprecated": false,
+            "source_location": "paths[\"/api/form-versions/{id}/form\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_form_id_for_form_version",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/form-versions/{id}/relationships/form",
+            "operation_id": "get_form_id_for_form_version",
+            "deprecated": false,
+            "source_location": "paths[\"/api/form-versions/{id}/relationships/form\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_forms",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/forms",
+            "operation_id": "get_forms",
+            "deprecated": false,
+            "source_location": "paths[\"/api/forms\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_form",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/forms/{id}",
+            "operation_id": "get_form",
+            "deprecated": false,
+            "source_location": "paths[\"/api/forms/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_versions_for_form",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/forms/{id}/form-versions",
+            "operation_id": "get_versions_for_form",
+            "deprecated": false,
+            "source_location": "paths[\"/api/forms/{id}/form-versions\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_version_ids_for_form",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/forms/{id}/relationships/form-versions",
+            "operation_id": "get_version_ids_for_form",
+            "deprecated": false,
+            "source_location": "paths[\"/api/forms/{id}/relationships/form-versions\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_images",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/images",
+            "operation_id": "get_images",
+            "deprecated": false,
+            "source_location": "paths[\"/api/images\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_image",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/images/{id}",
+            "operation_id": "get_image",
+            "deprecated": false,
+            "source_location": "paths[\"/api/images/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_lists",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/lists",
+            "operation_id": "get_lists",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/lists/{id}",
+            "operation_id": "get_list",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_flows_triggered_by_list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/lists/{id}/flow-triggers",
+            "operation_id": "get_flows_triggered_by_list",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists/{id}/flow-triggers\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_profiles_for_list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/lists/{id}/profiles",
+            "operation_id": "get_profiles_for_list",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists/{id}/profiles\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_ids_for_flows_triggered_by_list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/lists/{id}/relationships/flow-triggers",
+            "operation_id": "get_ids_for_flows_triggered_by_list",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists/{id}/relationships/flow-triggers\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_profile_ids_for_list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/lists/{id}/relationships/profiles",
+            "operation_id": "get_profile_ids_for_list",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists/{id}/relationships/profiles\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_tag_ids_for_list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/lists/{id}/relationships/tags",
+            "operation_id": "get_tag_ids_for_list",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists/{id}/relationships/tags\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_tags_for_list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/lists/{id}/tags",
+            "operation_id": "get_tags_for_list",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists/{id}/tags\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_mapped_metrics",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/mapped-metrics",
+            "operation_id": "get_mapped_metrics",
+            "deprecated": false,
+            "source_location": "paths[\"/api/mapped-metrics\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_mapped_metric",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/mapped-metrics/{id}",
+            "operation_id": "get_mapped_metric",
+            "deprecated": false,
+            "source_location": "paths[\"/api/mapped-metrics/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_custom_metric_for_mapped_metric",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/mapped-metrics/{id}/custom-metric",
+            "operation_id": "get_custom_metric_for_mapped_metric",
+            "deprecated": false,
+            "source_location": "paths[\"/api/mapped-metrics/{id}/custom-metric\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_metric_for_mapped_metric",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/mapped-metrics/{id}/metric",
+            "operation_id": "get_metric_for_mapped_metric",
+            "deprecated": false,
+            "source_location": "paths[\"/api/mapped-metrics/{id}/metric\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_custom_metric_id_for_mapped_metric",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/mapped-metrics/{id}/relationships/custom-metric",
+            "operation_id": "get_custom_metric_id_for_mapped_metric",
+            "deprecated": false,
+            "source_location": "paths[\"/api/mapped-metrics/{id}/relationships/custom-metric\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_metric_id_for_mapped_metric",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/mapped-metrics/{id}/relationships/metric",
+            "operation_id": "get_metric_id_for_mapped_metric",
+            "deprecated": false,
+            "source_location": "paths[\"/api/mapped-metrics/{id}/relationships/metric\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_metric_property",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/metric-properties/{id}",
+            "operation_id": "get_metric_property",
+            "deprecated": false,
+            "source_location": "paths[\"/api/metric-properties/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_metric_for_metric_property",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/metric-properties/{id}/metric",
+            "operation_id": "get_metric_for_metric_property",
+            "deprecated": false,
+            "source_location": "paths[\"/api/metric-properties/{id}/metric\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_metric_id_for_metric_property",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/metric-properties/{id}/relationships/metric",
+            "operation_id": "get_metric_id_for_metric_property",
+            "deprecated": false,
+            "source_location": "paths[\"/api/metric-properties/{id}/relationships/metric\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_metrics",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/metrics",
+            "operation_id": "get_metrics",
+            "deprecated": false,
+            "source_location": "paths[\"/api/metrics\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_metric",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/metrics/{id}",
+            "operation_id": "get_metric",
+            "deprecated": false,
+            "source_location": "paths[\"/api/metrics/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_flows_triggered_by_metric",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/metrics/{id}/flow-triggers",
+            "operation_id": "get_flows_triggered_by_metric",
+            "deprecated": false,
+            "source_location": "paths[\"/api/metrics/{id}/flow-triggers\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_properties_for_metric",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/metrics/{id}/metric-properties",
+            "operation_id": "get_properties_for_metric",
+            "deprecated": false,
+            "source_location": "paths[\"/api/metrics/{id}/metric-properties\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_ids_for_flows_triggered_by_metric",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/metrics/{id}/relationships/flow-triggers",
+            "operation_id": "get_ids_for_flows_triggered_by_metric",
+            "deprecated": false,
+            "source_location": "paths[\"/api/metrics/{id}/relationships/flow-triggers\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_property_ids_for_metric",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/metrics/{id}/relationships/metric-properties",
+            "operation_id": "get_property_ids_for_metric",
+            "deprecated": false,
+            "source_location": "paths[\"/api/metrics/{id}/relationships/metric-properties\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_object_record",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-records/{id}",
+            "operation_id": "get_object_record",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-records/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_object_schema",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-schemas/{id}",
+            "operation_id": "get_object_schema",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-schemas/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_object_schema_relationships",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-schemas/{id}/relationships/object-schemas",
+            "operation_id": "get_object_schema_relationships",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-schemas/{id}/relationships/object-schemas\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_profile_schema_relationships",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-schemas/{id}/relationships/profile-object-schemas",
+            "operation_id": "get_profile_schema_relationships",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-schemas/{id}/relationships/profile-object-schemas\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_source_mapping_id_for_object_schema",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-schemas/{id}/relationships/source-mapping",
+            "operation_id": "get_source_mapping_id_for_object_schema",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-schemas/{id}/relationships/source-mapping\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_source_mapping_for_object_schema",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-schemas/{id}/source-mapping",
+            "operation_id": "get_source_mapping_for_object_schema",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-schemas/{id}/source-mapping\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_object_types",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-types",
+            "operation_id": "get_object_types",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-types\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_object_type",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-types/{id}",
+            "operation_id": "get_object_type",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-types/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_current_schema_for_object_type",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-types/{id}/current-schema",
+            "operation_id": "get_current_schema_for_object_type",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-types/{id}/current-schema\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_draft_schema_for_object_type",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-types/{id}/draft-schema",
+            "operation_id": "get_draft_schema_for_object_type",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-types/{id}/draft-schema\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_ingestion_logs_for_object_type",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-types/{id}/object-ingestion-logs",
+            "operation_id": "get_ingestion_logs_for_object_type",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-types/{id}/object-ingestion-logs\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_records_for_object_type",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-types/{id}/object-records",
+            "operation_id": "get_records_for_object_type",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-types/{id}/object-records\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_current_schema_id_for_object_type",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-types/{id}/relationships/current-schema",
+            "operation_id": "get_current_schema_id_for_object_type",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-types/{id}/relationships/current-schema\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_draft_schema_id_for_object_type",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-types/{id}/relationships/draft-schema",
+            "operation_id": "get_draft_schema_id_for_object_type",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-types/{id}/relationships/draft-schema\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_ingestion_log_ids_for_object_type",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-types/{id}/relationships/object-ingestion-logs",
+            "operation_id": "get_ingestion_log_ids_for_object_type",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-types/{id}/relationships/object-ingestion-logs\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_record_ids_for_object_type",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-types/{id}/relationships/object-records",
+            "operation_id": "get_record_ids_for_object_type",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-types/{id}/relationships/object-records\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_object_type_relationships",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-types/{id}/relationships/object-types",
+            "operation_id": "get_object_type_relationships",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-types/{id}/relationships/object-types\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_profile_type_relationships",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-types/{id}/relationships/profile-object-types",
+            "operation_id": "get_profile_type_relationships",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-types/{id}/relationships/profile-object-types\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_schema_version_ids_for_object_type",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-types/{id}/relationships/schema-versions",
+            "operation_id": "get_schema_version_ids_for_object_type",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-types/{id}/relationships/schema-versions\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_schema_versions_for_object_type",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/object-types/{id}/schema-versions",
+            "operation_id": "get_schema_versions_for_object_type",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-types/{id}/schema-versions\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_import_profiles_jobs",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profile-bulk-import-jobs",
+            "operation_id": "get_bulk_import_profiles_jobs",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profile-bulk-import-jobs\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_errors_for_bulk_import_profiles_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profile-bulk-import-jobs/{id}/import-errors",
+            "operation_id": "get_errors_for_bulk_import_profiles_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profile-bulk-import-jobs/{id}/import-errors\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_list_for_bulk_import_profiles_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profile-bulk-import-jobs/{id}/lists",
+            "operation_id": "get_list_for_bulk_import_profiles_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profile-bulk-import-jobs/{id}/lists\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_profiles_for_bulk_import_profiles_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profile-bulk-import-jobs/{id}/profiles",
+            "operation_id": "get_profiles_for_bulk_import_profiles_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profile-bulk-import-jobs/{id}/profiles\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_list_ids_for_bulk_import_profiles_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profile-bulk-import-jobs/{id}/relationships/lists",
+            "operation_id": "get_list_ids_for_bulk_import_profiles_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profile-bulk-import-jobs/{id}/relationships/lists\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_profile_ids_for_bulk_import_profiles_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profile-bulk-import-jobs/{id}/relationships/profiles",
+            "operation_id": "get_profile_ids_for_bulk_import_profiles_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profile-bulk-import-jobs/{id}/relationships/profiles\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_import_profiles_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profile-bulk-import-jobs/{job_id}",
+            "operation_id": "get_bulk_import_profiles_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profile-bulk-import-jobs/{job_id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_suppress_profiles_jobs",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profile-suppression-bulk-create-jobs",
+            "operation_id": "get_bulk_suppress_profiles_jobs",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profile-suppression-bulk-create-jobs\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_suppress_profiles_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profile-suppression-bulk-create-jobs/{job_id}",
+            "operation_id": "get_bulk_suppress_profiles_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profile-suppression-bulk-create-jobs/{job_id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_unsuppress_profiles_jobs",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profile-suppression-bulk-delete-jobs",
+            "operation_id": "get_bulk_unsuppress_profiles_jobs",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profile-suppression-bulk-delete-jobs\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_bulk_unsuppress_profiles_job",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profile-suppression-bulk-delete-jobs/{job_id}",
+            "operation_id": "get_bulk_unsuppress_profiles_job",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profile-suppression-bulk-delete-jobs/{job_id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_profiles",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profiles",
+            "operation_id": "get_profiles",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profiles\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_profile",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profiles/{id}",
+            "operation_id": "get_profile",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profiles/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_conversation_for_profile",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profiles/{id}/conversation",
+            "operation_id": "get_conversation_for_profile",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profiles/{id}/conversation\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_conversations_for_profile",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profiles/{id}/conversations",
+            "operation_id": "get_conversations_for_profile",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profiles/{id}/conversations\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_lists_for_profile",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profiles/{id}/lists",
+            "operation_id": "get_lists_for_profile",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profiles/{id}/lists\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_push_tokens_for_profile",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profiles/{id}/push-tokens",
+            "operation_id": "get_push_tokens_for_profile",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profiles/{id}/push-tokens\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_conversation_id_for_profile",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profiles/{id}/relationships/conversation",
+            "operation_id": "get_conversation_id_for_profile",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profiles/{id}/relationships/conversation\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_conversation_ids_for_profile",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profiles/{id}/relationships/conversations",
+            "operation_id": "get_conversation_ids_for_profile",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profiles/{id}/relationships/conversations\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_list_ids_for_profile",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profiles/{id}/relationships/lists",
+            "operation_id": "get_list_ids_for_profile",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profiles/{id}/relationships/lists\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_push_token_ids_for_profile",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profiles/{id}/relationships/push-tokens",
+            "operation_id": "get_push_token_ids_for_profile",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profiles/{id}/relationships/push-tokens\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_segment_ids_for_profile",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profiles/{id}/relationships/segments",
+            "operation_id": "get_segment_ids_for_profile",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profiles/{id}/relationships/segments\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_segments_for_profile",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/profiles/{id}/segments",
+            "operation_id": "get_segments_for_profile",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profiles/{id}/segments\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_push_tokens",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/push-tokens",
+            "operation_id": "get_push_tokens",
+            "deprecated": false,
+            "source_location": "paths[\"/api/push-tokens\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_push_token",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/push-tokens/{id}",
+            "operation_id": "get_push_token",
+            "deprecated": false,
+            "source_location": "paths[\"/api/push-tokens/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_profile_for_push_token",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/push-tokens/{id}/profile",
+            "operation_id": "get_profile_for_push_token",
+            "deprecated": false,
+            "source_location": "paths[\"/api/push-tokens/{id}/profile\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_profile_id_for_push_token",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/push-tokens/{id}/relationships/profile",
+            "operation_id": "get_profile_id_for_push_token",
+            "deprecated": false,
+            "source_location": "paths[\"/api/push-tokens/{id}/relationships/profile\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_reviews",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/reviews",
+            "operation_id": "get_reviews",
+            "deprecated": false,
+            "source_location": "paths[\"/api/reviews\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_review",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/reviews/{id}",
+            "operation_id": "get_review",
+            "deprecated": false,
+            "source_location": "paths[\"/api/reviews/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_segments",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/segments",
+            "operation_id": "get_segments",
+            "deprecated": false,
+            "source_location": "paths[\"/api/segments\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_segment",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/segments/{id}",
+            "operation_id": "get_segment",
+            "deprecated": false,
+            "source_location": "paths[\"/api/segments/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_flows_triggered_by_segment",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/segments/{id}/flow-triggers",
+            "operation_id": "get_flows_triggered_by_segment",
+            "deprecated": false,
+            "source_location": "paths[\"/api/segments/{id}/flow-triggers\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_profiles_for_segment",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/segments/{id}/profiles",
+            "operation_id": "get_profiles_for_segment",
+            "deprecated": false,
+            "source_location": "paths[\"/api/segments/{id}/profiles\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_ids_for_flows_triggered_by_segment",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/segments/{id}/relationships/flow-triggers",
+            "operation_id": "get_ids_for_flows_triggered_by_segment",
+            "deprecated": false,
+            "source_location": "paths[\"/api/segments/{id}/relationships/flow-triggers\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_profile_ids_for_segment",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/segments/{id}/relationships/profiles",
+            "operation_id": "get_profile_ids_for_segment",
+            "deprecated": false,
+            "source_location": "paths[\"/api/segments/{id}/relationships/profiles\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_tag_ids_for_segment",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/segments/{id}/relationships/tags",
+            "operation_id": "get_tag_ids_for_segment",
+            "deprecated": false,
+            "source_location": "paths[\"/api/segments/{id}/relationships/tags\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_tags_for_segment",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/segments/{id}/tags",
+            "operation_id": "get_tags_for_segment",
+            "deprecated": false,
+            "source_location": "paths[\"/api/segments/{id}/tags\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_source_mapping",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/source-mappings/{id}",
+            "operation_id": "get_source_mapping",
+            "deprecated": false,
+            "source_location": "paths[\"/api/source-mappings/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_tag_groups",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tag-groups",
+            "operation_id": "get_tag_groups",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tag-groups\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_tag_group",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tag-groups/{id}",
+            "operation_id": "get_tag_group",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tag-groups/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_tag_ids_for_tag_group",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tag-groups/{id}/relationships/tags",
+            "operation_id": "get_tag_ids_for_tag_group",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tag-groups/{id}/relationships/tags\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_tags_for_tag_group",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tag-groups/{id}/tags",
+            "operation_id": "get_tags_for_tag_group",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tag-groups/{id}/tags\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_tags",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tags",
+            "operation_id": "get_tags",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tags\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_tag",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tags/{id}",
+            "operation_id": "get_tag",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tags/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_campaign_ids_for_tag",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tags/{id}/relationships/campaigns",
+            "operation_id": "get_campaign_ids_for_tag",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tags/{id}/relationships/campaigns\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_flow_ids_for_tag",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tags/{id}/relationships/flows",
+            "operation_id": "get_flow_ids_for_tag",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tags/{id}/relationships/flows\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_list_ids_for_tag",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tags/{id}/relationships/lists",
+            "operation_id": "get_list_ids_for_tag",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tags/{id}/relationships/lists\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_segment_ids_for_tag",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tags/{id}/relationships/segments",
+            "operation_id": "get_segment_ids_for_tag",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tags/{id}/relationships/segments\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_tag_group_id_for_tag",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tags/{id}/relationships/tag-group",
+            "operation_id": "get_tag_group_id_for_tag",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tags/{id}/relationships/tag-group\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_tag_group_for_tag",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tags/{id}/tag-group",
+            "operation_id": "get_tag_group_for_tag",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tags/{id}/tag-group\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_all_universal_content",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/template-universal-content",
+            "operation_id": "get_all_universal_content",
+            "deprecated": false,
+            "source_location": "paths[\"/api/template-universal-content\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_universal_content",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/template-universal-content/{id}",
+            "operation_id": "get_universal_content",
+            "deprecated": false,
+            "source_location": "paths[\"/api/template-universal-content/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_templates",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/templates",
+            "operation_id": "get_templates",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_template",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/templates/{id}",
+            "operation_id": "get_template",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_tracking_settings",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tracking-settings",
+            "operation_id": "get_tracking_settings",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tracking-settings\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_tracking_setting",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/tracking-settings/{id}",
+            "operation_id": "get_tracking_setting",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tracking-settings/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_web_feeds",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/web-feeds",
+            "operation_id": "get_web_feeds",
+            "deprecated": false,
+            "source_location": "paths[\"/api/web-feeds\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_web_feed",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/web-feeds/{id}",
+            "operation_id": "get_web_feed",
+            "deprecated": false,
+            "source_location": "paths[\"/api/web-feeds/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_webhook_topics",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/webhook-topics",
+            "operation_id": "get_webhook_topics",
+            "deprecated": false,
+            "source_location": "paths[\"/api/webhook-topics\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_webhook_topic",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/webhook-topics/{id}",
+            "operation_id": "get_webhook_topic",
+            "deprecated": false,
+            "source_location": "paths[\"/api/webhook-topics/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_webhooks",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/webhooks",
+            "operation_id": "get_webhooks",
+            "deprecated": false,
+            "source_location": "paths[\"/api/webhooks\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_webhook",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/api/webhooks/{id}",
+            "operation_id": "get_webhook",
+            "deprecated": false,
+            "source_location": "paths[\"/api/webhooks/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_client_geofences",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/client/geofences",
+            "operation_id": "get_client_geofences",
+            "deprecated": false,
+            "source_location": "paths[\"/client/geofences\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_client_ip_allowlist",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/client/ip-allowlists/{id}",
+            "operation_id": "get_client_ip_allowlist",
+            "deprecated": false,
+            "source_location": "paths[\"/client/ip-allowlists/{id}\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_client_review_values_reports",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/client/review-values-reports",
+            "operation_id": "get_client_review_values_reports",
+            "deprecated": false,
+            "source_location": "paths[\"/client/review-values-reports\"].get"
+          },
+          {
+            "id": "klaviyo.rest.get.get_client_reviews",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/client/reviews",
+            "operation_id": "get_client_reviews",
+            "deprecated": false,
+            "source_location": "paths[\"/client/reviews\"].get"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_campaign_message",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/campaign-messages/{id}",
+            "operation_id": "update_campaign_message",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaign-messages/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_image_for_campaign_message",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/campaign-messages/{id}/relationships/image",
+            "operation_id": "update_image_for_campaign_message",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaign-messages/{id}/relationships/image\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.cancel_campaign_send",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/campaign-send-jobs/{id}",
+            "operation_id": "cancel_campaign_send",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaign-send-jobs/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_campaign",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/campaigns/{id}",
+            "operation_id": "update_campaign",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_catalog_category",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/catalog-categories/{id}",
+            "operation_id": "update_catalog_category",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-categories/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_items_for_catalog_category",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/catalog-categories/{id}/relationships/items",
+            "operation_id": "update_items_for_catalog_category",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-categories/{id}/relationships/items\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_catalog_item",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/catalog-items/{id}",
+            "operation_id": "update_catalog_item",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-items/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_categories_for_catalog_item",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/catalog-items/{id}/relationships/categories",
+            "operation_id": "update_categories_for_catalog_item",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-items/{id}/relationships/categories\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_catalog_variant",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/catalog-variants/{id}",
+            "operation_id": "update_catalog_variant",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-variants/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_coupon_code",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/coupon-codes/{id}",
+            "operation_id": "update_coupon_code",
+            "deprecated": false,
+            "source_location": "paths[\"/api/coupon-codes/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_coupon",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/coupons/{id}",
+            "operation_id": "update_coupon",
+            "deprecated": false,
+            "source_location": "paths[\"/api/coupons/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_custom_metric",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/custom-metrics/{id}",
+            "operation_id": "update_custom_metric",
+            "deprecated": false,
+            "source_location": "paths[\"/api/custom-metrics/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_flow_action",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/flow-actions/{id}",
+            "operation_id": "update_flow_action",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flow-actions/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_flow",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/flows/{id}",
+            "operation_id": "update_flow",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flows/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_image",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/images/{id}",
+            "operation_id": "update_image",
+            "deprecated": false,
+            "source_location": "paths[\"/api/images/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_list",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/lists/{id}",
+            "operation_id": "update_list",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_mapped_metric",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/mapped-metrics/{id}",
+            "operation_id": "update_mapped_metric",
+            "deprecated": false,
+            "source_location": "paths[\"/api/mapped-metrics/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_object_schema",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/object-schemas/{id}",
+            "operation_id": "update_object_schema",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-schemas/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_object_schema_relationship",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/object-schemas/{id}/relationships/object-schemas",
+            "operation_id": "update_object_schema_relationship",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-schemas/{id}/relationships/object-schemas\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_profile_schema_relationship",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/object-schemas/{id}/relationships/profile-object-schemas",
+            "operation_id": "update_profile_schema_relationship",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-schemas/{id}/relationships/profile-object-schemas\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_profile",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/profiles/{id}",
+            "operation_id": "update_profile",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profiles/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_review",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/reviews/{id}",
+            "operation_id": "update_review",
+            "deprecated": false,
+            "source_location": "paths[\"/api/reviews/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_segment",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/segments/{id}",
+            "operation_id": "update_segment",
+            "deprecated": false,
+            "source_location": "paths[\"/api/segments/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_source_mapping",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/source-mappings/{id}",
+            "operation_id": "update_source_mapping",
+            "deprecated": false,
+            "source_location": "paths[\"/api/source-mappings/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_tag_group",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/tag-groups/{id}",
+            "operation_id": "update_tag_group",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tag-groups/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_tag",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/tags/{id}",
+            "operation_id": "update_tag",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tags/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_universal_content",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/template-universal-content/{id}",
+            "operation_id": "update_universal_content",
+            "deprecated": false,
+            "source_location": "paths[\"/api/template-universal-content/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_template",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/templates/{id}",
+            "operation_id": "update_template",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_tracking_setting",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/tracking-settings/{id}",
+            "operation_id": "update_tracking_setting",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tracking-settings/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_web_feed",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/web-feeds/{id}",
+            "operation_id": "update_web_feed",
+            "deprecated": false,
+            "source_location": "paths[\"/api/web-feeds/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.patch.update_webhook",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/api/webhooks/{id}",
+            "operation_id": "update_webhook",
+            "deprecated": false,
+            "source_location": "paths[\"/api/webhooks/{id}\"].patch"
+          },
+          {
+            "id": "klaviyo.rest.post.create_back_in_stock_subscription",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/back-in-stock-subscriptions",
+            "operation_id": "create_back_in_stock_subscription",
+            "deprecated": false,
+            "source_location": "paths[\"/api/back-in-stock-subscriptions\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_campaign_clone",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/campaign-clone",
+            "operation_id": "create_campaign_clone",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaign-clone\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.assign_template_to_campaign_message",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/campaign-message-assign-template",
+            "operation_id": "assign_template_to_campaign_message",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaign-message-assign-template\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.refresh_campaign_recipient_estimation",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/campaign-recipient-estimation-jobs",
+            "operation_id": "refresh_campaign_recipient_estimation",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaign-recipient-estimation-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.send_campaign",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/campaign-send-jobs",
+            "operation_id": "send_campaign",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaign-send-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.query_campaign_values",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/campaign-values-reports",
+            "operation_id": "query_campaign_values",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaign-values-reports\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_campaign",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/campaigns",
+            "operation_id": "create_campaign",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_catalog_category",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/catalog-categories",
+            "operation_id": "create_catalog_category",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-categories\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.add_items_to_catalog_category",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/catalog-categories/{id}/relationships/items",
+            "operation_id": "add_items_to_catalog_category",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-categories/{id}/relationships/items\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.bulk_create_catalog_categories",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/catalog-category-bulk-create-jobs",
+            "operation_id": "bulk_create_catalog_categories",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-category-bulk-create-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.bulk_delete_catalog_categories",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/catalog-category-bulk-delete-jobs",
+            "operation_id": "bulk_delete_catalog_categories",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-category-bulk-delete-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.bulk_update_catalog_categories",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/catalog-category-bulk-update-jobs",
+            "operation_id": "bulk_update_catalog_categories",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-category-bulk-update-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.bulk_create_catalog_items",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/catalog-item-bulk-create-jobs",
+            "operation_id": "bulk_create_catalog_items",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-item-bulk-create-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.bulk_delete_catalog_items",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/catalog-item-bulk-delete-jobs",
+            "operation_id": "bulk_delete_catalog_items",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-item-bulk-delete-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.bulk_update_catalog_items",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/catalog-item-bulk-update-jobs",
+            "operation_id": "bulk_update_catalog_items",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-item-bulk-update-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_catalog_item",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/catalog-items",
+            "operation_id": "create_catalog_item",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-items\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.add_categories_to_catalog_item",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/catalog-items/{id}/relationships/categories",
+            "operation_id": "add_categories_to_catalog_item",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-items/{id}/relationships/categories\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.bulk_create_catalog_variants",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/catalog-variant-bulk-create-jobs",
+            "operation_id": "bulk_create_catalog_variants",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-variant-bulk-create-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.bulk_delete_catalog_variants",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/catalog-variant-bulk-delete-jobs",
+            "operation_id": "bulk_delete_catalog_variants",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-variant-bulk-delete-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.bulk_update_catalog_variants",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/catalog-variant-bulk-update-jobs",
+            "operation_id": "bulk_update_catalog_variants",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-variant-bulk-update-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_catalog_variant",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/catalog-variants",
+            "operation_id": "create_catalog_variant",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalog-variants\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_conversation_message",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/conversation-messages",
+            "operation_id": "create_conversation_message",
+            "deprecated": false,
+            "source_location": "paths[\"/api/conversation-messages\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.bulk_create_coupon_codes",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/coupon-code-bulk-create-jobs",
+            "operation_id": "bulk_create_coupon_codes",
+            "deprecated": false,
+            "source_location": "paths[\"/api/coupon-code-bulk-create-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_coupon_code",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/coupon-codes",
+            "operation_id": "create_coupon_code",
+            "deprecated": false,
+            "source_location": "paths[\"/api/coupon-codes\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_coupon",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/coupons",
+            "operation_id": "create_coupon",
+            "deprecated": false,
+            "source_location": "paths[\"/api/coupons\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_custom_metric",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/custom-metrics",
+            "operation_id": "create_custom_metric",
+            "deprecated": false,
+            "source_location": "paths[\"/api/custom-metrics\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.request_profile_deletion",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/data-privacy-deletion-jobs",
+            "operation_id": "request_profile_deletion",
+            "deprecated": false,
+            "source_location": "paths[\"/api/data-privacy-deletion-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.bulk_create_data_source_records",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/data-source-record-bulk-create-jobs",
+            "operation_id": "bulk_create_data_source_records",
+            "deprecated": false,
+            "source_location": "paths[\"/api/data-source-record-bulk-create-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_data_source_record",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/data-source-record-create-jobs",
+            "operation_id": "create_data_source_record",
+            "deprecated": false,
+            "source_location": "paths[\"/api/data-source-record-create-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_data_source",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/data-sources",
+            "operation_id": "create_data_source",
+            "deprecated": false,
+            "source_location": "paths[\"/api/data-sources\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.bulk_create_events",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/event-bulk-create-jobs",
+            "operation_id": "bulk_create_events",
+            "deprecated": false,
+            "source_location": "paths[\"/api/event-bulk-create-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_event",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/events",
+            "operation_id": "create_event",
+            "deprecated": false,
+            "source_location": "paths[\"/api/events\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.query_flow_series",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/flow-series-reports",
+            "operation_id": "query_flow_series",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flow-series-reports\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.query_flow_values",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/flow-values-reports",
+            "operation_id": "query_flow_values",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flow-values-reports\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_flow",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/flows",
+            "operation_id": "create_flow",
+            "deprecated": false,
+            "source_location": "paths[\"/api/flows\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.query_form_series",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/form-series-reports",
+            "operation_id": "query_form_series",
+            "deprecated": false,
+            "source_location": "paths[\"/api/form-series-reports\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.query_form_values",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/form-values-reports",
+            "operation_id": "query_form_values",
+            "deprecated": false,
+            "source_location": "paths[\"/api/form-values-reports\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_form",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/forms",
+            "operation_id": "create_form",
+            "deprecated": false,
+            "source_location": "paths[\"/api/forms\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.upload_image_from_file",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/image-upload",
+            "operation_id": "upload_image_from_file",
+            "deprecated": false,
+            "source_location": "paths[\"/api/image-upload\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.upload_image_from_url",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/images",
+            "operation_id": "upload_image_from_url",
+            "deprecated": false,
+            "source_location": "paths[\"/api/images\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_list",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/lists",
+            "operation_id": "create_list",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.add_profiles_to_list",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/lists/{id}/relationships/profiles",
+            "operation_id": "add_profiles_to_list",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists/{id}/relationships/profiles\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.query_metric_aggregates",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/metric-aggregates",
+            "operation_id": "query_metric_aggregates",
+            "deprecated": false,
+            "source_location": "paths[\"/api/metric-aggregates\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.bulk_delete_object_records",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/object-record-bulk-delete-jobs",
+            "operation_id": "bulk_delete_object_records",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-record-bulk-delete-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_object_schema",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/object-schemas",
+            "operation_id": "create_object_schema",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-schemas\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_object_schema_relationship",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/object-schemas/{id}/relationships/object-schemas",
+            "operation_id": "create_object_schema_relationship",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-schemas/{id}/relationships/object-schemas\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_profile_schema_relationship",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/object-schemas/{id}/relationships/profile-object-schemas",
+            "operation_id": "create_profile_schema_relationship",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-schemas/{id}/relationships/profile-object-schemas\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_object_type",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/object-types",
+            "operation_id": "create_object_type",
+            "deprecated": false,
+            "source_location": "paths[\"/api/object-types\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.bulk_import_profiles",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/profile-bulk-import-jobs",
+            "operation_id": "bulk_import_profiles",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profile-bulk-import-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_or_update_profile",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/profile-import",
+            "operation_id": "create_or_update_profile",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profile-import\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.merge_profiles",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/profile-merge",
+            "operation_id": "merge_profiles",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profile-merge\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.bulk_subscribe_profiles",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/profile-subscription-bulk-create-jobs",
+            "operation_id": "bulk_subscribe_profiles",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profile-subscription-bulk-create-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.bulk_unsubscribe_profiles",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/profile-subscription-bulk-delete-jobs",
+            "operation_id": "bulk_unsubscribe_profiles",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profile-subscription-bulk-delete-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.bulk_suppress_profiles",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/profile-suppression-bulk-create-jobs",
+            "operation_id": "bulk_suppress_profiles",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profile-suppression-bulk-create-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.bulk_unsuppress_profiles",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/profile-suppression-bulk-delete-jobs",
+            "operation_id": "bulk_unsuppress_profiles",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profile-suppression-bulk-delete-jobs\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_profile",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/profiles",
+            "operation_id": "create_profile",
+            "deprecated": false,
+            "source_location": "paths[\"/api/profiles\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_push_token",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/push-tokens",
+            "operation_id": "create_push_token",
+            "deprecated": false,
+            "source_location": "paths[\"/api/push-tokens\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.query_segment_series",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/segment-series-reports",
+            "operation_id": "query_segment_series",
+            "deprecated": false,
+            "source_location": "paths[\"/api/segment-series-reports\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.query_segment_values",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/segment-values-reports",
+            "operation_id": "query_segment_values",
+            "deprecated": false,
+            "source_location": "paths[\"/api/segment-values-reports\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_segment",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/segments",
+            "operation_id": "create_segment",
+            "deprecated": false,
+            "source_location": "paths[\"/api/segments\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_tag_group",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/tag-groups",
+            "operation_id": "create_tag_group",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tag-groups\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_tag",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/tags",
+            "operation_id": "create_tag",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tags\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.tag_campaigns",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/tags/{id}/relationships/campaigns",
+            "operation_id": "tag_campaigns",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tags/{id}/relationships/campaigns\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.tag_flows",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/tags/{id}/relationships/flows",
+            "operation_id": "tag_flows",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tags/{id}/relationships/flows\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.tag_lists",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/tags/{id}/relationships/lists",
+            "operation_id": "tag_lists",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tags/{id}/relationships/lists\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.tag_segments",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/tags/{id}/relationships/segments",
+            "operation_id": "tag_segments",
+            "deprecated": false,
+            "source_location": "paths[\"/api/tags/{id}/relationships/segments\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.clone_template",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/template-clone",
+            "operation_id": "clone_template",
+            "deprecated": false,
+            "source_location": "paths[\"/api/template-clone\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.render_template",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/template-render",
+            "operation_id": "render_template",
+            "deprecated": false,
+            "source_location": "paths[\"/api/template-render\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_universal_content",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/template-universal-content",
+            "operation_id": "create_universal_content",
+            "deprecated": false,
+            "source_location": "paths[\"/api/template-universal-content\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_template",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/templates",
+            "operation_id": "create_template",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_web_feed",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/web-feeds",
+            "operation_id": "create_web_feed",
+            "deprecated": false,
+            "source_location": "paths[\"/api/web-feeds\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_webhook",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/api/webhooks",
+            "operation_id": "create_webhook",
+            "deprecated": false,
+            "source_location": "paths[\"/api/webhooks\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_client_back_in_stock_subscription",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/client/back-in-stock-subscriptions",
+            "operation_id": "create_client_back_in_stock_subscription",
+            "deprecated": false,
+            "source_location": "paths[\"/client/back-in-stock-subscriptions\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.bulk_create_client_events",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/client/event-bulk-create",
+            "operation_id": "bulk_create_client_events",
+            "deprecated": false,
+            "source_location": "paths[\"/client/event-bulk-create\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_client_event",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/client/events",
+            "operation_id": "create_client_event",
+            "deprecated": false,
+            "source_location": "paths[\"/client/events\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_client_profile",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/client/profiles",
+            "operation_id": "create_client_profile",
+            "deprecated": false,
+            "source_location": "paths[\"/client/profiles\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.unregister_client_push_token",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/client/push-token-unregister",
+            "operation_id": "unregister_client_push_token",
+            "deprecated": false,
+            "source_location": "paths[\"/client/push-token-unregister\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_client_push_token",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/client/push-tokens",
+            "operation_id": "create_client_push_token",
+            "deprecated": false,
+            "source_location": "paths[\"/client/push-tokens\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_client_review",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/client/reviews",
+            "operation_id": "create_client_review",
+            "deprecated": false,
+            "source_location": "paths[\"/client/reviews\"].post"
+          },
+          {
+            "id": "klaviyo.rest.post.create_client_subscription",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/client/subscriptions",
+            "operation_id": "create_client_subscription",
+            "deprecated": false,
+            "source_location": "paths[\"/client/subscriptions\"].post"
+          }
+        ]
+      }
+    ]
+  },
+  "counts": {
+    "rest": 345,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 345
+  }
+}

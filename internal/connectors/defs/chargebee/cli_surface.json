@@ -1,0 +1,2398 @@
+{
+  "tagline": "Read Chargebee source-locked ETL records.",
+  "usage": "pm chargebee <command> [flags]",
+  "source_cli": {
+    "name": "Chargebee provider API",
+    "docs": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+    "reference": "Pinned schema-v3 source documents; each ETL command retains its exact provider operation route and citation.",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "etl",
+      "title": "ETL streams",
+      "commands": [
+        "customers",
+        "subscriptions",
+        "invoices",
+        "plans",
+        "items",
+        "item-prices",
+        "item-families",
+        "coupons",
+        "coupon-codes",
+        "coupon-sets",
+        "credit-notes",
+        "transactions",
+        "orders",
+        "quotes",
+        "payment-sources",
+        "events",
+        "hosted-pages",
+        "virtual-bank-accounts",
+        "unbilled-charges",
+        "ramps",
+        "gifts",
+        "alerts",
+        "comments",
+        "promotional-credits",
+        "features",
+        "entitlements",
+        "differential-prices",
+        "price-variants",
+        "products",
+        "webhook-endpoints",
+        "ledger-operations",
+        "ledger-account-balances"
+      ]
+    },
+    {
+      "id": "writes",
+      "title": "Typed write plans",
+      "commands": [
+        "create customer apply",
+        "update customer apply",
+        "delete customer apply",
+        "create item apply",
+        "update item apply",
+        "delete item apply",
+        "create item price apply",
+        "update item price apply",
+        "delete item price apply",
+        "create item family apply",
+        "update item family apply",
+        "delete item family apply",
+        "create subscription apply",
+        "update subscription apply",
+        "cancel subscription apply",
+        "create credit note apply",
+        "void credit note apply",
+        "create coupon apply",
+        "update coupon apply",
+        "delete coupon apply",
+        "create order apply",
+        "update order apply",
+        "cancel order apply",
+        "void invoice apply",
+        "collect payment for invoice apply",
+        "create webhook endpoint apply",
+        "update webhook endpoint apply",
+        "delete webhook endpoint apply",
+        "create comment apply",
+        "delete comment apply",
+        "add promotional credit apply",
+        "deduct promotional credit apply",
+        "create virtual bank account apply",
+        "delete virtual bank account apply",
+        "create card payment source apply",
+        "delete payment source apply"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Chargebee request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit."
+    }
+  ],
+  "commands": [
+    {
+      "path": "add promotional credit apply",
+      "summary": "Plan and execute the typed add promotional credit write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_promotional_credit",
+      "source_cli_path": "POST /v2/promotional_credits/add",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "amount",
+          "summary": "Optional amount record field.",
+          "maps_to": "record.amount",
+          "type": "integer"
+        },
+        {
+          "name": "credit_type",
+          "summary": "Optional credit type record field.",
+          "maps_to": "record.credit_type",
+          "type": "string"
+        },
+        {
+          "name": "currency_code",
+          "summary": "Optional currency code record field.",
+          "maps_to": "record.currency_code",
+          "type": "string"
+        },
+        {
+          "name": "customer_id",
+          "summary": "Required customer id record field.",
+          "maps_to": "record.customer_id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "summary": "Required description record field.",
+          "maps_to": "record.description",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation with a direct billing-credit financial effect; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/promotional_credits/add"
+        }
+      ],
+      "examples": [
+        "pm chargebee add promotional credit apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.AddPromotionalCredits428; writes.json action add_promotional_credit is the declared method/path/body execution component."
+    },
+    {
+      "path": "alerts list",
+      "summary": "Read Alerts as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "alerts",
+      "source_cli_path": "GET /v2/alerts",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/alerts"
+        }
+      ],
+      "examples": [
+        "pm chargebee alerts list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListAlerts4 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "cancel order apply",
+      "summary": "Plan and execute the typed cancel order write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_order",
+      "source_cli_path": "POST /v2/orders/{order-id}/cancel",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "cancellation_reason",
+          "summary": "Required cancellation reason record field.",
+          "maps_to": "record.cancellation_reason",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "comment",
+          "summary": "Optional comment record field.",
+          "maps_to": "record.comment",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "irreversible external mutation (order cancellation); approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orders/{order-id}/cancel"
+        }
+      ],
+      "examples": [
+        "pm chargebee cancel order apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.CancelAnOrder372; writes.json action cancel_order is the declared method/path/body execution component."
+    },
+    {
+      "path": "cancel subscription apply",
+      "summary": "Plan and execute the typed cancel subscription write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_subscription",
+      "source_cli_path": "POST /v2/subscriptions/{subscription-id}/cancel_for_items",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "cancel_option",
+          "summary": "Optional cancel option record field.",
+          "maps_to": "record.cancel_option",
+          "type": "string"
+        },
+        {
+          "name": "cancel_reason_code",
+          "summary": "Optional cancel reason code record field.",
+          "maps_to": "record.cancel_reason_code",
+          "type": "string"
+        },
+        {
+          "name": "end_of_term",
+          "summary": "Optional end of term record field.",
+          "maps_to": "record.end_of_term",
+          "type": "boolean"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "irreversible external mutation (subscription cancellation) with billing side effects; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/subscriptions/{subscription-id}/cancel_for_items"
+        }
+      ],
+      "examples": [
+        "pm chargebee cancel subscription apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.CancelSubscriptionForItems462; writes.json action cancel_subscription is the declared method/path/body execution component."
+    },
+    {
+      "path": "collect payment for invoice apply",
+      "summary": "Plan and execute the typed collect payment for invoice write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "collect_payment_for_invoice",
+      "source_cli_path": "POST /v2/invoices/{invoice-id}/collect_payment",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "amount",
+          "summary": "Optional amount record field.",
+          "maps_to": "record.amount",
+          "type": "integer"
+        },
+        {
+          "name": "comment",
+          "summary": "Optional comment record field.",
+          "maps_to": "record.comment",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "payment_source_id",
+          "summary": "Optional payment source id record field.",
+          "maps_to": "record.payment_source_id",
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation that attempts to charge a payment method; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/invoices/{invoice-id}/collect_payment"
+        }
+      ],
+      "examples": [
+        "pm chargebee collect payment for invoice apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.CollectPaymentForAnInvoice315; writes.json action collect_payment_for_invoice is the declared method/path/body execution component."
+    },
+    {
+      "path": "comments list",
+      "summary": "Read Comments as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "comments",
+      "source_cli_path": "GET /v2/comments",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/comments"
+        }
+      ],
+      "examples": [
+        "pm chargebee comments list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListComments12 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "coupon-codes list",
+      "summary": "Read Coupon Codes as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "coupon_codes",
+      "source_cli_path": "GET /v2/coupon_codes",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/coupon_codes"
+        }
+      ],
+      "examples": [
+        "pm chargebee coupon-codes list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListCouponCodes15 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "coupon-sets list",
+      "summary": "Read Coupon Sets as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "coupon_sets",
+      "source_cli_path": "GET /v2/coupon_sets",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/coupon_sets"
+        }
+      ],
+      "examples": [
+        "pm chargebee coupon-sets list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListCouponSets17 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "coupons list",
+      "summary": "Read Coupons as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "coupons",
+      "source_cli_path": "GET /v2/coupons",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/coupons"
+        }
+      ],
+      "examples": [
+        "pm chargebee coupons list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListCoupons19 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "create card payment source apply",
+      "summary": "Plan and execute the typed create card payment source write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_card_payment_source",
+      "source_cli_path": "POST /v2/payment_sources/create_card",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "card[cvv]",
+          "summary": "Optional card[cvv] record field.",
+          "maps_to": "record.card[cvv]",
+          "type": "string"
+        },
+        {
+          "name": "card[expiry_month]",
+          "summary": "Optional card[expiry month] record field.",
+          "maps_to": "record.card[expiry_month]",
+          "type": "integer"
+        },
+        {
+          "name": "card[expiry_year]",
+          "summary": "Optional card[expiry year] record field.",
+          "maps_to": "record.card[expiry_year]",
+          "type": "integer"
+        },
+        {
+          "name": "card[first_name]",
+          "summary": "Optional card[first name] record field.",
+          "maps_to": "record.card[first_name]",
+          "type": "string"
+        },
+        {
+          "name": "card[last_name]",
+          "summary": "Optional card[last name] record field.",
+          "maps_to": "record.card[last_name]",
+          "type": "string"
+        },
+        {
+          "name": "card[number]",
+          "summary": "Optional card[number] record field.",
+          "maps_to": "record.card[number]",
+          "type": "string"
+        },
+        {
+          "name": "customer_id",
+          "summary": "Required customer id record field.",
+          "maps_to": "record.customer_id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation carrying raw payment-card data; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/payment_sources/create_card"
+        }
+      ],
+      "examples": [
+        "pm chargebee create card payment source apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.CreateACardPaymentSource391; writes.json action create_card_payment_source is the declared method/path/body execution component."
+    },
+    {
+      "path": "create comment apply",
+      "summary": "Plan and execute the typed create comment write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_comment",
+      "source_cli_path": "POST /v2/comments",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "added_by",
+          "summary": "Optional added by record field.",
+          "maps_to": "record.added_by",
+          "type": "string"
+        },
+        {
+          "name": "entity_id",
+          "summary": "Required entity id record field.",
+          "maps_to": "record.entity_id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "entity_type",
+          "summary": "Required entity type record field.",
+          "maps_to": "record.entity_type",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "notes",
+          "summary": "Required notes record field.",
+          "maps_to": "record.notes",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/comments"
+        }
+      ],
+      "examples": [
+        "pm chargebee create comment apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.CreateAComment173; writes.json action create_comment is the declared method/path/body execution component."
+    },
+    {
+      "path": "create coupon apply",
+      "summary": "Plan and execute the typed create coupon write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_coupon",
+      "source_cli_path": "POST /v2/coupons/create_for_items",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "apply_on",
+          "summary": "Required apply on record field.",
+          "maps_to": "record.apply_on",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "discount_amount",
+          "summary": "Optional discount amount record field.",
+          "maps_to": "record.discount_amount",
+          "type": "integer"
+        },
+        {
+          "name": "discount_percentage",
+          "summary": "Optional discount percentage record field.",
+          "maps_to": "record.discount_percentage",
+          "type": "number"
+        },
+        {
+          "name": "discount_type",
+          "summary": "Optional discount type record field.",
+          "maps_to": "record.discount_type",
+          "type": "string"
+        },
+        {
+          "name": "duration_type",
+          "summary": "Optional duration type record field.",
+          "maps_to": "record.duration_type",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation with billing/discount side effects; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/coupons/create_for_items"
+        }
+      ],
+      "examples": [
+        "pm chargebee create coupon apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.CreateACouponForItems188; writes.json action create_coupon is the declared method/path/body execution component."
+    },
+    {
+      "path": "create credit note apply",
+      "summary": "Plan and execute the typed create credit note write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_credit_note",
+      "source_cli_path": "POST /v2/credit_notes",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "currency_code",
+          "summary": "Optional currency code record field.",
+          "maps_to": "record.currency_code",
+          "type": "string"
+        },
+        {
+          "name": "customer_id",
+          "summary": "Optional customer id record field.",
+          "maps_to": "record.customer_id",
+          "type": "string"
+        },
+        {
+          "name": "reason_code",
+          "summary": "Optional reason code record field.",
+          "maps_to": "record.reason_code",
+          "type": "string"
+        },
+        {
+          "name": "reference_invoice_id",
+          "summary": "Optional reference invoice id record field.",
+          "maps_to": "record.reference_invoice_id",
+          "type": "string"
+        },
+        {
+          "name": "total",
+          "summary": "Optional total record field.",
+          "maps_to": "record.total",
+          "type": "integer"
+        },
+        {
+          "name": "type",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation with accounting/billing side effects; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/credit_notes"
+        }
+      ],
+      "examples": [
+        "pm chargebee create credit note apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.CreateCreditNote189; writes.json action create_credit_note is the declared method/path/body execution component."
+    },
+    {
+      "path": "create customer apply",
+      "summary": "Plan and execute the typed create customer write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_customer",
+      "source_cli_path": "POST /v2/customers",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "company",
+          "summary": "Optional company record field.",
+          "maps_to": "record.company",
+          "type": "string"
+        },
+        {
+          "name": "email",
+          "summary": "Optional email record field.",
+          "maps_to": "record.email",
+          "type": "string"
+        },
+        {
+          "name": "first_name",
+          "summary": "Optional first name record field.",
+          "maps_to": "record.first_name",
+          "type": "string"
+        },
+        {
+          "name": "last_name",
+          "summary": "Optional last name record field.",
+          "maps_to": "record.last_name",
+          "type": "string"
+        },
+        {
+          "name": "phone",
+          "summary": "Optional phone record field.",
+          "maps_to": "record.phone",
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customers"
+        }
+      ],
+      "examples": [
+        "pm chargebee create customer apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.CreateACustomer209; writes.json action create_customer is the declared method/path/body execution component."
+    },
+    {
+      "path": "create item apply",
+      "summary": "Plan and execute the typed create item write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_item",
+      "source_cli_path": "POST /v2/items",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "description",
+          "summary": "Optional description record field.",
+          "maps_to": "record.description",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "item_family_id",
+          "summary": "Required item family id record field.",
+          "maps_to": "record.item_family_id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "type",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "unit",
+          "summary": "Optional unit record field.",
+          "maps_to": "record.unit",
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/items"
+        }
+      ],
+      "examples": [
+        "pm chargebee create item apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.CreateAnItem349; writes.json action create_item is the declared method/path/body execution component."
+    },
+    {
+      "path": "create item family apply",
+      "summary": "Plan and execute the typed create item family write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_item_family",
+      "source_cli_path": "POST /v2/item_families",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "description",
+          "summary": "Optional description record field.",
+          "maps_to": "record.description",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/item_families"
+        }
+      ],
+      "examples": [
+        "pm chargebee create item family apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.CreateAnItemFamily342; writes.json action create_item_family is the declared method/path/body execution component."
+    },
+    {
+      "path": "create item price apply",
+      "summary": "Plan and execute the typed create item price write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_item_price",
+      "source_cli_path": "POST /v2/item_prices",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "currency_code",
+          "summary": "Optional currency code record field.",
+          "maps_to": "record.currency_code",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "summary": "Optional description record field.",
+          "maps_to": "record.description",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "item_id",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "period",
+          "summary": "Optional period record field.",
+          "maps_to": "record.period",
+          "type": "integer"
+        },
+        {
+          "name": "period_unit",
+          "summary": "Optional period unit record field.",
+          "maps_to": "record.period_unit",
+          "type": "string"
+        },
+        {
+          "name": "price",
+          "summary": "Optional price record field.",
+          "maps_to": "record.price",
+          "type": "integer"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/item_prices"
+        }
+      ],
+      "examples": [
+        "pm chargebee create item price apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.CreateAnItemPrice345; writes.json action create_item_price is the declared method/path/body execution component."
+    },
+    {
+      "path": "create order apply",
+      "summary": "Plan and execute the typed create order write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_order",
+      "source_cli_path": "POST /v2/orders",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Optional id record field.",
+          "maps_to": "record.id",
+          "type": "string"
+        },
+        {
+          "name": "invoice_id",
+          "summary": "Required invoice id record field.",
+          "maps_to": "record.invoice_id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "reference_id",
+          "summary": "Optional reference id record field.",
+          "maps_to": "record.reference_id",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "summary": "Optional status record field.",
+          "maps_to": "record.status",
+          "type": "string"
+        },
+        {
+          "name": "tracking_id",
+          "summary": "Optional tracking id record field.",
+          "maps_to": "record.tracking_id",
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orders"
+        }
+      ],
+      "examples": [
+        "pm chargebee create order apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.CreateAnOrder369; writes.json action create_order is the declared method/path/body execution component."
+    },
+    {
+      "path": "create subscription apply",
+      "summary": "Plan and execute the typed create subscription write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_subscription",
+      "source_cli_path": "POST /v2/customers/{customer-id}/subscription_for_items",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "auto_collection",
+          "summary": "Optional auto collection record field.",
+          "maps_to": "record.auto_collection",
+          "type": "string"
+        },
+        {
+          "name": "customer_id",
+          "summary": "Required customer id record field.",
+          "maps_to": "record.customer_id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "summary": "Optional id record field.",
+          "maps_to": "record.id",
+          "type": "string"
+        },
+        {
+          "name": "po_number",
+          "summary": "Optional po number record field.",
+          "maps_to": "record.po_number",
+          "type": "string"
+        },
+        {
+          "name": "start_date",
+          "summary": "Optional start date record field.",
+          "maps_to": "record.start_date",
+          "type": "integer"
+        }
+      ],
+      "risk": "external mutation with billing side effects; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customers/{customer-id}/subscription_for_items"
+        }
+      ],
+      "examples": [
+        "pm chargebee create subscription apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.CreateSubscriptionForItems232; writes.json action create_subscription is the declared method/path/body execution component."
+    },
+    {
+      "path": "create virtual bank account apply",
+      "summary": "Plan and execute the typed create virtual bank account write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_virtual_bank_account",
+      "source_cli_path": "POST /v2/virtual_bank_accounts",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "customer_id",
+          "summary": "Required customer id record field.",
+          "maps_to": "record.customer_id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "email",
+          "summary": "Optional email record field.",
+          "maps_to": "record.email",
+          "type": "string"
+        },
+        {
+          "name": "gateway_account_id",
+          "summary": "Optional gateway account id record field.",
+          "maps_to": "record.gateway_account_id",
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/virtual_bank_accounts"
+        }
+      ],
+      "examples": [
+        "pm chargebee create virtual bank account apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.CreateAVirtualBankAccount519; writes.json action create_virtual_bank_account is the declared method/path/body execution component."
+    },
+    {
+      "path": "create webhook endpoint apply",
+      "summary": "Plan and execute the typed create webhook endpoint write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_webhook_endpoint",
+      "source_cli_path": "POST /v2/webhook_endpoints",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "api_version",
+          "summary": "Optional api version record field.",
+          "maps_to": "record.api_version",
+          "type": "string"
+        },
+        {
+          "name": "disabled",
+          "summary": "Optional disabled record field.",
+          "maps_to": "record.disabled",
+          "type": "boolean"
+        },
+        {
+          "name": "name",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "url",
+          "summary": "Required url record field.",
+          "maps_to": "record.url",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation exposing business data to a third-party URL; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/webhook_endpoints"
+        }
+      ],
+      "examples": [
+        "pm chargebee create webhook endpoint apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.CreateAWebhookEndpoint524; writes.json action create_webhook_endpoint is the declared method/path/body execution component."
+    },
+    {
+      "path": "credit-notes list",
+      "summary": "Read Credit Notes as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "credit_notes",
+      "source_cli_path": "GET /v2/credit_notes",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/credit_notes"
+        }
+      ],
+      "examples": [
+        "pm chargebee credit-notes list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListCreditNotes21 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "customers list",
+      "summary": "Read Customers as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_cli_path": "GET /v2/customers",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customers"
+        }
+      ],
+      "examples": [
+        "pm chargebee customers list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListCustomers27 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "deduct promotional credit apply",
+      "summary": "Plan and execute the typed deduct promotional credit write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "deduct_promotional_credit",
+      "source_cli_path": "POST /v2/promotional_credits/deduct",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "amount",
+          "summary": "Optional amount record field.",
+          "maps_to": "record.amount",
+          "type": "integer"
+        },
+        {
+          "name": "credit_type",
+          "summary": "Optional credit type record field.",
+          "maps_to": "record.credit_type",
+          "type": "string"
+        },
+        {
+          "name": "currency_code",
+          "summary": "Optional currency code record field.",
+          "maps_to": "record.currency_code",
+          "type": "string"
+        },
+        {
+          "name": "customer_id",
+          "summary": "Required customer id record field.",
+          "maps_to": "record.customer_id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "summary": "Required description record field.",
+          "maps_to": "record.description",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation with a direct billing-credit financial effect; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/promotional_credits/deduct"
+        }
+      ],
+      "examples": [
+        "pm chargebee deduct promotional credit apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.DeductPromotionalCredits429; writes.json action deduct_promotional_credit is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete comment apply",
+      "summary": "Plan and execute the typed delete comment write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_comment",
+      "source_cli_path": "POST /v2/comments/{comment-id}/delete",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "irreversible external deletion; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/comments/{comment-id}/delete"
+        }
+      ],
+      "examples": [
+        "pm chargebee delete comment apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.DeleteAComment174; writes.json action delete_comment is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete coupon apply",
+      "summary": "Plan and execute the typed delete coupon write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_coupon",
+      "source_cli_path": "POST /v2/coupons/{coupon-id}/delete",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "irreversible external deletion; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/coupons/{coupon-id}/delete"
+        }
+      ],
+      "examples": [
+        "pm chargebee delete coupon apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.DeleteACoupon184; writes.json action delete_coupon is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete customer apply",
+      "summary": "Plan and execute the typed delete customer write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_customer",
+      "source_cli_path": "POST /v2/customers/{customer-id}/delete",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "irreversible external deletion; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customers/{customer-id}/delete"
+        }
+      ],
+      "examples": [
+        "pm chargebee delete customer apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.DeleteACustomer223; writes.json action delete_customer is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete item apply",
+      "summary": "Plan and execute the typed delete item write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_item",
+      "source_cli_path": "POST /v2/items/{item-id}/delete",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "irreversible external deletion; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/items/{item-id}/delete"
+        }
+      ],
+      "examples": [
+        "pm chargebee delete item apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.DeleteAnItem352; writes.json action delete_item is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete item family apply",
+      "summary": "Plan and execute the typed delete item family write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_item_family",
+      "source_cli_path": "POST /v2/item_families/{item-family-id}/delete",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "irreversible external deletion; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/item_families/{item-family-id}/delete"
+        }
+      ],
+      "examples": [
+        "pm chargebee delete item family apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.DeleteAnItemFamily344; writes.json action delete_item_family is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete item price apply",
+      "summary": "Plan and execute the typed delete item price write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_item_price",
+      "source_cli_path": "POST /v2/item_prices/{item-price-id}/delete",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "irreversible external deletion; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/item_prices/{item-price-id}/delete"
+        }
+      ],
+      "examples": [
+        "pm chargebee delete item price apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.DeleteAnItemPrice347; writes.json action delete_item_price is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete payment source apply",
+      "summary": "Plan and execute the typed delete payment source write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_payment_source",
+      "source_cli_path": "POST /v2/payment_sources/{cust-payment-source-id}/delete",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "irreversible external deletion; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/payment_sources/{cust-payment-source-id}/delete"
+        }
+      ],
+      "examples": [
+        "pm chargebee delete payment source apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.DeleteAPaymentSource383; writes.json action delete_payment_source is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete virtual bank account apply",
+      "summary": "Plan and execute the typed delete virtual bank account write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_virtual_bank_account",
+      "source_cli_path": "POST /v2/virtual_bank_accounts/{virtual-bank-account-id}/delete",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "irreversible external deletion; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/virtual_bank_accounts/{virtual-bank-account-id}/delete"
+        }
+      ],
+      "examples": [
+        "pm chargebee delete virtual bank account apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.DeleteAVirtualBankAccount520; writes.json action delete_virtual_bank_account is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete webhook endpoint apply",
+      "summary": "Plan and execute the typed delete webhook endpoint write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook_endpoint",
+      "source_cli_path": "POST /v2/webhook_endpoints/{webhook-endpoint-id}/delete",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "irreversible external deletion; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/webhook_endpoints/{webhook-endpoint-id}/delete"
+        }
+      ],
+      "examples": [
+        "pm chargebee delete webhook endpoint apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.DeleteAWebhookEndpoint526; writes.json action delete_webhook_endpoint is the declared method/path/body execution component."
+    },
+    {
+      "path": "differential-prices list",
+      "summary": "Read Differential Prices as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "differential_prices",
+      "source_cli_path": "GET /v2/differential_prices",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/differential_prices"
+        }
+      ],
+      "examples": [
+        "pm chargebee differential-prices list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListDifferentialPrices40 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "entitlements list",
+      "summary": "Read Entitlements as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "entitlements",
+      "source_cli_path": "GET /v2/entitlements",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/entitlements"
+        }
+      ],
+      "examples": [
+        "pm chargebee entitlements list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListAllEntitlements42 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "events list",
+      "summary": "Read Events as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "events",
+      "source_cli_path": "GET /v2/events",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/events"
+        }
+      ],
+      "examples": [
+        "pm chargebee events list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListEvents43 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "features list",
+      "summary": "Read Features as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "features",
+      "source_cli_path": "GET /v2/features",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/features"
+        }
+      ],
+      "examples": [
+        "pm chargebee features list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListFeatures46 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "gifts list",
+      "summary": "Read Gifts as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "gifts",
+      "source_cli_path": "GET /v2/gifts",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/gifts"
+        }
+      ],
+      "examples": [
+        "pm chargebee gifts list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListGifts50 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "hosted-pages list",
+      "summary": "Read Hosted Pages as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "hosted_pages",
+      "source_cli_path": "GET /v2/hosted_pages",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/hosted_pages"
+        }
+      ],
+      "examples": [
+        "pm chargebee hosted-pages list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListHostedPages53 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "invoices list",
+      "summary": "Read Invoices as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invoices",
+      "source_cli_path": "GET /v2/invoices",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/invoices"
+        }
+      ],
+      "examples": [
+        "pm chargebee invoices list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListInvoices55 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "item-families list",
+      "summary": "Read Item Families as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "item_families",
+      "source_cli_path": "GET /v2/item_families",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/item_families"
+        }
+      ],
+      "examples": [
+        "pm chargebee item-families list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListItemFamilies63 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "item-prices list",
+      "summary": "Read Item Prices as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "item_prices",
+      "source_cli_path": "GET /v2/item_prices",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/item_prices"
+        }
+      ],
+      "examples": [
+        "pm chargebee item-prices list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListItemPrices65 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "items list",
+      "summary": "Read Items as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "items",
+      "source_cli_path": "GET /v2/items",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/items"
+        }
+      ],
+      "examples": [
+        "pm chargebee items list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListItems69 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "ledger-account-balances list",
+      "summary": "Read Ledger Account Balances as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ledger_account_balances",
+      "source_cli_path": "GET /v2/ledger_account_balances",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/ledger_account_balances"
+        }
+      ],
+      "examples": [
+        "pm chargebee ledger-account-balances list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListLedgerAccountBalances73 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "ledger-operations list",
+      "summary": "Read Ledger Operations as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ledger_operations",
+      "source_cli_path": "GET /v2/ledger_operations",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/ledger_operations"
+        }
+      ],
+      "examples": [
+        "pm chargebee ledger-operations list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListLedgerOperations74 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "orders list",
+      "summary": "Read Orders as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "orders",
+      "source_cli_path": "GET /v2/orders",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/orders"
+        }
+      ],
+      "examples": [
+        "pm chargebee orders list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListOrders84 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "payment-sources list",
+      "summary": "Read Payment Sources as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payment_sources",
+      "source_cli_path": "GET /v2/payment_sources",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/payment_sources"
+        }
+      ],
+      "examples": [
+        "pm chargebee payment-sources list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListPaymentSources88 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "plans list",
+      "summary": "Read Plans as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "plans",
+      "source_cli_path": "GET /v2/plans",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/plans"
+        }
+      ],
+      "examples": [
+        "pm chargebee plans list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListPlans100 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "price-variants list",
+      "summary": "Read Price Variants as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "price_variants",
+      "source_cli_path": "GET /v2/price_variants",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/price_variants"
+        }
+      ],
+      "examples": [
+        "pm chargebee price-variants list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListPriceVariants103 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "products list",
+      "summary": "Read Products as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "products",
+      "source_cli_path": "GET /v2/products",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/products"
+        }
+      ],
+      "examples": [
+        "pm chargebee products list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListProducts105 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "promotional-credits list",
+      "summary": "Read Promotional Credits as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "promotional_credits",
+      "source_cli_path": "GET /v2/promotional_credits",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/promotional_credits"
+        }
+      ],
+      "examples": [
+        "pm chargebee promotional-credits list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListPromotionalCredits108 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "quotes list",
+      "summary": "Read Quotes as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "quotes",
+      "source_cli_path": "GET /v2/quotes",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/quotes"
+        }
+      ],
+      "examples": [
+        "pm chargebee quotes list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListQuotes110 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "ramps list",
+      "summary": "Read Ramps as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ramps",
+      "source_cli_path": "GET /v2/ramps",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/ramps"
+        }
+      ],
+      "examples": [
+        "pm chargebee ramps list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListRamps115 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "subscriptions list",
+      "summary": "Read Subscriptions as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscriptions",
+      "source_cli_path": "GET /v2/subscriptions",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/subscriptions"
+        }
+      ],
+      "examples": [
+        "pm chargebee subscriptions list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListSubscriptions122 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "transactions list",
+      "summary": "Read Transactions as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "transactions",
+      "source_cli_path": "GET /v2/transactions",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/transactions"
+        }
+      ],
+      "examples": [
+        "pm chargebee transactions list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListTransactions148 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "unbilled-charges list",
+      "summary": "Read Unbilled Charges as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "unbilled_charges",
+      "source_cli_path": "GET /v2/unbilled_charges",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/unbilled_charges"
+        }
+      ],
+      "examples": [
+        "pm chargebee unbilled-charges list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListUnbilledCharges150 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "update coupon apply",
+      "summary": "Plan and execute the typed update coupon write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_coupon",
+      "source_cli_path": "POST /v2/coupons/{coupon-id}/update_for_items",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "summary": "Optional name record field.",
+          "maps_to": "record.name",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "summary": "Optional status record field.",
+          "maps_to": "record.status",
+          "type": "string"
+        },
+        {
+          "name": "valid_till",
+          "summary": "Optional valid till record field.",
+          "maps_to": "record.valid_till",
+          "type": "integer"
+        }
+      ],
+      "risk": "external mutation with billing/discount side effects; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/coupons/{coupon-id}/update_for_items"
+        }
+      ],
+      "examples": [
+        "pm chargebee update coupon apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.UpdateACouponForItems186; writes.json action update_coupon is the declared method/path/body execution component."
+    },
+    {
+      "path": "update customer apply",
+      "summary": "Plan and execute the typed update customer write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_customer",
+      "source_cli_path": "POST /v2/customers/{customer-id}",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "company",
+          "summary": "Optional company record field.",
+          "maps_to": "record.company",
+          "type": "string"
+        },
+        {
+          "name": "email",
+          "summary": "Optional email record field.",
+          "maps_to": "record.email",
+          "type": "string"
+        },
+        {
+          "name": "first_name",
+          "summary": "Optional first name record field.",
+          "maps_to": "record.first_name",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "last_name",
+          "summary": "Optional last name record field.",
+          "maps_to": "record.last_name",
+          "type": "string"
+        },
+        {
+          "name": "phone",
+          "summary": "Optional phone record field.",
+          "maps_to": "record.phone",
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customers/{customer-id}"
+        }
+      ],
+      "examples": [
+        "pm chargebee update customer apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.UpdateACustomer210; writes.json action update_customer is the declared method/path/body execution component."
+    },
+    {
+      "path": "update item apply",
+      "summary": "Plan and execute the typed update item write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_item",
+      "source_cli_path": "POST /v2/items/{item-id}",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "description",
+          "summary": "Optional description record field.",
+          "maps_to": "record.description",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "summary": "Optional name record field.",
+          "maps_to": "record.name",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "summary": "Optional status record field.",
+          "maps_to": "record.status",
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/items/{item-id}"
+        }
+      ],
+      "examples": [
+        "pm chargebee update item apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.UpdateAnItem350; writes.json action update_item is the declared method/path/body execution component."
+    },
+    {
+      "path": "update item family apply",
+      "summary": "Plan and execute the typed update item family write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_item_family",
+      "source_cli_path": "POST /v2/item_families/{item-family-id}",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "description",
+          "summary": "Optional description record field.",
+          "maps_to": "record.description",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "summary": "Optional name record field.",
+          "maps_to": "record.name",
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/item_families/{item-family-id}"
+        }
+      ],
+      "examples": [
+        "pm chargebee update item family apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.UpdateAnItemFamily343; writes.json action update_item_family is the declared method/path/body execution component."
+    },
+    {
+      "path": "update item price apply",
+      "summary": "Plan and execute the typed update item price write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_item_price",
+      "source_cli_path": "POST /v2/item_prices/{item-price-id}",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "description",
+          "summary": "Optional description record field.",
+          "maps_to": "record.description",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "summary": "Optional name record field.",
+          "maps_to": "record.name",
+          "type": "string"
+        },
+        {
+          "name": "price",
+          "summary": "Optional price record field.",
+          "maps_to": "record.price",
+          "type": "integer"
+        },
+        {
+          "name": "status",
+          "summary": "Optional status record field.",
+          "maps_to": "record.status",
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/item_prices/{item-price-id}"
+        }
+      ],
+      "examples": [
+        "pm chargebee update item price apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.UpdateAnItemPrice346; writes.json action update_item_price is the declared method/path/body execution component."
+    },
+    {
+      "path": "update order apply",
+      "summary": "Plan and execute the typed update order write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_order",
+      "source_cli_path": "POST /v2/orders/{order-id}",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "note",
+          "summary": "Optional note record field.",
+          "maps_to": "record.note",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "summary": "Optional status record field.",
+          "maps_to": "record.status",
+          "type": "string"
+        },
+        {
+          "name": "tracking_id",
+          "summary": "Optional tracking id record field.",
+          "maps_to": "record.tracking_id",
+          "type": "string"
+        },
+        {
+          "name": "tracking_url",
+          "summary": "Optional tracking url record field.",
+          "maps_to": "record.tracking_url",
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orders/{order-id}"
+        }
+      ],
+      "examples": [
+        "pm chargebee update order apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.UpdateAnOrder370; writes.json action update_order is the declared method/path/body execution component."
+    },
+    {
+      "path": "update subscription apply",
+      "summary": "Plan and execute the typed update subscription write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_subscription",
+      "source_cli_path": "POST /v2/subscriptions/{subscription-id}/update_for_items",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "auto_collection",
+          "summary": "Optional auto collection record field.",
+          "maps_to": "record.auto_collection",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "invoice_date",
+          "summary": "Optional invoice date record field.",
+          "maps_to": "record.invoice_date",
+          "type": "integer"
+        },
+        {
+          "name": "po_number",
+          "summary": "Optional po number record field.",
+          "maps_to": "record.po_number",
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation with billing side effects; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/subscriptions/{subscription-id}/update_for_items"
+        }
+      ],
+      "examples": [
+        "pm chargebee update subscription apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.UpdateSubscriptionForItems492; writes.json action update_subscription is the declared method/path/body execution component."
+    },
+    {
+      "path": "update webhook endpoint apply",
+      "summary": "Plan and execute the typed update webhook endpoint write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_webhook_endpoint",
+      "source_cli_path": "POST /v2/webhook_endpoints/{webhook-endpoint-id}",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "disabled",
+          "summary": "Optional disabled record field.",
+          "maps_to": "record.disabled",
+          "type": "boolean"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "summary": "Optional name record field.",
+          "maps_to": "record.name",
+          "type": "string"
+        },
+        {
+          "name": "url",
+          "summary": "Optional url record field.",
+          "maps_to": "record.url",
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation exposing business data to a third-party URL; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/webhook_endpoints/{webhook-endpoint-id}"
+        }
+      ],
+      "examples": [
+        "pm chargebee update webhook endpoint apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.UpdateAWebhookEndpoint525; writes.json action update_webhook_endpoint is the declared method/path/body execution component."
+    },
+    {
+      "path": "virtual-bank-accounts list",
+      "summary": "Read Virtual Bank Accounts as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "virtual_bank_accounts",
+      "source_cli_path": "GET /v2/virtual_bank_accounts",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/virtual_bank_accounts"
+        }
+      ],
+      "examples": [
+        "pm chargebee virtual-bank-accounts list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListVirtualBankAccounts156 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "void credit note apply",
+      "summary": "Plan and execute the typed void credit note write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "void_credit_note",
+      "source_cli_path": "POST /v2/credit_notes/{credit-note-id}/void",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "comment",
+          "summary": "Optional comment record field.",
+          "maps_to": "record.comment",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "irreversible external mutation; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/credit_notes/{credit-note-id}/void"
+        }
+      ],
+      "examples": [
+        "pm chargebee void credit note apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.VoidACreditNote198; writes.json action void_credit_note is the declared method/path/body execution component."
+    },
+    {
+      "path": "void invoice apply",
+      "summary": "Plan and execute the typed void invoice write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "void_invoice",
+      "source_cli_path": "POST /v2/invoices/{invoice-id}/void",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "flags": [
+        {
+          "name": "comment",
+          "summary": "Optional comment record field.",
+          "maps_to": "record.comment",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "irreversible external mutation with accounting side effects; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/invoices/{invoice-id}/void"
+        }
+      ],
+      "examples": [
+        "pm chargebee void invoice apply --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.post.VoidAnInvoice334; writes.json action void_invoice is the declared method/path/body execution component."
+    },
+    {
+      "path": "webhook-endpoints list",
+      "summary": "Read Webhook Endpoints as Chargebee ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhook_endpoints",
+      "source_cli_path": "GET /v2/webhook_endpoints",
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/webhook_endpoints"
+        }
+      ],
+      "examples": [
+        "pm chargebee webhook-endpoints list --json"
+      ],
+      "notes": "Pinned source operation chargebee.rest.get.ListWebhookEndpoints158 from source document primary; streams.json is the declared execution component."
+    }
+  ]
+}

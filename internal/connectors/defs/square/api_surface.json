@@ -1,91 +1,5010 @@
 {
-  "api": "Square Connect v2 API (https://connect.squareup.com/v2)",
-  "docs": "https://developer.squareup.com/reference/square",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (payments, refunds, customers, locations); Square is read-only in legacy (no reverse-ETL write surface) and the full Square surface (orders, catalog, invoices, team members, disputes, etc.) is out of scope until Pass B",
+  "api": "Square API OpenAPI 3.0.0",
+  "docs": "https://github.com/square/connect-api-specification/blob/master/api.json",
+  "reviewed_at": "2026-08-19",
+  "operation_ledger_version": 2,
+  "scope": "Complete provider-reference inventory generated from every operation in the cited OpenAPI 3.0.0 document (334 HTTP operations). Existing executable bindings are retained only where their exact method/path still matches the refreshed provider source.",
+  "artifacts": [
+    {
+      "id": "square-openapi-3.0.0-2026-08-19",
+      "url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json",
+      "retrieved_at": "2026-08-19",
+      "sha256": "a0d0db22c202f68282fd359772461697b3f635df03d3b19b11bb60add7f8ff7c"
+    }
+  ],
   "endpoints": [
     {
-      "method": "GET",
-      "path": "/v2/payments",
-      "covered_by": {
-        "stream": "payments"
+      "method": "DELETE",
+      "path": "/v2/bookings/{booking_id}/custom-attributes/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/bookings/custom-attribute-definitions/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/catalog/object/{object_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/{customer_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/{customer_id}/cards/{card_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/{customer_id}/custom-attributes/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/{customer_id}/groups/{group_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/custom-attribute-definitions/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/customers/groups/{group_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/disputes/{dispute_id}/evidence/{evidence_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/invoices/{invoice_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/invoices/{invoice_id}/attachments/{attachment_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/labor/break-types/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/labor/shifts/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/labor/timecards/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/locations/{location_id}/custom-attributes/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/locations/custom-attribute-definitions/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/loyalty/rewards/{reward_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/merchants/{merchant_id}/custom-attributes/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/merchants/custom-attribute-definitions/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/online-checkout/payment-links/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/orders/{order_id}/custom-attributes/{custom_attribute_key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/orders/custom-attribute-definitions/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/sites/{site_id}/snippet",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/subscriptions/{subscription_id}/actions/{action_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/transfer-orders/{transfer_order_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/webhooks/subscriptions/{subscription_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     },
     {
       "method": "GET",
-      "path": "/v2/refunds",
-      "covered_by": {
-        "stream": "refunds"
+      "path": "/v1/{location_id}/orders",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{location_id}/orders/{order_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bank-accounts",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bank-accounts/{bank_account_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bank-accounts/by-v1-id/{v1_bank_account_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/{booking_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/{booking_id}/custom-attributes",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/{booking_id}/custom-attributes/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/business-booking-profile",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/custom-attribute-definitions",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/custom-attribute-definitions/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/location-booking-profiles",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/location-booking-profiles/{location_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/team-member-booking-profiles",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/bookings/team-member-booking-profiles/{team_member_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cards",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cards/{card_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cash-drawers/shifts",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cash-drawers/shifts/{shift_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cash-drawers/shifts/{shift_id}/events",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/catalog/info",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/catalog/list",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/catalog/object/{object_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/channels",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/channels/{channel_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
       }
     },
     {
       "method": "GET",
       "path": "/v2/customers",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
       "covered_by": {
         "stream": "customers"
       }
     },
     {
       "method": "GET",
+      "path": "/v2/customers/{customer_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{customer_id}/custom-attributes",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/{customer_id}/custom-attributes/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/custom-attribute-definitions",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/custom-attribute-definitions/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/groups",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/groups/{group_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/segments",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/customers/segments/{segment_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/devices",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/devices/{device_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/devices/codes",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/devices/codes/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/disputes",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/disputes/{dispute_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/disputes/{dispute_id}/evidence",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/disputes/{dispute_id}/evidence/{evidence_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/employees",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/employees/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/events/types",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/gift-cards",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/gift-cards/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/gift-cards/activities",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/inventory/{catalog_object_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/inventory/{catalog_object_id}/changes",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/inventory/adjustment-reasons",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/inventory/adjustment/{adjustment_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/inventory/adjustments/{adjustment_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/inventory/physical-count/{physical_count_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/inventory/physical-counts/{physical_count_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoices",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoices/{invoice_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/break-types",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/break-types/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/employee-wages",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/employee-wages/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/scheduled-shifts/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/shifts/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/team-member-wages",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/team-member-wages/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/timecards/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/labor/workweek-configs",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
       "path": "/v2/locations",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
       "covered_by": {
         "stream": "locations"
       }
     },
     {
       "method": "GET",
-      "path": "/v2/orders",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v2/orders is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/v2/locations/{location_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
       }
     },
     {
       "method": "GET",
-      "path": "/v2/catalog/list",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v2/catalog/list is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/v2/locations/{location_id}/custom-attributes",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
       }
     },
     {
       "method": "GET",
-      "path": "/v2/invoices",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v2/invoices is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/v2/locations/{location_id}/custom-attributes/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
       }
     },
     {
       "method": "GET",
-      "path": "/v2/team-members",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v2/team-members is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/v2/locations/{location_id}/transactions",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
       }
     },
     {
       "method": "GET",
-      "path": "/v2/disputes",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v2/disputes is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/v2/locations/{location_id}/transactions/{transaction_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/locations/custom-attribute-definitions",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/locations/custom-attribute-definitions/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/loyalty/accounts/{account_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/loyalty/programs",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/loyalty/programs/{program_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/loyalty/programs/{program_id}/promotions",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/loyalty/programs/{program_id}/promotions/{promotion_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/loyalty/rewards/{reward_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/merchants",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/merchants/{merchant_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/merchants/{merchant_id}/custom-attributes",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/merchants/{merchant_id}/custom-attributes/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/merchants/custom-attribute-definitions",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/merchants/custom-attribute-definitions/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/online-checkout/location-settings/{location_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/online-checkout/merchant-settings",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/online-checkout/payment-links",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/online-checkout/payment-links/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orders/{order_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orders/{order_id}/custom-attributes",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orders/{order_id}/custom-attributes/{custom_attribute_key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orders/custom-attribute-definitions",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orders/custom-attribute-definitions/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/payments",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "covered_by": {
+        "stream": "payments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/payments/{payment_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/payouts",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/payouts/{payout_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/payouts/{payout_id}/payout-entries",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/refunds",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "covered_by": {
+        "stream": "refunds"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/refunds/{refund_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sites",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sites/{site_id}/snippet",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/subscriptions/{subscription_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/subscriptions/{subscription_id}/events",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/team-members/{team_member_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/team-members/{team_member_id}/wage-setting",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/team-members/jobs",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/team-members/jobs/{job_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/terminals/actions/{action_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/terminals/checkouts/{checkout_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/terminals/refunds/{terminal_refund_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/transfer-orders/{transfer_order_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/vendors/{vendor_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/webhooks/event-types",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/webhooks/subscriptions",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/webhooks/subscriptions/{subscription_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
       }
     },
     {
       "method": "POST",
-      "path": "/v2/payments",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy connector is read-only"
+      "path": "/oauth2/revoke",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth2/token",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth2/token/status",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/apple-pay/domains",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bank-accounts",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bank-accounts/{bank_account_id}/disable",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bookings",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bookings/{booking_id}/cancel",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bookings/availability/search",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bookings/bulk-retrieve",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bookings/custom-attribute-definitions",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bookings/custom-attributes/bulk-delete",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bookings/custom-attributes/bulk-upsert",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/bookings/team-member-booking-profiles/bulk-retrieve",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/cards",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/cards/{card_id}/disable",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/batch-delete",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/batch-retrieve",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/batch-upsert",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/images",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/object",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/search",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/search-catalog-items",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/update-item-modifier-lists",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/catalog/update-item-taxes",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/channels/bulk-retrieve",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
       }
     },
     {
       "method": "POST",
       "path": "/v2/customers",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy connector is read-only"
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer_id}/cards",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/{customer_id}/custom-attributes/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/bulk-create",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/bulk-delete",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/bulk-retrieve",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/bulk-update",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/custom-attribute-definitions",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/custom-attributes/bulk-upsert",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/groups",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/customers/search",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/devices/codes",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/disputes/{dispute_id}/accept",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/disputes/{dispute_id}/evidence-files",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/disputes/{dispute_id}/evidence-text",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/disputes/{dispute_id}/submit-evidence",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/events",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/gift-cards",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/gift-cards/{gift_card_id}/link-customer",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/gift-cards/{gift_card_id}/unlink-customer",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/gift-cards/activities",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/gift-cards/from-gan",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/gift-cards/from-nonce",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/adjustment-reasons/create",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/adjustment-reasons/delete",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/adjustment-reasons/restore",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/adjustment-reasons/retrieve",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/batch-change",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/batch-retrieve-changes",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/batch-retrieve-counts",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/changes/batch-create",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/changes/batch-retrieve",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/inventory/counts/batch-retrieve",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice_id}/attachments",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice_id}/cancel",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/{invoice_id}/publish",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invoices/search",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/labor/break-types",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/labor/scheduled-shifts",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/labor/scheduled-shifts/{id}/publish",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/labor/scheduled-shifts/bulk-publish",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/labor/scheduled-shifts/search",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/labor/shifts",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/labor/shifts/search",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/labor/timecards",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/labor/timecards/search",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/locations",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/locations/{location_id}/checkouts",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/locations/{location_id}/custom-attributes/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/locations/{location_id}/transactions/{transaction_id}/capture",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/locations/{location_id}/transactions/{transaction_id}/void",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/locations/custom-attribute-definitions",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/locations/custom-attributes/bulk-delete",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/locations/custom-attributes/bulk-upsert",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/accounts",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/accounts/{account_id}/accumulate",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/accounts/{account_id}/adjust",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/accounts/search",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/events/search",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/programs/{program_id}/calculate",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/programs/{program_id}/promotions",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/programs/{program_id}/promotions/{promotion_id}/cancel",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/rewards",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/rewards/{reward_id}/redeem",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/loyalty/rewards/search",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/merchants/{merchant_id}/custom-attributes/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/merchants/custom-attribute-definitions",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/merchants/custom-attributes/bulk-delete",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/merchants/custom-attributes/bulk-upsert",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/online-checkout/payment-links",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/{order_id}/custom-attributes/{custom_attribute_key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/{order_id}/pay",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/batch-retrieve",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/calculate",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/clone",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/custom-attribute-definitions",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/custom-attributes/bulk-delete",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/custom-attributes/bulk-upsert",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orders/search",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payments",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payments/{payment_id}/cancel",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payments/{payment_id}/complete",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/payments/cancel",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/refunds",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/sites/{site_id}/snippet",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription_id}/billing-anchor",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription_id}/cancel",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription_id}/pause",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription_id}/resume",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/{subscription_id}/swap-plan",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/bulk-swap-plan",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/subscriptions/search",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/team-members",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/team-members/bulk-create",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/team-members/bulk-update",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/team-members/jobs",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/team-members/search",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/actions",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/actions/{action_id}/cancel",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/actions/{action_id}/dismiss",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/actions/search",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/checkouts",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/checkouts/{checkout_id}/cancel",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/checkouts/{checkout_id}/dismiss",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/checkouts/search",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/refunds",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/refunds/{terminal_refund_id}/cancel",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/refunds/{terminal_refund_id}/dismiss",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/terminals/refunds/search",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/transfer-orders",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/transfer-orders/{transfer_order_id}/cancel",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/transfer-orders/{transfer_order_id}/receive",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/transfer-orders/{transfer_order_id}/start",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/transfer-orders/search",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/vendors/bulk-create",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/vendors/bulk-retrieve",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/vendors/create",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/vendors/search",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/webhooks/subscriptions",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/webhooks/subscriptions/{subscription_id}/signature-key",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/webhooks/subscriptions/{subscription_id}/test",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/{location_id}/orders/{order_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/bookings/{booking_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/bookings/{booking_id}/custom-attributes/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/bookings/custom-attribute-definitions/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/catalog/images/{image_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/customers/{customer_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/customers/{customer_id}/groups/{group_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/customers/custom-attribute-definitions/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/customers/groups/{group_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/events/disable",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/events/enable",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/inventory/adjustment-reasons/update",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/inventory/adjustments/update",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/invoices/{invoice_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/labor/break-types/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/labor/scheduled-shifts/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/labor/shifts/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/labor/timecards/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/labor/workweek-configs/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/locations/{location_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/locations/custom-attribute-definitions/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/merchants/custom-attribute-definitions/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/online-checkout/location-settings/{location_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/online-checkout/merchant-settings",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/online-checkout/payment-links/{id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/orders/{order_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/orders/custom-attribute-definitions/{key}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/payments/{payment_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/subscriptions/{subscription_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/team-members/{team_member_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/team-members/{team_member_id}/wage-setting",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/team-members/jobs/{job_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/transfer-orders/{transfer_order_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/vendors/{vendor_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/vendors/bulk-update",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/webhooks/subscriptions/{subscription_id}",
+      "provenance": {
+        "artifact": "square-openapi-3.0.0-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
       }
     }
   ]

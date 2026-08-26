@@ -1,0 +1,931 @@
+{
+  "schema_version": 3,
+  "connector": "copper",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "retrieval": "Migrated schema-version 2 complete_rendered_reference source-lock capture.",
+    "openapi": [],
+    "coverage_confidence": {
+      "level": "complete_rendered_reference",
+      "basis": "Parsed all 637 provider-published MkDocs search-index documentation nodes. The declaration-form operation blocks yield 89 unique HTTP method/path operations; curl examples are intentionally excluded because they substitute literal request ids."
+    },
+    "source_documents": [
+      {
+        "id": "primary",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://developer.copper.com/",
+          "sha256": "5174f8c907d9c6d579146bd23b09283e8d8ccedaa2353e1cafc997e8e31454a9",
+          "bytes": 643109
+        },
+        "published_source": {
+          "source_url": "https://developer.copper.com/",
+          "capture_url": "https://developer.copper.com/",
+          "sha256": "5174f8c907d9c6d579146bd23b09283e8d8ccedaa2353e1cafc997e8e31454a9",
+          "bytes": 643109,
+          "adapter": "schema-v2-source-lock-migration"
+        },
+        "info_version": "Copper Developer API public reference",
+        "operations": [
+          {
+            "id": "copper.rest.delete.V1EntityEntityIdRelated0",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/{entity}/{entity_id}/related",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Remove relationship between record and Entity",
+            "citation_url": "https://developer.copper.com/related-items/remove-relationship-between-record-and-entity.html"
+          },
+          {
+            "id": "copper.rest.delete.V1ActivitiesActivityId1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/activities/{activity_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Delete an Activity",
+            "citation_url": "https://developer.copper.com/activities/delete-an-activity.html"
+          },
+          {
+            "id": "copper.rest.delete.V1CompaniesCompanyId2",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/companies/{company_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Delete a Company",
+            "citation_url": "https://developer.copper.com/companies/delete-a-company.html"
+          },
+          {
+            "id": "copper.rest.delete.V1CustomFieldDefinitionsCustomFieldDefinitionId3",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/custom_field_definitions/{custom_field_definition_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Delete a Custom Field Definition",
+            "citation_url": "https://developer.copper.com/custom-fields/general/delete-a-custom-field-definition.html"
+          },
+          {
+            "id": "copper.rest.delete.V1LeadsLeadId4",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/leads/{lead_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Delete a Lead",
+            "citation_url": "https://developer.copper.com/leads/delete-a-lead.html"
+          },
+          {
+            "id": "copper.rest.delete.V1OpportunitiesOpportunityId5",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/opportunities/{opportunity_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Delete an Opportunity",
+            "citation_url": "https://developer.copper.com/opportunities/delete-an-opportunity.html"
+          },
+          {
+            "id": "copper.rest.delete.V1PeoplePersonId6",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/people/{person_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Delete a Person",
+            "citation_url": "https://developer.copper.com/people/delete-a-person.html"
+          },
+          {
+            "id": "copper.rest.delete.V1ProjectsProjectId7",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/projects/{project_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Delete a Project",
+            "citation_url": "https://developer.copper.com/projects/delete-a-project.html"
+          },
+          {
+            "id": "copper.rest.delete.V1RelatedLinksConnectionId8",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/related_links/{connection_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Delete a connection",
+            "citation_url": "https://developer.copper.com/custom-fields/connect-fields/delete-a-connection.html"
+          },
+          {
+            "id": "copper.rest.delete.V1TasksTaskId9",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/tasks/{task_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Delete a Task",
+            "citation_url": "https://developer.copper.com/tasks/delete-a-task.html"
+          },
+          {
+            "id": "copper.rest.delete.V1WebhooksWebhookId10",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/webhooks/{webhook_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Delete subscription (unsubscribe)",
+            "citation_url": "https://developer.copper.com/webhooks/delete-subscription-unsubscribe.html"
+          },
+          {
+            "id": "copper.rest.get.V1EntityTypeEntityIdFiles11",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/{entity_type}/{entity_id}/files",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List attached files of an entity record",
+            "citation_url": "https://developer.copper.com/file-upload/list-attached-files-of-an-entity-record.html"
+          },
+          {
+            "id": "copper.rest.get.V1EntityTypeEntityIdFilesFileId12",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/{entity_type}/{entity_id}/files/{file_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Get metadata of a specific attached file",
+            "citation_url": "https://developer.copper.com/file-upload/get-metadata-of-a-specific-attached-file.html"
+          },
+          {
+            "id": "copper.rest.get.V1EntityTypeEntityIdFilesS3SignedUrl13",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/{entity_type}/{entity_id}/files/s3_signed_url",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Get signed S3 URL",
+            "citation_url": "https://developer.copper.com/file-upload/get-signed-s3-url.html"
+          },
+          {
+            "id": "copper.rest.get.V1EntityEntityIdRelated14",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/{entity}/{entity_id}/related/",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: View all records related to an Entity",
+            "citation_url": "https://developer.copper.com/related-items/view-all-records-related-to-an-entity.html"
+          },
+          {
+            "id": "copper.rest.get.V1EntityEntityIdRelatedRelatedEntityName15",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/{entity}/{entity_id}/related/{related_entity_name}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: View all records of a given Entity Type related to an Entity",
+            "citation_url": "https://developer.copper.com/related-items/view-all-records-of-a-given-entity-type-related-to-an-entity.html"
+          },
+          {
+            "id": "copper.rest.get.V1Account16",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/account",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Fetch Account Details",
+            "citation_url": "https://developer.copper.com/account-and-users/fetch-account-details.html"
+          },
+          {
+            "id": "copper.rest.get.V1ActivitiesActivityId17",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/activities/{activity_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Fetch an Activity by ID",
+            "citation_url": "https://developer.copper.com/activities/fetch-an-activity-by-id.html"
+          },
+          {
+            "id": "copper.rest.get.V1ActivityTypes18",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/activity_types",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List Activity Types",
+            "citation_url": "https://developer.copper.com/activities/list-activity-types.html"
+          },
+          {
+            "id": "copper.rest.get.V1CompaniesCompanyId19",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/companies/{company_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Fetch a Company by ID",
+            "citation_url": "https://developer.copper.com/companies/fetch-a-company-by-id.html"
+          },
+          {
+            "id": "copper.rest.get.V1ContactTypes20",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/contact_types",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List Contact Types",
+            "citation_url": "https://developer.copper.com/companies/list-contact-types.html"
+          },
+          {
+            "id": "copper.rest.get.V1CustomActivityTypes21",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/custom_activity_types",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List All Custom Activity Types",
+            "citation_url": "https://developer.copper.com/custom-fields/general/list-all-custom-activity-types.html"
+          },
+          {
+            "id": "copper.rest.get.V1CustomActivityTypesCustomActivityTypeId22",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/custom_activity_types/{custom_activity_type_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Get Custom Activity Type",
+            "citation_url": "https://developer.copper.com/custom-fields/general/get-custom-activity-type.html"
+          },
+          {
+            "id": "copper.rest.get.V1CustomFieldDefinitions23",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/custom_field_definitions",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List Custom Field Definitions",
+            "citation_url": "https://developer.copper.com/custom-fields/general/list-custom-field-definitions.html"
+          },
+          {
+            "id": "copper.rest.get.V1CustomFieldDefinitionsCustomFieldDefinitionId24",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/custom_field_definitions/{custom_field_definition_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Fetch a Custom Field Definition",
+            "citation_url": "https://developer.copper.com/custom-fields/general/fetch-a-custom-field-definition.html"
+          },
+          {
+            "id": "copper.rest.get.V1CustomerSources25",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/customer_sources",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List Customer Sources",
+            "citation_url": "https://developer.copper.com/leads/list-customer-sources.html"
+          },
+          {
+            "id": "copper.rest.get.V1FieldLayoutsByEntityEntityNameInPlural26",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/field_layouts/by_entity/{entity_name_in_plural}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List Field Layout by Entity Type",
+            "citation_url": "https://developer.copper.com/field-layouts/list-field-layout-by-entity-type.html"
+          },
+          {
+            "id": "copper.rest.get.V1LeadStatuses27",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/lead_statuses",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List Lead Statuses",
+            "citation_url": "https://developer.copper.com/leads/list-lead-statuses.html"
+          },
+          {
+            "id": "copper.rest.get.V1LeadsLeadId28",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/leads/{lead_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Fetch a Lead by ID",
+            "citation_url": "https://developer.copper.com/leads/fetch-a-lead-by-id.html"
+          },
+          {
+            "id": "copper.rest.get.V1LossReasons29",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/loss_reasons",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List Loss Reasons",
+            "citation_url": "https://developer.copper.com/opportunities/list-loss-reasons.html"
+          },
+          {
+            "id": "copper.rest.get.V1OpportunitiesOpportunityId30",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/opportunities/{opportunity_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Fetch an Opportunity by ID",
+            "citation_url": "https://developer.copper.com/opportunities/fetch-an-opportunity-by-id.html"
+          },
+          {
+            "id": "copper.rest.get.V1PeoplePersonId31",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/people/{person_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Fetch a Person by ID",
+            "citation_url": "https://developer.copper.com/people/fetch-a-person-by-id.html"
+          },
+          {
+            "id": "copper.rest.get.V1PipelineStages32",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/pipeline_stages",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List Pipeline Stages",
+            "citation_url": "https://developer.copper.com/opportunities/list-pipeline-stages.html#list-pipeline-stages"
+          },
+          {
+            "id": "copper.rest.get.V1PipelineStagesPipelinePipelineId33",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/pipeline_stages/pipeline/{pipeline_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List Stages in a Pipeline",
+            "citation_url": "https://developer.copper.com/opportunities/list-stages-in-a-pipeline.html"
+          },
+          {
+            "id": "copper.rest.get.V1Pipelines34",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/pipelines",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List Pipelines",
+            "citation_url": "https://developer.copper.com/opportunities/list-pipelines.html#list-pipelines"
+          },
+          {
+            "id": "copper.rest.get.V1ProjectsProjectId35",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/projects/{project_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Fetch a Project by ID",
+            "citation_url": "https://developer.copper.com/projects/fetch-a-project-by-id.html"
+          },
+          {
+            "id": "copper.rest.get.V1RelatedLinks36",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/related_links",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List the connections on specified entity for a specific custom-field-definition-id",
+            "citation_url": "https://developer.copper.com/custom-fields/connect-fields/list-the-connections-on-specified-entity-custom-field-definition-id.html"
+          },
+          {
+            "id": "copper.rest.get.V1Tags37",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/tags",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List Tags",
+            "citation_url": "https://developer.copper.com/tags/list-tags.html"
+          },
+          {
+            "id": "copper.rest.get.V1TasksTaskId38",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/tasks/{task_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Fetch a Task by ID",
+            "citation_url": "https://developer.copper.com/tasks/fetch-a-task-by-id.html"
+          },
+          {
+            "id": "copper.rest.get.V1UsersUserId39",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/users/{user_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Fetch User by ID",
+            "citation_url": "https://developer.copper.com/account-and-users/fetch-user-by-id.html"
+          },
+          {
+            "id": "copper.rest.get.V1UsersMe40",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/users/me",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Fetch API User",
+            "citation_url": "https://developer.copper.com/account-and-users/fetch-api-user.html"
+          },
+          {
+            "id": "copper.rest.get.V1Webhooks41",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/webhooks",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List all subscriptions",
+            "citation_url": "https://developer.copper.com/webhooks/list-all-subscriptions.html"
+          },
+          {
+            "id": "copper.rest.get.V1WebhooksWebhookId42",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/webhooks/{webhook_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: View subscription by ID; normalized provider markup /v1/webhooks{webhook_id} to /v1/webhooks/{webhook_id}",
+            "citation_url": "https://developer.copper.com/webhooks/view-subscription-by-id.html"
+          },
+          {
+            "id": "copper.rest.post.V1EntityNameInPluralSearch43",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/{entity_name_in_plural}/search",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Search Entity (Leads, People, etc) by Custom Field",
+            "citation_url": "https://developer.copper.com/custom-fields/general/search-entity-leads-people-etc-by-custom-field.html"
+          },
+          {
+            "id": "copper.rest.post.V1EntityTypeEntityIdFiles44",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/{entity_type}/{entity_id}/files",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Relate the uploaded file to a specific entity",
+            "citation_url": "https://developer.copper.com/file-upload/relate-the-uploaded-file-to-a-specific-entity.html"
+          },
+          {
+            "id": "copper.rest.post.V1EntityEntityIdRelated45",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/{entity}/{entity_id}/related",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Relate an existing record to an Entity",
+            "citation_url": "https://developer.copper.com/related-items/relate-an-existing-record-to-an-entity.html"
+          },
+          {
+            "id": "copper.rest.post.V1Activities46",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/activities",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Create a New Activity",
+            "citation_url": "https://developer.copper.com/activities/create-a-new-activity.html"
+          },
+          {
+            "id": "copper.rest.post.V1ActivitiesBulkCreate47",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/activities/bulk_create",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Bulk Create Activities",
+            "citation_url": "https://developer.copper.com/activities/bulk-create-activities.html"
+          },
+          {
+            "id": "copper.rest.post.V1ActivitiesSearch48",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/activities/search",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List Activities (Search)",
+            "citation_url": "https://developer.copper.com/activities/list-activities-search.html"
+          },
+          {
+            "id": "copper.rest.post.V1Companies49",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/companies",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Create a New Company",
+            "citation_url": "https://developer.copper.com/companies/create-a-new-company.html"
+          },
+          {
+            "id": "copper.rest.post.V1CompaniesCompanyIdActivities50",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/companies/{company_id}/activities",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: See a Company's Activities",
+            "citation_url": "https://developer.copper.com/companies/see-a-companys-activities.html"
+          },
+          {
+            "id": "copper.rest.post.V1CompaniesBulkCreate51",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/companies/bulk_create",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Bulk Create Companies",
+            "citation_url": "https://developer.copper.com/companies/bulk-company-create.html"
+          },
+          {
+            "id": "copper.rest.post.V1CompaniesBulkUpdate52",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/companies/bulk_update",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Bulk Update Companies",
+            "citation_url": "https://developer.copper.com/companies/bulk-company-update.html"
+          },
+          {
+            "id": "copper.rest.post.V1CompaniesSearch53",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/companies/search",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List Companies (Search)",
+            "citation_url": "https://developer.copper.com/companies/list-companies-search.html"
+          },
+          {
+            "id": "copper.rest.post.V1CustomActivityTypes54",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/custom_activity_types",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Create a New Custom Activity Type",
+            "citation_url": "https://developer.copper.com/custom-fields/general/create-a-new-custom-activity-type.html"
+          },
+          {
+            "id": "copper.rest.post.V1CustomFieldDefinitions55",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/custom_field_definitions",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Create a new custom field definition",
+            "citation_url": "https://developer.copper.com/custom-fields/general/create-a-new-custom-field-definition.html"
+          },
+          {
+            "id": "copper.rest.post.V1Leads56",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/leads",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Create a New Lead",
+            "citation_url": "https://developer.copper.com/leads/create-a-new-lead.html"
+          },
+          {
+            "id": "copper.rest.post.V1LeadsLeadIdActivities57",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/leads/{lead_id}/activities",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: See a Lead's Activities",
+            "citation_url": "https://developer.copper.com/leads/see-a-leads-activities.html"
+          },
+          {
+            "id": "copper.rest.post.V1LeadsLeadconvertIdConvert58",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/leads/{leadconvert_id}/convert",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Convert a Lead",
+            "citation_url": "https://developer.copper.com/leads/convert-a-lead.html"
+          },
+          {
+            "id": "copper.rest.post.V1LeadsBulkCreate59",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/leads/bulk_create",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Bulk Create Leads",
+            "citation_url": "https://developer.copper.com/leads/bulk-create-leads.html"
+          },
+          {
+            "id": "copper.rest.post.V1LeadsBulkUpdate60",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/leads/bulk_update",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Bulk Update Leads",
+            "citation_url": "https://developer.copper.com/leads/bulk-update-leads.html"
+          },
+          {
+            "id": "copper.rest.post.V1LeadsSearch61",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/leads/search",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List Leads (Search)",
+            "citation_url": "https://developer.copper.com/leads/list-leads-search.html"
+          },
+          {
+            "id": "copper.rest.post.V1Opportunities62",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/opportunities",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Create a New Opportunity",
+            "citation_url": "https://developer.copper.com/opportunities/create-a-new-opportunity.html"
+          },
+          {
+            "id": "copper.rest.post.V1OpportunitiesBulkCreate63",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/opportunities/bulk_create",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Bulk Create Opportunities",
+            "citation_url": "https://developer.copper.com/opportunities/bulk-create-opportunities.html"
+          },
+          {
+            "id": "copper.rest.post.V1OpportunitiesSearch64",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/opportunities/search",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List Opportunities (Search)",
+            "citation_url": "https://developer.copper.com/opportunities/list-opportunities-search.html"
+          },
+          {
+            "id": "copper.rest.post.V1People65",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/people",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Create a New Person",
+            "citation_url": "https://developer.copper.com/people/create-a-new-person.html"
+          },
+          {
+            "id": "copper.rest.post.V1PeoplePersonIdActivities66",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/people/{person_id}/activities",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: See a Person's Activities",
+            "citation_url": "https://developer.copper.com/people/see-a-persons-activities.html"
+          },
+          {
+            "id": "copper.rest.post.V1PeopleBulkCreate67",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/people/bulk_create",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Bulk Create People",
+            "citation_url": "https://developer.copper.com/people/bulk-create-people.html"
+          },
+          {
+            "id": "copper.rest.post.V1PeopleBulkUpdate68",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/people/bulk_update",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Bulk Update People",
+            "citation_url": "https://developer.copper.com/people/bulk-update-people.html"
+          },
+          {
+            "id": "copper.rest.post.V1PeopleFetchByEmail69",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/people/fetch_by_email",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Fetch a Person by Email",
+            "citation_url": "https://developer.copper.com/people/fetch-a-person-by-email.html"
+          },
+          {
+            "id": "copper.rest.post.V1PeopleSearch70",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/people/search",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List People (Search)",
+            "citation_url": "https://developer.copper.com/people/list-people-search.html"
+          },
+          {
+            "id": "copper.rest.post.V1Projects71",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/projects",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Create a New Project",
+            "citation_url": "https://developer.copper.com/projects/create-a-new-project.html"
+          },
+          {
+            "id": "copper.rest.post.V1ProjectsSearch72",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/projects/search",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List Projects (Search)",
+            "citation_url": "https://developer.copper.com/projects/list-projects-search.html"
+          },
+          {
+            "id": "copper.rest.post.V1RelatedLinks73",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/related_links",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Create a connection",
+            "citation_url": "https://developer.copper.com/custom-fields/connect-fields/create-a-connection.html"
+          },
+          {
+            "id": "copper.rest.post.V1Tasks74",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/tasks",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Create a New Task",
+            "citation_url": "https://developer.copper.com/tasks/create-a-new-task.html"
+          },
+          {
+            "id": "copper.rest.post.V1TasksSearch75",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/tasks/search",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List Tasks (Search)",
+            "citation_url": "https://developer.copper.com/tasks/list-tasks-search.html"
+          },
+          {
+            "id": "copper.rest.post.V1UsersSearch76",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/users/search",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: List Users",
+            "citation_url": "https://developer.copper.com/account-and-users/list-users.html"
+          },
+          {
+            "id": "copper.rest.post.V1Webhooks77",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/webhooks",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Create new subscription",
+            "citation_url": "https://developer.copper.com/webhooks/create-new-subscription.html"
+          },
+          {
+            "id": "copper.rest.put.V1ActivitiesActivityId78",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/activities/{activity_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Update an Activity",
+            "citation_url": "https://developer.copper.com/activities/update-an-activity.html"
+          },
+          {
+            "id": "copper.rest.put.V1CompaniesCompanyId79",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/companies/{company_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Update a Company",
+            "citation_url": "https://developer.copper.com/companies/update-a-company.html"
+          },
+          {
+            "id": "copper.rest.put.V1CustomActivityTypesCustomActivityTypeId80",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/custom_activity_types/{custom_activity_type_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Update an Existing Custom Activity Type",
+            "citation_url": "https://developer.copper.com/custom-fields/general/update-an-existing-custom-activity-type.html"
+          },
+          {
+            "id": "copper.rest.put.V1CustomFieldDefinitionsCustomFieldDefinitionId81",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/custom_field_definitions/{custom_field_definition_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Update an existing custom field definition",
+            "citation_url": "https://developer.copper.com/custom-fields/general/update-an-existing-custom-field-definition.html"
+          },
+          {
+            "id": "copper.rest.put.V1LeadsLeadId82",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/leads/{lead_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Update a Lead",
+            "citation_url": "https://developer.copper.com/leads/update-a-lead.html"
+          },
+          {
+            "id": "copper.rest.put.V1LeadsUpsert83",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/leads/upsert",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: UPSERT a Lead (by custom field)",
+            "citation_url": "https://developer.copper.com/leads/upsert-a-lead-by-custom-field.html"
+          },
+          {
+            "id": "copper.rest.put.V1OpportunitiesOpportunityId84",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/opportunities/{opportunity_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Update an Opportunity",
+            "citation_url": "https://developer.copper.com/opportunities/update-an-opportunity.html"
+          },
+          {
+            "id": "copper.rest.put.V1PeoplePersonId85",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/people/{person_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Update a Person",
+            "citation_url": "https://developer.copper.com/people/update-a-person.html"
+          },
+          {
+            "id": "copper.rest.put.V1ProjectsProjectId86",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/projects/{project_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Update a Project",
+            "citation_url": "https://developer.copper.com/projects/update-a-project.html"
+          },
+          {
+            "id": "copper.rest.put.V1TasksTaskId87",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/tasks/{task_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Update a Task",
+            "citation_url": "https://developer.copper.com/tasks/update-a-task.html"
+          },
+          {
+            "id": "copper.rest.put.V1WebhooksSubscriptionId88",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/webhooks/{subscription_id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "Copper rendered declaration: Update a subscription",
+            "citation_url": "https://developer.copper.com/webhooks/update-a-subscription.html"
+          }
+        ]
+      }
+    ]
+  },
+  "counts": {
+    "rest": 89,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 89
+  }
+}

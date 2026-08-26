@@ -1270,7 +1270,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter `id`."
           },
           "subject": {

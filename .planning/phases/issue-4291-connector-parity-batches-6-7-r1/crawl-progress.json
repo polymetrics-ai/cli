@@ -1,0 +1,3703 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-08-19T16:51:16.950Z",
+  "crawls": {
+    "salesloft": {
+      "state": "complete",
+      "reference_root": "https://developers.salesloft.com/docs/api/",
+      "discovery_url": "https://developers.salesloft.com/sitemap.xml",
+      "documents_total": 315,
+      "documents_retrieved": 315,
+      "operations_found": 211,
+      "coverage_confidence": "complete_rendered_reference"
+    },
+    "square": {
+      "state": "superseded_by_machine_spec",
+      "reference_root": "https://developer.squareup.com/reference/square",
+      "groups_total": 40,
+      "groups_retrieved": 40,
+      "operations_found": null,
+      "coverage_confidence": "partial",
+      "resume_strategy": null,
+      "group_pages": {
+        "https://developer.squareup.com/reference/square/apple-pay-api": {
+          "sha256": "eedba74f7517134b00604ad2d7f1ceb2c97aed9ff7b6e5bd92c688e837b6faca",
+          "bytes": 59394,
+          "operations": [
+            {
+              "method": "POST",
+              "path": "/v2/apple-pay/domains",
+              "source_url": "https://developer.squareup.com/reference/square/apple-pay-api/register-domain"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/bank-accounts-api": {
+          "sha256": "c9a2ea73ae058e4ea957a4cf76fd9e962d537a69aab88c83a4e0d69cb8ddb879",
+          "bytes": 65575,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/bank-accounts",
+              "source_url": "https://developer.squareup.com/reference/square/bank-accounts-api/list-bank-accounts"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/bank-accounts",
+              "source_url": "https://developer.squareup.com/reference/square/bank-accounts-api/create-bank-account"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/bank-accounts/by-v1-id/{v1_bank_account_id}",
+              "source_url": "https://developer.squareup.com/reference/square/bank-accounts-api/get-bank-account-by-v1-id"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/bank-accounts/{bank_account_id}",
+              "source_url": "https://developer.squareup.com/reference/square/bank-accounts-api/get-bank-account"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/bank-accounts/{bank_account_id}/disable",
+              "source_url": "https://developer.squareup.com/reference/square/bank-accounts-api/disable-bank-account"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/booking-custom-attributes-api": {
+          "sha256": "4ee5ac25d52948e212d1e5f02ce8122d6a76b7af929f16e4952bad8887a504f6",
+          "bytes": 76064,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/bookings/custom-attribute-definitions",
+              "source_url": "https://developer.squareup.com/reference/square/booking-custom-attributes-api/list-booking-custom-attribute-definitions"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/bookings/custom-attribute-definitions",
+              "source_url": "https://developer.squareup.com/reference/square/booking-custom-attributes-api/create-booking-custom-attribute-definition"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/bookings/custom-attribute-definitions/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/booking-custom-attributes-api/delete-booking-custom-attribute-definition"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/bookings/custom-attribute-definitions/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/booking-custom-attributes-api/retrieve-booking-custom-attribute-definition"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/bookings/custom-attribute-definitions/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/booking-custom-attributes-api/update-booking-custom-attribute-definition"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/bookings/custom-attributes/bulk-delete",
+              "source_url": "https://developer.squareup.com/reference/square/booking-custom-attributes-api/bulk-delete-booking-custom-attributes"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/bookings/custom-attributes/bulk-upsert",
+              "source_url": "https://developer.squareup.com/reference/square/booking-custom-attributes-api/bulk-upsert-booking-custom-attributes"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/bookings/{booking_id}/custom-attributes",
+              "source_url": "https://developer.squareup.com/reference/square/booking-custom-attributes-api/list-booking-custom-attributes"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/bookings/{booking_id}/custom-attributes/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/booking-custom-attributes-api/delete-booking-custom-attribute"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/bookings/{booking_id}/custom-attributes/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/booking-custom-attributes-api/retrieve-booking-custom-attribute"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/bookings/{booking_id}/custom-attributes/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/booking-custom-attributes-api/upsert-booking-custom-attribute"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/bookings-api": {
+          "sha256": "18a460ad20cdc255ba360eb1a451e5a69f093864f89dfd4fcca016ad269be6e7",
+          "bytes": 81931,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/bookings",
+              "source_url": "https://developer.squareup.com/reference/square/bookings-api/list-bookings"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/bookings",
+              "source_url": "https://developer.squareup.com/reference/square/bookings-api/create-booking"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/bookings/availability/search",
+              "source_url": "https://developer.squareup.com/reference/square/bookings-api/search-availability"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/bookings/bulk-retrieve",
+              "source_url": "https://developer.squareup.com/reference/square/bookings-api/bulk-retrieve-bookings"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/bookings/business-booking-profile",
+              "source_url": "https://developer.squareup.com/reference/square/bookings-api/retrieve-business-booking-profile"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/bookings/location-booking-profiles",
+              "source_url": "https://developer.squareup.com/reference/square/bookings-api/list-location-booking-profiles"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/bookings/location-booking-profiles/{location_id}",
+              "source_url": "https://developer.squareup.com/reference/square/bookings-api/retrieve-location-booking-profile"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/bookings/team-member-booking-profiles",
+              "source_url": "https://developer.squareup.com/reference/square/bookings-api/list-team-member-booking-profiles"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/bookings/team-member-booking-profiles/bulk-retrieve",
+              "source_url": "https://developer.squareup.com/reference/square/bookings-api/bulk-retrieve-team-member-booking-profiles"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/bookings/team-member-booking-profiles/{team_member_id}",
+              "source_url": "https://developer.squareup.com/reference/square/bookings-api/retrieve-team-member-booking-profile"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/bookings/{booking_id}",
+              "source_url": "https://developer.squareup.com/reference/square/bookings-api/retrieve-booking"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/bookings/{booking_id}",
+              "source_url": "https://developer.squareup.com/reference/square/bookings-api/update-booking"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/bookings/{booking_id}/cancel",
+              "source_url": "https://developer.squareup.com/reference/square/bookings-api/cancel-booking"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/cards-api": {
+          "sha256": "9fbbac914858ba8e1abbf32d235a2bc95e382726ca632c63b9819265af4fe7b2",
+          "bytes": 64823,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/cards",
+              "source_url": "https://developer.squareup.com/reference/square/cards-api/list-cards"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/cards",
+              "source_url": "https://developer.squareup.com/reference/square/cards-api/create-card"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/cards/{card_id}",
+              "source_url": "https://developer.squareup.com/reference/square/cards-api/retrieve-card"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/cards/{card_id}/disable",
+              "source_url": "https://developer.squareup.com/reference/square/cards-api/disable-card"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/cash-drawers-api": {
+          "sha256": "a801dfa1a976f9e60461016994c8f13a0b602785f7fb43fcfeffb36fec10786a",
+          "bytes": 62745,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/cash-drawers/shifts",
+              "source_url": "https://developer.squareup.com/reference/square/cash-drawers-api/list-cash-drawer-shifts"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/cash-drawers/shifts/{shift_id}",
+              "source_url": "https://developer.squareup.com/reference/square/cash-drawers-api/retrieve-cash-drawer-shift"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/cash-drawers/shifts/{shift_id}/events",
+              "source_url": "https://developer.squareup.com/reference/square/cash-drawers-api/list-cash-drawer-shift-events"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/catalog-api": {
+          "sha256": "6c2c00e8b2c46993a141d4889f0e1b1fd0054ef4c1a4fc4bd74e73654a934716",
+          "bytes": 80468,
+          "operations": [
+            {
+              "method": "POST",
+              "path": "/v2/catalog/batch-delete",
+              "source_url": "https://developer.squareup.com/reference/square/catalog-api/batch-delete-catalog-objects"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/catalog/batch-retrieve",
+              "source_url": "https://developer.squareup.com/reference/square/catalog-api/batch-retrieve-catalog-objects"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/catalog/batch-upsert",
+              "source_url": "https://developer.squareup.com/reference/square/catalog-api/batch-upsert-catalog-objects"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/catalog/images",
+              "source_url": "https://developer.squareup.com/reference/square/catalog-api/create-catalog-image"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/catalog/images/{image_id}",
+              "source_url": "https://developer.squareup.com/reference/square/catalog-api/update-catalog-image"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/catalog/info",
+              "source_url": "https://developer.squareup.com/reference/square/catalog-api/catalog-info"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/catalog/list",
+              "source_url": "https://developer.squareup.com/reference/square/catalog-api/list-catalog"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/catalog/object",
+              "source_url": "https://developer.squareup.com/reference/square/catalog-api/upsert-catalog-object"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/catalog/object/{object_id}",
+              "source_url": "https://developer.squareup.com/reference/square/catalog-api/delete-catalog-object"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/catalog/object/{object_id}",
+              "source_url": "https://developer.squareup.com/reference/square/catalog-api/retrieve-catalog-object"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/catalog/search",
+              "source_url": "https://developer.squareup.com/reference/square/catalog-api/search-catalog-objects"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/catalog/search-catalog-items",
+              "source_url": "https://developer.squareup.com/reference/square/catalog-api/search-catalog-items"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/catalog/update-item-modifier-lists",
+              "source_url": "https://developer.squareup.com/reference/square/catalog-api/update-item-modifier-lists"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/catalog/update-item-taxes",
+              "source_url": "https://developer.squareup.com/reference/square/catalog-api/update-item-taxes"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/channels-api": {
+          "sha256": "02e4cb12cded9a92ef396cef25086a22fb23f011f6af37bac24c34e6432b3224",
+          "bytes": 61517,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/channels",
+              "source_url": "https://developer.squareup.com/reference/square/channels-api/list-channels"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/channels/bulk-retrieve",
+              "source_url": "https://developer.squareup.com/reference/square/channels-api/bulk-retrieve-channels"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/channels/{channel_id}",
+              "source_url": "https://developer.squareup.com/reference/square/channels-api/retrieve-channel"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/checkout-api": {
+          "sha256": "e8cad0b6a3f30efbd942ce687906ecf15a309e6ab728716d6db2db4c9e4f5a9d",
+          "bytes": 38471,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/online-checkout/location-settings/{location_id}",
+              "source_url": "https://developer.squareup.com/reference/square/checkout-api/retrieve-location-settings"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/online-checkout/location-settings/{location_id}",
+              "source_url": "https://developer.squareup.com/reference/square/checkout-api/update-location-settings"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/online-checkout/merchant-settings",
+              "source_url": "https://developer.squareup.com/reference/square/checkout-api/retrieve-merchant-settings"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/online-checkout/merchant-settings",
+              "source_url": "https://developer.squareup.com/reference/square/checkout-api/update-merchant-settings"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/online-checkout/payment-links",
+              "source_url": "https://developer.squareup.com/reference/square/checkout-api/list-payment-links"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/online-checkout/payment-links",
+              "source_url": "https://developer.squareup.com/reference/square/checkout-api/create-payment-link"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/online-checkout/payment-links/{id}",
+              "source_url": "https://developer.squareup.com/reference/square/checkout-api/delete-payment-link"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/online-checkout/payment-links/{id}",
+              "source_url": "https://developer.squareup.com/reference/square/checkout-api/retrieve-payment-link"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/online-checkout/payment-links/{id}",
+              "source_url": "https://developer.squareup.com/reference/square/checkout-api/update-payment-link"
+            }
+          ],
+          "extraction": "browser_rendered_dom"
+        },
+        "https://developer.squareup.com/reference/square/customer-custom-attributes-api": {
+          "sha256": "3f43e4e91784d52f8a576447155760b349bfa916a409f6935463898309e0b5ce",
+          "bytes": 72445,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/customers/custom-attribute-definitions",
+              "source_url": "https://developer.squareup.com/reference/square/customer-custom-attributes-api/list-customer-custom-attribute-definitions"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/customers/custom-attribute-definitions",
+              "source_url": "https://developer.squareup.com/reference/square/customer-custom-attributes-api/create-customer-custom-attribute-definition"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/customers/custom-attribute-definitions/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/customer-custom-attributes-api/delete-customer-custom-attribute-definition"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/customers/custom-attribute-definitions/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/customer-custom-attributes-api/retrieve-customer-custom-attribute-definition"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/customers/custom-attribute-definitions/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/customer-custom-attributes-api/update-customer-custom-attribute-definition"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/customers/custom-attributes/bulk-upsert",
+              "source_url": "https://developer.squareup.com/reference/square/customer-custom-attributes-api/bulk-upsert-customer-custom-attributes"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/customers/{customer_id}/custom-attributes",
+              "source_url": "https://developer.squareup.com/reference/square/customer-custom-attributes-api/list-customer-custom-attributes"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/customers/{customer_id}/custom-attributes/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/customer-custom-attributes-api/delete-customer-custom-attribute"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/customers/{customer_id}/custom-attributes/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/customer-custom-attributes-api/retrieve-customer-custom-attribute"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/customers/{customer_id}/custom-attributes/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/customer-custom-attributes-api/upsert-customer-custom-attribute"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/customer-groups-api": {
+          "sha256": "3647703fcc787b82167e4772f923433f06bcbf6bf09e813ff736d761d25cc0c2",
+          "bytes": 63920,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/customers/groups",
+              "source_url": "https://developer.squareup.com/reference/square/customer-groups-api/list-customer-groups"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/customers/groups",
+              "source_url": "https://developer.squareup.com/reference/square/customer-groups-api/create-customer-group"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/customers/groups/{group_id}",
+              "source_url": "https://developer.squareup.com/reference/square/customer-groups-api/delete-customer-group"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/customers/groups/{group_id}",
+              "source_url": "https://developer.squareup.com/reference/square/customer-groups-api/retrieve-customer-group"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/customers/groups/{group_id}",
+              "source_url": "https://developer.squareup.com/reference/square/customer-groups-api/update-customer-group"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/customer-segments-api": {
+          "sha256": "025f064041c3021dabcf463c4dc2ec7806a278cc07007174d20c3fb27a32bfdc",
+          "bytes": 59719,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/customers/segments",
+              "source_url": "https://developer.squareup.com/reference/square/customer-segments-api/list-customer-segments"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/customers/segments/{segment_id}",
+              "source_url": "https://developer.squareup.com/reference/square/customer-segments-api/retrieve-customer-segment"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/customers-api": {
+          "sha256": "4dacae270dedb7b985f41706b298b7f4113608486a2f26b967bcbb51b03a2368",
+          "bytes": 73865,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/customers",
+              "source_url": "https://developer.squareup.com/reference/square/customers-api/list-customers"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/customers",
+              "source_url": "https://developer.squareup.com/reference/square/customers-api/create-customer"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/customers/bulk-create",
+              "source_url": "https://developer.squareup.com/reference/square/customers-api/bulk-create-customers"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/customers/bulk-delete",
+              "source_url": "https://developer.squareup.com/reference/square/customers-api/bulk-delete-customers"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/customers/bulk-retrieve",
+              "source_url": "https://developer.squareup.com/reference/square/customers-api/bulk-retrieve-customers"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/customers/bulk-update",
+              "source_url": "https://developer.squareup.com/reference/square/customers-api/bulk-update-customers"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/customers/search",
+              "source_url": "https://developer.squareup.com/reference/square/customers-api/search-customers"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/customers/{customer_id}",
+              "source_url": "https://developer.squareup.com/reference/square/customers-api/delete-customer"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/customers/{customer_id}",
+              "source_url": "https://developer.squareup.com/reference/square/customers-api/retrieve-customer"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/customers/{customer_id}",
+              "source_url": "https://developer.squareup.com/reference/square/customers-api/update-customer"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/customers/{customer_id}/groups/{group_id}",
+              "source_url": "https://developer.squareup.com/reference/square/customers-api/remove-group-from-customer"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/customers/{customer_id}/groups/{group_id}",
+              "source_url": "https://developer.squareup.com/reference/square/customers-api/add-group-to-customer"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/devices-api": {
+          "sha256": "ed6d3c67454409e7a6e3444836a52bae1be00075efa949bf98a8617f5996839b",
+          "bytes": 65411,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/devices",
+              "source_url": "https://developer.squareup.com/reference/square/devices-api/list-devices"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/devices/codes",
+              "source_url": "https://developer.squareup.com/reference/square/devices-api/list-device-codes"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/devices/codes",
+              "source_url": "https://developer.squareup.com/reference/square/devices-api/create-device-code"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/devices/codes/{id}",
+              "source_url": "https://developer.squareup.com/reference/square/devices-api/get-device-code"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/devices/{device_id}",
+              "source_url": "https://developer.squareup.com/reference/square/devices-api/get-device"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/disputes-api": {
+          "sha256": "6cbd19e6c407faa552179d89b589263e2ac5013f6f33578ef7b632177ae4fc6d",
+          "bytes": 72695,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/disputes",
+              "source_url": "https://developer.squareup.com/reference/square/disputes-api/list-disputes"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/disputes/{dispute_id}",
+              "source_url": "https://developer.squareup.com/reference/square/disputes-api/retrieve-dispute"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/disputes/{dispute_id}/accept",
+              "source_url": "https://developer.squareup.com/reference/square/disputes-api/accept-dispute"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/disputes/{dispute_id}/evidence",
+              "source_url": "https://developer.squareup.com/reference/square/disputes-api/list-dispute-evidence"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/disputes/{dispute_id}/evidence-files",
+              "source_url": "https://developer.squareup.com/reference/square/disputes-api/create-dispute-evidence-file"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/disputes/{dispute_id}/evidence-text",
+              "source_url": "https://developer.squareup.com/reference/square/disputes-api/create-dispute-evidence-text"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/disputes/{dispute_id}/evidence/{evidence_id}",
+              "source_url": "https://developer.squareup.com/reference/square/disputes-api/delete-dispute-evidence"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/disputes/{dispute_id}/evidence/{evidence_id}",
+              "source_url": "https://developer.squareup.com/reference/square/disputes-api/retrieve-dispute-evidence"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/disputes/{dispute_id}/submit-evidence",
+              "source_url": "https://developer.squareup.com/reference/square/disputes-api/submit-evidence"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/events-api": {
+          "sha256": "0e0fe59e0eec49394d3710c09aa32601abb564e35ccf0f9fccfa2e62d5eff3ec",
+          "bytes": 59369,
+          "operations": [
+            {
+              "method": "POST",
+              "path": "/v2/events",
+              "source_url": "https://developer.squareup.com/reference/square/events-api/search-events"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/events/disable",
+              "source_url": "https://developer.squareup.com/reference/square/events-api/disable-events"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/events/enable",
+              "source_url": "https://developer.squareup.com/reference/square/events-api/enable-events"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/events/types",
+              "source_url": "https://developer.squareup.com/reference/square/events-api/list-event-types"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/gift-card-activities-api": {
+          "sha256": "06f0b4d65de53f7db50c36208a99f8a1495accf7a1bf97a56ee7e7b18f1ca2ac",
+          "bytes": 59087,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/gift-cards/activities",
+              "source_url": "https://developer.squareup.com/reference/square/gift-card-activities-api/list-gift-card-activities"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/gift-cards/activities",
+              "source_url": "https://developer.squareup.com/reference/square/gift-card-activities-api/create-gift-card-activity"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/gift-cards-api": {
+          "sha256": "56e70c33d1b8e44140198ecc1694f8e0549456e05022a0ac2c2dc73b1960600a",
+          "bytes": 38475,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/gift-cards",
+              "source_url": "https://developer.squareup.com/reference/square/gift-cards-api/list-gift-cards"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/gift-cards",
+              "source_url": "https://developer.squareup.com/reference/square/gift-cards-api/create-gift-card"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/gift-cards/from-gan",
+              "source_url": "https://developer.squareup.com/reference/square/gift-cards-api/retrieve-gift-card-from-gan"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/gift-cards/from-nonce",
+              "source_url": "https://developer.squareup.com/reference/square/gift-cards-api/retrieve-gift-card-from-nonce"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/gift-cards/{gift_card_id}/link-customer",
+              "source_url": "https://developer.squareup.com/reference/square/gift-cards-api/link-customer-to-gift-card"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/gift-cards/{gift_card_id}/unlink-customer",
+              "source_url": "https://developer.squareup.com/reference/square/gift-cards-api/unlink-customer-from-gift-card"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/gift-cards/{id}",
+              "source_url": "https://developer.squareup.com/reference/square/gift-cards-api/retrieve-gift-card"
+            }
+          ],
+          "extraction": "browser_rendered_dom"
+        },
+        "https://developer.squareup.com/reference/square/inventory-api": {
+          "sha256": "af02dfe255a76073124afa435c8fb4c380b1aa31fd3f3c0b5e0990d6b3f13daf",
+          "bytes": 38473,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/inventory/adjustment-reasons",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/list-inventory-adjustment-reasons"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/inventory/adjustment-reasons/create",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/create-inventory-adjustment-reason"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/inventory/adjustment-reasons/delete",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/delete-inventory-adjustment-reason"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/inventory/adjustment-reasons/restore",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/restore-inventory-adjustment-reason"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/inventory/adjustment-reasons/retrieve",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/retrieve-inventory-adjustment-reason"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/inventory/adjustment-reasons/update",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/update-inventory-adjustment-reason"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/inventory/adjustments/update",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/update-inventory-adjustment"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/inventory/adjustments/{adjustment_id}",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/retrieve-inventory-adjustment"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/inventory/changes/batch-create",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/batch-change-inventory"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/inventory/changes/batch-retrieve",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/batch-retrieve-inventory-changes"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/inventory/counts/batch-retrieve",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/batch-retrieve-inventory-counts"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/inventory/physical-counts/{physical_count_id}",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/retrieve-inventory-physical-count"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/inventory/{catalog_object_id}",
+              "source_url": "https://developer.squareup.com/reference/square/inventory-api/retrieve-inventory-count"
+            }
+          ],
+          "extraction": "browser_rendered_dom"
+        },
+        "https://developer.squareup.com/reference/square/invoices-api": {
+          "sha256": "78a538e5dfba370665988254c6ba90f5f4e90f4365321aa3d36d0aca3e185888",
+          "bytes": 73679,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/invoices",
+              "source_url": "https://developer.squareup.com/reference/square/invoices-api/list-invoices"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/invoices",
+              "source_url": "https://developer.squareup.com/reference/square/invoices-api/create-invoice"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/invoices/search",
+              "source_url": "https://developer.squareup.com/reference/square/invoices-api/search-invoices"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/invoices/{invoice_id}",
+              "source_url": "https://developer.squareup.com/reference/square/invoices-api/delete-invoice"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/invoices/{invoice_id}",
+              "source_url": "https://developer.squareup.com/reference/square/invoices-api/get-invoice"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/invoices/{invoice_id}",
+              "source_url": "https://developer.squareup.com/reference/square/invoices-api/update-invoice"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/invoices/{invoice_id}/attachments",
+              "source_url": "https://developer.squareup.com/reference/square/invoices-api/create-invoice-attachment"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/invoices/{invoice_id}/attachments/{attachment_id}",
+              "source_url": "https://developer.squareup.com/reference/square/invoices-api/delete-invoice-attachment"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/invoices/{invoice_id}/cancel",
+              "source_url": "https://developer.squareup.com/reference/square/invoices-api/cancel-invoice"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/invoices/{invoice_id}/publish",
+              "source_url": "https://developer.squareup.com/reference/square/invoices-api/publish-invoice"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/labor-api": {
+          "sha256": "b2a6c1c59bfd45aecf403ab98f2d69210b7a4c1cba04f850f23a8d2ff7abdf6a",
+          "bytes": 83199,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/labor/break-types",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/list-break-types"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/labor/break-types",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/create-break-type"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/labor/break-types/{id}",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/delete-break-type"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/labor/break-types/{id}",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/get-break-type"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/labor/break-types/{id}",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/update-break-type"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/labor/scheduled-shifts",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/create-scheduled-shift"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/labor/scheduled-shifts/bulk-publish",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/bulk-publish-scheduled-shifts"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/labor/scheduled-shifts/search",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/search-scheduled-shifts"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/labor/scheduled-shifts/{id}",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/retrieve-scheduled-shift"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/labor/scheduled-shifts/{id}",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/update-scheduled-shift"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/labor/scheduled-shifts/{id}/publish",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/publish-scheduled-shift"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/labor/team-member-wages",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/list-team-member-wages"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/labor/team-member-wages/{id}",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/get-team-member-wage"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/labor/timecards",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/create-timecard"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/labor/timecards/search",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/search-timecards"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/labor/timecards/{id}",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/delete-timecard"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/labor/timecards/{id}",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/retrieve-timecard"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/labor/timecards/{id}",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/update-timecard"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/labor/workweek-configs",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/list-workweek-configs"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/labor/workweek-configs/{id}",
+              "source_url": "https://developer.squareup.com/reference/square/labor-api/update-workweek-config"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/location-custom-attributes-api": {
+          "sha256": "3cbccc7e9f40954bbdf3c55ba114d9257155f365c3f1a792c34c1983f773c89a",
+          "bytes": 71277,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/locations/custom-attribute-definitions",
+              "source_url": "https://developer.squareup.com/reference/square/location-custom-attributes-api/list-location-custom-attribute-definitions"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/locations/custom-attribute-definitions",
+              "source_url": "https://developer.squareup.com/reference/square/location-custom-attributes-api/create-location-custom-attribute-definition"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/locations/custom-attribute-definitions/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/location-custom-attributes-api/delete-location-custom-attribute-definition"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/locations/custom-attribute-definitions/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/location-custom-attributes-api/retrieve-location-custom-attribute-definition"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/locations/custom-attribute-definitions/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/location-custom-attributes-api/update-location-custom-attribute-definition"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/locations/custom-attributes/bulk-delete",
+              "source_url": "https://developer.squareup.com/reference/square/location-custom-attributes-api/bulk-delete-location-custom-attributes"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/locations/custom-attributes/bulk-upsert",
+              "source_url": "https://developer.squareup.com/reference/square/location-custom-attributes-api/bulk-upsert-location-custom-attributes"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/locations/{location_id}/custom-attributes",
+              "source_url": "https://developer.squareup.com/reference/square/location-custom-attributes-api/list-location-custom-attributes"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/locations/{location_id}/custom-attributes/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/location-custom-attributes-api/delete-location-custom-attribute"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/locations/{location_id}/custom-attributes/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/location-custom-attributes-api/retrieve-location-custom-attribute"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/locations/{location_id}/custom-attributes/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/location-custom-attributes-api/upsert-location-custom-attribute"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/locations-api": {
+          "sha256": "5507bc37fbf3657e3718502f7a14f547d331ad1baaa26cc9aba36ddb53607d1c",
+          "bytes": 38474,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/locations",
+              "source_url": "https://developer.squareup.com/reference/square/locations-api/list-locations"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/locations",
+              "source_url": "https://developer.squareup.com/reference/square/locations-api/create-location"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/locations/{location_id}",
+              "source_url": "https://developer.squareup.com/reference/square/locations-api/retrieve-location"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/locations/{location_id}",
+              "source_url": "https://developer.squareup.com/reference/square/locations-api/update-location"
+            }
+          ],
+          "extraction": "browser_rendered_dom"
+        },
+        "https://developer.squareup.com/reference/square/loyalty-api": {
+          "sha256": "03e43afc939064708856b081864d3a317f27b877f22bd57549121c16d5a42554",
+          "bytes": 82454,
+          "operations": [
+            {
+              "method": "POST",
+              "path": "/v2/loyalty/accounts",
+              "source_url": "https://developer.squareup.com/reference/square/loyalty-api/create-loyalty-account"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/loyalty/accounts/search",
+              "source_url": "https://developer.squareup.com/reference/square/loyalty-api/search-loyalty-accounts"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/loyalty/accounts/{account_id}",
+              "source_url": "https://developer.squareup.com/reference/square/loyalty-api/retrieve-loyalty-account"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/loyalty/accounts/{account_id}/accumulate",
+              "source_url": "https://developer.squareup.com/reference/square/loyalty-api/accumulate-loyalty-points"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/loyalty/accounts/{account_id}/adjust",
+              "source_url": "https://developer.squareup.com/reference/square/loyalty-api/adjust-loyalty-points"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/loyalty/events/search",
+              "source_url": "https://developer.squareup.com/reference/square/loyalty-api/search-loyalty-events"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/loyalty/programs/{program_id}",
+              "source_url": "https://developer.squareup.com/reference/square/loyalty-api/retrieve-loyalty-program"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/loyalty/programs/{program_id}/calculate",
+              "source_url": "https://developer.squareup.com/reference/square/loyalty-api/calculate-loyalty-points"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/loyalty/programs/{program_id}/promotions",
+              "source_url": "https://developer.squareup.com/reference/square/loyalty-api/list-loyalty-promotions"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/loyalty/programs/{program_id}/promotions",
+              "source_url": "https://developer.squareup.com/reference/square/loyalty-api/create-loyalty-promotion"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/loyalty/programs/{program_id}/promotions/{promotion_id}",
+              "source_url": "https://developer.squareup.com/reference/square/loyalty-api/retrieve-loyalty-promotion"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/loyalty/programs/{program_id}/promotions/{promotion_id}/cancel",
+              "source_url": "https://developer.squareup.com/reference/square/loyalty-api/cancel-loyalty-promotion"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/loyalty/rewards",
+              "source_url": "https://developer.squareup.com/reference/square/loyalty-api/create-loyalty-reward"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/loyalty/rewards/search",
+              "source_url": "https://developer.squareup.com/reference/square/loyalty-api/search-loyalty-rewards"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/loyalty/rewards/{reward_id}",
+              "source_url": "https://developer.squareup.com/reference/square/loyalty-api/delete-loyalty-reward"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/loyalty/rewards/{reward_id}",
+              "source_url": "https://developer.squareup.com/reference/square/loyalty-api/retrieve-loyalty-reward"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/loyalty/rewards/{reward_id}/redeem",
+              "source_url": "https://developer.squareup.com/reference/square/loyalty-api/redeem-loyalty-reward"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/merchant-custom-attributes-api": {
+          "sha256": "7e21a087ac7d8f4cc275c416c3bcb660c6ca2ed1e66671dfd724361c628e4a9f",
+          "bytes": 38491,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/merchants/custom-attribute-definitions",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/list-merchant-custom-attribute-definitions"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/merchants/custom-attribute-definitions",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/create-merchant-custom-attribute-definition"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/merchants/custom-attribute-definitions/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/delete-merchant-custom-attribute-definition"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/merchants/custom-attribute-definitions/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/retrieve-merchant-custom-attribute-definition"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/merchants/custom-attribute-definitions/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/update-merchant-custom-attribute-definition"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/merchants/custom-attributes/bulk-delete",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/bulk-delete-merchant-custom-attributes"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/merchants/custom-attributes/bulk-upsert",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/bulk-upsert-merchant-custom-attributes"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/merchants/{merchant_id}/custom-attributes",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/list-merchant-custom-attributes"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/merchants/{merchant_id}/custom-attributes/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/delete-merchant-custom-attribute"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/merchants/{merchant_id}/custom-attributes/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/retrieve-merchant-custom-attribute"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/merchants/{merchant_id}/custom-attributes/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/merchant-custom-attributes-api/upsert-merchant-custom-attribute"
+            }
+          ],
+          "extraction": "browser_rendered_dom"
+        },
+        "https://developer.squareup.com/reference/square/merchants-api": {
+          "sha256": "4ae22944e2565482fcda5492e6555c2b935c3578494faa9b6829da40478ff10a",
+          "bytes": 57190,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/merchants",
+              "source_url": "https://developer.squareup.com/reference/square/merchants-api/list-merchants"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/merchants/{merchant_id}",
+              "source_url": "https://developer.squareup.com/reference/square/merchants-api/retrieve-merchant"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/o-auth-api": {
+          "sha256": "ad21739d726a084aafd9f0d068d0bbfb1df573ac445b292a64ccd2a8eaedeaa0",
+          "bytes": 60907,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/oauth2/authorize",
+              "source_url": "https://developer.squareup.com/reference/square/o-auth-api/authorize"
+            },
+            {
+              "method": "POST",
+              "path": "/oauth2/revoke",
+              "source_url": "https://developer.squareup.com/reference/square/o-auth-api/revoke-token"
+            },
+            {
+              "method": "POST",
+              "path": "/oauth2/token",
+              "source_url": "https://developer.squareup.com/reference/square/o-auth-api/obtain-token"
+            },
+            {
+              "method": "POST",
+              "path": "/oauth2/token/status",
+              "source_url": "https://developer.squareup.com/reference/square/o-auth-api/retrieve-token-status"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/order-custom-attributes-api": {
+          "sha256": "8fe9c3979065e172ded70073122665f14d2b33a163e5bd1c55f204402a48b97c",
+          "bytes": 75085,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/orders/custom-attribute-definitions",
+              "source_url": "https://developer.squareup.com/reference/square/order-custom-attributes-api/list-order-custom-attribute-definitions"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/orders/custom-attribute-definitions",
+              "source_url": "https://developer.squareup.com/reference/square/order-custom-attributes-api/create-order-custom-attribute-definition"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/orders/custom-attribute-definitions/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/order-custom-attributes-api/delete-order-custom-attribute-definition"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/orders/custom-attribute-definitions/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/order-custom-attributes-api/retrieve-order-custom-attribute-definition"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/orders/custom-attribute-definitions/{key}",
+              "source_url": "https://developer.squareup.com/reference/square/order-custom-attributes-api/update-order-custom-attribute-definition"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/orders/custom-attributes/bulk-delete",
+              "source_url": "https://developer.squareup.com/reference/square/order-custom-attributes-api/bulk-delete-order-custom-attributes"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/orders/custom-attributes/bulk-upsert",
+              "source_url": "https://developer.squareup.com/reference/square/order-custom-attributes-api/bulk-upsert-order-custom-attributes"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/orders/{order_id}/custom-attributes",
+              "source_url": "https://developer.squareup.com/reference/square/order-custom-attributes-api/list-order-custom-attributes"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/orders/{order_id}/custom-attributes/{custom_attribute_key}",
+              "source_url": "https://developer.squareup.com/reference/square/order-custom-attributes-api/delete-order-custom-attribute"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/orders/{order_id}/custom-attributes/{custom_attribute_key}",
+              "source_url": "https://developer.squareup.com/reference/square/order-custom-attributes-api/retrieve-order-custom-attribute"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/orders/{order_id}/custom-attributes/{custom_attribute_key}",
+              "source_url": "https://developer.squareup.com/reference/square/order-custom-attributes-api/upsert-order-custom-attribute"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/orders-api": {
+          "sha256": "bb978689cc2a6f1d70f673a952df70a5bb77e81c1ca87f180e68a4c396a84155",
+          "bytes": 70495,
+          "operations": [
+            {
+              "method": "POST",
+              "path": "/v2/orders",
+              "source_url": "https://developer.squareup.com/reference/square/orders-api/create-order"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/orders/batch-retrieve",
+              "source_url": "https://developer.squareup.com/reference/square/orders-api/batch-retrieve-orders"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/orders/calculate",
+              "source_url": "https://developer.squareup.com/reference/square/orders-api/calculate-order"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/orders/clone",
+              "source_url": "https://developer.squareup.com/reference/square/orders-api/clone-order"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/orders/search",
+              "source_url": "https://developer.squareup.com/reference/square/orders-api/search-orders"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/orders/{order_id}",
+              "source_url": "https://developer.squareup.com/reference/square/orders-api/retrieve-order"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/orders/{order_id}",
+              "source_url": "https://developer.squareup.com/reference/square/orders-api/update-order"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/orders/{order_id}/pay",
+              "source_url": "https://developer.squareup.com/reference/square/orders-api/pay-order"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/payments-api": {
+          "sha256": "4e01a96787e988d315d482b4fb9fc8a7088a9b118625787130a3d7d5383eb59d",
+          "bytes": 69206,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/payments",
+              "source_url": "https://developer.squareup.com/reference/square/payments-api/list-payments"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/payments",
+              "source_url": "https://developer.squareup.com/reference/square/payments-api/create-payment"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/payments/cancel",
+              "source_url": "https://developer.squareup.com/reference/square/payments-api/cancel-payment-by-idempotency-key"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/payments/{payment_id}",
+              "source_url": "https://developer.squareup.com/reference/square/payments-api/get-payment"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/payments/{payment_id}",
+              "source_url": "https://developer.squareup.com/reference/square/payments-api/update-payment"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/payments/{payment_id}/cancel",
+              "source_url": "https://developer.squareup.com/reference/square/payments-api/cancel-payment"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/payments/{payment_id}/complete",
+              "source_url": "https://developer.squareup.com/reference/square/payments-api/complete-payment"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/payouts-api": {
+          "sha256": "9c676484b938065b2bf284b4120cda7d1b3f9abdac2427db3fef01019ebf1299",
+          "bytes": 38471,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/payouts",
+              "source_url": "https://developer.squareup.com/reference/square/payouts-api/list-payouts"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/payouts/{payout_id}",
+              "source_url": "https://developer.squareup.com/reference/square/payouts-api/get-payout"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/payouts/{payout_id}/payout-entries",
+              "source_url": "https://developer.squareup.com/reference/square/payouts-api/list-payout-entries"
+            }
+          ],
+          "extraction": "browser_rendered_dom"
+        },
+        "https://developer.squareup.com/reference/square/refunds-api": {
+          "sha256": "53e069a61715cabfd07598e27b11b52116b3b05e4fb1ad7067a883a66ce8a503",
+          "bytes": 63054,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/refunds",
+              "source_url": "https://developer.squareup.com/reference/square/refunds-api/list-payment-refunds"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/refunds",
+              "source_url": "https://developer.squareup.com/reference/square/refunds-api/refund-payment"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/refunds/{refund_id}",
+              "source_url": "https://developer.squareup.com/reference/square/refunds-api/get-payment-refund"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/sites-api": {
+          "sha256": "6f700b35b5ca3f3dc66278fa5e4cc674eebdd3031a554bceb0d7ef6389144711",
+          "bytes": 59865,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/sites",
+              "source_url": "https://developer.squareup.com/reference/square/sites-api/list-sites"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/snippets-api": {
+          "sha256": "4d97b99181331e60f48cf25598b6336d9ba1028dbe5547ed7374ccf5ea79299f",
+          "bytes": 63100,
+          "operations": [
+            {
+              "method": "DELETE",
+              "path": "/v2/sites/{site_id}/snippet",
+              "source_url": "https://developer.squareup.com/reference/square/snippets-api/delete-snippet"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/sites/{site_id}/snippet",
+              "source_url": "https://developer.squareup.com/reference/square/snippets-api/retrieve-snippet"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/sites/{site_id}/snippet",
+              "source_url": "https://developer.squareup.com/reference/square/snippets-api/upsert-snippet"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/subscriptions-api": {
+          "sha256": "321c9bdd6d5237e96fff9ec3f606cebcbada425c1b2e9996e236b33fe29e4827",
+          "bytes": 76396,
+          "operations": [
+            {
+              "method": "POST",
+              "path": "/v2/subscriptions",
+              "source_url": "https://developer.squareup.com/reference/square/subscriptions-api/create-subscription"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/subscriptions/bulk-swap-plan",
+              "source_url": "https://developer.squareup.com/reference/square/subscriptions-api/bulk-swap-plan"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/subscriptions/search",
+              "source_url": "https://developer.squareup.com/reference/square/subscriptions-api/search-subscriptions"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/subscriptions/{subscription_id}",
+              "source_url": "https://developer.squareup.com/reference/square/subscriptions-api/retrieve-subscription"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/subscriptions/{subscription_id}",
+              "source_url": "https://developer.squareup.com/reference/square/subscriptions-api/update-subscription"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/subscriptions/{subscription_id}/actions/{action_id}",
+              "source_url": "https://developer.squareup.com/reference/square/subscriptions-api/delete-subscription-action"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/subscriptions/{subscription_id}/billing-anchor",
+              "source_url": "https://developer.squareup.com/reference/square/subscriptions-api/change-billing-anchor-date"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/subscriptions/{subscription_id}/cancel",
+              "source_url": "https://developer.squareup.com/reference/square/subscriptions-api/cancel-subscription"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/subscriptions/{subscription_id}/events",
+              "source_url": "https://developer.squareup.com/reference/square/subscriptions-api/list-subscription-events"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/subscriptions/{subscription_id}/pause",
+              "source_url": "https://developer.squareup.com/reference/square/subscriptions-api/pause-subscription"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/subscriptions/{subscription_id}/resume",
+              "source_url": "https://developer.squareup.com/reference/square/subscriptions-api/resume-subscription"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/subscriptions/{subscription_id}/swap-plan",
+              "source_url": "https://developer.squareup.com/reference/square/subscriptions-api/swap-plan"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/team-api": {
+          "sha256": "2387dbf20e7bcc24e5f576c494f7c764c4019395d42029e9aa8aa9af09e43aa2",
+          "bytes": 71026,
+          "operations": [
+            {
+              "method": "POST",
+              "path": "/v2/team-members",
+              "source_url": "https://developer.squareup.com/reference/square/team-api/create-team-member"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/team-members/bulk-create",
+              "source_url": "https://developer.squareup.com/reference/square/team-api/bulk-create-team-members"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/team-members/bulk-update",
+              "source_url": "https://developer.squareup.com/reference/square/team-api/bulk-update-team-members"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/team-members/jobs",
+              "source_url": "https://developer.squareup.com/reference/square/team-api/list-jobs"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/team-members/jobs",
+              "source_url": "https://developer.squareup.com/reference/square/team-api/create-job"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/team-members/jobs/{job_id}",
+              "source_url": "https://developer.squareup.com/reference/square/team-api/retrieve-job"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/team-members/jobs/{job_id}",
+              "source_url": "https://developer.squareup.com/reference/square/team-api/update-job"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/team-members/search",
+              "source_url": "https://developer.squareup.com/reference/square/team-api/search-team-members"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/team-members/{team_member_id}",
+              "source_url": "https://developer.squareup.com/reference/square/team-api/retrieve-team-member"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/team-members/{team_member_id}",
+              "source_url": "https://developer.squareup.com/reference/square/team-api/update-team-member"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/team-members/{team_member_id}/wage-setting",
+              "source_url": "https://developer.squareup.com/reference/square/team-api/retrieve-wage-setting"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/team-members/{team_member_id}/wage-setting",
+              "source_url": "https://developer.squareup.com/reference/square/team-api/update-wage-setting"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/terminal-api": {
+          "sha256": "d24100bd27e4daee4a4068fc5e9e4691b328d43ede5233361f4c9512b934515a",
+          "bytes": 80940,
+          "operations": [
+            {
+              "method": "POST",
+              "path": "/v2/terminals/actions",
+              "source_url": "https://developer.squareup.com/reference/square/terminal-api/create-terminal-action"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/terminals/actions/search",
+              "source_url": "https://developer.squareup.com/reference/square/terminal-api/search-terminal-actions"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/terminals/actions/{action_id}",
+              "source_url": "https://developer.squareup.com/reference/square/terminal-api/get-terminal-action"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/terminals/actions/{action_id}/cancel",
+              "source_url": "https://developer.squareup.com/reference/square/terminal-api/cancel-terminal-action"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/terminals/actions/{action_id}/dismiss",
+              "source_url": "https://developer.squareup.com/reference/square/terminal-api/dismiss-terminal-action"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/terminals/checkouts",
+              "source_url": "https://developer.squareup.com/reference/square/terminal-api/create-terminal-checkout"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/terminals/checkouts/search",
+              "source_url": "https://developer.squareup.com/reference/square/terminal-api/search-terminal-checkouts"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/terminals/checkouts/{checkout_id}",
+              "source_url": "https://developer.squareup.com/reference/square/terminal-api/get-terminal-checkout"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/terminals/checkouts/{checkout_id}/cancel",
+              "source_url": "https://developer.squareup.com/reference/square/terminal-api/cancel-terminal-checkout"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/terminals/checkouts/{checkout_id}/dismiss",
+              "source_url": "https://developer.squareup.com/reference/square/terminal-api/dismiss-terminal-checkout"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/terminals/refunds",
+              "source_url": "https://developer.squareup.com/reference/square/terminal-api/create-terminal-refund"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/terminals/refunds/search",
+              "source_url": "https://developer.squareup.com/reference/square/terminal-api/search-terminal-refunds"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/terminals/refunds/{terminal_refund_id}",
+              "source_url": "https://developer.squareup.com/reference/square/terminal-api/get-terminal-refund"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/terminals/refunds/{terminal_refund_id}/cancel",
+              "source_url": "https://developer.squareup.com/reference/square/terminal-api/cancel-terminal-refund"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/terminals/refunds/{terminal_refund_id}/dismiss",
+              "source_url": "https://developer.squareup.com/reference/square/terminal-api/dismiss-terminal-refund"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/transfer-order-api": {
+          "sha256": "8809c12f81263b0a69ce0d538896b53536350285652a72d8f170528867788bc7",
+          "bytes": 69623,
+          "operations": [
+            {
+              "method": "POST",
+              "path": "/v2/transfer-orders",
+              "source_url": "https://developer.squareup.com/reference/square/transfer-order-api/create-transfer-order"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/transfer-orders/search",
+              "source_url": "https://developer.squareup.com/reference/square/transfer-order-api/search-transfer-orders"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/transfer-orders/{transfer_order_id}",
+              "source_url": "https://developer.squareup.com/reference/square/transfer-order-api/delete-transfer-order"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/transfer-orders/{transfer_order_id}",
+              "source_url": "https://developer.squareup.com/reference/square/transfer-order-api/retrieve-transfer-order"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/transfer-orders/{transfer_order_id}",
+              "source_url": "https://developer.squareup.com/reference/square/transfer-order-api/update-transfer-order"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/transfer-orders/{transfer_order_id}/cancel",
+              "source_url": "https://developer.squareup.com/reference/square/transfer-order-api/cancel-transfer-order"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/transfer-orders/{transfer_order_id}/receive",
+              "source_url": "https://developer.squareup.com/reference/square/transfer-order-api/receive-transfer-order"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/transfer-orders/{transfer_order_id}/start",
+              "source_url": "https://developer.squareup.com/reference/square/transfer-order-api/start-transfer-order"
+            }
+          ]
+        },
+        "https://developer.squareup.com/reference/square/vendors-api": {
+          "sha256": "4e297c23f6ca2d9db51f3ee621732b45a9a3850088754ec8d113068e319d9fe1",
+          "bytes": 38472,
+          "operations": [
+            {
+              "method": "POST",
+              "path": "/v2/vendors/bulk-create",
+              "source_url": "https://developer.squareup.com/reference/square/vendors-api/bulk-create-vendors"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/vendors/bulk-retrieve",
+              "source_url": "https://developer.squareup.com/reference/square/vendors-api/bulk-retrieve-vendors"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/vendors/bulk-update",
+              "source_url": "https://developer.squareup.com/reference/square/vendors-api/bulk-update-vendors"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/vendors/create",
+              "source_url": "https://developer.squareup.com/reference/square/vendors-api/create-vendor"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/vendors/search",
+              "source_url": "https://developer.squareup.com/reference/square/vendors-api/search-vendors"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/vendors/{vendor_id}",
+              "source_url": "https://developer.squareup.com/reference/square/vendors-api/retrieve-vendor"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/vendors/{vendor_id}",
+              "source_url": "https://developer.squareup.com/reference/square/vendors-api/update-vendor"
+            }
+          ],
+          "extraction": "browser_rendered_dom"
+        },
+        "https://developer.squareup.com/reference/square/webhook-subscriptions-api": {
+          "sha256": "aa85477d26f0df429277937f9c1507029af3e1a2e2ef0686e8f771253ba26ac1",
+          "bytes": 66192,
+          "operations": [
+            {
+              "method": "GET",
+              "path": "/v2/webhooks/event-types",
+              "source_url": "https://developer.squareup.com/reference/square/webhook-subscriptions-api/list-webhook-event-types"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/webhooks/subscriptions",
+              "source_url": "https://developer.squareup.com/reference/square/webhook-subscriptions-api/list-webhook-subscriptions"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/webhooks/subscriptions",
+              "source_url": "https://developer.squareup.com/reference/square/webhook-subscriptions-api/create-webhook-subscription"
+            },
+            {
+              "method": "DELETE",
+              "path": "/v2/webhooks/subscriptions/{subscription_id}",
+              "source_url": "https://developer.squareup.com/reference/square/webhook-subscriptions-api/delete-webhook-subscription"
+            },
+            {
+              "method": "GET",
+              "path": "/v2/webhooks/subscriptions/{subscription_id}",
+              "source_url": "https://developer.squareup.com/reference/square/webhook-subscriptions-api/retrieve-webhook-subscription"
+            },
+            {
+              "method": "PUT",
+              "path": "/v2/webhooks/subscriptions/{subscription_id}",
+              "source_url": "https://developer.squareup.com/reference/square/webhook-subscriptions-api/update-webhook-subscription"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/webhooks/subscriptions/{subscription_id}/signature-key",
+              "source_url": "https://developer.squareup.com/reference/square/webhook-subscriptions-api/update-webhook-subscription-signature-key"
+            },
+            {
+              "method": "POST",
+              "path": "/v2/webhooks/subscriptions/{subscription_id}/test",
+              "source_url": "https://developer.squareup.com/reference/square/webhook-subscriptions-api/test-webhook-subscription"
+            }
+          ]
+        }
+      },
+      "completed_groups": [
+        "/reference/square/apple-pay-api",
+        "/reference/square/bank-accounts-api",
+        "/reference/square/booking-custom-attributes-api",
+        "/reference/square/bookings-api",
+        "/reference/square/cards-api",
+        "/reference/square/cash-drawers-api",
+        "/reference/square/catalog-api",
+        "/reference/square/channels-api",
+        "/reference/square/checkout-api",
+        "/reference/square/customer-custom-attributes-api",
+        "/reference/square/customer-groups-api",
+        "/reference/square/customer-segments-api",
+        "/reference/square/devices-api",
+        "/reference/square/events-api",
+        "/reference/square/gift-card-activities-api",
+        "/reference/square/gift-cards-api"
+      ],
+      "last_error": null,
+      "groups_extracted": 40,
+      "static_extraction_defect": "Seven fetched group pages supplied no static operation cards; their browser-rendered DOM cards were checkpointed, but the rendered crawler is not used as the settled source denominator.",
+      "authoritative_source": {
+        "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json",
+        "sha256": "a0d0db22c202f68282fd359772461697b3f635df03d3b19b11bb60add7f8ff7c",
+        "bytes": 3279392,
+        "openapi": "3.0.0",
+        "operations_found": 334,
+        "coverage_confidence": "complete_machine_readable_specification"
+      }
+    },
+    "copper": {
+      "state": "complete",
+      "reference_root": "https://developer.copper.com/",
+      "expected_documents": 637,
+      "coverage_confidence": "complete_rendered_reference",
+      "document_operations": {
+        "index.html": [],
+        "index.html#changelog": [],
+        "index.html#domain-update": [],
+        "index.html#change-policy": [],
+        "index.html#postman-resources": [],
+        "index.html#import-the-collection": [],
+        "index.html#import-and-use-the-environment": [],
+        "account-and-users/fetch-account-details.html": [
+          {
+            "method": "GET",
+            "path": "/v1/account",
+            "source_url": "https://developer.copper.com/account-and-users/fetch-account-details.html",
+            "title": "Fetch Account Details"
+          }
+        ],
+        "account-and-users/fetch-account-details.html#example": [],
+        "account-and-users/fetch-api-user.html": [
+          {
+            "method": "GET",
+            "path": "/v1/users/me",
+            "source_url": "https://developer.copper.com/account-and-users/fetch-api-user.html",
+            "title": "Fetch API User"
+          }
+        ],
+        "account-and-users/fetch-user-by-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/users/{user_id}",
+            "source_url": "https://developer.copper.com/account-and-users/fetch-user-by-id.html",
+            "title": "Fetch User by ID"
+          }
+        ],
+        "account-and-users/fetch-user-by-id.html#response-body": [],
+        "account-and-users/fetch-user-by-id.html#example": [],
+        "account-and-users/list-users.html": [
+          {
+            "method": "POST",
+            "path": "/v1/users/search",
+            "source_url": "https://developer.copper.com/account-and-users/list-users.html",
+            "title": "List Users"
+          }
+        ],
+        "account-and-users/list-users.html#parameters": [],
+        "account-and-users/list-users.html#example": [],
+        "account-and-users/list-users.html#list-of-users": [],
+        "account-and-users/overview.html": [],
+        "account-and-users/overview.html#account": [],
+        "activities/bulk-create-activities.html": [
+          {
+            "method": "POST",
+            "path": "/v1/activities/bulk_create",
+            "source_url": "https://developer.copper.com/activities/bulk-create-activities.html",
+            "title": "Bulk Create Activities"
+          }
+        ],
+        "activities/bulk-create-activities.html#beta-disclaimer": [],
+        "activities/bulk-create-activities.html#request-size-limit": [],
+        "activities/bulk-create-activities.html#responses": [],
+        "activities/bulk-create-activities.html#notes": [],
+        "activities/bulk-create-activities.html#request-body": [],
+        "activities/bulk-create-activities.html#example-requests": [],
+        "activities/bulk-create-activities.html#bulk-create-activities_1": [],
+        "activities/create-a-new-activity.html": [
+          {
+            "method": "POST",
+            "path": "/v1/activities",
+            "source_url": "https://developer.copper.com/activities/create-a-new-activity.html",
+            "title": "Create a New Activity"
+          }
+        ],
+        "activities/create-a-new-activity.html#request-body": [],
+        "activities/create-a-new-activity.html#example-requests": [],
+        "activities/create-a-new-activity.html#create-new-note": [],
+        "activities/delete-an-activity.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/activities/{activity_id}",
+            "source_url": "https://developer.copper.com/activities/delete-an-activity.html",
+            "title": "Delete an Activity"
+          }
+        ],
+        "activities/delete-an-activity.html#example-requests": [],
+        "activities/delete-an-activity.html#delete-activity": [],
+        "activities/fetch-an-activity-by-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/activities/{activity_id}",
+            "source_url": "https://developer.copper.com/activities/fetch-an-activity-by-id.html",
+            "title": "Fetch an Activity by ID"
+          }
+        ],
+        "activities/fetch-an-activity-by-id.html#example-requests": [],
+        "activities/fetch-an-activity-by-id.html#get-activity": [],
+        "activities/list-activities-search.html": [
+          {
+            "method": "POST",
+            "path": "/v1/activities/search",
+            "source_url": "https://developer.copper.com/activities/list-activities-search.html",
+            "title": "List Activities (Search)"
+          }
+        ],
+        "activities/list-activities-search.html#example-requests": [],
+        "activities/list-activities-search.html#search-activities": [],
+        "activities/list-activities-search.html#search-activities-by-date": [],
+        "activities/list-activities-search.html#search-activities-with-the-full_result-parameter": [],
+        "activities/list-activity-types.html": [
+          {
+            "method": "GET",
+            "path": "/v1/activity_types",
+            "source_url": "https://developer.copper.com/activities/list-activity-types.html",
+            "title": "List Activity Types"
+          }
+        ],
+        "activities/list-activity-types.html#example-requests": [],
+        "activities/list-activity-types.html#list-activity-types_1": [],
+        "activities/overview.html": [],
+        "activities/overview.html#activity-properties": [],
+        "activities/update-an-activity.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/activities/{activity_id}",
+            "source_url": "https://developer.copper.com/activities/update-an-activity.html",
+            "title": "Update an Activity"
+          }
+        ],
+        "activities/update-an-activity.html#request-body": [],
+        "activities/update-an-activity.html#example-requests": [],
+        "activities/update-an-activity.html#update-a-note": [],
+        "companies/bulk-company-create.html": [
+          {
+            "method": "POST",
+            "path": "/v1/companies/bulk_create",
+            "source_url": "https://developer.copper.com/companies/bulk-company-create.html",
+            "title": "Bulk Create Companies"
+          }
+        ],
+        "companies/bulk-company-create.html#beta-disclaimer": [],
+        "companies/bulk-company-create.html#request-size-limit": [],
+        "companies/bulk-company-create.html#responses": [],
+        "companies/bulk-company-create.html#notes": [],
+        "companies/bulk-company-create.html#request-body": [],
+        "companies/bulk-company-create.html#example-requests": [],
+        "companies/bulk-company-create.html#create-company": [],
+        "companies/bulk-company-update.html": [
+          {
+            "method": "POST",
+            "path": "/v1/companies/bulk_update",
+            "source_url": "https://developer.copper.com/companies/bulk-company-update.html",
+            "title": "Bulk Update Companies"
+          }
+        ],
+        "companies/bulk-company-update.html#beta-disclaimer": [],
+        "companies/bulk-company-update.html#request-size-limit": [],
+        "companies/bulk-company-update.html#responses": [],
+        "companies/bulk-company-update.html#notes": [],
+        "companies/bulk-company-update.html#request-body": [],
+        "companies/bulk-company-update.html#example-requests": [],
+        "companies/bulk-company-update.html#bulk-update-companies_1": [],
+        "companies/create-a-new-company.html": [
+          {
+            "method": "POST",
+            "path": "/v1/companies",
+            "source_url": "https://developer.copper.com/companies/create-a-new-company.html",
+            "title": "Create a New Company"
+          }
+        ],
+        "companies/create-a-new-company.html#request-body": [],
+        "companies/create-a-new-company.html#example-requests": [],
+        "companies/create-a-new-company.html#create-company": [],
+        "companies/delete-a-company.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/companies/{company_id}",
+            "source_url": "https://developer.copper.com/companies/delete-a-company.html",
+            "title": "Delete a Company"
+          }
+        ],
+        "companies/delete-a-company.html#example-requests": [],
+        "companies/delete-a-company.html#delete-person": [],
+        "companies/fetch-a-company-by-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/companies/{company_id}",
+            "source_url": "https://developer.copper.com/companies/fetch-a-company-by-id.html",
+            "title": "Fetch a Company by ID"
+          }
+        ],
+        "companies/fetch-a-company-by-id.html#example-requests": [],
+        "companies/fetch-a-company-by-id.html#company": [],
+        "companies/list-companies-search.html": [
+          {
+            "method": "POST",
+            "path": "/v1/companies/search",
+            "source_url": "https://developer.copper.com/companies/list-companies-search.html",
+            "title": "List Companies (Search)"
+          }
+        ],
+        "companies/list-companies-search.html#request-body": [],
+        "companies/list-companies-search.html#example-requests": [],
+        "companies/list-companies-search.html#companies-search": [],
+        "companies/list-companies-search.html#search-companies-by-email-domains": [],
+        "companies/list-companies-search.html#search-companies-by-contact-type-ids": [],
+        "companies/list-companies-search.html#search-companies-by-custom-date-field": [],
+        "companies/list-companies-search.html#search-companies-by-postal-code": [],
+        "companies/list-companies-search.html#search-companies-by-last-interaction": [],
+        "companies/list-companies-search.html#search-companies-by-city": [],
+        "companies/list-companies-search.html#search-companies-by-socials": [],
+        "companies/list-contact-types.html": [
+          {
+            "method": "GET",
+            "path": "/v1/contact_types",
+            "source_url": "https://developer.copper.com/companies/list-contact-types.html",
+            "title": "List Contact Types"
+          }
+        ],
+        "companies/list-contact-types.html#example-requests": [],
+        "companies/list-contact-types.html#contact-types": [],
+        "companies/overview.html": [],
+        "companies/overview.html#company-properties": [],
+        "companies/see-a-companys-activities.html": [
+          {
+            "method": "POST",
+            "path": "/v1/companies/{company_id}/activities",
+            "source_url": "https://developer.copper.com/companies/see-a-companys-activities.html",
+            "title": "See a Company's Activities"
+          }
+        ],
+        "companies/see-a-companys-activities.html#request-body": [],
+        "companies/see-a-companys-activities.html#example-requests": [],
+        "companies/see-a-companys-activities.html#company-activities": [],
+        "companies/update-a-company.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/companies/{company_id}",
+            "source_url": "https://developer.copper.com/companies/update-a-company.html",
+            "title": "Update a Company"
+          }
+        ],
+        "companies/update-a-company.html#request-body": [],
+        "companies/update-a-company.html#example-requests": [],
+        "companies/update-a-company.html#update-company": [],
+        "custom-fields/connect-fields/create-a-connection.html": [
+          {
+            "method": "POST",
+            "path": "/v1/related_links",
+            "source_url": "https://developer.copper.com/custom-fields/connect-fields/create-a-connection.html",
+            "title": "Create a connection"
+          }
+        ],
+        "custom-fields/connect-fields/create-a-connection.html#request-body": [],
+        "custom-fields/connect-fields/create-a-connection.html#example-requests": [],
+        "custom-fields/connect-fields/create-a-connection.html#create-a-new-connection": [],
+        "custom-fields/connect-fields/delete-a-connection.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/related_links/{connection_id}",
+            "source_url": "https://developer.copper.com/custom-fields/connect-fields/delete-a-connection.html",
+            "title": "Delete a connection"
+          }
+        ],
+        "custom-fields/connect-fields/delete-a-connection.html#example-requests": [],
+        "custom-fields/connect-fields/delete-a-connection.html#delete-a-connection_1": [],
+        "custom-fields/connect-fields/list-the-connections-on-specified-entity-custom-field-definition-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/related_links",
+            "source_url": "https://developer.copper.com/custom-fields/connect-fields/list-the-connections-on-specified-entity-custom-field-definition-id.html",
+            "title": "List the connections on specified entity for a specific custom-field-definition-id"
+          }
+        ],
+        "custom-fields/connect-fields/list-the-connections-on-specified-entity-custom-field-definition-id.html#parameters": [],
+        "custom-fields/connect-fields/list-the-connections-on-specified-entity-custom-field-definition-id.html#example-requests": [],
+        "custom-fields/connect-fields/list-the-connections-on-specified-entity-custom-field-definition-id.html#list-the-connections-on-specified-entity": [],
+        "custom-fields/connect-fields/list-the-connections-on-specified-entity.html": [
+          {
+            "method": "GET",
+            "path": "/v1/related_links",
+            "source_url": "https://developer.copper.com/custom-fields/connect-fields/list-the-connections-on-specified-entity.html",
+            "title": "List all connections on specified entity"
+          }
+        ],
+        "custom-fields/connect-fields/list-the-connections-on-specified-entity.html#parameters": [],
+        "custom-fields/connect-fields/list-the-connections-on-specified-entity.html#example-requests": [],
+        "custom-fields/connect-fields/list-the-connections-on-specified-entity.html#list-the-connections-on-specified-entity": [],
+        "custom-fields/connect-fields/overview.html": [],
+        "custom-fields/general/computed_cf_values.html": [],
+        "custom-fields/general/computed_cf_values.html#what-is-a-computed-custom-field": [],
+        "custom-fields/general/computed_cf_values.html#eligible-endpoints": [],
+        "custom-fields/general/computed_cf_values.html#people": [],
+        "custom-fields/general/computed_cf_values.html#leads": [],
+        "custom-fields/general/computed_cf_values.html#companies": [],
+        "custom-fields/general/computed_cf_values.html#opportunities": [],
+        "custom-fields/general/computed_cf_values.html#projects": [],
+        "custom-fields/general/computed_cf_values.html#tasks": [],
+        "custom-fields/general/computed_cf_values.html#webhooks": [],
+        "custom-fields/general/create-a-new-custom-activity-type.html": [
+          {
+            "method": "POST",
+            "path": "/v1/custom_activity_types",
+            "source_url": "https://developer.copper.com/custom-fields/general/create-a-new-custom-activity-type.html",
+            "title": "Create a New Custom Activity Type"
+          }
+        ],
+        "custom-fields/general/create-a-new-custom-activity-type.html#request-body": [],
+        "custom-fields/general/create-a-new-custom-activity-type.html#example-requests": [],
+        "custom-fields/general/create-a-new-custom-activity-type.html#create-a-new-custom-activity-type_1": [],
+        "custom-fields/general/create-a-new-custom-field-definition.html": [
+          {
+            "method": "POST",
+            "path": "/v1/custom_field_definitions",
+            "source_url": "https://developer.copper.com/custom-fields/general/create-a-new-custom-field-definition.html",
+            "title": "Create a new custom field definition"
+          }
+        ],
+        "custom-fields/general/create-a-new-custom-field-definition.html#request-body": [],
+        "custom-fields/general/create-a-new-custom-field-definition.html#example-requests": [],
+        "custom-fields/general/create-a-new-custom-field-definition.html#create-a-dropdown-custom-field": [],
+        "custom-fields/general/create-a-new-custom-field-definition.html#create-a-currency-custom-field": [],
+        "custom-fields/general/create-a-new-custom-field-definition.html#create-a-string-custom-field": [],
+        "custom-fields/general/delete-a-custom-field-definition.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/custom_field_definitions/{custom_field_definition_id}",
+            "source_url": "https://developer.copper.com/custom-fields/general/delete-a-custom-field-definition.html",
+            "title": "Delete a Custom Field Definition"
+          }
+        ],
+        "custom-fields/general/delete-a-custom-field-definition.html#example-requests": [],
+        "custom-fields/general/delete-a-custom-field-definition.html#delete-a-custom-field-definition_1": [],
+        "custom-fields/general/fetch-a-custom-field-definition.html": [
+          {
+            "method": "GET",
+            "path": "/v1/custom_field_definitions/{custom_field_definition_id}",
+            "source_url": "https://developer.copper.com/custom-fields/general/fetch-a-custom-field-definition.html",
+            "title": "Fetch a Custom Field Definition"
+          }
+        ],
+        "custom-fields/general/fetch-a-custom-field-definition.html#example-requests": [],
+        "custom-fields/general/fetch-a-custom-field-definition.html#custom-field-definitioin": [],
+        "custom-fields/general/get-custom-activity-type.html": [
+          {
+            "method": "GET",
+            "path": "/v1/custom_activity_types/{custom_activity_type_id}",
+            "source_url": "https://developer.copper.com/custom-fields/general/get-custom-activity-type.html",
+            "title": "Get Custom Activity Type"
+          }
+        ],
+        "custom-fields/general/get-custom-activity-type.html#example-requests": [],
+        "custom-fields/general/get-custom-activity-type.html#get-custom-activity-type_1": [],
+        "custom-fields/general/list-all-custom-activity-types.html": [
+          {
+            "method": "GET",
+            "path": "/v1/custom_activity_types",
+            "source_url": "https://developer.copper.com/custom-fields/general/list-all-custom-activity-types.html",
+            "title": "List All Custom Activity Types"
+          }
+        ],
+        "custom-fields/general/list-all-custom-activity-types.html#example-requests": [],
+        "custom-fields/general/list-all-custom-activity-types.html#list-all-custom-activity-types_1": [],
+        "custom-fields/general/list-custom-field-definitions.html": [
+          {
+            "method": "GET",
+            "path": "/v1/custom_field_definitions",
+            "source_url": "https://developer.copper.com/custom-fields/general/list-custom-field-definitions.html",
+            "title": "List Custom Field Definitions"
+          }
+        ],
+        "custom-fields/general/list-custom-field-definitions.html#example-requests": [],
+        "custom-fields/general/list-custom-field-definitions.html#custom-field-definitions": [],
+        "custom-fields/general/overview.html": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html": [
+          {
+            "method": "POST",
+            "path": "/v1/{entity_name_in_plural}/search",
+            "source_url": "https://developer.copper.com/custom-fields/general/search-entity-leads-people-etc-by-custom-field.html",
+            "title": "Search Entity (Leads, People, etc) by Custom Field"
+          }
+        ],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#request-body": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#example-requests": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#search-custom-date-field": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#search-custom-percentage-field": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#search-custom-multi-select-dropdown-field": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#search-custom-dropdown-field": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#search-custom-currency-field": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#search-custom-dropdown-field-for-empty-value": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#search-custom-multi-select-dropdown-field-for-both-set-value-and-empty-value": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#search-custom-number-field": [],
+        "custom-fields/general/search-entity-leads-people-etc-by-custom-field.html#search-custom-checkbox-field": [],
+        "custom-fields/general/update-an-existing-custom-activity-type.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/custom_activity_types/{custom_activity_type_id}",
+            "source_url": "https://developer.copper.com/custom-fields/general/update-an-existing-custom-activity-type.html",
+            "title": "Update an Existing Custom Activity Type"
+          }
+        ],
+        "custom-fields/general/update-an-existing-custom-activity-type.html#request-body": [],
+        "custom-fields/general/update-an-existing-custom-activity-type.html#example-requests": [],
+        "custom-fields/general/update-an-existing-custom-activity-type.html#update-an-existing-custom-activity-type_1": [],
+        "custom-fields/general/update-an-existing-custom-field-definition.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/custom_field_definitions/{custom_field_definition_id}",
+            "source_url": "https://developer.copper.com/custom-fields/general/update-an-existing-custom-field-definition.html",
+            "title": "Update an existing custom field definition"
+          }
+        ],
+        "custom-fields/general/update-an-existing-custom-field-definition.html#request-body": [],
+        "custom-fields/general/update-an-existing-custom-field-definition.html#example-requests": [],
+        "custom-fields/general/update-an-existing-custom-field-definition.html#update-options-for-an-existing-dropdown-custom-field": [],
+        "custom-fields/general/update-an-existing-custom-field-definition.html#update-a-string-custom-field": [],
+        "field-layouts/list-field-layout-by-entity-type.html": [
+          {
+            "method": "GET",
+            "path": "/v1/field_layouts/by_entity/{entity_name_in_plural}",
+            "source_url": "https://developer.copper.com/field-layouts/list-field-layout-by-entity-type.html",
+            "title": "List Field Layout by Entity Type"
+          }
+        ],
+        "field-layouts/list-field-layout-by-entity-type.html#field-layouts": [],
+        "field-layouts/list-field-layout-by-entity-type.html#field-attributes": [],
+        "field-layouts/list-field-layout-by-entity-type.html#example-requests": [],
+        "field-layouts/list-field-layout-by-entity-type.html#people-field-layout": [],
+        "field-layouts/list-field-layout-by-entity-type.html#opportunities-field-layout": [],
+        "file-upload/delete-a-file.html": [],
+        "file-upload/delete-a-file.html#example-requests": [],
+        "file-upload/delete-a-file.html#delete-a-file_1": [],
+        "file-upload/get-metadata-of-a-specific-attached-file.html": [
+          {
+            "method": "GET",
+            "path": "/v1/{entity_type}/{entity_id}/files/{file_id}",
+            "source_url": "https://developer.copper.com/file-upload/get-metadata-of-a-specific-attached-file.html",
+            "title": "Get metadata of a specific attached file"
+          }
+        ],
+        "file-upload/get-metadata-of-a-specific-attached-file.html#example-requests": [],
+        "file-upload/get-metadata-of-a-specific-attached-file.html#get-metadata-of-a-specific-attached-file-on-an-existing-lead": [],
+        "file-upload/get-signed-s3-url.html": [
+          {
+            "method": "GET",
+            "path": "/v1/{entity_type}/{entity_id}/files/s3_signed_url",
+            "source_url": "https://developer.copper.com/file-upload/get-signed-s3-url.html",
+            "title": "Get signed S3 URL"
+          }
+        ],
+        "file-upload/get-signed-s3-url.html#example-requests": [],
+        "file-upload/get-signed-s3-url.html#get-signed-s3-url-to-upload-file-to-leads-entity": [],
+        "file-upload/list-attached-files-of-an-entity-record.html": [
+          {
+            "method": "GET",
+            "path": "/v1/{entity_type}/{entity_id}/files",
+            "source_url": "https://developer.copper.com/file-upload/list-attached-files-of-an-entity-record.html",
+            "title": "List attached files of an entity record"
+          }
+        ],
+        "file-upload/list-attached-files-of-an-entity-record.html#example-requests": [],
+        "file-upload/list-attached-files-of-an-entity-record.html#list-attached-files-of-an-existing-lead": [],
+        "file-upload/overview.html": [],
+        "file-upload/relate-the-uploaded-file-to-a-specific-entity.html": [
+          {
+            "method": "POST",
+            "path": "/v1/{entity_type}/{entity_id}/files",
+            "source_url": "https://developer.copper.com/file-upload/relate-the-uploaded-file-to-a-specific-entity.html",
+            "title": "Relate the uploaded file to a specific entity"
+          }
+        ],
+        "file-upload/relate-the-uploaded-file-to-a-specific-entity.html#request-body": [],
+        "file-upload/relate-the-uploaded-file-to-a-specific-entity.html#example-requests": [],
+        "file-upload/relate-the-uploaded-file-to-a-specific-entity.html#relate-the-uploaded-file-to-a-specific-entity_1": [],
+        "file-upload/upload-your-file-to-s3.html": [],
+        "file-upload/upload-your-file-to-s3.html#example-requests": [],
+        "file-upload/upload-your-file-to-s3.html#upload-your-file-to-s3_1": [],
+        "introduction/appendix.html": [],
+        "introduction/appendix.html#basic-data-types": [],
+        "introduction/appendix.html#categories": [],
+        "introduction/authentication.html": [],
+        "introduction/authentication.html#api-keys": [],
+        "introduction/authentication.html#oauth20": [],
+        "introduction/best_practices.html": [],
+        "introduction/best_practices.html#date-formats": [],
+        "introduction/best_practices.html#the-api-respects-team-permissions": [],
+        "introduction/best_practices.html#create-a-developer-user": [],
+        "introduction/best_practices.html#entity-id-scopes": [],
+        "introduction/best_practices.html#file-upload": [],
+        "introduction/change_policy.html": [],
+        "introduction/change_policy.html#backwards-compatible-changes": [],
+        "introduction/change_policy.html#what-you-can-expect-from-copper": [],
+        "introduction/change_policy.html#change-process": [],
+        "introduction/change_policy.html#incompatible-changes": [],
+        "introduction/change_policy.html#what-you-can-expect-from-copper_1": [],
+        "introduction/change_policy.html#change-process_1": [],
+        "introduction/change_policy.html#communication-plan": [],
+        "introduction/change_policy.html#glossary": [],
+        "introduction/changelog.html": [],
+        "introduction/changelog.html#july-2-2026": [],
+        "introduction/changelog.html#february-24-2026": [],
+        "introduction/changelog.html#august-15-2025": [],
+        "introduction/changelog.html#march-10-2025": [],
+        "introduction/changelog.html#january-9-2025": [],
+        "introduction/changelog.html#december-5-2024": [],
+        "introduction/changelog.html#november-11-2024": [],
+        "introduction/changelog.html#october-30-2024": [],
+        "introduction/changelog.html#june-19-2024": [],
+        "introduction/changelog.html#april-24-2024": [],
+        "introduction/changelog.html#november-1-2023": [],
+        "introduction/changelog.html#september-14-2023": [],
+        "introduction/changelog.html#august-22-2023": [],
+        "introduction/changelog.html#bulk-apis-available-beta": [],
+        "introduction/changelog.html#august-14-2023": [],
+        "introduction/changelog.html#headers-supported-in-webhooks": [],
+        "introduction/changelog.html#august-11-2023": [],
+        "introduction/changelog.html#oauth20-support": [],
+        "introduction/changelog.html#july-20-2023": [],
+        "introduction/changelog.html#search-by-ids": [],
+        "introduction/changelog.html#march-9-2023": [],
+        "introduction/changelog.html#new-field-is_filterable-for-customfielddefinitions": [],
+        "introduction/changelog.html#february-14-2023": [],
+        "introduction/changelog.html#new-primary-timezone-field-for-account": [],
+        "introduction/changelog.html#december-5-2022": [],
+        "introduction/changelog.html#invalid-target-error-for-webhook-subscription-createupdate": [],
+        "introduction/changelog.html#june-15-2022": [],
+        "introduction/changelog.html#custom-field-definition-canonical-name": [],
+        "introduction/changelog.html#june-15-2022_1": [],
+        "introduction/changelog.html#moved-page_size-to-relevent-area": [],
+        "introduction/changelog.html#january-12-2022": [],
+        "introduction/changelog.html#changelog-added": [],
+        "introduction/changelog.html#search-by-social-media-accounts": [],
+        "introduction/changelog.html#computed-custom-field-values-for-endpoints-webhooks": [],
+        "introduction/changelog.html#december-13-2021": [],
+        "introduction/changelog.html#new-webhook-request-timestamp-field": [],
+        "introduction/changelog.html#october-29-2021": [],
+        "introduction/changelog.html#postman-environment": [],
+        "introduction/changelog.html#october-15-2021": [],
+        "introduction/changelog.html#get-tags-index": [],
+        "introduction/changelog.html#september-17-2021": [],
+        "introduction/changelog.html#added-update-activity-endpoint": [],
+        "introduction/changelog.html#september-7-2021": [],
+        "introduction/changelog.html#change-policy": [],
+        "introduction/changelog.html#august-18-2021": [],
+        "introduction/changelog.html#domain-update": [],
+        "introduction/embedded_apps.html": [],
+        "introduction/pagination.html": [],
+        "introduction/pagination.html#strategy-1-calculate-the-number-of-pages": [],
+        "introduction/pagination.html#strategy-2-count-the-records-on-each-page": [],
+        "introduction/pagination.html#remember-to-sort-you-search-results": [],
+        "introduction/requests.html": [],
+        "introduction/requests.html#encryption": [],
+        "introduction/requests.html#headers": [],
+        "introduction/requests.html#body": [],
+        "introduction/requests.html#rate-limits": [],
+        "introduction/responses.html": [],
+        "introduction/search.html": [],
+        "introduction/search.html#search-by-phone-number": [],
+        "introduction/support.html": [],
+        "introduction/oauth/index.html": [],
+        "introduction/oauth/index.html#1-introduction": [],
+        "introduction/oauth/index.html#2-prerequisites": [],
+        "introduction/oauth/index.html#3-authorization-flow-overview": [],
+        "introduction/oauth/index.html#4-quickstart-guide": [],
+        "introduction/oauth/index.html#5-documentation": [],
+        "introduction/oauth/index.html#6-access-token-management": [],
+        "introduction/oauth/index.html#7-scopes": [],
+        "introduction/oauth/index.html#8-client-libraries": [],
+        "introduction/oauth/index.html#9-resources": [],
+        "introduction/oauth/flow.html": [],
+        "introduction/oauth/flow.html#1-introduction": [],
+        "introduction/oauth/flow.html#11-prerequisites": [],
+        "introduction/oauth/flow.html#12-the-authorization-flow": [],
+        "introduction/oauth/flow.html#13-sequence-diagram": [],
+        "introduction/oauth/flow.html#2-flow-steps": [],
+        "introduction/oauth/flow.html#21-authorization-request": [],
+        "introduction/oauth/flow.html#22-user-authentication": [],
+        "introduction/oauth/flow.html#23-authorization-grant": [],
+        "introduction/oauth/flow.html#24-token-request": [],
+        "introduction/oauth/flow.html#25-access-protected-resources": [],
+        "introduction/oauth/quickstart.html": [],
+        "introduction/oauth/quickstart.html#introduction": [],
+        "introduction/oauth/quickstart.html#prerequisites": [],
+        "introduction/oauth/quickstart.html#integration": [],
+        "leads/bulk-create-leads.html": [
+          {
+            "method": "POST",
+            "path": "/v1/leads/bulk_create",
+            "source_url": "https://developer.copper.com/leads/bulk-create-leads.html",
+            "title": "Bulk Create Leads"
+          }
+        ],
+        "leads/bulk-create-leads.html#beta-disclaimer": [],
+        "leads/bulk-create-leads.html#request-size-limit": [],
+        "leads/bulk-create-leads.html#responses": [],
+        "leads/bulk-create-leads.html#notes": [],
+        "leads/bulk-create-leads.html#request-body": [],
+        "leads/bulk-create-leads.html#example-requests": [],
+        "leads/bulk-create-leads.html#create-new-person": [],
+        "leads/bulk-update-leads.html": [
+          {
+            "method": "POST",
+            "path": "/v1/leads/bulk_update",
+            "source_url": "https://developer.copper.com/leads/bulk-update-leads.html",
+            "title": "Bulk Update Leads"
+          }
+        ],
+        "leads/bulk-update-leads.html#beta-disclaimer": [],
+        "leads/bulk-update-leads.html#request-size-limit": [],
+        "leads/bulk-update-leads.html#responses": [],
+        "leads/bulk-update-leads.html#notes": [],
+        "leads/bulk-update-leads.html#request-body": [],
+        "leads/bulk-update-leads.html#example-requests": [],
+        "leads/bulk-update-leads.html#update-leads": [],
+        "leads/convert-a-lead.html": [
+          {
+            "method": "POST",
+            "path": "/v1/leads/{leadconvert_id}/convert",
+            "source_url": "https://developer.copper.com/leads/convert-a-lead.html",
+            "title": "Convert a Lead"
+          }
+        ],
+        "leads/convert-a-lead.html#request-body": [],
+        "leads/convert-a-lead.html#example-requests": [],
+        "leads/convert-a-lead.html#lead-conversion": [],
+        "leads/create-a-new-lead.html": [
+          {
+            "method": "POST",
+            "path": "/v1/leads",
+            "source_url": "https://developer.copper.com/leads/create-a-new-lead.html",
+            "title": "Create a New Lead"
+          }
+        ],
+        "leads/create-a-new-lead.html#request-body": [],
+        "leads/create-a-new-lead.html#example-requests": [],
+        "leads/create-a-new-lead.html#create-new-lead": [],
+        "leads/delete-a-lead.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/leads/{lead_id}",
+            "source_url": "https://developer.copper.com/leads/delete-a-lead.html",
+            "title": "Delete a Lead"
+          }
+        ],
+        "leads/delete-a-lead.html#example-requests": [],
+        "leads/delete-a-lead.html#delete-a-lead_1": [],
+        "leads/fetch-a-lead-by-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/leads/{lead_id}",
+            "source_url": "https://developer.copper.com/leads/fetch-a-lead-by-id.html",
+            "title": "Fetch a Lead by ID"
+          }
+        ],
+        "leads/fetch-a-lead-by-id.html#example-requests": [],
+        "leads/fetch-a-lead-by-id.html#sample-lead": [],
+        "leads/list-customer-sources.html": [
+          {
+            "method": "GET",
+            "path": "/v1/customer_sources",
+            "source_url": "https://developer.copper.com/leads/list-customer-sources.html",
+            "title": "List Customer Sources"
+          }
+        ],
+        "leads/list-customer-sources.html#example-requests": [],
+        "leads/list-customer-sources.html#customer-sources": [],
+        "leads/list-lead-statuses.html": [
+          {
+            "method": "GET",
+            "path": "/v1/lead_statuses",
+            "source_url": "https://developer.copper.com/leads/list-lead-statuses.html",
+            "title": "List Lead Statuses"
+          }
+        ],
+        "leads/list-lead-statuses.html#example-requests": [],
+        "leads/list-lead-statuses.html#lead-statuses": [],
+        "leads/list-leads-search.html": [
+          {
+            "method": "POST",
+            "path": "/v1/leads/search",
+            "source_url": "https://developer.copper.com/leads/list-leads-search.html",
+            "title": "List Leads (Search)"
+          }
+        ],
+        "leads/list-leads-search.html#request-body": [],
+        "leads/list-leads-search.html#example-requests": [],
+        "leads/list-leads-search.html#leads-search": [],
+        "leads/list-leads-search.html#list-leads-in-groups-of-200": [],
+        "leads/list-leads-search.html#search-by-full-name": [],
+        "leads/list-leads-search.html#search-by-followed": [],
+        "leads/list-leads-search.html#search-by-assignee-ids": [],
+        "leads/list-leads-search.html#search-by-interaction-count": [],
+        "leads/list-leads-search.html#search-by-city": [],
+        "leads/list-leads-search.html#search-by-state": [],
+        "leads/list-leads-search.html#search-by-postal-code": [],
+        "leads/list-leads-search.html#search-by-country": [],
+        "leads/list-leads-search.html#search-by-customer-source-ids": [],
+        "leads/list-leads-search.html#search-by-email": [],
+        "leads/list-leads-search.html#search-by-monetary-value": [],
+        "leads/list-leads-search.html#search-by-phone-number": [],
+        "leads/list-leads-search.html#search-by-status-ids": [],
+        "leads/list-leads-search.html#search-by-tags": [],
+        "leads/list-leads-search.html#search-by-socials": [],
+        "leads/list-leads-search.html#search-by-created-date": [],
+        "leads/list-leads-search.html#search-by-modified-date": [],
+        "leads/list-leads-search.html#search-by-interaction-date": [],
+        "leads/list-leads-search.html#search-by-status-change-date": [],
+        "leads/list-leads-search.html#search-by-empty-field": [],
+        "leads/list-leads-search.html#search-by-custom-multi-select-dropdown": [],
+        "leads/list-leads-search.html#search-by-custom-multi-select-dropdown-set-to-empty": [],
+        "leads/list-leads-search.html#search-by-custom-date-field": [],
+        "leads/overview.html": [],
+        "leads/overview.html#lead-properties": [],
+        "leads/see-a-leads-activities.html": [
+          {
+            "method": "POST",
+            "path": "/v1/leads/{lead_id}/activities",
+            "source_url": "https://developer.copper.com/leads/see-a-leads-activities.html",
+            "title": "See a Lead's Activities"
+          }
+        ],
+        "leads/see-a-leads-activities.html#request-body": [],
+        "leads/see-a-leads-activities.html#example-requests": [],
+        "leads/see-a-leads-activities.html#lead-activities": [],
+        "leads/update-a-lead.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/leads/{lead_id}",
+            "source_url": "https://developer.copper.com/leads/update-a-lead.html",
+            "title": "Update a Lead"
+          }
+        ],
+        "leads/update-a-lead.html#request-body": [],
+        "leads/update-a-lead.html#example-requests": [],
+        "leads/update-a-lead.html#update-a-lead_1": [],
+        "leads/upsert-a-lead-by-custom-field.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/leads/upsert",
+            "source_url": "https://developer.copper.com/leads/upsert-a-lead-by-custom-field.html",
+            "title": "UPSERT a Lead (by custom field)"
+          }
+        ],
+        "leads/upsert-a-lead-by-custom-field.html#request-body": [],
+        "leads/upsert-a-lead-by-custom-field.html#example-requests": [],
+        "leads/upsert-a-lead-by-custom-field.html#upsert-a-leads": [],
+        "leads/upsert-a-lead.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/leads/upsert",
+            "source_url": "https://developer.copper.com/leads/upsert-a-lead.html",
+            "title": "UPSERT a Lead"
+          }
+        ],
+        "leads/upsert-a-lead.html#functionality": [],
+        "leads/upsert-a-lead.html#match-criteria": [],
+        "leads/upsert-a-lead.html#match-outcomes": [],
+        "leads/upsert-a-lead.html#request-body": [],
+        "leads/upsert-a-lead.html#example-requests": [],
+        "leads/upsert-a-lead.html#upsert-a-lead_1": [],
+        "opportunities/bulk-create-opportunities.html": [
+          {
+            "method": "POST",
+            "path": "/v1/opportunities/bulk_create",
+            "source_url": "https://developer.copper.com/opportunities/bulk-create-opportunities.html",
+            "title": "Bulk Create Opportunities"
+          }
+        ],
+        "opportunities/bulk-create-opportunities.html#beta-disclaimer": [],
+        "opportunities/bulk-create-opportunities.html#request-size-limit": [],
+        "opportunities/bulk-create-opportunities.html#responses": [],
+        "opportunities/bulk-create-opportunities.html#notes": [],
+        "opportunities/bulk-create-opportunities.html#request-body": [],
+        "opportunities/bulk-create-opportunities.html#example-requests": [],
+        "opportunities/bulk-create-opportunities.html#create-new-person": [],
+        "opportunities/create-a-new-opportunity.html": [
+          {
+            "method": "POST",
+            "path": "/v1/opportunities",
+            "source_url": "https://developer.copper.com/opportunities/create-a-new-opportunity.html",
+            "title": "Create a New Opportunity"
+          }
+        ],
+        "opportunities/create-a-new-opportunity.html#request-body": [],
+        "opportunities/create-a-new-opportunity.html#example-requests": [],
+        "opportunities/create-a-new-opportunity.html#new-opportunity": [],
+        "opportunities/delete-an-opportunity.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/opportunities/{opportunity_id}",
+            "source_url": "https://developer.copper.com/opportunities/delete-an-opportunity.html",
+            "title": "Delete an Opportunity"
+          }
+        ],
+        "opportunities/delete-an-opportunity.html#example-requests": [],
+        "opportunities/delete-an-opportunity.html#delete-opportunity": [],
+        "opportunities/fetch-an-opportunity-by-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/opportunities/{opportunity_id}",
+            "source_url": "https://developer.copper.com/opportunities/fetch-an-opportunity-by-id.html",
+            "title": "Fetch an Opportunity by ID"
+          }
+        ],
+        "opportunities/fetch-an-opportunity-by-id.html#example-requests": [],
+        "opportunities/fetch-an-opportunity-by-id.html#get-opportunity": [],
+        "opportunities/list-customer-sources.html": [
+          {
+            "method": "GET",
+            "path": "/v1/customer_sources",
+            "source_url": "https://developer.copper.com/opportunities/list-customer-sources.html",
+            "title": "List Customer Sources"
+          }
+        ],
+        "opportunities/list-customer-sources.html#example-requests": [],
+        "opportunities/list-customer-sources.html#customer-sources": [],
+        "opportunities/list-loss-reasons.html": [
+          {
+            "method": "GET",
+            "path": "/v1/loss_reasons",
+            "source_url": "https://developer.copper.com/opportunities/list-loss-reasons.html",
+            "title": "List Loss Reasons"
+          }
+        ],
+        "opportunities/list-loss-reasons.html#example-requests": [],
+        "opportunities/list-loss-reasons.html#loss-reasons": [],
+        "opportunities/list-opportunities-search.html": [
+          {
+            "method": "POST",
+            "path": "/v1/opportunities/search",
+            "source_url": "https://developer.copper.com/opportunities/list-opportunities-search.html",
+            "title": "List Opportunities (Search)"
+          }
+        ],
+        "opportunities/list-opportunities-search.html#request-body": [],
+        "opportunities/list-opportunities-search.html#example-requests": [],
+        "opportunities/list-opportunities-search.html#opportunities-search": [],
+        "opportunities/list-opportunities-search.html#search-by-assignee-ids": [],
+        "opportunities/list-opportunities-search.html#search-by-priorities": [],
+        "opportunities/list-opportunities-search.html#search-by-date-stage-changed": [],
+        "opportunities/list-opportunities-search.html#search-by-value": [],
+        "opportunities/list-opportunities-search.html#search-by-pipeline-stage-ids": [],
+        "opportunities/list-opportunities-search.html#search-by-primary-contact-ids": [],
+        "opportunities/list-opportunities-search.html#search-by-statuses": [],
+        "opportunities/list-opportunities-search.html#search-by-company-ids": [],
+        "opportunities/list-opportunities-search.html#search-by-loss-reason-ids": [],
+        "opportunities/list-opportunities-search.html#search-by-tags": [],
+        "opportunities/list-opportunities-search.html#list-opportunities-in-groups-of-200": [],
+        "opportunities/list-opportunities-search.html#search-by-close-date": [],
+        "opportunities/list-opportunities-search.html#search-by-date-last-interacted": [],
+        "opportunities/list-opportunities-search.html#search-by-name": [],
+        "opportunities/list-opportunities-search.html#search-by-followed": [],
+        "opportunities/list-opportunities-search.html#search-by-interaction-count": [],
+        "opportunities/list-opportunities-search.html#search-by-customer-source-ids": [],
+        "opportunities/list-opportunities-search.html#search-by-created-date": [],
+        "opportunities/list-opportunities-search.html#search-by-custom-date-field": [],
+        "opportunities/list-opportunities-search.html#search-by-custom-multi-select-dropdown": [],
+        "opportunities/list-opportunities-search.html#search-by-multi-select-dropdown-set-to-empty": [],
+        "opportunities/list-pipeline-stages.html": [],
+        "opportunities/list-pipeline-stages.html#list-pipeline-stages": [
+          {
+            "method": "GET",
+            "path": "/v1/pipeline_stages",
+            "source_url": "https://developer.copper.com/opportunities/list-pipeline-stages.html#list-pipeline-stages",
+            "title": "List Pipeline Stages"
+          }
+        ],
+        "opportunities/list-pipeline-stages.html#example-requests": [],
+        "opportunities/list-pipeline-stages.html#pipeline-stages": [],
+        "opportunities/list-pipelines.html": [],
+        "opportunities/list-pipelines.html#list-pipelines": [
+          {
+            "method": "GET",
+            "path": "/v1/pipelines",
+            "source_url": "https://developer.copper.com/opportunities/list-pipelines.html#list-pipelines",
+            "title": "List Pipelines"
+          }
+        ],
+        "opportunities/list-pipelines.html#example-requests": [],
+        "opportunities/list-pipelines.html#pipelines": [],
+        "opportunities/list-stages-in-a-pipeline.html": [
+          {
+            "method": "GET",
+            "path": "/v1/pipeline_stages/pipeline/{pipeline_id}",
+            "source_url": "https://developer.copper.com/opportunities/list-stages-in-a-pipeline.html",
+            "title": "List Stages in a Pipeline"
+          }
+        ],
+        "opportunities/list-stages-in-a-pipeline.html#example-requests": [],
+        "opportunities/list-stages-in-a-pipeline.html#stages-in-a-pipeline": [],
+        "opportunities/overview.html": [],
+        "opportunities/overview.html#opportunity-properties": [],
+        "opportunities/update-an-opportunity.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/opportunities/{opportunity_id}",
+            "source_url": "https://developer.copper.com/opportunities/update-an-opportunity.html",
+            "title": "Update an Opportunity"
+          }
+        ],
+        "opportunities/update-an-opportunity.html#request-body": [],
+        "opportunities/update-an-opportunity.html#example-requests": [],
+        "opportunities/update-an-opportunity.html#update-opportunity": [],
+        "people/bulk-create-people.html": [
+          {
+            "method": "POST",
+            "path": "/v1/people/bulk_create",
+            "source_url": "https://developer.copper.com/people/bulk-create-people.html",
+            "title": "Bulk Create People"
+          }
+        ],
+        "people/bulk-create-people.html#beta-disclaimer": [],
+        "people/bulk-create-people.html#request-size-limit": [],
+        "people/bulk-create-people.html#responses": [],
+        "people/bulk-create-people.html#notes": [],
+        "people/bulk-create-people.html#request-body": [],
+        "people/bulk-create-people.html#example-requests": [],
+        "people/bulk-create-people.html#create-new-person": [],
+        "people/bulk-update-people.html": [
+          {
+            "method": "POST",
+            "path": "/v1/people/bulk_update",
+            "source_url": "https://developer.copper.com/people/bulk-update-people.html",
+            "title": "Bulk Update People"
+          }
+        ],
+        "people/bulk-update-people.html#beta-disclaimer": [],
+        "people/bulk-update-people.html#request-size-limit": [],
+        "people/bulk-update-people.html#responses": [],
+        "people/bulk-update-people.html#notes": [],
+        "people/bulk-update-people.html#request-body": [],
+        "people/bulk-update-people.html#example-requests": [],
+        "people/bulk-update-people.html#create-new-person": [],
+        "people/create-a-new-person.html": [
+          {
+            "method": "POST",
+            "path": "/v1/people",
+            "source_url": "https://developer.copper.com/people/create-a-new-person.html",
+            "title": "Create a New Person"
+          }
+        ],
+        "people/create-a-new-person.html#request-body": [],
+        "people/create-a-new-person.html#example-requests": [],
+        "people/create-a-new-person.html#create-new-person": [],
+        "people/delete-a-person.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/people/{person_id}",
+            "source_url": "https://developer.copper.com/people/delete-a-person.html",
+            "title": "Delete a Person"
+          }
+        ],
+        "people/delete-a-person.html#example-requests": [],
+        "people/delete-a-person.html#delete-person": [],
+        "people/fetch-a-person-by-email.html": [
+          {
+            "method": "POST",
+            "path": "/v1/people/fetch_by_email",
+            "source_url": "https://developer.copper.com/people/fetch-a-person-by-email.html",
+            "title": "Fetch a Person by Email"
+          }
+        ],
+        "people/fetch-a-person-by-email.html#request-body": [],
+        "people/fetch-a-person-by-email.html#example-requests": [],
+        "people/fetch-a-person-by-email.html#fetch-by-email": [],
+        "people/fetch-a-person-by-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/people/{person_id}",
+            "source_url": "https://developer.copper.com/people/fetch-a-person-by-id.html",
+            "title": "Fetch a Person by ID"
+          }
+        ],
+        "people/fetch-a-person-by-id.html#examples": [],
+        "people/fetch-a-person-by-id.html#fetch-a-person-by-id_1": [],
+        "people/list-contact-types.html": [
+          {
+            "method": "GET",
+            "path": "/v1/contact_types",
+            "source_url": "https://developer.copper.com/people/list-contact-types.html",
+            "title": "List Contact Types"
+          }
+        ],
+        "people/list-contact-types.html#examples": [],
+        "people/list-contact-types.html#list-contact-types_1": [],
+        "people/list-people-search.html": [
+          {
+            "method": "POST",
+            "path": "/v1/people/search",
+            "source_url": "https://developer.copper.com/people/list-people-search.html",
+            "title": "List People (Search)"
+          }
+        ],
+        "people/list-people-search.html#request-body": [],
+        "people/list-people-search.html#examples": [],
+        "people/list-people-search.html#people-search": [],
+        "people/list-people-search.html#search-by-state": [],
+        "people/list-people-search.html#search-by-postal-code": [],
+        "people/list-people-search.html#search-by-followed": [],
+        "people/list-people-search.html#search-by-tags": [],
+        "people/list-people-search.html#search-by-socials": [],
+        "people/list-people-search.html#search-by-date-added": [],
+        "people/list-people-search.html#search-by-opportunity-ids": [],
+        "people/list-people-search.html#search-by-custom-multi-select-dropdown": [],
+        "people/list-people-search.html#search-by-city": [],
+        "people/list-people-search.html#search-by-interaction-count": [],
+        "people/list-people-search.html#search-by-assignee-id": [],
+        "people/list-people-search.html#search-by-full-name": [],
+        "people/list-people-search.html#search-by-phone-number": [],
+        "people/list-people-search.html#search-by-country": [],
+        "people/list-people-search.html#search-by-last-interaction-date": [],
+        "people/list-people-search.html#search-by-contact-type": [],
+        "people/list-people-search.html#search-by-company-id": [],
+        "people/list-people-search.html#list-people-in-groups-of-200": [],
+        "people/list-people-search.html#search-by-custom-date-field": [],
+        "people/list-people-search.html#search-by-custom-multi-select-dropdown-set-to-empty": [],
+        "people/overview.html": [],
+        "people/overview.html#person-properties": [],
+        "people/see-a-persons-activities.html": [
+          {
+            "method": "POST",
+            "path": "/v1/people/{person_id}/activities",
+            "source_url": "https://developer.copper.com/people/see-a-persons-activities.html",
+            "title": "See a Person's Activities"
+          }
+        ],
+        "people/see-a-persons-activities.html#request-body": [],
+        "people/see-a-persons-activities.html#example-requests": [],
+        "people/see-a-persons-activities.html#person-activities": [],
+        "people/update-a-person.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/people/{person_id}",
+            "source_url": "https://developer.copper.com/people/update-a-person.html",
+            "title": "Update a Person"
+          }
+        ],
+        "people/update-a-person.html#request-body": [],
+        "people/update-a-person.html#example-requests": [],
+        "people/update-a-person.html#person-update": [],
+        "projects/create-a-new-project.html": [
+          {
+            "method": "POST",
+            "path": "/v1/projects",
+            "source_url": "https://developer.copper.com/projects/create-a-new-project.html",
+            "title": "Create a New Project"
+          }
+        ],
+        "projects/create-a-new-project.html#body": [],
+        "projects/create-a-new-project.html#example-requests": [],
+        "projects/create-a-new-project.html#new-project": [],
+        "projects/delete-a-project.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/projects/{project_id}",
+            "source_url": "https://developer.copper.com/projects/delete-a-project.html",
+            "title": "Delete a Project"
+          }
+        ],
+        "projects/delete-a-project.html#example-requests": [],
+        "projects/delete-a-project.html#delete-project": [],
+        "projects/fetch-a-project-by-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/projects/{project_id}",
+            "source_url": "https://developer.copper.com/projects/fetch-a-project-by-id.html",
+            "title": "Fetch a Project by ID"
+          }
+        ],
+        "projects/fetch-a-project-by-id.html#get-project": [],
+        "projects/list-projects-search.html": [
+          {
+            "method": "POST",
+            "path": "/v1/projects/search",
+            "source_url": "https://developer.copper.com/projects/list-projects-search.html",
+            "title": "List Projects (Search)"
+          }
+        ],
+        "projects/list-projects-search.html#body": [],
+        "projects/list-projects-search.html#example-requests": [],
+        "projects/list-projects-search.html#list-projects-in-groups-of-200": [],
+        "projects/list-projects-search.html#search-by-assignee-ids": [],
+        "projects/list-projects-search.html#projects-search": [],
+        "projects/list-projects-search.html#search-by-tags": [],
+        "projects/list-projects-search.html#search-by-statuses": [],
+        "projects/list-projects-search.html#search-by-custom-multi-select-dropdown-set-to-empty": [],
+        "projects/list-projects-search.html#search-by-custom-date-field": [],
+        "projects/list-projects-search.html#search-by-custom-multi-select-dropdown": [],
+        "projects/overview.html": [],
+        "projects/update-a-project.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/projects/{project_id}",
+            "source_url": "https://developer.copper.com/projects/update-a-project.html",
+            "title": "Update a Project"
+          }
+        ],
+        "projects/update-a-project.html#body": [],
+        "projects/update-a-project.html#example-requests": [],
+        "projects/update-a-project.html#update-project": [],
+        "related-items/overview.html": [],
+        "related-items/overview.html#notes": [],
+        "related-items/relate-an-existing-record-to-an-entity.html": [
+          {
+            "method": "POST",
+            "path": "/v1/{entity}/{entity_id}/related",
+            "source_url": "https://developer.copper.com/related-items/relate-an-existing-record-to-an-entity.html",
+            "title": "Relate an existing record to an Entity"
+          }
+        ],
+        "related-items/relate-an-existing-record-to-an-entity.html#request-body": [],
+        "related-items/relate-an-existing-record-to-an-entity.html#example-requests": [],
+        "related-items/relate-an-existing-record-to-an-entity.html#relate-opportunity-to-person": [],
+        "related-items/remove-relationship-between-record-and-entity.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/{entity}/{entity_id}/related",
+            "source_url": "https://developer.copper.com/related-items/remove-relationship-between-record-and-entity.html",
+            "title": "Remove relationship between record and Entity"
+          }
+        ],
+        "related-items/remove-relationship-between-record-and-entity.html#request-body": [],
+        "related-items/remove-relationship-between-record-and-entity.html#example-requests": [],
+        "related-items/remove-relationship-between-record-and-entity.html#remove-relationship-between-person-and-opportunity": [],
+        "related-items/view-all-records-of-a-given-entity-type-related-to-an-entity.html": [
+          {
+            "method": "GET",
+            "path": "/v1/{entity}/{entity_id}/related/{related_entity_name}",
+            "source_url": "https://developer.copper.com/related-items/view-all-records-of-a-given-entity-type-related-to-an-entity.html",
+            "title": "View all records of a given Entity Type related to an Entity"
+          }
+        ],
+        "related-items/view-all-records-of-a-given-entity-type-related-to-an-entity.html#example-requests": [],
+        "related-items/view-all-records-of-a-given-entity-type-related-to-an-entity.html#related-opportunities-to-person": [],
+        "related-items/view-all-records-related-to-an-entity.html": [
+          {
+            "method": "GET",
+            "path": "/v1/{entity}/{entity_id}/related/",
+            "source_url": "https://developer.copper.com/related-items/view-all-records-related-to-an-entity.html",
+            "title": "View all records related to an Entity"
+          }
+        ],
+        "related-items/view-all-records-related-to-an-entity.html#example-requests": [],
+        "related-items/view-all-records-related-to-an-entity.html#all-related-rcords": [],
+        "tags/list-tags.html": [
+          {
+            "method": "GET",
+            "path": "/v1/tags",
+            "source_url": "https://developer.copper.com/tags/list-tags.html",
+            "title": "List Tags"
+          }
+        ],
+        "tags/list-tags.html#parameters": [],
+        "tags/list-tags.html#example": [],
+        "tags/list-tags.html#list-of-tags": [],
+        "tags/list-tags.html#list-of-tags-tag_names_onlytrue": [],
+        "tags/overview.html": [],
+        "tasks/create-a-new-task.html": [
+          {
+            "method": "POST",
+            "path": "/v1/tasks",
+            "source_url": "https://developer.copper.com/tasks/create-a-new-task.html",
+            "title": "Create a New Task"
+          }
+        ],
+        "tasks/create-a-new-task.html#request-body": [],
+        "tasks/create-a-new-task.html#example-requests": [],
+        "tasks/create-a-new-task.html#create-task": [],
+        "tasks/delete-a-task.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/tasks/{task_id}",
+            "source_url": "https://developer.copper.com/tasks/delete-a-task.html",
+            "title": "Delete a Task"
+          }
+        ],
+        "tasks/delete-a-task.html#example-requests": [],
+        "tasks/delete-a-task.html#delete-task": [],
+        "tasks/fetch-a-task-by-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/tasks/{task_id}",
+            "source_url": "https://developer.copper.com/tasks/fetch-a-task-by-id.html",
+            "title": "Fetch a Task by ID"
+          }
+        ],
+        "tasks/fetch-a-task-by-id.html#example-requests": [],
+        "tasks/fetch-a-task-by-id.html#get-task": [],
+        "tasks/list-tasks-search.html": [
+          {
+            "method": "POST",
+            "path": "/v1/tasks/search",
+            "source_url": "https://developer.copper.com/tasks/list-tasks-search.html",
+            "title": "List Tasks (Search)"
+          }
+        ],
+        "tasks/list-tasks-search.html#request-body": [],
+        "tasks/list-tasks-search.html#example-requests": [],
+        "tasks/list-tasks-search.html#tasks-search": [],
+        "tasks/list-tasks-search.html#list-tasks-in-groups-of-200": [],
+        "tasks/list-tasks-search.html#search-by-assignee-ids": [],
+        "tasks/list-tasks-search.html#search-by-tags": [],
+        "tasks/list-tasks-search.html#search-by-followed": [],
+        "tasks/list-tasks-search.html#search-by-project-ids": [],
+        "tasks/list-tasks-search.html#search-by-opportunity-ids": [],
+        "tasks/list-tasks-search.html#search-by-statuses": [],
+        "tasks/list-tasks-search.html#search-by-due-date": [],
+        "tasks/list-tasks-search.html#search-by-custom-date-field": [],
+        "tasks/list-tasks-search.html#search-by-multi-select-dropdown": [],
+        "tasks/list-tasks-search.html#search-by-multi-select-dropdown-set-to-empty": [],
+        "tasks/overview.html": [],
+        "tasks/overview.html#task-properties": [],
+        "tasks/update-a-task.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/tasks/{task_id}",
+            "source_url": "https://developer.copper.com/tasks/update-a-task.html",
+            "title": "Update a Task"
+          }
+        ],
+        "tasks/update-a-task.html#request-body": [],
+        "tasks/update-a-task.html#example-requests": [],
+        "tasks/update-a-task.html#update-task": [],
+        "webhooks/create-new-subscription.html": [
+          {
+            "method": "POST",
+            "path": "/v1/webhooks",
+            "source_url": "https://developer.copper.com/webhooks/create-new-subscription.html",
+            "title": "Create new subscription"
+          }
+        ],
+        "webhooks/create-new-subscription.html#parameters": [],
+        "webhooks/create-new-subscription.html#request-body": [],
+        "webhooks/create-new-subscription.html#example-requests": [],
+        "webhooks/create-new-subscription.html#create-subscription": [],
+        "webhooks/delete-subscription-unsubscribe.html": [
+          {
+            "method": "DELETE",
+            "path": "/v1/webhooks/{webhook_id}",
+            "source_url": "https://developer.copper.com/webhooks/delete-subscription-unsubscribe.html",
+            "title": "Delete subscription (unsubscribe)"
+          }
+        ],
+        "webhooks/delete-subscription-unsubscribe.html#example-requests": [],
+        "webhooks/delete-subscription-unsubscribe.html#delete-webhook": [],
+        "webhooks/list-all-subscriptions.html": [
+          {
+            "method": "GET",
+            "path": "/v1/webhooks",
+            "source_url": "https://developer.copper.com/webhooks/list-all-subscriptions.html",
+            "title": "List all subscriptions"
+          }
+        ],
+        "webhooks/list-all-subscriptions.html#example-requests": [],
+        "webhooks/list-all-subscriptions.html#list-all-subscriptions_1": [],
+        "webhooks/notification-example.html": [],
+        "webhooks/notification-example.html#request-body-template": [],
+        "webhooks/notification-example.html#request-body-with-non-computed-custom-fields-default": [],
+        "webhooks/notification-example.html#request-body-with-computed-custom-field-values": [],
+        "webhooks/overview.html": [],
+        "webhooks/overview.html#webhook-concepts": [],
+        "webhooks/overview.html#event-types": [],
+        "webhooks/overview.html#entity-types": [],
+        "webhooks/overview.html#technical-considerations": [],
+        "webhooks/overview.html#subscription-count": [],
+        "webhooks/overview.html#rate-limits": [],
+        "webhooks/overview.html#multi-event-notifications": [],
+        "webhooks/overview.html#retries": [],
+        "webhooks/overview.html#https-only": [],
+        "webhooks/overview.html#webhook-properties": [],
+        "webhooks/update-a-subscription.html": [
+          {
+            "method": "PUT",
+            "path": "/v1/webhooks/{subscription_id}",
+            "source_url": "https://developer.copper.com/webhooks/update-a-subscription.html",
+            "title": "Update a subscription"
+          }
+        ],
+        "webhooks/update-a-subscription.html#parameters": [],
+        "webhooks/update-a-subscription.html#request-body": [],
+        "webhooks/update-a-subscription.html#example-requests": [],
+        "webhooks/update-a-subscription.html#update-a-subscription_1": [],
+        "webhooks/view-subscription-by-id.html": [
+          {
+            "method": "GET",
+            "path": "/v1/webhooks{webhook_id}",
+            "source_url": "https://developer.copper.com/webhooks/view-subscription-by-id.html",
+            "title": "View subscription by ID"
+          }
+        ],
+        "webhooks/view-subscription-by-id.html#example-requests": [],
+        "webhooks/view-subscription-by-id.html#see-webhook-by-id": []
+      },
+      "index_url": "https://developer.copper.com/search/search_index.json",
+      "documents_total": 637,
+      "index_bytes": 643109,
+      "index_sha256": "5174f8c907d9c6d579146bd23b09283e8d8ccedaa2353e1cafc997e8e31454a9",
+      "documents_retrieved": 637,
+      "operations_found": 89,
+      "operation_counts": {
+        "GET": 32,
+        "POST": 35,
+        "PUT": 11,
+        "PATCH": 0,
+        "DELETE": 11
+      },
+      "completed_operations": [
+        {
+          "method": "GET",
+          "path": "/v1/account",
+          "source_url": "https://developer.copper.com/account-and-users/fetch-account-details.html",
+          "title": "Fetch Account Details"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/users/me",
+          "source_url": "https://developer.copper.com/account-and-users/fetch-api-user.html",
+          "title": "Fetch API User"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/users/{user_id}",
+          "source_url": "https://developer.copper.com/account-and-users/fetch-user-by-id.html",
+          "title": "Fetch User by ID"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/users/search",
+          "source_url": "https://developer.copper.com/account-and-users/list-users.html",
+          "title": "List Users"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/activities/bulk_create",
+          "source_url": "https://developer.copper.com/activities/bulk-create-activities.html",
+          "title": "Bulk Create Activities"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/activities",
+          "source_url": "https://developer.copper.com/activities/create-a-new-activity.html",
+          "title": "Create a New Activity"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/activities/{activity_id}",
+          "source_url": "https://developer.copper.com/activities/delete-an-activity.html",
+          "title": "Delete an Activity"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/activities/{activity_id}",
+          "source_url": "https://developer.copper.com/activities/fetch-an-activity-by-id.html",
+          "title": "Fetch an Activity by ID"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/activities/search",
+          "source_url": "https://developer.copper.com/activities/list-activities-search.html",
+          "title": "List Activities (Search)"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/activity_types",
+          "source_url": "https://developer.copper.com/activities/list-activity-types.html",
+          "title": "List Activity Types"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/activities/{activity_id}",
+          "source_url": "https://developer.copper.com/activities/update-an-activity.html",
+          "title": "Update an Activity"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/companies/bulk_create",
+          "source_url": "https://developer.copper.com/companies/bulk-company-create.html",
+          "title": "Bulk Create Companies"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/companies/bulk_update",
+          "source_url": "https://developer.copper.com/companies/bulk-company-update.html",
+          "title": "Bulk Update Companies"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/companies",
+          "source_url": "https://developer.copper.com/companies/create-a-new-company.html",
+          "title": "Create a New Company"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/companies/{company_id}",
+          "source_url": "https://developer.copper.com/companies/delete-a-company.html",
+          "title": "Delete a Company"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/companies/{company_id}",
+          "source_url": "https://developer.copper.com/companies/fetch-a-company-by-id.html",
+          "title": "Fetch a Company by ID"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/companies/search",
+          "source_url": "https://developer.copper.com/companies/list-companies-search.html",
+          "title": "List Companies (Search)"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/contact_types",
+          "source_url": "https://developer.copper.com/companies/list-contact-types.html",
+          "title": "List Contact Types"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/companies/{company_id}/activities",
+          "source_url": "https://developer.copper.com/companies/see-a-companys-activities.html",
+          "title": "See a Company's Activities"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/companies/{company_id}",
+          "source_url": "https://developer.copper.com/companies/update-a-company.html",
+          "title": "Update a Company"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/related_links",
+          "source_url": "https://developer.copper.com/custom-fields/connect-fields/create-a-connection.html",
+          "title": "Create a connection"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/related_links/{connection_id}",
+          "source_url": "https://developer.copper.com/custom-fields/connect-fields/delete-a-connection.html",
+          "title": "Delete a connection"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/related_links",
+          "source_url": "https://developer.copper.com/custom-fields/connect-fields/list-the-connections-on-specified-entity-custom-field-definition-id.html",
+          "title": "List the connections on specified entity for a specific custom-field-definition-id"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/custom_activity_types",
+          "source_url": "https://developer.copper.com/custom-fields/general/create-a-new-custom-activity-type.html",
+          "title": "Create a New Custom Activity Type"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/custom_field_definitions",
+          "source_url": "https://developer.copper.com/custom-fields/general/create-a-new-custom-field-definition.html",
+          "title": "Create a new custom field definition"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/custom_field_definitions/{custom_field_definition_id}",
+          "source_url": "https://developer.copper.com/custom-fields/general/delete-a-custom-field-definition.html",
+          "title": "Delete a Custom Field Definition"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/custom_field_definitions/{custom_field_definition_id}",
+          "source_url": "https://developer.copper.com/custom-fields/general/fetch-a-custom-field-definition.html",
+          "title": "Fetch a Custom Field Definition"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/custom_activity_types/{custom_activity_type_id}",
+          "source_url": "https://developer.copper.com/custom-fields/general/get-custom-activity-type.html",
+          "title": "Get Custom Activity Type"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/custom_activity_types",
+          "source_url": "https://developer.copper.com/custom-fields/general/list-all-custom-activity-types.html",
+          "title": "List All Custom Activity Types"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/custom_field_definitions",
+          "source_url": "https://developer.copper.com/custom-fields/general/list-custom-field-definitions.html",
+          "title": "List Custom Field Definitions"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/{entity_name_in_plural}/search",
+          "source_url": "https://developer.copper.com/custom-fields/general/search-entity-leads-people-etc-by-custom-field.html",
+          "title": "Search Entity (Leads, People, etc) by Custom Field"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/custom_activity_types/{custom_activity_type_id}",
+          "source_url": "https://developer.copper.com/custom-fields/general/update-an-existing-custom-activity-type.html",
+          "title": "Update an Existing Custom Activity Type"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/custom_field_definitions/{custom_field_definition_id}",
+          "source_url": "https://developer.copper.com/custom-fields/general/update-an-existing-custom-field-definition.html",
+          "title": "Update an existing custom field definition"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/field_layouts/by_entity/{entity_name_in_plural}",
+          "source_url": "https://developer.copper.com/field-layouts/list-field-layout-by-entity-type.html",
+          "title": "List Field Layout by Entity Type"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/{entity_type}/{entity_id}/files/{file_id}",
+          "source_url": "https://developer.copper.com/file-upload/get-metadata-of-a-specific-attached-file.html",
+          "title": "Get metadata of a specific attached file"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/{entity_type}/{entity_id}/files/s3_signed_url",
+          "source_url": "https://developer.copper.com/file-upload/get-signed-s3-url.html",
+          "title": "Get signed S3 URL"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/{entity_type}/{entity_id}/files",
+          "source_url": "https://developer.copper.com/file-upload/list-attached-files-of-an-entity-record.html",
+          "title": "List attached files of an entity record"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/{entity_type}/{entity_id}/files",
+          "source_url": "https://developer.copper.com/file-upload/relate-the-uploaded-file-to-a-specific-entity.html",
+          "title": "Relate the uploaded file to a specific entity"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/leads/bulk_create",
+          "source_url": "https://developer.copper.com/leads/bulk-create-leads.html",
+          "title": "Bulk Create Leads"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/leads/bulk_update",
+          "source_url": "https://developer.copper.com/leads/bulk-update-leads.html",
+          "title": "Bulk Update Leads"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/leads/{leadconvert_id}/convert",
+          "source_url": "https://developer.copper.com/leads/convert-a-lead.html",
+          "title": "Convert a Lead"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/leads",
+          "source_url": "https://developer.copper.com/leads/create-a-new-lead.html",
+          "title": "Create a New Lead"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/leads/{lead_id}",
+          "source_url": "https://developer.copper.com/leads/delete-a-lead.html",
+          "title": "Delete a Lead"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/leads/{lead_id}",
+          "source_url": "https://developer.copper.com/leads/fetch-a-lead-by-id.html",
+          "title": "Fetch a Lead by ID"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/customer_sources",
+          "source_url": "https://developer.copper.com/leads/list-customer-sources.html",
+          "title": "List Customer Sources"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/lead_statuses",
+          "source_url": "https://developer.copper.com/leads/list-lead-statuses.html",
+          "title": "List Lead Statuses"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/leads/search",
+          "source_url": "https://developer.copper.com/leads/list-leads-search.html",
+          "title": "List Leads (Search)"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/leads/{lead_id}/activities",
+          "source_url": "https://developer.copper.com/leads/see-a-leads-activities.html",
+          "title": "See a Lead's Activities"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/leads/{lead_id}",
+          "source_url": "https://developer.copper.com/leads/update-a-lead.html",
+          "title": "Update a Lead"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/leads/upsert",
+          "source_url": "https://developer.copper.com/leads/upsert-a-lead-by-custom-field.html",
+          "title": "UPSERT a Lead (by custom field)"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/opportunities/bulk_create",
+          "source_url": "https://developer.copper.com/opportunities/bulk-create-opportunities.html",
+          "title": "Bulk Create Opportunities"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/opportunities",
+          "source_url": "https://developer.copper.com/opportunities/create-a-new-opportunity.html",
+          "title": "Create a New Opportunity"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/opportunities/{opportunity_id}",
+          "source_url": "https://developer.copper.com/opportunities/delete-an-opportunity.html",
+          "title": "Delete an Opportunity"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/opportunities/{opportunity_id}",
+          "source_url": "https://developer.copper.com/opportunities/fetch-an-opportunity-by-id.html",
+          "title": "Fetch an Opportunity by ID"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/loss_reasons",
+          "source_url": "https://developer.copper.com/opportunities/list-loss-reasons.html",
+          "title": "List Loss Reasons"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/opportunities/search",
+          "source_url": "https://developer.copper.com/opportunities/list-opportunities-search.html",
+          "title": "List Opportunities (Search)"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/pipeline_stages",
+          "source_url": "https://developer.copper.com/opportunities/list-pipeline-stages.html#list-pipeline-stages",
+          "title": "List Pipeline Stages"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/pipelines",
+          "source_url": "https://developer.copper.com/opportunities/list-pipelines.html#list-pipelines",
+          "title": "List Pipelines"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/pipeline_stages/pipeline/{pipeline_id}",
+          "source_url": "https://developer.copper.com/opportunities/list-stages-in-a-pipeline.html",
+          "title": "List Stages in a Pipeline"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/opportunities/{opportunity_id}",
+          "source_url": "https://developer.copper.com/opportunities/update-an-opportunity.html",
+          "title": "Update an Opportunity"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/people/bulk_create",
+          "source_url": "https://developer.copper.com/people/bulk-create-people.html",
+          "title": "Bulk Create People"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/people/bulk_update",
+          "source_url": "https://developer.copper.com/people/bulk-update-people.html",
+          "title": "Bulk Update People"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/people",
+          "source_url": "https://developer.copper.com/people/create-a-new-person.html",
+          "title": "Create a New Person"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/people/{person_id}",
+          "source_url": "https://developer.copper.com/people/delete-a-person.html",
+          "title": "Delete a Person"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/people/fetch_by_email",
+          "source_url": "https://developer.copper.com/people/fetch-a-person-by-email.html",
+          "title": "Fetch a Person by Email"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/people/{person_id}",
+          "source_url": "https://developer.copper.com/people/fetch-a-person-by-id.html",
+          "title": "Fetch a Person by ID"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/people/search",
+          "source_url": "https://developer.copper.com/people/list-people-search.html",
+          "title": "List People (Search)"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/people/{person_id}/activities",
+          "source_url": "https://developer.copper.com/people/see-a-persons-activities.html",
+          "title": "See a Person's Activities"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/people/{person_id}",
+          "source_url": "https://developer.copper.com/people/update-a-person.html",
+          "title": "Update a Person"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/projects",
+          "source_url": "https://developer.copper.com/projects/create-a-new-project.html",
+          "title": "Create a New Project"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/projects/{project_id}",
+          "source_url": "https://developer.copper.com/projects/delete-a-project.html",
+          "title": "Delete a Project"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/projects/{project_id}",
+          "source_url": "https://developer.copper.com/projects/fetch-a-project-by-id.html",
+          "title": "Fetch a Project by ID"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/projects/search",
+          "source_url": "https://developer.copper.com/projects/list-projects-search.html",
+          "title": "List Projects (Search)"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/projects/{project_id}",
+          "source_url": "https://developer.copper.com/projects/update-a-project.html",
+          "title": "Update a Project"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/{entity}/{entity_id}/related",
+          "source_url": "https://developer.copper.com/related-items/relate-an-existing-record-to-an-entity.html",
+          "title": "Relate an existing record to an Entity"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/{entity}/{entity_id}/related",
+          "source_url": "https://developer.copper.com/related-items/remove-relationship-between-record-and-entity.html",
+          "title": "Remove relationship between record and Entity"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/{entity}/{entity_id}/related/{related_entity_name}",
+          "source_url": "https://developer.copper.com/related-items/view-all-records-of-a-given-entity-type-related-to-an-entity.html",
+          "title": "View all records of a given Entity Type related to an Entity"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/{entity}/{entity_id}/related/",
+          "source_url": "https://developer.copper.com/related-items/view-all-records-related-to-an-entity.html",
+          "title": "View all records related to an Entity"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/tags",
+          "source_url": "https://developer.copper.com/tags/list-tags.html",
+          "title": "List Tags"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/tasks",
+          "source_url": "https://developer.copper.com/tasks/create-a-new-task.html",
+          "title": "Create a New Task"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/tasks/{task_id}",
+          "source_url": "https://developer.copper.com/tasks/delete-a-task.html",
+          "title": "Delete a Task"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/tasks/{task_id}",
+          "source_url": "https://developer.copper.com/tasks/fetch-a-task-by-id.html",
+          "title": "Fetch a Task by ID"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/tasks/search",
+          "source_url": "https://developer.copper.com/tasks/list-tasks-search.html",
+          "title": "List Tasks (Search)"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/tasks/{task_id}",
+          "source_url": "https://developer.copper.com/tasks/update-a-task.html",
+          "title": "Update a Task"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/webhooks",
+          "source_url": "https://developer.copper.com/webhooks/create-new-subscription.html",
+          "title": "Create new subscription"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/webhooks/{webhook_id}",
+          "source_url": "https://developer.copper.com/webhooks/delete-subscription-unsubscribe.html",
+          "title": "Delete subscription (unsubscribe)"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/webhooks",
+          "source_url": "https://developer.copper.com/webhooks/list-all-subscriptions.html",
+          "title": "List all subscriptions"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/webhooks/{subscription_id}",
+          "source_url": "https://developer.copper.com/webhooks/update-a-subscription.html",
+          "title": "Update a subscription"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/webhooks{webhook_id}",
+          "source_url": "https://developer.copper.com/webhooks/view-subscription-by-id.html",
+          "title": "View subscription by ID"
+        }
+      ],
+      "resume_strategy": null
+    },
+    "freshdesk": {
+      "state": "complete",
+      "reference_root": "https://developers.freshdesk.com/api/",
+      "reference_bytes_hint": 3228889,
+      "documents_total": 1,
+      "documents_retrieved": 1,
+      "operations_found": 170,
+      "coverage_confidence": "complete_rendered_reference",
+      "basis": "Parsed all 171 endpoint sections in the provider's single 3.2MB rendered reference, which normalize to 170 unique HTTP method/path operations after provider query examples are removed."
+    }
+  }
+}

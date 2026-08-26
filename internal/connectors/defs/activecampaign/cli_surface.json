@@ -1,0 +1,267 @@
+{
+  "tagline": "Read Activecampaign source-locked ETL records.",
+  "usage": "pm activecampaign <command> [flags]",
+  "source_cli": {
+    "name": "Activecampaign provider API",
+    "docs": "https://developers.activecampaign.com/reference/list-all-contacts",
+    "reference": "Pinned schema-v3 source documents; each ETL command retains its exact provider operation route and citation.",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "etl",
+      "title": "ETL streams",
+      "commands": [
+        "contacts",
+        "lists",
+        "deals",
+        "campaigns",
+        "tags",
+        "automations",
+        "fields",
+        "accounts",
+        "users",
+        "deal-stages",
+        "deal-tasks"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Activecampaign request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit."
+    }
+  ],
+  "commands": [
+    {
+      "path": "contacts list",
+      "summary": "Read Contacts as Activecampaign ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_cli_path": "GET /api/3/contacts",
+      "source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/contacts"
+        }
+      ],
+      "examples": [
+        "pm activecampaign contacts list --json"
+      ],
+      "notes": "Pinned source operation activecampaign.rest.get.ListAllContacts83 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "lists list",
+      "summary": "Read Lists as Activecampaign ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lists",
+      "source_cli_path": "GET /api/3/lists",
+      "source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/lists"
+        }
+      ],
+      "examples": [
+        "pm activecampaign lists list --json"
+      ],
+      "notes": "Pinned source operation activecampaign.rest.get.RetrieveAllLists151 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "deals list",
+      "summary": "Read Deals as Activecampaign ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "deals",
+      "source_cli_path": "GET /api/3/deals",
+      "source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/deals"
+        }
+      ],
+      "examples": [
+        "pm activecampaign deals list --json"
+      ],
+      "notes": "Pinned source operation activecampaign.rest.get.ListAllDeals119 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "campaigns list",
+      "summary": "Read Campaigns as Activecampaign ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "campaigns",
+      "source_cli_path": "GET /api/3/campaigns",
+      "source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/campaigns"
+        }
+      ],
+      "examples": [
+        "pm activecampaign campaigns list --json"
+      ],
+      "notes": "Pinned source operation activecampaign.rest.get.ListAllCampaigns73 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "tags list",
+      "summary": "Read Tags as Activecampaign ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_cli_path": "GET /api/3/tags",
+      "source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/tags"
+        }
+      ],
+      "examples": [
+        "pm activecampaign tags list --json"
+      ],
+      "notes": "Pinned source operation activecampaign.rest.get.RetrieveAllTags172 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "automations list",
+      "summary": "Read Automations as Activecampaign ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "automations",
+      "source_cli_path": "GET /api/3/automations",
+      "source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/automations"
+        }
+      ],
+      "examples": [
+        "pm activecampaign automations list --json"
+      ],
+      "notes": "Pinned source operation activecampaign.rest.get.ListAllAutomations65 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "fields list",
+      "summary": "Read Fields as Activecampaign ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "fields",
+      "source_cli_path": "GET /api/3/fields",
+      "source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/fields"
+        }
+      ],
+      "examples": [
+        "pm activecampaign fields list --json"
+      ],
+      "notes": "Pinned source operation activecampaign.rest.get.RetrieveFields137 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "accounts list",
+      "summary": "Read Accounts as Activecampaign ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "accounts",
+      "source_cli_path": "GET /api/3/accounts",
+      "source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/accounts"
+        }
+      ],
+      "examples": [
+        "pm activecampaign accounts list --json"
+      ],
+      "notes": "Pinned source operation activecampaign.rest.get.ListAllAccounts56 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "users list",
+      "summary": "Read Users as Activecampaign ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_cli_path": "GET /api/3/users",
+      "source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/users"
+        }
+      ],
+      "examples": [
+        "pm activecampaign users list --json"
+      ],
+      "notes": "Pinned source operation activecampaign.rest.get.ListAllUsers181 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "deal-stages list",
+      "summary": "Read Deal Stages as Activecampaign ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "deal_stages",
+      "source_cli_path": "GET /api/3/dealStages",
+      "source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/dealStages"
+        }
+      ],
+      "examples": [
+        "pm activecampaign deal-stages list --json"
+      ],
+      "notes": "Pinned source operation activecampaign.rest.get.ListAllDealStages121 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "deal-tasks list",
+      "summary": "Read Deal Tasks as Activecampaign ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "deal_tasks",
+      "source_cli_path": "GET /api/3/dealTasks",
+      "source_url": "https://developers.activecampaign.com/reference/list-all-contacts",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/dealTasks"
+        }
+      ],
+      "examples": [
+        "pm activecampaign deal-tasks list --json"
+      ],
+      "notes": "Pinned source operation activecampaign.rest.get.ListAllTasks123 from source document primary; streams.json is the declared execution component."
+    }
+  ]
+}

@@ -15,6 +15,18 @@ The six write actions below were this connector's original build; see `cli_surfa
 
 Service API documentation: https://developers.chatwoot.com/api-reference.
 
+## Declarative transport proof
+
+`sync_transport.json` declares every executable Chatwoot stream as a
+`declarative_stream_source` and binds `contacts(id, blocked)` to the exact typed
+`update_contact` action for overwrite, append, and upsert modes. The declaration has keyed
+delivery, durable warehouse acknowledgement, and fixture/dry conformance evidence. Foundation
+`609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` supplies persisted App/CLI generic-destination dispatch
+and exact action selection; this declaration still needs its installed App/CLI fixture path and
+provider-live certification. The source disposition records all 60 typed-action eligibility decisions;
+59 ordinary actions are declaration-pending exact source mappings and conformance evidence, while all
+remain reachable through their approval-governed connector commands.
+
 ## Auth setup
 
 Connection fields:

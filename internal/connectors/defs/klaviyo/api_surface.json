@@ -1,73 +1,5167 @@
 {
-  "api": "Klaviyo REST (JSON:API) API (https://a.klaviyo.com/api)",
-  "docs": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: all 6 legacy-parity read streams (profiles, events, campaigns, lists, metrics, segments); every other Klaviyo JSON:API resource (flows, templates, catalogs, coupons, images, reviews, forms, tags, ACL/webhook management, and all write/mutation endpoints) is out of scope until Pass B",
+  "api": "Klaviyo API",
+  "docs": "https://developers.klaviyo.com/en/reference/api_overview",
+  "reviewed_at": "2026-08-19",
+  "operation_ledger_version": 2,
+  "scope": "Complete provider-artifact inventory generated from the cited official machine-readable specification (345 documented HTTP operations). Existing executable bindings are retained only when their method/path matches the provider artifact; every other operation is explicitly blocked pending a connector-owned declaration.",
+  "artifacts": [
+    {
+      "id": "klaviyo-openapi-2026-08-19",
+      "url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json",
+      "retrieved_at": "2026-08-19",
+      "sha256": "d31f92dcbb1568a27fb2c2fe8df8f5f2b47957f344e06556b97ee8da520beee9"
+    }
+  ],
   "endpoints": [
     {
-      "method": "GET",
-      "path": "/api/profiles",
-      "covered_by": {
-        "stream": "profiles"
+      "method": "DELETE",
+      "path": "/api/campaigns/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/catalog-categories/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/catalog-categories/{id}/relationships/items",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/catalog-items/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/catalog-items/{id}/relationships/categories",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/catalog-variants/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/coupon-codes/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/coupons/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/custom-metrics/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/data-sources/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/flow-actions/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/flows/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/forms/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/lists/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/lists/{id}/relationships/profiles",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/object-schemas/{id}/relationships/object-schemas",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/object-schemas/{id}/relationships/profile-object-schemas",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/object-types/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/push-tokens/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/segments/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tag-groups/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tags/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tags/{id}/relationships/campaigns",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tags/{id}/relationships/flows",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tags/{id}/relationships/lists",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/tags/{id}/relationships/segments",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/template-universal-content/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/templates/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/web-feeds/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/webhooks/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion has no operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     },
     {
       "method": "GET",
-      "path": "/api/events",
-      "covered_by": {
-        "stream": "events"
+      "path": "/api/accounts",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/accounts/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/campaign-messages/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/campaign-messages/{id}/campaign",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/campaign-messages/{id}/image",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/campaign-messages/{id}/relationships/campaign",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/campaign-messages/{id}/relationships/image",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/campaign-messages/{id}/relationships/template",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/campaign-messages/{id}/template",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/campaign-recipient-estimation-jobs/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/campaign-recipient-estimations/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/campaign-send-jobs/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
       }
     },
     {
       "method": "GET",
       "path": "/api/campaigns",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
       "covered_by": {
         "stream": "campaigns"
       }
     },
     {
       "method": "GET",
+      "path": "/api/campaigns/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/campaigns/{id}/campaign-messages",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/campaigns/{id}/relationships/campaign-messages",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/campaigns/{id}/relationships/tags",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/campaigns/{id}/tags",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-categories",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-categories/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-categories/{id}/items",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-categories/{id}/relationships/items",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-category-bulk-create-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-category-bulk-create-jobs/{job_id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-category-bulk-delete-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-category-bulk-delete-jobs/{job_id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-category-bulk-update-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-category-bulk-update-jobs/{job_id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-item-bulk-create-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-item-bulk-create-jobs/{job_id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-item-bulk-delete-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-item-bulk-delete-jobs/{job_id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-item-bulk-update-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-item-bulk-update-jobs/{job_id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-items",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-items/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-items/{id}/categories",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-items/{id}/relationships/categories",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-items/{id}/relationships/variants",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-items/{id}/variants",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-variant-bulk-create-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-variant-bulk-create-jobs/{job_id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-variant-bulk-delete-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-variant-bulk-delete-jobs/{job_id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-variant-bulk-update-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-variant-bulk-update-jobs/{job_id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-variants",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog-variants/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/coupon-code-bulk-create-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/coupon-code-bulk-create-jobs/{job_id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/coupon-codes",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/coupon-codes/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/coupon-codes/{id}/coupon",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/coupon-codes/{id}/relationships/coupon",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/coupons",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/coupons/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/coupons/{id}/coupon-codes",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/coupons/{id}/relationships/coupon-codes",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/custom-metrics",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/custom-metrics/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/custom-metrics/{id}/metrics",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/custom-metrics/{id}/relationships/metrics",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/data-sources",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/data-sources/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/events",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/events/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/events/{id}/metric",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/events/{id}/profile",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/events/{id}/relationships/metric",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/events/{id}/relationships/profile",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/flow-actions/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/flow-actions/{id}/flow",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/flow-actions/{id}/flow-messages",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/flow-actions/{id}/relationships/flow",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/flow-actions/{id}/relationships/flow-messages",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/flow-messages/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/flow-messages/{id}/flow-action",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/flow-messages/{id}/relationships/flow-action",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/flow-messages/{id}/relationships/template",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/flow-messages/{id}/template",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/flows",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/flows/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/flows/{id}/flow-actions",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/flows/{id}/relationships/flow-actions",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/flows/{id}/relationships/tags",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/flows/{id}/tags",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/form-versions/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/form-versions/{id}/form",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/form-versions/{id}/relationships/form",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/forms",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/forms/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/forms/{id}/form-versions",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/forms/{id}/relationships/form-versions",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/images",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/images/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
       "path": "/api/lists",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
       "covered_by": {
         "stream": "lists"
       }
     },
     {
       "method": "GET",
+      "path": "/api/lists/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/lists/{id}/flow-triggers",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/lists/{id}/profiles",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/lists/{id}/relationships/flow-triggers",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/lists/{id}/relationships/profiles",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/lists/{id}/relationships/tags",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/lists/{id}/tags",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/mapped-metrics",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/mapped-metrics/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/mapped-metrics/{id}/custom-metric",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/mapped-metrics/{id}/metric",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/mapped-metrics/{id}/relationships/custom-metric",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/mapped-metrics/{id}/relationships/metric",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/metric-properties/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/metric-properties/{id}/metric",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/metric-properties/{id}/relationships/metric",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
       "path": "/api/metrics",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
       "covered_by": {
         "stream": "metrics"
       }
     },
     {
       "method": "GET",
+      "path": "/api/metrics/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/metrics/{id}/flow-triggers",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/metrics/{id}/metric-properties",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/metrics/{id}/relationships/flow-triggers",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/metrics/{id}/relationships/metric-properties",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-records/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-schemas/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-schemas/{id}/relationships/object-schemas",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-schemas/{id}/relationships/profile-object-schemas",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-schemas/{id}/relationships/source-mapping",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-schemas/{id}/source-mapping",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-types",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-types/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-types/{id}/current-schema",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-types/{id}/draft-schema",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-types/{id}/object-ingestion-logs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-types/{id}/object-records",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-types/{id}/relationships/current-schema",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-types/{id}/relationships/draft-schema",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-types/{id}/relationships/object-ingestion-logs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-types/{id}/relationships/object-records",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-types/{id}/relationships/object-types",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-types/{id}/relationships/profile-object-types",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-types/{id}/relationships/schema-versions",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/object-types/{id}/schema-versions",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profile-bulk-import-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profile-bulk-import-jobs/{id}/import-errors",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profile-bulk-import-jobs/{id}/lists",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profile-bulk-import-jobs/{id}/profiles",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profile-bulk-import-jobs/{id}/relationships/lists",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profile-bulk-import-jobs/{id}/relationships/profiles",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profile-bulk-import-jobs/{job_id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profile-suppression-bulk-create-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profile-suppression-bulk-create-jobs/{job_id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profile-suppression-bulk-delete-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profile-suppression-bulk-delete-jobs/{job_id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profiles",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "covered_by": {
+        "stream": "profiles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profiles/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profiles/{id}/conversation",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profiles/{id}/conversations",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profiles/{id}/lists",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profiles/{id}/push-tokens",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profiles/{id}/relationships/conversation",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profiles/{id}/relationships/conversations",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profiles/{id}/relationships/lists",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profiles/{id}/relationships/push-tokens",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profiles/{id}/relationships/segments",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/profiles/{id}/segments",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/push-tokens",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/push-tokens/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/push-tokens/{id}/profile",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/push-tokens/{id}/relationships/profile",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/reviews",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/reviews/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
       "path": "/api/segments",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
       "covered_by": {
         "stream": "segments"
       }
     },
     {
       "method": "GET",
-      "path": "/api/accounts",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "used only by check.json's connectivity probe, not a data stream"
+      "path": "/api/segments/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
       }
     },
     {
-      "method": "*",
-      "path": "/api/flows, /api/templates, /api/catalogs, /api/coupons, /api/images, /api/reviews, /api/forms, /api/tags",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/api/flows, /api/templates, /api/catalogs, /api/coupons, /api/images, /api/reviews, /api/forms, /api/tags is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "method": "GET",
+      "path": "/api/segments/{id}/flow-triggers",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
       }
     },
     {
-      "method": "POST/PATCH/DELETE",
-      "path": "all Klaviyo mutation endpoints",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy itself is read-only (capabilities.write: false)"
+      "method": "GET",
+      "path": "/api/segments/{id}/profiles",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/segments/{id}/relationships/flow-triggers",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/segments/{id}/relationships/profiles",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/segments/{id}/relationships/tags",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/segments/{id}/tags",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/source-mappings/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tag-groups",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tag-groups/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tag-groups/{id}/relationships/tags",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tag-groups/{id}/tags",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags/{id}/relationships/campaigns",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags/{id}/relationships/flows",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags/{id}/relationships/lists",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags/{id}/relationships/segments",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags/{id}/relationships/tag-group",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags/{id}/tag-group",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/template-universal-content",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/template-universal-content/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/templates",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/templates/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tracking-settings",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/tracking-settings/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/web-feeds",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/web-feeds/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/webhook-topics",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/webhook-topics/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/webhooks",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/webhooks/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/client/geofences",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/client/ip-allowlists/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/client/review-values-reports",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/client/reviews",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no connector-owned bounded operation contract and runnable command binding."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/campaign-messages/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/campaign-messages/{id}/relationships/image",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/campaign-send-jobs/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/campaigns/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/catalog-categories/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/catalog-categories/{id}/relationships/items",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/catalog-items/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/catalog-items/{id}/relationships/categories",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/catalog-variants/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/coupon-codes/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/coupons/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/custom-metrics/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/flow-actions/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/flows/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/images/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/lists/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/mapped-metrics/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/object-schemas/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/object-schemas/{id}/relationships/object-schemas",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/object-schemas/{id}/relationships/profile-object-schemas",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/profiles/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/reviews/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/segments/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/source-mappings/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/tag-groups/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/tags/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/template-universal-content/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/templates/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/tracking-settings/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/web-feeds/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/webhooks/{id}",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/back-in-stock-subscriptions",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/campaign-clone",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/campaign-message-assign-template",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/campaign-recipient-estimation-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/campaign-send-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/campaign-values-reports",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/campaigns",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/catalog-categories",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/catalog-categories/{id}/relationships/items",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/catalog-category-bulk-create-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/catalog-category-bulk-delete-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/catalog-category-bulk-update-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/catalog-item-bulk-create-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/catalog-item-bulk-delete-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/catalog-item-bulk-update-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/catalog-items",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/catalog-items/{id}/relationships/categories",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/catalog-variant-bulk-create-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/catalog-variant-bulk-delete-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/catalog-variant-bulk-update-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/catalog-variants",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/conversation-messages",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/coupon-code-bulk-create-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/coupon-codes",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/coupons",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/custom-metrics",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/data-privacy-deletion-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/data-source-record-bulk-create-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/data-source-record-create-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/data-sources",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/event-bulk-create-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/events",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/flow-series-reports",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/flow-values-reports",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/flows",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/form-series-reports",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/form-values-reports",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/forms",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/image-upload",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/images",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/lists",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/lists/{id}/relationships/profiles",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/metric-aggregates",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/object-record-bulk-delete-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/object-schemas",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/object-schemas/{id}/relationships/object-schemas",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/object-schemas/{id}/relationships/profile-object-schemas",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/object-types",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/profile-bulk-import-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/profile-import",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/profile-merge",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/profile-subscription-bulk-create-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/profile-subscription-bulk-delete-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/profile-suppression-bulk-create-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/profile-suppression-bulk-delete-jobs",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/profiles",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/push-tokens",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/segment-series-reports",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/segment-values-reports",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/segments",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/tag-groups",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/tags",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/tags/{id}/relationships/campaigns",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/tags/{id}/relationships/flows",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/tags/{id}/relationships/lists",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/tags/{id}/relationships/segments",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/template-clone",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/template-render",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/template-universal-content",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/templates",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/web-feeds",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/webhooks",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/client/back-in-stock-subscriptions",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/client/event-bulk-create",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/client/events",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/client/profiles",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/client/push-token-unregister",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/client/push-tokens",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/client/reviews",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/client/subscriptions",
+      "provenance": {
+        "artifact": "klaviyo-openapi-2026-08-19",
+        "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
       }
     }
   ]
