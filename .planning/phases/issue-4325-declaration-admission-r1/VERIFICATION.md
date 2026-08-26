@@ -329,3 +329,21 @@ assigned to CI under the repository's explicit per-command-timeout guidance;
 all affected packages and every applicable non-aggregate constituent gate ran
 locally. No provider I/O, credential use, live proof, provider write/delete,
 retained artifact read/hash, or connector-owned definition change was used.
+
+## R9 re-audit repair checklist (planned 2026-08-26)
+
+The R8 finding set is frozen in `REVIEW-CONVERGENCE.md` before production
+changes. Completion requires the following serial evidence; results are filled
+only after their observed red/green runs.
+
+| Check | Required observable result |
+| --- | --- |
+| Direct App F1 regression | Invalid effective declared input returns a request-validation error and proves no vault/credential access. |
+| CLI F2 regression | Unknown argv and malformed config under `--plan` fail before plan/state lookup; help remains first. |
+| Built-binary F2 probes | Invalid `--plan` input produces validation error before credentials; valid GitHub label delete stops at `missing --credential`. |
+| Production-loader F3 regression | Duplicate JSON object member is rejected by `loadDeclarationTargetLedgers`. |
+| Affected packages | `go test -timeout 20m ./internal/app`, `./internal/cli`, `./internal/connectors/engine`, `./internal/connectors/commandrunner`, and `./cmd/connectorgen` pass. |
+| Static/build | `gofmt`, `go vet`, `make lint`, and `go build ./cmd/pm` pass. |
+| Admission and projection | `connectorgen validate`, declaration admission, surface-sync, runtime-preflight, and canon checks pass. |
+| CLI parity | Existing `pm github`, `pm github label delete --help`, and JSON error behavior remain correct; docs/website are not applicable because no surface text changes. |
+| Final custody | A non-force push updates only `fm/cli-declaration-admission-certification-r1`; GitHub API confirms PR #4351 remains open against `main` and reports the pushed SHA. |

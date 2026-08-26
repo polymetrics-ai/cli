@@ -368,3 +368,35 @@ single-worker contract and launch brief forbid role spawning. Required skills:
    every unstaged Stripe/Docker Hub handoff path byte-for-byte and do not run a
    provider request, credentialed check, write, delete, or broad connector
    regeneration.
+
+## R9 exact-head re-audit repair plan (2026-08-26)
+
+`REVIEW-CONVERGENCE.md` freezes the independent R8 audit at
+`92b2c495f45fbc5d011fcd40cdf4ab51178ddc39`. This is a coordinated shared
+foundation wave, not connector mapping work. The inline/manual GSD fallback
+uses the already-resolved `discuss-phase` → `plan-phase --tdd` →
+`execute-phase` → `verify-work` → `code-review` sequence because the direct-PR
+contract forbids lifecycle-role spawning.
+
+1. **Red F1 (App):** demonstrate that an invalid effective command request
+   reaches `missing --credential` before input validation. The direct App
+   regression must then require the validation error and zero vault/credential
+   reads for requiredness plus declared flag/config coercion.
+2. **Red F2 (CLI plan):** demonstrate that unknown argv and malformed config
+   on an existing command plus `--plan` reach plan lookup. The CLI and
+   built-binary tests must require request-validation errors before `withApp`,
+   state lookup, credential resolution, or preview; valid argv overrides still
+   win over an invalid config value.
+3. **Red F3 (production ledger):** load a schema-valid compact ledger whose
+   object repeats `source_url`. It must fail at the real production loader, not
+   solely in a `connectorgen` duplicate reader.
+4. **Green shared boundaries:** make `PlanConnectorCommand` and the CLI
+   `--plan` path use `commandrunner.PreflightRequest` with the same effective
+   request semantics. Add duplicate-object-member detection before production
+   schema/decode. Do not alter source locks, mapping-only admission, runtime
+   executor selection, or connector declarations.
+5. **Verify and re-audit:** run focused packages and the listed serial gates;
+   build the binary to prove invalid-before-credential and valid GitHub
+   label-delete-to-missing-credential behavior; review the final diff inline,
+   push only a normal fast-forward to PR #4351, verify API base/head, and leave
+   the new exact SHA open for a fresh independent Codex re-audit.
