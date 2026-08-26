@@ -37,6 +37,15 @@ var operationsSchemaJSON string
 //go:embed schema/cli_surface.schema.json
 var cliSurfaceSchemaJSON string
 
+//go:embed schema/declaration_admission.schema.json
+var declarationAdmissionSchemaJSON string
+
+//go:embed schema/declaration_admission_sources.schema.json
+var declarationAdmissionSourcesSchemaJSON string
+
+//go:embed schema/declaration_admission_inventory.schema.json
+var declarationAdmissionInventorySchemaJSON string
+
 //go:embed schema/certification.schema.json
 var certificationSchemaJSON string
 

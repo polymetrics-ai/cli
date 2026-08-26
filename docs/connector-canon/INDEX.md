@@ -15,7 +15,9 @@ this index or a later captain ruling, the current canon wins.
    can prove without provider access, and what it cannot.
 3. [Operation evidence](OPERATION-EVIDENCE.md) — generated source-operation
    accounting and the fixed-100 executable regression gate.
-4. The mechanical authoring references:
+4. [Source-declaration admission](DECLARATION-ADMISSION.md) — the distinct,
+   provider-I/O-free completeness certificate for cited declaration rows.
+5. The mechanical authoring references:
    [migration conventions](../migration/conventions.md),
    [architecture v2 design](../architecture/connector-architecture-v2-design.md),
    and [`AGENTS.md`](../../AGENTS.md).

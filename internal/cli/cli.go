@@ -819,13 +819,16 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 }
 
 func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, args []string, stdout, stderr io.Writer, jsonOut bool) error {
+	return runMaybeConnectorCommandWithRegistry(ctx, root, connectorName, args, stdout, stderr, jsonOut, appRegistry())
+}
+
+func runMaybeConnectorCommandWithRegistry(ctx context.Context, root, connectorName string, args []string, stdout, stderr io.Writer, jsonOut bool, registry *connectors.Registry) error {
 	if err := safety.ValidateIdentifier(connectorName, "connector"); err != nil {
 		return usageErrorf("unknown command %q", connectorName)
 	}
 	if err := connectors.RejectLegacyConnectorName(connectorName); err != nil {
 		return err
 	}
-	registry := appRegistry()
 	connector, ok := registry.Get(connectorName)
 	if !ok {
 		return usageErrorf("unknown command %q", connectorName)
@@ -871,7 +874,26 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	if err := validateConnectorLifecycleFlagValues(flags); err != nil {
 		return err
 	}
-	if err := commandrunner.Preflight(connector, path); err != nil {
+	config, err := keyValues(flags.values["config"])
+	if err != nil {
+		return err
+	}
+	if _, found := connectorSurfaceCommand(surface, strings.Join(path, " ")); !found {
+		return connectorCommandUsageError(surface, path)
+	}
+	var preparedCommandFlags map[string][]string
+	preflight := func() error {
+		resolvedFlags, resolveErr := resolveConnectorCommandEnvironmentOnlyFlags(surface, path, flags.values)
+		if resolveErr != nil {
+			return resolveErr
+		}
+		preparedCommandFlags = connectorCommandFlags(resolvedFlags)
+		return commandrunner.PreflightRequest(connector, commandrunner.Request{
+			Path: path, Flags: preparedCommandFlags, Config: connectors.RuntimeConfig{Config: config},
+			PlanContinuation: flags.first("plan") != "",
+		})
+	}
+	if err := preflight(); err != nil {
 		var blocked *commandrunner.BlockedCommandError
 		if errors.As(err, &blocked) {
 			if blocked.Reason == "unknown command" {
@@ -879,7 +901,11 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 			}
 			return connectorCommandBlockedError(blocked)
 		}
-		return err
+		var missingRequired *commandrunner.MissingRequiredFlagError
+		if errors.As(err, &missingRequired) {
+			return err
+		}
+		return validationErrorf("%v", err)
 	}
 	approval, err := prepareReverseApprovalCarrier(flags, os.Stdin)
 	if err != nil {
@@ -887,11 +913,11 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	}
 	if approval.supplied {
 		return withReverseExecutionApp(root, func(a *app.App) error {
-			return runConnectorCommand(ctx, a, connectorName, args, approval, stdout, stderr, jsonOut)
+			return runConnectorCommand(ctx, a, connectorName, args, preparedCommandFlags, approval, stdout, stderr, jsonOut)
 		})
 	}
 	return withApp(root, func(a *app.App) error {
-		return runConnectorCommand(ctx, a, connectorName, args, approval, stdout, stderr, jsonOut)
+		return runConnectorCommand(ctx, a, connectorName, args, preparedCommandFlags, approval, stdout, stderr, jsonOut)
 	})
 }
 
@@ -1290,7 +1316,7 @@ func connectorCommandSuggestion(surface *connectors.CommandSurface, path []strin
 	return ""
 }
 
-func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, args []string, approval reverseApprovalCarrier, stdout, stderr io.Writer, jsonOut bool) error {
+func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, args []string, preparedCommandFlags map[string][]string, approval reverseApprovalCarrier, stdout, stderr io.Writer, jsonOut bool) error {
 	flags := parseFlags(args)
 	path := flags.values["_"]
 	if len(path) == 0 {
@@ -1330,20 +1356,15 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	if err != nil {
 		return err
 	}
-	surfaceProvider, ok := connector.(connectors.CommandSurfaceProvider)
-	if !ok || surfaceProvider.CommandSurface() == nil {
-		return fmt.Errorf("connector %q has no command surface", connectorName)
-	}
-	resolvedFlags, err := resolveConnectorCommandEnvironmentOnlyFlags(surfaceProvider.CommandSurface(), path, flags.values)
-	if err != nil {
-		return err
-	}
 	// The page flags stay in commandFlags on purpose: only a direct_read can
 	// honour them, and the runner drops them for that intent alone. Stripping
 	// them here for every intent made `--page 3` on an ETL command
 	// accepted-and-ignored, which is the same quiet wrongness --page exists to
 	// remove.
-	commandFlags := connectorCommandFlags(resolvedFlags)
+	commandFlags := preparedCommandFlags
+	if commandFlags == nil {
+		return fmt.Errorf("connector command inputs were not preflighted")
+	}
 
 	if err := runConnectorWriteCommand(ctx, a, connectorName, credential, config, path, commandFlags, flags, stdout, jsonOut); err != commandrunner.ErrNotWriteCommand {
 		if err != nil {
@@ -1935,6 +1956,15 @@ func connectorCommandPlanForPath(a *app.App, planID, connectorName string, path 
 }
 
 func connectorCommandBlockedError(err error) error {
+	var blocked *commandrunner.BlockedCommandError
+	if errors.As(err, &blocked) && blocked.Failure != nil && blocked.Failure.Code() == "missing_foundation" {
+		return &cliError{
+			category: categoryInternal,
+			code:     "missing_foundation",
+			message:  blocked.Error(),
+			err:      err,
+		}
+	}
 	return &cliError{
 		category: categoryPolicy,
 		code:     "connector_command_blocked",

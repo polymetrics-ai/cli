@@ -10,6 +10,8 @@ import (
 	"sort"
 	"strings"
 
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -873,6 +875,7 @@ func checkCLISurface(b engine.Bundle) []Finding {
 
 	var findings []Finding
 	for i, cmd := range b.CLISurface.Commands {
+		findings = append(findings, checkCLISurfaceFoundation(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceReferences(b, i, cmd, streams, writes, operations)...)
 		findings = append(findings, checkCLISurfaceOperationSafety(b, i, cmd, operations)...)
 		findings = append(findings, checkCLISurfaceIntent(b, i, cmd, writes)...)
@@ -884,6 +887,80 @@ func checkCLISurface(b engine.Bundle) []Finding {
 		findings = append(findings, checkCLISurfaceEndpointCoverage(b, i, cmd, endpoints)...)
 	}
 	return findings
+}
+
+func checkCLISurfaceFoundation(b engine.Bundle, index int, command engine.CLICommand) []Finding {
+	if command.Availability == declarationAdmissionStateUnsupported {
+		if command.Unsupported == nil || strings.TrimSpace(command.Unsupported.Reason) == "" ||
+			strings.TrimSpace(command.Unsupported.Target.SourceID) == "" || strings.TrimSpace(command.Unsupported.Target.Method) == "" ||
+			strings.TrimSpace(command.Unsupported.Target.Path) == "" || command.Foundation != nil {
+			return []Finding{{
+				Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety,
+				Message: fmt.Sprintf("command %d (%q) provider-evidenced unsupported availability requires one exact unsupported_disposition and no foundation_gap", index, command.Path),
+			}}
+		}
+		if command.Stream != "" || command.Write != "" || command.Operation != "" {
+			return []Finding{{
+				Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety,
+				Message: fmt.Sprintf("command %d (%q) provider-evidenced unsupported availability must not claim an executable target", index, command.Path),
+			}}
+		}
+		if len(command.APISurface) != 1 || !strings.EqualFold(command.APISurface[0].Method, command.Unsupported.Target.Method) || command.APISurface[0].Path != command.Unsupported.Target.Path {
+			return []Finding{{
+				Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety,
+				Message: fmt.Sprintf("command %d (%q) unsupported source target must match exactly one api_surface endpoint", index, command.Path),
+			}}
+		}
+		return nil
+	}
+	if command.Availability == declarationAdmissionStateDeferred {
+		if command.Foundation == nil || strings.TrimSpace(command.Foundation.ID) == "" || strings.TrimSpace(command.Foundation.Reason) == "" ||
+			!connectors.ValidCommandFoundationComponent(command.Foundation.Component) ||
+			!connectors.ValidCommandFoundationEvidence(command.Foundation.Component, command.Foundation.Evidence) ||
+			strings.TrimSpace(command.Foundation.Target.Method) == "" || strings.TrimSpace(command.Foundation.Target.Path) == "" {
+			return []Finding{{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) deferred availability requires foundation_gap.id, reason, typed component/evidence, and target", index, command.Path),
+			}}
+		}
+		if len(command.APISurface) != 1 || !strings.EqualFold(command.APISurface[0].Method, command.Foundation.Target.Method) || command.APISurface[0].Path != command.Foundation.Target.Path {
+			return []Finding{{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) deferred foundation target must match exactly one api_surface endpoint", index, command.Path),
+			}}
+		}
+		path, err := commandrunner.CommandPathSegments(command.Path)
+		if err != nil {
+			return []Finding{{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) has no canonical round-trippable command path: %v", index, command.Path, err),
+			}}
+		}
+		if message := declarationAdmissionDeferredPreflight(b, path); message != "" {
+			return []Finding{{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) %s", index, command.Path, message),
+			}}
+		}
+		return nil
+	}
+	if command.Foundation == nil && command.Unsupported == nil {
+		return nil
+	}
+	return []Finding{{
+		Connector: b.Name,
+		File:      "cli_surface.json",
+		Rule:      ruleCLISurfaceSafety,
+		Message:   fmt.Sprintf("command %d (%q) foundation_gap or unsupported_disposition requires its matching availability", index, command.Path),
+	}}
 }
 
 // checkCLISurfaceEnvOnlyFlags requires every declaration-owned request secret
@@ -2459,6 +2536,17 @@ func checkCLISurfaceEndpointCoverage(
 		if sourceBoundPartialReadCommand(cmd) {
 			continue
 		}
+		if declarationBoundDeferredCommand(cmd) {
+			if state.excluded || state.operation == nil || state.operation.Status != "blocked" || !state.operation.BlockedByDefault {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("deferred command %d (%q) references api_surface endpoint %s %s that is not one blocked operation target", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path),
+				})
+			}
+			continue
+		}
 		if cmd.Operation != "" && slices.Contains(state.coveredBy.OperationTargets(), cmd.Operation) {
 			continue
 		}
@@ -2511,6 +2599,20 @@ func sourceBoundPartialReadCommand(cmd engine.CLICommand) bool {
 	return cmd.Availability == "partial" && cmd.Intent == "direct_read" &&
 		strings.HasPrefix(cmd.Notes, "Blocked: locked source operation ") &&
 		strings.Contains(cmd.Notes, "declaration-owned executable")
+}
+
+// declarationBoundDeferredCommand is a source-admission command that is
+// deliberately unroutable until its named implementation foundation exists.
+// Its cited API endpoint remains discoverable; treating the endpoint's policy,
+// method, risk, or current runtime coverage as grounds to hide the command
+// would lose the declaration it was added to preserve. The admission checker
+// separately requires a specific evidenced component for this state.
+func declarationBoundDeferredCommand(cmd engine.CLICommand) bool {
+	return cmd.Availability == declarationAdmissionStateDeferred && cmd.Foundation != nil &&
+		strings.TrimSpace(cmd.Foundation.ID) != "" && strings.TrimSpace(cmd.Foundation.Reason) != "" &&
+		connectors.ValidCommandFoundationComponent(cmd.Foundation.Component) &&
+		connectors.ValidCommandFoundationEvidence(cmd.Foundation.Component, cmd.Foundation.Evidence) &&
+		strings.TrimSpace(cmd.Foundation.Target.Method) != "" && strings.TrimSpace(cmd.Foundation.Target.Path) != ""
 }
 
 func cliSurfaceEndpointStates(surface *engine.APISurface) map[string]cliSurfaceEndpointState {
