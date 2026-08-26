@@ -1,5 +1,26 @@
 # Source-bound read execution foundation
 
+## Repair r4 task delivery header
+
+- Issue: Refs #4352 — source-bound read execution foundation; repair existing PR #4356.
+- Base branch: `main` at `b33983927d863032dac8220949990506e812937d`.
+- Merges into: `main`.
+- Delivery: PR #4356 remains open; all six frozen findings are red/green repaired and fast-forward pushed to `fm/cli-source-bound-read-execution-r1-continuation`, then a fresh independent audit reviews the final exact code SHA. No merge is authorized.
+- Working branch: `fm/cli-source-bound-read-execution-r1-continuation`, immutable start `19b2bd8dc470d6fa92da1a500173c8c8c30ba59c`.
+- Task: Repair closed paging, pre-credential origin refusal, direct-API ETL binding, 21 existing-lane Asana mutations, fixed-100 isolation, and generated Asana docs/help/website parity; retain provider bytes and only genuine named foundations.
+- Verification: Every `AUDIT-001`–`AUDIT-006` red/green regression, targeted packages, full `cmd/connectorgen`, generator/admission/runtime-preflight/canon/doc gates, credential-free binary census, and independent exact-SHA re-audit.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| Closed paging surface | live | Generated source-bound Asana reads have no raw `offset` or command `limit`; derived `--page`/`--page-cursor` navigation remains. |
+| Pre-credential source origin refusal | live | Credential-store, auth-cohort, and requester observers are all zero for an invalid origin overlay. |
+| Direct ETL binding | live | Direct `Read` rejects altered source ID/method/path/records/pagination/origin before auth or I/O. |
+| Existing Asana write lane | live | All 19 DELETE and two no-body POST actions reach `missing --credential`; actual remaining gaps stay blocked. |
+| Fixed-100 self-containment | live | The isolated test workspace carries every referenced connector source and passes without repository-tree input. |
+| Truthful generated docs | live | Source-derived actual counts/pagination/lane claims match manual/help and website data; historical blockers are absent. |
+
+Repair skills loaded: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, `vercel-react-best-practices`, and `vercel-composition-patterns`. Required `frontend-design` and `web-design-guidelines` are not installed; only generated website data is in scope and no React UI/component changes are planned.
+
 ## Task Delivery Header
 
 - Issue: Closes #4352 — add source-bound read execution foundation.

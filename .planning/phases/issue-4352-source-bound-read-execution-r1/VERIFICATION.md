@@ -1,5 +1,16 @@
 # Verification — #4352 source-bound read execution foundation
 
+## Repair r4 checklist
+
+- [ ] AUDIT-001 paging red/green: projection, engine/direct read, CLI/App parity, and generated help.
+- [ ] AUDIT-002 ordering red/green: CLI/App credential/auth/requester spies.
+- [ ] AUDIT-003 direct `Read`/`ReadWithOutcome` binding red/green.
+- [ ] AUDIT-004 Asana 21-mutation/delete census red/green.
+- [ ] AUDIT-005 both fixed-100 isolation red/green; full `go test -timeout 20m ./cmd/connectorgen`.
+- [ ] AUDIT-006 generated docs/manual/help/website semantic red/green.
+- [ ] `source-import --check`, validation, surface sync, operation evidence, admission/runtime-preflight/canon, docs/website, and credential-free binary census.
+- [ ] Final fresh independent exact-SHA Codex audit after code SHA is pushed.
+
 Status: verified locally, pending PR automation and human gate.
 
 ## Final post-rebase repair run

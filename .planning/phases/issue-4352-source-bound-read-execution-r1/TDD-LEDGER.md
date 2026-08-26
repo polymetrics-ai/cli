@@ -1,5 +1,18 @@
 # TDD Ledger — #4352 source-bound read execution foundation
 
+## Repair r4 frozen red/green evidence
+
+| Finding | Red before implementation | Required complete green result |
+| --- | --- | --- |
+| AUDIT-001 | Assert the current source projection emits raw `offset`/colliding `limit` for a source-bound read. | Shared paging classifier excludes provider navigation controls and regenerated surface/help/direct APIs expose only closed derived paging. |
+| AUDIT-002 | Supply cross-origin source-bound config through CLI/App and observe credential/auth construction before error. | Same input returns origin error with zero vault/credential reads, auth cohort/protected state, and requester calls. |
+| AUDIT-003 | Alter one direct stream source-bound field while retaining its binding and observe direct `Read` reach the later path. | `Read` and `ReadWithOutcome` reject source ID/method/path/records/pagination/origin drift before auth/I/O. |
+| AUDIT-004 | Census source-complete Asana mutations and show the 19 DELETE + two no-body POST commands are blocked. | Existing reverse-ETL/delete route admits all 21 to `missing --credential`, while true named gaps remain declared blocked. |
+| AUDIT-005 | Run both isolated fixed-100 checks and retain their missing-Asana-input failure. | Copy exact required inputs; both checks and full `./cmd/connectorgen` are green. |
+| AUDIT-006 | Assert source-derived Asana facts against stale generated docs/manual/help/website artifacts. | Regeneration and semantic tests show actual counts, closed paging, and only real named foundations. |
+
+Record exact commands, intended red failure, and full green result as each group completes; a passing command alone is not proof.
+
 ## Lifecycle
 
 - GSD source resolution: `scripts/gsd doctor`, all five required `scripts/gsd sources` commands, and `go run ./cmd/agentcontractgen check` passed before planning.
