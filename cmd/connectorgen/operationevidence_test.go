@@ -476,6 +476,7 @@ func TestOperationEvidenceCheckRunsFixed100Gate(t *testing.T) {
 func operationEvidenceWorkspace(t *testing.T) string {
 	t.Helper()
 	root := t.TempDir()
+	copyOperationEvidenceTree(t, filepath.Join("..", "..", "internal", "connectors", "defs", "asana"), filepath.Join(root, "internal", "connectors", "defs", "asana"))
 	copyOperationEvidenceTree(t, filepath.Join("..", "..", "internal", "connectors", "defs", "github"), filepath.Join(root, "internal", "connectors", "defs", "github"))
 	copyOperationEvidenceFile(t, filepath.Join("..", "..", "internal", "connectors", "operation-evidence-fixed-100.json"), filepath.Join(root, "internal", "connectors", "operation-evidence-fixed-100.json"))
 	copyOperationEvidenceFile(t, filepath.Join("..", "..", "internal", "connectors", "certifications", "current-subject.json"), filepath.Join(root, "internal", "connectors", "certifications", "current-subject.json"))
@@ -488,14 +489,14 @@ func operationEvidenceWorkspace(t *testing.T) string {
 	if err := json.Unmarshal(websiteRaw, &rows); err != nil {
 		t.Fatalf("decode generated website data: %v", err)
 	}
-	github := make([]any, 0, 1)
+	connectorRows := make([]any, 0, 2)
 	for _, item := range rows {
 		row := item.(map[string]any)
-		if row["slug"] == "github" {
-			github = append(github, row)
+		if row["slug"] == "github" || row["slug"] == "asana" {
+			connectorRows = append(connectorRows, row)
 		}
 	}
-	writeOperationEvidenceJSON(t, filepath.Join(root, "website", "data", "connectors.generated.json"), map[string]any{"rows": github})
+	writeOperationEvidenceJSON(t, filepath.Join(root, "website", "data", "connectors.generated.json"), map[string]any{"rows": connectorRows})
 	return root
 }
 

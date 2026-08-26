@@ -13,6 +13,12 @@
 
 Record exact commands, intended red failure, and full green result as each group completes; a passing command alone is not proof.
 
+### AUDIT-005 completed
+
+- **Red:** `go test -timeout 20m ./cmd/connectorgen -run 'TestOperationEvidence(Fixed100RejectsEveryRegression|CheckRunsFixed100Gate)$' -count=1` failed at the immutable review head with `asana.rest.getCustomFieldsForWorkspace is absent from operation evidence`.
+- **Intermediate red:** after copying only the Asana bundle, the same test failed `execution evidence regressed`, proving the isolated workspace also needs Asana's website evidence rather than an implicit repository-tree dependency.
+- **Green:** the isolated workspace now copies the referenced Asana bundle and carries the Asana + GitHub website rows. The exact command passed in `6.906s`; mutation controls inside each fixed-100 test remain negative proof that a changed expected digest still fails.
+
 ## Lifecycle
 
 - GSD source resolution: `scripts/gsd doctor`, all five required `scripts/gsd sources` commands, and `go run ./cmd/agentcontractgen check` passed before planning.

@@ -11,6 +11,10 @@
 - [ ] `source-import --check`, validation, surface sync, operation evidence, admission/runtime-preflight/canon, docs/website, and credential-free binary census.
 - [ ] Final fresh independent exact-SHA Codex audit after code SHA is pushed.
 
+### AUDIT-005 result
+
+- [x] Intended red and complete green recorded in `TDD-LEDGER.md`; focused fixed-100 isolation command passed in `6.906s`.
+
 Status: verified locally, pending PR automation and human gate.
 
 ## Final post-rebase repair run
