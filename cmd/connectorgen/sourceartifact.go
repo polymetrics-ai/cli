@@ -443,7 +443,7 @@ func sourceRetainStructuredMediaType(mediaType string) bool {
 }
 
 func sourceRetainLooksLikeLoginOrErrorHTML(raw []byte) bool {
-	if !(bytes.HasPrefix(raw, []byte("<!doctype html")) || bytes.HasPrefix(raw, []byte("<html")) || bytes.Contains(raw, []byte("<html"))) {
+	if !bytes.HasPrefix(raw, []byte("<!doctype html")) && !bytes.HasPrefix(raw, []byte("<html")) && !bytes.Contains(raw, []byte("<html")) {
 		return false
 	}
 	hasLogin := bytes.Contains(raw, []byte("login")) || bytes.Contains(raw, []byte("log in")) || bytes.Contains(raw, []byte("sign in")) || bytes.Contains(raw, []byte("sign-in"))

@@ -13,11 +13,11 @@
 
 ## Independent audit R1 gap closure — pending
 
-- [ ] F1 red and green: strict v3 document-owned operation-evidence identity preserves six lanes and declared/deferred rows.
-- [ ] F2 red and green: generic rendered publication citation rejects unless fragment or verified capture extraction binding is present. Read-only Batch 6–7 impact at `origin/fm/cli-map-batch67-r1` / `18248d233e6abd9d7ec03075a225cf35ee2f5399`: 861 generic citation rows in eight connectors are intentionally not admitted until their lock owners add a fragment or binding.
-- [ ] F3 red and green: HTTP MIME/body evidence rejects plausible login and `Error 503` pages plus bad MIME as wrong-source before drift, without rejecting legitimate documentation HTML.
-- [ ] `go test -timeout 20m ./cmd/connectorgen` passes after the repair, or any unrelated local limitation is recorded exactly.
-- [ ] `go vet ./cmd/connectorgen` passes after the repair.
-- [ ] `go run ./cmd/connectorgen operation-evidence --check` and `go run ./cmd/connectorgen certification-subject --check` pass from a clean tracked worktree; regenerated checked-in provenance is byte-stable on a second run.
-- [ ] Applicable non-aggregate repository gates pass separately with explicit timeouts, including source import/projection and generated snapshot checks.
+- [x] F1 red and green: strict v3 document-owned operation-evidence identity preserves six lanes and declared/deferred rows. Exact focused green command passed in 2.822s on 2026-08-26.
+- [x] F2 red and green: generic rendered publication citation rejects unless fragment or verified capture extraction binding is present. Read-only Batch 6–7 impact at `origin/fm/cli-map-batch67-r1` / `18248d233e6abd9d7ec03075a225cf35ee2f5399`: 861 generic citation rows in eight connectors are intentionally not admitted until their lock owners add a fragment or binding.
+- [x] F3 red and green: HTTP MIME/body evidence rejects plausible login and `Error 503` pages plus invalid/bad MIME as wrong-source before drift, without rejecting legitimate documentation HTML.
+- [x] `go test -timeout 20m ./cmd/connectorgen` passes after the final repair (158.269s on 2026-08-26).
+- [x] `go vet ./cmd/connectorgen`, `go build ./cmd/pm`, `make tidy-check`, and `make docs-check-no-build` pass after the repair.
+- [x] Clean tracked archive at `9e1bfdb9b21ab346f84537bfb094a22782b0d5d5` passed `agentcontractgen check`, `connectorgen validate`, `surface-sync --check`, `operation-evidence --check` (1,525 rows; fixed-100 passed), certification subject/matrix/candidates/sweep checks, and `connectorgen boundary . --json`. Its temporary archive was deleted after the checks; it excluded the preserved live-retention artifacts.
+- [x] `make lint` passes after the static-analysis repair. No aggregate `go test ./...` was run.
 - [ ] PR #4350 is pushed, its API-reported base is `main`, and Firstmate is asked for a fresh independent audit. No merge is performed.

@@ -6,6 +6,6 @@
   "execution": "inline_manual_gsd_fallback",
   "base_branch": "main",
   "working_branch": "fm/cli-source-lock-usability-foundation-r1",
-  "red_green_evidence": "r1_red_pending",
-  "review": "independent_audit_r1_failed_at_f9d237840ed49737ef92667b7e2173465dcc000d"
+  "red_green_evidence": "r1_red_and_green_recorded",
+  "review": "independent_audit_r1_repair_ready_for_fresh_audit"
 }
