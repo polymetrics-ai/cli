@@ -1,0 +1,19 @@
+{
+  "issue": 4354,
+  "phase": "issue-4354-schema-v3-source-projection-importer-r1",
+  "base": "main",
+  "branch": "feat/4354-schema-v3-source-projection",
+  "delivery": "direct-pr",
+  "status": "planned",
+  "gsd": {
+    "mode": "inline-manual-fallback",
+    "commands_resolved": [
+      "discuss-phase",
+      "plan-phase --tdd",
+      "execute-phase",
+      "verify-work",
+      "code-review"
+    ]
+  },
+  "usable_surface_delta": 0
+}
