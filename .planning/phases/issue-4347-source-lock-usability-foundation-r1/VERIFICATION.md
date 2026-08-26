@@ -36,4 +36,12 @@
 - [x] `go vet ./cmd/connectorgen`, `go build ./cmd/pm`, `go build -o .task-bin-connectorgen ./cmd/connectorgen`, `make tidy-check`, `make docs-check-no-build`, `make smoke-no-build`, and `make lint` pass. `git diff --check` passes.
 - [x] Clean tracked-only archive check passes: `agentcontractgen check`, source validate, surface sync, operation evidence (1,525 rows; fixed-100), certification subject/matrix/candidates/sweep, boundary (553 connectors; 317 files; no findings), connector canon, GitHub parity artifacts, and all release workflow scripts including installed GitHub certification.
 - [x] Root `agentcontractgen check` is not a code failure: it correctly refuses the deliberately preserved untracked `.fm-main-clean.qazhOS/.claude/agents/pm-connector-worker.md` duplicate. The exact command passes in the clean archive containing this branch's diff and no untracked artifacts.
-- [ ] PR #4350 points at the repaired remote head and a fresh audit is requested. No merge.
+- [x] PR #4350 is open against `main` with head branch
+  `fm/cli-source-lock-usability-foundation-r1`; `gh-axi pr list --state open
+  --base main --head fm/cli-source-lock-usability-foundation-r1 --limit 10`
+  returned only #4350. Before the delivery-record commit, `git ls-remote
+  origin refs/heads/fm/cli-source-lock-usability-foundation-r1` and local HEAD
+  both returned `54c2e653a088e809884ada50ab41a9e54c3f90b5`. A PR comment requests
+  a fresh independent audit; no merge was performed. The body editor is
+  blocked by GitHub's deprecated `repository.pullRequest.projectCards` GraphQL
+  field, so that immutable PR comment is the R2 delivery record.
