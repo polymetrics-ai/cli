@@ -144,6 +144,42 @@ func TestGitHubLabelDeleteValidatesRequiredInputBeforeCredentialResolution(t *te
 	}
 }
 
+func TestConnectorCommandPlanValidatesRequestBeforePlanLookup(t *testing.T) {
+	root := t.TempDir()
+	var initOut, initErr bytes.Buffer
+	if code := Run([]string{"init", "--root", root, "--json"}, &initOut, &initErr); code != 0 {
+		t.Fatalf("init code=%d stdout=%s stderr=%s", code, initOut.String(), initErr.String())
+	}
+
+	tests := []struct {
+		name string
+		args []string
+		want string
+	}{
+		{
+			name: "unknown argv", want: "unknown flag --bogus",
+			args: []string{"github", "label", "delete", "--plan", "rplan_missing", "--name", "bug", "--bogus", "value", "--root", root, "--json"},
+		},
+		{
+			name: "configured enum", want: "configured value",
+			args: []string{"freshchat", "agents", "list", "--plan", "rplan_missing", "--config", "agents_is_deactivated=not-a-deactivation-state", "--root", root, "--json"},
+		},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := Run(testCase.args, &stdout, &stderr)
+			combined := stdout.String() + stderr.String()
+			if code == 0 || !strings.Contains(combined, testCase.want) {
+				t.Fatalf("plan input code=%d stdout=%s stderr=%s; want request validation %q before plan lookup", code, stdout.String(), stderr.String(), testCase.want)
+			}
+			if strings.Contains(combined, `reverse plan "rplan_missing" not found`) || strings.Contains(combined, "missing --credential") {
+				t.Fatalf("plan input crossed App state or credential boundary: stdout=%s stderr=%s", stdout.String(), stderr.String())
+			}
+		})
+	}
+}
+
 func TestFreshchatConfiguredEnumValidatesBeforeCredentialResolution(t *testing.T) {
 	bundle, err := engine.Load(defs.FS, "freshchat")
 	if err != nil {

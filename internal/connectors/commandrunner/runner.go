@@ -47,6 +47,11 @@ type Request struct {
 	DestRoot string
 	// FileName optionally names the downloaded file within DestRoot.
 	FileName string
+	// PlanContinuation permits already-planned required values to remain
+	// withheld while previewing or executing a persisted reverse plan. It does
+	// not relax unknown-flag, type, enum, format, size, range, cardinality, or
+	// effective-config validation, all of which still run before state lookup.
+	PlanContinuation bool
 }
 
 type Result struct {
@@ -244,7 +249,7 @@ func PreflightRequest(connector connectors.Connector, req Request) error {
 	if cmd.Intent == "direct_read" {
 		flags = withoutDirectReadPageFlags(flags)
 	}
-	if _, err := validateCommandFlagSet(cmd, flags); err != nil {
+	if _, err := validateCommandFlagSetForPreflight(cmd, flags, req.PlanContinuation); err != nil {
 		return err
 	}
 	return validateConfiguredFlagValues(cmd, req.Config, flags)
@@ -1599,6 +1604,10 @@ func parseDateTimeValue(value, label string) (time.Time, error) {
 // requiredness, multiplicity, unknown flags, types, enums, bounds, formats, or
 // encoded-size limits.
 func validateCommandFlagSet(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]connectors.CommandSurfaceFlag, error) {
+	return validateCommandFlagSetForPreflight(cmd, flags, false)
+}
+
+func validateCommandFlagSetForPreflight(cmd connectors.CommandSurfaceCommand, flags map[string][]string, allowOmittedRequired bool) (map[string]connectors.CommandSurfaceFlag, error) {
 	allowed := make(map[string]connectors.CommandSurfaceFlag, len(cmd.Flags))
 	for _, flag := range cmd.Flags {
 		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
@@ -1612,8 +1621,10 @@ func validateCommandFlagSet(cmd connectors.CommandSurfaceCommand, flags map[stri
 	if err := validateCanonicalFlagOccurrences(cmd, flags); err != nil {
 		return nil, err
 	}
-	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
-		return nil, err
+	if !allowOmittedRequired {
+		if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+			return nil, err
+		}
 	}
 	names := make([]string, 0, len(flags))
 	for name := range flags {

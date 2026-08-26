@@ -2146,7 +2146,9 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 	if !ok {
 		return ReversePlan{}, nil, fmt.Errorf("connector %q not found", req.Connector)
 	}
-	if err := commandrunner.Preflight(preflightConnector, req.Path); err != nil {
+	if err := commandrunner.PreflightRequest(preflightConnector, commandrunner.Request{
+		Path: req.Path, Flags: req.Flags, Config: connectors.RuntimeConfig{Config: req.Config},
+	}); err != nil {
 		return ReversePlan{}, nil, err
 	}
 	connector, runtime, err := a.ResolveConnectorCredential(ctx, req.Connector, req.Credential, req.Config)

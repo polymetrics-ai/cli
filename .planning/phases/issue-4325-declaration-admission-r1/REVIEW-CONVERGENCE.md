@@ -79,3 +79,41 @@ The repair necessarily produces a new SHA. It is not merge-ready until the
 new exact SHA has local evidence, required CI, and a fresh independent Codex
 re-audit. No provider request, credential use, write/delete operation, source
 lock rewrite, connector-definition edit, force-push, or merge is authorized.
+
+## Coordinated repair outcome
+
+- **F1 green:** `PlanConnectorCommand` now submits `Path`, argv flags, and
+  request config to `commandrunner.PreflightRequest` before credential
+  resolution. The direct nil-vault regression returns `missing required flag
+  --name` instead of reaching `vault.Get`.
+- **F2 green:** CLI resolves only declared env-only input and submits the same
+  effective request preflight before `withApp`. Unknown argv and malformed
+  config now return validation envelopes before plan lookup. A plan
+  continuation permits only previously-planned required fields to remain
+  withheld for preview/approval; it still rejects unknown, type, enum, format,
+  byte, range, cardinality, and config defects before state access. This keeps
+  the existing reverse-plan protocol intact without reopening the bypass.
+- **F3 green:** `loadDeclarationTargetLedgers` walks JSON tokens before schema
+  validation/decode and rejects every repeated object member with its JSON
+  pointer. The direct loader regression no longer accepts last-member-wins
+  input.
+- **Focused red/green:** F1 red panicked on a nil vault, F2 red returned
+  `reverse plan "rplan_missing" not found` for both cases, and F3 red loaded
+  the repeated member. The three named regressions then pass.
+- **Affected packages:** App `283.033s`, engine `13.036s`, commandrunner
+  `32.585s`, CLI `502.363s`, and connectorgen `159.834s` all pass with
+  `-count=1 -timeout 20m`.
+- **Static/generator:** changed-file gofmt output is empty; focused vet passes;
+  lint reports 0 issues; `go build ./cmd/pm`, tidy, contract, validate (553),
+  admission (1/1/0), surface-sync (553/no drift), runtime-preflight, canon,
+  certification subject/matrix, and boundary (323 files/553 connectors/0
+  findings) pass.
+- **Executable witnesses:** fresh built `pm` returns validation exit 3 for
+  both invalid `--plan` probes and missing-credential exit 1 for valid GitHub
+  label-delete; `pm github`, `pm help github`, and `pm github label delete
+  --help` stay successful/helpful.
+- **Local diagnostic:** `make docs-check-no-build` used the pre-existing
+  ignored root `./pm` with a stale 557-entry catalog and failed before source
+  validation. Its exact `docs validate` command passes with the fresh binary
+  (556-entry source catalog), so this is recorded as local binary drift, not a
+  source failure.

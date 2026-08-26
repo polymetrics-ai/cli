@@ -347,3 +347,16 @@ only after their observed red/green runs.
 | Admission and projection | `connectorgen validate`, declaration admission, surface-sync, runtime-preflight, and canon checks pass. |
 | CLI parity | Existing `pm github`, `pm github label delete --help`, and JSON error behavior remain correct; docs/website are not applicable because no surface text changes. |
 | Final custody | A non-force push updates only `fm/cli-declaration-admission-certification-r1`; GitHub API confirms PR #4351 remains open against `main` and reports the pushed SHA. |
+
+## R9 re-audit repair results (2026-08-26)
+
+| Check | Result |
+| --- | --- |
+| F1 direct App regression | pass; missing required input returns before the nil vault can be read |
+| F2 CLI regression | pass; unknown argv and malformed config under `--plan` return validation before plan lookup |
+| F3 production-loader regression | pass; repeated `source_url` is rejected by `loadDeclarationTargetLedgers` |
+| Affected packages | pass; App 283.033s, engine 13.036s, commandrunner 32.585s, CLI 502.363s, connectorgen 159.834s |
+| Format/static/build | pass; gofmt clean, focused vet clean, lint 0 issues, `go build ./cmd/pm`, tidy, and agent-contract check pass |
+| Generator/admission | pass; 553 validation, admission 1 connector/1 source/0 findings, surface-sync 553/no drift, runtime preflight, canon, subject/matrix, and boundary 323/553/0 findings pass |
+| Built-binary behavior | pass; invalid unknown/configured `--plan` input exits 3 at validation, valid GitHub label delete exits 1 at missing credential, and required help/namespace commands exit 0 |
+| Docs local tooling | source validation pass with fresh binary; Make wrapper fails only because ignored root `./pm` is stale (557 catalog entries versus source 556) |

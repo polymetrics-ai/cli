@@ -1,7 +1,10 @@
 package engine
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"io"
 	"io/fs"
 	"sort"
 	"strings"
@@ -45,6 +48,9 @@ func loadDeclarationTargetLedgers(fsys fs.FS) (map[string]*declarationTargetLedg
 	raw, err := readFile(fsys, DeclarationAdmissionSourcesFile)
 	if err != nil {
 		return nil, err
+	}
+	if err := rejectDuplicateDeclarationTargetLedgerJSONMembers(raw); err != nil {
+		return nil, fmt.Errorf("%s: %w", DeclarationAdmissionSourcesFile, err)
 	}
 	if err := ValidateDeclarationAdmissionSources(raw); err != nil {
 		return nil, err
@@ -100,6 +106,87 @@ func loadDeclarationTargetLedgers(fsys fs.FS) (map[string]*declarationTargetLedg
 		}
 	}
 	return ledgers, nil
+}
+
+// rejectDuplicateDeclarationTargetLedgerJSONMembers keeps the compact
+// production authorization input unambiguous. encoding/json accepts repeated
+// object names and silently retains the last value, so schema validation and
+// strict struct decoding alone cannot establish one canonical source owner.
+func rejectDuplicateDeclarationTargetLedgerJSONMembers(raw []byte) error {
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.UseNumber()
+	if err := rejectDuplicateDeclarationTargetLedgerJSONValue(decoder, ""); err != nil {
+		return err
+	}
+	var extra any
+	if err := decoder.Decode(&extra); err != io.EOF {
+		if err == nil {
+			return fmt.Errorf("invalid JSON: multiple top-level values")
+		}
+		return err
+	}
+	return nil
+}
+
+func rejectDuplicateDeclarationTargetLedgerJSONValue(decoder *json.Decoder, pointer string) error {
+	token, err := decoder.Token()
+	if err != nil {
+		return err
+	}
+	delimiter, isDelimiter := token.(json.Delim)
+	if !isDelimiter {
+		return nil
+	}
+	switch delimiter {
+	case '{':
+		seen := map[string]struct{}{}
+		for decoder.More() {
+			rawKey, err := decoder.Token()
+			if err != nil {
+				return err
+			}
+			key, ok := rawKey.(string)
+			if !ok {
+				return fmt.Errorf("JSON object key at %s is not a string", pointer)
+			}
+			childPointer := declarationTargetLedgerJSONPointer(pointer, key)
+			if _, duplicate := seen[key]; duplicate {
+				return fmt.Errorf("duplicate JSON object member at %s", childPointer)
+			}
+			seen[key] = struct{}{}
+			if err := rejectDuplicateDeclarationTargetLedgerJSONValue(decoder, childPointer); err != nil {
+				return err
+			}
+		}
+		closing, err := decoder.Token()
+		if err != nil {
+			return err
+		}
+		if closing != json.Delim('}') {
+			return fmt.Errorf("JSON object at %s is not closed", pointer)
+		}
+	case '[':
+		for index := 0; decoder.More(); index++ {
+			if err := rejectDuplicateDeclarationTargetLedgerJSONValue(decoder, declarationTargetLedgerJSONPointer(pointer, fmt.Sprintf("%d", index))); err != nil {
+				return err
+			}
+		}
+		closing, err := decoder.Token()
+		if err != nil {
+			return err
+		}
+		if closing != json.Delim(']') {
+			return fmt.Errorf("JSON array at %s is not closed", pointer)
+		}
+	default:
+		return fmt.Errorf("unexpected JSON delimiter %q at %s", delimiter, pointer)
+	}
+	return nil
+}
+
+func declarationTargetLedgerJSONPointer(parent, segment string) string {
+	escaped := strings.ReplaceAll(strings.ReplaceAll(segment, "~", "~0"), "/", "~1")
+	return parent + "/" + escaped
 }
 
 func validateDeclarationAdmissionSource(source declarationAdmissionSourceOperation) (string, error) {

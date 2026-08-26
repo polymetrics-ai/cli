@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"errors"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
@@ -41,5 +42,42 @@ func TestPlanConnectorCommandPreflightsDeferredCommandBeforeCredentialResolution
 	}
 	if blocked.Failure.Code() != "missing_foundation" {
 		t.Fatalf("PlanConnectorCommand code = %q, want missing_foundation", blocked.Failure.Code())
+	}
+}
+
+func TestPlanConnectorCommandValidatesRequiredInputBeforeVaultResolution(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	instance, err := Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := instance.AddCredential(ctx, AddCredentialRequest{
+		Name:      "github-local",
+		Connector: "github",
+		Config: map[string]string{
+			"owner": "acme", "repo": "widgets", "public_access": "true", "base_url": "https://provider.example.test",
+		},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+
+	// A nil vault turns an accidental credential read into an observable panic.
+	// Valid request validation must therefore return before this boundary.
+	instance.vault = nil
+	defer func() {
+		if recovered := recover(); recovered != nil {
+			t.Fatalf("PlanConnectorCommand reached vault resolution for invalid input: %v", recovered)
+		}
+	}()
+
+	_, _, err = instance.PlanConnectorCommand(ctx, PlanConnectorCommandRequest{
+		Connector: "github", Credential: "github-local", Path: []string{"label", "delete"},
+	})
+	if err == nil || !strings.Contains(err.Error(), "missing required flag --name") {
+		t.Fatalf("PlanConnectorCommand invalid input error = %v, want required-input validation before credential resolution", err)
 	}
 }

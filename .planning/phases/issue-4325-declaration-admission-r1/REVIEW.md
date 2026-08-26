@@ -252,3 +252,26 @@ No unresolved local R6 finding remains. The exact generic diff passes full
 affected packages plus vet, lint, build, docs, smoke, generator/snapshot,
 boundary, canon, and release checks in the clean checkout. A fresh independent
 exact-head audit and PR CI remain external gates; this worker will not merge.
+
+## R9 inline code review (2026-08-26)
+
+- **F1 ordering:** `PlanConnectorCommand` now invokes the existing
+  credential-free request validator before `ResolveConnectorCredential`; its
+  direct nil-vault regression proves invalid input cannot reach the vault.
+- **F2 parity:** the CLI no longer has a path-only `--plan` preflight branch.
+  It resolves declared env-only values and validates flags/config before
+  `withApp`. `PlanContinuation` is deliberately narrow: it preserves only
+  omitted fields already bound in a persisted plan, while retaining unknown,
+  type, enum, format, byte, range, cardinality, and config rejection before
+  state lookup. Existing preview/approval tests cover the withheld-value flow.
+- **F3 integrity:** the production compact ledger scans every JSON object
+  token before schema/strict decode, catches nested repeated names with an
+  escaped JSON pointer, and accepts no last-member-wins ambiguity.
+- **Scope/security:** no source lock, retained artifact, connector definition,
+  provider request, credential value, write/delete execution, or generic
+  transport surface changed. Errors remain redacted and all findings use the
+  existing declaration-owned validator.
+
+No additional local correctness, security, or code-quality finding remains.
+The next gate is required CI plus a fresh independent exact-head Codex re-audit;
+this branch remains open and unmerged.

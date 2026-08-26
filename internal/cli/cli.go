@@ -883,9 +883,6 @@ func runMaybeConnectorCommandWithRegistry(ctx context.Context, root, connectorNa
 	}
 	var preparedCommandFlags map[string][]string
 	preflight := func() error {
-		if flags.first("plan") != "" {
-			return commandrunner.Preflight(connector, path)
-		}
 		resolvedFlags, resolveErr := resolveConnectorCommandEnvironmentOnlyFlags(surface, path, flags.values)
 		if resolveErr != nil {
 			return resolveErr
@@ -893,6 +890,7 @@ func runMaybeConnectorCommandWithRegistry(ctx context.Context, root, connectorNa
 		preparedCommandFlags = connectorCommandFlags(resolvedFlags)
 		return commandrunner.PreflightRequest(connector, commandrunner.Request{
 			Path: path, Flags: preparedCommandFlags, Config: connectors.RuntimeConfig{Config: config},
+			PlanContinuation: flags.first("plan") != "",
 		})
 	}
 	if err := preflight(); err != nil {

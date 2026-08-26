@@ -84,6 +84,31 @@ func TestDeclarationTargetLedgerRejectsDuplicateProviderProvenanceAcrossBindings
 	}
 }
 
+func TestDeclarationTargetLedgerRejectsDuplicateJSONMembers(t *testing.T) {
+	raw := []byte(`{
+  "schema_version": 2,
+  "cohort": "test",
+  "source_operations": [{
+    "connector": "acme",
+    "id": "acme.widgets.list",
+    "protocol": "rest",
+    "source_url": "https://provider.example.test/reference",
+    "source_url": "https://provider.example.test/reference",
+    "location": "Widgets > list",
+    "operation_id": "widgets/list",
+    "method": "GET",
+    "path": "/widgets",
+    "binding": {"kind": "stream", "id": "widgets"},
+    "destructive_kind": "none"
+  }]
+}`)
+
+	_, err := loadDeclarationTargetLedgers(fstest.MapFS{DeclarationAdmissionSourcesFile: &fstest.MapFile{Data: raw}})
+	if err == nil || !strings.Contains(err.Error(), "duplicate JSON object member") {
+		t.Fatalf("load compact declaration ledger error = %v, want duplicate JSON-member rejection", err)
+	}
+}
+
 func TestDeclarationTargetLedgerAcceptsGraphQLOperationIdentity(t *testing.T) {
 	raw := []byte(`{
   "schema_version": 2,
