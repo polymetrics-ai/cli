@@ -442,6 +442,21 @@ type operationEvidenceRawLock struct {
 			SourceLocation string `json:"source_location"`
 			SourceURL      string `json:"source_url"`
 		} `json:"operations"`
+		SourceDocuments []struct {
+			ID       string `json:"id"`
+			Artifact struct {
+				SourceURL string `json:"source_url"`
+				SHA256    string `json:"sha256"`
+				Bytes     int64  `json:"bytes"`
+			} `json:"artifact"`
+			Operations []struct {
+				ID             string `json:"id"`
+				Protocol       string `json:"protocol"`
+				Method         string `json:"method"`
+				Path           string `json:"path"`
+				SourceLocation string `json:"source_location"`
+			} `json:"operations"`
+		} `json:"source_documents"`
 		CoverageConfidence struct {
 			Level string `json:"level"`
 			Basis string `json:"basis"`
@@ -525,6 +540,17 @@ func operationEvidenceSourceInputFromLegacyLock(input operationEvidenceSourceInp
 	documents := make(map[string]operationEvidenceSourceTrace, len(lock.Rest.Documents))
 	for _, document := range lock.Rest.Documents {
 		documents[document.SourceURL] = operationEvidenceSourceTrace{Lock: input.LockPath, URL: document.SourceURL, SHA256: document.SHA256, Bytes: document.Bytes}
+	}
+	for _, document := range lock.Rest.SourceDocuments {
+		trace := operationEvidenceSourceTrace{Lock: input.LockPath, URL: document.Artifact.SourceURL, SHA256: document.Artifact.SHA256, Bytes: document.Artifact.Bytes}
+		for _, operation := range document.Operations {
+			if operation.ID == "" || operation.Method == "" || operation.Path == "" || trace.URL == "" || trace.SHA256 == "" || trace.Bytes <= 0 {
+				return operationEvidenceSourceInput{}, fmt.Errorf("source lock for %q contains an incomplete source-document operation", connector)
+			}
+			operationTrace := trace
+			operationTrace.Location = operation.SourceLocation
+			input.Operations = append(input.Operations, operationEvidenceSourceOperation{ID: operation.ID, Protocol: firstNonEmpty(operation.Protocol, "rest"), Method: strings.ToUpper(operation.Method), Path: operation.Path, Trace: operationTrace})
+		}
 	}
 	for _, operation := range lock.Rest.Operations {
 		if operation.ID == "" || operation.Method == "" || operation.Path == "" {

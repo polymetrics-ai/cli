@@ -486,8 +486,8 @@ func TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL(t *t
 			t.Fatalf("operation %s source binding = %q, want %q", id, got, want)
 		}
 	}
-	if _, found := bound["get_pending"]; found {
-		t.Fatalf("planned read operation was source-bound before its declaration was materialized: %+v", bound)
+	if got := bound["get_pending"]; got != "asana.rest.getPending GET /pending" {
+		t.Fatalf("complete planned read operation binding = %q, want exact source identity", got)
 	}
 
 	var cli engine.CLISurface
@@ -513,8 +513,8 @@ func TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL(t *t
 	if command := commands["workspaces get-workspaces"]; command.Intent != "etl" || command.Availability != "implemented" || command.Stream != "workspaces" || command.Operation != "" || command.SourceOperation != "asana.rest.getWorkspaces" {
 		t.Fatalf("workspace command = %+v, want preserved source-backed ETL stream", command)
 	}
-	if command := commands["pending get-pending"]; command.Intent != "etl" || command.Availability != "planned" || command.SourceOperation != "" {
-		t.Fatalf("planned command = %+v, want unchanged declaration-pending read", command)
+	if command := commands["pending get-pending"]; command.Intent != "direct_read" || command.Availability != "implemented" || command.Operation != "get_pending" || command.SourceOperation != "asana.rest.getPending" {
+		t.Fatalf("complete planned operation = %+v, want materialized bounded direct read", command)
 	}
 }
 
@@ -554,7 +554,7 @@ func TestRetainedAsanaSourceImportRejectsReadProjectionDrift(t *testing.T) {
 		{
 			name: "invented source identity",
 			mutate: func(t *testing.T, bundleDir string) {
-				mutateAsanaOperation(t, filepath.Join(bundleDir, "operations.json"), "get_access_requests", func(operation map[string]any) {
+				mutateAsanaOperation(t, filepath.Join(bundleDir, "operations.json"), "get_custom_fields_for_workspace", func(operation map[string]any) {
 					operation["source_operation"].(map[string]any)["id"] = "asana.rest.inventedAccessRequests"
 				})
 			},
@@ -562,7 +562,7 @@ func TestRetainedAsanaSourceImportRejectsReadProjectionDrift(t *testing.T) {
 		{
 			name: "source method substitution",
 			mutate: func(t *testing.T, bundleDir string) {
-				mutateAsanaOperation(t, filepath.Join(bundleDir, "operations.json"), "get_access_requests", func(operation map[string]any) {
+				mutateAsanaOperation(t, filepath.Join(bundleDir, "operations.json"), "get_custom_fields_for_workspace", func(operation map[string]any) {
 					operation["source_operation"].(map[string]any)["method"] = "POST"
 				})
 			},
@@ -570,32 +570,23 @@ func TestRetainedAsanaSourceImportRejectsReadProjectionDrift(t *testing.T) {
 		{
 			name: "source route substitution",
 			mutate: func(t *testing.T, bundleDir string) {
-				mutateAsanaOperation(t, filepath.Join(bundleDir, "operations.json"), "get_access_requests", func(operation map[string]any) {
-					operation["source_operation"].(map[string]any)["path"] = "/access_requests/replaced"
+				mutateAsanaOperation(t, filepath.Join(bundleDir, "operations.json"), "get_custom_fields_for_workspace", func(operation map[string]any) {
+					operation["source_operation"].(map[string]any)["path"] = "/workspaces/{workspace_gid}/custom_fields/replaced"
 				})
 			},
 		},
 		{
-			name: "required typed query input",
+			name: "typed workspace path contract",
 			mutate: func(t *testing.T, bundleDir string) {
-				mutateAsanaOperation(t, filepath.Join(bundleDir, "operations.json"), "get_access_requests", func(operation map[string]any) {
-					parameters := operation["rest"].(map[string]any)["parameters"].([]any)
-					for _, raw := range parameters {
-						parameter := raw.(map[string]any)
-						if parameter["name"] == "target" {
-							parameter["type"] = "integer"
-							parameter["required"] = false
+				mutateAsanaJSON(t, filepath.Join(bundleDir, "streams.json"), func(document map[string]any) {
+					for _, raw := range document["streams"].([]any) {
+						stream := raw.(map[string]any)
+						if stream["name"] == "custom_fields" {
+							stream["path"] = "/workspaces/{{ config.workspace_id }}/custom_fields/replaced"
+							return
 						}
 					}
-				})
-				mutateAsanaCommand(t, filepath.Join(bundleDir, "cli_surface.json"), "access-requests get-access-requests", func(command map[string]any) {
-					for _, raw := range command["flags"].([]any) {
-						flag := raw.(map[string]any)
-						if flag["maps_to"] == "query.target" {
-							flag["type"] = "integer"
-							flag["required"] = false
-						}
-					}
+					t.Fatal("custom_fields stream is missing")
 				})
 			},
 		},
@@ -761,18 +752,24 @@ func assertAsanaRetainedReadSourceContracts(t *testing.T, descriptorPath string)
 		endpoint string
 		location string
 	}{
-		"asana.rest.getAccessRequests": {endpoint: "GET /access_requests", location: `paths["/access_requests"].get`},
-		"asana.rest.getAgent":          {endpoint: "GET /agents/{agent_gid}", location: `paths["/agents/{agent_gid}"].get`},
-		"asana.rest.getWorkspaces":     {endpoint: "GET /workspaces", location: `paths["/workspaces"].get`},
+		"asana.rest.getCustomFieldsForWorkspace":         {endpoint: "GET /workspaces/{workspace_gid}/custom_fields", location: `paths["/workspaces/{workspace_gid}/custom_fields"].get`},
+		"asana.rest.getProjects":                         {endpoint: "GET /projects", location: `paths["/projects"].get`},
+		"asana.rest.getTags":                             {endpoint: "GET /tags", location: `paths["/tags"].get`},
+		"asana.rest.getTasks":                            {endpoint: "GET /tasks", location: `paths["/tasks"].get`},
+		"asana.rest.getTeamMemberships":                  {endpoint: "GET /team_memberships", location: `paths["/team_memberships"].get`},
+		"asana.rest.getTeamsForWorkspace":                {endpoint: "GET /workspaces/{workspace_gid}/teams", location: `paths["/workspaces/{workspace_gid}/teams"].get`},
+		"asana.rest.getUsers":                            {endpoint: "GET /users", location: `paths["/users"].get`},
+		"asana.rest.getWorkspaceMembershipsForWorkspace": {endpoint: "GET /workspaces/{workspace_gid}/workspace_memberships", location: `paths["/workspaces/{workspace_gid}/workspace_memberships"].get`},
+		"asana.rest.getWorkspaces":                       {endpoint: "GET /workspaces", location: `paths["/workspaces"].get`},
 	} {
 		operation, found := byID[sourceID]
 		if !found || strings.ToUpper(operation.Method)+" "+operation.Path != want.endpoint || operation.Source.Location != want.location {
 			t.Fatalf("retained source operation %s = %+v, want endpoint %s at %s", sourceID, operation, want.endpoint, want.location)
 		}
 	}
-	accessRequest := byID["asana.rest.getAccessRequests"]
-	if !sourceProjectionHasRequiredStringParameter(accessRequest.Request.Query, "target") {
-		t.Fatalf("retained access-request source contract = %+v, want required string query target", accessRequest.Request.Query)
+	customFields := byID["asana.rest.getCustomFieldsForWorkspace"]
+	if !sourceProjectionHasRequiredStringParameter(customFields.Request.Path, "workspace_gid") {
+		t.Fatalf("retained custom-fields source contract = %+v, want required string workspace_gid path input", customFields.Request.Path)
 	}
 	workspaces := byID["asana.rest.getWorkspaces"]
 	if !reflect.DeepEqual(workspaces.Pagination, map[string]any{"type": "next_url", "next_url_path": "next_page.uri"}) {
@@ -2393,6 +2390,26 @@ func TestSourceProjectionAcceptsVersion3DocumentProvenance(t *testing.T) {
 		{name: "artifact url", mutate: func(operation *sourceOperationDescriptor) {
 			operation.Source.URL = "https://fixtures.polymetrics.invalid/reassigned.openapi.json"
 		}},
+		{name: "source location", mutate: func(operation *sourceOperationDescriptor) { operation.Source.Location = `paths["/reassigned"].get` }},
+		{name: "source method", mutate: func(operation *sourceOperationDescriptor) { operation.Method = "POST" }},
+		{name: "source path", mutate: func(operation *sourceOperationDescriptor) { operation.Path = "/reassigned" }},
+	} {
+		change := change
+		t.Run(change.name, func(t *testing.T) {
+			operation := result.Operations[0]
+			change.mutate(&operation)
+			if findings := validateSourceDescriptorAgainstLock("fixture", "sources/fixture-operation-descriptor.json", lock, sourceImportDescriptorDocument{SchemaVersion: 3, Operations: []sourceOperationDescriptor{operation}}); len(findings) != 1 || !strings.Contains(findings[0].Message, "provider contract drift") {
+				t.Fatalf("%s findings = %+v", change.name, findings)
+			}
+		})
+	}
+
+	for _, change := range []struct {
+		name   string
+		mutate func(*sourceOperationDescriptor)
+	}{
+		{name: "artifact digest", mutate: func(operation *sourceOperationDescriptor) { operation.Source.SHA256 = strings.Repeat("0", 64) }},
+		{name: "artifact bytes", mutate: func(operation *sourceOperationDescriptor) { operation.Source.Bytes++ }},
 		{name: "document id", mutate: func(operation *sourceOperationDescriptor) { operation.Source.DocumentID = "reassigned" }},
 		{name: "published url", mutate: func(operation *sourceOperationDescriptor) {
 			operation.Source.PublishedURL = "https://published.polymetrics.invalid/reassigned?slug=reassigned"
@@ -2410,7 +2427,7 @@ func TestSourceProjectionAcceptsVersion3DocumentProvenance(t *testing.T) {
 		t.Run(change.name, func(t *testing.T) {
 			operation := result.Operations[0]
 			change.mutate(&operation)
-			if findings := validateSourceDescriptorAgainstLock("fixture", "sources/fixture-operation-descriptor.json", lock, sourceImportDescriptorDocument{SchemaVersion: 3, Operations: []sourceOperationDescriptor{operation}}); len(findings) != 1 || !strings.Contains(findings[0].Message, "provenance drift") {
+			if findings := validateSourceDescriptorAgainstLock("fixture", "sources/fixture-operation-descriptor.json", lock, sourceImportDescriptorDocument{SchemaVersion: 3, Operations: []sourceOperationDescriptor{operation}}); len(findings) != 0 {
 				t.Fatalf("%s findings = %+v", change.name, findings)
 			}
 		})
@@ -2594,6 +2611,27 @@ func TestSourceProjectionSourceCitedNonExecutableMutationDispositionsCoverAbsent
 				t.Fatalf("executable coverage findings = %+v", findings)
 			}
 		})
+	}
+}
+
+func TestSourceProjectionMutationDispositionCitationIgnoresRetainedArtifactMetadata(t *testing.T) {
+	operation := sourceCitedMutationTestOperation("asana", "asana.rest.createAccessRequest", "POST", "/access_requests")
+	operation.Source.SHA256 = ""
+	operation.Source.Bytes = 0
+	operation.Source.PublishedURL = "https://capture.polymetrics.invalid/provider-page"
+	operation.Source.PublishedCaptureURL = "https://capture.polymetrics.invalid/capture"
+	operation.Source.PublishedSHA256 = strings.Repeat("0", 64)
+	operation.Source.PublishedBytes = 1
+	operation.Source.PublishedAdapter = "fixture"
+	operation.Source.ContentType = "application/json"
+	citation := sourceOperationCitation{SourceID: operation.SourceID, Method: operation.Method, Path: operation.Path}
+	if err := sourceProjectionValidateMutationDispositionCitation(operation, citation, "mutation disposition"); err != nil {
+		t.Fatalf("stable source identity/method/path citation rejected because capture metadata is absent: %v", err)
+	}
+
+	operation.Source.URL = ""
+	if err := sourceProjectionValidateMutationDispositionCitation(operation, citation, "mutation disposition"); err == nil || !strings.Contains(err.Error(), "lacks a provider source citation") {
+		t.Fatalf("missing provider URL error = %v, want stable-source citation refusal", err)
 	}
 }
 

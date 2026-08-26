@@ -184,6 +184,13 @@ func (c *Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (
 }
 
 func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
+	stream, err := findStream(c.bundle, req.Stream)
+	if err != nil {
+		return err
+	}
+	if err := preflightSourceBoundStreamOrigin(c.bundle, req.Config, stream); err != nil {
+		return err
+	}
 	return executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
 		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, Read(admitted, c.bundle, req, c.hooks, emit))
 	})
@@ -193,6 +200,13 @@ func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit f
 // the normal authentication boundary while making a known page budget stop
 // distinguishable from provider exhaustion for a durable continuation.
 func (c *Connector) ReadWithOutcome(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
+	stream, err := findStream(c.bundle, req.Stream)
+	if err != nil {
+		return err
+	}
+	if err := preflightSourceBoundStreamOrigin(c.bundle, req.Config, stream); err != nil {
+		return err
+	}
 	return executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
 		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, ReadWithOutcome(admitted, c.bundle, req, c.hooks, emit))
 	})
@@ -239,8 +253,15 @@ func (c *Connector) DirectRead(ctx context.Context, req connectors.DirectReadReq
 }
 
 func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
+	op, err := operationDirectReadSpec(c.bundle, req.Operation)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	if err := preflightSourceBoundOperationOrigin(c.bundle, req.Config, op); err != nil {
+		return connectors.DirectReadResult{}, err
+	}
 	var result connectors.DirectReadResult
-	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+	err = executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
 		var err error
 		result, err = OperationDirectRead(admitted, c.bundle, req, c.hooks)
 		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)

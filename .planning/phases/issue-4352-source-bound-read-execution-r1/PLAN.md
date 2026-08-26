@@ -70,3 +70,46 @@ after the source-lock audit has exited.
 - This phase's `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `RUN-STATE.md`, `SUMMARY.md`, and `REVIEW.md`
 
 No certification policy, live provider calls, generic request interface, or edits to another worker's branch belong in this PR. The retained Asana artifact is solely a hermetic shared-foundation control, not a claim of certification or a substitute for Batch-1 materialization review.
+
+## R2 independent-audit gap closure
+
+> Superseded in part by captain instruction `021.msg`: historical planned-read
+> counts are not a delivery goal. See `RECONCILIATION.md`; complete
+> source-backed reads must materialize in their correct executor lane.
+
+The independent R2 report path named by the dispatch was unavailable in both the
+preserved worktree and the declared repository path. Its durable numbered audit
+directive is the controlling evidence for this gap slice. It is executed
+inline/manual: the canonical contract forbids role spawning and no compatible
+isolated runtime is available.
+
+1. **Restore the admitted read partition.** Red: the current retained-source
+   lane promotes `getAccessRequests`, `getAgentsForWorkspace`, and `getAgent`,
+   even though they were planned at merge base. Green: retain all 100 planned
+   Asana GET rows as planned/declaration-pending; source-bind only the nine
+   merge-base executable controls (`projects`, `tags`, `tasks`,
+   `team-memberships`, `users`, `workspaces`, `custom-fields`, `teams`, and
+   `workspace-memberships`) to exact source identity, method, path, typed
+   contract, and valid stream/direct semantics.
+2. **Separate admission from capture integrity.** Red: mutate capture SHA,
+   byte count, capture metadata, or adapter metadata without changing the
+   provider operation contract and demonstrate that mapping/declaration status
+   changes. Green: source identity plus source URL/location, method/path, and
+   typed provider contract decide source-bound declaration status, while the
+   retained-artifact integrity verifier continues to reject changed raw bytes.
+3. **Close the source-bound authenticated origin escape.** Red: configure an
+   arbitrary `base_url` for a source-bound operation and observe that it reaches
+   credential/auth/request construction. Green: reject the override before
+   credential/auth/request construction; preserve only an explicitly bounded
+   source/test origin mechanism. Tests use a requester/auth spy and assert zero
+   I/O.
+4. **Make operation-evidence coherent.** Red: reproduce the Verify report that
+   the Asana source lock declares no operations or provider-evidenced absence.
+   Green: use coherent retained source data and source-operation dispositions so
+   the existing check observes the locked operation inventory without weakening
+   its policy.
+5. **Closure.** Run focused red/green generator and runtime tests, the retained
+   source import/projection checks, `cmd/connectorgen` package tests, and the
+   relevant generated-artifact checks in a clean clone. The unrelated
+   blog-annotation website E2E failure is recorded as external CI state and is
+   not changed without a demonstrated connection.

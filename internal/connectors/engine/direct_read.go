@@ -65,6 +65,9 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
+	if err := preflightSourceBoundOperationOrigin(b, req.Config, op); err != nil {
+		return connectors.DirectReadResult{}, err
+	}
 	commandQueryFields := map[string]struct{}(nil)
 	if req.CommandBindings != nil {
 		if !operationDirectReadBindingsDeclaredByCommand(b, op.ID, req.CommandBindings.Path, req.CommandBindings.Query, req.CommandBindings.Body, req.CommandBindings.RawBody) {
@@ -276,7 +279,7 @@ func PreflightSourceBoundStreamRead(b Bundle, streamName, sourceOperation, metho
 	if streamMethod == "" {
 		streamMethod = http.MethodGet
 	}
-	if !strings.EqualFold(streamMethod, method) || stream.Path != endpointPath {
+	if !strings.EqualFold(streamMethod, method) || !sourceBoundStreamPathMatchesLockedPath(stream.Path, endpointPath) {
 		return fmt.Errorf("source-bound stream %q endpoint %s %q does not match locked source endpoint %s %q", streamName, strings.ToUpper(streamMethod), stream.Path, strings.ToUpper(method), endpointPath)
 	}
 	if strings.TrimSpace(stream.Records.Path) == "" || strings.TrimSpace(stream.SchemaRef) == "" {
@@ -291,6 +294,36 @@ func PreflightSourceBoundStreamRead(b Bundle, streamName, sourceOperation, metho
 		}
 	}
 	return fmt.Errorf("operation %q does not select declared stream %q", op.ID, streamName)
+}
+
+// sourceBoundStreamPathMatchesLockedPath accepts only declaration-owned
+// connection values that occupy an entire source path-variable segment. It is
+// deliberately narrower than interpolation: literal route segments must be
+// identical, so a configured value cannot select another provider route.
+func sourceBoundStreamPathMatchesLockedPath(streamPath, lockedPath string) bool {
+	streamParts := strings.Split(strings.Trim(streamPath, "/"), "/")
+	lockedParts := strings.Split(strings.Trim(lockedPath, "/"), "/")
+	if len(streamParts) != len(lockedParts) {
+		return false
+	}
+	for index := range streamParts {
+		if streamParts[index] == lockedParts[index] {
+			continue
+		}
+		if sourceBoundConfigPathSegment(streamParts[index]) && sourceBoundLockedPathSegment(lockedParts[index]) {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
+func sourceBoundConfigPathSegment(segment string) bool {
+	return strings.HasPrefix(segment, "{{ config.") && strings.HasSuffix(segment, " }}") && len(strings.TrimSuffix(strings.TrimPrefix(segment, "{{ config."), " }}")) > 0
+}
+
+func sourceBoundLockedPathSegment(segment string) bool {
+	return strings.HasPrefix(segment, "{") && strings.HasSuffix(segment, "}") && len(strings.TrimSuffix(strings.TrimPrefix(segment, "{"), "}")) > 0
 }
 
 func sourceBoundStreamOperation(b Bundle, streamName string) (OperationSpec, error) {

@@ -476,9 +476,6 @@ func sourceProjectionMaterializeReadOperation(operations, cli, streams *orderedO
 
 	switch stringField(op, "kind") {
 	case "rest_read":
-		if stringField(command, "intent") != "direct_read" || stringField(command, "availability") != "implemented" {
-			return sourceProjectionReadStats{}, nil
-		}
 		return sourceProjectionMaterializeDirectRead(op, command, source)
 	case "stream_etl":
 		if stringField(command, "intent") != "etl" || stringField(command, "availability") != "implemented" || stringField(command, "stream") == "" {
@@ -715,7 +712,7 @@ func sourceProjectionStreamMatchesReadOperation(operation, streams *orderedObjec
 		if method == "" {
 			method = "GET"
 		}
-		if sourceProjectionEndpointKey(method, stringField(stream, "path")) != sourceProjectionEndpointKey(source.Method, source.Path) {
+		if !strings.EqualFold(method, source.Method) || !sourceProjectionStreamPathMatchesSourcePath(stringField(stream, "path"), source.Path) {
 			return false
 		}
 		recordsRaw, recordsDeclared := stream.get("records")
@@ -735,6 +732,39 @@ func sourceProjectionStreamMatchesReadOperation(operation, streams *orderedObjec
 		return inheritedPagination && orderedSemanticEqual(pagination, source.Pagination)
 	}
 	return false
+}
+
+// sourceProjectionStreamPathMatchesSourcePath permits a stream to use a typed
+// connection setting for one complete source path segment.  It does not make
+// that setting a route escape hatch: every literal segment must still be the
+// locked source path, and both variable spellings must occupy a whole segment.
+// This preserves long-standing streams whose configured `workspace_id` is the
+// provider's `workspace_gid`, while retaining the provider's exact method/path
+// in source_operation and cli_surface.
+func sourceProjectionStreamPathMatchesSourcePath(streamPath, sourcePath string) bool {
+	streamParts := strings.Split(strings.Trim(streamPath, "/"), "/")
+	sourceParts := strings.Split(strings.Trim(sourcePath, "/"), "/")
+	if len(streamParts) != len(sourceParts) {
+		return false
+	}
+	for index := range streamParts {
+		if streamParts[index] == sourceParts[index] {
+			continue
+		}
+		if sourceProjectionConfigPathSegment(streamParts[index]) && sourceProjectionSourcePathSegment(sourceParts[index]) {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
+func sourceProjectionConfigPathSegment(segment string) bool {
+	return strings.HasPrefix(segment, "{{ config.") && strings.HasSuffix(segment, " }}") && len(strings.TrimSuffix(strings.TrimPrefix(segment, "{{ config."), " }}")) > 0
+}
+
+func sourceProjectionSourcePathSegment(segment string) bool {
+	return strings.HasPrefix(segment, "{") && strings.HasSuffix(segment, "}") && len(strings.TrimSuffix(strings.TrimPrefix(segment, "{"), "}")) > 0
 }
 
 func sourceProjectionReadParametersComplete(rest *orderedObject, source sourceOperationDescriptor) string {
@@ -1212,7 +1242,7 @@ func sourceProjectionValidateMutationDispositionCitation(operation sourceOperati
 	if !sourceProjectionOperationMutates(operation) {
 		return fmt.Errorf("%s source operation %q is not mutating", kind, operation.SourceID)
 	}
-	if operation.Source.URL == "" || operation.Source.SHA256 == "" || operation.Source.Bytes <= 0 || operation.Source.Location == "" {
+	if operation.Source.URL == "" || operation.Source.Location == "" {
 		return fmt.Errorf("%s source operation %q lacks a provider source citation", kind, operation.SourceID)
 	}
 	if citation.SourceID != operation.SourceID || !strings.EqualFold(citation.Method, operation.Method) || citation.Path != operation.Path {
@@ -3118,6 +3148,8 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 	type expectedSource struct {
 		source              sourceImportSource
 		providerOperationID string
+		method              string
+		path                string
 	}
 	expected := map[string]expectedSource{}
 	if lock.SchemaVersion == 3 {
@@ -3151,6 +3183,8 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 						CitationURL:         operation.CitationURL,
 					},
 					providerOperationID: operation.OperationID,
+					method:              strings.ToUpper(operation.Method),
+					path:                operation.Path,
 				}
 			}
 		}
@@ -3160,7 +3194,7 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 			if identity == "" {
 				identity = operation.ID
 			}
-			expected[identity] = expectedSource{source: sourceImportSource{SHA256: strings.ToLower(lock.Rest.SHA256), Bytes: lock.Rest.Bytes, Location: operation.SourceLocation}, providerOperationID: operation.OperationID}
+			expected[identity] = expectedSource{source: sourceImportSource{URL: lock.Rest.SourceURL, Location: operation.SourceLocation}, method: strings.ToUpper(operation.Method), path: operation.Path}
 		}
 	}
 	for _, field := range lock.GraphQL.QueryFields {
@@ -3184,11 +3218,11 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 		if !ok {
 			return []Finding{sourceProjectionFinding(connector, file, "source descriptor is missing identity "+identity)}
 		}
-		if operation.Source.SHA256 != expectedOperation.source.SHA256 || operation.Source.Bytes != expectedOperation.source.Bytes || (expectedOperation.source.Location != "" && operation.Source.Location != expectedOperation.source.Location) {
-			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provenance drift for "+identity)}
+		if (expectedOperation.source.URL != "" && operation.Source.URL != expectedOperation.source.URL) || (expectedOperation.source.Location != "" && operation.Source.Location != expectedOperation.source.Location) || (expectedOperation.method != "" && (!strings.EqualFold(operation.Method, expectedOperation.method) || operation.Path != expectedOperation.path)) {
+			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provider contract drift for "+identity)}
 		}
-		if lock.SchemaVersion == 3 && (operation.ProviderOperationID != expectedOperation.providerOperationID || operation.Source.URL != expectedOperation.source.URL || operation.Source.Form != expectedOperation.source.Form || operation.Source.Version != expectedOperation.source.Version || operation.Source.DocumentID != expectedOperation.source.DocumentID || operation.Source.PublishedURL != expectedOperation.source.PublishedURL || operation.Source.PublishedCaptureURL != expectedOperation.source.PublishedCaptureURL || operation.Source.PublishedSHA256 != expectedOperation.source.PublishedSHA256 || operation.Source.PublishedBytes != expectedOperation.source.PublishedBytes || operation.Source.PublishedAdapter != expectedOperation.source.PublishedAdapter || operation.Source.ContentType != expectedOperation.source.ContentType || operation.Source.CitationURL != expectedOperation.source.CitationURL) {
-			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provenance drift for "+identity)}
+		if lock.SchemaVersion == 3 && operation.ProviderOperationID != expectedOperation.providerOperationID {
+			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provider contract drift for "+identity)}
 		}
 		if operation.Runtime.MergeBlocked != (len(operation.Runtime.Gaps) > 0) {
 			return []Finding{sourceProjectionFinding(connector, file, "source descriptor gap state is inconsistent for "+identity)}
@@ -3714,10 +3748,11 @@ func sourceProjectionAnnotateUnreachableReadGaps(bundle engine.Bundle, result *s
 }
 
 // sourceProjectionReadOnlyResult retains the complete provider descriptor but
-// limits a bundle projection to reads that the existing declaration has already
-// materialized as executable. This source-bound bridge seals an exact provider
-// identity; it never promotes a planned command, and it cannot rewrite, defer,
-// or otherwise change an established write or delete contract.
+// limits a bundle projection to GET operations with an already declaration-owned
+// canonical command. A complete REST read may be promoted into the bounded
+// direct-read lane; a stream remains ETL only when it was already implemented
+// with a named stream. This source-bound bridge seals an exact provider identity
+// and never rewrites a write or delete contract.
 func sourceProjectionReadOnlyResult(bundleDir string, result sourceImportResult) (sourceImportResult, error) {
 	filtered := result
 	filtered.Operations = make([]sourceOperationDescriptor, 0, len(result.Operations))
@@ -3760,7 +3795,7 @@ func sourceProjectionReadOnlyResult(bundleDir string, result sourceImportResult)
 		if command == nil {
 			continue
 		}
-		if (stringField(declared, "kind") == "rest_read" && stringField(command, "intent") == "direct_read" && stringField(command, "availability") == "implemented") ||
+		if stringField(declared, "kind") == "rest_read" ||
 			(stringField(declared, "kind") == "stream_etl" && stringField(command, "intent") == "etl" && stringField(command, "availability") == "implemented" && stringField(command, "stream") != "") {
 			filtered.Operations = append(filtered.Operations, operation)
 		}

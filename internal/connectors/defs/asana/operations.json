@@ -2,14 +2,9 @@
   "operations": [
     {
       "id": "get_access_requests",
-      "source_operation": {
-        "id": "asana.rest.getAccessRequests",
-        "method": "GET",
-        "path": "/access_requests"
-      },
       "kind": "rest_read",
       "summary": "Get access requests",
-      "description": "Bounded source-bound direct read of one provider response.",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
       "source_url": "https://developers.asana.com/reference/getaccessrequests",
       "risk": "none",
       "approval": "none; read-only fixed-target operation remains bounded and redacted",
@@ -32,6 +27,11 @@
             "required": true
           }
         ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAccessRequests",
+        "method": "GET",
+        "path": "/access_requests"
       }
     },
     {
@@ -113,14 +113,9 @@
     },
     {
       "id": "get_agents_for_workspace",
-      "source_operation": {
-        "id": "asana.rest.getAgentsForWorkspace",
-        "method": "GET",
-        "path": "/workspaces/{workspace_gid}/agents"
-      },
       "kind": "rest_read",
       "summary": "Get a list of agents in a workspace",
-      "description": "Bounded source-bound direct read of one provider response; it is not declared as an ETL stream.",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
       "source_url": "https://developers.asana.com/reference/getagentsforworkspace",
       "risk": "none",
       "approval": "none; read-only fixed-target operation remains bounded and redacted",
@@ -143,18 +138,18 @@
             "required": true
           }
         ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAgentsForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/agents"
       }
     },
     {
       "id": "get_agent",
-      "source_operation": {
-        "id": "asana.rest.getAgent",
-        "method": "GET",
-        "path": "/agents/{agent_gid}"
-      },
       "kind": "rest_read",
       "summary": "Get an agent",
-      "description": "Bounded source-bound direct read of one provider response.",
+      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
       "source_url": "https://developers.asana.com/reference/getagent",
       "risk": "none",
       "approval": "none; read-only fixed-target operation remains bounded and redacted",
@@ -177,6 +172,11 @@
             "required": true
           }
         ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAgent",
+        "method": "GET",
+        "path": "/agents/{agent_gid}"
       }
     },
     {
@@ -197,7 +197,20 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/ai_studio/runs",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAiStudioRuns",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/ai_studio/runs"
       }
     },
     {
@@ -218,7 +231,20 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/ai_studio/seats",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAiStudioSeats",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/ai_studio/seats"
       }
     },
     {
@@ -239,7 +265,20 @@
       "rest": {
         "method": "GET",
         "path": "/allocations/{allocation_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "allocation_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAllocation",
+        "method": "GET",
+        "path": "/allocations/{allocation_gid}"
       }
     },
     {
@@ -377,7 +416,20 @@
       "rest": {
         "method": "GET",
         "path": "/attachments/{attachment_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "attachment_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAttachment",
+        "method": "GET",
+        "path": "/attachments/{attachment_gid}"
       }
     },
     {
@@ -419,7 +471,20 @@
       "rest": {
         "method": "GET",
         "path": "/attachments",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "parent",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAttachmentsForObject",
+        "method": "GET",
+        "path": "/attachments"
       }
     },
     {
@@ -461,7 +526,20 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/audit_log_events",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAuditLogEvents",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/audit_log_events"
       }
     },
     {
@@ -503,7 +581,20 @@
       "rest": {
         "method": "GET",
         "path": "/budgets",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "parent",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getBudgets",
+        "method": "GET",
+        "path": "/budgets"
       }
     },
     {
@@ -559,7 +650,20 @@
       "rest": {
         "method": "GET",
         "path": "/budgets/{budget_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "budget_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getBudget",
+        "method": "GET",
+        "path": "/budgets/{budget_gid}"
       }
     },
     {
@@ -641,7 +745,20 @@
       "rest": {
         "method": "GET",
         "path": "/projects/{project_gid}/custom_field_settings",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getCustomFieldSettingsForProject",
+        "method": "GET",
+        "path": "/projects/{project_gid}/custom_field_settings"
       }
     },
     {
@@ -662,7 +779,20 @@
       "rest": {
         "method": "GET",
         "path": "/portfolios/{portfolio_gid}/custom_field_settings",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "portfolio_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getCustomFieldSettingsForPortfolio",
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}/custom_field_settings"
       }
     },
     {
@@ -683,7 +813,20 @@
       "rest": {
         "method": "GET",
         "path": "/goals/{goal_gid}/custom_field_settings",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "goal_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getCustomFieldSettingsForGoal",
+        "method": "GET",
+        "path": "/goals/{goal_gid}/custom_field_settings"
       }
     },
     {
@@ -704,7 +847,20 @@
       "rest": {
         "method": "GET",
         "path": "/teams/{team_gid}/custom_field_settings",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "team_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getCustomFieldSettingsForTeam",
+        "method": "GET",
+        "path": "/teams/{team_gid}/custom_field_settings"
       }
     },
     {
@@ -725,7 +881,20 @@
       "rest": {
         "method": "GET",
         "path": "/custom_fields/{custom_field_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "custom_field_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getCustomField",
+        "method": "GET",
+        "path": "/custom_fields/{custom_field_gid}"
       }
     },
     {
@@ -751,6 +920,11 @@
     },
     {
       "id": "get_custom_fields_for_workspace",
+      "source_operation": {
+        "id": "asana.rest.getCustomFieldsForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/custom_fields"
+      },
       "kind": "stream_etl",
       "summary": "Get a workspace's custom fields",
       "description": "Implemented Asana operation mapped to {'stream': 'custom_fields'}.",
@@ -788,7 +962,20 @@
       "rest": {
         "method": "GET",
         "path": "/custom_types",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getCustomTypes",
+        "method": "GET",
+        "path": "/custom_types"
       }
     },
     {
@@ -809,7 +996,20 @@
       "rest": {
         "method": "GET",
         "path": "/custom_types/{custom_type_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "custom_type_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getCustomType",
+        "method": "GET",
+        "path": "/custom_types/{custom_type_gid}"
       }
     },
     {
@@ -830,7 +1030,20 @@
       "rest": {
         "method": "GET",
         "path": "/events",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "resource",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getEvents",
+        "method": "GET",
+        "path": "/events"
       }
     },
     {
@@ -851,7 +1064,20 @@
       "rest": {
         "method": "GET",
         "path": "/goal_relationships/{goal_relationship_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "goal_relationship_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getGoalRelationship",
+        "method": "GET",
+        "path": "/goal_relationships/{goal_relationship_gid}"
       }
     },
     {
@@ -872,7 +1098,20 @@
       "rest": {
         "method": "GET",
         "path": "/goal_relationships",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "supported_goal",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getGoalRelationships",
+        "method": "GET",
+        "path": "/goal_relationships"
       }
     },
     {
@@ -933,7 +1172,20 @@
       "rest": {
         "method": "GET",
         "path": "/goals/{goal_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "goal_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getGoal",
+        "method": "GET",
+        "path": "/goals/{goal_gid}"
       }
     },
     {
@@ -1036,7 +1288,20 @@
       "rest": {
         "method": "GET",
         "path": "/goals/{goal_gid}/parentGoals",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "goal_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getParentGoalsForGoal",
+        "method": "GET",
+        "path": "/goals/{goal_gid}/parentGoals"
       }
     },
     {
@@ -1097,7 +1362,20 @@
       "rest": {
         "method": "GET",
         "path": "/jobs/{job_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "job_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getJob",
+        "method": "GET",
+        "path": "/jobs/{job_gid}"
       }
     },
     {
@@ -1256,7 +1534,20 @@
       "rest": {
         "method": "GET",
         "path": "/ooo_entries/{ooo_entry_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "ooo_entry_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getOooEntry",
+        "method": "GET",
+        "path": "/ooo_entries/{ooo_entry_gid}"
       }
     },
     {
@@ -1298,7 +1589,26 @@
       "rest": {
         "method": "GET",
         "path": "/ooo_entries",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getOooEntries",
+        "method": "GET",
+        "path": "/ooo_entries"
       }
     },
     {
@@ -1354,7 +1664,20 @@
       "rest": {
         "method": "GET",
         "path": "/organization_exports/{organization_export_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "organization_export_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getOrganizationExport",
+        "method": "GET",
+        "path": "/organization_exports/{organization_export_gid}"
       }
     },
     {
@@ -1396,7 +1719,20 @@
       "rest": {
         "method": "GET",
         "path": "/portfolio_memberships/{portfolio_membership_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "portfolio_membership_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getPortfolioMembership",
+        "method": "GET",
+        "path": "/portfolio_memberships/{portfolio_membership_gid}"
       }
     },
     {
@@ -1417,7 +1753,20 @@
       "rest": {
         "method": "GET",
         "path": "/portfolios/{portfolio_gid}/portfolio_memberships",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "portfolio_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getPortfolioMembershipsForPortfolio",
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}/portfolio_memberships"
       }
     },
     {
@@ -1438,7 +1787,20 @@
       "rest": {
         "method": "GET",
         "path": "/portfolios",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getPortfolios",
+        "method": "GET",
+        "path": "/portfolios"
       }
     },
     {
@@ -1459,7 +1821,20 @@
       "rest": {
         "method": "GET",
         "path": "/portfolios/{portfolio_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "portfolio_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getPortfolio",
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}"
       }
     },
     {
@@ -1501,7 +1876,20 @@
       "rest": {
         "method": "GET",
         "path": "/portfolios/{portfolio_gid}/items",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "portfolio_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getItemsForPortfolio",
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}/items"
       }
     },
     {
@@ -1642,7 +2030,20 @@
       "rest": {
         "method": "GET",
         "path": "/project_briefs/{project_brief_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_brief_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectBrief",
+        "method": "GET",
+        "path": "/project_briefs/{project_brief_gid}"
       }
     },
     {
@@ -1684,7 +2085,20 @@
       "rest": {
         "method": "GET",
         "path": "/project_memberships/{project_membership_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_membership_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectMembership",
+        "method": "GET",
+        "path": "/project_memberships/{project_membership_gid}"
       }
     },
     {
@@ -1705,7 +2119,20 @@
       "rest": {
         "method": "GET",
         "path": "/projects/{project_gid}/project_memberships",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectMembershipsForProject",
+        "method": "GET",
+        "path": "/projects/{project_gid}/project_memberships"
       }
     },
     {
@@ -1726,7 +2153,20 @@
       "rest": {
         "method": "GET",
         "path": "/project_portfolio_settings/{project_portfolio_setting_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_portfolio_setting_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectPortfolioSetting",
+        "method": "GET",
+        "path": "/project_portfolio_settings/{project_portfolio_setting_gid}"
       }
     },
     {
@@ -1747,7 +2187,20 @@
       "rest": {
         "method": "GET",
         "path": "/projects/{project_gid}/project_portfolio_settings",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectPortfolioSettingsForProject",
+        "method": "GET",
+        "path": "/projects/{project_gid}/project_portfolio_settings"
       }
     },
     {
@@ -1768,7 +2221,20 @@
       "rest": {
         "method": "GET",
         "path": "/portfolios/{portfolio_gid}/project_portfolio_settings",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "portfolio_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectPortfolioSettingsForPortfolio",
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}/project_portfolio_settings"
       }
     },
     {
@@ -1789,7 +2255,20 @@
       "rest": {
         "method": "GET",
         "path": "/project_statuses/{project_status_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_status_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectStatus",
+        "method": "GET",
+        "path": "/project_statuses/{project_status_gid}"
       }
     },
     {
@@ -1852,7 +2331,20 @@
       "rest": {
         "method": "GET",
         "path": "/project_templates/{project_template_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_template_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectTemplate",
+        "method": "GET",
+        "path": "/project_templates/{project_template_gid}"
       }
     },
     {
@@ -1915,7 +2407,20 @@
       "rest": {
         "method": "GET",
         "path": "/teams/{team_gid}/project_templates",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "team_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectTemplatesForTeam",
+        "method": "GET",
+        "path": "/teams/{team_gid}/project_templates"
       }
     },
     {
@@ -1997,7 +2502,20 @@
       "rest": {
         "method": "GET",
         "path": "/projects/{project_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProject",
+        "method": "GET",
+        "path": "/projects/{project_gid}"
       }
     },
     {
@@ -2079,7 +2597,20 @@
       "rest": {
         "method": "GET",
         "path": "/tasks/{task_gid}/projects",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "task_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectsForTask",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/projects"
       }
     },
     {
@@ -2100,7 +2631,20 @@
       "rest": {
         "method": "GET",
         "path": "/teams/{team_gid}/projects",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "team_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectsForTeam",
+        "method": "GET",
+        "path": "/teams/{team_gid}/projects"
       }
     },
     {
@@ -2121,7 +2665,20 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/projects",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectsForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/projects"
       }
     },
     {
@@ -2142,7 +2699,20 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/projects/search",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.searchProjectsForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/projects/search"
       }
     },
     {
@@ -2203,7 +2773,20 @@
       "rest": {
         "method": "GET",
         "path": "/projects/{project_gid}/task_counts",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTaskCountsForProject",
+        "method": "GET",
+        "path": "/projects/{project_gid}/task_counts"
       }
     },
     {
@@ -2360,7 +2943,20 @@
       "rest": {
         "method": "GET",
         "path": "/rates/{rate_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "rate_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getRate",
+        "method": "GET",
+        "path": "/rates/{rate_gid}"
       }
     },
     {
@@ -2442,7 +3038,26 @@
       "rest": {
         "method": "GET",
         "path": "/reactions",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "emoji_base",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "target",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getReactionsOnObject",
+        "method": "GET",
+        "path": "/reactions"
       }
     },
     {
@@ -2519,7 +3134,20 @@
       "rest": {
         "method": "GET",
         "path": "/roles/{role_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "role_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getRole",
+        "method": "GET",
+        "path": "/roles/{role_gid}"
       }
     },
     {
@@ -2601,7 +3229,20 @@
       "rest": {
         "method": "GET",
         "path": "/sections/{section_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "section_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getSection",
+        "method": "GET",
+        "path": "/sections/{section_gid}"
       }
     },
     {
@@ -2744,7 +3385,20 @@
       "rest": {
         "method": "GET",
         "path": "/status_updates/{status_update_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "status_update_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getStatus",
+        "method": "GET",
+        "path": "/status_updates/{status_update_gid}"
       }
     },
     {
@@ -2786,7 +3440,20 @@
       "rest": {
         "method": "GET",
         "path": "/status_updates",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "parent",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getStatusesForObject",
+        "method": "GET",
+        "path": "/status_updates"
       }
     },
     {
@@ -2807,7 +3474,20 @@
       "rest": {
         "method": "GET",
         "path": "/stories/{story_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "story_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getStory",
+        "method": "GET",
+        "path": "/stories/{story_gid}"
       }
     },
     {
@@ -2910,7 +3590,20 @@
       "rest": {
         "method": "GET",
         "path": "/goals/{goal_gid}/stories",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "goal_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getStoriesForGoal",
+        "method": "GET",
+        "path": "/goals/{goal_gid}/stories"
       }
     },
     {
@@ -2992,7 +3685,20 @@
       "rest": {
         "method": "GET",
         "path": "/tags/{tag_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "tag_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTag",
+        "method": "GET",
+        "path": "/tags/{tag_gid}"
       }
     },
     {
@@ -3074,7 +3780,20 @@
       "rest": {
         "method": "GET",
         "path": "/tasks/{task_gid}/tags",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "task_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTagsForTask",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/tags"
       }
     },
     {
@@ -3095,7 +3814,20 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/tags",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTagsForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/tags"
       }
     },
     {
@@ -3137,7 +3869,20 @@
       "rest": {
         "method": "GET",
         "path": "/task_templates/{task_template_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "task_template_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTaskTemplate",
+        "method": "GET",
+        "path": "/task_templates/{task_template_gid}"
       }
     },
     {
@@ -3240,7 +3985,20 @@
       "rest": {
         "method": "GET",
         "path": "/tasks/{task_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "task_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTask",
+        "method": "GET",
+        "path": "/tasks/{task_gid}"
       }
     },
     {
@@ -3322,7 +4080,20 @@
       "rest": {
         "method": "GET",
         "path": "/projects/{project_gid}/tasks",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTasksForProject",
+        "method": "GET",
+        "path": "/projects/{project_gid}/tasks"
       }
     },
     {
@@ -3343,7 +4114,20 @@
       "rest": {
         "method": "GET",
         "path": "/sections/{section_gid}/tasks",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "section_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTasksForSection",
+        "method": "GET",
+        "path": "/sections/{section_gid}/tasks"
       }
     },
     {
@@ -3364,7 +4148,20 @@
       "rest": {
         "method": "GET",
         "path": "/tags/{tag_gid}/tasks",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "tag_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTasksForTag",
+        "method": "GET",
+        "path": "/tags/{tag_gid}/tasks"
       }
     },
     {
@@ -3385,7 +4182,20 @@
       "rest": {
         "method": "GET",
         "path": "/user_task_lists/{user_task_list_gid}/tasks",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user_task_list_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTasksForUserTaskList",
+        "method": "GET",
+        "path": "/user_task_lists/{user_task_list_gid}/tasks"
       }
     },
     {
@@ -3406,7 +4216,20 @@
       "rest": {
         "method": "GET",
         "path": "/tasks/{task_gid}/subtasks",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "task_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getSubtasksForTask",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/subtasks"
       }
     },
     {
@@ -3427,7 +4250,20 @@
       "rest": {
         "method": "GET",
         "path": "/tasks/{task_gid}/dependencies",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "task_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getDependenciesForTask",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/dependencies"
       }
     },
     {
@@ -3488,7 +4324,20 @@
       "rest": {
         "method": "GET",
         "path": "/tasks/{task_gid}/dependents",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "task_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getDependentsForTask",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/dependents"
       }
     },
     {
@@ -3669,7 +4518,26 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/tasks/custom_id/{custom_id}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "custom_id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTaskForCustomID",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/tasks/custom_id/{custom_id}"
       }
     },
     {
@@ -3690,7 +4558,20 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/tasks/search",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.searchTasksForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/tasks/search"
       }
     },
     {
@@ -3711,7 +4592,20 @@
       "rest": {
         "method": "GET",
         "path": "/team_memberships/{team_membership_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "team_membership_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTeamMembership",
+        "method": "GET",
+        "path": "/team_memberships/{team_membership_gid}"
       }
     },
     {
@@ -3758,7 +4652,20 @@
       "rest": {
         "method": "GET",
         "path": "/teams/{team_gid}/team_memberships",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "team_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTeamMembershipsForTeam",
+        "method": "GET",
+        "path": "/teams/{team_gid}/team_memberships"
       }
     },
     {
@@ -3779,7 +4686,26 @@
       "rest": {
         "method": "GET",
         "path": "/users/{user_gid}/team_memberships",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTeamMembershipsForUser",
+        "method": "GET",
+        "path": "/users/{user_gid}/team_memberships"
       }
     },
     {
@@ -3800,11 +4726,29 @@
       "rest": {
         "method": "GET",
         "path": "/teams/{team_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "team_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTeam",
+        "method": "GET",
+        "path": "/teams/{team_gid}"
       }
     },
     {
       "id": "get_teams_for_workspace",
+      "source_operation": {
+        "id": "asana.rest.getTeamsForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/teams"
+      },
       "kind": "stream_etl",
       "summary": "Get teams in a workspace",
       "description": "Implemented Asana operation mapped to {'stream': 'teams'}.",
@@ -3842,7 +4786,26 @@
       "rest": {
         "method": "GET",
         "path": "/users/{user_gid}/teams",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "organization",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTeamsForUser",
+        "method": "GET",
+        "path": "/users/{user_gid}/teams"
       }
     },
     {
@@ -3903,7 +4866,20 @@
       "rest": {
         "method": "GET",
         "path": "/time_periods/{time_period_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "time_period_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimePeriod",
+        "method": "GET",
+        "path": "/time_periods/{time_period_gid}"
       }
     },
     {
@@ -3924,7 +4900,20 @@
       "rest": {
         "method": "GET",
         "path": "/time_periods",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimePeriods",
+        "method": "GET",
+        "path": "/time_periods"
       }
     },
     {
@@ -3945,7 +4934,20 @@
       "rest": {
         "method": "GET",
         "path": "/time_tracking_categories/{time_tracking_category_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "time_tracking_category_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimeTrackingCategory",
+        "method": "GET",
+        "path": "/time_tracking_categories/{time_tracking_category_gid}"
       }
     },
     {
@@ -4027,7 +5029,20 @@
       "rest": {
         "method": "GET",
         "path": "/time_tracking_categories/{time_tracking_category_gid}/time_tracking_entries",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "time_tracking_category_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimeTrackingEntriesForTimeTrackingCategory",
+        "method": "GET",
+        "path": "/time_tracking_categories/{time_tracking_category_gid}/time_tracking_entries"
       }
     },
     {
@@ -4048,7 +5063,20 @@
       "rest": {
         "method": "GET",
         "path": "/time_tracking_categories",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimeTrackingCategories",
+        "method": "GET",
+        "path": "/time_tracking_categories"
       }
     },
     {
@@ -4104,7 +5132,20 @@
       "rest": {
         "method": "GET",
         "path": "/tasks/{task_gid}/time_tracking_entries",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "task_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimeTrackingEntriesForTask",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/time_tracking_entries"
       }
     },
     {
@@ -4125,7 +5166,20 @@
       "rest": {
         "method": "GET",
         "path": "/time_tracking_entries/{time_tracking_entry_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "time_tracking_entry_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimeTrackingEntry",
+        "method": "GET",
+        "path": "/time_tracking_entries/{time_tracking_entry_gid}"
       }
     },
     {
@@ -4188,7 +5242,20 @@
       "rest": {
         "method": "GET",
         "path": "/timesheet_approval_statuses/{timesheet_approval_status_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "timesheet_approval_status_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimesheetApprovalStatus",
+        "method": "GET",
+        "path": "/timesheet_approval_statuses/{timesheet_approval_status_gid}"
       }
     },
     {
@@ -4249,7 +5316,20 @@
       "rest": {
         "method": "GET",
         "path": "/timesheet_approval_statuses",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimesheetApprovalStatuses",
+        "method": "GET",
+        "path": "/timesheet_approval_statuses"
       }
     },
     {
@@ -4305,7 +5385,39 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/typeahead",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "resource_type",
+            "in": "query",
+            "type": "enum",
+            "required": true,
+            "values": [
+              "actor",
+              "agent",
+              "custom_field",
+              "goal",
+              "project",
+              "project_template",
+              "portfolio",
+              "tag",
+              "task",
+              "team",
+              "user"
+            ]
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.typeaheadForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/typeahead"
       }
     },
     {
@@ -4326,7 +5438,20 @@
       "rest": {
         "method": "GET",
         "path": "/user_task_lists/{user_task_list_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user_task_list_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getUserTaskList",
+        "method": "GET",
+        "path": "/user_task_lists/{user_task_list_gid}"
       }
     },
     {
@@ -4347,7 +5472,26 @@
       "rest": {
         "method": "GET",
         "path": "/users/{user_gid}/user_task_list",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getUserTaskListForUser",
+        "method": "GET",
+        "path": "/users/{user_gid}/user_task_list"
       }
     },
     {
@@ -4394,7 +5538,20 @@
       "rest": {
         "method": "GET",
         "path": "/users/{user_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getUser",
+        "method": "GET",
+        "path": "/users/{user_gid}"
       }
     },
     {
@@ -4415,7 +5572,40 @@
       "rest": {
         "method": "GET",
         "path": "/users/{user_gid}/favorites",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "resource_type",
+            "in": "query",
+            "type": "enum",
+            "required": true,
+            "values": [
+              "portfolio",
+              "project",
+              "tag",
+              "task",
+              "user",
+              "project_template"
+            ]
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getFavoritesForUser",
+        "method": "GET",
+        "path": "/users/{user_gid}/favorites"
       }
     },
     {
@@ -4436,7 +5626,20 @@
       "rest": {
         "method": "GET",
         "path": "/teams/{team_gid}/users",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "team_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getUsersForTeam",
+        "method": "GET",
+        "path": "/teams/{team_gid}/users"
       }
     },
     {
@@ -4457,7 +5660,20 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/users",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getUsersForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/users"
       }
     },
     {
@@ -4478,7 +5694,26 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/users/{user_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getUserForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/users/{user_gid}"
       }
     },
     {
@@ -4499,7 +5734,20 @@
       "rest": {
         "method": "GET",
         "path": "/webhooks",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getWebhooks",
+        "method": "GET",
+        "path": "/webhooks"
       }
     },
     {
@@ -4555,7 +5803,20 @@
       "rest": {
         "method": "GET",
         "path": "/webhooks/{webhook_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "webhook_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getWebhook",
+        "method": "GET",
+        "path": "/webhooks/{webhook_gid}"
       }
     },
     {
@@ -4637,7 +5898,20 @@
       "rest": {
         "method": "GET",
         "path": "/workspace_memberships/{workspace_membership_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_membership_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getWorkspaceMembership",
+        "method": "GET",
+        "path": "/workspace_memberships/{workspace_membership_gid}"
       }
     },
     {
@@ -4658,11 +5932,29 @@
       "rest": {
         "method": "GET",
         "path": "/users/{user_gid}/workspace_memberships",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getWorkspaceMembershipsForUser",
+        "method": "GET",
+        "path": "/users/{user_gid}/workspace_memberships"
       }
     },
     {
       "id": "get_workspace_memberships_for_workspace",
+      "source_operation": {
+        "id": "asana.rest.getWorkspaceMembershipsForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/workspace_memberships"
+      },
       "kind": "stream_etl",
       "summary": "Get the workspace memberships for a workspace",
       "description": "Implemented Asana operation mapped to {'stream': 'workspace_memberships'}.",
@@ -4726,7 +6018,20 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}"
       }
     },
     {
@@ -4787,7 +6092,20 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/events",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getWorkspaceEvents",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/events"
       }
     }
   ]

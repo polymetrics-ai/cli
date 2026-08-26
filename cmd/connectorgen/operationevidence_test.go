@@ -198,6 +198,30 @@ func TestOperationEvidenceRejectsDuplicateV3InventoryBeforeAbsenceProjection(t *
 	}
 }
 
+func TestOperationEvidenceReadsAsanaVersion3DocumentOwnedLock(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	input, err := readOperationEvidenceSourceLock(filepath.Join(root, "internal", "connectors", "defs", "asana", "sources", "asana-operation-source-lock.json"), "asana")
+	if err != nil {
+		t.Fatalf("read Asana version-3 source lock: %v", err)
+	}
+	if len(input.Operations) != 249 {
+		t.Fatalf("Asana source operations = %d, want 249", len(input.Operations))
+	}
+	for _, operation := range input.Operations {
+		if operation.ID != "asana.rest.getAccessRequests" {
+			continue
+		}
+		if operation.Method != "GET" || operation.Path != "/access_requests" || operation.Trace.URL != "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml" || operation.Trace.Location != `paths["/access_requests"].get` || operation.Trace.SHA256 == "" || operation.Trace.Bytes <= 0 {
+			t.Fatalf("Asana access-request evidence = %+v, want document-owned source trace", operation)
+		}
+		return
+	}
+	t.Fatal("Asana access-request source operation is absent")
+}
+
 func TestOperationEvidenceReportsEachMissingEvidenceKind(t *testing.T) {
 	cases := []struct {
 		name   string
