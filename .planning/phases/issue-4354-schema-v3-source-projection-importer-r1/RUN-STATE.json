@@ -4,7 +4,7 @@
   "base": "main",
   "branch": "feat/4354-schema-v3-source-projection",
   "delivery": "direct-pr",
-  "status": "planned",
+  "status": "blocked_missing_immutable_outreach_artifacts",
   "gsd": {
     "mode": "inline-manual-fallback",
     "commands_resolved": [
@@ -15,5 +15,6 @@
       "code-review"
     ]
   },
-  "usable_surface_delta": 0
+  "usable_surface_delta": 0,
+  "blocker": "The candidate Outreach lock enumerates two provider documents but neither exact raw source artifact is retained in the candidate, current main, or local Git object store. Source-import must verify those immutable bytes before projection; provider fetching, re-pinning, and derived-byte substitution are forbidden."
 }
