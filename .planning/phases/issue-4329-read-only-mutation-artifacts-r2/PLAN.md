@@ -46,3 +46,20 @@ Only shared `cmd/connectorgen` import/projection/coverage behavior, its tests,
 and this issue's evidence may change. The preserved Batch 1 Sentry/Vercel
 worktree, source-lock bytes, connector declarations, write actions, and active
 #4351/#4356 repair worktrees are not modified.
+
+## Current-main integration — inbox 001
+
+- Authorization: Captain message `001.msg`, processed 2026-08-27.
+- Target: merge `origin/main` at
+  `1324c52bab0b224ed8958858af7676b8b8e191b4` into this PR branch without a
+  force push. This is not a merge of the PR into `main`.
+- Reason: #4351 is now in main and must be integrated with the shared
+  write-disabled mutation-artifact foundation before review.
+- Inline GSD fallback: the canonical single-worker contract forbids lifecycle
+  role spawning, so discuss/plan/execute/verify/review are recorded in this
+  phase evidence and executed inline.
+- Required proof: run the full preserved Sentry/Vercel source-lock inventory
+  classification and real selected read/mutation coverage after integration;
+  also rerun the executable delete/reverse-ETL control. Report every merge
+  conflict, use no credential, and obtain a fresh separate Codex audit of the
+  pushed integration SHA.

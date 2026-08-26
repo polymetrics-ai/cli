@@ -1,8 +1,8 @@
 {
   "issue": 4329,
-  "state": "verified_local_pending_pr",
+  "state": "current_main_integration_planned",
   "base": "main",
   "working_branch": "fix/4329-read-only-mutation-artifacts",
   "scope": "shared connectorgen source-import/projection/coverage behavior and issue evidence only",
-  "next": "commit the verified slice, push, open the main-targeted PR, record API base/audit/CI"
+  "next": "merge origin/main at 1324c52bab0b224ed8958858af7676b8b8e191b4, run real source-lock integration proof, audit, and push"
 }
