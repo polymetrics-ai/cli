@@ -1,0 +1,25 @@
+{
+  "schema_version": 2,
+  "cohort": "batch-1-foundation",
+  "declarations": [
+    {
+      "connector": "github",
+      "source_id": "github.rest.issues.delete-label",
+      "lane": "reverse_etl",
+      "command": "label delete",
+      "state": "implemented",
+      "canonical": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/labels/{name}"
+      },
+      "binding": {
+        "kind": "write",
+        "id": "delete_label"
+      },
+      "destructive": {
+        "kind": "delete",
+        "reason": "deletes a repository label and its existing issue metadata"
+      }
+    }
+  ]
+}

@@ -109,9 +109,10 @@ type CommandSurfaceFlag struct {
 	// can name the flag the user actually typed.
 	MaxItems int
 	MinItems int
-	// MaxBytes bounds the exact percent-encoded value for path/query targets.
-	// It is projected from the source operation parameter or from the engine's
-	// conservative fallback and enforced again by the executor.
+	// MaxBytes bounds the exact percent-encoded value for path/query targets and
+	// the raw UTF-8 bytes for record/config targets. It is projected from the
+	// source operation parameter or from the engine's conservative fallback and
+	// enforced again by the executor.
 	MaxBytes int
 	// MaxBytesOrigin and MaxBytesPolicyVersion identify MaxBytes as a PM
 	// execution limit. They prevent generated help and inspection output from
@@ -144,6 +145,114 @@ type CommandSurfaceConstraint struct {
 	Message       string
 }
 
+// CommandFoundationTarget names the one admitted provider operation and
+// runtime binding a deferred command would resolve once its foundation exists.
+// It is not a request URL and cannot be supplied by a caller.
+type CommandFoundationTarget struct {
+	SourceID            string
+	ProviderOperationID string
+	Binding             CommandBindingIdentity
+	DestructiveKind     string
+	Method              string
+	Path                string
+}
+
+const (
+	CommandBindingCommand   = "command"
+	CommandBindingStream    = "stream"
+	CommandBindingWrite     = "write"
+	CommandBindingOperation = "operation"
+)
+
+// CommandBindingIdentity is the stable declaration selected by a command.
+// Method/path alone are not an operation identity because GraphQL operations
+// and provider actions may share one transport endpoint.
+type CommandBindingIdentity struct {
+	Kind string
+	ID   string
+}
+
+// CommandFoundation names the missing shared capability for a command that is
+// deliberately discoverable but not runnable. Component and Evidence are a
+// closed, locally checkable absence claim; Target binds that claim to exactly
+// one admitted source identity and provider target. It is declaration
+// metadata, not a request parameter, so dispatch can refuse before provider I/O.
+type CommandFoundation struct {
+	ID        string
+	Reason    string
+	Component string
+	Evidence  string
+	Target    CommandFoundationTarget
+}
+
+// CommandUnsupportedDisposition retains a provider-documented operation in
+// discovery when its semantics cannot be supported by the CLI. Target is
+// provenance only: it deliberately has no stream, write, operation, executor,
+// or foundation binding and can never be promoted by dispatch.
+type CommandUnsupportedDisposition struct {
+	Reason string
+	Target CommandUnsupportedTarget
+}
+
+type CommandUnsupportedTarget struct {
+	SourceID            string
+	ProviderOperationID string
+	Method              string
+	Path                string
+}
+
+const (
+	FoundationComponentTypedWriteAction        = "typed_write_action"
+	FoundationComponentTypedRecordSchema       = "typed_record_schema"
+	FoundationComponentTypedRequestBody        = "typed_request_body"
+	FoundationComponentTypedResponseDescriptor = "typed_response_descriptor"
+	FoundationComponentBinaryTransferBinding   = "binary_transfer_binding"
+	FoundationComponentSourceImporter          = "source_importer"
+	FoundationComponentRuntimeExecutor         = "runtime_executor"
+)
+
+// ValidCommandFoundationComponent reports whether component is a specific
+// implementation seam, not a provider policy, method, risk, retained source
+// artifact, or a runtime/live-certification state.
+func ValidCommandFoundationComponent(component string) bool {
+	switch component {
+	case FoundationComponentTypedWriteAction,
+		FoundationComponentTypedRecordSchema,
+		FoundationComponentTypedRequestBody,
+		FoundationComponentTypedResponseDescriptor,
+		FoundationComponentBinaryTransferBinding,
+		FoundationComponentSourceImporter,
+		FoundationComponentRuntimeExecutor:
+		return true
+	default:
+		return false
+	}
+}
+
+// ValidCommandFoundationEvidence binds each foundation component to one
+// machine-checkable absence predicate. The human explanation stays in Reason;
+// Evidence cannot be a free-form policy claim.
+func ValidCommandFoundationEvidence(component, evidence string) bool {
+	switch component {
+	case FoundationComponentTypedWriteAction:
+		return evidence == "write_action_absent"
+	case FoundationComponentTypedRecordSchema:
+		return evidence == "record_schema_absent"
+	case FoundationComponentTypedRequestBody:
+		return evidence == "request_body_schema_absent"
+	case FoundationComponentTypedResponseDescriptor:
+		return evidence == "response_descriptor_absent"
+	case FoundationComponentBinaryTransferBinding:
+		return evidence == "binary_transfer_binding_absent"
+	case FoundationComponentSourceImporter:
+		return evidence == "source_importer_absent"
+	case FoundationComponentRuntimeExecutor:
+		return evidence == "runtime_executor_absent"
+	default:
+		return false
+	}
+}
+
 type CommandSurfaceCommand struct {
 	Path            string
 	Summary         string
@@ -173,6 +282,8 @@ type CommandSurfaceCommand struct {
 	RedactFields []string
 	Risk         string
 	Approval     string
+	Foundation   *CommandFoundation
+	Unsupported  *CommandUnsupportedDisposition
 	Notes        string
 }
 

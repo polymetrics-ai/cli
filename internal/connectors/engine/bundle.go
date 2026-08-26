@@ -48,6 +48,7 @@ type Bundle struct {
 	Surface            *APISurface                            // api_surface.json, when available on disk
 	directWriteSurface *APISurface                            // runtime projection from shipped rest_write declarations
 	directReadLedger   *operationEndpointLedger               // generated direct-read endpoint projection
+	declarationTargets *declarationTargetLedger               // admitted source identities needed by shipped deferred preflight
 	CLISurface         *CLISurface                            // cli_surface.json
 	RawCLISurface      json.RawMessage                        // verbatim cli_surface.json bytes; nil when absent
 	Certification      *CertificationSpec                     // certification.json; nil when absent
@@ -1155,6 +1156,51 @@ type CLIConstraint struct {
 	Message       string   `json:"message,omitempty"`
 }
 
+// CommandFoundation is the named missing capability for a deferred command.
+// Target makes the future provider endpoint explicit so the runtime can reject
+// a policy or excluded row rather than treating it as an executable binding.
+type CommandFoundation struct {
+	ID        string                  `json:"id"`
+	Reason    string                  `json:"reason"`
+	Component string                  `json:"component"`
+	Evidence  string                  `json:"evidence"`
+	Target    CommandFoundationTarget `json:"target"`
+}
+
+// CommandFoundationTarget is the exact admitted source and runtime binding of
+// a deferred command. Method/path are duplicated with the command reference;
+// the stable identities disambiguate operations sharing one transport.
+type CommandFoundationTarget struct {
+	SourceID            string                 `json:"source_id,omitempty"`
+	ProviderOperationID string                 `json:"operation_id,omitempty"`
+	Binding             CommandBindingIdentity `json:"binding,omitempty"`
+	DestructiveKind     string                 `json:"destructive_kind,omitempty"`
+	Method              string                 `json:"method"`
+	Path                string                 `json:"path"`
+}
+
+// CommandUnsupportedDisposition is source-backed discovery metadata for an
+// operation the CLI cannot represent or execute. It is intentionally separate
+// from a missing foundation, which describes an implementation gap.
+type CommandUnsupportedDisposition struct {
+	Reason string                   `json:"reason"`
+	Target CommandUnsupportedTarget `json:"target"`
+}
+
+type CommandUnsupportedTarget struct {
+	SourceID            string `json:"source_id"`
+	ProviderOperationID string `json:"operation_id"`
+	Method              string `json:"method"`
+	Path                string `json:"path"`
+}
+
+// CommandBindingIdentity selects one stream, write action, operation, or
+// operation-free command independently of its shared transport endpoint.
+type CommandBindingIdentity struct {
+	Kind string `json:"kind"`
+	ID   string `json:"id"`
+}
+
 // CLICommand is one provider-inspired command path.
 type CLICommand struct {
 	Path          string                  `json:"path"`
@@ -1175,10 +1221,12 @@ type CLICommand struct {
 	// SourceOperation names the locked provider identity selected by a
 	// source-projected command. It must match OperationSpec.SourceOperation
 	// before commandrunner may reach credential resolution.
-	SourceOperation string `json:"source_operation,omitempty"`
-	Risk            string `json:"risk,omitempty"`
-	Approval        string `json:"approval,omitempty"`
-	Notes           string `json:"notes,omitempty"`
+	SourceOperation string                         `json:"source_operation,omitempty"`
+	Risk            string                         `json:"risk,omitempty"`
+	Approval        string                         `json:"approval,omitempty"`
+	Foundation      *CommandFoundation             `json:"foundation_gap,omitempty"`
+	Unsupported     *CommandUnsupportedDisposition `json:"unsupported_disposition,omitempty"`
+	Notes           string                         `json:"notes,omitempty"`
 }
 
 // CLISurfaceEndpointRef points from a command to a tracked api_surface row.
@@ -1506,8 +1554,8 @@ type CertificationWriteWaveBlockedAction struct {
 // metaSchemas holds the compiled meta-schemas used to validate the bundle
 // files themselves, lazily compiled once from the embedded schema/ dir.
 var metaSchemas = struct {
-	metadata, changefeed, pollingWatermark, syncTransport, spec, streams, writes, apiSurface, operations, cliSurface, certification, rateLimits *Schema
-	err                                                                                                                                         error
+	metadata, changefeed, pollingWatermark, syncTransport, spec, streams, writes, apiSurface, operations, cliSurface, declarationAdmission, declarationAdmissionSources, declarationAdmissionInventory, certification, rateLimits *Schema
+	err                                                                                                                                                                                                                           error
 }{}
 
 func init() {
@@ -1532,8 +1580,52 @@ func init() {
 	metaSchemas.apiSurface = compileMeta(apiSurfaceSchemaJSON)
 	metaSchemas.operations = compileMeta(operationsSchemaJSON)
 	metaSchemas.cliSurface = compileMeta(cliSurfaceSchemaJSON)
+	metaSchemas.declarationAdmission = compileMeta(declarationAdmissionSchemaJSON)
+	metaSchemas.declarationAdmissionSources = compileMeta(declarationAdmissionSourcesSchemaJSON)
+	metaSchemas.declarationAdmissionInventory = compileMeta(declarationAdmissionInventorySchemaJSON)
 	metaSchemas.certification = compileMeta(certificationSchemaJSON)
 	metaSchemas.rateLimits = compileMeta(rateLimitsSchemaJSON)
+}
+
+// ValidateDeclarationAdmission validates the repository declaration catalog
+// shared by connectorgen. It deliberately validates only its declaration
+// shape: source-lock retention, runtime preflight, and live proof are separate
+// certificates with their own stricter contracts.
+func ValidateDeclarationAdmission(raw []byte) error {
+	if metaSchemas.err != nil {
+		return fmt.Errorf("declaration-admission meta-schema failed to compile: %w", metaSchemas.err)
+	}
+	if err := metaSchemas.declarationAdmission.Validate(mustDecodeAny(raw)); err != nil {
+		return err
+	}
+	return nil
+}
+
+// ValidateDeclarationAdmissionSources validates the independent admission
+// denominator. It does not require retained provider bytes or make provider
+// requests; those remain separate certification concerns.
+func ValidateDeclarationAdmissionSources(raw []byte) error {
+	if metaSchemas.err != nil {
+		return fmt.Errorf("declaration-admission source meta-schema failed to compile: %w", metaSchemas.err)
+	}
+	if err := metaSchemas.declarationAdmissionSources.Validate(mustDecodeAny(raw)); err != nil {
+		return err
+	}
+	return nil
+}
+
+// ValidateDeclarationAdmissionInventory validates the independently reviewed
+// operation selections that control the admission denominator. Resolving each
+// selection against its connector-owned source lock remains connectorgen's
+// repository-only authoring check; the production runtime never reads it.
+func ValidateDeclarationAdmissionInventory(raw []byte) error {
+	if metaSchemas.err != nil {
+		return fmt.Errorf("declaration-admission inventory meta-schema failed to compile: %w", metaSchemas.err)
+	}
+	if err := metaSchemas.declarationAdmissionInventory.Validate(mustDecodeAny(raw)); err != nil {
+		return err
+	}
+	return nil
 }
 
 // requiredFiles lists the bundle files that must always exist relative to a
@@ -1614,6 +1706,10 @@ func LoadAll(fsys fs.FS) ([]Bundle, error) {
 	if err != nil {
 		return nil, fmt.Errorf("load runtime operation endpoint ledger: %w", err)
 	}
+	declarationTargetLedgers, err := loadDeclarationTargetLedgers(fsys)
+	if err != nil {
+		return nil, fmt.Errorf("load declaration-admission target ledger: %w", err)
+	}
 	entries, err := fs.ReadDir(fsys, ".")
 	if err != nil {
 		return nil, fmt.Errorf("load all bundles: read root: %w", err)
@@ -1631,7 +1727,7 @@ func LoadAll(fsys fs.FS) ([]Bundle, error) {
 	bundles := make([]Bundle, 0, len(names))
 	var loadErr LoadAllError
 	for _, name := range names {
-		b, err := loadBundle(fsys, name, operationEndpointLedgers)
+		b, err := loadBundle(fsys, name, operationEndpointLedgers, declarationTargetLedgers)
 		if err != nil {
 			loadErr.Failures = append(loadErr.Failures, BundleLoadFailure{Name: name, Err: err})
 			continue
@@ -1651,10 +1747,14 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 	if err != nil {
 		return Bundle{}, fmt.Errorf("load runtime operation endpoint ledger: %w", err)
 	}
-	return loadBundle(fsys, dirName, operationEndpointLedgers)
+	declarationTargetLedgers, err := loadDeclarationTargetLedgers(fsys)
+	if err != nil {
+		return Bundle{}, fmt.Errorf("load declaration-admission target ledger: %w", err)
+	}
+	return loadBundle(fsys, dirName, operationEndpointLedgers, declarationTargetLedgers)
 }
 
-func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]*operationEndpointLedger) (Bundle, error) {
+func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]*operationEndpointLedger, declarationTargetLedgers map[string]*declarationTargetLedger) (Bundle, error) {
 	if metaSchemas.err != nil {
 		return Bundle{}, fmt.Errorf("load bundle %s: meta-schemas failed to compile: %w", dirName, metaSchemas.err)
 	}
@@ -1775,6 +1875,7 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 		Surface:            surface,
 		directWriteSurface: directWriteSurface,
 		directReadLedger:   directReadLedger,
+		declarationTargets: declarationTargetLedgers[dirName],
 		CLISurface:         cliSurface,
 		RawCLISurface:      rawCLISurface,
 		Certification:      certification,
@@ -3333,6 +3434,18 @@ func loadCLISurface(sub fs.FS, dirName string) (*CLISurface, json.RawMessage, er
 	var surface CLISurface
 	if err := strictDecode(raw, &surface); err != nil {
 		return nil, nil, fmt.Errorf("load bundle %s: cli_surface.json: %w", dirName, err)
+	}
+	for index, command := range surface.Commands {
+		if command.Foundation != nil {
+			if err := ValidateCommandEndpoint(command.Foundation.Target.Method, command.Foundation.Target.Path); err != nil {
+				return nil, nil, fmt.Errorf("load bundle %s: cli_surface.json: command %d foundation target: %w", dirName, index, err)
+			}
+		}
+		if command.Unsupported != nil {
+			if err := ValidateCommandEndpoint(command.Unsupported.Target.Method, command.Unsupported.Target.Path); err != nil {
+				return nil, nil, fmt.Errorf("load bundle %s: cli_surface.json: command %d unsupported target: %w", dirName, index, err)
+			}
+		}
 	}
 	return &surface, json.RawMessage(raw), nil
 }
