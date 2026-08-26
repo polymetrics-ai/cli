@@ -21,3 +21,19 @@
 - [x] Clean tracked archive at `9e1bfdb9b21ab346f84537bfb094a22782b0d5d5` passed `agentcontractgen check`, `connectorgen validate`, `surface-sync --check`, `operation-evidence --check` (1,525 rows; fixed-100 passed), certification subject/matrix/candidates/sweep checks, and `connectorgen boundary . --json`. Its temporary archive was deleted after the checks; it excluded the preserved live-retention artifacts.
 - [x] `make lint` passes after the static-analysis repair. No aggregate `go test ./...` was run.
 - [ ] PR #4350 is pushed, its API-reported base is `main`, and Firstmate is asked for a fresh independent audit. No merge is performed.
+
+## Independent exact-SHA audit R2
+
+- [x] Red and green: populated v3 source documents cannot be classified as absence or suppress REST evidence.
+- [x] Red and green: canonical JSON served as HTML is wrong-source before canonical identity drift.
+- [x] Red and green: rendered citation fragments match the operation location and supplied bindings are never ignored.
+- [x] Red and green: canonical JSON rejects duplicate object members as ambiguous bad-source input, not ordinary drift.
+- [x] Red and green: canonical JSON accepts formatted/minified equivalent JSON
+  with unequal raw byte counts; raw identity is manifest provenance only while
+  byte-identity locks remain exact.
+- [x] Focused suites pass: `go test -timeout 10m ./cmd/connectorgen -run '^TestSourceRetain' -count=1` (1.409s) and the operation-evidence/rendered-reference/canonical suite (17.618s).
+- [x] Full changed suite passes: `go test -timeout 20m ./cmd/connectorgen -count=1` in the clean tracked-only archive (279.084s). Aggregate `go test ./...` was not run.
+- [x] `go vet ./cmd/connectorgen`, `go build ./cmd/pm`, `go build -o .task-bin-connectorgen ./cmd/connectorgen`, `make tidy-check`, `make docs-check-no-build`, `make smoke-no-build`, and `make lint` pass. `git diff --check` passes.
+- [x] Clean tracked-only archive check passes: `agentcontractgen check`, source validate, surface sync, operation evidence (1,525 rows; fixed-100), certification subject/matrix/candidates/sweep, boundary (553 connectors; 317 files; no findings), connector canon, GitHub parity artifacts, and all release workflow scripts including installed GitHub certification.
+- [x] Root `agentcontractgen check` is not a code failure: it correctly refuses the deliberately preserved untracked `.fm-main-clean.qazhOS/.claude/agents/pm-connector-worker.md` duplicate. The exact command passes in the clean archive containing this branch's diff and no untracked artifacts.
+- [ ] PR #4350 points at the repaired remote head and a fresh audit is requested. No merge.

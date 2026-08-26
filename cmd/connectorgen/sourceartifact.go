@@ -24,13 +24,16 @@ const sourceRetainUsage = `connectorgen source-retain <connector> [--defs <dir>]
 Fetches only the artifacts already identified by a connector-owned operation
 or parity source lock, verifies the lock-selected identity, and stores the raw
 bytes under sources/artifacts/. Byte identity is exact size plus SHA-256;
-canonical_json identity key-sorts parsed JSON before SHA-256 comparison. It
+canonical_json identity key-sorts one strict, unambiguous JSON value before
+SHA-256 comparison. Its raw byte count/SHA-256 are recorded provenance, not
+the comparison identity. It
 records the fetched byte identity and detected form/version (or undetermined)
 without changing a source lock. Redirected, invalid/bad MIME, credible HTML
-login/error, or drastically undersized responses are wrong source rather than
-drift; HTTP 403 and TLS refusal are BOT-BLOCK and direct the reader to a
-browser capture or provider-owned repository. Builds and source-import remain
-offline: this is an explicit maintenance command only.
+login/error, or (for byte identity) drastically undersized responses are wrong
+source rather than drift; canonical_json raw size is provenance, not a drift
+gate. HTTP 403 and TLS refusal are BOT-BLOCK and direct the reader to a browser
+capture or provider-owned repository. Builds and source-import remain offline:
+this is an explicit maintenance command only.
 
   <connector>       connector whose source lock is retained
   --defs <dir>      connector defs root (default internal/connectors/defs)
@@ -404,6 +407,9 @@ func sourceRetainClassifyFetchedArtifact(raw []byte, contentType string, artifac
 			return sourceRetainWrongSourceError{Reason: fmt.Sprintf("locked URL returned invalid response content type %q", contentType)}
 		}
 		mediaType = strings.ToLower(mediaType)
+		if sourceArtifactIdentity(artifact) == sourceArtifactIdentityCanonicalJSON && !sourceRetainJSONMediaType(mediaType) {
+			return sourceRetainWrongSourceError{Reason: fmt.Sprintf("locked canonical JSON source was served as %s rather than JSON", mediaType)}
+		}
 		if sourceRetainArtifactRequiresStructuredMedia(artifact) && !sourceRetainStructuredMediaType(mediaType) {
 			return sourceRetainWrongSourceError{Reason: fmt.Sprintf("locked structured source was served as %s rather than JSON or YAML", mediaType)}
 		}
@@ -415,15 +421,20 @@ func sourceRetainClassifyFetchedArtifact(raw []byte, contentType string, artifac
 	if sourceRetainLooksLikeLoginOrErrorHTML(lower) {
 		return sourceRetainWrongSourceError{Reason: "received an HTML login or error page rather than the locked provider artifact"}
 	}
+	if sourceArtifactIdentity(artifact) == sourceArtifactIdentityCanonicalJSON {
+		if _, err := sourceCanonicalJSONSHA256(raw); err != nil {
+			return sourceRetainWrongSourceError{Reason: fmt.Sprintf("locked canonical JSON source is invalid or ambiguous: %v", err)}
+		}
+	}
 	drasticallySmaller := int64(len(raw))*8 < artifact.Bytes
-	if drasticallySmaller {
+	if sourceArtifactIdentity(artifact) == sourceArtifactIdentityBytes && drasticallySmaller {
 		return sourceRetainWrongSourceError{Reason: fmt.Sprintf("received %d bytes where the lock records %d bytes; the URL likely resolves to a landing page or error response", len(raw), artifact.Bytes)}
 	}
 	return nil
 }
 
 func sourceRetainArtifactRequiresStructuredMedia(artifact sourceImportArtifact) bool {
-	if artifact.OpenAPI != "" || artifact.Swagger != "" {
+	if sourceArtifactIdentity(artifact) == sourceArtifactIdentityCanonicalJSON || artifact.OpenAPI != "" || artifact.Swagger != "" {
 		return true
 	}
 	mediaType, _, err := mime.ParseMediaType(artifact.RetainExpectedContentType)
@@ -431,7 +442,7 @@ func sourceRetainArtifactRequiresStructuredMedia(artifact sourceImportArtifact) 
 }
 
 func sourceRetainArtifactRequiresNonHTMLMedia(artifact sourceImportArtifact) bool {
-	if artifact.OpenAPI != "" || artifact.Swagger != "" {
+	if sourceArtifactIdentity(artifact) == sourceArtifactIdentityCanonicalJSON || artifact.OpenAPI != "" || artifact.Swagger != "" {
 		return true
 	}
 	mediaType, _, err := mime.ParseMediaType(artifact.RetainExpectedContentType)
@@ -439,7 +450,11 @@ func sourceRetainArtifactRequiresNonHTMLMedia(artifact sourceImportArtifact) boo
 }
 
 func sourceRetainStructuredMediaType(mediaType string) bool {
-	return mediaType == "application/json" || strings.HasSuffix(mediaType, "+json") || mediaType == "application/yaml" || mediaType == "application/x-yaml" || mediaType == "text/yaml"
+	return sourceRetainJSONMediaType(mediaType) || mediaType == "application/yaml" || mediaType == "application/x-yaml" || mediaType == "text/yaml"
+}
+
+func sourceRetainJSONMediaType(mediaType string) bool {
+	return mediaType == "application/json" || strings.HasSuffix(mediaType, "+json")
 }
 
 func sourceRetainLooksLikeLoginOrErrorHTML(raw []byte) bool {

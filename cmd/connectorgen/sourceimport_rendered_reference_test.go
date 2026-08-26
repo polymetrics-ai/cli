@@ -344,7 +344,7 @@ func TestSourceImportVersion3RenderedReferenceProjectsYAMLPathFragment(t *testin
 			"path":            "/audit",
 			"operation_id":    "listAudit",
 			"source_location": "#/get",
-			"citation_url":    "https://docs.polymetrics.invalid/public-api/audit#list-audit",
+			"citation_url":    "https://docs.polymetrics.invalid/public-api/audit#/get",
 		}},
 	}
 	raw, err := json.Marshal(map[string]any{
@@ -373,7 +373,7 @@ func TestSourceImportVersion3RenderedReferenceProjectsYAMLPathFragment(t *testin
 	if err != nil {
 		t.Fatalf("import YAML path-fragment lock: %v", err)
 	}
-	if len(result.Operations) != 1 || result.Operations[0].Source.Form != "rendered_reference" || result.Operations[0].Source.CitationURL != "https://docs.polymetrics.invalid/public-api/audit#list-audit" {
+	if len(result.Operations) != 1 || result.Operations[0].Source.Form != "rendered_reference" || result.Operations[0].Source.CitationURL != "https://docs.polymetrics.invalid/public-api/audit#/get" {
 		t.Fatalf("YAML path-fragment operation projection = %#v", result.Operations)
 	}
 }
@@ -413,7 +413,7 @@ func TestSourceImportVersion3RenderedReferenceRejectsStandaloneOpenAPIDescriptio
 					"path":            "/audit",
 					"operation_id":    "listAudit",
 					"source_location": "#/paths/~1audit/get",
-					"citation_url":    "https://docs.polymetrics.invalid/public-api/audit#list-audit",
+					"citation_url":    "https://docs.polymetrics.invalid/public-api/audit#/paths/~1audit/get",
 				}},
 			}},
 		},
@@ -589,6 +589,13 @@ func TestSourceImportVersion3RenderedReferenceCitationNeedsPointerOrVerifiedCapt
 		}
 	})
 
+	t.Run("unrelated publication fragment", func(t *testing.T) {
+		raw, _ := sourceImportV3RenderedReferenceLock(t, strings.Replace(renderedReferenceCitationURL, "#list-widgets", "#unrelated-widget", 1))
+		if _, err := parseSourceImportLock(raw, "fixture"); err == nil || !strings.Contains(err.Error(), "citation") {
+			t.Fatalf("unrelated rendered publication fragment error = %v, want operation-specific citation refusal", err)
+		}
+	})
+
 	t.Run("capture extraction binding", func(t *testing.T) {
 		raw, page := sourceImportV3RenderedReferenceLock(t, renderedReferencePublishedURL)
 		var lock map[string]any
@@ -619,6 +626,29 @@ func TestSourceImportVersion3RenderedReferenceCitationNeedsPointerOrVerifiedCapt
 		}
 		if _, err := parseSourceImportLock(raw, "fixture"); err == nil || !strings.Contains(err.Error(), "citation") {
 			t.Fatalf("mismatched rendered capture binding error = %v, want citation refusal", err)
+		}
+	})
+
+	t.Run("contradictory binding alongside pointer", func(t *testing.T) {
+		raw, _ := sourceImportV3RenderedReferenceLock(t, renderedReferenceCitationURL)
+		var lock map[string]any
+		if err := json.Unmarshal(raw, &lock); err != nil {
+			t.Fatal(err)
+		}
+		document := lock["rest"].(map[string]any)["source_documents"].([]any)[0].(map[string]any)
+		operation := document["operations"].([]any)[0].(map[string]any)
+		operation["citation_binding"] = map[string]any{
+			"capture_url":     renderedReferenceArtifactURL,
+			"capture_sha256":  strings.Repeat("0", 64),
+			"capture_bytes":   1,
+			"source_location": "#unrelated-widget",
+		}
+		raw, err := json.Marshal(lock)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if _, err := parseSourceImportLock(raw, "fixture"); err == nil || !strings.Contains(err.Error(), "citation") {
+			t.Fatalf("contradictory pointer capture binding error = %v, want citation refusal", err)
 		}
 	})
 }

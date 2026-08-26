@@ -425,10 +425,11 @@ type operationEvidenceRawLock struct {
 		Detail string `json:"detail"`
 	} `json:"dynamic"`
 	Rest struct {
-		SourceURL string `json:"source_url"`
-		SHA256    string `json:"sha256"`
-		Bytes     int64  `json:"bytes"`
-		Documents []struct {
+		SourceURL       string            `json:"source_url"`
+		SHA256          string            `json:"sha256"`
+		Bytes           int64             `json:"bytes"`
+		SourceDocuments []json.RawMessage `json:"source_documents"`
+		Documents       []struct {
 			SourceURL string `json:"source_url"`
 			SHA256    string `json:"sha256"`
 			Bytes     int64  `json:"bytes"`
@@ -479,7 +480,13 @@ func readOperationEvidenceSourceLock(path, connector string) (operationEvidenceS
 		return operationEvidenceSourceInput{}, fmt.Errorf("source lock connector %q does not match directory %q", lock.Connector, connector)
 	}
 	input := operationEvidenceSourceInput{Connector: connector, LockPath: filepath.ToSlash(filepath.Join("sources", filepath.Base(path)))}
-	if lock.State == "skipped" || lock.State == "dynamic" {
+	// A v3 document-owned inventory is the strict source-import contract. It
+	// cannot be hidden behind the historical provider-absence projection just
+	// by adding an otherwise legacy state field. Empty v3 absence locks remain
+	// evidence-only because they have no document operations to suppress.
+	isProviderAbsence := lock.State == "skipped" || lock.State == "dynamic"
+	hasV3DocumentInventory := lock.SchemaVersion == 3 && len(lock.Rest.SourceDocuments) != 0
+	if isProviderAbsence && !hasV3DocumentInventory {
 		absence := operationEvidenceAbsence{State: lock.State}
 		if lock.Skip != nil {
 			absence.Reason = lock.Skip.Reason

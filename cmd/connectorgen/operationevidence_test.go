@@ -144,6 +144,35 @@ func TestOperationEvidenceUsesStrictV3DocumentOperationInventory(t *testing.T) {
 	}
 }
 
+func TestOperationEvidenceRejectsV3InventoryStateClaimingAbsence(t *testing.T) {
+	root := operationEvidenceWorkspace(t)
+	operationEvidenceRewriteGitHubLockAsV3(t, root)
+	path := filepath.Join(root, "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json")
+	var documentOperations int
+	mutateOperationEvidenceJSON(t, path, func(lock map[string]any) {
+		rest := lock["rest"].(map[string]any)
+		documentOperations = len(rest["source_documents"].([]any)[0].(map[string]any)["operations"].([]any))
+		lock["state"] = "dynamic"
+		lock["dynamic"] = map[string]any{
+			"reason": "contradictory-fixture-state",
+			"detail": "A document-owned operation inventory exists and must not be projected as absence.",
+		}
+	})
+	if documentOperations != 1220 {
+		t.Fatalf("v3 fixture document operations = %d, want 1220 REST operations", documentOperations)
+	}
+	input, err := readOperationEvidenceSourceLock(path, "github")
+	if err == nil {
+		if input.Absence != nil {
+			t.Fatalf("v3 source document inventory with %d REST operations was classified as absence: %+v", documentOperations, input.Absence)
+		}
+		t.Fatal("contradictory v3 state unexpectedly projected without strict source-import rejection")
+	}
+	if !strings.Contains(err.Error(), "source-import schema") {
+		t.Fatalf("v3 contradictory state error = %v, want strict source-import schema rejection", err)
+	}
+}
+
 func TestOperationEvidenceReportsEachMissingEvidenceKind(t *testing.T) {
 	cases := []struct {
 		name   string

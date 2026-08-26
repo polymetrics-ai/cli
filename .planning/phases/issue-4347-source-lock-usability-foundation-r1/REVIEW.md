@@ -23,15 +23,35 @@ once the main-targeted PR opens.
   unchanged on clean `060bb7864`, proving the failure was branch-owned. Byte
   identity now retains its legacy `locked bytes and SHA-256` diagnostic, while
   canonical identity retains the distinct fetched-byte provenance diagnostic.
-- **No remaining actionable findings:** lock loading stays connector-owned;
-  redirects, denial, and drastic source collapse are classified before drift;
-  canonical identity preserves fetched-byte provenance; no source lock is
-  rewritten.
+- **Accepted R2 exact-SHA repair:** a populated v3 `source_documents`
+  inventory cannot enter the evidence-only skipped/dynamic projection. The
+  reader now reaches the strict source-import decoder, which rejects the
+  contradictory legacy `state` field before it can suppress REST rows. An
+  empty v3 provider-absence record remains deliberately separate.
+- **Accepted R2 source classification repair:** `canonical_json` itself is a
+  JSON MIME expectation. A non-JSON MIME, malformed canonical JSON, or a
+  duplicate member is wrong-source before identity comparison. The canonical
+  parser reuses the strict recursive JSON validator, so it never accepts
+  implementation-dependent last-member semantics; offline verification calls
+  duplicate input invalid/ambiguous rather than asking for a re-pin.
+- **Accepted R2 provenance repair:** canonical locks compare strict canonical
+  JSON only. A raw size/digest change from formatting or minification remains
+  manifest provenance, while byte locks retain exact size/digest and the
+  drastic-collapse wrong-source classifier.
+- **Accepted R2 citation repair:** a rendered citation fragment must exactly
+  name the operation's locked extraction location; any supplied capture
+  binding is independently checked even when that fragment is present.
+- **No remaining actionable findings:** review of the R2 production diff,
+  red/green tests, full changed package suite, generated checks, clean
+  structural boundary, and release checks found no route escape, lock rewrite,
+  silent re-pin, or source-import relaxation.
 
 ## Evidence
 
-`go test -timeout 10m ./cmd/connectorgen -run '^TestSourceRetain'`,
-`go vet ./cmd/connectorgen`, the independent Makefile gates, and the eight
-built-binary retain commands passed. The full package command was not used as
-final evidence because its unrelated certification matrix fixture recompiles
-the generator under a fresh cache; see `VERIFICATION.md`.
+The focused R2 command, `go test -timeout 10m ./cmd/connectorgen -run
+'^TestSourceRetain' -count=1`, `go test -timeout 20m ./cmd/connectorgen
+-count=1` (279.084s), `go vet ./cmd/connectorgen`, all applicable independent
+Makefile gates, clean generated checks, and the prior eight built-binary retain
+commands passed. The exact commands and the retained-artifact preservation
+boundary are recorded in `TDD-LEDGER.md` and `VERIFICATION.md`; no aggregate
+`go test ./...` was run.

@@ -27,6 +27,15 @@ Shared `cmd/connectorgen` source-lock retention foundation for issue #4347. Owne
 5. Run focused red tests before production changes. Implement F1–F3, then run the focused package suite, the operation-evidence fixed-100 check, source projection/check gates, and regenerated artifacts in a clean tracked worktree. Record exact commands and outcomes in `TDD-LEDGER.md` and `VERIFICATION.md`.
 6. Commit the coherent repair, push the existing PR branch, re-read its `main` base through the GitHub API, and request a fresh independent audit. Do not merge.
 
+## Independent exact-SHA audit R2 repair plan
+
+1. **Red first — v3 inventory cannot become absence.** Add an operation-evidence fixture with the full legal GitHub document-owned v3 inventory plus a contradictory `state: dynamic`. The current evidence reader must demonstrate the bad absence projection; after the repair it must enter the strict v3 decoder and reject the contradictory wire shape rather than omit REST operations. Keep v3 skipped/dynamic records with no `source_documents` on their narrow absence path.
+2. **Red first — canonical JSON MIME expectation.** Add a canonical-JSON retain fixture with no form pin and an HTTP `text/html` response containing otherwise parseable, mismatched JSON. It must report `wrong source`, never canonical identity drift; byte/generic HTML behavior stays unchanged.
+3. **Red first — citation fragment and binding agree.** Add rendered-reference fixtures for an unrelated fragment and for a matching fragment carrying a contradictory capture binding. Both must fail source-lock parsing. A matching source-location fragment without a binding, and a no-fragment exact binding, remain valid.
+4. **Red first — duplicate JSON members are ambiguous.** Add a canonical-JSON retain fixture with a duplicate key and prove it does not fall through to a canonical digest or ordinary refresh/drift message. Reject duplicate keys at every JSON object nesting level before canonical hashing; source retain reports wrong-source and offline identity verification reports invalid/ambiguous canonical input.
+5. **Red first — canonical raw bytes are provenance.** Lock formatted JSON and serve its minified equivalent with a different byte count and raw SHA-256. `canonical_json` must retain and offline-read that file by the canonical digest while recording the served raw evidence; a byte-identity fixture remains strict.
+6. Run the five focused tests before production edits, then make the smallest shared decoder/classifier changes. Re-run source retain, source import, and operation-evidence focused suites plus a clean tracked snapshot. Preserve all ignored retained artifacts, particularly Zendesk.
+
 ## Security and correctness boundaries
 
 - Source URLs remain connector-owned, HTTPS/public-address validated, query-bounded, and never accepted from command arguments.
@@ -36,3 +45,8 @@ Shared `cmd/connectorgen` source-lock retention foundation for issue #4347. Owne
 - Operation evidence is an offline evidence consumer: its normal lock decoder must not add fetching, credential use, parity-lock admission, or a second v3 identity model.
 - Citation specificity is a source-lock admission condition. A generic rendered publication cannot become an exact operation claim merely because it shares an origin with a captured reference.
 - MIME/body classification may only turn a response into wrong-source before persistence; it must never make a mismatch look verified or weaken the locked byte/canonical identity check.
+- A v3 provider-absence projection may not coexist with a non-empty document-owned inventory. Canonical JSON identity is a structured-JSON expectation for response MIME classification. A rendered citation fragment and any supplied capture binding must both agree with the locked operation evidence.
+- Canonical JSON identity rejects duplicate object member names at every nesting level; it never assigns implementation-dependent last-member semantics to a source lock.
+- Canonical JSON identity compares only strict, unambiguous canonical JSON. Its
+  locked and retained raw digest/count are provenance; byte-identity locks
+  remain exact raw-byte comparisons.

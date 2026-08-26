@@ -1239,24 +1239,29 @@ func validateSourceImportRenderedReferenceCitation(operation sourceImportRESTOpe
 	if err := validateSourceImportPublishedURL(canonicalCitation.String()); err != nil {
 		return fmt.Errorf("citation: %w", err)
 	}
-	if strings.TrimSpace(citation.Fragment) != "" {
+	binding := operation.CitationBinding
+	if binding != nil {
+		if binding.CaptureURL != document.PublishedSource.CaptureURL ||
+			!strings.EqualFold(binding.CaptureSHA256, document.PublishedSource.SHA256) ||
+			binding.CaptureBytes != document.PublishedSource.Bytes ||
+			binding.SourceLocation != operation.SourceLocation {
+			return fmt.Errorf("citation capture extraction binding does not match the locked document and operation")
+		}
+		if binding.CaptureURL == "" || binding.SourceLocation == "" || len(binding.CaptureSHA256) != sha256.Size*2 {
+			return fmt.Errorf("citation capture extraction binding is incomplete")
+		}
+		if _, err := hex.DecodeString(binding.CaptureSHA256); err != nil {
+			return fmt.Errorf("citation capture extraction binding has invalid SHA-256: %w", err)
+		}
+	}
+	if fragment := strings.TrimSpace(citation.Fragment); fragment != "" {
+		if fragment != strings.TrimPrefix(operation.SourceLocation, "#") {
+			return fmt.Errorf("citation fragment %q does not match locked operation extraction location %q", fragment, operation.SourceLocation)
+		}
 		return nil
 	}
-	binding := operation.CitationBinding
 	if binding == nil {
 		return fmt.Errorf("citation must include an operation-specific fragment or a verified capture extraction binding")
-	}
-	if binding.CaptureURL != document.PublishedSource.CaptureURL ||
-		!strings.EqualFold(binding.CaptureSHA256, document.PublishedSource.SHA256) ||
-		binding.CaptureBytes != document.PublishedSource.Bytes ||
-		binding.SourceLocation != operation.SourceLocation {
-		return fmt.Errorf("citation capture extraction binding does not match the locked document and operation")
-	}
-	if binding.CaptureURL == "" || binding.SourceLocation == "" || len(binding.CaptureSHA256) != sha256.Size*2 {
-		return fmt.Errorf("citation capture extraction binding is incomplete")
-	}
-	if _, err := hex.DecodeString(binding.CaptureSHA256); err != nil {
-		return fmt.Errorf("citation capture extraction binding has invalid SHA-256: %w", err)
 	}
 	return nil
 }
@@ -8885,7 +8890,7 @@ func validateSourceImportArtifactBytes(raw []byte, artifact sourceImportArtifact
 	case sourceArtifactIdentityCanonicalJSON:
 		canonicalDigest, err := sourceCanonicalJSONSHA256(raw)
 		if err != nil {
-			return fmt.Errorf("source-lock refresh required: canonical JSON identity cannot parse fetched artifact: %w", err)
+			return fmt.Errorf("canonical JSON identity requires one unambiguous JSON value: %w", err)
 		}
 		if !strings.EqualFold(canonicalDigest, artifact.CanonicalSHA256) {
 			return fmt.Errorf("source-lock refresh required: fetched artifact does not match locked canonical JSON SHA-256")
@@ -8901,13 +8906,8 @@ func validateSourceImportArtifactBytes(raw []byte, artifact sourceImportArtifact
 // intentionally an identity for parsed JSON, not a claim that the provider
 // delivered byte-identical serialisation.
 func sourceCanonicalJSONSHA256(raw []byte) (string, error) {
-	decoder := json.NewDecoder(bytes.NewReader(raw))
-	decoder.UseNumber()
 	var document any
-	if err := decoder.Decode(&document); err != nil {
-		return "", err
-	}
-	if err := sourceJSONEOF(decoder); err != nil {
+	if err := decodeSourceJSON(raw, &document); err != nil {
 		return "", err
 	}
 	canonical, err := json.Marshal(document)

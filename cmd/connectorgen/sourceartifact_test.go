@@ -172,7 +172,7 @@ func TestSourceRetainHelpAndMigrationDocumentationDescribeIdentityAndWrongSource
 	if code := runSourceRetain([]string{"source-retain", "--help"}, &stdout, &stderr); code != 0 {
 		t.Fatalf("source-retain help exit = %d, stderr=%s", code, stderr.String())
 	}
-	for _, want := range []string{"canonical_json", "wrong source", "bad MIME", "BOT-BLOCK", "operation\nor parity"} {
+	for _, want := range []string{"canonical_json", "unambiguous JSON", "wrong source", "bad MIME", "BOT-BLOCK", "operation\nor parity"} {
 		if !strings.Contains(stdout.String(), want) {
 			t.Fatalf("source-retain help missing %q: %s", want, stdout.String())
 		}
@@ -181,7 +181,7 @@ func TestSourceRetainHelpAndMigrationDocumentationDescribeIdentityAndWrongSource
 	if err != nil {
 		t.Fatalf("read migration conventions: %v", err)
 	}
-	for _, want := range []string{"canonical_json", "wrong source", "invalid response\nMIME", "BOT-BLOCK", "retained-byte-sha256", "does not silently re-pin", "citation_binding"} {
+	for _, want := range []string{"canonical_json", "unambiguous JSON", "wrong source", "invalid response\nMIME", "BOT-BLOCK", "retained-byte-sha256", "does not silently re-pin", "citation_binding"} {
 		if !strings.Contains(string(docs), want) {
 			t.Fatalf("migration conventions missing %q", want)
 		}
@@ -436,6 +436,147 @@ func TestSourceRetainVerifiesReorderedJSONByCanonicalIdentity(t *testing.T) {
 	got, err := retainedFetcher.FetchArtifact(context.Background(), lock.Rest.sourceImportArtifact)
 	if err != nil || !bytes.Equal(got, second) {
 		t.Fatalf("canonical retained artifact = %q/%v, want second serialisation", got, err)
+	}
+}
+
+func TestSourceRetainVerifiesMinifiedJSONByCanonicalIdentityDespiteRawByteChange(t *testing.T) {
+	t.Parallel()
+	defsRoot := t.TempDir()
+	formatted := []byte("{\n" + strings.Repeat(" ", 512) + "\"a\": {\"nested\": true},\n" + strings.Repeat(" ", 512) + "\"b\": [2, 1]\n}\n")
+	minified := []byte(`{"a":{"nested":true},"b":[2,1]}`)
+	formattedDigest := sha256.Sum256(formatted)
+	minifiedDigest := sha256.Sum256(minified)
+	canonicalDigest := sourceRetainTestCanonicalJSONDigest(t, formatted)
+	if len(formatted) == len(minified) || strings.EqualFold(hex.EncodeToString(formattedDigest[:]), hex.EncodeToString(minifiedDigest[:])) || canonicalDigest != sourceRetainTestCanonicalJSONDigest(t, minified) {
+		t.Fatal("fixture must prove a canonical match with distinct raw size and digest")
+	}
+	lockRaw, err := json.Marshal(map[string]any{
+		"schema_version": 1,
+		"connector":      "alpha",
+		"rest": map[string]any{
+			"source_url":       "https://fixtures.polymetrics.invalid/discovery.json",
+			"sha256":           hex.EncodeToString(formattedDigest[:]),
+			"bytes":            len(formatted),
+			"identity":         "canonical_json",
+			"canonical_sha256": canonicalDigest,
+			"operations":       []any{},
+		},
+		"counts": map[string]any{"rest": 0, "graphql_query": 0, "graphql_mutation": 0, "total": 0},
+	})
+	if err != nil {
+		t.Fatalf("marshal formatted canonical identity lock: %v", err)
+	}
+	writeSourceRetainFixtureLockRaw(t, defsRoot, "alpha", lockRaw)
+	var stdout, stderr bytes.Buffer
+	code := runSourceRetainWithFetcher([]string{"source-retain", "alpha", "--defs", defsRoot, "--retrieved-at", "2026-08-26T04:20:03Z", "--license", "fixture-license", "--terms", "fixture-terms"}, &stdout, &stderr, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return minified, nil
+	}))
+	if code != 0 {
+		t.Fatalf("source-retain exit = %d, want canonical-identity success despite raw byte change; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	manifestRaw, err := os.ReadFile(filepath.Join(defsRoot, "alpha", "sources", "alpha-retained-artifacts.json"))
+	if err != nil {
+		t.Fatalf("read minified canonical retained artifact manifest: %v", err)
+	}
+	if !bytes.Contains(manifestRaw, []byte(`"bytes": `+fmt.Sprint(len(formatted)))) || !bytes.Contains(manifestRaw, []byte(`"retained_bytes": `+fmt.Sprint(len(minified)))) || !bytes.Contains(manifestRaw, []byte(hex.EncodeToString(minifiedDigest[:]))) {
+		t.Fatalf("canonical retained manifest does not distinguish locked and fetched raw provenance: %s", manifestRaw)
+	}
+	lock, err := parseSourceImportLock(lockRaw, "alpha")
+	if err != nil {
+		t.Fatalf("parse formatted canonical source lock: %v", err)
+	}
+	retainedFetcher, err := newSourceImportRetainedArtifactFetcher(filepath.Join(defsRoot, "alpha", "sources"), "alpha", defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("construct minified canonical retained fetcher: %v", err)
+	}
+	got, err := retainedFetcher.FetchArtifact(context.Background(), lock.Rest.sourceImportArtifact)
+	if err != nil || !bytes.Equal(got, minified) {
+		t.Fatalf("canonical retained artifact = %q/%v, want minified serialisation", got, err)
+	}
+}
+
+func TestSourceRetainCanonicalJSONRejectsHTMLMIMEBeforeIdentityDrift(t *testing.T) {
+	t.Parallel()
+	defsRoot := t.TempDir()
+	locked := []byte(`{"a":{"nested":true},"b":[2,1]}`)
+	served := []byte(`{"a":{"nested":false},"b":[2,1]}`)
+	byteDigest := sha256.Sum256(locked)
+	lockRaw, err := json.Marshal(map[string]any{
+		"schema_version": 1,
+		"connector":      "alpha",
+		"rest": map[string]any{
+			"source_url":       "https://fixtures.polymetrics.invalid/discovery.json",
+			"sha256":           hex.EncodeToString(byteDigest[:]),
+			"bytes":            len(locked),
+			"identity":         "canonical_json",
+			"canonical_sha256": sourceRetainTestCanonicalJSONDigest(t, locked),
+			"operations":       []any{},
+		},
+		"counts": map[string]any{"rest": 0, "graphql_query": 0, "graphql_mutation": 0, "total": 0},
+	})
+	if err != nil {
+		t.Fatalf("marshal canonical identity lock: %v", err)
+	}
+	writeSourceRetainFixtureLockRaw(t, defsRoot, "alpha", lockRaw)
+	var stdout, stderr bytes.Buffer
+	code := runSourceRetainWithFetcher([]string{"source-retain", "alpha", "--defs", defsRoot, "--retrieved-at", "2026-08-26T04:07:07Z", "--license", "fixture-license", "--terms", "fixture-terms"}, &stdout, &stderr, sourceRetainHTTPFixtureFetcher(served, "text/html; charset=utf-8"))
+	if code != 1 || !strings.Contains(stderr.String(), "wrong source") || strings.Contains(stderr.String(), "source-lock refresh required") {
+		t.Fatalf("canonical JSON HTML MIME exit/stderr = %d/%q, want wrong-source before identity drift", code, stderr.String())
+	}
+}
+
+func TestSourceCanonicalJSONSHA256RejectsDuplicateObjectMembers(t *testing.T) {
+	t.Parallel()
+	for _, raw := range [][]byte{
+		[]byte(`{"role":"admin","role":"user"}`),
+		[]byte(`{"outer":{"role":"admin","role":"user"}}`),
+	} {
+		if _, err := sourceCanonicalJSONSHA256(raw); err == nil || !strings.Contains(err.Error(), "duplicate") {
+			t.Fatalf("canonical duplicate-member error = %v, want explicit ambiguity rejection", err)
+		}
+	}
+	locked := []byte(`{"role":"admin"}`)
+	digest := sha256.Sum256(locked)
+	artifact := sourceImportArtifact{
+		SourceURL:       "https://fixtures.polymetrics.invalid/discovery.json",
+		SHA256:          hex.EncodeToString(digest[:]),
+		Bytes:           int64(len(locked)),
+		Identity:        sourceArtifactIdentityCanonicalJSON,
+		CanonicalSHA256: sourceRetainTestCanonicalJSONDigest(t, locked),
+	}
+	err := validateSourceImportArtifactBytes([]byte(`{"role":"admin","role":"user"}`), artifact)
+	if err == nil || !strings.Contains(err.Error(), "unambiguous") || strings.Contains(err.Error(), "source-lock refresh required") {
+		t.Fatalf("offline canonical duplicate-member error = %v, want invalid ambiguity rather than refresh/re-pin request", err)
+	}
+}
+
+func TestSourceRetainCanonicalJSONRejectsDuplicateMembersBeforeIdentityDrift(t *testing.T) {
+	t.Parallel()
+	defsRoot := t.TempDir()
+	locked := []byte(`{"role":"admin"}`)
+	served := []byte(`{"role":"admin","role":"user"}`)
+	byteDigest := sha256.Sum256(locked)
+	lockRaw, err := json.Marshal(map[string]any{
+		"schema_version": 1,
+		"connector":      "alpha",
+		"rest": map[string]any{
+			"source_url":       "https://fixtures.polymetrics.invalid/discovery.json",
+			"sha256":           hex.EncodeToString(byteDigest[:]),
+			"bytes":            len(locked),
+			"identity":         "canonical_json",
+			"canonical_sha256": sourceRetainTestCanonicalJSONDigest(t, locked),
+			"operations":       []any{},
+		},
+		"counts": map[string]any{"rest": 0, "graphql_query": 0, "graphql_mutation": 0, "total": 0},
+	})
+	if err != nil {
+		t.Fatalf("marshal canonical identity lock: %v", err)
+	}
+	writeSourceRetainFixtureLockRaw(t, defsRoot, "alpha", lockRaw)
+	var stdout, stderr bytes.Buffer
+	code := runSourceRetainWithFetcher([]string{"source-retain", "alpha", "--defs", defsRoot, "--retrieved-at", "2026-08-26T04:10:02Z", "--license", "fixture-license", "--terms", "fixture-terms"}, &stdout, &stderr, sourceRetainHTTPFixtureFetcher(served, "application/json"))
+	if code != 1 || !strings.Contains(stderr.String(), "wrong source") || !strings.Contains(stderr.String(), "duplicate") || strings.Contains(stderr.String(), "source-lock refresh required") {
+		t.Fatalf("canonical duplicate-member exit/stderr = %d/%q, want wrong-source ambiguity before identity drift", code, stderr.String())
 	}
 }
 

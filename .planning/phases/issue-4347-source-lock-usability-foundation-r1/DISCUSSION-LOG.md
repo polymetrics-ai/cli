@@ -23,3 +23,37 @@ The independent audit failed the already-green PR at `f9d237840ed49737ef92667b7e
 3. The retain transport discarded HTTP `Content-Type` before source classification. A plausible-size HTML login/error page could therefore reach digest comparison and be described as drift. The retain-only transport result retains MIME/body evidence until classification; known structured sources reject HTML/bad MIME, and generic HTML is rejected only for credible login/error signatures so legitimate documentation remains retainable.
 
 This is an inline/manual GSD gap closure: compatible role spawning remains prohibited. The red/green rows are added before production changes.
+
+## Independent exact-SHA audit — R2, 2026-08-26
+
+The exact-SHA audit reopened the foundation with three coupled admission and
+classification bypasses. They are handled as one red-first repair:
+
+1. A v3 lock with a populated document-owned inventory and a legacy-looking
+   `state: dynamic` could be projected as provider absence before its strict
+   decoder ran, silently suppressing REST rows. Only an absence-shaped lock
+   with no v3 document inventory may use the evidence-only absence projection;
+   a populated v3 lock must proceed into strict parsing and be rejected if its
+   wire shape is contradictory.
+2. `canonical_json` itself proves that the expected artifact is JSON. A
+   `text/html` HTTP response must therefore be wrong-source before canonical
+   comparison, even when an older lock has no OpenAPI form pin or v3 document
+   content type.
+3. A rendered citation fragment is evidence only when it names the locked
+   extraction location. Any supplied capture binding is a constraint, not an
+   optional fallback: it must be validated even when the URL has a fragment.
+
+The repair does not fetch citations, relax source-import admission, re-pin a
+lock, or touch ignored retained artifact paths.
+
+4. Canonical JSON cannot be defined by a decoder that silently chooses the last
+   duplicate object member. Duplicate-member JSON is ambiguous source content,
+   not a canonical match and not ordinary document drift. The canonical parser
+   must reject it recursively before hashing; retain reports it as bad source
+   before comparison, while offline import reports an invalid canonical
+   artifact rather than a refresh/re-pin request.
+5. For `canonical_json`, strict unambiguous JSON plus its canonical digest is
+   the identity. Locked raw byte count/SHA-256 and a retained file's raw
+   byte count/SHA-256 remain observable provenance only: whitespace or
+   minification may change them without turning a canonical match into drift.
+   Byte-identity locks retain their exact raw-size and raw-digest requirement.
