@@ -2,14 +2,17 @@ package cli_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
+	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/cli"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
@@ -88,6 +91,7 @@ func TestSourceBoundOriginRejectsBeforeAppOrCredential(t *testing.T) {
 	code := cli.Run([]string{
 		"--root", root,
 		"asana", "custom-fields", "list",
+		"--credential", "unresolved-credential",
 		"--config", "base_url=https://invalid.example",
 	}, &stdout, &stderr)
 	if code == 0 {
@@ -101,6 +105,45 @@ func TestSourceBoundOriginRejectsBeforeAppOrCredential(t *testing.T) {
 		if strings.Contains(output, forbidden) {
 			t.Fatalf("invalid source origin reached App or credential handling (%q):\n%s", forbidden, output)
 		}
+	}
+}
+
+func TestSourceBoundOriginRejectsPersistedCredentialConfigBeforeVault(t *testing.T) {
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	project, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	credential, err := project.AddCredential(context.Background(), app.AddCredentialRequest{
+		Name:      "asana-persisted-origin",
+		Connector: "asana",
+		Config:    map[string]string{"base_url": "https://invalid.example"},
+	})
+	if err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+	if err := os.Remove(filepath.Join(root, ".polymetrics", "vault", credential.ID+".enc")); err != nil {
+		t.Fatalf("remove temporary encrypted credential: %v", err)
+	}
+
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{
+		"--root", root,
+		"asana", "custom-fields", "list",
+		"--credential", credential.Name,
+	}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("Run(persisted source-bound invalid origin) succeeded; stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+	output := stdout.String() + stderr.String()
+	if !strings.Contains(output, `source-bound provider operation "custom_fields" rejects configured base_url override`) {
+		t.Fatalf("persisted invalid source origin did not reach early preflight:\n%s", output)
+	}
+	if strings.Contains(output, "read encrypted credential") {
+		t.Fatalf("persisted invalid source origin reached vault access:\n%s", output)
 	}
 }
 

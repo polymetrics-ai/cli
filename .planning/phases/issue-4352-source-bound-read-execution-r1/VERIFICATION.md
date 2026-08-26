@@ -38,6 +38,19 @@ Status: verified locally, pending PR automation and human gate.
 - [ ] The required independent exact-SHA audit remains pending until the
   normal fast-forward repair commit is pushed to #4356.
 
+## Fresh-audit F6 / AUDIT-002 follow-up
+
+- [x] Red evidence recorded from the exact-SHA independent audit: persisted
+  source-bound `base_url` configuration was not part of the early preflight.
+- [x] Green: `TestSourceBoundOriginRejectsPersistedCredentialConfigBeforeVault`
+  proves a persisted public credential configuration rejects the origin before
+  vault/authentication/provider work.
+- [x] `go test -timeout 20m -count=1 ./internal/app` passed (267.522s).
+- [x] `go test -timeout 20m -count=1 ./internal/cli` passed (413.315s).
+- [x] `go vet ./internal/app ./internal/cli`, `go build -o ./pm ./cmd/pm`, and
+  `make lint` passed (0 lint issues).
+- [ ] Rerun the required independent audit at the next pushed SHA.
+
 ## Final post-rebase repair run
 
 - `go test -timeout 20m -count=1 ./cmd/connectorgen` passed after the V3

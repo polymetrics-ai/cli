@@ -110,3 +110,17 @@ normally, then independently re-audited at its exact remote SHA.
 The next and only acceptance action is a normal push of the reviewed commit to
 the existing #4356 branch followed by a fresh independent audit of that exact
 remote SHA. Do not merge.
+
+## Fresh-audit F6 / AUDIT-002 convergence
+
+- **Classification:** `fix_created:07251df15c904cad0f91a43724810dffa133b81d`.
+- **Red:** the exact-SHA independent audit found that CLI preflight considered
+  only `--config`. A selected credential's persisted `base_url` was merged only
+  by `ResolveConnectorCredential`, after vault access and authentication-cohort
+  construction, and could then be refused by the engine.
+- **Green required:** before `withApp` and before any vault/authentication
+  work, read only the selected credential's public persisted configuration,
+  overlay command configuration with the normal caller-wins order, and run the
+  existing source-bound origin preflight. The regression must use a persisted
+  Asana credential configuration and prove the declared-origin error, with no
+  provider request.

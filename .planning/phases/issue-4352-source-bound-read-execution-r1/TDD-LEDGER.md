@@ -89,6 +89,23 @@ Record exact commands, intended red failure, and full green result as each group
   is connector-neutral, `make connector-boundary` reports no findings, and
   `make lint` reports 0 issues.
 
+### Fresh-audit F6 / AUDIT-002 red/green
+
+- **Red:** independent `codex review --base b33983927d863032dac8220949990506e812937d`
+  at repair SHA `07251df15c904cad0f91a43724810dffa133b81d` found that a
+  persisted credential `base_url` bypassed the CLI source-origin preflight and
+  reached `ResolveConnectorCredential` before rejection.
+- **Green required:** a persisted credential configuration is read through a
+  credential-only, no-vault/no-App public snapshot; its configuration plus the
+  command overlay reaches `PreflightSourceBoundOrigin` before credential
+  resolution. The command must reject the persisted invalid origin rather than
+  report a credential, vault, authentication, or provider result.
+- **Green:** `go test -timeout 20m -count=1 ./internal/cli -run
+  '^(TestSourceBoundOriginRejectsBeforeAppOrCredential|TestSourceBoundOriginRejectsPersistedCredentialConfigBeforeVault)$'`
+  passed. The new persisted-configuration case first failed on the unmodified
+  behavior with `read encrypted credential`, then passed with the declared
+  source-origin rejection.
+
 ## Lifecycle
 
 - GSD source resolution: `scripts/gsd doctor`, all five required `scripts/gsd sources` commands, and `go run ./cmd/agentcontractgen check` passed before planning.
