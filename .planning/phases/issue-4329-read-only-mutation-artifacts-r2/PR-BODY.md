@@ -26,6 +26,11 @@ write action, request schema, transport, partial command, or source-lock edit.
   SHAs, byte counts, locations, source IDs, methods, and paths. Byte-identical
   fixtures load all 223/400 source-lock operations and retain all 103/237
   classified mutations. Writes/CLI projection bytes remain unchanged.
+- Current main `1324c52bab0b224ed8958858af7676b8b8e191b4` (#4351) merged
+  cleanly with no conflict. The integration regression now reads the real
+  Sentry `deleteOrganizationDashboard` and Vercel
+  `deleteStorageStoresBlobById` lock entries and proves each declared
+  destructive delete/reverse-ETL action wins over artifact retention.
 
 ## TDD and local verification
 
@@ -37,11 +42,14 @@ write action, request schema, transport, partial command, or source-lock edit.
 - Audit fix: automatic artifacts now require explicit
   `metadata.capabilities.write=false` at both projection and validation; a
   red-to-green test prevents a hand-edited `write:true` descriptor bypass.
-- PASS: full `cmd/connectorgen` (153.286s), engine (13.126s), commandrunner
-  (21.799s), and CLI (441.520s) suites; `go vet ./...`; `go build ./cmd/pm`.
+- PASS after current-main integration: focused full-lock acceptance (1.118s),
+  full `cmd/connectorgen` (154.269s), engine (14.192s), commandrunner
+  (24.871s), runtime-preflight (8.737s), and CLI (438.166s) suites;
+  `GOFLAGS=-p=3 go vet ./...`; `GOFLAGS=-p=3 go build ./cmd/pm`.
 - PASS: `tidy-check`, lint, agent contract, generator validate/surface-sync/
-  operation-evidence, connector boundary/canon, release workflow, docs and
-  smoke gates; `git diff --check`.
+  declaration-admission/operation-evidence, GitHub parity, certification,
+  connector boundary/canon, release workflow, docs and smoke gates;
+  `git diff --check`.
 - CLI parity: no `pm` command/flag/help/manual/website surface changed. The
   rebuilt binary has no Sentry/Vercel topic on this foundation-only branch, so
   there are zero new implemented commands to credential-probe and no usability
@@ -62,7 +70,8 @@ Skills used: `golang-how-to`, `golang-cli`, `golang-testing`,
 ## Delivery record
 
 The first independent audit found and this PR fixed the write-capable artifact
-bypass. Pending: the fresh audit of the audit-fix SHA, Claude-auto review
-result, and required CI status. The remaining built-binary credential-boundary
-proof belongs to the named downstream source-bound-read foundation because this
-PR deliberately adds zero connector commands. Do not merge from this PR.
+bypass. Pending: the Captain-requested fresh separate Codex audit of the exact
+current-main integration SHA, Claude-auto review result, and required CI
+status. The remaining built-binary credential-boundary proof belongs to the
+named downstream source-bound-read foundation because this PR deliberately adds
+zero connector commands. Do not merge from this PR.
