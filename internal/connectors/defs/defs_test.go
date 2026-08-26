@@ -144,7 +144,7 @@ func TestProductionEmbedInventoryIsDeterministicAndAttributed(t *testing.T) {
 		t.Fatalf("inventory JSON is not deterministic:\nfirst:  %s\nsecond: %s", firstJSON, secondJSON)
 	}
 
-	var filesTotal, sourceLockBytes int64
+	var filesTotal, sourceLockBytes, declarationLedgerBytes int64
 	for _, file := range first.Files {
 		filesTotal += file.Bytes
 		if file.Path == githubGraphQLSourceLockPath {
@@ -153,6 +153,12 @@ func TestProductionEmbedInventoryIsDeterministicAndAttributed(t *testing.T) {
 			}
 			sourceLockBytes = file.Bytes
 		}
+		if file.Path == "declaration_admission_sources.json" {
+			if file.Class != "runtime_declaration_target_ledger" {
+				t.Fatalf("declaration target ledger class = %q", file.Class)
+			}
+			declarationLedgerBytes = file.Bytes
+		}
 	}
 	if filesTotal != first.TotalBytes {
 		t.Fatalf("file bytes = %d, report total = %d", filesTotal, first.TotalBytes)
@@ -160,13 +166,26 @@ func TestProductionEmbedInventoryIsDeterministicAndAttributed(t *testing.T) {
 	if sourceLockBytes == 0 {
 		t.Fatalf("inventory omits %q", githubGraphQLSourceLockPath)
 	}
+	if declarationLedgerBytes == 0 {
+		t.Fatal("inventory omits declaration_admission_sources.json")
+	}
 
 	var classesTotal int64
+	declarationLedgerClasses := 0
 	for _, class := range first.Classes {
 		classesTotal += class.Bytes
+		if class.Class == "runtime_declaration_target_ledger" {
+			declarationLedgerClasses++
+			if class.Files != 1 || class.Bytes != declarationLedgerBytes {
+				t.Fatalf("declaration target ledger inventory class = %+v, want one exact attributed file", class)
+			}
+		}
 	}
 	if classesTotal != first.TotalBytes {
 		t.Fatalf("class bytes = %d, report total = %d", classesTotal, first.TotalBytes)
+	}
+	if declarationLedgerClasses != 1 {
+		t.Fatalf("declaration target ledger classes = %d, want exactly one", declarationLedgerClasses)
 	}
 }
 
@@ -180,6 +199,7 @@ func TestEmbeddedArtifactClassRejectsBuildTimeArtifacts(t *testing.T) {
 		{name: "runtime metadata", path: "github/metadata.json", wantClass: "metadata"},
 		{name: "runtime schema", path: "github/schemas/repository.json", wantClass: "schema"},
 		{name: "runtime ledger", path: "operation_endpoint_ledger.json", wantClass: "runtime_endpoint_ledger"},
+		{name: "declaration target ledger", path: "declaration_admission_sources.json", wantClass: "runtime_declaration_target_ledger"},
 		{name: "GitHub certification exception", path: githubGraphQLSourceLockPath, wantClass: "certification_source_lock_exception"},
 		{name: "API surface", path: "github/api_surface.json", wantErr: true},
 		{name: "root fixture", path: "fixtures/page.json", wantErr: true},

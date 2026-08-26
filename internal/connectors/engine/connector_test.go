@@ -374,6 +374,26 @@ func TestCommandSurfaceProjectsOperationParameterByteCaps(t *testing.T) {
 	}
 }
 
+func TestCommandSurfaceProjectsDeferredFoundationGap(t *testing.T) {
+	surface := synthesizeCommandSurface(Bundle{CLISurface: &CLISurface{Commands: []CLICommand{{
+		Path: "widgets archive", Intent: "binary_upload", Availability: "deferred",
+		Foundation: &CommandFoundation{
+			ID: "binary_upload_foundation", Reason: "binary request binding is not available",
+			Component: "binary_transfer_binding", Evidence: "binary_transfer_binding_absent",
+			Target: CommandFoundationTarget{Method: "POST", Path: "/widgets/{id}/archive"},
+		},
+	}}}})
+	if surface == nil || len(surface.Commands) != 1 {
+		t.Fatalf("command surface = %#v", surface)
+	}
+	got := surface.Commands[0].Foundation
+	if got == nil || got.ID != "binary_upload_foundation" || got.Reason != "binary request binding is not available" ||
+		got.Component != "binary_transfer_binding" || got.Evidence != "binary_transfer_binding_absent" ||
+		got.Target.Method != "POST" || got.Target.Path != "/widgets/{id}/archive" {
+		t.Fatalf("foundation gap = %#v", got)
+	}
+}
+
 // --- Definition() ---
 
 func TestConnectorDefinitionSynthesizedFromBundle(t *testing.T) {

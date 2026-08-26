@@ -42,6 +42,21 @@ type Hooks struct{}
 
 func (Hooks) ConnectorName() string { return "notion" }
 
+// CommandBindingTransport reports the same closed stream route ReadStream
+// selects below. It lets source admission prove the documented /v1/search
+// operation identities without pretending the declarative GET /search
+// fallback is the request the hook executes.
+func (Hooks) CommandBindingTransport(binding connectors.CommandBindingIdentity) (string, string, bool) {
+	if binding.Kind != connectors.CommandBindingStream {
+		return "", "", false
+	}
+	route, ok := streamRoutes[binding.ID]
+	if !ok {
+		return "", "", false
+	}
+	return route.method, route.resource, true
+}
+
 // streamRoute mirrors legacy's notionStreamEndpoints routing table
 // (notion/streams.go): the API resource, HTTP method, and object filter
 // (empty for GET endpoints) each stream reads from.

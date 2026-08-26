@@ -1104,6 +1104,8 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 			RedactFields:  append([]string(nil), cmd.RedactFields...),
 			Risk:          cmd.Risk,
 			Approval:      cmd.Approval,
+			Foundation:    commandSurfaceFoundation(cmd.Foundation),
+			Unsupported:   commandSurfaceUnsupported(cmd.Unsupported),
 			Notes:         cmd.Notes,
 		})
 	}
@@ -1121,6 +1123,33 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 		})
 	}
 	return out
+}
+
+func commandSurfaceUnsupported(disposition *CommandUnsupportedDisposition) *connectors.CommandUnsupportedDisposition {
+	if disposition == nil {
+		return nil
+	}
+	return &connectors.CommandUnsupportedDisposition{
+		Reason: disposition.Reason,
+		Target: connectors.CommandUnsupportedTarget{
+			SourceID: disposition.Target.SourceID, ProviderOperationID: disposition.Target.ProviderOperationID,
+			Method: disposition.Target.Method, Path: disposition.Target.Path,
+		},
+	}
+}
+
+func commandSurfaceFoundation(foundation *CommandFoundation) *connectors.CommandFoundation {
+	if foundation == nil {
+		return nil
+	}
+	return &connectors.CommandFoundation{
+		ID: foundation.ID, Reason: foundation.Reason, Component: foundation.Component, Evidence: foundation.Evidence,
+		Target: connectors.CommandFoundationTarget{
+			SourceID: foundation.Target.SourceID, ProviderOperationID: foundation.Target.ProviderOperationID,
+			Binding:         connectors.CommandBindingIdentity{Kind: foundation.Target.Binding.Kind, ID: foundation.Target.Binding.ID},
+			DestructiveKind: foundation.Target.DestructiveKind, Method: foundation.Target.Method, Path: foundation.Target.Path,
+		},
+	}
 }
 
 func commandSurfaceHasWriteIntent(commands []connectors.CommandSurfaceCommand) bool {
