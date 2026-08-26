@@ -23,17 +23,22 @@ write action, request schema, transport, partial command, or source-lock edit.
   write-disabled source bundle may retain its supported read/ETL commands
   instead of failing all source coverage because provider mutations coexist.
 - Sentry and Vercel source-lock acceptance vectors preserve their real URLs,
-  SHAs, byte counts, locations, source IDs, methods, and paths. Writes/CLI
-  projection bytes remain unchanged.
+  SHAs, byte counts, locations, source IDs, methods, and paths. Byte-identical
+  fixtures load all 223/400 source-lock operations and retain all 103/237
+  classified mutations. Writes/CLI projection bytes remain unchanged.
 
 ## TDD and local verification
 
 - **Red:** focused generator tests failed before production code because
   `sourceProjectionApplyWriteDisabledMutationArtifacts` did not exist.
 - **Green:** focused source-import/projection coverage passed, including
-  write-capable, executable-delete, and missing-citation controls.
-- PASS: full `cmd/connectorgen` (153.267s), engine (12.156s), commandrunner
-  (22.660s), and CLI (441.520s) suites; `go vet ./...`; `go build ./cmd/pm`.
+  write-capable, executable-delete, missing-citation, GraphQL, and full
+  Sentry/Vercel source-lock controls.
+- Audit fix: automatic artifacts now require explicit
+  `metadata.capabilities.write=false` at both projection and validation; a
+  red-to-green test prevents a hand-edited `write:true` descriptor bypass.
+- PASS: full `cmd/connectorgen` (153.286s), engine (13.126s), commandrunner
+  (21.799s), and CLI (441.520s) suites; `go vet ./...`; `go build ./cmd/pm`.
 - PASS: `tidy-check`, lint, agent contract, generator validate/surface-sync/
   operation-evidence, connector boundary/canon, release workflow, docs and
   smoke gates; `git diff --check`.
@@ -56,5 +61,8 @@ Skills used: `golang-how-to`, `golang-cli`, `golang-testing`,
 
 ## Delivery record
 
-Pending pushed SHA, API base read-back, independent Codex audit, Claude-auto
-review result, and required CI status. Do not merge from this PR.
+The first independent audit found and this PR fixed the write-capable artifact
+bypass. Pending: the fresh audit of the audit-fix SHA, Claude-auto review
+result, and required CI status. The remaining built-binary credential-boundary
+proof belongs to the named downstream source-bound-read foundation because this
+PR deliberately adds zero connector commands. Do not merge from this PR.

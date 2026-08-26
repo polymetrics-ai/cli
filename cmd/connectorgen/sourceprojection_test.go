@@ -2236,6 +2236,7 @@ func TestSourceProjectionWriteDisabledLockedSourcesRetainMutationArtifacts(t *te
 			bundleDir := t.TempDir()
 			writesPath := filepath.Join(bundleDir, "writes.json")
 			cliPath := filepath.Join(bundleDir, "cli_surface.json")
+			writeProjectionFixture(t, filepath.Join(bundleDir, "metadata.json"), `{"name":"`+tc.connector+`","capabilities":{"write":false}}`)
 			const emptyWrites = `{"schema_version":1,"actions":[]}`
 			cliRaw, err := json.Marshal(engine.CLISurface{Commands: []engine.CLICommand{{
 				Path: "projects list", Summary: "list", Intent: "direct_read", Availability: "implemented",
@@ -2253,6 +2254,92 @@ func TestSourceProjectionWriteDisabledLockedSourcesRetainMutationArtifacts(t *te
 			}
 			if gotWrites, gotCLI := readProjectionFixture(t, writesPath), readProjectionFixture(t, cliPath); gotWrites != emptyWrites || gotCLI != cli {
 				t.Fatalf("source projection fabricated a write or command:\nwrites=%s\ncli=%s", gotWrites, gotCLI)
+			}
+		})
+	}
+}
+
+func TestSourceProjectionIssue4329SourceLocksRetainMutationInventoryAndReadSurface(t *testing.T) {
+	pathFlags := func(path string) []engine.CLIFlag {
+		flags := make([]engine.CLIFlag, 0)
+		for _, match := range sourceProjectionPathVariableRE.FindAllStringSubmatch(path, -1) {
+			flags = append(flags, engine.CLIFlag{Name: strings.ReplaceAll(match[1], "_", "-"), Type: "string", MapsTo: "path." + match[1], Required: true})
+		}
+		return flags
+	}
+	tests := []struct {
+		connector       string
+		lockFile        string
+		expectedOps     int
+		expectedMutates int
+		readOperationID string
+		mutationID      string
+	}{
+		{connector: "sentry", lockFile: "sentry-operation-source-lock.json", expectedOps: 223, expectedMutates: 103, readOperationID: "listOrganizationProjects", mutationID: "createOrganizationDashboard"},
+		{connector: "vercel", lockFile: "vercel-operation-source-lock.json", expectedOps: 400, expectedMutates: 237, readOperationID: "getProjects", mutationID: "deleteStorageStoresBlobById"},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.connector, func(t *testing.T) {
+			raw, err := os.ReadFile(filepath.Join("testdata", "issue4329", tc.lockFile))
+			if err != nil {
+				t.Fatal(err)
+			}
+			lock, err := parseSourceImportLock(raw, tc.connector)
+			if err != nil {
+				t.Fatalf("parse preserved %s source lock: %v", tc.connector, err)
+			}
+			if got := len(lock.Rest.Operations); got != tc.expectedOps {
+				t.Fatalf("locked operations = %d, want %d", got, tc.expectedOps)
+			}
+			toDescriptor := func(operation sourceImportRESTOperation) sourceOperationDescriptor {
+				return sourceOperationDescriptor{
+					Connector: tc.connector, SourceID: operation.OperationID, Method: operation.Method, Path: operation.Path,
+					ProviderOperationID: operation.OperationID,
+					Source:              sourceImportSource{URL: lock.Rest.SourceURL, SHA256: lock.Rest.SHA256, Bytes: lock.Rest.Bytes, Location: operation.SourceLocation, Form: "openapi", Version: lock.Rest.OpenAPI},
+				}
+			}
+
+			allMutations := sourceImportResult{}
+			var read, selectedMutation sourceOperationDescriptor
+			for _, operation := range lock.Rest.Operations {
+				descriptor := toDescriptor(operation)
+				if sourceProjectionOperationMutates(descriptor) {
+					allMutations.Operations = append(allMutations.Operations, descriptor)
+				}
+				if operation.OperationID == tc.readOperationID {
+					read = descriptor
+				}
+				if operation.OperationID == tc.mutationID {
+					selectedMutation = descriptor
+				}
+			}
+			if len(allMutations.Operations) != tc.expectedMutates || read.SourceID == "" || selectedMutation.SourceID == "" {
+				t.Fatalf("source-lock selection = mutations:%d read:%#v mutation:%#v", len(allMutations.Operations), read, selectedMutation)
+			}
+
+			writeDisabled := engine.Bundle{Name: tc.connector, Metadata: engine.Metadata{Name: tc.connector, Capabilities: engine.Capabilities{Read: true, Write: false}}}
+			if got := sourceProjectionApplyWriteDisabledMutationArtifacts(writeDisabled, &allMutations); got != tc.expectedMutates {
+				t.Fatalf("retained mutation artifacts = %d, want %d", got, tc.expectedMutates)
+			}
+			if findings := validateSourceExecutableCoverage(writeDisabled, "sources/"+tc.connector+"-operation-descriptor.json", sourceImportDescriptorDocument{Operations: allMutations.Operations}); len(findings) != 0 {
+				t.Fatalf("full retained mutation inventory findings = %+v", findings)
+			}
+
+			readSurface := writeDisabled
+			readSurface.CLISurface = &engine.CLISurface{Commands: []engine.CLICommand{{
+				Path: "projects list", Intent: "direct_read", Availability: "implemented",
+				APISurface: []engine.CLISurfaceEndpointRef{{Method: read.Method, Path: read.Path}}, Flags: pathFlags(read.Path),
+			}}}
+			selected := sourceImportResult{Operations: []sourceOperationDescriptor{read, selectedMutation}}
+			if got := sourceProjectionApplyWriteDisabledMutationArtifacts(readSurface, &selected); got != 1 {
+				t.Fatalf("selected mutation artifacts = %d, want 1", got)
+			}
+			if findings := validateSourceExecutableCoverage(readSurface, "sources/"+tc.connector+"-operation-descriptor.json", sourceImportDescriptorDocument{Operations: selected.Operations}); len(findings) != 0 {
+				t.Fatalf("source-locked read surface findings = %+v", findings)
+			}
+			if !sourceProjectionHasNonExecutableMutationDisposition(selected.Operations[1]) || selected.Operations[1].Runtime.NonExecutableMutation.Source.SourceID != tc.mutationID {
+				t.Fatalf("selected provider mutation = %#v, want exact source-cited artifact", selected.Operations[1])
 			}
 		})
 	}
@@ -2301,6 +2388,15 @@ func TestSourceProjectionWriteCapableBundlesDoNotAutoDeferMutations(t *testing.T
 	}
 	if findings := validateSourceExecutableCoverage(bundle, "sources/vercel-operation-descriptor.json", sourceImportDescriptorDocument{Operations: result.Operations}); len(findings) != 1 || !strings.Contains(findings[0].Message, "no executable action") {
 		t.Fatalf("write-capable mutation coverage findings = %+v, want missing-action refusal", findings)
+	}
+
+	writeDisabled := bundle
+	writeDisabled.Metadata.Capabilities.Write = false
+	if got := sourceProjectionApplyWriteDisabledMutationArtifacts(writeDisabled, &result); got != 1 {
+		t.Fatalf("automatic mutation artifact count = %d, want 1 for explicitly write-disabled bundle", got)
+	}
+	if findings := validateSourceExecutableCoverage(bundle, "sources/vercel-operation-descriptor.json", sourceImportDescriptorDocument{Operations: result.Operations}); len(findings) != 1 || !strings.Contains(findings[0].Message, "automatic write-disabled mutation artifact requires connector metadata capabilities.write=false") {
+		t.Fatalf("write-capable automatic artifact coverage findings = %+v, want policy refusal", findings)
 	}
 }
 

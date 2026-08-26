@@ -125,6 +125,11 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 	if len(result.Operations) > 0 {
 		declarationBundle.Name = result.Operations[0].Connector
 	}
+	executionSurface, err := sourceProjectionExecutionSurface(bundleDir, declarationBundle.Name)
+	if err != nil {
+		return sourceProjectionStats{}, err
+	}
+	declarationBundle.Metadata = executionSurface.Metadata
 	if api.root != nil {
 		raw, marshalErr := marshalNoEscapeHTML(api.root)
 		if marshalErr != nil {
@@ -196,6 +201,9 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 			if operation.Runtime.NonExecutableMutation != nil {
 				if !sourceProjectionHasNonExecutableMutationDisposition(operation) {
 					return stats, fmt.Errorf("source-cited non-executable mutation disposition is invalid: %s", operation.SourceID)
+				}
+				if err := sourceProjectionValidateWriteDisabledMutationArtifact(declarationBundle, operation); err != nil {
+					return stats, fmt.Errorf("%w: %s", err, operation.SourceID)
 				}
 				if sourceProjectionMutationActionIsComplete(declaredMutationBundle, operation) {
 					return stats, fmt.Errorf("source-cited non-executable mutation disposition claims a complete executable action: %s", operation.SourceID)
@@ -562,6 +570,22 @@ func sourceProjectionHasNonExecutableMutationDisposition(operation sourceOperati
 		}
 	}
 	return false
+}
+
+// sourceProjectionValidateWriteDisabledMutationArtifact ensures the automatic
+// artifact cannot be copied into a write-capable bundle to waive source
+// executable coverage. Manually authored non-executable mutation dispositions
+// retain their existing policy; this applies only to the exact automatic
+// write-disabled reason.
+func sourceProjectionValidateWriteDisabledMutationArtifact(bundle engine.Bundle, operation sourceOperationDescriptor) error {
+	disposition := operation.Runtime.NonExecutableMutation
+	if disposition == nil || disposition.Reason != sourceWriteDisabledMutationArtifactReason {
+		return nil
+	}
+	if bundle.Metadata.Name == "" || bundle.Metadata.Capabilities.Write {
+		return errors.New("automatic write-disabled mutation artifact requires connector metadata capabilities.write=false")
+	}
+	return nil
 }
 
 func sourceProjectionHasReadOnlyDisposition(operation sourceOperationDescriptor) bool {
@@ -2458,6 +2482,10 @@ func validateSourceExecutableCoverage(bundle engine.Bundle, file string, descrip
 			if operation.Runtime.NonExecutableMutation != nil {
 				if !sourceProjectionHasNonExecutableMutationDisposition(operation) {
 					findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source-cited non-executable mutation disposition is invalid: "+operation.SourceID))
+					continue
+				}
+				if err := sourceProjectionValidateWriteDisabledMutationArtifact(bundle, operation); err != nil {
+					findings = append(findings, sourceProjectionFinding(bundle.Name, file, err.Error()+": "+operation.SourceID))
 					continue
 				}
 				if sourceProjectionMutationActionIsComplete(bundle, operation) {

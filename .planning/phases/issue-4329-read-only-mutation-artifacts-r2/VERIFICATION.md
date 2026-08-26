@@ -2,8 +2,8 @@
 
 ## Status
 
-Local verification is complete. PR API base read-back, independent audit, and
-required remote CI remain pending after the green commit is pushed.
+Local verification is complete for the audit-fix commit. A fresh independent
+audit of that exact pushed SHA and required remote CI remain pending.
 
 ## Completed evidence
 
@@ -12,28 +12,30 @@ required remote CI remain pending after the green commit is pushed.
 
 ## Source-lock regression vectors
 
-- Sentry: `listOrganizationProjects` and `createOrganizationDashboard` retain
-  the preserved source citation URL, SHA
-  `b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435`,
-  byte count `3868570`, and exact OpenAPI locations.
-- Vercel: `getProjects` and `deleteStorageStoresBlobById` retain the preserved
-  source citation URL, SHA
-  `74cb7ff3dc0b89cc344b13ac9c6d5f1d9b7d7a9356cfd6b5a779da51fd43da28`,
-  byte count `10463249`, and exact OpenAPI locations.
-- In both vectors a supported GET command remains valid while the mutation
-  carries the exact source ID/method/path plus the named
-  `source-cited-non-executable-mutation-foundation-r1` gap. Projection leaves
-  `writes.json` and `cli_surface.json` byte-identical.
+- Byte-identical read-only fixtures carry the preserved Sentry and Vercel full
+  `operation-source-lock.json` inventories. The test parses 223 Sentry and
+  400 Vercel operations, respectively, and derives every test operation from
+  that retained source data rather than a hand-written citation.
+- The source locks retain Sentry SHA
+  `b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435`
+  (3868570 bytes) and Vercel SHA
+  `74cb7ff3dc0b89cc344b13ac9c6d5f1d9b7d7a9356cfd6b5a779da51fd43da28`
+  (10463249 bytes).
+- The test retains all 103/237 classified Sentry/Vercel mutations as exact
+  cited artifacts, and separately validates the real
+  `listOrganizationProjects`/`createOrganizationDashboard` and
+  `getProjects`/`deleteStorageStoresBlobById` pairs with a declared GET route.
+  Projection leaves `writes.json` and `cli_surface.json` byte-identical.
 
 ## Local command results
 
-- `GOFLAGS=-p=3 go test -count=1 -timeout 20m ./cmd/connectorgen` — PASS (153.267s; final run).
-- `GOFLAGS=-p=3 go test -count=1 -timeout 20m ./internal/connectors/engine` — PASS (12.156s).
-- `GOFLAGS=-p=3 go test -count=1 -timeout 20m ./internal/connectors/commandrunner` — PASS (22.660s).
+- `GOFLAGS=-p=3 go test -count=1 -timeout 20m ./cmd/connectorgen` — PASS (153.286s; audit-fix final run).
+- `GOFLAGS=-p=3 go test -count=1 -timeout 20m ./internal/connectors/engine` — PASS (13.126s).
+- `GOFLAGS=-p=3 go test -count=1 -timeout 20m ./internal/connectors/commandrunner` — PASS (21.799s).
 - `GOFLAGS=-p=3 go test -count=1 -timeout 20m ./internal/cli` — PASS (441.520s).
 - `go vet ./...` — PASS.
 - `go build ./cmd/pm` — PASS.
-- `make tidy-check lint agent-contract-check connectorgen-validate connectorgen-surface-sync connectorgen-operation-evidence connector-boundary connector-canon-check release-workflow-check` — PASS. The generator validated 553 connectors; surface sync corrected 0 fields; operation evidence is current (1525 rows).
+- `make connectorgen-validate connectorgen-surface-sync connectorgen-operation-evidence` — PASS. The generator validated 553 connectors; surface sync corrected 0 fields; operation evidence is current (1525 rows). The broader tidy, lint, agent-contract, boundary, canon, and release gates passed on the preceding equivalent code slice.
 - `make docs-check-no-build smoke-no-build` — PASS.
 - `git diff --check` and `gofmt -d` over changed Go files — PASS (no output).
 
@@ -47,7 +49,8 @@ intentionally outside this shared-foundation PR. No user command is claimed
 usable without a credential-boundary probe. The real downstream gap is
 materializing the source-locked Sentry/Vercel read bundles on their owned
 source-bound read/execution work; this PR only removes the shared validator
-blocker that previously prevented that work.
+blocker that previously prevented that work. That named downstream foundation
+is the only remaining gap to a built-binary credential-boundary proof.
 
 ## Remaining remote gates
 

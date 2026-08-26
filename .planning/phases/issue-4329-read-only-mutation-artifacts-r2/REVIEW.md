@@ -4,15 +4,25 @@
 
 - Reviewed the final local diff for scope, source provenance, action precedence,
   failure behavior, and generated-surface drift.
-- No local findings. The helper is fail-closed without a retained provider
+- Independent audit of `42fd5d48f78f03bfa713dfd30de8059a2d663e99` reported:
+  - **Medium, accepted and fixed:** a copied automatic artifact could waive
+    coverage in a `write:true` bundle. Validation and projection now require
+    explicit `metadata.capabilities.write=false`; a recorded red-to-green test
+    proves it.
+  - **Acceptance gap, strengthened:** test inputs had constructed citations.
+    Tests now load byte-identical preserved Sentry/Vercel full source locks and
+    exercise their full mutation inventories. The built-binary credential
+    boundary remains a named downstream source-bound-read foundation gap; no
+    user command is claimed here.
+- No other local findings. The helper is fail-closed without a retained provider
   citation, does not alter a manual disposition, and does not downgrade an
   executable or implemented action claim.
 
 ## Required independent review
 
-After the commit is pushed, obtain a fresh independent Codex audit of that
-exact SHA. Record the SHA, findings, dispositions, and any follow-up green
-checks here before requesting merge.
+After the audit-fix commit is pushed, obtain a fresh independent Codex audit of
+that exact SHA. Record its result in the PR review coverage before requesting
+merge.
 
 ## Automated review route
 
