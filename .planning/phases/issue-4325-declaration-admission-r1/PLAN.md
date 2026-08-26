@@ -8,16 +8,16 @@
 - Delivery: Pull request #4351 is open against `main`; this expanded slice is
   committed, pushed to its existing branch, and locally verified.
 - Working branch: fm/cli-declaration-admission-certification-r1.
-- Task: Close the R3 DA-002 gap with one shared, fail-closed provider-citation
-  canonicalizer used by authoring admission and the production compact ledger.
-  Correct the prior Outreach test/docs claim without adding connector-owned
-  commands: real Outreach command reachability remains a combined-head mapping
-  and source-lock integration gate after #4350 is repaired.
-- Verification: Focused authoring and compact-ledger red/green tests for host
-  case, explicit `:443`, query order, escaped path canonicality, and duplicate
-  provider provenance under distinct bindings; unchanged fleet-alias coverage;
-  formatting plus applicable generator/static/CI gates; and fresh independent
-  audit after push.
+- Task: Close the R5 exact-SHA gaps by binding the admission denominator to
+  exact operations in connector-owned reviewed source locks, adding a
+  provider-evidenced unsupported disposition across all six lanes, validating
+  public connector inputs before credential resolution, and separating the
+  denominator from the mutable declaration rows and counts.
+- Verification: Focused red/green tests for lock ownership and exact operation
+  identity, six-lane unsupported discovery/refusal, denominator deletion,
+  help-first and input-before-credential behavior, unchanged real alias
+  coverage, formatting plus applicable generator/static/CI gates, and a fresh
+  independent exact-head audit after push.
 
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
@@ -244,6 +244,65 @@ Required skills loaded for this wave: `golang-how-to`, `golang-testing`,
 `golang-error-handling`, `golang-security`, `golang-safety`,
 `golang-design-patterns`, `golang-structs-interfaces`, and
 `golang-documentation`, plus the `gsd-ns-workflow` routing skill.
+
+## Exact-SHA R5 gap closure (2026-08-26)
+
+The independent R5 audit of `51367fc7e97705046ce6274125e9cee1d6e1e365`
+found four remaining High blockers. Inbox 019 supersedes the prior audit wait
+and authorizes a generic-only repair. The generated `discuss-phase --auto` and
+`plan-phase --gaps` prompts are executed inline because the canonical
+single-worker contract and launch brief forbid role spawning. Required skills
+loaded for this wave: `golang-how-to`, `golang-cli`, `golang-testing`,
+`golang-error-handling`, `golang-security`, `golang-safety`, `golang-lint`,
+`golang-design-patterns`, `golang-structs-interfaces`,
+`golang-documentation`, and `gsd-ns-workflow`.
+
+1. **Red — reviewed source-lock identity (DA-001/DA-002):** mutate a source
+   row to an unrelated lock, nonexistent lock operation, alias location,
+   operation ID, method, or endpoint and require admission to fail without
+   provider I/O. The source catalog names an exact operation in a
+   connector-owned reviewed source lock; the checker compares the row's URL,
+   location, protocol, provider operation ID, and endpoint byte-for-byte to
+   that selected inventory record. It reads no provider and does not make
+   retained bytes, artifact hashing, or live certification an admission step.
+2. **Red — independent denominator (DA-012):** create a separately controlled
+   declaration-admission inventory that selects connector/source-lock operation
+   identities. Delete a source row and declaration while attempting to adjust
+   legacy adjacent counts; certification must still fail because the inventory
+   entry remains. Expected-count fields are removed from the mutable catalogs.
+3. **Red — provider-evidenced unsupported disposition:** cover ETL, reverse
+   ETL, direct read, direct write, binary download, and binary upload with an
+   exact source-backed command projection whose availability is
+   `unsupported_with_provider_evidence`. It remains denominator-visible and
+   discoverable, claims no executor or missing foundation, and returns a typed
+   unsupported refusal distinct from `missing_foundation`.
+4. **Red — input-aware credential-free public validation:** prove `--help`
+   returns first; bare GitHub `label delete` reports missing `--name`; adding
+   `--name bug` reaches missing credential; and unknown, enum, minimum, and
+   direct secret/env-only carrier defects all fail before `withApp` credential
+   resolution. The public CLI and runtime execution share one command flag
+   validator rather than restating accepted input rules.
+5. **Green/refactor/gate:** migrate only the shared schemas and root catalogs,
+   reuse the existing connector source-lock parser offline, add the unsupported
+   projection/refusal, invoke input preflight before credential resolution,
+   update certificate-separation docs, and run focused plus repository gates in
+   a clean exact-head checkout. Do not modify, stage, or normalize any Stripe,
+   Docker Hub, Outreach, or other connector-owned production definition.
+
+### R5 code and schema seam
+
+- `cmd/connectorgen/declarationadmission.go` consumes a new independently
+  controlled `internal/connectors/defs/declaration_admission_inventory.json`,
+  resolves each selected operation through the existing source-lock parser,
+  and cross-links the compact source and declaration catalogs.
+- `internal/connectors/engine/schema/declaration_admission_*.schema.json` and
+  `declaration_admission_inventory.schema.json` express the lock reference,
+  count-free catalogs, and provider-evidenced unsupported state; the compact
+  production ledger retains admitted targets but does not perform provider I/O
+  or re-certify retained artifacts.
+- `internal/connectors/commandrunner` exposes one request-input preflight that
+  shares runtime flag validation, and `internal/cli/runMaybeConnectorCommand`
+  invokes it after help parsing but before `withApp` and credential lookup.
 
 ## CLI docs parity
 
