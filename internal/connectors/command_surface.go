@@ -184,6 +184,22 @@ type CommandFoundation struct {
 	Target    CommandFoundationTarget
 }
 
+// CommandUnsupportedDisposition retains a provider-documented operation in
+// discovery when its semantics cannot be supported by the CLI. Target is
+// provenance only: it deliberately has no stream, write, operation, executor,
+// or foundation binding and can never be promoted by dispatch.
+type CommandUnsupportedDisposition struct {
+	Reason string
+	Target CommandUnsupportedTarget
+}
+
+type CommandUnsupportedTarget struct {
+	SourceID            string
+	ProviderOperationID string
+	Method              string
+	Path                string
+}
+
 const (
 	FoundationComponentTypedWriteAction        = "typed_write_action"
 	FoundationComponentTypedRecordSchema       = "typed_record_schema"
@@ -265,6 +281,7 @@ type CommandSurfaceCommand struct {
 	Risk         string
 	Approval     string
 	Foundation   *CommandFoundation
+	Unsupported  *CommandUnsupportedDisposition
 	Notes        string
 }
 

@@ -99,6 +99,7 @@
             "enum": [
               "implemented",
               "deferred",
+              "unsupported_with_provider_evidence",
               "partial",
               "planned",
               "excluded",
@@ -240,6 +241,25 @@
                   "destructive_kind": { "type": "string", "enum": ["none", "delete", "destructive"] },
                   "method": { "type": "string", "minLength": 1 },
                   "path": { "type": "string", "minLength": 1 }
+                }
+              }
+            }
+          },
+          "unsupported_disposition": {
+            "type": "object",
+            "required": ["reason", "target"],
+            "additionalProperties": false,
+            "properties": {
+              "reason": { "type": "string", "minLength": 1, "maxLength": 512 },
+              "target": {
+                "type": "object",
+                "required": ["source_id", "operation_id", "method", "path"],
+                "additionalProperties": false,
+                "properties": {
+                  "source_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+                  "operation_id": { "type": "string", "maxLength": 512 },
+                  "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "GRAPHQL"] },
+                  "path": { "type": "string", "minLength": 1, "maxLength": 8192 }
                 }
               }
             }

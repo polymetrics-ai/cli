@@ -1105,6 +1105,7 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 			Risk:          cmd.Risk,
 			Approval:      cmd.Approval,
 			Foundation:    commandSurfaceFoundation(cmd.Foundation),
+			Unsupported:   commandSurfaceUnsupported(cmd.Unsupported),
 			Notes:         cmd.Notes,
 		})
 	}
@@ -1122,6 +1123,19 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 		})
 	}
 	return out
+}
+
+func commandSurfaceUnsupported(disposition *CommandUnsupportedDisposition) *connectors.CommandUnsupportedDisposition {
+	if disposition == nil {
+		return nil
+	}
+	return &connectors.CommandUnsupportedDisposition{
+		Reason: disposition.Reason,
+		Target: connectors.CommandUnsupportedTarget{
+			SourceID: disposition.Target.SourceID, ProviderOperationID: disposition.Target.ProviderOperationID,
+			Method: disposition.Target.Method, Path: disposition.Target.Path,
+		},
+	}
 }
 
 func commandSurfaceFoundation(foundation *CommandFoundation) *connectors.CommandFoundation {

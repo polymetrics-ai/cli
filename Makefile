@@ -105,10 +105,10 @@ connectorgen-validate:
 connectorgen-surface-sync:
 	go run ./cmd/connectorgen surface-sync --check
 
-# Source declaration admission is intentionally separate from source-lock
-# retention, runtime preflight, generated operation evidence, and live proof.
-# It is a provider-I/O-free check of the required independent source and
-# declaration catalogs.
+# Source declaration admission resolves exact operations in connector-owned
+# reviewed source locks without fetching or rehashing provider artifacts. Its
+# independent inventory and mutable catalogs remain separate from runtime
+# preflight, generated operation evidence, and live proof.
 connectorgen-declaration-admission:
 	go run ./cmd/connectorgen declaration-admission
 

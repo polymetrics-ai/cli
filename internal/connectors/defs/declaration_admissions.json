@@ -1,7 +1,6 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "cohort": "batch-1-foundation",
-  "expected_declarations": 1,
   "declarations": [
     {
       "connector": "github",

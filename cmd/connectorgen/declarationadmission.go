@@ -21,10 +21,11 @@ import (
 var declarationAdmissionActionTemplateRE = regexp.MustCompile(`\{\{\s*(?:config|record)\.([-A-Za-z0-9_]+)\s*\}\}`)
 
 const (
-	declarationAdmissionSchemaVersion = 1
+	declarationAdmissionSchemaVersion = 2
 
 	declarationAdmissionStateImplemented = "implemented"
 	declarationAdmissionStateDeferred    = "deferred"
+	declarationAdmissionStateUnsupported = "unsupported_with_provider_evidence"
 
 	declarationAdmissionLaneETL            = "etl"
 	declarationAdmissionLaneReverseETL     = "reverse_etl"
@@ -42,18 +43,28 @@ type declarationAdmissionDocument struct {
 }
 
 type declarationAdmissionSourceCatalog struct {
-	SchemaVersion      int                                   `json:"schema_version"`
-	Cohort             string                                `json:"cohort"`
-	ExpectedConnectors int                                   `json:"expected_connectors"`
-	ExpectedOperations int                                   `json:"expected_source_operations"`
-	SourceOperations   []declarationAdmissionSourceOperation `json:"source_operations"`
+	SchemaVersion    int                                   `json:"schema_version"`
+	Cohort           string                                `json:"cohort"`
+	SourceOperations []declarationAdmissionSourceOperation `json:"source_operations"`
 }
 
 type declarationAdmissionCatalog struct {
-	SchemaVersion        int                               `json:"schema_version"`
-	Cohort               string                            `json:"cohort"`
-	ExpectedDeclarations int                               `json:"expected_declarations"`
-	Declarations         []declarationAdmissionDeclaration `json:"declarations"`
+	SchemaVersion int                               `json:"schema_version"`
+	Cohort        string                            `json:"cohort"`
+	Declarations  []declarationAdmissionDeclaration `json:"declarations"`
+}
+
+type declarationAdmissionInventory struct {
+	SchemaVersion int                                      `json:"schema_version"`
+	Cohort        string                                   `json:"cohort"`
+	Operations    []declarationAdmissionInventoryOperation `json:"operations"`
+}
+
+type declarationAdmissionInventoryOperation struct {
+	Connector         string `json:"connector"`
+	SourceID          string `json:"source_id"`
+	SourceLock        string `json:"source_lock"`
+	SourceOperationID string `json:"source_operation_id"`
 }
 
 type declarationAdmissionSourceOperation struct {
@@ -79,6 +90,7 @@ type declarationAdmissionDeclaration struct {
 	Canonical   declarationAdmissionEndpoint     `json:"canonical"`
 	Binding     declarationAdmissionBinding      `json:"binding"`
 	Foundation  *declarationAdmissionFoundation  `json:"foundation_gap,omitempty"`
+	Unsupported *declarationAdmissionUnsupported `json:"unsupported_disposition,omitempty"`
 	Destructive *declarationAdmissionDestructive `json:"destructive,omitempty"`
 }
 
@@ -103,6 +115,18 @@ type declarationAdmissionFoundation struct {
 type declarationAdmissionDestructive struct {
 	Kind   string `json:"kind"`
 	Reason string `json:"reason"`
+}
+
+type declarationAdmissionUnsupported struct {
+	Reason string                                `json:"reason"`
+	Target declarationAdmissionUnsupportedTarget `json:"target"`
+}
+
+type declarationAdmissionUnsupportedTarget struct {
+	SourceID            string `json:"source_id"`
+	ProviderOperationID string `json:"operation_id"`
+	Method              string `json:"method"`
+	Path                string `json:"path"`
 }
 
 type declarationAdmissionReport struct {
@@ -177,8 +201,16 @@ func parseDeclarationAdmissionOptions(args []string) (declarationAdmissionOption
 }
 
 func declarationAdmissionPathCheck(dir string) (declarationAdmissionReport, error) {
+	inventoryFile := filepath.Join(dir, "declaration_admission_inventory.json")
 	sourceFile := filepath.Join(dir, "declaration_admission_sources.json")
 	declarationFile := filepath.Join(dir, "declaration_admissions.json")
+	inventoryRaw, err := os.ReadFile(inventoryFile)
+	if err != nil {
+		return declarationAdmissionReport{}, fmt.Errorf("read required declaration admission inventory %s: %w", inventoryFile, err)
+	}
+	if err := engine.ValidateDeclarationAdmissionInventory(inventoryRaw); err != nil {
+		return declarationAdmissionReport{}, fmt.Errorf("validate declaration admission inventory: %w", err)
+	}
 	sourceRaw, err := os.ReadFile(sourceFile)
 	if err != nil {
 		return declarationAdmissionReport{}, fmt.Errorf("read required independent source cohort %s: %w", sourceFile, err)
@@ -194,6 +226,10 @@ func declarationAdmissionPathCheck(dir string) (declarationAdmissionReport, erro
 		return declarationAdmissionReport{}, fmt.Errorf("validate declaration catalog: %w", err)
 	}
 
+	var inventory declarationAdmissionInventory
+	if err := decodeSourceStrictJSON(inventoryRaw, &inventory); err != nil {
+		return declarationAdmissionReport{}, fmt.Errorf("parse declaration admission inventory: %w", err)
+	}
 	var sources declarationAdmissionSourceCatalog
 	if err := decodeSourceStrictJSON(sourceRaw, &sources); err != nil {
 		return declarationAdmissionReport{}, fmt.Errorf("parse independent source cohort: %w", err)
@@ -203,27 +239,23 @@ func declarationAdmissionPathCheck(dir string) (declarationAdmissionReport, erro
 		return declarationAdmissionReport{}, fmt.Errorf("parse declaration catalog: %w", err)
 	}
 
-	report := declarationAdmissionReport{Findings: []Finding{}, SourceOperations: len(sources.SourceOperations)}
+	report := declarationAdmissionReport{Findings: []Finding{}, SourceOperations: len(inventory.Operations)}
 	addCatalogFinding := func(file, message string) {
 		report.Findings = append(report.Findings, Finding{File: file, Rule: "declaration_admission", Message: message})
 	}
-	if sources.SchemaVersion != declarationAdmissionSchemaVersion || declarations.SchemaVersion != declarationAdmissionSchemaVersion {
-		addCatalogFinding("declaration_admission_sources.json", "catalog schema_version must be 1")
+	if inventory.SchemaVersion != 1 || sources.SchemaVersion != declarationAdmissionSchemaVersion || declarations.SchemaVersion != declarationAdmissionSchemaVersion {
+		addCatalogFinding("declaration_admission_inventory.json", "inventory schema_version must be 1 and mutable catalogs must use schema_version 2")
 	}
-	if strings.TrimSpace(sources.Cohort) == "" || sources.Cohort != declarations.Cohort {
-		addCatalogFinding("declaration_admissions.json", "declaration cohort does not match the independent source cohort")
-	}
-	if sources.ExpectedConnectors <= 0 || sources.ExpectedOperations <= 0 || declarations.ExpectedDeclarations <= 0 {
-		addCatalogFinding("declaration_admission_sources.json", "repository admission cohort expected counts must be nonzero")
-	}
-	if sources.ExpectedOperations != len(sources.SourceOperations) {
-		addCatalogFinding("declaration_admission_sources.json", fmt.Sprintf("expected_source_operations = %d, found %d", sources.ExpectedOperations, len(sources.SourceOperations)))
-	}
-	if declarations.ExpectedDeclarations != len(declarations.Declarations) {
-		addCatalogFinding("declaration_admissions.json", fmt.Sprintf("expected_declarations = %d, found %d", declarations.ExpectedDeclarations, len(declarations.Declarations)))
+	if strings.TrimSpace(inventory.Cohort) == "" || inventory.Cohort != sources.Cohort || inventory.Cohort != declarations.Cohort {
+		addCatalogFinding("declaration_admission_inventory.json", "source and declaration cohorts do not match the independent inventory")
 	}
 
 	documents := map[string]*declarationAdmissionDocument{}
+	for _, selected := range inventory.Operations {
+		if documents[selected.Connector] == nil {
+			documents[selected.Connector] = &declarationAdmissionDocument{SchemaVersion: declarationAdmissionSchemaVersion, Connector: selected.Connector}
+		}
+	}
 	for _, source := range sources.SourceOperations {
 		document := documents[source.Connector]
 		if document == nil {
@@ -240,9 +272,7 @@ func declarationAdmissionPathCheck(dir string) (declarationAdmissionReport, erro
 		}
 		document.Declarations = append(document.Declarations, declaration)
 	}
-	if sources.ExpectedConnectors != len(documents) {
-		addCatalogFinding("declaration_admission_sources.json", fmt.Sprintf("expected_connectors = %d, found %d", sources.ExpectedConnectors, len(documents)))
-	}
+	report.Findings = append(report.Findings, declarationAdmissionReviewedSourceFindings(dir, inventory, sources)...)
 
 	connectorNames := make([]string, 0, len(documents))
 	for connector := range documents {
@@ -268,6 +298,184 @@ func declarationAdmissionPathCheck(dir string) (declarationAdmissionReport, erro
 		return report.Findings[i].Message < report.Findings[j].Message
 	})
 	return report, nil
+}
+
+type declarationAdmissionReviewedOperation struct {
+	Protocol            string
+	SourceURL           string
+	Location            string
+	ProviderOperationID string
+	Method              string
+	Path                string
+}
+
+func declarationAdmissionReviewedSourceFindings(dir string, inventory declarationAdmissionInventory, sources declarationAdmissionSourceCatalog) []Finding {
+	findings := []Finding{}
+	add := func(connector, message string) {
+		findings = append(findings, declarationAdmissionFinding(connector, "declaration_admission_inventory.json", message))
+	}
+	rows := make(map[string]declarationAdmissionSourceOperation, len(sources.SourceOperations))
+	for _, source := range sources.SourceOperations {
+		key := source.Connector + "\x00" + source.ID
+		if _, duplicate := rows[key]; duplicate {
+			continue
+		}
+		rows[key] = source
+	}
+	selectedRows := make(map[string]struct{}, len(inventory.Operations))
+	selectedOperations := make(map[string]string, len(inventory.Operations))
+	lockCache := map[string]sourceImportLock{}
+	for _, selected := range inventory.Operations {
+		rowKey := selected.Connector + "\x00" + selected.SourceID
+		if _, duplicate := selectedRows[rowKey]; duplicate {
+			add(selected.Connector, fmt.Sprintf("inventory duplicates source identity %q", selected.SourceID))
+			continue
+		}
+		selectedRows[rowKey] = struct{}{}
+		selectionKey := selected.Connector + "\x00" + selected.SourceLock + "\x00" + selected.SourceOperationID
+		if previous, duplicate := selectedOperations[selectionKey]; duplicate {
+			add(selected.Connector, fmt.Sprintf("inventory source identities %q and %q select one reviewed source operation", previous, selected.SourceID))
+			continue
+		}
+		selectedOperations[selectionKey] = selected.SourceID
+		row, exists := rows[rowKey]
+		if !exists {
+			add(selected.Connector, fmt.Sprintf("inventory source operation %q has no compact source row", selected.SourceID))
+			continue
+		}
+		lockPath, err := declarationAdmissionOwnedSourceLockPath(dir, selected)
+		if err != nil {
+			add(selected.Connector, fmt.Sprintf("source operation %q has invalid reviewed source lock: %v", selected.SourceID, err))
+			continue
+		}
+		lock, cached := lockCache[lockPath]
+		if !cached {
+			raw, readErr := os.ReadFile(lockPath)
+			if readErr != nil {
+				add(selected.Connector, fmt.Sprintf("source operation %q cannot read reviewed source lock: %v", selected.SourceID, readErr))
+				continue
+			}
+			lock, err = parseSourceImportLock(raw, selected.Connector)
+			if err != nil {
+				add(selected.Connector, fmt.Sprintf("source operation %q has invalid reviewed source lock: %v", selected.SourceID, err))
+				continue
+			}
+			lockCache[lockPath] = lock
+		}
+		reviewed, found := declarationAdmissionReviewedOperationFromLock(lock, selected.SourceOperationID)
+		if !found {
+			add(selected.Connector, fmt.Sprintf("source operation %q selects nonexistent reviewed operation %q", selected.SourceID, selected.SourceOperationID))
+			continue
+		}
+		if message := declarationAdmissionReviewedOperationMismatch(row, reviewed); message != "" {
+			add(selected.Connector, fmt.Sprintf("source operation %q does not exactly match reviewed operation %q: %s", selected.SourceID, selected.SourceOperationID, message))
+		}
+	}
+	for _, source := range sources.SourceOperations {
+		if _, selected := selectedRows[source.Connector+"\x00"+source.ID]; !selected {
+			add(source.Connector, fmt.Sprintf("compact source operation %q is absent from the independent inventory", source.ID))
+		}
+	}
+	return findings
+}
+
+func declarationAdmissionOwnedSourceLockPath(dir string, selected declarationAdmissionInventoryOperation) (string, error) {
+	raw := selected.SourceLock
+	if raw == "" || filepath.IsAbs(raw) || strings.Contains(raw, "\\") || filepath.ToSlash(filepath.Clean(filepath.FromSlash(raw))) != raw {
+		return "", errors.New("source_lock must be one canonical relative path")
+	}
+	prefix := selected.Connector + "/sources/"
+	if !strings.HasPrefix(raw, prefix) || !strings.HasSuffix(raw, "-operation-source-lock.json") {
+		return "", fmt.Errorf("source_lock must be owned beneath %s", prefix)
+	}
+	root, err := filepath.EvalSymlinks(dir)
+	if err != nil {
+		return "", fmt.Errorf("resolve defs root: %w", err)
+	}
+	path, err := filepath.EvalSymlinks(filepath.Join(dir, filepath.FromSlash(raw)))
+	if err != nil {
+		return "", err
+	}
+	relative, err := filepath.Rel(root, path)
+	if err != nil || relative == ".." || strings.HasPrefix(relative, ".."+string(filepath.Separator)) {
+		return "", errors.New("source_lock resolves outside the defs root")
+	}
+	if !strings.HasPrefix(filepath.ToSlash(relative), prefix) {
+		return "", fmt.Errorf("source_lock resolves outside connector-owned %s", prefix)
+	}
+	info, err := os.Stat(path)
+	if err != nil {
+		return "", err
+	}
+	if !info.Mode().IsRegular() {
+		return "", errors.New("source_lock must resolve to one regular file")
+	}
+	return path, nil
+}
+
+func declarationAdmissionReviewedOperationFromLock(lock sourceImportLock, operationID string) (declarationAdmissionReviewedOperation, bool) {
+	if lock.SchemaVersion == 3 {
+		for _, document := range lock.Rest.SourceDocuments {
+			for _, operation := range document.Operations {
+				if operation.ID != operationID {
+					continue
+				}
+				sourceURL := operation.CitationURL
+				if sourceURL == "" {
+					sourceURL = document.PublishedSource.SourceURL
+				}
+				return declarationAdmissionReviewedOperation{
+					Protocol: operation.Protocol, SourceURL: sourceURL, Location: operation.SourceLocation,
+					ProviderOperationID: operation.OperationID, Method: operation.Method, Path: operation.Path,
+				}, true
+			}
+		}
+	} else {
+		for _, operation := range lock.Rest.Operations {
+			if operation.ID == operationID {
+				return declarationAdmissionReviewedOperation{
+					Protocol: operation.Protocol, SourceURL: lock.Rest.SourceURL, Location: operation.SourceLocation,
+					ProviderOperationID: operation.OperationID, Method: operation.Method, Path: operation.Path,
+				}, true
+			}
+		}
+	}
+	for _, group := range []struct {
+		kind   string
+		fields []sourceGraphQLField
+	}{{"query", lock.GraphQL.QueryFields}, {"mutation", lock.GraphQL.MutationFields}} {
+		for _, field := range group.fields {
+			id := fmt.Sprintf("%s.graphql.%s.%s", lock.Connector, group.kind, field.Name)
+			if id != operationID {
+				continue
+			}
+			return declarationAdmissionReviewedOperation{
+				Protocol: "graphql", SourceURL: lock.GraphQL.SourceURL,
+				Location:            fmt.Sprintf("graphql.%s_fields[%q]@line:%d", group.kind, field.Name, field.Line),
+				ProviderOperationID: field.Root + "." + field.Name, Method: "GRAPHQL", Path: field.Name,
+			}, true
+		}
+	}
+	return declarationAdmissionReviewedOperation{}, false
+}
+
+func declarationAdmissionReviewedOperationMismatch(row declarationAdmissionSourceOperation, reviewed declarationAdmissionReviewedOperation) string {
+	if row.Protocol != reviewed.Protocol {
+		return fmt.Sprintf("protocol %q does not equal %q", row.Protocol, reviewed.Protocol)
+	}
+	if row.SourceURL != reviewed.SourceURL {
+		return "source URL is not the reviewed document URL"
+	}
+	if row.Location != reviewed.Location {
+		return "document location is not the exact reviewed operation location"
+	}
+	if row.ProviderOperationID != reviewed.ProviderOperationID {
+		return "provider operation identity differs"
+	}
+	if row.BasePath != "" || !strings.EqualFold(row.Method, reviewed.Method) || row.Path != reviewed.Path {
+		return "method/path is not the exact reviewed operation endpoint"
+	}
+	return ""
 }
 
 func declarationAdmissionFindings(bundle engine.Bundle, document declarationAdmissionDocument) []Finding {
@@ -372,10 +580,9 @@ func declarationAdmissionFindings(bundle engine.Bundle, document declarationAdmi
 	return findings
 }
 
-// declarationAdmissionSourceIdentity is the source-row completeness key. It
-// intentionally does not consult a source lock or importer: a URL plus its
-// exact documented operation is enough to establish the independent admission
-// denominator, but two aliases for that same documented operation are not.
+// declarationAdmissionSourceIdentity is the compact-row provenance key after
+// declarationAdmissionReviewedSourceFindings has bound that row to the exact
+// operation selected from its connector-owned reviewed source lock.
 func declarationAdmissionSourceIdentity(source declarationAdmissionSourceOperation, canonicalSourceURL string) string {
 	method, path, err := declarationAdmissionCanonicalSourceEndpoint(source)
 	if err != nil {
@@ -450,8 +657,8 @@ func declarationAdmissionCheckRow(findings *[]Finding, bundle engine.Bundle, fil
 	}
 	switch declaration.State {
 	case declarationAdmissionStateImplemented:
-		if declaration.Foundation != nil || command.Foundation != nil {
-			add("implemented declaration must not retain a foundation gap")
+		if declaration.Foundation != nil || command.Foundation != nil || declaration.Unsupported != nil || command.Unsupported != nil {
+			add("implemented declaration must not retain a foundation gap or unsupported disposition")
 		}
 		resolved, resolveErr := engine.ResolveImplementedCommandPath(bundle, declaration.Command)
 		if command.Availability != declarationAdmissionStateImplemented || resolveErr != nil ||
@@ -465,6 +672,9 @@ func declarationAdmissionCheckRow(findings *[]Finding, bundle engine.Bundle, fil
 			add("implemented destructive declaration does not retain destructive runtime metadata")
 		}
 	case declarationAdmissionStateDeferred:
+		if declaration.Unsupported != nil || command.Unsupported != nil {
+			add("deferred declaration must not retain an unsupported disposition")
+		}
 		if !declarationAdmissionFoundationSpecific(declaration.Foundation) {
 			add("deferred declaration requires a specific missing implementation component with evidence")
 		} else if message := declarationAdmissionFoundationEvidenceFinding(bundle, declaration, declaration.Foundation); message != "" {
@@ -485,9 +695,46 @@ func declarationAdmissionCheckRow(findings *[]Finding, bundle engine.Bundle, fil
 		if message := declarationAdmissionDeferredPreflight(bundle, commandPath); message != "" {
 			add(message)
 		}
+	case declarationAdmissionStateUnsupported:
+		if declaration.Foundation != nil || command.Foundation != nil {
+			add("provider-evidenced unsupported declaration must not claim a missing foundation")
+		}
+		if source.Binding.Kind != connectors.CommandBindingCommand || source.Binding.ID != declaration.Command ||
+			declaration.Binding.Kind != connectors.CommandBindingCommand || declaration.Binding.ID != declaration.Command {
+			add("provider-evidenced unsupported declaration may bind only its discoverable command projection")
+		}
+		if command.Stream != "" || command.Write != "" || command.Operation != "" {
+			add("provider-evidenced unsupported command must not claim an executable target")
+		}
+		if !declarationAdmissionUnsupportedMatches(declaration.Unsupported, command.Unsupported, source) {
+			add("provider-evidenced unsupported disposition does not retain the exact source target and reason")
+		}
+		if command.Availability != declarationAdmissionStateUnsupported {
+			add("provider-evidenced unsupported declaration command has the wrong availability")
+		}
+		err := commandrunner.Preflight(engine.New(bundle, nil), commandPath)
+		var blocked *commandrunner.BlockedCommandError
+		if !errors.As(err, &blocked) || blocked.Failure == nil || blocked.Failure.Code() != "provider_evidenced_unsupported" {
+			add("provider-evidenced unsupported command does not return its typed terminal refusal")
+		}
 	default:
-		add("state must be implemented or deferred")
+		add("state must be implemented, deferred, or provider-evidenced unsupported")
 	}
+}
+
+func declarationAdmissionUnsupportedMatches(declaration *declarationAdmissionUnsupported, command *engine.CommandUnsupportedDisposition, source declarationAdmissionSourceOperation) bool {
+	if declaration == nil || command == nil || strings.TrimSpace(declaration.Reason) == "" || declaration.Reason != command.Reason {
+		return false
+	}
+	method, path, err := declarationAdmissionCanonicalSourceEndpoint(source)
+	if err != nil {
+		return false
+	}
+	want := declarationAdmissionUnsupportedTarget{
+		SourceID: source.ID, ProviderOperationID: source.ProviderOperationID, Method: method, Path: path,
+	}
+	return declaration.Target == want && command.Target.SourceID == want.SourceID &&
+		command.Target.ProviderOperationID == want.ProviderOperationID && strings.EqualFold(command.Target.Method, want.Method) && command.Target.Path == want.Path
 }
 
 func declarationAdmissionFinding(connector, filename, message string) Finding {

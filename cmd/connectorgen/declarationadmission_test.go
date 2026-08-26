@@ -802,11 +802,20 @@ func TestDeclarationAdmissionRejectsFalseImplementedSameEndpointBinding(t *testi
 	}
 }
 
-func TestDeclarationAdmissionCommandRequiresBothCatalogsAndExactCounts(t *testing.T) {
+func TestDeclarationAdmissionCommandRequiresInventoryAndBothCatalogs(t *testing.T) {
 	tests := []struct {
 		name string
 		edit func(*testing.T, string)
 	}{
+		{
+			name: "missing independent inventory",
+			edit: func(t *testing.T, dir string) {
+				t.Helper()
+				if err := os.Remove(filepath.Join(dir, "declaration_admission_inventory.json")); err != nil {
+					t.Fatalf("remove declaration inventory: %v", err)
+				}
+			},
+		},
 		{
 			name: "missing source cohort",
 			edit: func(t *testing.T, dir string) {
@@ -826,24 +835,24 @@ func TestDeclarationAdmissionCommandRequiresBothCatalogsAndExactCounts(t *testin
 			},
 		},
 		{
-			name: "source count hides omitted row",
+			name: "legacy source count escape hatch",
 			edit: func(t *testing.T, dir string) {
 				t.Helper()
 				path := filepath.Join(dir, "declaration_admission_sources.json")
-				var catalog declarationAdmissionSourceCatalog
+				var catalog map[string]any
 				readDeclarationAdmissionJSON(t, path, &catalog)
-				catalog.ExpectedOperations++
+				catalog["expected_source_operations"] = 1
 				writeDeclarationAdmissionJSON(t, path, catalog)
 			},
 		},
 		{
-			name: "declaration count hides omitted row",
+			name: "legacy declaration count escape hatch",
 			edit: func(t *testing.T, dir string) {
 				t.Helper()
 				path := filepath.Join(dir, "declaration_admissions.json")
-				var catalog declarationAdmissionCatalog
+				var catalog map[string]any
 				readDeclarationAdmissionJSON(t, path, &catalog)
-				catalog.ExpectedDeclarations++
+				catalog["expected_declarations"] = 1
 				writeDeclarationAdmissionJSON(t, path, catalog)
 			},
 		},
@@ -861,7 +870,7 @@ func TestDeclarationAdmissionCommandRequiresBothCatalogsAndExactCounts(t *testin
 	}
 }
 
-func TestDeclarationAdmissionCommandLoadsIndependentCatalogsWithoutRetainedArtifact(t *testing.T) {
+func TestDeclarationAdmissionCommandLoadsReviewedLockInventoryWithoutReadingRetainedArtifact(t *testing.T) {
 	defsRoot := declarationAdmissionCatalogFixtureDir(t)
 
 	var stdout, stderr bytes.Buffer
@@ -874,6 +883,119 @@ func TestDeclarationAdmissionCommandLoadsIndependentCatalogsWithoutRetainedArtif
 	}
 	if report.ConnectorsChecked != 1 || report.SourceOperations != 1 || len(report.Findings) != 0 {
 		t.Fatalf("report = %+v, want one clean source-cited operation", report)
+	}
+}
+
+func TestDeclarationAdmissionBindsSourceRowsToReviewedConnectorOwnedLock(t *testing.T) {
+	tests := []struct {
+		name string
+		edit func(*testing.T, string)
+	}{
+		{
+			name: "unrelated provider host",
+			edit: func(t *testing.T, dir string) {
+				path := filepath.Join(dir, "declaration_admission_sources.json")
+				var catalog declarationAdmissionSourceCatalog
+				readDeclarationAdmissionJSON(t, path, &catalog)
+				catalog.SourceOperations[0].SourceURL = "https://unrelated.example.test/openapi.json"
+				writeDeclarationAdmissionJSON(t, path, catalog)
+			},
+		},
+		{
+			name: "nonexistent locked operation",
+			edit: func(t *testing.T, dir string) {
+				path := filepath.Join(dir, "declaration_admission_inventory.json")
+				var inventory map[string]any
+				readDeclarationAdmissionJSON(t, path, &inventory)
+				inventory["operations"].([]any)[0].(map[string]any)["source_operation_id"] = "provider.rest.widgets.missing"
+				writeDeclarationAdmissionJSON(t, path, inventory)
+			},
+		},
+		{
+			name: "semantic location alias",
+			edit: func(t *testing.T, dir string) {
+				path := filepath.Join(dir, "declaration_admission_sources.json")
+				var catalog declarationAdmissionSourceCatalog
+				readDeclarationAdmissionJSON(t, path, &catalog)
+				catalog.SourceOperations[0].Location = "Widgets > List (semantic alias)"
+				writeDeclarationAdmissionJSON(t, path, catalog)
+			},
+		},
+		{
+			name: "lock outside connector ownership",
+			edit: func(t *testing.T, dir string) {
+				path := filepath.Join(dir, "declaration_admission_inventory.json")
+				var inventory map[string]any
+				readDeclarationAdmissionJSON(t, path, &inventory)
+				inventory["operations"].([]any)[0].(map[string]any)["source_lock"] = "other/sources/cli-surface-operation-source-lock.json"
+				writeDeclarationAdmissionJSON(t, path, inventory)
+			},
+		},
+	}
+
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			defsRoot := declarationAdmissionCatalogFixtureDir(t)
+			testCase.edit(t, defsRoot)
+			report, err := declarationAdmissionPathCheck(defsRoot)
+			if err == nil && len(report.Findings) == 0 {
+				t.Fatalf("source-lock defect passed: report=%+v", report)
+			}
+		})
+	}
+}
+
+func TestDeclarationAdmissionIndependentInventoryCannotShrinkWithCatalogRows(t *testing.T) {
+	defsRoot := declarationAdmissionCatalogFixtureDir(t)
+	sourcePath := filepath.Join(defsRoot, "declaration_admission_sources.json")
+	declarationPath := filepath.Join(defsRoot, "declaration_admissions.json")
+
+	var sources map[string]any
+	readDeclarationAdmissionJSON(t, sourcePath, &sources)
+	var declarations map[string]any
+	readDeclarationAdmissionJSON(t, declarationPath, &declarations)
+	sources["source_operations"] = []any{}
+	declarations["declarations"] = []any{}
+	writeDeclarationAdmissionJSON(t, sourcePath, sources)
+	writeDeclarationAdmissionJSON(t, declarationPath, declarations)
+
+	report, err := declarationAdmissionPathCheck(defsRoot)
+	if err == nil && len(report.Findings) == 0 {
+		t.Fatalf("catalog row deletion passed while independent inventory retained its operation: report=%+v", report)
+	}
+
+	// Restoring the old adjacent-count escape hatch cannot change the source
+	// inventory denominator: schema v2 rejects these mutable count fields.
+	sources["expected_source_operations"] = 0
+	sources["expected_connectors"] = 0
+	declarations["expected_declarations"] = 0
+	writeDeclarationAdmissionJSON(t, sourcePath, sources)
+	writeDeclarationAdmissionJSON(t, declarationPath, declarations)
+	if _, err := declarationAdmissionPathCheck(defsRoot); err == nil {
+		t.Fatal("deleted rows plus decremented adjacent counts passed declaration admission")
+	}
+}
+
+func TestDeclarationAdmissionAcceptsProviderEvidencedUnsupportedAcrossAllSixLanes(t *testing.T) {
+	lanes := []string{
+		declarationAdmissionLaneETL,
+		declarationAdmissionLaneReverseETL,
+		declarationAdmissionLaneDirectRead,
+		declarationAdmissionLaneDirectWrite,
+		declarationAdmissionLaneBinaryDownload,
+		declarationAdmissionLaneBinaryUpload,
+	}
+	for _, lane := range lanes {
+		t.Run(lane, func(t *testing.T) {
+			defsRoot := declarationAdmissionUnsupportedFixtureDir(t, lane)
+			report, err := declarationAdmissionPathCheck(defsRoot)
+			if err != nil {
+				t.Fatalf("unsupported %s admission: %v", lane, err)
+			}
+			if len(report.Findings) != 0 {
+				t.Fatalf("unsupported %s findings = %+v, want none", lane, report.Findings)
+			}
+		})
 	}
 }
 
@@ -890,16 +1012,16 @@ func declarationAdmissionCatalogFixtureDir(t *testing.T) string {
 		}
 	}
 	sources := declarationAdmissionSourceCatalog{
-		SchemaVersion: declarationAdmissionSchemaVersion,
-		Cohort:        "test-cohort", ExpectedConnectors: 1, ExpectedOperations: 1,
+		SchemaVersion: 2,
+		Cohort:        "test-cohort",
 		SourceOperations: []declarationAdmissionSourceOperation{{
-			Connector: "cli-surface", ID: "list-widgets", Protocol: "rest", SourceURL: "https://provider.example.test/reference", Location: "Widgets > List", ProviderOperationID: "",
+			Connector: "cli-surface", ID: "list-widgets", Protocol: "rest", SourceURL: "https://provider.example.test/openapi.json", Location: "Widgets > List", ProviderOperationID: "provider.list-widgets",
 			Method: "GET", Path: "/widgets", Binding: declarationAdmissionBinding{Kind: "stream", ID: "widgets"}, DestructiveKind: "none",
 		}},
 	}
 	declarations := declarationAdmissionCatalog{
-		SchemaVersion: declarationAdmissionSchemaVersion,
-		Cohort:        "test-cohort", ExpectedDeclarations: 1,
+		SchemaVersion: 2,
+		Cohort:        "test-cohort",
 		Declarations: []declarationAdmissionDeclaration{{
 			Connector: "cli-surface", SourceID: "list-widgets", Lane: declarationAdmissionLaneETL, Command: "widget list", State: declarationAdmissionStateImplemented,
 			Canonical: declarationAdmissionEndpoint{Method: "GET", Path: "/widgets"}, Binding: declarationAdmissionBinding{Kind: "stream", ID: "widgets"},
@@ -908,6 +1030,15 @@ func declarationAdmissionCatalogFixtureDir(t *testing.T) string {
 	for name, catalog := range map[string]any{
 		"declaration_admission_sources.json": sources,
 		"declaration_admissions.json":        declarations,
+		"declaration_admission_inventory.json": map[string]any{
+			"schema_version": 1,
+			"cohort":         "test-cohort",
+			"operations": []any{map[string]any{
+				"connector": "cli-surface", "source_id": "list-widgets",
+				"source_lock":         "cli-surface/sources/cli-surface-operation-source-lock.json",
+				"source_operation_id": "provider.rest.widgets.list",
+			}},
+		},
 	} {
 		raw, err := json.Marshal(catalog)
 		if err != nil {
@@ -917,7 +1048,91 @@ func declarationAdmissionCatalogFixtureDir(t *testing.T) string {
 			t.Fatalf("write %s: %v", name, err)
 		}
 	}
+	writeDeclarationAdmissionSourceLock(t, defsRoot, "cli-surface", []map[string]any{{
+		"id": "provider.rest.widgets.list", "protocol": "rest", "method": "GET", "path": "/widgets",
+		"operation_id": "provider.list-widgets", "deprecated": false, "source_location": "Widgets > List",
+	}})
 	return defsRoot
+}
+
+func declarationAdmissionUnsupportedFixtureDir(t *testing.T, lane string) string {
+	t.Helper()
+	defsRoot := declarationAdmissionCatalogFixtureDir(t)
+	method := "GET"
+	if lane == declarationAdmissionLaneReverseETL || lane == declarationAdmissionLaneDirectWrite || lane == declarationAdmissionLaneBinaryUpload {
+		method = "POST"
+	}
+	command := "widget unsupported"
+	target := map[string]any{
+		"source_id": "list-widgets", "operation_id": "provider.list-widgets",
+		"method": method, "path": "/widgets",
+	}
+	disposition := map[string]any{
+		"reason": "the provider documents this operation but the CLI cannot support its semantics",
+		"target": target,
+	}
+	cliSurface := map[string]any{
+		"tagline": "Unsupported operation fixture", "usage": "pm cli-surface <command>",
+		"commands": []any{map[string]any{
+			"path": command, "summary": "Retain an unsupported provider operation", "intent": lane,
+			"availability":            "unsupported_with_provider_evidence",
+			"api_surface":             []any{map[string]any{"method": method, "path": "/widgets"}},
+			"unsupported_disposition": disposition,
+		}},
+	}
+	writeDeclarationAdmissionJSON(t, filepath.Join(defsRoot, "cli-surface", "cli_surface.json"), cliSurface)
+	apiSurface := map[string]any{
+		"api":       "test API v1",
+		"endpoints": []any{map[string]any{"method": method, "path": "/widgets"}},
+	}
+	writeDeclarationAdmissionJSON(t, filepath.Join(defsRoot, "cli-surface", "api_surface.json"), apiSurface)
+	sources := map[string]any{
+		"schema_version": 2, "cohort": "test-cohort",
+		"source_operations": []any{map[string]any{
+			"connector": "cli-surface", "id": "list-widgets", "protocol": "rest",
+			"source_url": "https://provider.example.test/openapi.json", "location": "Widgets > List",
+			"operation_id": "provider.list-widgets", "method": method, "path": "/widgets",
+			"binding": map[string]any{"kind": "command", "id": command}, "destructive_kind": "none",
+		}},
+	}
+	declarations := map[string]any{
+		"schema_version": 2, "cohort": "test-cohort",
+		"declarations": []any{map[string]any{
+			"connector": "cli-surface", "source_id": "list-widgets", "lane": lane, "command": command,
+			"state":                   "unsupported_with_provider_evidence",
+			"canonical":               map[string]any{"method": method, "path": "/widgets"},
+			"binding":                 map[string]any{"kind": "command", "id": command},
+			"unsupported_disposition": disposition,
+		}},
+	}
+	writeDeclarationAdmissionJSON(t, filepath.Join(defsRoot, "declaration_admission_sources.json"), sources)
+	writeDeclarationAdmissionJSON(t, filepath.Join(defsRoot, "declaration_admissions.json"), declarations)
+	writeDeclarationAdmissionSourceLock(t, defsRoot, "cli-surface", []map[string]any{{
+		"id": "provider.rest.widgets.list", "protocol": "rest", "method": method, "path": "/widgets",
+		"operation_id": "provider.list-widgets", "deprecated": false, "source_location": "Widgets > List",
+	}})
+	return defsRoot
+}
+
+func writeDeclarationAdmissionSourceLock(t *testing.T, defsRoot, connector string, operations []map[string]any) {
+	t.Helper()
+	path := filepath.Join(defsRoot, connector, "sources", connector+"-operation-source-lock.json")
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		t.Fatalf("create source-lock fixture directory: %v", err)
+	}
+	lock := map[string]any{
+		"schema_version": 2,
+		"connector":      connector,
+		"rest": map[string]any{
+			"source_url": "https://provider.example.test/openapi.json",
+			"sha256":     strings.Repeat("0", 64), "bytes": 1, "openapi": "3.0.3",
+			"operations": operations,
+		},
+		"counts": map[string]any{
+			"rest": len(operations), "graphql_query": 0, "graphql_mutation": 0, "total": len(operations),
+		},
+	}
+	writeDeclarationAdmissionJSON(t, path, lock)
 }
 
 func readDeclarationAdmissionJSON(t *testing.T, path string, target any) {
@@ -955,7 +1170,7 @@ func TestDeclarationAdmissionDeferredCLISurfaceNeedsFoundationGap(t *testing.T) 
 		Target: engine.CommandFoundationTarget{Method: "POST", Path: "/v1/widgets"},
 	}
 	findings = checkCLISurfaceFoundation(bundle, 1, bundle.CLISurface.Commands[1])
-	if len(findings) != 1 || !strings.Contains(findings[0].Message, "requires deferred availability") {
+	if len(findings) != 1 || !strings.Contains(findings[0].Message, "requires its matching availability") {
 		t.Fatalf("implemented foundation findings = %+v", findings)
 	}
 }

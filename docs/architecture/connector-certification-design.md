@@ -13,8 +13,10 @@ current delivery rules are in [the connector canon](../connector-canon/INDEX.md)
 > operation in the required independent source cohort has exactly one separate
 > declaration, lane, canonical endpoint, exact command/declaration binding,
 > source-owned destructive semantic, and discoverable command, with a runtime
-> binding or named deferred foundation. Nonzero expected cohort counts make a
-> missing catalog, omitted row, or zero-work run fail.
+> binding, named deferred foundation, or provider-evidenced unsupported
+> disposition. An independently reviewed inventory selects exact operations
+> from connector-owned source locks; the mutable v2 source/declaration catalogs
+> have no expected-count escape hatch.
 > Its no-I/O check reuses the real runtime resolver to reject false implemented
 > bindings. Provenance-row uniqueness uses one shared canonical provider
 > citation identity in authoring and the compact production ledger: stored URLs
@@ -27,8 +29,12 @@ current delivery rules are in [the connector canon](../connector-canon/INDEX.md)
 > arbitrary endpoint substitution fails closed. Deferred targets carry the admitted source and binding identities;
 > their compact ledger is embedded for production preflight even though full
 > API-surface manifests are not, and commandrunner tries its real implemented
-> preflight before accepting any missing-foundation classification. It accepts URL-plus-exact-citation evidence
-> without retained bytes, hashes, request bodies, credentials, or live proof. A
+> preflight before accepting any missing-foundation classification. An
+> unsupported disposition stays denominator-visible and discoverable in any of
+> the six lanes, but has no executor/foundation claim and returns its own typed
+> terminal. Admission resolves only the reviewed lock inventory: it does not
+> fetch/read retained bytes, recompute hashes, infer request bodies, resolve
+> credentials, or make a live claim. A
 > passing admission result is neither credential-bound runtime usability nor
 > live certification; see
 > [the declaration-admission canon](../connector-canon/DECLARATION-ADMISSION.md).

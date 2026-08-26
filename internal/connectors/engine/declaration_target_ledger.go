@@ -15,11 +15,9 @@ import (
 const DeclarationAdmissionSourcesFile = "declaration_admission_sources.json"
 
 type declarationAdmissionSourceCatalog struct {
-	SchemaVersion      int                                   `json:"schema_version"`
-	Cohort             string                                `json:"cohort"`
-	ExpectedConnectors int                                   `json:"expected_connectors"`
-	ExpectedOperations int                                   `json:"expected_source_operations"`
-	SourceOperations   []declarationAdmissionSourceOperation `json:"source_operations"`
+	SchemaVersion    int                                   `json:"schema_version"`
+	Cohort           string                                `json:"cohort"`
+	SourceOperations []declarationAdmissionSourceOperation `json:"source_operations"`
 }
 
 type declarationAdmissionSourceOperation struct {
@@ -55,11 +53,11 @@ func loadDeclarationTargetLedgers(fsys fs.FS) (map[string]*declarationTargetLedg
 	if err := strictDecode(raw, &catalog); err != nil {
 		return nil, fmt.Errorf("%s: %w", DeclarationAdmissionSourcesFile, err)
 	}
-	if catalog.SchemaVersion != 1 || strings.TrimSpace(catalog.Cohort) == "" {
+	if catalog.SchemaVersion != 2 || strings.TrimSpace(catalog.Cohort) == "" {
 		return nil, fmt.Errorf("%s: invalid schema version or empty cohort", DeclarationAdmissionSourcesFile)
 	}
-	if catalog.ExpectedOperations != len(catalog.SourceOperations) || catalog.ExpectedOperations <= 0 {
-		return nil, fmt.Errorf("%s: expected_source_operations = %d, found %d", DeclarationAdmissionSourcesFile, catalog.ExpectedOperations, len(catalog.SourceOperations))
+	if len(catalog.SourceOperations) == 0 {
+		return nil, fmt.Errorf("%s: source_operations must not be empty", DeclarationAdmissionSourcesFile)
 	}
 
 	ledgers := make(map[string]*declarationTargetLedger)
@@ -100,9 +98,6 @@ func loadDeclarationTargetLedgers(fsys fs.FS) (map[string]*declarationTargetLedg
 			Binding:         connectors.CommandBindingIdentity{Kind: source.Binding.Kind, ID: source.Binding.ID},
 			DestructiveKind: source.DestructiveKind, Method: method, Path: effectivePath,
 		}
-	}
-	if catalog.ExpectedConnectors != len(ledgers) || catalog.ExpectedConnectors <= 0 {
-		return nil, fmt.Errorf("%s: expected_connectors = %d, found %d", DeclarationAdmissionSourcesFile, catalog.ExpectedConnectors, len(ledgers))
 	}
 	return ledgers, nil
 }

@@ -112,3 +112,82 @@ func TestShippedDeclarationTargetReachesPublicMissingFoundationEnvelopeWithoutAP
 		})
 	}
 }
+
+func TestGitHubLabelDeleteValidatesRequiredInputBeforeCredentialResolution(t *testing.T) {
+	root := t.TempDir()
+	var initOut, initErr bytes.Buffer
+	if code := Run([]string{"init", "--root", root, "--json"}, &initOut, &initErr); code != 0 {
+		t.Fatalf("init code=%d stdout=%s stderr=%s", code, initOut.String(), initErr.String())
+	}
+
+	var helpOut, helpErr bytes.Buffer
+	if code := Run([]string{"github", "label", "delete", "--help", "--root", root, "--json"}, &helpOut, &helpErr); code != 0 {
+		t.Fatalf("label delete help code=%d stdout=%s stderr=%s", code, helpOut.String(), helpErr.String())
+	}
+	if !strings.Contains(helpOut.String(), "--name") {
+		t.Fatalf("label delete help omitted required input: %s", helpOut.String())
+	}
+
+	var missingOut, missingErr bytes.Buffer
+	code := Run([]string{"github", "label", "delete", "--root", root, "--json"}, &missingOut, &missingErr)
+	if code == 0 || !strings.Contains(missingOut.String()+missingErr.String(), "missing required flag --name") {
+		t.Fatalf("bare label delete code=%d stdout=%s stderr=%s", code, missingOut.String(), missingErr.String())
+	}
+	if strings.Contains(missingOut.String()+missingErr.String(), "missing --credential") {
+		t.Fatalf("bare label delete reached credential resolution before input validation: stdout=%s stderr=%s", missingOut.String(), missingErr.String())
+	}
+
+	var validOut, validErr bytes.Buffer
+	code = Run([]string{"github", "label", "delete", "--name", "bug", "--root", root, "--json"}, &validOut, &validErr)
+	if code == 0 || !strings.Contains(validOut.String()+validErr.String(), "missing --credential") {
+		t.Fatalf("complete label delete code=%d stdout=%s stderr=%s", code, validOut.String(), validErr.String())
+	}
+}
+
+func TestConnectorCommandInputDefectsFailBeforeWithApp(t *testing.T) {
+	minimum := connectors.ExactNumber("2")
+	bundle := engine.Bundle{
+		Name:    "input-ordering",
+		Streams: []engine.StreamSpec{{Name: "widgets", Method: "GET", Path: "/widgets"}},
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{Method: "GET", Path: "/widgets"}}},
+		CLISurface: &engine.CLISurface{
+			Tagline: "Input ordering fixture", Usage: "pm input-ordering widgets list",
+			Commands: []engine.CLICommand{{
+				Path: "widgets list", Summary: "List widgets", Intent: "etl", Availability: "implemented", Stream: "widgets",
+				APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/widgets"}},
+				Flags: []engine.CLIFlag{
+					{Name: "state", Type: "enum", Values: []string{"open", "closed"}, MapsTo: "query.state", Required: true},
+					{Name: "batch", Type: "integer", MapsTo: "query.batch", Minimum: &minimum},
+					{Name: "secret-input", Type: "string", MapsTo: "query.secret_input", EnvOnly: true},
+				},
+			}},
+		},
+	}
+	registry := connectors.NewEmptyRegistry()
+	registry.Register(engine.New(bundle, nil))
+	tests := []struct {
+		name string
+		args []string
+		want string
+	}{
+		{name: "missing required", args: []string{"widgets", "list"}, want: "missing required flag --state"},
+		{name: "unknown", args: []string{"widgets", "list", "--state", "open", "--other", "value"}, want: "unknown flag --other"},
+		{name: "enum", args: []string{"widgets", "list", "--state", "pending"}, want: "want one of"},
+		{name: "minimum", args: []string{"widgets", "list", "--state", "open", "--batch", "1"}, want: "at least 2"},
+		{name: "env only direct carrier", args: []string{"widgets", "list", "--state", "open", "--secret-input", "must-not-enter-argv"}, want: "--secret-input must be supplied through --from-env"},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			err := runMaybeConnectorCommandWithRegistry(context.Background(), t.TempDir(), "input-ordering", testCase.args, &stdout, &stderr, true, registry)
+			if err == nil || !strings.Contains(err.Error(), testCase.want) {
+				t.Fatalf("input defect error=%v stdout=%s stderr=%s; want %q before app open", err, stdout.String(), stderr.String(), testCase.want)
+			}
+		})
+	}
+
+	var helpOut, helpErr bytes.Buffer
+	if err := runMaybeConnectorCommandWithRegistry(context.Background(), t.TempDir(), "input-ordering", []string{"widgets", "list", "--help"}, &helpOut, &helpErr, false, registry); err != nil {
+		t.Fatalf("help should return before request validation: %v", err)
+	}
+}

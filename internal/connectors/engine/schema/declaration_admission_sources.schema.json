@@ -2,13 +2,11 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "declaration_admission_sources.json",
   "type": "object",
-  "required": ["schema_version", "cohort", "expected_connectors", "expected_source_operations", "source_operations"],
+  "required": ["schema_version", "cohort", "source_operations"],
   "additionalProperties": false,
   "properties": {
-    "schema_version": { "type": "integer", "enum": [1] },
+    "schema_version": { "type": "integer", "enum": [2] },
     "cohort": { "type": "string", "minLength": 1, "maxLength": 128 },
-    "expected_connectors": { "type": "integer", "minimum": 1 },
-    "expected_source_operations": { "type": "integer", "minimum": 1 },
     "source_operations": {
       "type": "array",
       "minItems": 1,

@@ -212,6 +212,25 @@ func Preflight(connector connectors.Connector, path []string) error {
 	return err
 }
 
+// PreflightRequest validates one public command invocation without credentials
+// and without calling an executor. It resolves the same executable command as
+// Preflight and shares the exact flag coercion/requiredness rules used while
+// constructing runtime requests.
+func PreflightRequest(connector connectors.Connector, req Request) error {
+	cmd, _, err := resolvePreflightCommand(connector, req.Path)
+	if err != nil {
+		return err
+	}
+	flags := req.Flags
+	if cmd.Intent == "direct_read" {
+		flags = withoutDirectReadPageFlags(flags)
+	}
+	if _, err := validateCommandFlagSet(cmd, flags); err != nil {
+		return err
+	}
+	return validateConfiguredFlagMinimums(cmd, req.Config)
+}
+
 func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req Request) (WriteCommand, error) {
 	cmd, command, err := resolvePreflightCommand(connector, req.Path)
 	if err != nil {
@@ -460,6 +479,18 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	if !ok {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: "unknown command"}
 	}
+	if cmd.Availability == "unsupported_with_provider_evidence" {
+		if cmd.Unsupported == nil || strings.TrimSpace(cmd.Unsupported.Reason) == "" ||
+			strings.TrimSpace(cmd.Unsupported.Target.SourceID) == "" ||
+			strings.TrimSpace(cmd.Unsupported.Target.Method) == "" || strings.TrimSpace(cmd.Unsupported.Target.Path) == "" ||
+			cmd.Foundation != nil || cmd.Stream != "" || cmd.Write != "" || cmd.Operation != "" {
+			return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+				Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability,
+				Reason: "provider-evidenced unsupported command has invalid source disposition metadata",
+			}
+		}
+		return connectors.CommandSurfaceCommand{}, command, unsupportedCommandError(connector.Name(), command, cmd)
+	}
 	if cmd.Availability == "deferred" {
 		implemented := cmd
 		implemented.Availability = "implemented"
@@ -491,6 +522,30 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	}
 	return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
 		Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: blockReason(cmd),
+	}
+}
+
+func unsupportedCommandError(connectorName, command string, cmd connectors.CommandSurfaceCommand) *BlockedCommandError {
+	reason := boundedFailureMessage(cmd.Unsupported.Reason, 700)
+	message := "provider-evidenced unsupported operation: " + reason
+	classification, err := failures.New(failures.Input{
+		Domain: failures.DomainSystem, Code: "provider_evidenced_unsupported", Message: message,
+		DispatchKind: failures.DispatchKindDeclaredButUnroutableCommand,
+		References: []failures.Reference{
+			{Kind: failures.ReferenceKindConnector, Value: boundedFailureReference(connectorName)},
+			{Kind: failures.ReferenceKindCommand, Value: boundedFailureReference(strings.ReplaceAll(command, " ", "_"))},
+			{Kind: failures.ReferenceKindSource, Value: boundedFailureReference(cmd.Unsupported.Target.SourceID)},
+		},
+	}, nil)
+	if err != nil {
+		classification, _ = failures.New(failures.Input{
+			Domain: failures.DomainSystem, Code: "provider_evidenced_unsupported", Message: "provider-evidenced operation is unsupported",
+			DispatchKind: failures.DispatchKindDeclaredButUnroutableCommand,
+		}, nil)
+	}
+	return &BlockedCommandError{
+		Connector: connectorName, Command: command, Intent: cmd.Intent, Availability: cmd.Availability,
+		Reason: message, Failure: classification,
 	}
 }
 
@@ -1267,17 +1322,8 @@ func blockReason(cmd connectors.CommandSurfaceCommand) string {
 }
 
 func streamOverrides(cmd connectors.CommandSurfaceCommand, cfg connectors.RuntimeConfig, flags map[string][]string) (connectors.RuntimeConfig, map[string]string, error) {
-	allowed := map[string]connectors.CommandSurfaceFlag{}
-	for _, flag := range cmd.Flags {
-		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
-			return connectors.RuntimeConfig{}, nil, err
-		}
-		allowed[flag.Name] = flag
-	}
-	if err := validateCanonicalFlagOccurrences(cmd, flags); err != nil {
-		return connectors.RuntimeConfig{}, nil, err
-	}
-	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+	allowed, err := validateCommandFlagSet(cmd, flags)
+	if err != nil {
 		return connectors.RuntimeConfig{}, nil, err
 	}
 
@@ -1513,6 +1559,52 @@ func parseDateTimeValue(value, label string) (time.Time, error) {
 		return time.Time{}, fmt.Errorf("invalid %s, want ISO-8601/RFC3339 timestamp", label)
 	}
 	return parsed, nil
+}
+
+// validateCommandFlagSet is the one credential-free validation boundary for
+// declared command inputs. Runtime mapping helpers use the returned declaration
+// map, so the public preflight and executor request builders cannot drift on
+// requiredness, multiplicity, unknown flags, types, enums, bounds, formats, or
+// encoded-size limits.
+func validateCommandFlagSet(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]connectors.CommandSurfaceFlag, error) {
+	allowed := make(map[string]connectors.CommandSurfaceFlag, len(cmd.Flags))
+	for _, flag := range cmd.Flags {
+		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
+			return nil, err
+		}
+		if _, duplicate := allowed[flag.Name]; duplicate {
+			return nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s is declared more than once", flag.Name)}
+		}
+		allowed[flag.Name] = flag
+	}
+	if err := validateCanonicalFlagOccurrences(cmd, flags); err != nil {
+		return nil, err
+	}
+	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+		return nil, err
+	}
+	names := make([]string, 0, len(flags))
+	for name := range flags {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		values := flags[name]
+		if len(values) == 0 {
+			continue
+		}
+		if err := safety.ValidateIdentifier(name, "flag name"); err != nil {
+			return nil, err
+		}
+		flag, ok := allowed[name]
+		if !ok {
+			return nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
+		}
+		if _, err := coerceCommandFlagValue(cmd, flag, values); err != nil {
+			return nil, err
+		}
+	}
+	return allowed, nil
 }
 
 func validateRequiredCommandFlags(cmd connectors.CommandSurfaceCommand, flags map[string][]string) error {
@@ -1866,17 +1958,8 @@ func validateFlagFormat(flag connectors.CommandSurfaceFlag, value string) error 
 }
 
 func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, error) {
-	allowed := map[string]connectors.CommandSurfaceFlag{}
-	for _, flag := range cmd.Flags {
-		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
-			return nil, nil, err
-		}
-		allowed[flag.Name] = flag
-	}
-	if err := validateCanonicalFlagOccurrences(cmd, flags); err != nil {
-		return nil, nil, err
-	}
-	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+	allowed, err := validateCommandFlagSet(cmd, flags)
+	if err != nil {
 		return nil, nil, err
 	}
 
@@ -1939,17 +2022,8 @@ func operationDirectWriteOverrides(cmd connectors.CommandSurfaceCommand, flags m
 }
 
 func operationDirectOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string, materialize func(string, map[string]any) (map[string]any, error)) (map[string]string, map[string]string, map[string]string, map[string][]string, map[string]any, *string, error) {
-	allowed := map[string]connectors.CommandSurfaceFlag{}
-	for _, flag := range cmd.Flags {
-		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
-			return nil, nil, nil, nil, nil, nil, err
-		}
-		allowed[flag.Name] = flag
-	}
-	if err := validateCanonicalFlagOccurrences(cmd, flags); err != nil {
-		return nil, nil, nil, nil, nil, nil, err
-	}
-	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+	allowed, err := validateCommandFlagSet(cmd, flags)
+	if err != nil {
 		return nil, nil, nil, nil, nil, nil, err
 	}
 
@@ -2283,17 +2357,8 @@ func stringifyCommandValue(value any) string {
 }
 
 func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (connectors.Record, error) {
-	allowed := map[string]connectors.CommandSurfaceFlag{}
-	for _, flag := range cmd.Flags {
-		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
-			return nil, err
-		}
-		allowed[flag.Name] = flag
-	}
-	if err := validateCanonicalFlagOccurrences(cmd, flags); err != nil {
-		return nil, err
-	}
-	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+	allowed, err := validateCommandFlagSet(cmd, flags)
+	if err != nil {
 		return nil, err
 	}
 	if err := validateRecordFlagTargets(cmd); err != nil {

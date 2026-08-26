@@ -1,8 +1,6 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "cohort": "batch-1-foundation",
-  "expected_connectors": 1,
-  "expected_source_operations": 1,
   "source_operations": [
     {
       "connector": "github",

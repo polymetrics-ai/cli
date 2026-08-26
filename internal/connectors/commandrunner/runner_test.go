@@ -20,6 +20,7 @@ import (
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/failures"
 )
 
 type fakeConnector struct {
@@ -166,6 +167,60 @@ func TestCommandRunnerRejectsDuplicateSingletonTargetsBeforeIO(t *testing.T) {
 	record, err := recordOverrides(arrayCommand, map[string][]string{"tag": {"one", "two"}})
 	if err != nil || !reflect.DeepEqual(record["tags"], []string{"one", "two"}) {
 		t.Fatalf("repeatable array = %#v, err %v", record, err)
+	}
+}
+
+func TestPreflightProviderEvidencedUnsupportedReturnsTypedTerminal(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "widgets unsupported", Intent: "direct_read", Availability: "unsupported_with_provider_evidence",
+		Unsupported: &connectors.CommandUnsupportedDisposition{
+			Reason: "the provider documents this operation but the CLI cannot support its semantics",
+			Target: connectors.CommandUnsupportedTarget{
+				SourceID: "provider.rest.widgets.get", ProviderOperationID: "widgets/get", Method: "GET", Path: "/widgets/{id}",
+			},
+		},
+	}}}}
+	err := Preflight(connector, []string{"widgets", "unsupported"})
+	var blocked *BlockedCommandError
+	if !errors.As(err, &blocked) || blocked.Failure == nil {
+		t.Fatalf("unsupported preflight = %v, want typed terminal", err)
+	}
+	if blocked.Failure.Code() != "provider_evidenced_unsupported" || blocked.Failure.Domain() != failures.DomainSystem {
+		t.Fatalf("unsupported failure = %+v, want system/provider_evidenced_unsupported", blocked.Failure)
+	}
+}
+
+func TestPreflightRequestValidatesDeclaredInputsWithoutExecutor(t *testing.T) {
+	minimum := connectors.ExactNumber("2")
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "widgets list", Intent: "etl", Availability: "implemented", Stream: "widgets",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "state", Type: "enum", Values: []string{"open", "closed"}, MapsTo: "query.state", Required: true},
+			{Name: "limit", Type: "integer", MapsTo: "query.limit", Minimum: &minimum},
+		},
+	}}}}
+	tests := []struct {
+		name  string
+		flags map[string][]string
+		want  string
+	}{
+		{name: "missing required", flags: map[string][]string{}, want: "missing required flag --state"},
+		{name: "unknown", flags: map[string][]string{"state": {"open"}, "other": {"value"}}, want: "unknown flag --other"},
+		{name: "enum", flags: map[string][]string{"state": {"pending"}}, want: "want one of"},
+		{name: "minimum", flags: map[string][]string{"state": {"open"}, "limit": {"1"}}, want: "at least 2"},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			err := PreflightRequest(connector, Request{Path: []string{"widgets", "list"}, Flags: testCase.flags})
+			if err == nil || !strings.Contains(err.Error(), testCase.want) {
+				t.Fatalf("request preflight = %v, want %q", err, testCase.want)
+			}
+		})
+	}
+	if err := PreflightRequest(connector, Request{
+		Path: []string{"widgets", "list"}, Flags: map[string][]string{"state": {"closed"}, "limit": {"2"}},
+	}); err != nil {
+		t.Fatalf("valid request preflight: %v", err)
 	}
 }
 

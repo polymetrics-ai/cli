@@ -890,6 +890,29 @@ func checkCLISurface(b engine.Bundle) []Finding {
 }
 
 func checkCLISurfaceFoundation(b engine.Bundle, index int, command engine.CLICommand) []Finding {
+	if command.Availability == declarationAdmissionStateUnsupported {
+		if command.Unsupported == nil || strings.TrimSpace(command.Unsupported.Reason) == "" ||
+			strings.TrimSpace(command.Unsupported.Target.SourceID) == "" || strings.TrimSpace(command.Unsupported.Target.Method) == "" ||
+			strings.TrimSpace(command.Unsupported.Target.Path) == "" || command.Foundation != nil {
+			return []Finding{{
+				Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety,
+				Message: fmt.Sprintf("command %d (%q) provider-evidenced unsupported availability requires one exact unsupported_disposition and no foundation_gap", index, command.Path),
+			}}
+		}
+		if command.Stream != "" || command.Write != "" || command.Operation != "" {
+			return []Finding{{
+				Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety,
+				Message: fmt.Sprintf("command %d (%q) provider-evidenced unsupported availability must not claim an executable target", index, command.Path),
+			}}
+		}
+		if len(command.APISurface) != 1 || !strings.EqualFold(command.APISurface[0].Method, command.Unsupported.Target.Method) || command.APISurface[0].Path != command.Unsupported.Target.Path {
+			return []Finding{{
+				Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety,
+				Message: fmt.Sprintf("command %d (%q) unsupported source target must match exactly one api_surface endpoint", index, command.Path),
+			}}
+		}
+		return nil
+	}
 	if command.Availability == declarationAdmissionStateDeferred {
 		if command.Foundation == nil || strings.TrimSpace(command.Foundation.ID) == "" || strings.TrimSpace(command.Foundation.Reason) == "" ||
 			!connectors.ValidCommandFoundationComponent(command.Foundation.Component) ||
@@ -929,14 +952,14 @@ func checkCLISurfaceFoundation(b engine.Bundle, index int, command engine.CLICom
 		}
 		return nil
 	}
-	if command.Foundation == nil {
+	if command.Foundation == nil && command.Unsupported == nil {
 		return nil
 	}
 	return []Finding{{
 		Connector: b.Name,
 		File:      "cli_surface.json",
 		Rule:      ruleCLISurfaceSafety,
-		Message:   fmt.Sprintf("command %d (%q) foundation_gap requires deferred availability", index, command.Path),
+		Message:   fmt.Sprintf("command %d (%q) foundation_gap or unsupported_disposition requires its matching availability", index, command.Path),
 	}}
 }
 

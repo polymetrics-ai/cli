@@ -1,20 +1,33 @@
 # Source-declaration admission
 
 `connectorgen declaration-admission` is the deterministic source-completeness
-certificate. It reads two required repository-level catalogs and performs no
-provider I/O:
+certificate. It reads three required repository-level artifacts and performs
+no provider I/O:
 
-- `internal/connectors/defs/declaration_admission_sources.json` is the
-  independent source cohort and completeness denominator. Its nonzero expected
-  connector and operation counts make a missing catalog, deleted row, or
-  zero-work run fail.
+- `internal/connectors/defs/declaration_admission_inventory.json` is the
+  independently reviewed completeness denominator. Each entry selects one
+  exact operation ID from a connector-owned
+  `<connector>/sources/*-operation-source-lock.json` and assigns its compact
+  source ID. Deleting mutable rows or changing adjacent counts cannot shrink
+  this inventory; the v2 catalogs do not accept expected-count fields.
+- `internal/connectors/defs/declaration_admission_sources.json` is the compact
+  source cohort used by authoring admission and shipped deferred-target
+  preflight. Every row must equal the selected lock operation's provider URL,
+  exact document location, protocol, provider operation ID, method, and path.
 - `internal/connectors/defs/declaration_admissions.json` contains the separate
-  canonical declaration for each source identity. Its expected declaration
-  count must match the rows present.
+  canonical declaration for each inventoried source identity.
 
 The checker does not scan connector-local sidecars. Adding a sidecar without
 adding its operation to the required source cohort cannot make the global gate
 pass or silently expand the certified cohort.
+
+The checker resolves only connector-owned reviewed lock files and reads no
+provider or retained artifact bytes. A path outside the selected connector's
+`sources/` directory, a nonexistent locked operation, an unrelated URL, or a
+semantic location/endpoint alias fails closed. The reviewed lock already owns
+the retained content identity; declaration admission neither fetches that
+content nor recomputes its byte count or hash. Source retention verification
+remains a separate certificate.
 
 Each source row records a stable source ID, protocol, provider HTTPS URL,
 exact document location, optional raw provider operation ID, method/base/path,
@@ -53,6 +66,12 @@ GraphQL operation-to-`POST /graphql`, a declaration-owned query, a known
 provider `.json` suffix, or an operation annotation. A method change or an
 unrelated path is never replaced by the command surface.
 
+Public connector dispatch validates required, unknown, typed, enum, bounded,
+and `env_only` inputs after help handling and before opening the app or resolving
+a credential. A valid invocation still reaches the existing credential-bound
+runtime boundary; admission and credential-free input validation do not make a
+runtime or live usability claim.
+
 An admitted `deferred` row instead names one missing implementation component
 with closed evidence. Its discoverable command carries the same gap and an
 exact source target: source ID, optional raw operation ID, binding identity,
@@ -67,6 +86,15 @@ remains true in the shipped binary even though the full `api_surface.json` is
 intentionally not embedded. A complete connector may have zero runnable
 operations when every source row is explicitly deferred.
 
+`unsupported_with_provider_evidence` is a third, non-executable disposition.
+It is valid in every admission lane when the provider documents the operation
+but the CLI cannot support its semantics. The operation remains in the
+inventory and command discovery surface with its exact source target and a
+bounded reason, while declaring no stream, write, operation executor, or
+missing foundation. Commandrunner returns typed
+`system/provider_evidenced_unsupported`; it cannot be counted as implemented
+or deferred runtime usability.
+
 A foundation gap names a missing implementation component such as
 `typed_write_action`, `typed_record_schema`, `source_importer`, or
 `runtime_executor`. Components are executor-specific: for example,
@@ -78,9 +106,11 @@ not a foundation component and cannot hide a source operation. Deferred state
 also does not apply to an operation class: an existing implemented delete
 remains implemented. GitHub `label delete` is the admission/runtime control.
 
-Admission requires neither retained source bytes nor a hash, request body,
-typed schema, credentials, provider response, or live proof. Declaration
-completeness and runtime/live usability are distinct certificates:
+Admission requires a reviewed connector-owned source-lock operation selection,
+but it does not fetch/read retained source bytes, recompute a hash, infer a
+request body or typed schema, resolve credentials, inspect a provider response,
+or claim live proof. Declaration completeness and runtime/live usability are
+distinct certificates:
 
 ```bash
 go run ./cmd/connectorgen declaration-admission

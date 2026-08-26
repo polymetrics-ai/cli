@@ -9,9 +9,10 @@
 // certification compiles its pinned GraphQL schema from that exact raw file.
 // The generated operation endpoint ledger retains only direct-read method,
 // path, operation kind, and response-cap bindings needed for runtime preflight.
-// declaration_admission_sources.json is the compact admitted-source
-// target ledger needed to keep deferred preflight exact in installed binaries.
-// The separate declaration catalog remains a repository certification input.
+// declaration_admission_sources.json is the compact admitted-source target
+// ledger needed to keep deferred preflight exact in installed binaries. The
+// independent declaration-admission inventory and separate declaration catalog
+// remain repository-only certification inputs.
 // In shipped builds, direct-write endpoint validation is derived only from the
 // embedded rest_write operation declarations; it checks internal declaration
 // consistency, not provider documented-surface provenance (#3773 owns that).

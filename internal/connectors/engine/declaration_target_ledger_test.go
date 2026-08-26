@@ -30,7 +30,7 @@ func TestDeclarationTargetLedgerRejectsNoncanonicalProviderCitations(t *testing.
 				DestructiveKind: "none",
 			}
 			catalog := declarationAdmissionSourceCatalog{
-				SchemaVersion: 1, Cohort: "test", ExpectedConnectors: 1, ExpectedOperations: 1,
+				SchemaVersion: 2, Cohort: "test",
 				SourceOperations: []declarationAdmissionSourceOperation{source},
 			}
 			raw, err := json.Marshal(catalog)
@@ -47,10 +47,8 @@ func TestDeclarationTargetLedgerRejectsNoncanonicalProviderCitations(t *testing.
 
 func TestDeclarationTargetLedgerRejectsDuplicateProviderProvenanceAcrossBindings(t *testing.T) {
 	raw := []byte(`{
-  "schema_version": 1,
+  "schema_version": 2,
   "cohort": "test",
-  "expected_connectors": 1,
-  "expected_source_operations": 2,
   "source_operations": [
     {
       "connector": "acme",
@@ -88,10 +86,8 @@ func TestDeclarationTargetLedgerRejectsDuplicateProviderProvenanceAcrossBindings
 
 func TestDeclarationTargetLedgerAcceptsGraphQLOperationIdentity(t *testing.T) {
 	raw := []byte(`{
-  "schema_version": 1,
+  "schema_version": 2,
   "cohort": "test",
-  "expected_connectors": 1,
-  "expected_source_operations": 1,
   "source_operations": [{
     "connector": "acme",
     "id": "acme.graphql.list-widgets",
