@@ -1,0 +1,12 @@
+{
+  "issue": 4371,
+  "parent_issue": 4291,
+  "phase": "issue-4371-cited-only-mutation-reference-r1",
+  "base_branch": "main",
+  "initial_origin_main": "cf29d302c13f7fcd340d31ad6dc27872880ccf42",
+  "working_branch": "fm/cli-cited-only-mutation-reference-foundation-r1",
+  "delivery": "direct-pr",
+  "state": "plan_tdd",
+  "gsd_execution": "inline_manual_single_worker_fallback",
+  "expected_usable_surface_delta": 0
+}
