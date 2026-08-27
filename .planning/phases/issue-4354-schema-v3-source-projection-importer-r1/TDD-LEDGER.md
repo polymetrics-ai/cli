@@ -245,6 +245,15 @@ PASS
   descriptor validation before materialization, and therefore rejects the
   tampered descriptor without reaching a command/action projection path.
 
+### Refactor correction — 2026-08-27
+
+The first complete `cmd/connectorgen` run found that carrying descriptor schema
+version into the existing materializer activated a v3 execution-envelope rule
+for an unrelated synthetic source-projection fixture. That propagation was not
+needed for the new pre-materialization citation check and was removed. The
+focused source-reference plus `TestSurfaceSyncAcceptsSchema3SourceDescriptor`
+set then passed, followed by the full package in `168.282s`.
+
 ## Frozen independent-audit repair wave — planned red/green (2026-08-27)
 
 The fresh independent audit of head `21480fcd9ce5701164bafb82666ffe5bbc3934c4`

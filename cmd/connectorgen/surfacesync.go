@@ -257,11 +257,10 @@ func syncCheckedInSourceProjection(bundleDir, connector string, check bool) (sou
 		}
 	}
 	return projectSourceDescriptorToBundle(bundleDir, sourceImportResult{
-		DescriptorSchemaVersion: descriptor.SchemaVersion,
-		Operations:              descriptor.Operations,
-		InboundEvents:           descriptor.InboundEvents,
-		Extensions:              descriptor.Extensions,
-		GraphQLSchemas:          descriptor.GraphQLSchemas,
+		Operations:     descriptor.Operations,
+		InboundEvents:  descriptor.InboundEvents,
+		Extensions:     descriptor.Extensions,
+		GraphQLSchemas: descriptor.GraphQLSchemas,
 	}, check)
 }
 
