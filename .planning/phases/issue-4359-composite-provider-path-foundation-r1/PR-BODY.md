@@ -91,3 +91,8 @@ the recovery changes only the generator-owned declaration fingerprint and
 preserves the closed endpoint surface, runtime embedding policy, six-lane
 isolation, and honest Batch 1 credential-boundary limitation. No Copilot
 fallback was needed.
+
+After current main #4356 was normally merged, a further fresh-context Codex
+audit of exact base `2165619e` and head `50cb0e41d` passed with zero findings.
+It verified the generator-only merge resolution, exact eleven-row source/CLI
+witness, closed six lanes, no engine literals, and no CircleCI CLI expansion.

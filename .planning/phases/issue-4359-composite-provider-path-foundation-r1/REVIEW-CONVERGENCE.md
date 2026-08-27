@@ -153,3 +153,21 @@ source-projection/CLI-mapping inputs with this branch's declaration input. No
 CircleCI proof, source lock, runtime route, CLI surface, App path, or lane
 eligibility was hand-resolved or broadened. A fresh exact-head independent
 Codex review is required after the normal push.
+
+## Post-main exact-head independent review
+
+Fresh-context Codex independently reviewed exact main
+`2165619ec8f5f9d4141b491b7a5a64bc460d0c71` and exact remote PR head
+`50cb0e41d9dd1e4dbe2f601511564d0fb93b2b09`. Verdict: **PASS — zero critical,
+high, medium, or low findings.**
+
+It confirmed `4d7f57894` is the normal two-parent merge of `2e60b4b72` and
+current main, with only `current-subject.json` conflicted and canonically
+regenerated. The subject, surface-sync, and operation-evidence checks are
+current. The retained Batch-1 source-lock witness and Batch-1 CLI bindings
+match all eleven declaration rows exactly; the current API-surface coverage is
+the same. The full/focused engine matrices retain all six-lane refusals and
+admissions, production engine contains no CircleCI literals, and the installed
+binary still refuses `pm circleci` as unknown with exit 2. #4356 remains an
+unmodified main parent and does not broaden this proof. No additional fix or
+audit is required for this code state.
