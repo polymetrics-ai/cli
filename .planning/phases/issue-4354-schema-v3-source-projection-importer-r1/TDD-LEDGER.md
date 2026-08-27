@@ -131,6 +131,68 @@ go test -timeout 20m ./cmd/connectorgen \
   green. No new command, request contract, credential flow, provider call, or
   certification condition was added.
 
+## Current-main integration gap — red (2026-08-27)
+
+After merging `origin/main@2165619e`, the global generator backstop failed:
+
+```text
+connectorgen validate: github source descriptor provenance drift for
+orgs/add-security-manager-team
+connectorgen surface-sync: github source projection: validate canonical source
+descriptor: source descriptor provenance drift for
+actions/set-workflow-access-to-repository
+```
+
+The merge had retained an exact full-provenance comparison outside the
+citation-only `expectedOperation.reference` branch. That comparison is needed
+for a citation descriptor only, where the existing deep equality already owns
+connector/protocol/method/path/provenance/empty contract/gaps. For ordinary v3
+documents, current main owns the narrower provider contract comparison.
+
+### Current-main integration gap — green (2026-08-27)
+
+The execution retained `reflect.DeepEqual(operation, *expectedOperation.reference)`
+for every citation-only descriptor, which already includes exact connector,
+protocol, method, path, provenance, empty request/response/output, merge-block,
+and exact gap state. It removed duplicate broad source-hash/provenance checks
+for ordinary documents, preserving current main’s endpoint/identity comparison.
+
+```text
+go test <B1/B2 and provenance set>                 PASS
+connectorgen validate internal/connectors/defs     553 / 0 findings
+connectorgen surface-sync --check ...              553 scanned / zero drift
+connectorgen operation-evidence . --check          1,774 rows / 5 rollups / fixed-100
+```
+
+### Current-main projection-compatibility gap — red (2026-08-27)
+
+The full changed-package run failed two established synthetic projection tests:
+
+```text
+TestSourceProjection_MissingOperationOrFieldFailsValidateAndSurfaceCheck
+TestSurfaceSyncAcceptsSchema3SourceDescriptor
+parse source lock: source lock has unsupported schema version 0
+```
+
+Those tests used deliberately invalid `{}` lock fixtures to cover the
+materializer independently of source-import admission. They are not a reason
+to restore a marker-only source-reference gateway or to tolerate an invalid
+lock. The green design is unconditional: parse every checked-in lock strictly,
+bind every descriptor to that parsed lock, and reject before projection. The
+tests now build minimal valid legacy-v1 and v3 inventories for their projection
+assertions and separately assert that `{}` fails the strict parser.
+
+### Current-main projection-compatibility gap — green (2026-08-27)
+
+`TestSourceProjection_MissingOperationOrFieldFailsValidateAndSurfaceCheck`
+now writes a minimal valid legacy lock whose operation identity and provenance
+match the synthetic descriptor; it also asserts `parseSourceImportLock({})`
+rejects schema version zero. `TestSurfaceSyncAcceptsSchema3SourceDescriptor`
+uses the standard valid v3 document fixture and its derived descriptor
+identity/provenance. With those valid inputs, `surface-sync` has one trust
+boundary for all locks: strict parse followed by descriptor validation before
+materialization.
+
 ## Verify repair red
 
 2026-08-26 — GitHub Verify runs `32978972653` and `32978973162` both failed
@@ -374,3 +436,18 @@ PASS
   source location, so the count-preserving cross-source swap is rejected.
 - Next: merge `origin/main` normally and repeat this suite plus the required
   generator, engine, runner, docs, boundary, and release checks.
+
+## Exact-head R3 B1/B2 final green evidence — 2026-08-27
+
+The corrected strict-parser implementation passed the full changed package:
+
+```text
+go test -timeout 20m ./cmd/connectorgen
+PASS (196.142s)
+```
+
+The focused suite also passed against the exact complete fixture. It covers
+both B1 absence overlays, the v3 altered-marker/exact-gap bypass, every
+reference-only absence field including `source_kind: null`, exact
+connector/protocol/method/path/provenance/empty-contract/root-gap tampering,
+and the primary/supplemental provenance swap.

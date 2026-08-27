@@ -262,3 +262,50 @@ ordinary merge commit `449f18cdd`.
   projection.
 - **Not yet final:** current-main merge, scoped/full gate run, inline code
   review, no-mistakes pipeline, CI, and independent exact-head audit remain.
+
+### Current-main integration verification
+
+- `origin/main@2165619e` was integrated as ordinary merge commit `3315f4ea2`.
+  The only conflicts were shared source-import/projection/surface-sync code;
+  no generated certification artifact conflicted or was manually edited.
+- The first merged-tree generator run failed on ordinary GitHub v3 descriptor
+  provenance because a citation-only equality condition had expanded beyond
+  citation documents. The `--gaps` inline GSD cycle retained exact deep
+  equality for `expectedOperation.reference` and current-main generic endpoint
+  checks for ordinary descriptors.
+- Green after the narrow correction: the focused B1/B2 and provenance set;
+  `connectorgen validate` (553 / 0); `surface-sync --check` (553 / zero
+  drift); and operation evidence (1,774 rows, five rollups, fixed-100).
+
+## Exact-head R3 B1/B2 final local verification — 2026-08-27
+
+The required main integration is commit `3315f4ea2` (ordinary merge of
+`origin/main@2165619ec8f5f9d4141b491b7a5a64bc460d0c71`). The final implementation
+parses every checked-in lock strictly and validates its descriptor before any
+projection. The two historical `{}` synthetic locks were replaced with minimal
+valid legacy-v1/v3 inventories; their test also directly proves `{}` is
+rejected as schema version zero.
+
+- **Focused B1/B2 plus retained adversarial coverage:** PASS. The exact
+  259-operation full legacy-v2 fixture fails before both `skipped` and
+  `dynamic` provider-absence returns. The v3 raw-citation/mutated-kind and
+  removed-gap input fails before projection. Exact citation descriptor,
+  provenance-swap, null discriminator, and root/operation gap tamper checks
+  all remain green.
+- **Changed/dependent tests:** `go test -timeout 20m ./cmd/connectorgen` —
+  PASS (`196.142s`); engine — PASS (`11.708s`); commandrunner — PASS
+  (`22.296s`).
+- **Static/build/generator:** `go vet ./...`; both builds; tidy; lint (zero
+  issues); docs; smoke; agent contract; validate (`553/0`); surface-sync
+  (`553`, zero drift); and operation evidence (`1,774` rows, `5` rollups,
+  fixed-100) — PASS.
+- **Repository gates:** connector boundary — clean (`324` files, `553`
+  connectors); release workflow — PASS, including the installed GitHub
+  certification archive proof.
+- **Truth boundary:** a fresh credential-free initialized project returned
+  `error: unknown command "outreach"` (exit `2`) for `pm outreach prospects
+  list`. The required surface delta is zero: no fake Outreach command or
+  provider/credential/certification path was introduced.
+- **Still delegated:** aggregate `go test ./...` belongs to CI. No-mistakes,
+  CI, and a fresh independent exact-head Codex audit are next Firstmate gates;
+  this branch must not merge.

@@ -4290,12 +4290,6 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 			// the sole source_contract_unavailable gap all travel together.
 			return []Finding{sourceProjectionFinding(connector, file, "source descriptor reference contract drift for "+identity)}
 		}
-		if operation.Source.SHA256 != expectedOperation.source.SHA256 || operation.Source.Bytes != expectedOperation.source.Bytes || (expectedOperation.source.Location != "" && operation.Source.Location != expectedOperation.source.Location) {
-			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provenance drift for "+identity)}
-		}
-		if (lock.SchemaVersion == 3 || lock.isLegacySourceReference()) && (operation.ProviderOperationID != expectedOperation.providerOperationID || operation.Source.URL != expectedOperation.source.URL || operation.Source.Form != expectedOperation.source.Form || operation.Source.Version != expectedOperation.source.Version || operation.Source.DocumentID != expectedOperation.source.DocumentID || operation.Source.PublishedURL != expectedOperation.source.PublishedURL || operation.Source.PublishedCaptureURL != expectedOperation.source.PublishedCaptureURL || operation.Source.PublishedSHA256 != expectedOperation.source.PublishedSHA256 || operation.Source.PublishedBytes != expectedOperation.source.PublishedBytes || operation.Source.PublishedAdapter != expectedOperation.source.PublishedAdapter || operation.Source.ContentType != expectedOperation.source.ContentType || operation.Source.CitationURL != expectedOperation.source.CitationURL) {
-			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provenance drift for "+identity)}
-		}
 		if (expectedOperation.source.URL != "" && operation.Source.URL != expectedOperation.source.URL) || (expectedOperation.source.Location != "" && operation.Source.Location != expectedOperation.source.Location) || (expectedOperation.method != "" && (!strings.EqualFold(operation.Method, expectedOperation.method) || operation.Path != expectedOperation.path)) {
 			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provider contract drift for "+identity)}
 		}

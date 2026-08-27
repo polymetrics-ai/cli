@@ -110,3 +110,27 @@ No blocking finding after review of the repair diff.
   provider-I/O, command, or executor path.
 - No blocking inline finding. This review is not independent; the required
   fresh exact-head Codex audit remains pending and the PR must not merge.
+
+## Exact-head R3 B1/B2 final inline review — 2026-08-27
+
+- Review scope: the B1 guard in `readOperationEvidenceSourceLock`, the
+  source-sync lock/descriptor gateway, exact reference validation, the valid
+  synthetic-lock fixtures, and the current-main integration correction.
+- **B1 ordering:** a valid legacy reference inventory now prevents the
+  skipped/dynamic provider-absence fast return, so strict lock parsing sees
+  all 259 rows. The raw presence tests still reject null/empty discriminators
+  and reference-only byte-backed field drift.
+- **B2 trust boundary:** `syncCheckedInSourceProjection` always strictly
+  parses the checked-in lock and validates the descriptor before invoking a
+  materializer; no marker-only or raw-field fallback remains. A source
+  reference still uses exact descriptor equality, binding connector,
+  protocol, method, path, provenance, empty execution fields, merge block,
+  and exact `source_contract_unavailable` gaps together.
+- **Current-main compatibility:** exact equality remains confined to citation
+  descriptors. Ordinary v3 descriptors retain current-main provider identity
+  and endpoint checks, which keeps 553 bundles valid without weakening the
+  cited-only provenance-swap or gap-tamper protections.
+- **Safety:** no CLI/runtime/action, connector mapping, provider I/O,
+  credential/certification flow, hash requirement, or generic URL/method/body
+  parameter was added. No blocking inline finding. A fresh independent
+  exact-head Codex audit after CI remains mandatory; do not approve or merge.

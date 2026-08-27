@@ -328,7 +328,10 @@ func TestSourceProjection_MissingOperationOrFieldFailsValidateAndSurfaceCheck(t 
 	if err := os.MkdirAll(filepath.Join(bundleDir, "sources"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	writeProjectionFixture(t, filepath.Join(bundleDir, "sources", "alpha-operation-source-lock.json"), `{}`)
+	if _, err := parseSourceImportLock([]byte(`{}`), "alpha"); err == nil || !strings.Contains(err.Error(), "unsupported schema version 0") {
+		t.Fatalf("invalid source lock parse error = %v, want unsupported schema version", err)
+	}
+	writeProjectionFixture(t, filepath.Join(bundleDir, "sources", "alpha-operation-source-lock.json"), sourceProjectionMinimalLegacyLock(t, &operation))
 	descriptorRaw, err := json.Marshal(sourceImportDescriptorDocument{SchemaVersion: 2, Operations: []sourceOperationDescriptor{operation}})
 	if err != nil {
 		t.Fatal(err)
@@ -2767,6 +2770,58 @@ func sourceProjectionTestOperation() sourceOperationDescriptor {
 	}
 }
 
+// sourceProjectionMinimalLegacyLock makes the synthetic surface-sync fixture
+// exercise the real checked-in lock admission path. The descriptor remains
+// deliberately richer than the lock so projection can still report its field
+// drift; its source identity is nevertheless bound to the one declared lock
+// operation.
+func sourceProjectionMinimalLegacyLock(t *testing.T, operation *sourceOperationDescriptor) string {
+	t.Helper()
+	artifact := []byte(`{"openapi":"3.0.3"}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/alpha-openapi.json", artifact)
+	location := `paths["/items/{owner}"].post`
+	lock.Rest.Operations = []sourceImportRESTOperation{{
+		ID:             operation.SourceID,
+		Protocol:       "rest",
+		Method:         "POST",
+		Path:           operation.Path,
+		SourceLocation: location,
+	}}
+	lock.Counts = sourceImportCounts{REST: 1, Total: 1}
+	operation.Source = sourceImportSource{URL: lock.Rest.SourceURL, Location: location}
+	raw, err := json.Marshal(lock)
+	if err != nil {
+		t.Fatalf("marshal minimal legacy source lock: %v", err)
+	}
+	return string(raw)
+}
+
+// sourceProjectionMinimalV3Lock uses the ordinary v3 fixture constructor so
+// surface-sync's schema-3 test has a fully valid checked-in lock, including
+// document provenance and inventory counts, before it projects any fields.
+func sourceProjectionMinimalV3Lock(t *testing.T, operation *sourceOperationDescriptor) string {
+	t.Helper()
+	raw := sourceImportV3FixtureLock(t, "alpha", []sourceImportV3FixtureDocument{{
+		ID:          "items",
+		Path:        operation.Path,
+		Method:      "POST",
+		OperationID: "items_create",
+		Artifact:    []byte(`{"openapi":"3.0.3"}`),
+	}})
+	lock, err := parseSourceImportLock(raw, "alpha")
+	if err != nil {
+		t.Fatalf("parse minimal v3 source lock: %v", err)
+	}
+	document := lock.Rest.SourceDocuments[0]
+	sourceOperation := document.Operations[0]
+	operation.SourceID = sourceOperation.ID
+	operation.ProviderOperationID = sourceOperation.OperationID
+	operation.Method = sourceOperation.Method
+	operation.Path = sourceOperation.Path
+	operation.Source = sourceImportExpectedV3DescriptorProvenance(document, sourceOperation)
+	return string(raw)
+}
+
 func loadInstalledGitHubSourceProjection(t *testing.T) (engine.Bundle, sourceImportDescriptorDocument) {
 	t.Helper()
 	root, err := repoRoot()
@@ -2867,11 +2922,12 @@ func TestSurfaceSyncAcceptsSchema3SourceDescriptor(t *testing.T) {
 		t.Fatal(err)
 	}
 	operation := sourceProjectionTestOperation()
+	lockRaw := sourceProjectionMinimalV3Lock(t, &operation)
 	descriptorRaw, err := json.Marshal(sourceImportDescriptorDocument{SchemaVersion: 3, Operations: []sourceOperationDescriptor{operation}})
 	if err != nil {
 		t.Fatal(err)
 	}
-	writeProjectionFixture(t, filepath.Join(bundleDir, "sources", "alpha-operation-source-lock.json"), `{}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "sources", "alpha-operation-source-lock.json"), lockRaw)
 	writeProjectionFixture(t, filepath.Join(bundleDir, "sources", "alpha-operation-descriptor.json"), string(descriptorRaw))
 	writeProjectionFixture(t, filepath.Join(bundleDir, "writes.json"), `{"schema_version":1,"actions":[{"name":"items","kind":"custom","method":"POST","path":"/items/{{ record.owner }}","path_fields":["owner"],"record_schema":{"type":"object","additionalProperties":false,"properties":{"owner":{"type":"string"}}},"risk":"standard"}]}`)
 	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), `{"schema_version":1,"commands":[{"path":"items create","summary":"create","intent":"reverse_etl","availability":"implemented","write":"items","flags":[{"name":"owner","type":"string","maps_to":"record.owner","required":true}]}]}`)

@@ -227,3 +227,20 @@ verification checklist are the durable fallback record. Required skills:
 `golang-safety`, and `golang-lint`. No user-facing CLI flag/help/manual/website
 contract changes are planned; this only makes invalid source-import evidence
 fail closed.
+
+### Current-main integration gap (2026-08-27)
+
+After the required normal merge of `origin/main@2165619e`, the first generator
+run was the red backstop: `connectorgen validate` and `surface-sync --check`
+reported GitHub descriptor provenance drift. The merge had combined a
+citation-only full-provenance comparison with current-main’s broader v3
+source-bound descriptors. The gap plan is deliberately narrow: retain the
+existing `reflect.DeepEqual` exact projection for
+`expectedOperation.reference`, retain generic provider endpoint checks for
+ordinary descriptors, and remove only the redundant full provenance condition
+that reached non-reference documents. No generator artifact is hand-edited.
+
+`plan-phase --gaps` and `execute-phase --gaps-only` were resolved and executed
+inline under the single-worker fallback. Green requires the full reference
+suite and the global validate/surface-sync checks to pass without writing or
+replacing a descriptor.
