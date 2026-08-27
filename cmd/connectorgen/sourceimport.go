@@ -56,7 +56,9 @@ request input. A declaration-only source reference preserves the locked URL,
 digest, byte count, and operation identity but emits source_contract_unavailable
 instead of materializing an executable contract. Version 3 locks may cite
 provider URLs with bounded queries, but the importer never fetches citations:
-byte-backed locks read only retained content-addressed document artifacts.`
+byte-backed locks read only retained content-addressed document artifacts. A
+zero-operation rendered reference is valid only when its lock explicitly sets
+coverage_only:true and its retained artifact and provenance still verify.`
 
 const (
 	defaultSourceImportArtifactBytes = int64(16 << 20)
@@ -290,8 +292,13 @@ const (
 // publication separately: source import never fetches a citation URL; the
 // captured bytes and SHA-256 are the evidence, while URLs are provenance only.
 type sourceImportRESTDocument struct {
-	ID                string                      `json:"id"`
-	Kind              string                      `json:"kind,omitempty"`
+	ID   string `json:"id"`
+	Kind string `json:"kind,omitempty"`
+	// CoverageOnly is an explicit discriminator for an otherwise ambiguous
+	// zero-operation rendered reference. It does not relax retained-artifact
+	// integrity checks and it never creates a source operation or executable
+	// contract.
+	CoverageOnly      bool                        `json:"coverage_only,omitempty"`
 	ContentType       string                      `json:"content_type,omitempty"`
 	Artifact          sourceImportArtifact        `json:"artifact"`
 	SourceReference   *sourceImportArtifact       `json:"source_reference,omitempty"`
@@ -299,6 +306,34 @@ type sourceImportRESTDocument struct {
 	InfoVersion       string                      `json:"info_version,omitempty"`
 	UnavailableReason string                      `json:"unavailable_reason,omitempty"`
 	Operations        []sourceImportRESTOperation `json:"operations"`
+
+	operationsDeclared bool
+	operationsArray    bool
+}
+
+// UnmarshalJSON keeps the v3 lock closed while retaining the distinction that
+// Go slices otherwise erase: an omitted or null operations member is not the
+// documented empty inventory required by a coverage_only reference.
+func (document *sourceImportRESTDocument) UnmarshalJSON(raw []byte) error {
+	type wire sourceImportRESTDocument
+	var decoded wire
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(&decoded); err != nil {
+		return err
+	}
+	if err := sourceJSONEOF(decoder); err != nil {
+		return err
+	}
+	var members map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &members); err != nil {
+		return err
+	}
+	operations, declared := members["operations"]
+	*document = sourceImportRESTDocument(decoded)
+	document.operationsDeclared = declared
+	document.operationsArray = declared && len(bytes.TrimSpace(operations)) > 0 && bytes.TrimSpace(operations)[0] == '['
+	return nil
 }
 
 func (document sourceImportRESTDocument) sourceKind() string {
@@ -1147,6 +1182,9 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 		default:
 			return fmt.Errorf("source lock v3 REST document %q has unsupported kind %q", document.ID, kind)
 		}
+		if document.CoverageOnly && kind != sourceImportDocumentKindRenderedReference {
+			return fmt.Errorf("source lock v3 REST document %q coverage_only is valid only for a rendered_reference", document.ID)
+		}
 		if kind == sourceImportDocumentKindUnavailable {
 			requiresCoverageConfidence = true
 			if err := validateSourceImportUnavailableReason(document.UnavailableReason); err != nil {
@@ -1203,14 +1241,28 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 				}
 			}
 		}
+		if document.CoverageOnly {
+			if !document.operationsDeclared || !document.operationsArray {
+				return fmt.Errorf("source lock v3 rendered-reference coverage document %q must declare operations as an empty array", document.ID)
+			}
+			if len(document.Operations) != 0 {
+				return fmt.Errorf("source lock v3 rendered-reference coverage document %q must not declare operations", document.ID)
+			}
+			continue
+		}
 		if len(document.Operations) == 0 {
 			if kind == sourceImportDocumentKindOpenAPI || kind == sourceImportDocumentKindSourceReference {
 				return fmt.Errorf("source lock v3 REST document %q has no operations", document.ID)
 			}
+			if kind == sourceImportDocumentKindRenderedReference {
+				return fmt.Errorf("source lock v3 rendered-reference document %q has no operations; declare coverage_only:true only for an intentionally empty retained coverage document", document.ID)
+			}
 			// A rendered page or archive can be retained as hash-pinned coverage
-			// evidence even where it contributes no operation. Every declared
-			// operation still takes the same identity, citation, route, dedup, and
-			// count validation below; an empty evidence document cannot declare one.
+			// evidence even where it contributes no operation. Rendered references
+			// require the explicit CoverageOnly discriminator above; existing archive
+			// semantics stay byte-for-byte compatible. Every declared operation still
+			// takes the same identity, citation, route, dedup, and count validation
+			// below; an empty evidence document cannot declare one.
 			continue
 		}
 		for _, operation := range document.Operations {
