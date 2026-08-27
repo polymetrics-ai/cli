@@ -34,6 +34,17 @@
   supplied copy is available. Otherwise small explicit fixtures are limited to
   the irreducible cited-only incompatibility and do not claim provider import.
 
+## Retained cohort inventory observed without materialization
+
+The local Git object for the non-main Batch 6–7 cohort commit
+`84255801b` preserves source-lock inventories but not their ignored retained
+artifact copies in this worktree. It reports 211 Salesloft REST operations
+from `https://developers.salesloft.com/docs/api/` and 89 Copper REST operations
+from `https://developer.copper.com/`; both have zero GraphQL operations. The
+respective source identities begin `salesloft.rest.delete.V2AccountsId0` and
+`copper.rest.delete.V1EntityEntityIdRelated0`. This is read-only scope evidence
+for #4291, not a current-main output, source re-pin, or regeneration claim.
+
 ## GSD execution mode
 
 The canonical single-worker contract forbids role spawning. The generated
