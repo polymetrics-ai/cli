@@ -2853,6 +2853,14 @@ func TestSourceProjectionSchemaPreservesClosedComposition(t *testing.T) {
 			raw:     map[string]any{"allOf": []any{map[string]any{"type": "string"}, map[string]any{"type": "integer"}}},
 			wantErr: "allOf",
 		},
+		{
+			name: "untyped composition wrapper with object sibling is deferred",
+			raw: map[string]any{
+				"oneOf":      []any{map[string]any{"type": "string"}, map[string]any{"type": "integer"}},
+				"properties": map[string]any{"dropped_without_a_type": map[string]any{"type": "string"}},
+			},
+			wantErr: "explicit type",
+		},
 	}
 	for _, testCase := range tests {
 		t.Run(testCase.name, func(t *testing.T) {

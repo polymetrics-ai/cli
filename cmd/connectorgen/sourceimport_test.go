@@ -364,6 +364,13 @@ func TestSourceRequestSchemaDispositionSeparatesPolicyBoundsFromMalformedInput(t
 	if err == nil || sourceRequestSchemaDispositionOf(err) != sourceRequestMalformedSourceGap || !strings.Contains(err.Error(), "contradictory") {
 		t.Fatalf("contradictory schema disposition/error = %q/%v, want malformed source", sourceRequestSchemaDispositionOf(err), err)
 	}
+	err = validateBoundedRequestSchema(map[string]any{
+		"oneOf":      []any{map[string]any{"type": "string"}, map[string]any{"type": "integer"}},
+		"properties": map[string]any{"lost_without_type": map[string]any{"type": "string"}},
+	}, form, policy, 0)
+	if err == nil || sourceRequestSchemaDispositionOf(err) != sourceRequestMalformedSourceGap || !strings.Contains(err.Error(), "composition wrapper") {
+		t.Fatalf("untyped composition wrapper disposition/error = %q/%v, want malformed source", sourceRequestSchemaDispositionOf(err), err)
+	}
 }
 
 func TestSourceParameterExecutionEnvelopeUsesTighterProviderDerivedByteCap(t *testing.T) {

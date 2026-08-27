@@ -3627,6 +3627,11 @@ func sourceProjectionClosedSchema(raw any, requireExplicitClosedObject bool) (an
 	if len(types) == 0 && !hasComposition {
 		return nil, fmt.Errorf("source schema has no type")
 	}
+	if len(types) == 0 && hasComposition {
+		if keyword := sourceCompositionWrapperTypedKeyword(schema); keyword != "" {
+			return nil, fmt.Errorf("source composition wrapper has %s without an explicit type", keyword)
+		}
+	}
 	primary := ""
 	if len(types) > 0 {
 		primary = types[0]
