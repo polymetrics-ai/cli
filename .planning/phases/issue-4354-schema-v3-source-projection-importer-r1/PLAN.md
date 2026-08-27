@@ -146,3 +146,30 @@ four correctness gaps. Treat them as one red/green wave:
 The repair remains declaration-only: no provider calls, no raw-byte rewrite,
 no source-lock admission into production Outreach definitions, no generic
 executor, and no executable command materialization.
+
+## Fresh admission hardening repair (2026-08-27)
+
+The independent audit of exact PR head `6a372ee216112d4a83c00d0d687a96dc438abf84`
+found two additional fail-closed admission gaps. This final repair stays
+within the shared `connectorgen` foundation and preserves an Outreach usable
+surface delta of `0`.
+
+1. **Provider-absence cannot bypass v2 wire validation.** Before returning a
+   `skipped` or `dynamic` provider-absence record, operation evidence must
+   inspect the full legacy v2 wire and reject every reference-only field,
+   including an explicitly `null` `rest.source_kind`. Add skipped/dynamic
+   adversarial overlays with an otherwise complete legacy inventory.
+2. **Citation-only descriptors are exact lock projections.** For both legacy
+   and v3 `source_reference` forms, validation and `surface-sync` must bind a
+   descriptor to its lock-owned connector, protocol, method, path, provider
+   operation ID, complete provenance, empty execution contract, merge-blocked
+   state, and exactly one `source_contract_unavailable` gap. A removed or
+   replaced gap, method/path/identity change, or request/response/output
+   materialization must fail before source projection can mutate a bundle.
+3. **Red/green and refactor guards.** First add tests that demonstrate the
+   skipped/dynamic return and descriptor/surface-sync bypasses. Green only by
+   moving the existing raw v2 wire check before absence handling and sharing a
+   narrow reference-descriptor contract validator between validation and the
+   surface-sync gateway. Do not add an Outreach lock, command, request
+   contract, executor, provider I/O, hash certification gate, or generic
+   route/evidence escape.

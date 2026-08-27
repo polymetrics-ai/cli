@@ -4,7 +4,7 @@
   "base": "main",
   "branch": "feat/4354-schema-v3-source-projection",
   "delivery": "direct-pr",
-  "status": "frozen_audit_repair_verified_locally_push_and_exact_head_audit_pending",
+  "status": "fresh_audit_admission_hardening_planned_red_tests_pending",
   "gsd": {
     "mode": "inline-manual-fallback",
     "commands_resolved": [
@@ -27,5 +27,5 @@
     "review_status": "pending"
   },
   "constraint": "The candidate Outreach lock enumerates two provider documents but neither exact raw source artifact is retained in the candidate, current main, or local Git object store. Byte-backed import remains strict and cannot fetch, re-pin, or substitute derived bytes. The active slice adds an explicit declaration-only source-reference path that preserves canonical URLs and operation identities without claiming byte-backed import, credential validity, certification, or executability.",
-  "verify_repair": "Frozen audit F1/F2/F3 was repaired with CLI-path import-to-validate tests for legacy/v3 reference forms, v2 operation-evidence raw-field overlays (including null discriminator), and cross-source citation location binding. Current origin/main b9b2478b3b2451d632d28b9aa138a170ad835110 was merged normally at 449f18cdd. Captured full cmd/connectorgen, engine/runner, vet/build, generator, docs, lint, and diff gates are in VERIFICATION.md; boundary/release terminal statuses were not retained by the local collection harness and are not claimed as passes."
+  "verify_repair": "Frozen audit F1/F2/F3 was repaired with CLI-path import-to-validate tests for legacy/v3 reference forms, v2 operation-evidence raw-field overlays (including null discriminator), and cross-source citation location binding. Current origin/main b9b2478b3b2451d632d28b9aa138a170ad835110 was merged normally at 449f18cdd. Captured full cmd/connectorgen, engine/runner, vet/build, generator, docs, lint, and diff gates are in VERIFICATION.md; boundary/release terminal statuses were not retained by the local collection harness and are not claimed as passes. Fresh audit head 6a372ee216112d4a83c00d0d687a96dc438abf84 requires a new red/green admission-hardening wave before a normal push and another independent exact-head audit."
 }

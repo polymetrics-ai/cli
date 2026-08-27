@@ -189,6 +189,23 @@ PASS
   provenance and never enters credential, certification, or execution
   admission logic.
 
+## Fresh admission hardening — planned red/green (2026-08-27)
+
+The audit of exact head `6a372ee216112d4a83c00d0d687a96dc438abf84` found two
+post-repair bypasses. Before production edits, add regressions proving:
+
+- a schema-v2 `skipped` or `dynamic` record carrying the complete legacy
+  inventory plus `rest.source_kind: null` cannot return an absence record; and
+- a legacy/v3 citation-only descriptor cannot remove/replace its sole gap,
+  change connector/protocol/method/path/provider identity/provenance, or add
+  a request, response, or output contract. The same tamper must stop
+  `surface-sync` before it can project a command/action change.
+
+The implementation may only reuse raw v2 presence validation before absence
+projection and exact reference-operation construction for descriptor checking.
+The untouched byte-backed legacy reader and all cited Outreach operations must
+remain non-executable.
+
 ## Frozen independent-audit repair wave — planned red/green (2026-08-27)
 
 The fresh independent audit of head `21480fcd9ce5701164bafb82666ffe5bbc3934c4`
