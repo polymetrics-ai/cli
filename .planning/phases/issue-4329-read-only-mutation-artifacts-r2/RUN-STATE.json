@@ -1,8 +1,8 @@
 {
   "issue": 4329,
-  "state": "current_main_integration_pushed_audit_ci_pending",
+  "state": "audit_m1_planned_red_test_pending",
   "base": "main",
   "working_branch": "fix/4329-read-only-mutation-artifacts",
   "scope": "shared connectorgen source-import/projection/coverage behavior and issue evidence only",
-  "next": "obtain the Captain-requested fresh separate audit of the exact pushed HEAD and wait for every required PR CI check; do not merge"
+  "next": "add and run the M1 missing capabilities.write red test, preserve explicit presence through metadata decoding, then rerun Sentry/Vercel and delete/reverse-ETL acceptance before a normal repair push"
 }

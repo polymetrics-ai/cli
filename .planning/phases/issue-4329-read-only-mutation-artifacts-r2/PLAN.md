@@ -63,3 +63,32 @@ worktree, source-lock bytes, connector declarations, write actions, and active
   also rerun the executable delete/reverse-ETL control. Report every merge
   conflict, use no credential, and obtain a fresh separate Codex audit of the
   pushed integration SHA.
+
+## Audit repair M1 — inbox 002
+
+- Audit target: PR #4357 head
+  `e6418bb1dc50001eefc438d4fb8c62e441de25c9`; independent Codex audit found
+  that a missing nested `capabilities.write` JSON member decoded as Go `false`
+  and incorrectly admitted the automatic artifact.
+- Delivery: repair the existing main-targeted PR with a normal push only. Do
+  not alter connector source locks, generated connector definitions, user
+  commands, or the preserved worker worktrees; do not merge.
+- Inline GSD fallback: the canonical single-worker contract forbids lifecycle
+  role spawning. The resolved `discuss-phase`, `plan-phase --tdd`,
+  `execute-phase`, `verify-work`, and `code-review` prompts are executed and
+  recorded inline.
+- Red: add an adversarial missing-member test that demonstrates the former
+  zero-value admission through actual metadata decoding and source-artifact
+  classification. It must observe no automatic artifact and a source coverage
+  failure after the repair, while explicit `write:false` remains green.
+- Green: retain the declaration-presence bit alongside the decoded boolean;
+  automatic artifact derivation and automatic-artifact validation require the
+  explicit bit plus `write:false`. The metadata schema rejects the missing
+  member on full bundle loads. `write:true`, provider citation, complete action,
+  and implemented-action precedence remain unchanged.
+- Proof: focused engine/source-import/source-projection tests; full
+  `cmd/connectorgen`, engine, commandrunner, and CLI suites; generator and
+  applicable repository gates; `go build ./cmd/pm`; source-lock Sentry/Vercel
+  inventory plus real delete/reverse-ETL controls; `git diff --check`. No new
+  implemented `pm` command exists, so no new credential-boundary probe is
+  claimed. Obtain a fresh separate Codex audit of the exact pushed repair SHA.
