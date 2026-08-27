@@ -3050,6 +3050,72 @@ func TestBuildWriteCommandPreservesDeclaredScalarUnionJSONFlag(t *testing.T) {
 	}
 }
 
+func TestBuildWriteCommandValidatesSourceDeclaredNullableStringJSON(t *testing.T) {
+	bundle, err := engine.Load(defs.FS, "xero")
+	if err != nil {
+		t.Fatalf("Load(xero): %v", err)
+	}
+	bundle.CLISurface = &engine.CLISurface{Commands: []engine.CLICommand{{
+		Path: "payments delete", Intent: "reverse_etl", Availability: "implemented", Write: "delete_payment",
+		Flags: []engine.CLIFlag{
+			{Name: "payment-id", Type: "string", MapsTo: "record.payment_id", Required: true, MaxBytes: 64},
+			{Name: "status", Type: "json", MapsTo: "record.Status", Required: true, MaxBytes: 64},
+		},
+	}}}
+	connector := engine.New(bundle, nil)
+	base := map[string][]string{"payment-id": {"fixture-payment-id"}}
+	for _, testCase := range []struct {
+		name    string
+		flags   map[string][]string
+		want    any
+		wantErr string
+	}{
+		{name: "declared string", flags: map[string][]string{"payment-id": {"fixture-payment-id"}, "status": {`"fixture status"`}}, want: "fixture status"},
+		{name: "declared empty string", flags: map[string][]string{"payment-id": {"fixture-payment-id"}, "status": {`""`}}, want: ""},
+		{name: "declared null", flags: map[string][]string{"payment-id": {"fixture-payment-id"}, "status": {"null"}}, want: nil},
+		{name: "number", flags: map[string][]string{"payment-id": {"fixture-payment-id"}, "status": {"7"}}, wantErr: "does not match type"},
+		{name: "boolean", flags: map[string][]string{"payment-id": {"fixture-payment-id"}, "status": {"true"}}, wantErr: "does not match type"},
+		{name: "array", flags: map[string][]string{"payment-id": {"fixture-payment-id"}, "status": {"[]"}}, wantErr: "does not match type"},
+		{name: "object", flags: map[string][]string{"payment-id": {"fixture-payment-id"}, "status": {"{}"}}, wantErr: "does not match type"},
+		{name: "unknown field", flags: map[string][]string{"payment-id": {"fixture-payment-id"}, "status": {"null"}, "unknown": {"value"}}, wantErr: "unknown flag --unknown"},
+		{name: "missing required field", flags: base, wantErr: "missing required flag --status"},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			command, err := BuildWriteCommand(context.Background(), connector, Request{Path: []string{"payments", "delete"}, Flags: testCase.flags})
+			if testCase.wantErr != "" {
+				if err == nil || !strings.Contains(err.Error(), testCase.wantErr) {
+					t.Fatalf("BuildWriteCommand error = %v, want %q", err, testCase.wantErr)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("BuildWriteCommand: %v", err)
+			}
+			if got := command.Record["Status"]; !reflect.DeepEqual(got, testCase.want) {
+				t.Fatalf("Status = %#v (%T), want %#v (%T)", got, got, testCase.want, testCase.want)
+			}
+		})
+	}
+
+	stringOnly := engine.Bundle{
+		Name: "string-only",
+		Writes: []engine.WriteAction{{
+			Name: "update", Method: http.MethodPatch, Path: "/items",
+			RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"required":["value"],"properties":{"value":{"type":"string"}}}`),
+			Risk:         "standard",
+		}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path: "items update", Intent: "reverse_etl", Availability: "implemented", Write: "update",
+			Flags: []engine.CLIFlag{{Name: "value", Type: "json", MapsTo: "record.value", Required: true, MaxBytes: 64}},
+		}}},
+	}
+	if _, err := BuildWriteCommand(context.Background(), engine.New(stringOnly, nil), Request{
+		Path: []string{"items", "update"}, Flags: map[string][]string{"value": {"null"}},
+	}); err == nil || !strings.Contains(err.Error(), "object or array") {
+		t.Fatalf("string-only null error = %v, want closed scalar-union refusal", err)
+	}
+}
+
 func TestBuildOperationDirectWriteCommandSupportsDottedStructuredBodyField(t *testing.T) {
 	batchable := false
 	bundle := engine.Bundle{

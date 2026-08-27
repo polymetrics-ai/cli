@@ -2133,6 +2133,51 @@ func TestSourceProjectionStringUnionKeepsTextCLIAndProviderArms(t *testing.T) {
 	}
 }
 
+func TestSourceProjectionNullableStringUsesStrictNamedJSONFlag(t *testing.T) {
+	bundleDir := t.TempDir()
+	writesPath := filepath.Join(bundleDir, "writes.json")
+	cliPath := filepath.Join(bundleDir, "cli_surface.json")
+	writeProjectionFixture(t, writesPath, `{"schema_version":1,"actions":[{"name":"items","method":"POST","path":"/items","body_type":"json","body_fields":["status"],"record_schema":{"type":"object","additionalProperties":false,"required":["status"],"properties":{"status":{"type":"string","maxLength":64}}},"risk":"standard"}]}`)
+	writeProjectionFixture(t, cliPath, `{"schema_version":1,"commands":[{"path":"items create","intent":"reverse_etl","availability":"implemented","write":"items","flags":[{"name":"status","type":"string","maps_to":"record.status","required":true,"max_bytes":256}]}]}`)
+	operation := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "items/create", Method: "post", Path: "/items",
+		Request: sourceRequestDescriptor{MediaType: "application/json", Body: &sourceRequestBodyDescriptor{Schema: map[string]any{
+			"type": "object", "additionalProperties": false, "required": []any{"status"},
+			"properties": map[string]any{"status": map[string]any{"type": []any{"string", "null"}, "maxLength": 64}},
+		}}},
+		Runtime: sourceRuntimeReachability{Gaps: []sourceContractGap{{
+			Foundation: "cli-structured-scalar-union-foundation-r1", Location: "request body.properties.status", Reason: "exact nullable string needs strict JSON syntax",
+		}}},
+	}
+	stats, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{operation}}, false)
+	if err != nil {
+		t.Fatalf("project nullable string: %v", err)
+	}
+	if stats.Writes != 1 {
+		t.Fatalf("projection stats = %+v, want the source-declared action schema retained", stats)
+	}
+	var surface struct {
+		Commands []struct {
+			Flags []struct {
+				Name            string `json:"name"`
+				Type            string `json:"type"`
+				MaxBytes        int    `json:"max_bytes"`
+				AllowBareString bool   `json:"allow_bare_string"`
+				MapsTo          string `json:"maps_to"`
+			} `json:"flags"`
+		} `json:"commands"`
+	}
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, cliPath)), &surface); err != nil {
+		t.Fatalf("decode projected CLI: %v", err)
+	}
+	if len(surface.Commands) != 1 || len(surface.Commands[0].Flags) != 1 {
+		t.Fatalf("projected commands = %+v, want one named flag", surface.Commands)
+	}
+	if got := surface.Commands[0].Flags[0]; got.Name != "status" || got.Type != "json" || got.MapsTo != "record.status" || got.MaxBytes != sourceProjectionDefaultJSONBytes || got.AllowBareString {
+		t.Fatalf("nullable string flag = %+v, want strict bounded named JSON", got)
+	}
+}
+
 func TestSourceProjectionGapCreatesCommandFromExistingClosedActionVariant(t *testing.T) {
 	bundleDir := t.TempDir()
 	writesPath := filepath.Join(bundleDir, "writes.json")
