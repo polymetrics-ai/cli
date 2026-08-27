@@ -31,6 +31,9 @@ var writesSchemaJSON string
 //go:embed schema/api_surface.schema.json
 var apiSurfaceSchemaJSON string
 
+//go:embed schema/composite_provider_path_identity.schema.json
+var compositeProviderPathIdentitySchemaJSON string
+
 //go:embed schema/operations.schema.json
 var operationsSchemaJSON string
 

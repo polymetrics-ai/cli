@@ -16,6 +16,8 @@
 // In shipped builds, direct-write endpoint validation is derived only from the
 // embedded rest_write operation declarations; it checks internal declaration
 // consistency, not provider documented-surface provenance (#3773 owns that).
+// CircleCI's composite-provider-path proof is a separately classified runtime
+// declaration with only the closed source identity needed by preflight.
 // Keeping replay fixtures out of cmd/pm avoids compiling tens of megabytes of inert JSON into
 // every shipped binary. A connector bundle whose spec publishes a fixture-replay
 // mode as a supported config value embeds its own fixtures from its own
@@ -24,5 +26,5 @@ package defs
 
 import "embed"
 
-//go:embed operation_endpoint_ledger.json declaration_admission_sources.json */metadata.json */changefeed.json */polling_watermark.json */sync_transport.json */spec.json */streams.json */writes.json */schemas/* github/sources/github-operation-source-lock.json */docs.md */operations.json */cli_surface.json */certification.json */rate_limits.json */database.json
+//go:embed operation_endpoint_ledger.json declaration_admission_sources.json */metadata.json */changefeed.json */polling_watermark.json */sync_transport.json */spec.json */streams.json */writes.json */schemas/* github/sources/github-operation-source-lock.json */docs.md circleci/composite_provider_path_identity.json */operations.json */cli_surface.json */certification.json */rate_limits.json */database.json
 var FS embed.FS

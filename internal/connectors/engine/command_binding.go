@@ -18,15 +18,16 @@ var (
 )
 
 const (
-	CommandEndpointExact              = "exact"
-	CommandEndpointBasePath           = "declared_base_path"
-	CommandEndpointPlaceholder        = "placeholder_identity"
-	CommandEndpointHookTransport      = "registered_hook_transport"
-	CommandEndpointGraphQLTransport   = "graphql_operation_transport"
-	CommandEndpointAbsoluteTransport  = "absolute_url_transport"
-	CommandEndpointQueryTransport     = "declared_query_transport"
-	CommandEndpointSuffixTransport    = "provider_suffix_transport"
-	CommandEndpointAnnotationIdentity = "operation_annotation_identity"
+	CommandEndpointExact                         = "exact"
+	CommandEndpointBasePath                      = "declared_base_path"
+	CommandEndpointPlaceholder                   = "placeholder_identity"
+	CommandEndpointHookTransport                 = "registered_hook_transport"
+	CommandEndpointGraphQLTransport              = "graphql_operation_transport"
+	CommandEndpointAbsoluteTransport             = "absolute_url_transport"
+	CommandEndpointQueryTransport                = "declared_query_transport"
+	CommandEndpointSuffixTransport               = "provider_suffix_transport"
+	CommandEndpointAnnotationIdentity            = "operation_annotation_identity"
+	CommandEndpointCompositeProviderPathIdentity = "composite_provider_path_identity"
 )
 
 // ResolvedCommandBinding is the one declaration and provider target selected
@@ -152,7 +153,7 @@ func resolveImplementedCommandBinding(b Bundle, cmd connectors.CommandSurfaceCom
 	reference := cmd.APISurface[0]
 	canonicalMethod := strings.ToUpper(strings.TrimSpace(reference.Method))
 	canonicalPath := reference.Path
-	proof, err := proveCommandEndpointEquivalence(b, runtime, canonicalMethod, canonicalPath)
+	proof, err := proveCommandEndpointEquivalence(b, cmd, resolved.Binding, runtime, canonicalMethod, canonicalPath, proofPrefix != "")
 	if err != nil {
 		return ResolvedCommandBinding{}, fmt.Errorf("implemented command %q binding %s/%s: %w", cmd.Path, resolved.Binding.Kind, resolved.Binding.ID, err)
 	}
@@ -167,7 +168,7 @@ func resolveImplementedCommandBinding(b Bundle, cmd connectors.CommandSurfaceCom
 	return resolved, nil
 }
 
-func proveCommandEndpointEquivalence(b Bundle, runtime commandRuntimeEndpoint, canonicalMethod, canonicalPath string) (string, error) {
+func proveCommandEndpointEquivalence(b Bundle, cmd connectors.CommandSurfaceCommand, binding connectors.CommandBindingIdentity, runtime commandRuntimeEndpoint, canonicalMethod, canonicalPath string, hookTransport bool) (string, error) {
 	if canonicalMethod == "GRAPHQL" {
 		if runtime.graphqlOperation == "" || runtime.graphqlOperation != canonicalPath {
 			return "", fmt.Errorf("runtime GraphQL operation %q does not match canonical operation %q", runtime.graphqlOperation, canonicalPath)
@@ -183,6 +184,11 @@ func proveCommandEndpointEquivalence(b Bundle, runtime commandRuntimeEndpoint, c
 
 	runtimeComparable, runtimeChange := commandBindingComparablePathWithProof(runtime.path)
 	declaredComparable, declaredChange := commandBindingComparablePathWithProof(canonicalPath)
+	if proof, matched, err := proveCircleCICompositeProviderPathIdentity(b, cmd, binding, runtime, canonicalMethod, canonicalPath, runtimeChange, declaredChange, hookTransport); err != nil {
+		return "", err
+	} else if matched {
+		return proof, nil
+	}
 	if commandBindingSlots(runtimeComparable) == commandBindingSlots(declaredComparable) {
 		return commandBindingEquivalenceProof(runtime.path, canonicalPath, runtimeChange, declaredChange), nil
 	}
@@ -197,6 +203,47 @@ func proveCommandEndpointEquivalence(b Bundle, runtime commandRuntimeEndpoint, c
 		return CommandEndpointBasePath, nil
 	}
 	return "", fmt.Errorf("runtime endpoint %s %s is not canonically equivalent to %s %s", runtime.method, runtime.path, canonicalMethod, canonicalPath)
+}
+
+// proveCircleCICompositeProviderPathIdentity is deliberately a closed proof
+// for the retained CircleCI OpenAPI project's project-slug identity. It cannot
+// be configured for another connector or another shape: validation requires
+// the complete source-cited manifest, and this function requires the one exact
+// runtime expansion to vcs_type/org/repo.
+func proveCircleCICompositeProviderPathIdentity(b Bundle, cmd connectors.CommandSurfaceCommand, binding connectors.CommandBindingIdentity, runtime commandRuntimeEndpoint, canonicalMethod, canonicalPath, runtimeChange, declaredChange string, hookTransport bool) (string, bool, error) {
+	if b.CompositeProviderPathIdentity == nil {
+		return "", false, nil
+	}
+	if err := validateCompositeProviderPathIdentity(b.Name, b.CompositeProviderPathIdentity); err != nil {
+		return "", false, err
+	}
+
+	var expected *CompositeProviderPathBinding
+	for index := range circleCICompositeProviderPathBindings {
+		candidate := &circleCICompositeProviderPathBindings[index]
+		if candidate.Intent == cmd.Intent && candidate.BindingKind == binding.Kind && candidate.BindingID == binding.ID &&
+			candidate.Method == canonicalMethod && candidate.Path == canonicalPath {
+			expected = candidate
+			break
+		}
+	}
+	if expected == nil {
+		return "", false, nil
+	}
+	if hookTransport {
+		return "", false, fmt.Errorf("CircleCI composite provider path identity does not permit hook transport")
+	}
+	if runtimeChange != "" || declaredChange != "" || runtime.route != "" || runtime.baseURL != "" {
+		return "", false, fmt.Errorf("CircleCI composite provider path identity requires the declared relative transport path without query, suffix, annotation, route, or base override")
+	}
+	if strings.Count(canonicalPath, "{project-slug}") != 1 {
+		return "", false, fmt.Errorf("CircleCI composite provider path identity requires exactly one {project-slug} placeholder")
+	}
+	expectedRuntimePath := strings.Replace(canonicalPath, "{project-slug}", "{vcs_type}/{org}/{repo}", 1)
+	if runtime.path != expectedRuntimePath || strings.ToUpper(runtime.method) != expected.Method {
+		return "", false, fmt.Errorf("CircleCI composite provider path identity requires %s %s transport, got %s %s", expected.Method, expectedRuntimePath, runtime.method, runtime.path)
+	}
+	return CommandEndpointCompositeProviderPathIdentity, true, nil
 }
 
 func commandBindingEquivalenceProof(runtimePath, canonicalPath, runtimeChange, canonicalChange string) string {

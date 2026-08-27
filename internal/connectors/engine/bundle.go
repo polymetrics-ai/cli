@@ -32,31 +32,32 @@ var certificationEvidenceIdentifierPattern = regexp.MustCompile(`^[A-Za-z0-9][A-
 
 // Bundle is a fully loaded and structurally validated connector definition.
 type Bundle struct {
-	Name               string
-	Metadata           Metadata
-	Changefeed         *connectors.ChangefeedDescriptor       // changefeed.json; nil when a connector has not been surveyed
-	PollingWatermark   *connectors.PollingWatermarkDescriptor // polling_watermark.json; nil until a native database declaration exists
-	SyncTransport      *connectors.SyncTransportDescriptor    // sync_transport.json; nil when no closed source/destination role is declared
-	Database           *database.Definition                   // database.json; nil for non-database or unmigrated bundles
-	Spec               *Schema                                // compiled spec.json; SecretKeys() from x-secret
-	RawSpec            json.RawMessage                        // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
-	HTTP               HTTPBase                               // streams.json "base"; zero value when no streams.json
-	Streams            []StreamSpec                           // streams.json "streams"
-	Writes             []WriteAction                          // writes.json "actions"; nil when writes.json absent
-	Operations         []OperationSpec                        // operations.json "operations"; nil when operations.json absent
-	RawOperations      json.RawMessage                        // verbatim operations.json bytes for validation/audit scanning
-	Schemas            map[string]*StreamSchema               // stream name -> compiled schema + PK/cursor
-	Surface            *APISurface                            // api_surface.json, when available on disk
-	directWriteSurface *APISurface                            // runtime projection from shipped rest_write declarations
-	directReadLedger   *operationEndpointLedger               // generated direct-read endpoint projection
-	declarationTargets *declarationTargetLedger               // admitted source identities needed by shipped deferred preflight
-	CLISurface         *CLISurface                            // cli_surface.json
-	RawCLISurface      json.RawMessage                        // verbatim cli_surface.json bytes; nil when absent
-	Certification      *CertificationSpec                     // certification.json; nil when absent
-	RawCertification   json.RawMessage                        // verbatim certification.json bytes; nil when absent
-	RateLimits         *connsdk.RateLimits                    // rate_limits.json; nil when absent
-	Docs               string                                 // docs.md
-	Fixtures           fs.FS                                  // fixtures/ subtree; nil when absent
+	Name                          string
+	Metadata                      Metadata
+	Changefeed                    *connectors.ChangefeedDescriptor       // changefeed.json; nil when a connector has not been surveyed
+	PollingWatermark              *connectors.PollingWatermarkDescriptor // polling_watermark.json; nil until a native database declaration exists
+	SyncTransport                 *connectors.SyncTransportDescriptor    // sync_transport.json; nil when no closed source/destination role is declared
+	Database                      *database.Definition                   // database.json; nil for non-database or unmigrated bundles
+	Spec                          *Schema                                // compiled spec.json; SecretKeys() from x-secret
+	RawSpec                       json.RawMessage                        // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
+	HTTP                          HTTPBase                               // streams.json "base"; zero value when no streams.json
+	Streams                       []StreamSpec                           // streams.json "streams"
+	Writes                        []WriteAction                          // writes.json "actions"; nil when writes.json absent
+	Operations                    []OperationSpec                        // operations.json "operations"; nil when operations.json absent
+	RawOperations                 json.RawMessage                        // verbatim operations.json bytes for validation/audit scanning
+	Schemas                       map[string]*StreamSchema               // stream name -> compiled schema + PK/cursor
+	Surface                       *APISurface                            // api_surface.json, when available on disk
+	directWriteSurface            *APISurface                            // runtime projection from shipped rest_write declarations
+	directReadLedger              *operationEndpointLedger               // generated direct-read endpoint projection
+	declarationTargets            *declarationTargetLedger               // admitted source identities needed by shipped deferred preflight
+	CLISurface                    *CLISurface                            // cli_surface.json
+	RawCLISurface                 json.RawMessage                        // verbatim cli_surface.json bytes; nil when absent
+	Certification                 *CertificationSpec                     // certification.json; nil when absent
+	RawCertification              json.RawMessage                        // verbatim certification.json bytes; nil when absent
+	RateLimits                    *connsdk.RateLimits                    // rate_limits.json; nil when absent
+	CompositeProviderPathIdentity *CompositeProviderPathIdentity         // composite_provider_path_identity.json; nil except for the closed CircleCI proof
+	Docs                          string                                 // docs.md
+	Fixtures                      fs.FS                                  // fixtures/ subtree; nil when absent
 }
 
 // Metadata is the parsed metadata.json.
@@ -1580,8 +1581,8 @@ type CertificationWriteWaveBlockedAction struct {
 // metaSchemas holds the compiled meta-schemas used to validate the bundle
 // files themselves, lazily compiled once from the embedded schema/ dir.
 var metaSchemas = struct {
-	metadata, changefeed, pollingWatermark, syncTransport, spec, streams, writes, apiSurface, operations, cliSurface, declarationAdmission, declarationAdmissionSources, declarationAdmissionInventory, certification, rateLimits *Schema
-	err                                                                                                                                                                                                                           error
+	metadata, changefeed, pollingWatermark, syncTransport, spec, streams, writes, apiSurface, compositeProviderPathIdentity, operations, cliSurface, declarationAdmission, declarationAdmissionSources, declarationAdmissionInventory, certification, rateLimits *Schema
+	err                                                                                                                                                                                                                                                          error
 }{}
 
 func init() {
@@ -1604,6 +1605,7 @@ func init() {
 	metaSchemas.streams = compileMeta(streamsSchemaJSON)
 	metaSchemas.writes = compileMeta(writesSchemaJSON)
 	metaSchemas.apiSurface = compileMeta(apiSurfaceSchemaJSON)
+	metaSchemas.compositeProviderPathIdentity = compileMeta(compositeProviderPathIdentitySchemaJSON)
 	metaSchemas.operations = compileMeta(operationsSchemaJSON)
 	metaSchemas.cliSurface = compileMeta(cliSurfaceSchemaJSON)
 	metaSchemas.declarationAdmission = compileMeta(declarationAdmissionSchemaJSON)
@@ -1856,6 +1858,10 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 	if err != nil {
 		return Bundle{}, err
 	}
+	compositeProviderPathIdentity, err := loadCompositeProviderPathIdentity(sub, dirName)
+	if err != nil {
+		return Bundle{}, err
+	}
 	directReadLedger := deriveOperationDirectReadEndpointLedger(operations, surface)
 	if directReadLedger == nil && operationEndpointLedgers != nil {
 		directReadLedger = operationEndpointLedgers[dirName]
@@ -1884,31 +1890,32 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 	fixtures := loadFixtures(sub)
 
 	return Bundle{
-		Name:               dirName,
-		Metadata:           metadata,
-		Changefeed:         changefeed,
-		PollingWatermark:   pollingWatermark,
-		SyncTransport:      syncTransport,
-		Database:           databaseDefinition,
-		Spec:               spec,
-		RawSpec:            rawSpec,
-		HTTP:               httpBase,
-		Streams:            streams,
-		Writes:             writes,
-		Operations:         operations,
-		RawOperations:      rawOperations,
-		Schemas:            schemas,
-		Surface:            surface,
-		directWriteSurface: directWriteSurface,
-		directReadLedger:   directReadLedger,
-		declarationTargets: declarationTargetLedgers[dirName],
-		CLISurface:         cliSurface,
-		RawCLISurface:      rawCLISurface,
-		Certification:      certification,
-		RawCertification:   rawCertification,
-		RateLimits:         rateLimits,
-		Docs:               docs,
-		Fixtures:           fixtures,
+		Name:                          dirName,
+		Metadata:                      metadata,
+		Changefeed:                    changefeed,
+		PollingWatermark:              pollingWatermark,
+		SyncTransport:                 syncTransport,
+		Database:                      databaseDefinition,
+		Spec:                          spec,
+		RawSpec:                       rawSpec,
+		HTTP:                          httpBase,
+		Streams:                       streams,
+		Writes:                        writes,
+		Operations:                    operations,
+		RawOperations:                 rawOperations,
+		Schemas:                       schemas,
+		Surface:                       surface,
+		directWriteSurface:            directWriteSurface,
+		directReadLedger:              directReadLedger,
+		declarationTargets:            declarationTargetLedgers[dirName],
+		CLISurface:                    cliSurface,
+		RawCLISurface:                 rawCLISurface,
+		Certification:                 certification,
+		RawCertification:              rawCertification,
+		RateLimits:                    rateLimits,
+		CompositeProviderPathIdentity: compositeProviderPathIdentity,
+		Docs:                          docs,
+		Fixtures:                      fixtures,
 	}, nil
 }
 
