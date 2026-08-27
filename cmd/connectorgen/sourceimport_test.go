@@ -832,15 +832,20 @@ func TestSourceImportRejectsUnsafeOrRetainsMalformedSourceForms(t *testing.T) {
 	t.Parallel()
 	baseLimits := defaultSourceImportLimits()
 	cases := []struct {
-		name     string
-		artifact string
-		want     string
-		wantGap  string
-		limits   sourceImportLimits
+		name        string
+		artifact    string
+		want        string
+		wantGap     string
+		wantSuccess bool
+		limits      sourceImportLimits
 	}{
 		{name: "external reference", artifact: "external-ref.json", want: "external reference", limits: baseLimits},
 		{name: "unresolved response schema reference", artifact: "unresolved-ref.json", want: "unresolved reference", wantGap: sourceMalformedReferenceFoundation, limits: baseLimits},
-		{name: "ambiguous request", artifact: "ambiguous-request.json", want: "ambiguous request schema", limits: baseLimits},
+		// A closed oneOf stays source-native. The engine's pre-I/O validator
+		// rejects an instance that matches multiple arms; source import must not
+		// flatten or discard the provider contract merely because that outcome is
+		// possible.
+		{name: "ambiguous request remains typed for pre-I/O validation", artifact: "ambiguous-request.json", wantSuccess: true, limits: baseLimits},
 		{name: "duplicate identity", artifact: "duplicate-id.json", want: "duplicate source identity", limits: baseLimits},
 		{name: "unbounded request", artifact: "unbounded-request.json", want: "unbounded request schema", limits: baseLimits},
 		{name: "missing additional properties", artifact: "missing-additional-properties.json", want: "dynamic additionalProperties", limits: baseLimits},
@@ -862,6 +867,16 @@ func TestSourceImportRejectsUnsafeOrRetainsMalformedSourceForms(t *testing.T) {
 			raw := loadSourceImportFixture(t, filepath.Join("invalid", tc.artifact))
 			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/invalid/"+tc.artifact, raw)
 			result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), tc.limits)
+			if tc.wantSuccess {
+				if err != nil || len(result.Operations) != 1 || result.Operations[0].Request.Body == nil {
+					t.Fatalf("closed composition import = result=%#v err=%v", result.Operations, err)
+				}
+				body, ok := result.Operations[0].Request.Body.Schema.(map[string]any)
+				if !ok || body["oneOf"] == nil || result.Operations[0].Runtime.MergeBlocked {
+					t.Fatalf("closed composition lost typed source contract: %#v", result.Operations[0])
+				}
+				return
+			}
 			if tc.wantGap != "" {
 				if err != nil {
 					t.Fatalf("retained malformed source import: %v", err)
@@ -3700,7 +3715,7 @@ func TestSourceImportPreservesFrozenGitHubArtifacts(t *testing.T) {
 		sha256 string
 	}{
 		{path: filepath.Join("..", "..", "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json"), bytes: 3420025, sha256: "79f6eaf203394aabe7d2558d0f87a8100a7a084b2e39bd264f7773f235acf2c8"},
-		{path: filepath.Join("..", "..", "internal", "connectors", "defs", "github", "sources", "github-operation-descriptor.json"), bytes: 43355704, sha256: "69b23e5146480eb67f10c3ba65b45fc6fac466cfb8ae244953b19b8373f10062"},
+		{path: filepath.Join("..", "..", "internal", "connectors", "defs", "github", "sources", "github-operation-descriptor.json"), bytes: 43349384, sha256: "82834ce2a1939f78450b15e80b932a9a6c6c9f3fb920e276bcce695bec55323c"},
 		{path: filepath.Join("..", "..", ".planning", "phases", "github-parity-extract-r1", "GITHUB-COMBINED-OPERATION-LEDGER.json"), bytes: 2553169, sha256: "b2bc566e8c844fcf307b37000c8bf3d482a9da932aff5c8d375f54b6a6ed3391"},
 	}
 	for _, check := range checks {

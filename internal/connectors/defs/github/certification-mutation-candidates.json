@@ -16557,7 +16557,7 @@
         },
         {
           "path": "record.budget_type",
-          "type": "string",
+          "type": "json",
           "required": false
         },
         {
@@ -16710,7 +16710,7 @@
         },
         {
           "path": "record.budget_type",
-          "type": "string",
+          "type": "json",
           "required": false
         },
         {

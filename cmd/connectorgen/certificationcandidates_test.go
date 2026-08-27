@@ -557,8 +557,28 @@ func githubFoundationFiniteJSONShape(raw any, allowUntyped bool) error {
 	if !ok {
 		return fmt.Errorf("schema is %T, want object", raw)
 	}
+	hasComposition := false
+	for _, keyword := range []string{"oneOf", "anyOf", "allOf"} {
+		rawArms, exists := schema[keyword]
+		if !exists {
+			continue
+		}
+		hasComposition = true
+		arms, ok := rawArms.([]any)
+		if !ok || len(arms) == 0 {
+			return fmt.Errorf("%s must be a non-empty schema array", keyword)
+		}
+		for index, arm := range arms {
+			if err := githubFoundationFiniteJSONShape(arm, false); err != nil {
+				return fmt.Errorf("%s arm %d: %w", keyword, index, err)
+			}
+		}
+	}
 	types := githubFoundationSchemaTypes(schema)
 	if len(types) == 0 {
+		if hasComposition {
+			return nil
+		}
 		if allowUntyped {
 			return nil
 		}

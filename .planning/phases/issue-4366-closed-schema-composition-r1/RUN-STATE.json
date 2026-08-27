@@ -6,18 +6,18 @@
   "lifecycle": {
     "discuss_phase": "inline_manual_fallback_recorded",
     "plan_phase_tdd": "complete",
-    "execute_phase": "in_progress: closed composition green slice",
-    "verify_work": "pending",
+    "execute_phase": "complete: closed schema conversion, generated source contracts, and docs parity",
+    "verify_work": "complete: focused packages and applicable direct-PR gates green; aggregate repository test delegated to CI per per-command timeout rule",
     "code_review": "pending"
   },
   "red_green": {
     "red": "complete: traces/red-composition.txt",
-    "green": "focused source-import, engine, and commandrunner suites passed",
-    "refactor": "pending"
+    "green": "full cmd/connectorgen, engine, and commandrunner suites passed with source/generator checks",
+    "refactor": "complete: deferred composition fallback is explicit and generated composition consumers read named arms"
   },
   "promotion": {
-    "credential_bound_runnable": null,
-    "missing_foundation": null,
-    "reconciled_rows": null
+    "credential_bound_runnable": 0,
+    "missing_foundation": 608,
+    "reconciled_rows": 608
   }
 }

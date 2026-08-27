@@ -10835,7 +10835,7 @@
         },
         {
           "name": "budget-type",
-          "type": "string",
+          "type": "json",
           "required": false,
           "maps_to": "record.budget_type"
         },
@@ -11237,7 +11237,7 @@
         },
         {
           "name": "budget-type",
-          "type": "string",
+          "type": "json",
           "required": false,
           "maps_to": "record.budget_type"
         },

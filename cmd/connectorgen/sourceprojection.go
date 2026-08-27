@@ -441,6 +441,14 @@ func projectSourceDescriptorToBundleMode(bundleDir string, result sourceImportRe
 				// invents a lossy record shape for a contract it cannot express. A
 				// pre-existing closed action can still be an executable declared
 				// variant, including when its CLI command has not been generated yet.
+				// Composition is different: a source operation that still carries a
+				// composition foundation gap must remain deferred. Reusing a legacy
+				// action here would silently turn an unclosed provider union into an
+				// implementation claim, even though no complete typed input contract
+				// reached the engine.
+				if sourceOperationHasDeferredCompositionFallback(operation) {
+					continue
+				}
 				if sourceProjectionHasBlockingGap(operation.Runtime.Gaps) {
 					sealed, sealErr := sourceProjectionSealExistingActionRecordSchema(action)
 					sealedExistingAction = sealed
@@ -2925,6 +2933,49 @@ func sourceOperationHasFoundationGap(operation sourceOperationDescriptor, founda
 	for _, gap := range operation.Runtime.Gaps {
 		if gap.Foundation == foundation {
 			return true
+		}
+	}
+	return false
+}
+
+// sourceOperationHasDeferredCompositionFallback identifies the only case in
+// which the legacy action fallback is unsafe. A source importer can retain an
+// otherwise valid legacy action while another input gap is being worked on,
+// but it may not use that action to paper over an unclosed oneOf, anyOf, or
+// allOf request contract. The source descriptor remains the authoritative,
+// cited missing-foundation record instead.
+func sourceOperationHasDeferredCompositionFallback(operation sourceOperationDescriptor) bool {
+	if !operation.Runtime.MergeBlocked || !sourceOperationHasFoundationGap(operation, "cli-request-schema-foundation-r1") {
+		return false
+	}
+	for _, parameters := range [][]sourceParameterDescriptor{operation.Request.Path, operation.Request.Query, operation.Request.Header} {
+		for _, parameter := range parameters {
+			if sourceSchemaContainsComposition(parameter.Schema) {
+				return true
+			}
+		}
+	}
+	return operation.Request.Body != nil && sourceSchemaContainsComposition(operation.Request.Body.Schema)
+}
+
+func sourceSchemaContainsComposition(raw any) bool {
+	switch typed := raw.(type) {
+	case map[string]any:
+		for _, keyword := range []string{"oneOf", "anyOf", "allOf"} {
+			if _, exists := typed[keyword]; exists {
+				return true
+			}
+		}
+		for _, child := range typed {
+			if sourceSchemaContainsComposition(child) {
+				return true
+			}
+		}
+	case []any:
+		for _, child := range typed {
+			if sourceSchemaContainsComposition(child) {
+				return true
+			}
 		}
 	}
 	return false

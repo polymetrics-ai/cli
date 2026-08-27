@@ -1921,6 +1921,49 @@ func TestSourceProjectionGapCompletesExistingClosedActionCLI(t *testing.T) {
 	}
 }
 
+func TestSourceProjectionDefersUnclosedCompositionWithoutMutatingExistingAction(t *testing.T) {
+	bundleDir := t.TempDir()
+	writesPath := filepath.Join(bundleDir, "writes.json")
+	cliPath := filepath.Join(bundleDir, "cli_surface.json")
+	writes := `{"schema_version":1,"actions":[{"name":"items","method":"POST","path":"/items/{{ record.owner }}","body_type":"none","record_schema":{"type":"object","additionalProperties":false,"properties":{"owner":{"type":"string"}}},"risk":"standard"}]}`
+	cli := `{"schema_version":1,"commands":[{"path":"items create","intent":"reverse_etl","availability":"implemented","write":"items","flags":[{"name":"owner","type":"string","maps_to":"record.owner","required":true}]}]}`
+	writeProjectionFixture(t, writesPath, writes)
+	writeProjectionFixture(t, cliPath, cli)
+
+	operation := sourceProjectionTestOperation()
+	operation.SourceID = "fixture.items.create"
+	operation.Source = sourceImportSource{URL: "https://provider.invalid/openapi.json", Location: `paths["/items/{owner}"].post`, Form: "openapi"}
+	operation.Request.Query = nil
+	operation.Request.Body.Schema = map[string]any{"oneOf": []any{
+		map[string]any{"type": "object", "properties": map[string]any{"name": map[string]any{"type": "string"}}},
+		map[string]any{"type": "array", "items": map[string]any{"type": "string"}},
+	}}
+	operation.Runtime = sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{
+		Foundation: "cli-request-schema-foundation-r1",
+		Location:   "request body",
+		Reason:     "source schema oneOf arm 0: composition object must explicitly set additionalProperties to false",
+	}}}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{operation}}
+
+	stats, err := projectSourceDescriptorToBundle(bundleDir, result, false)
+	if err != nil {
+		t.Fatalf("defer unclosed composition: %v", err)
+	}
+	if stats.Writes != 0 || stats.CLI != 0 || stats.Operations != 0 {
+		t.Fatalf("deferred composition projection stats = %+v, want no generated artifact mutation", stats)
+	}
+	if got := readProjectionFixture(t, writesPath); got != writes {
+		t.Fatalf("deferred composition mutated writes.json:\n%s", got)
+	}
+	if got := readProjectionFixture(t, cliPath); got != cli {
+		t.Fatalf("deferred composition mutated cli_surface.json:\n%s", got)
+	}
+	retained := result.Operations[0]
+	if retained.SourceID != "fixture.items.create" || retained.Source.URL != "https://provider.invalid/openapi.json" || retained.Source.Location != `paths["/items/{owner}"].post` || !sourceOperationHasFoundationGap(retained, "cli-request-schema-foundation-r1") {
+		t.Fatalf("deferred composition lost source-cited missing-foundation identity: %#v", retained)
+	}
+}
+
 func sourceProjectionActionRequired(t *testing.T, raw, name string) []string {
 	t.Helper()
 	var document struct {
@@ -2079,12 +2122,11 @@ func TestSourceProjectionGapKeepsNamedBoundedUnionFieldsReachable(t *testing.T) 
 	}
 }
 
-// TestSourceProjectionStringUnionKeepsTextCLIAndProviderArms protects the
-// ordinary command spelling for source contracts such as GitHub's issue title.
-// A source oneOf may retain several provider scalar arms, but one named,
-// bounded JSON flag must still admit the explicitly declared string arm as
-// regular CLI text rather than becoming a raw JSON/body escape hatch.
-func TestSourceProjectionStringUnionKeepsTextCLIAndProviderArms(t *testing.T) {
+// TestSourceProjectionStringFieldKeepsTextCLI covers the ordinary scalar
+// source-projection path. It deliberately contains no provider union: the old
+// synthetic scalar-union fixture had no retained provider evidence and is not
+// a provenance claim for this composition foundation.
+func TestSourceProjectionStringFieldKeepsTextCLI(t *testing.T) {
 	bundleDir := t.TempDir()
 	writesPath := filepath.Join(bundleDir, "writes.json")
 	cliPath := filepath.Join(bundleDir, "cli_surface.json")
@@ -2094,16 +2136,13 @@ func TestSourceProjectionStringUnionKeepsTextCLIAndProviderArms(t *testing.T) {
 		Connector: "alpha", SourceID: "items/create", Method: "post", Path: "/items",
 		Request: sourceRequestDescriptor{MediaType: "application/json", Body: &sourceRequestBodyDescriptor{Schema: map[string]any{
 			"type": "object", "additionalProperties": false, "required": []any{"title"},
-			"properties": map[string]any{"title": map[string]any{"oneOf": []any{map[string]any{"type": "integer"}, map[string]any{"type": "string"}}}},
-		}}},
-		Runtime: sourceRuntimeReachability{Gaps: []sourceContractGap{{
-			Foundation: "cli-request-schema-foundation-r1", Location: "request body.properties.title", Reason: "provider scalar oneOf is projected as one bounded named field",
+			"properties": map[string]any{"title": map[string]any{"type": "string", "maxLength": 12}},
 		}}},
 	}
 
 	stats, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{operation}}, false)
 	if err != nil {
-		t.Fatalf("project direct scalar union: %v", err)
+		t.Fatalf("project direct scalar: %v", err)
 	}
 	if stats.Writes != 1 || stats.CLI != 1 {
 		t.Fatalf("projection stats = %+v, want schema and bounded bare-string flag repair", stats)
@@ -2118,8 +2157,8 @@ func TestSourceProjectionStringUnionKeepsTextCLIAndProviderArms(t *testing.T) {
 	if err := json.Unmarshal([]byte(readProjectionFixture(t, writesPath)), &projected); err != nil {
 		t.Fatalf("decode projected write: %v", err)
 	}
-	if got := projected.Actions[0].RecordSchema.Properties["title"]["type"]; !reflect.DeepEqual(got, []any{"integer", "string"}) {
-		t.Fatalf("provider scalar union = %#v, want integer|string retained", got)
+	if got := projected.Actions[0].RecordSchema.Properties["title"]; !reflect.DeepEqual(got, map[string]any{"type": "string", "maxLength": float64(12)}) {
+		t.Fatalf("provider scalar field = %#v, want bounded string retained", got)
 	}
 	var surface struct {
 		Commands []struct {
@@ -2134,8 +2173,8 @@ func TestSourceProjectionStringUnionKeepsTextCLIAndProviderArms(t *testing.T) {
 	if err := json.Unmarshal([]byte(readProjectionFixture(t, cliPath)), &surface); err != nil {
 		t.Fatalf("decode projected CLI: %v", err)
 	}
-	if got := surface.Commands[0].Flags[0]; got.Name != "title" || got.Type != "json" || got.MaxBytes != sourceProjectionDefaultJSONBytes || !got.AllowBareString {
-		t.Fatalf("source string union flag = %+v, want bounded named JSON with bare text", got)
+	if got := surface.Commands[0].Flags[0]; got.Name != "title" || got.Type != "string" || got.MaxBytes != 48 || got.AllowBareString {
+		t.Fatalf("source string flag = %+v, want bounded text", got)
 	}
 }
 
