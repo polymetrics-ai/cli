@@ -4,7 +4,7 @@
   "base": "main",
   "branch": "feat/4354-schema-v3-source-projection",
   "delivery": "direct-pr",
-  "status": "fresh_audit_admission_hardening_planned_red_tests_pending",
+  "status": "fresh_audit_admission_hardening_green_targeted_validation_pending",
   "gsd": {
     "mode": "inline-manual-fallback",
     "commands_resolved": [

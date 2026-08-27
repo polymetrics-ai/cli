@@ -608,6 +608,239 @@ func TestOperationEvidenceLegacyByteBackedLocksRejectReferenceOnlyFields(t *test
 	}
 }
 
+// TestOperationEvidenceProviderAbsenceRejectsReferenceOnlyFields closes the
+// early absence exit as well as the ordinary legacy evidence path. A provider
+// absence has no authority to reinterpret a v2 byte-backed inventory as a
+// reference wire, including when the discriminator is explicitly null.
+func TestOperationEvidenceProviderAbsenceRejectsReferenceOnlyFields(t *testing.T) {
+	t.Parallel()
+	fields := []struct {
+		name   string
+		mutate func(map[string]any)
+	}{
+		{"root operations_found", func(lock map[string]any) {
+			lock["operations_found"] = map[string]any{"rest": 1, "graphql_query": 0, "graphql_mutation": 0, "total": 1}
+		}},
+		{"root coverage_confidence", func(lock map[string]any) {
+			lock["coverage_confidence"] = map[string]any{"level": "source_reference", "basis": "reference only"}
+		}},
+		{"rest operation_counts", func(lock map[string]any) {
+			lock["rest"].(map[string]any)["operation_counts"] = map[string]any{"GET": 1}
+		}},
+		{"rest supplements", func(lock map[string]any) {
+			lock["rest"].(map[string]any)["supplements"] = []any{}
+		}},
+		{"operation source_url", func(lock map[string]any) {
+			lock["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["source_url"] = "https://fixtures.polymetrics.invalid/alternate"
+		}},
+		{"null source_kind discriminator", func(lock map[string]any) {
+			lock["rest"].(map[string]any)["source_kind"] = nil
+		}},
+	}
+	states := []struct {
+		name  string
+		apply func(map[string]any)
+	}{
+		{"skipped", func(lock map[string]any) {
+			lock["state"] = "skipped"
+			lock["skip"] = map[string]any{"attempted_url": "https://fixtures.polymetrics.invalid/alpha-openapi.json", "reason": "provider source unavailable", "detail": "recorded fixture absence"}
+		}},
+		{"dynamic", func(lock map[string]any) {
+			lock["state"] = "dynamic"
+			lock["dynamic"] = map[string]any{"reason": "provider inventory is dynamic", "detail": "recorded fixture absence"}
+		}},
+	}
+	for _, state := range states {
+		for _, field := range fields {
+			state, field := state, field
+			t.Run(state.name+"/"+field.name, func(t *testing.T) {
+				lock := sourceImportLegacyByteBackedWireFixture(2)
+				state.apply(lock)
+				field.mutate(lock)
+				raw, err := json.Marshal(lock)
+				if err != nil {
+					t.Fatal(err)
+				}
+				path := filepath.Join(t.TempDir(), "alpha-operation-source-lock.json")
+				if err := os.WriteFile(path, raw, 0o644); err != nil {
+					t.Fatal(err)
+				}
+				if _, err := readOperationEvidenceSourceLock(path, "alpha"); err == nil {
+					t.Fatalf("provider-absence evidence accepted byte-backed v2 lock with reference-only %s", field.name)
+				}
+			})
+		}
+	}
+}
+
+// TestSourceReferenceDescriptorsRejectExactContractTampering ensures a
+// source-reference operation remains the declaration-only lock projection. It
+// intentionally checks both the retained legacy adapter and the general v3
+// document form so no connector-specific exception can become executable.
+func TestSourceReferenceDescriptorsRejectExactContractTampering(t *testing.T) {
+	t.Parallel()
+	for _, tc := range []struct {
+		name string
+		lock func(*testing.T) []byte
+	}{
+		{name: "legacy-v2-reference", lock: sourceImportOutreachReferenceLock},
+		{name: "schema-v3-reference", lock: func(t *testing.T) []byte {
+			return sourceImportV3SourceReferenceLock(t, "fixture", "fixture-source", "https://docs.polymetrics.invalid/fixture/openapi", strings.Repeat("a", 64), 512, "GET", "/widgets")
+		}},
+	} {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			connector := "fixture"
+			if tc.name == "legacy-v2-reference" {
+				connector = "outreach"
+			}
+			lock, err := parseSourceImportLock(tc.lock(t), connector)
+			if err != nil {
+				t.Fatalf("parse source reference: %v", err)
+			}
+			result, err := importSourceLockResult(context.Background(), lock, nil, defaultSourceImportLimits())
+			if err != nil {
+				t.Fatalf("import source reference: %v", err)
+			}
+			baselineRaw, err := marshalSourceImportResult(result)
+			if err != nil {
+				t.Fatalf("marshal source-reference descriptor: %v", err)
+			}
+			var baseline sourceImportDescriptorDocument
+			if err := decodeSourceStrictJSON(baselineRaw, &baseline); err != nil {
+				t.Fatalf("decode source-reference descriptor: %v", err)
+			}
+			if findings := validateSourceDescriptorAgainstLock(lock.Connector, "sources/"+lock.Connector+"-operation-descriptor.json", lock, baseline); len(findings) != 0 {
+				t.Fatalf("baseline reference descriptor findings = %+v", findings)
+			}
+			for _, change := range []struct {
+				name   string
+				mutate func(*sourceOperationDescriptor)
+			}{
+				{name: "connector", mutate: func(operation *sourceOperationDescriptor) { operation.Connector = "other" }},
+				{name: "protocol", mutate: func(operation *sourceOperationDescriptor) { operation.Protocol = "graphql" }},
+				{name: "method", mutate: func(operation *sourceOperationDescriptor) { operation.Method = "post" }},
+				{name: "path", mutate: func(operation *sourceOperationDescriptor) { operation.Path = "/rewritten" }},
+				{name: "provider operation identity", mutate: func(operation *sourceOperationDescriptor) { operation.ProviderOperationID = "rewritten" }},
+				{name: "provenance", mutate: func(operation *sourceOperationDescriptor) { operation.Source.SHA256 = strings.Repeat("0", 64) }},
+				{name: "removed gap", mutate: func(operation *sourceOperationDescriptor) {
+					operation.Runtime.MergeBlocked = false
+					operation.Runtime.Gaps = nil
+				}},
+				{name: "replaced gap", mutate: func(operation *sourceOperationDescriptor) {
+					operation.Runtime.MergeBlocked = true
+					operation.Runtime.Gaps = []sourceContractGap{sourceContractGapFor("runtime_executor", "source operation", "incorrect replacement")}
+				}},
+				{name: "request contract", mutate: func(operation *sourceOperationDescriptor) {
+					operation.Request.Query = []sourceParameterDescriptor{{Name: "limit", Schema: map[string]any{"type": "integer"}}}
+				}},
+				{name: "response contract", mutate: func(operation *sourceOperationDescriptor) {
+					operation.Responses = []sourceResponseDescriptor{{Status: "200", Declaration: map[string]any{"description": "invented"}}}
+				}},
+				{name: "output contract", mutate: func(operation *sourceOperationDescriptor) { operation.Output.Class = sourceOutputJSON }},
+			} {
+				change := change
+				t.Run(change.name, func(t *testing.T) {
+					descriptor := baseline
+					descriptor.Operations = append([]sourceOperationDescriptor(nil), baseline.Operations...)
+					operation := descriptor.Operations[0]
+					change.mutate(&operation)
+					descriptor.Operations[0] = operation
+					findings := validateSourceDescriptorAgainstLock(lock.Connector, "sources/"+lock.Connector+"-operation-descriptor.json", lock, descriptor)
+					if len(findings) != 1 || !strings.Contains(findings[0].Message, "reference contract drift") {
+						t.Fatalf("%s findings = %+v", change.name, findings)
+					}
+				})
+			}
+			for _, change := range []struct {
+				name   string
+				mutate func(*sourceImportDescriptorDocument)
+			}{
+				{name: "descriptor removed gap", mutate: func(descriptor *sourceImportDescriptorDocument) {
+					descriptor.MergeBlocked = false
+					descriptor.Gaps = nil
+				}},
+				{name: "descriptor replaced gap", mutate: func(descriptor *sourceImportDescriptorDocument) {
+					descriptor.MergeBlocked = true
+					descriptor.Gaps = []sourceContractGap{sourceContractGapFor("runtime_executor", "source descriptor", "incorrect replacement")}
+				}},
+			} {
+				change := change
+				t.Run(change.name, func(t *testing.T) {
+					descriptor := baseline
+					descriptor.Gaps = append([]sourceContractGap(nil), baseline.Gaps...)
+					change.mutate(&descriptor)
+					findings := validateSourceDescriptorAgainstLock(lock.Connector, "sources/"+lock.Connector+"-operation-descriptor.json", lock, descriptor)
+					if len(findings) != 1 || !strings.Contains(findings[0].Message, "reference contract drift") {
+						t.Fatalf("%s findings = %+v", change.name, findings)
+					}
+				})
+			}
+		})
+	}
+}
+
+// TestSourceReferenceSurfaceSyncRejectsTamperedDescriptor verifies that the
+// materializer consumes only an exact citation-only descriptor. This keeps a
+// missing/replaced gap from becoming a route into projection.
+func TestSourceReferenceSurfaceSyncRejectsTamperedDescriptor(t *testing.T) {
+	t.Parallel()
+	for _, tc := range []struct {
+		name string
+		lock func(*testing.T) []byte
+	}{
+		{name: "legacy-v2-reference", lock: sourceImportOutreachReferenceLock},
+		{name: "schema-v3-reference", lock: func(t *testing.T) []byte {
+			return sourceImportV3SourceReferenceLock(t, "fixture", "fixture-source", "https://docs.polymetrics.invalid/fixture/openapi", strings.Repeat("a", 64), 512, "GET", "/widgets")
+		}},
+	} {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			connector := "fixture"
+			if tc.name == "legacy-v2-reference" {
+				connector = "outreach"
+			}
+			raw := tc.lock(t)
+			lock, err := parseSourceImportLock(raw, connector)
+			if err != nil {
+				t.Fatal(err)
+			}
+			result, err := importSourceLockResult(context.Background(), lock, nil, defaultSourceImportLimits())
+			if err != nil {
+				t.Fatal(err)
+			}
+			descriptorRaw, err := marshalSourceImportResult(result)
+			if err != nil {
+				t.Fatal(err)
+			}
+			var descriptor sourceImportDescriptorDocument
+			if err := decodeSourceStrictJSON(descriptorRaw, &descriptor); err != nil {
+				t.Fatal(err)
+			}
+			descriptor.MergeBlocked = false
+			descriptor.Gaps = nil
+			bundleDir := filepath.Join(t.TempDir(), connector)
+			sourcesDir := filepath.Join(bundleDir, "sources")
+			if err := os.MkdirAll(sourcesDir, 0o755); err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(filepath.Join(sourcesDir, connector+"-operation-source-lock.json"), raw, 0o644); err != nil {
+				t.Fatal(err)
+			}
+			descriptorRaw, err = json.Marshal(descriptor)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(filepath.Join(sourcesDir, connector+"-operation-descriptor.json"), descriptorRaw, 0o644); err != nil {
+				t.Fatal(err)
+			}
+			if _, err := syncCheckedInSourceProjection(bundleDir, connector, true); err == nil || !strings.Contains(err.Error(), "reference contract drift") {
+				t.Fatalf("surface-sync source-reference tamper error = %v, want exact-contract refusal", err)
+			}
+		})
+	}
+}
+
 // TestSourceImportLegacyReferenceRejectsCrossSourceCitationSwap proves that
 // source-count equality cannot substitute for each operation's document
 // location. The two selected rows retain every ID, route, URL and count; only

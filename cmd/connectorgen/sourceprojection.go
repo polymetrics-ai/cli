@@ -2415,16 +2415,27 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 	type expectedSource struct {
 		source              sourceImportSource
 		providerOperationID string
+		reference           *sourceOperationDescriptor
 	}
 	expected := map[string]expectedSource{}
+	referenceGaps := []sourceContractGap{}
+	referenceCount := 0
 	if lock.SchemaVersion == 3 {
 		for _, document := range lock.Rest.SourceDocuments {
 			for _, operation := range document.Operations {
 				source := sourceImportExpectedV3DescriptorProvenance(document, operation)
-				expected[operation.ID] = expectedSource{
+				expectedOperation := expectedSource{
 					source:              source,
 					providerOperationID: operation.OperationID,
 				}
+				if document.isSourceReference() {
+					reference := sourceImportReferenceOperation(lock.Connector, operation, document.sourceArtifact(), sourceImportReferenceForm(document.sourceArtifact()))
+					reference.Source.DocumentID = document.ID
+					expectedOperation.reference = &reference
+					referenceGaps = append(referenceGaps, reference.Runtime.Gaps...)
+					referenceCount++
+				}
+				expected[operation.ID] = expectedOperation
 			}
 		}
 	} else if lock.isLegacySourceReference() {
@@ -2437,9 +2448,13 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 			if !found {
 				return []Finding{sourceProjectionFinding(connector, file, "source-reference operation "+operation.ID+" cites an undeclared source URL")}
 			}
+			reference := sourceImportReferenceOperation(lock.Connector, operation, artifact, sourceImportReferenceForm(artifact))
+			referenceGaps = append(referenceGaps, reference.Runtime.Gaps...)
+			referenceCount++
 			expected[operation.ID] = expectedSource{
 				source:              sourceImportReferenceProvenance(artifact, operation.SourceLocation, sourceImportReferenceForm(artifact)),
 				providerOperationID: operation.OperationID,
+				reference:           &reference,
 			}
 		}
 	} else {
@@ -2457,6 +2472,12 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 	for _, field := range lock.GraphQL.MutationFields {
 		expected[fmt.Sprintf("%s.graphql.mutation.%s", connector, field.Name)] = expectedSource{source: sourceImportSource{SHA256: strings.ToLower(firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)), Bytes: firstPositiveInt64(lock.GraphQL.ProjectionBytes, lock.GraphQL.Bytes)}}
 	}
+	if referenceCount > 0 && !descriptor.MergeBlocked {
+		return []Finding{sourceProjectionFinding(connector, file, "source descriptor reference contract drift: merge_blocked must remain true")}
+	}
+	if referenceCount == len(expected) && !reflect.DeepEqual(sourceSortedGaps(descriptor.Gaps), sourceSortedGaps(referenceGaps)) {
+		return []Finding{sourceProjectionFinding(connector, file, "source descriptor reference contract drift: descriptor gaps do not match the cited source contract")}
+	}
 	actual := map[string]sourceOperationDescriptor{}
 	for _, operation := range descriptor.Operations {
 		if _, duplicate := actual[operation.SourceID]; duplicate {
@@ -2471,6 +2492,13 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 		operation, ok := actual[identity]
 		if !ok {
 			return []Finding{sourceProjectionFinding(connector, file, "source descriptor is missing identity "+identity)}
+		}
+		if expectedOperation.reference != nil && !reflect.DeepEqual(operation, *expectedOperation.reference) {
+			// A cited-only source has no request or response contract to repair
+			// downstream. Its exact operation descriptor is therefore the closed
+			// lock projection: identity, provenance, empty execution fields, and
+			// the sole source_contract_unavailable gap all travel together.
+			return []Finding{sourceProjectionFinding(connector, file, "source descriptor reference contract drift for "+identity)}
 		}
 		if operation.Source.SHA256 != expectedOperation.source.SHA256 || operation.Source.Bytes != expectedOperation.source.Bytes || (expectedOperation.source.Location != "" && operation.Source.Location != expectedOperation.source.Location) {
 			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provenance drift for "+identity)}

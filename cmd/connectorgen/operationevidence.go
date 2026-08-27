@@ -490,6 +490,14 @@ func readOperationEvidenceSourceLock(path, connector string) (operationEvidenceS
 		return operationEvidenceSourceInput{}, fmt.Errorf("source lock connector %q does not match directory %q", lock.Connector, connector)
 	}
 	input := operationEvidenceSourceInput{Connector: connector, LockPath: filepath.ToSlash(filepath.Join("sources", filepath.Base(path)))}
+	// Validate the v2 wire before any provider-absence projection. Otherwise a
+	// skipped or dynamic state could suppress the presence check and let a
+	// reference-only field (including source_kind:null) hide in a byte-backed
+	// legacy inventory.
+	legacyReference, err := operationEvidenceLegacyReferenceWire(raw, lock.SchemaVersion)
+	if err != nil {
+		return operationEvidenceSourceInput{}, fmt.Errorf("parse source lock for %q: %w", connector, err)
+	}
 	// A v3 document-owned inventory is the strict source-import contract. It
 	// cannot be hidden behind the historical provider-absence projection just
 	// by adding an otherwise legacy state field. Empty v3 absence locks remain
@@ -511,10 +519,6 @@ func readOperationEvidenceSourceLock(path, connector string) (operationEvidenceS
 		}
 		input.Absence = &absence
 		return input, nil
-	}
-	legacyReference, err := operationEvidenceLegacyReferenceWire(raw, lock.SchemaVersion)
-	if err != nil {
-		return operationEvidenceSourceInput{}, fmt.Errorf("parse source lock for %q: %w", connector, err)
 	}
 	// Version 3 and an explicit non-null v2 source-reference discriminator are
 	// the strict source-import contracts. Historical byte-backed v2 evidence

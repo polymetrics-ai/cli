@@ -949,6 +949,38 @@ func (lock sourceImportLock) isLegacySourceReference() bool {
 	return lock.SchemaVersion == 2 && lock.Rest.SourceKind != ""
 }
 
+// sourceImportLockDeclaresSourceReference identifies the only lock forms that
+// can produce a declaration-only descriptor. It validates duplicate-member
+// syntax before using the small header view, then leaves full contract
+// validation to parseSourceImportLock at the caller's trust boundary.
+func sourceImportLockDeclaresSourceReference(raw []byte) (bool, error) {
+	var header struct {
+		SchemaVersion int `json:"schema_version"`
+		Rest          struct {
+			SourceKind      json.RawMessage `json:"source_kind"`
+			SourceDocuments []struct {
+				Kind string `json:"kind"`
+			} `json:"source_documents"`
+		} `json:"rest"`
+	}
+	if err := decodeSourceJSON(raw, &header); err != nil {
+		return false, err
+	}
+	if header.SchemaVersion == 2 && header.Rest.SourceKind != nil {
+		// An explicit null is still a claimed discriminator. The strict parser
+		// must reject it rather than letting a descriptor bypass its lock.
+		return true, nil
+	}
+	if header.SchemaVersion == 3 {
+		for _, document := range header.Rest.SourceDocuments {
+			if document.Kind == sourceImportDocumentKindSourceReference {
+				return true, nil
+			}
+		}
+	}
+	return false, nil
+}
+
 // validateSourceImportLegacySourceReferenceInventory accepts the retained
 // pre-v3 Outreach declaration shape without weakening the normal legacy
 // importer. Its operation list is enough for source-to-declaration mapping;

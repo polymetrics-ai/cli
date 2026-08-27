@@ -206,6 +206,45 @@ projection and exact reference-operation construction for descriptor checking.
 The untouched byte-backed legacy reader and all cited Outreach operations must
 remain non-executable.
 
+### Red — 2026-08-27
+
+```text
+go test -timeout 20m ./cmd/connectorgen \
+  -run 'Test(OperationEvidenceProviderAbsenceRejectsReferenceOnlyFields|SourceReferenceDescriptorsRejectExactContractTampering|SourceReferenceSurfaceSyncRejectsTamperedDescriptor)$' \
+  -count=1 -v
+FAIL
+```
+
+- Both `skipped` and `dynamic` returned provider-absence records before v2 raw
+  field inspection, accepting every reference-only overlay, including explicit
+  `rest.source_kind: null`.
+- Descriptor validation accepted connector/protocol/method/path changes,
+  removed/replaced gaps, and invented request/response/output contracts for
+  both the retained legacy reference and a v3 source-reference document.
+- `surface-sync` accepted the same gap-removed descriptor in both forms,
+  reaching projection instead of refusing the lock/descriptor mismatch.
+
+### Green — 2026-08-27
+
+```text
+go test -timeout 20m ./cmd/connectorgen \
+  -run 'Test(OperationEvidenceProviderAbsenceRejectsReferenceOnlyFields|SourceReferenceDescriptorsRejectExactContractTampering|SourceReferenceSurfaceSyncRejectsTamperedDescriptor)$' \
+  -count=1 -v
+PASS
+```
+
+- `operationEvidenceLegacyReferenceWire` now runs before either v2 absence
+  return, so the existing raw-presence matrix rejects all reference-only
+  fields for both `skipped` and `dynamic` and retains ordinary v2 absence
+  behavior when no such field is present.
+- Reference descriptor validation constructs the exact expected lock
+  projection and rejects any connector/protocol/method/path/provider identity,
+  provenance, execution-contract, operation runtime, or pure-reference root
+  gap-state drift.
+- `surface-sync` identifies a source-reference lock, performs strict lock and
+  descriptor validation before materialization, and therefore rejects the
+  tampered descriptor without reaching a command/action projection path.
+
 ## Frozen independent-audit repair wave — planned red/green (2026-08-27)
 
 The fresh independent audit of head `21480fcd9ce5701164bafb82666ffe5bbc3934c4`
