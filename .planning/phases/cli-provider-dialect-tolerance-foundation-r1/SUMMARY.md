@@ -25,11 +25,11 @@ coverage:
 
 # Summary — Stripe provider-dialect tolerance foundation
 
-The importer no longer walks every component before emitting source operations.
-It indexes source grammar and reserves bounded counts first, then resolves each
-operation locally. Normalized pointer targets are memoized per source document;
-cycle detection, target-kind validation, traversal/reference counts, and byte
-budgets remain on each traversal.
+The importer keeps current-main's full source-grammar preflight while resolving
+local pointer targets through per-document normalization and memoization. Cycle
+detection, target-kind validation, traversal/reference counts, and byte budgets
+remain bounded. Only a typed finite-depth error for a gap-enabled lock is
+allowed past preflight, so its affected operation can be handled locally.
 
 A typed depth exhaustion is retained only for a source-lock version that
 already permits source contract gaps. It emits a source-cited skeletal

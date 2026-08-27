@@ -2948,9 +2948,9 @@ const (
 )
 
 // sourceReferenceDepthError marks only the finite per-traversal reference
-// bound. A source lock that explicitly permits source-contract gaps may retain
-// the exact affected operation as incomplete; every other malformed or
-// resource-exhausting reference error stays terminal.
+// bound. A source lock that permits source-contract gaps retains the affected
+// operation with its exact source citation; malformed and resource-exhausting
+// references remain terminal.
 type sourceReferenceDepthError struct{}
 
 func (*sourceReferenceDepthError) Error() string {
@@ -3963,14 +3963,33 @@ func sourcePrepareSourceDocument(doc map[string]any, form sourceDocumentForm, li
 	if err != nil {
 		return fmt.Errorf("index source grammar positions: %w", err)
 	}
+	preflight := sourceReferenceResolver{
+		root:                 doc,
+		limits:               limits,
+		form:                 form,
+		referenceIndex:       index,
+		normalizedReferences: map[string]sourceNormalizedReference{},
+		referenceTargets:     map[string]sourceReferenceTargetCacheEntry{},
+		schemaCycles:         map[string]struct{}{},
+		responseExpansion:    sourceResponseExpansionBudget{limit: sourceResolvedDescriptorLimit(limits)},
+		mediaExpansion:       sourceRetainedExpansionBudget{limit: sourceResolvedDescriptorLimit(limits), label: "request media"},
+		inboundExpansion:     sourceRetainedExpansionBudget{limit: sourceResolvedDescriptorLimit(limits), label: "inbound event"},
+		referenceExpansion:   sourceRetainedExpansionBudget{limit: sourceResolvedDescriptorLimit(limits), label: "reference target"},
+	}
+	if err := preflight.reserveDiscoveredCounts(countBudget); err != nil {
+		return fmt.Errorf("reserve source discovery counts: %w", err)
+	}
+	if err := preflight.preflightDocument(); err != nil {
+		return fmt.Errorf("preflight source grammar: %w", err)
+	}
 	resolver.root = doc
 	resolver.limits = limits
 	resolver.form = form
 	resolver.referenceIndex = index
 	resolver.normalizedReferences = map[string]sourceNormalizedReference{}
 	resolver.referenceTargets = map[string]sourceReferenceTargetCacheEntry{}
-	resolver.schemaCycles = map[string]struct{}{}
-	resolver.schemaReferenceSiblingGaps = nil
+	resolver.schemaCycles = preflight.schemaCycles
+	resolver.schemaReferenceSiblingGaps = preflight.schemaReferenceSiblingGaps
 	resolver.references = 0
 	resolver.expansion = sourceSchemaExpansionBudget{}
 	resolver.responseExpansion = sourceResponseExpansionBudget{limit: sourceResolvedDescriptorLimit(limits)}
@@ -3978,10 +3997,6 @@ func sourcePrepareSourceDocument(doc map[string]any, form sourceDocumentForm, li
 	resolver.mediaExpansion = sourceRetainedExpansionBudget{limit: sourceResolvedDescriptorLimit(limits), label: "request media"}
 	resolver.inboundExpansion = sourceRetainedExpansionBudget{limit: sourceResolvedDescriptorLimit(limits), label: "inbound event"}
 	resolver.referenceExpansion = sourceRetainedExpansionBudget{limit: sourceResolvedDescriptorLimit(limits), label: "reference target"}
-	if err := resolver.reserveDiscoveredCounts(countBudget); err != nil {
-		return fmt.Errorf("reserve source discovery counts: %w", err)
-	}
-	resolver.references = 0
 	return nil
 }
 
@@ -4077,6 +4092,223 @@ func sourceCallbackCount(value any) (int, error) {
 	return sourceNonExtensionEntryCount(callbacks), nil
 }
 
+func (r *sourceReferenceResolver) preflightDocument() error {
+	if rawPaths, declared := r.root["paths"]; declared {
+		if err := r.preflightPathItems(rawPaths); err != nil && !sourceOperationRetainableReferenceDepth(err, r.limits) {
+			return err
+		}
+	}
+	if r.form.isOpenAPI() {
+		if rawWebhooks, declared := r.root["webhooks"]; declared && r.form.isOpenAPI31() {
+			if err := r.preflightInboundPathItems(rawWebhooks); err != nil && !sourceOperationRetainableReferenceDepth(err, r.limits) {
+				return err
+			}
+		}
+		if rawComponents, declared := r.root["components"]; declared {
+			if err := r.preflightOpenAPIComponents(rawComponents); err != nil && !sourceOperationRetainableReferenceDepth(err, r.limits) {
+				return err
+			}
+		}
+		return nil
+	}
+	if err := r.preflightSwaggerComponents(r.root); err != nil && !sourceOperationRetainableReferenceDepth(err, r.limits) {
+		return err
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightPathItems(value any) error {
+	items, err := sourceReferenceObject(value, "path items")
+	if err != nil {
+		return err
+	}
+	for _, name := range sortedSourceMapKeys(items) {
+		if strings.HasPrefix(name, "x-") {
+			continue
+		}
+		if err := r.preflightPathItem(items[name]); err != nil {
+			return fmt.Errorf("path item %q: %w", name, err)
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightInboundPathItems(value any) error {
+	items, err := sourceReferenceObject(value, "path items")
+	if err != nil {
+		return err
+	}
+	for _, name := range sortedSourceMapKeys(items) {
+		if strings.HasPrefix(name, "x-") {
+			continue
+		}
+		pathItem, err := r.resolveInboundPathItem(items[name], nil, 0)
+		if err != nil {
+			return fmt.Errorf("path item %q: %w", name, err)
+		}
+		if err := r.preflightResolvedPathItem(pathItem); err != nil {
+			return fmt.Errorf("path item %q: %w", name, err)
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightPathItem(value any) error {
+	pathItem, err := r.resolvePathItem(value, nil, 0)
+	if err != nil {
+		return err
+	}
+	if parameters, declared := pathItem["parameters"]; declared {
+		if err := r.preflightParameters(parameters); err != nil {
+			return err
+		}
+	}
+	if r.form.isOpenAPI() {
+		if callbacks, declared := pathItem["callbacks"]; declared {
+			if err := r.preflightCallbacks(callbacks); err != nil {
+				return err
+			}
+		}
+	}
+	for _, method := range sourceHTTPMethods {
+		operation, declared := pathItem[method]
+		if !declared {
+			continue
+		}
+		if err := r.preflightOperation(operation); err != nil {
+			return fmt.Errorf("%s operation: %w", method, err)
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightOperation(value any) error {
+	operation, err := sourceReferenceObject(value, "operation")
+	if err != nil {
+		return err
+	}
+	if parameters, declared := operation["parameters"]; declared {
+		if err := r.preflightParameters(parameters); err != nil {
+			return err
+		}
+	}
+	if r.form.isOpenAPI() {
+		if requestBody, declared := operation["requestBody"]; declared {
+			if err := r.preflightRequestBody(requestBody); err != nil {
+				return err
+			}
+		}
+	}
+	if responses, declared := operation["responses"]; declared {
+		if err := r.preflightResponses(responses); err != nil {
+			return err
+		}
+	}
+	if r.form.isOpenAPI() {
+		if callbacks, declared := operation["callbacks"]; declared {
+			if err := r.preflightCallbacks(callbacks); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightParameters(value any) error {
+	parameters, ok := value.([]any)
+	if !ok {
+		return fmt.Errorf("parameters must be an array")
+	}
+	for index, parameter := range parameters {
+		if err := r.preflightParameter(parameter); err != nil {
+			return fmt.Errorf("parameter %d: %w", index, err)
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightParameter(value any) error {
+	parameter, err := r.resolveParameter(value, nil, 0)
+	if err != nil {
+		return err
+	}
+	return r.preflightResolvedParameter(parameter)
+}
+
+func (r *sourceReferenceResolver) preflightResolvedParameter(parameter map[string]any) error {
+	schema, content, err := sourceParameterRepresentation(parameter, r.form)
+	if err != nil {
+		return err
+	}
+	if content != nil {
+		return validateBoundedParameterContent("source preflight", content, r.form, r.limits)
+	}
+	schema, err = r.resolveSchema(schema, nil, 0)
+	if err != nil {
+		return err
+	}
+	if len(r.schemaCycleReferences(schema)) > 0 {
+		return nil
+	}
+	location, _ := parameter["in"].(string)
+	return validateBoundedOperationParameterSchema(schema, r.form, r.limits, location)
+}
+
+func (r *sourceReferenceResolver) preflightRequestBody(value any) error {
+	body, err := r.resolveRequestBody(value, nil, 0)
+	if err != nil {
+		return err
+	}
+	return r.preflightResolvedRequestBody(body)
+}
+
+func (r *sourceReferenceResolver) preflightResolvedRequestBody(body map[string]any) error {
+	content, declared := body["content"]
+	if !declared {
+		return nil
+	}
+	media, err := sourceReferenceObject(content, "request body content")
+	if err != nil {
+		return err
+	}
+	for _, mediaType := range sortedSourceMapKeys(media) {
+		declaration, err := sourceReferenceObject(media[mediaType], "request body media")
+		if err != nil {
+			return err
+		}
+		schema, declared := declaration["schema"]
+		if !declared {
+			continue
+		}
+		if len(r.schemaCycleReferences(schema)) > 0 {
+			continue
+		}
+		if err := validateBoundedRequestSchema(schema, r.form, r.limits, 0); err != nil {
+			return fmt.Errorf("request body media %q: %w", mediaType, err)
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightResponses(value any) error {
+	responses, err := sourceReferenceObject(value, "responses")
+	if err != nil {
+		return err
+	}
+	for _, status := range sortedSourceMapKeys(responses) {
+		if strings.HasPrefix(status, "x-") {
+			continue
+		}
+		if _, err := r.resolveResponse(responses[status], nil, 0); err != nil {
+			if _, retained := sourceRetainedResponseSchemaReference(err); retained {
+				continue
+			}
+			return fmt.Errorf("response %q: %w", status, err)
+		}
+	}
+	return nil
+}
+
 func sourceRetainedResponseSchemaReference(err error) (string, bool) {
 	var resolution *sourceReferenceResolutionError
 	if errors.As(err, &resolution) && resolution.Kind == sourceReferenceSchema {
@@ -4092,6 +4324,214 @@ func sourceRetainedResponseSchemaReference(err error) (string, bool) {
 func sourceMalformedResponseSchemaGap(err error, location string) sourceContractGap {
 	reference, _ := sourceRetainedResponseSchemaReference(err)
 	return sourceContractGapFor(sourceMalformedReferenceFoundation, location, fmt.Sprintf("provider response schema reference %s is retained without resolution: %v", reference, err))
+}
+
+func (r *sourceReferenceResolver) preflightCallbacks(value any) error {
+	callbacks, err := sourceReferenceObject(value, "callbacks")
+	if err != nil {
+		return err
+	}
+	for _, name := range sortedSourceMapKeys(callbacks) {
+		if strings.HasPrefix(name, "x-") {
+			continue
+		}
+		if err := r.preflightCallback(callbacks[name]); err != nil {
+			return fmt.Errorf("callback %q: %w", name, err)
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightCallback(value any) error {
+	callback, err := r.resolveCallback(value, nil, 0)
+	if err != nil {
+		return err
+	}
+	return r.preflightResolvedCallback(callback)
+}
+
+func (r *sourceReferenceResolver) preflightResolvedPathItem(pathItem map[string]any) error {
+	if parameters, declared := pathItem["parameters"]; declared {
+		if err := r.preflightResolvedParameters(parameters); err != nil {
+			return err
+		}
+	}
+	if r.form.isOpenAPI() {
+		if callbacks, declared := pathItem["callbacks"]; declared {
+			if err := r.preflightResolvedCallbacks(callbacks); err != nil {
+				return err
+			}
+		}
+	}
+	for _, method := range sourceHTTPMethods {
+		rawOperation, declared := pathItem[method]
+		if !declared {
+			continue
+		}
+		operation, err := sourceReferenceObject(rawOperation, "operation")
+		if err != nil {
+			return fmt.Errorf("%s operation: %w", method, err)
+		}
+		if err := r.preflightResolvedOperation(operation); err != nil {
+			return fmt.Errorf("%s operation: %w", method, err)
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightResolvedOperation(operation map[string]any) error {
+	if parameters, declared := operation["parameters"]; declared {
+		if err := r.preflightResolvedParameters(parameters); err != nil {
+			return err
+		}
+	}
+	if r.form.isOpenAPI() {
+		if requestBody, declared := operation["requestBody"]; declared {
+			body, err := sourceReferenceObject(requestBody, "request body")
+			if err != nil {
+				return err
+			}
+			if err := r.preflightResolvedRequestBody(body); err != nil {
+				return err
+			}
+		}
+		if callbacks, declared := operation["callbacks"]; declared {
+			if err := r.preflightResolvedCallbacks(callbacks); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightResolvedParameters(value any) error {
+	parameters, ok := value.([]any)
+	if !ok {
+		return fmt.Errorf("parameters must be an array")
+	}
+	for index, rawParameter := range parameters {
+		parameter, err := sourceReferenceObject(rawParameter, "parameter")
+		if err != nil {
+			return fmt.Errorf("parameter %d: %w", index, err)
+		}
+		if err := r.preflightResolvedParameter(parameter); err != nil {
+			return fmt.Errorf("parameter %d: %w", index, err)
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightResolvedCallbacks(value any) error {
+	callbacks, err := sourceReferenceObject(value, "callbacks")
+	if err != nil {
+		return err
+	}
+	for _, name := range sortedSourceMapKeys(callbacks) {
+		if strings.HasPrefix(name, "x-") {
+			continue
+		}
+		callback, err := sourceReferenceObject(callbacks[name], "callback")
+		if err != nil {
+			return fmt.Errorf("callback %q: %w", name, err)
+		}
+		if err := r.preflightResolvedCallback(callback); err != nil {
+			return fmt.Errorf("callback %q: %w", name, err)
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightResolvedCallback(callback map[string]any) error {
+	for _, expression := range sortedSourceMapKeys(callback) {
+		if strings.HasPrefix(expression, "x-") {
+			continue
+		}
+		pathItem, err := sourceReferenceObject(callback[expression], "path item")
+		if err != nil {
+			return fmt.Errorf("callback expression %q: %w", expression, err)
+		}
+		if err := r.preflightResolvedPathItem(pathItem); err != nil {
+			return fmt.Errorf("callback expression %q: %w", expression, err)
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightOpenAPIComponents(value any) error {
+	components, err := sourceReferenceObject(value, "components")
+	if err != nil {
+		return err
+	}
+	entries := []struct {
+		name      string
+		preflight func(any) error
+	}{
+		{name: "schemas", preflight: func(child any) error { _, err := r.resolveSchema(child, nil, 0); return err }},
+		{name: "parameters", preflight: r.preflightParameter},
+		{name: "responses", preflight: func(child any) error { _, err := r.resolveResponse(child, nil, 0); return err }},
+		{name: "requestBodies", preflight: r.preflightRequestBody},
+		{name: "headers", preflight: func(child any) error { _, err := r.resolveHeader(child, nil, 0); return err }},
+		{name: "securitySchemes", preflight: func(child any) error { _, err := r.resolveSecurityScheme(child, nil, 0); return err }},
+		{name: "links", preflight: func(child any) error { _, err := r.resolveLink(child, nil, 0); return err }},
+		{name: "examples", preflight: func(child any) error { _, err := r.resolveExample(child, nil, 0); return err }},
+		{name: "callbacks", preflight: r.preflightCallback},
+	}
+	if r.form.isOpenAPI31() {
+		entries = append(entries, struct {
+			name      string
+			preflight func(any) error
+		}{name: "pathItems", preflight: r.preflightPathItem})
+	}
+	for _, entry := range entries {
+		raw, declared := components[entry.name]
+		if !declared {
+			continue
+		}
+		items, err := sourceReferenceObject(raw, "components."+entry.name)
+		if err != nil {
+			return err
+		}
+		for _, name := range sortedSourceMapKeys(items) {
+			if err := entry.preflight(items[name]); err != nil {
+				if sourceOperationRetainableReferenceDepth(err, r.limits) {
+					continue
+				}
+				return fmt.Errorf("components.%s[%q]: %w", entry.name, name, err)
+			}
+		}
+	}
+	return nil
+}
+
+func (r *sourceReferenceResolver) preflightSwaggerComponents(root map[string]any) error {
+	entries := []struct {
+		name      string
+		preflight func(any) error
+	}{
+		{name: "definitions", preflight: func(child any) error { _, err := r.resolveSchema(child, nil, 0); return err }},
+		{name: "parameters", preflight: r.preflightParameter},
+		{name: "responses", preflight: func(child any) error { _, err := r.resolveResponse(child, nil, 0); return err }},
+		{name: "securityDefinitions", preflight: func(child any) error { _, err := r.resolveSecurityScheme(child, nil, 0); return err }},
+	}
+	for _, entry := range entries {
+		raw, declared := root[entry.name]
+		if !declared {
+			continue
+		}
+		items, err := sourceReferenceObject(raw, entry.name)
+		if err != nil {
+			return err
+		}
+		for _, name := range sortedSourceMapKeys(items) {
+			if err := entry.preflight(items[name]); err != nil {
+				if sourceOperationRetainableReferenceDepth(err, r.limits) {
+					continue
+				}
+				return fmt.Errorf("%s[%q]: %w", entry.name, name, err)
+			}
+		}
+	}
+	return nil
 }
 
 func (r *sourceReferenceResolver) resolve(value any) (any, error) {
@@ -5288,6 +5728,25 @@ func (r *sourceReferenceResolver) resolveExample(value any, stack map[string]boo
 	return sourceCloneMap(object), nil
 }
 
+func (r *sourceReferenceResolver) resolveSecurityScheme(value any, stack map[string]bool, depth int) (map[string]any, error) {
+	object, ok := value.(map[string]any)
+	if !ok {
+		return nil, fmt.Errorf("security scheme must be an object")
+	}
+	target, reference, next, hasReference, err := r.referenceTarget(object, sourceReferenceSecurity, stack, depth)
+	if err != nil {
+		return nil, err
+	}
+	if hasReference {
+		resolved, err := r.resolveSecurityScheme(target, next, depth+1)
+		if err != nil {
+			return nil, err
+		}
+		return sourceMergeReferenceObject(resolved, reference), nil
+	}
+	return sourceCloneMap(object), nil
+}
+
 func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool, depth int) (any, error) {
 	if depth == 0 && len(stack) == 0 {
 		// Bound each retained root schema independently. Aggregate descriptor,
@@ -6247,6 +6706,67 @@ func importSourceDocumentResult(documentContext sourceImportDocumentContext, doc
 	return result, nil
 }
 
+func sourceOperationRetainableReferenceDepth(err error, limits sourceImportLimits) bool {
+	if !limits.AllowSourceContractGaps {
+		return false
+	}
+	var depth *sourceReferenceDepthError
+	return errors.As(err, &depth)
+}
+
+func sourceIncompleteOperationDescriptor(documentContext sourceImportDocumentContext, form sourceDocumentForm, path, method string, operation map[string]any, cause error) (sourceOperationDescriptor, error) {
+	lock := documentContext.Lock
+	location := fmt.Sprintf("paths[%q].%s", path, method)
+	providerID := ""
+	if rawProviderID, declared := operation["operationId"]; declared {
+		var ok bool
+		providerID, ok = rawProviderID.(string)
+		if !ok {
+			return sourceOperationDescriptor{}, fmt.Errorf("%s.operationId must be a string", location)
+		}
+	}
+	sourceID := providerID
+	if sourceID == "" {
+		sourceID = fmt.Sprintf("%s.rest.%s_%s", lock.Connector, method, path)
+	}
+	if documentContext.Document != nil {
+		locked, exists := documentContext.lockedRESTOperation(method, path)
+		if !exists {
+			return sourceOperationDescriptor{}, fmt.Errorf("%s is not present in source document %q inventory", location, documentContext.Document.ID)
+		}
+		if locked.OperationID != providerID || locked.SourceLocation != location {
+			return sourceOperationDescriptor{}, fmt.Errorf("%s disagrees with source document %q inventory", location, documentContext.Document.ID)
+		}
+		sourceID = locked.ID
+	}
+	return sourceOperationDescriptor{
+		Connector:           lock.Connector,
+		Protocol:            "rest",
+		SourceID:            sourceID,
+		ProviderOperationID: providerID,
+		Source:              sourceImportProvenance(documentContext, form, location),
+		Method:              method,
+		Path:                path,
+		Request: sourceRequestDescriptor{
+			Path:   []sourceParameterDescriptor{},
+			Query:  []sourceParameterDescriptor{},
+			Header: []sourceParameterDescriptor{},
+		},
+		Responses:  []sourceResponseDescriptor{},
+		Output:     sourceOutputDescriptor{Success: []sourceOutputVariant{}},
+		AuthScopes: sourceAuthDescriptor{AnyOf: []sourceAuthRequirementGroup{}},
+		Servers:    sourceServerOverrides{Precedence: []string{"operation", "path_item", "root"}},
+		Runtime: sourceRuntimeReachability{
+			MergeBlocked: true,
+			Gaps: []sourceContractGap{sourceContractGapFor(
+				sourceDescriptorFoundation,
+				location,
+				fmt.Sprintf("source descriptor is incomplete because its bounded local reference traversal could not resolve the provider contract: %v", cause),
+			)},
+		},
+	}, nil
+}
+
 var sourceHTTPMethods = []string{"delete", "get", "head", "options", "patch", "post", "put", "trace"}
 
 func validateSourceImportPath(path string) error {
@@ -6372,67 +6892,6 @@ func importSourceOperation(documentContext sourceImportDocumentContext, doc map[
 		AuthScopes:          authScopes,
 		Servers:             servers,
 		Runtime:             runtime,
-	}, nil
-}
-
-func sourceOperationRetainableReferenceDepth(err error, limits sourceImportLimits) bool {
-	if !limits.AllowSourceContractGaps {
-		return false
-	}
-	var depth *sourceReferenceDepthError
-	return errors.As(err, &depth)
-}
-
-func sourceIncompleteOperationDescriptor(documentContext sourceImportDocumentContext, form sourceDocumentForm, path, method string, operation map[string]any, cause error) (sourceOperationDescriptor, error) {
-	lock := documentContext.Lock
-	location := fmt.Sprintf("paths[%q].%s", path, method)
-	providerID := ""
-	if rawProviderID, declared := operation["operationId"]; declared {
-		var ok bool
-		providerID, ok = rawProviderID.(string)
-		if !ok {
-			return sourceOperationDescriptor{}, fmt.Errorf("%s.operationId must be a string", location)
-		}
-	}
-	sourceID := providerID
-	if sourceID == "" {
-		sourceID = fmt.Sprintf("%s.rest.%s_%s", lock.Connector, method, path)
-	}
-	if documentContext.Document != nil {
-		locked, exists := documentContext.lockedRESTOperation(method, path)
-		if !exists {
-			return sourceOperationDescriptor{}, fmt.Errorf("%s is not present in source document %q inventory", location, documentContext.Document.ID)
-		}
-		if locked.OperationID != providerID || locked.SourceLocation != location {
-			return sourceOperationDescriptor{}, fmt.Errorf("%s disagrees with source document %q inventory", location, documentContext.Document.ID)
-		}
-		sourceID = locked.ID
-	}
-	return sourceOperationDescriptor{
-		Connector:           lock.Connector,
-		Protocol:            "rest",
-		SourceID:            sourceID,
-		ProviderOperationID: providerID,
-		Source:              sourceImportProvenance(documentContext, form, location),
-		Method:              method,
-		Path:                path,
-		Request: sourceRequestDescriptor{
-			Path:   []sourceParameterDescriptor{},
-			Query:  []sourceParameterDescriptor{},
-			Header: []sourceParameterDescriptor{},
-		},
-		Responses:  []sourceResponseDescriptor{},
-		Output:     sourceOutputDescriptor{Success: []sourceOutputVariant{}},
-		AuthScopes: sourceAuthDescriptor{AnyOf: []sourceAuthRequirementGroup{}},
-		Servers:    sourceServerOverrides{Precedence: []string{"operation", "path_item", "root"}},
-		Runtime: sourceRuntimeReachability{
-			MergeBlocked: true,
-			Gaps: []sourceContractGap{sourceContractGapFor(
-				sourceDescriptorFoundation,
-				location,
-				fmt.Sprintf("source descriptor is incomplete because its bounded local reference traversal could not resolve the provider contract: %v", cause),
-			)},
-		},
 	}, nil
 }
 

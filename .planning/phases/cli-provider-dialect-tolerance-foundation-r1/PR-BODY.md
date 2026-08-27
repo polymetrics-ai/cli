@@ -1,6 +1,6 @@
 ## Summary
 
-- replace connector-wide OpenAPI component preflight with bounded,
+- retain current-main's complete OpenAPI grammar preflight while adding bounded,
   source-document-local reference normalization and target memoization;
 - retain only an exact over-depth Stripe operation as a source-cited,
   merge-blocked `cli-source-descriptor-foundation-r1` descriptor;
@@ -42,7 +42,9 @@ See `.planning/phases/cli-provider-dialect-tolerance-foundation-r1/VERIFICATION.
 for exact commands/results. Passing local gates include focused and changed
 package tests, engine/commandrunner regressions, vet, builds, docs, smoke,
 lint, agent contract, generator validation, surface sync, declaration
-admission, operation evidence, certification, connector boundary/canon, and
-release workflow checks. Full `go test ./...` and monolithic `make verify` are
-intentionally delegated to CI per the repository's per-command worker
-guidance.
+admission, operation evidence, certification, connector canon, and release
+workflow checks. The two recorded connector-boundary process groups exited
+after their launcher detached, so no exit status is claimable locally;
+Firstmate has the exact blocker for CI/recovery confirmation. Full
+`go test ./...` and monolithic `make verify` are intentionally delegated to CI
+per the repository's per-command worker guidance.

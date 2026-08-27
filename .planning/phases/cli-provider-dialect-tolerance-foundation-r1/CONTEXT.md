@@ -21,10 +21,10 @@
 
 ## Current evidence and constraints
 
-- `origin/main` is `7cd0412ae388ad10342e9c1153260c6e787e5757` after integrating Firstmate's required #4360 foundation baseline.
+- `origin/main` is `cf29d302c` after #4358 source-reference projection integration.
 - `internal/connectors/defs/stripe/api_surface.json` contains 589 endpoints, 581 of which have `operation.source_url` citations.
 - The previously retained exact Stripe lock and artifact are present in repository history at `47c606453`: lock schema v2, 589 operations, source artifact `3653ad45…b2cbdee5`, 7,967,776 bytes, OpenAPI 3.0.0. Current `main` intentionally does not carry that source directory, so this foundation does not restore or materialize it.
-- `cmd/connectorgen/sourceimport.go` currently sets a global reference depth of 64 and invokes `preflightDocument` over all paths/components before importing any operation. The preflight is what turns a one-operation reference traversal into a connector-wide abort.
+- `cmd/connectorgen/sourceimport.go` keeps #4358's `preflightDocument` over all paths/components. This foundation preserves it for every malformed/dynamic/resource error but makes the one typed finite reference-depth condition operation-local for gap-enabled source locks.
 - PR #4358 preserves source-reference descriptors where complete byte-backed source contracts are unavailable. It does not alter the source resolver and must not be represented as resolving Stripe reference depth.
 
 ## Scope guard

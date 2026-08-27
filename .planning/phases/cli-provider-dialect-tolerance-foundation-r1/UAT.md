@@ -8,7 +8,9 @@ Automated coverage classifies all three delivered behaviors as passed:
    source-descriptor foundation gap and cannot enter source projection.
 3. External, malformed, ambiguous, cyclic, and reference-count-exhausted
    fixtures remain import errors; canonical target memoization cannot bypass
-   reference accounting.
+   reference accounting. Unused grammar, request-media, inbound, callback, and
+   response-expansion regression tests also prove current-main preflight safety
+   remains active.
 
 No human visual or runtime UAT is applicable. The change has no user-facing
 command or materialized connector surface, and no provider access is allowed.
