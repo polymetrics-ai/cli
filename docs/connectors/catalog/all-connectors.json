@@ -8476,7 +8476,7 @@
   {
     "name": "asana",
     "display_name": "Asana",
-    "description": "Reads implemented Asana project-management streams and executes typed, approval-gated reverse-ETL write actions across tasks, projects, sections, tags, stories, goals, portfolios, teams, users, and workspaces. Tracks every official Asana API operation from the pinned OpenAPI source as covered or blocked/planned fixed-target metadata.",
+    "description": "Reads 106 bounded source-bound direct operations and 12 declared Asana ETL streams, and executes 94 approval-gated reverse-ETL actions. The pinned OpenAPI ledger accounts for every official operation as an executable covered_by route, an exact named foundation gap, or the one not-applicable generic batch wrapper.",
     "integration_type": "api",
     "docs_url": "https://developers.asana.com/reference/rest-api-reference",
     "release_stage": "ga",
@@ -9165,10 +9165,178 @@
         "method": "POST",
         "path": "/workspaces/{{ record.workspace_gid }}/addUser",
         "risk": "external mutation; medium-risk create against POST /workspaces/{workspace_gid}/addUser; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "delete_allocation",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/allocations/{{ record.allocation_gid }}",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_attachment",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/attachments/{{ record.attachment_gid }}",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_budget",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/budgets/{{ record.budget_gid }}",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_custom_field",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/custom_fields/{{ record.custom_field_gid }}",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_goal",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/goals/{{ record.goal_gid }}",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_membership",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/memberships/{{ record.membership_gid }}",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_ooo_entry",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/ooo_entries/{{ record.ooo_entry_gid }}",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_portfolio",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/portfolios/{{ record.portfolio_gid }}",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_project_brief",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/project_briefs/{{ record.project_brief_gid }}",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_project_status",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/project_statuses/{{ record.project_status_gid }}",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_project_template",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/project_templates/{{ record.project_template_gid }}",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_rate",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rates/{{ record.rate_gid }}",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_role",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/roles/{{ record.role_gid }}",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_status",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/status_updates/{{ record.status_update_gid }}",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_story",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/stories/{{ record.story_gid }}",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_task_template",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/task_templates/{{ record.task_template_gid }}",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_time_tracking_category",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/time_tracking_categories/{{ record.time_tracking_category_gid }}",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_time_tracking_entry",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/time_tracking_entries/{{ record.time_tracking_entry_gid }}",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_webhook",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/webhooks/{{ record.webhook_gid }}",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "approve_access_request",
+        "kind": "update",
+        "method": "POST",
+        "path": "/access_requests/{{ record.access_request_gid }}/approve",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "reject_access_request",
+        "kind": "update",
+        "method": "POST",
+        "path": "/access_requests/{{ record.access_request_gid }}/reject",
+        "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
       }
     ],
     "risk": {
-      "read": "external Asana API reads use fixed declared streams or blocked/planned fixed-target command metadata; no raw provider query/path passthrough",
+      "read": "external Asana API reads use fixed declared streams or bounded source-bound operations; no raw provider query/path passthrough",
       "write": "external mutations require named reverse-ETL actions, schemas, previews, explicit approval, and typed destructive confirmation when destructive/admin",
       "approval": "all write execution follows plan -\u003e preview -\u003e explicit approval -\u003e execute; destructive actions also require confirm: destructive"
     },

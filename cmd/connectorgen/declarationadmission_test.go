@@ -60,8 +60,8 @@ func TestImplementedCommandEndpointEquivalenceCoversExactFleet(t *testing.T) {
 			}
 		}
 	}
-	if !loadFailed && (aliases != 243 || graphql != 4) {
-		t.Fatalf("proved endpoint aliases = %d non-GraphQL and %d GraphQL, want 243 and 4", aliases, graphql)
+	if !loadFailed && (aliases != 246 || graphql != 4) {
+		t.Fatalf("proved endpoint aliases = %d non-GraphQL and %d GraphQL, want 246 and 4", aliases, graphql)
 	}
 	t.Logf("proved endpoint aliases = %d non-GraphQL and %d GraphQL", aliases, graphql)
 }

@@ -238,7 +238,7 @@ func syncCheckedInSourceProjection(bundleDir, connector string, check bool) (sou
 	if descriptor.SchemaVersion != 2 && descriptor.SchemaVersion != 3 {
 		return sourceProjectionStats{}, fmt.Errorf("source descriptor schema_version = %d, want 2 or 3", descriptor.SchemaVersion)
 	}
-	return projectSourceDescriptorToBundle(bundleDir, sourceImportResult{
+	return projectSourceMutationMappingsToBundle(bundleDir, sourceImportResult{
 		Operations:     descriptor.Operations,
 		InboundEvents:  descriptor.InboundEvents,
 		Extensions:     descriptor.Extensions,

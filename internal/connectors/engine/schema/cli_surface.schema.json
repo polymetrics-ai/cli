@@ -112,6 +112,7 @@
           "stream": { "type": "string" },
           "write": { "type": "string" },
           "operation": { "type": "string" },
+          "source_operation": { "type": "string", "minLength": 1 },
           "source_cli_path": { "type": "string" },
           "source_url": { "type": "string" },
           "flags": {

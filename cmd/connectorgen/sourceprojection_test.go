@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
+	"maps"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -403,6 +405,907 @@ func TestSourceProjectionRequiresExplicitReadOnlyNonMutationDeclaration(t *testi
 	}
 }
 
+// The three controls below are copied from Asana's locked OpenAPI inventory:
+// getAccessRequests (paths["/access_requests"].get), getAgent
+// (paths["/agents/{agent_gid}"].get), and getWorkspaces
+// (paths["/workspaces"].get).  They exercise a zero-input bounded read, a
+// source-owned path input, and an already-proven paginated stream without
+// assigning stream semantics to the first two.
+func TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL(t *testing.T) {
+	bundleDir := t.TempDir()
+	operationsPath := filepath.Join(bundleDir, "operations.json")
+	cliPath := filepath.Join(bundleDir, "cli_surface.json")
+	writeProjectionFixture(t, filepath.Join(bundleDir, "writes.json"), `{"schema_version":1,"actions":[]}`)
+	writeProjectionFixture(t, operationsPath, `{
+  "schema_version": 1,
+  "operations": [
+    {"id":"get_access_requests","kind":"rest_read","summary":"Get access requests","risk":"none","approval":"none","output_policy":"json_redacted","rest":{"method":"GET","path":"/access_requests","max_bytes":1024,"parameters":[]}},
+    {"id":"get_agent","kind":"rest_read","summary":"Get an agent","risk":"none","approval":"none","output_policy":"json_redacted","rest":{"method":"GET","path":"/agents/{agent_gid}","max_bytes":1024,"parameters":[{"name":"agent_gid","in":"path","type":"string","required":true}]}},
+    {"id":"get_workspaces","kind":"stream_etl","summary":"Get workspaces","risk":"none","approval":"none","output_policy":"json_redacted","composite":{"steps":["stream:workspaces"]}},
+    {"id":"get_pending","kind":"rest_read","summary":"Get pending","risk":"none","approval":"none","output_policy":"json_redacted","rest":{"method":"GET","path":"/pending","max_bytes":1024,"parameters":[]}}
+  ]
+}`)
+	writeProjectionFixture(t, cliPath, `{
+  "schema_version": 1,
+  "commands": [
+    {"path":"access-requests get-access-requests","summary":"Get access requests","intent":"direct_read","availability":"implemented","operation":"get_access_requests","notes":"Blocked until a historical certification lane completes.","api_surface":[{"method":"GET","path":"/access_requests"}]},
+    {"path":"agents get-agent","summary":"Get an agent","intent":"direct_read","availability":"implemented","operation":"get_agent","flags":[{"name":"agent-gid","type":"string","maps_to":"query.agent_gid"}],"api_surface":[{"method":"GET","path":"/agents/{agent_gid}"}]},
+    {"path":"workspaces get-workspaces","summary":"Get workspaces","intent":"etl","availability":"implemented","stream":"workspaces","api_surface":[{"method":"GET","path":"/workspaces"}]},
+    {"path":"pending get-pending","summary":"Planned fixed-target Alpha read: Get pending.","intent":"etl","availability":"planned","operation":"get_pending","api_surface":[{"method":"GET","path":"/pending"}]}
+  ]
+}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "streams.json"), `{
+  "schema_version": 1,
+  "base": {"pagination":{"type":"next_url","next_url_path":"next_page.uri"}},
+  "streams": [{"name":"workspaces","path":"/workspaces","records":{"path":"data"},"schema":"schemas/workspaces.json"}]
+}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"), `{
+  "api":"asana",
+  "endpoints":[
+    {"method":"GET","path":"/access_requests"},
+    {"method":"GET","path":"/agents/{agent_gid}"},
+    {"method":"GET","path":"/workspaces"},
+    {"method":"GET","path":"/pending"}
+  ]
+}`)
+
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{
+		{Connector: "asana", SourceID: "asana.rest.getAccessRequests", ProviderOperationID: "getAccessRequests", Method: "GET", Path: "/access_requests", Request: sourceRequestDescriptor{Query: []sourceParameterDescriptor{{Name: "target", Required: true, Schema: map[string]any{"type": "string"}}, {Name: "limit", Required: false, Schema: map[string]any{"type": "integer"}}, {Name: "offset", Required: false, Schema: map[string]any{"type": "integer"}}}}, Pagination: map[string]any{"type": "next_url", "next_url_path": "next_page.uri", "size_param": "limit", "limit_param": "limit", "offset_param": "offset", "page_size": 100}, Output: sourceOutputDescriptor{Class: sourceOutputJSON}},
+		{Connector: "asana", SourceID: "asana.rest.getAgent", ProviderOperationID: "getAgent", Method: "GET", Path: "/agents/{agent_gid}", Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{{Name: "agent_gid", Required: true, Schema: map[string]any{"type": "string"}}}}, Output: sourceOutputDescriptor{Class: sourceOutputJSON}},
+		{Connector: "asana", SourceID: "asana.rest.getWorkspaces", ProviderOperationID: "getWorkspaces", Method: "GET", Path: "/workspaces", Pagination: map[string]any{"type": "next_url", "next_url_path": "next_page.uri"}, Output: sourceOutputDescriptor{Class: sourceOutputJSON}},
+		{Connector: "asana", SourceID: "asana.rest.getPending", ProviderOperationID: "getPending", Method: "GET", Path: "/pending", Output: sourceOutputDescriptor{Class: sourceOutputJSON}},
+	}}
+	if _, err := projectSourceBoundReadDescriptorToBundle(bundleDir, result, false); err != nil {
+		t.Fatalf("project source-bound reads: %v", err)
+	}
+
+	var operations struct {
+		Operations []struct {
+			ID   string `json:"id"`
+			REST struct {
+				Pagination           map[string]any `json:"pagination"`
+				PaginationParameters []struct {
+					Name string `json:"name"`
+					In   string `json:"in"`
+				} `json:"pagination_parameters"`
+			} `json:"rest"`
+			SourceOperation *struct {
+				ID     string `json:"id"`
+				Method string `json:"method"`
+				Path   string `json:"path"`
+			} `json:"source_operation"`
+		} `json:"operations"`
+	}
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, operationsPath)), &operations); err != nil {
+		t.Fatalf("decode projected operations: %v", err)
+	}
+	bound := map[string]string{}
+	for _, operation := range operations.Operations {
+		if operation.SourceOperation != nil {
+			bound[operation.ID] = operation.SourceOperation.ID + " " + operation.SourceOperation.Method + " " + operation.SourceOperation.Path
+		}
+	}
+	for id, want := range map[string]string{
+		"get_access_requests": "asana.rest.getAccessRequests GET /access_requests",
+		"get_agent":           "asana.rest.getAgent GET /agents/{agent_gid}",
+		"get_workspaces":      "asana.rest.getWorkspaces GET /workspaces",
+	} {
+		if got := bound[id]; got != want {
+			t.Fatalf("operation %s source binding = %q, want %q", id, got, want)
+		}
+	}
+	for _, operation := range operations.Operations {
+		if operation.ID != "get_access_requests" {
+			continue
+		}
+		wantPagination := map[string]any{"type": "next_url", "next_url_path": "next_page.uri", "size_param": "limit", "limit_param": "limit", "offset_param": "offset", "page_size": float64(100)}
+		if !reflect.DeepEqual(operation.REST.Pagination, wantPagination) {
+			t.Fatalf("source-bound direct-read pagination = %#v, want %#v", operation.REST.Pagination, wantPagination)
+		}
+		gotParameters := make([]string, 0, len(operation.REST.PaginationParameters))
+		for _, parameter := range operation.REST.PaginationParameters {
+			gotParameters = append(gotParameters, parameter.In+"."+parameter.Name)
+		}
+		if !reflect.DeepEqual(gotParameters, []string{"query.limit", "query.offset"}) {
+			t.Fatalf("source-bound direct-read pagination parameters = %#v, want limit/offset only", gotParameters)
+		}
+	}
+	if got := bound["get_pending"]; got != "asana.rest.getPending GET /pending" {
+		t.Fatalf("complete planned read operation binding = %q, want exact source identity", got)
+	}
+
+	var cli engine.CLISurface
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, cliPath)), &cli); err != nil {
+		t.Fatalf("decode projected CLI surface: %v", err)
+	}
+	commands := map[string]engine.CLICommand{}
+	for _, command := range cli.Commands {
+		commands[command.Path] = command
+	}
+	if command := commands["access-requests get-access-requests"]; command.Intent != "direct_read" || command.Availability != "implemented" || command.SourceOperation != "asana.rest.getAccessRequests" {
+		t.Fatalf("access-requests command = %+v, want bounded implemented direct_read", command)
+	} else if len(command.Flags) != 1 || command.Flags[0].MapsTo != "query.target" || !command.Flags[0].Required || command.Flags[0].Type != "string" {
+		t.Fatalf("access-requests typed query contract = %+v, want only required query.target; raw provider paging stays behind --page/--page-cursor", command.Flags)
+	} else if command.Notes != "" {
+		t.Fatalf("promoted source-bound command note = %q, want historical blocker cleared", command.Notes)
+	}
+	agent := commands["agents get-agent"]
+	if agent.Intent != "direct_read" || agent.Availability != "implemented" || agent.SourceOperation != "asana.rest.getAgent" {
+		t.Fatalf("agent command = %+v, want bounded implemented direct_read", agent)
+	}
+	if len(agent.Flags) != 1 || agent.Flags[0].MapsTo != "path.agent_gid" || !agent.Flags[0].Required {
+		t.Fatalf("agent path contract = %+v, want required path.agent_gid", agent.Flags)
+	}
+	if command := commands["workspaces get-workspaces"]; command.Intent != "etl" || command.Availability != "implemented" || command.Stream != "workspaces" || command.Operation != "" || command.SourceOperation != "asana.rest.getWorkspaces" {
+		t.Fatalf("workspace command = %+v, want preserved source-backed ETL stream", command)
+	}
+	if command := commands["pending get-pending"]; command.Intent != "direct_read" || command.Availability != "implemented" || command.Operation != "get_pending" || command.SourceOperation != "asana.rest.getPending" || command.Summary != "Get pending." {
+		t.Fatalf("complete planned operation = %+v, want materialized bounded direct read", command)
+	}
+}
+
+// TestRetainedAsanaSourceImportRejectsReadProjectionDrift reads the actual
+// connector-owned Asana lock and retained OpenAPI capture.  It does not create
+// a descriptor in Go: source-import must reconstruct the descriptor from the
+// pinned bytes and reject every altered bundle contract in check mode.
+func TestRetainedAsanaSourceImportRejectsReadProjectionDrift(t *testing.T) {
+	defsDir, bundleDir := copyInstalledAsanaProjectionBundle(t)
+	writesPath := filepath.Join(bundleDir, "writes.json")
+	writesBefore, err := os.ReadFile(writesPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	reverseETLBefore, err := asanaReverseETLCommandArtifacts(filepath.Join(bundleDir, "cli_surface.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if stdout, stderr, exit := runAsanaSourceImport(t, defsDir); exit != 0 {
+		t.Fatalf("generate retained Asana source descriptor exit=%d stdout=%q stderr=%q", exit, stdout, stderr)
+	}
+	if writesAfter, err := os.ReadFile(writesPath); err != nil || !bytes.Equal(writesBefore, writesAfter) {
+		t.Fatalf("read-only retained source import rewrote writes.json: read error=%v", err)
+	}
+	if reverseETLAfter, err := asanaReverseETLCommandArtifacts(filepath.Join(bundleDir, "cli_surface.json")); err != nil || !bytes.Equal(reverseETLBefore, reverseETLAfter) {
+		t.Fatalf("read-only retained source import rewrote reverse-ETL or delete commands: read error=%v", err)
+	}
+	if stdout, stderr, exit := runAsanaSourceImport(t, defsDir, "--read-projection-only", "--check"); exit != 0 {
+		t.Fatalf("check retained Asana source projection exit=%d stdout=%q stderr=%q", exit, stdout, stderr)
+	}
+	assertAsanaRetainedReadSourceContracts(t, filepath.Join(bundleDir, "sources", "asana-operation-descriptor.json"))
+
+	for _, change := range []struct {
+		name             string
+		wantInputClosure bool
+		mutate           func(t *testing.T, bundleDir string)
+	}{
+		{
+			name: "invented source identity",
+			mutate: func(t *testing.T, bundleDir string) {
+				mutateAsanaOperation(t, filepath.Join(bundleDir, "operations.json"), "get_custom_fields_for_workspace", func(operation map[string]any) {
+					operation["source_operation"].(map[string]any)["id"] = "asana.rest.inventedAccessRequests"
+				})
+			},
+		},
+		{
+			name: "source method substitution",
+			mutate: func(t *testing.T, bundleDir string) {
+				mutateAsanaOperation(t, filepath.Join(bundleDir, "operations.json"), "get_custom_fields_for_workspace", func(operation map[string]any) {
+					operation["source_operation"].(map[string]any)["method"] = "POST"
+				})
+			},
+		},
+		{
+			name: "source route substitution",
+			mutate: func(t *testing.T, bundleDir string) {
+				mutateAsanaOperation(t, filepath.Join(bundleDir, "operations.json"), "get_custom_fields_for_workspace", func(operation map[string]any) {
+					operation["source_operation"].(map[string]any)["path"] = "/workspaces/{workspace_gid}/custom_fields/replaced"
+				})
+			},
+		},
+		{
+			name: "typed workspace path contract",
+			mutate: func(t *testing.T, bundleDir string) {
+				mutateAsanaJSON(t, filepath.Join(bundleDir, "streams.json"), func(document map[string]any) {
+					for _, raw := range document["streams"].([]any) {
+						stream := raw.(map[string]any)
+						if stream["name"] == "custom_fields" {
+							stream["path"] = "/workspaces/{{ config.workspace_id }}/custom_fields/replaced"
+							return
+						}
+					}
+					t.Fatal("custom_fields stream is missing")
+				})
+			},
+		},
+		{
+			name: "workspace pagination semantics",
+			mutate: func(t *testing.T, bundleDir string) {
+				mutateAsanaJSON(t, filepath.Join(bundleDir, "streams.json"), func(document map[string]any) {
+					document["base"].(map[string]any)["pagination"].(map[string]any)["next_url_path"] = "next_page.token"
+				})
+			},
+		},
+		{
+			name:             "operation-only undeclared query input",
+			wantInputClosure: true,
+			mutate: func(t *testing.T, bundleDir string) {
+				mutateAsanaOperation(t, filepath.Join(bundleDir, "operations.json"), "get_access_requests", func(operation map[string]any) {
+					rest := operation["rest"].(map[string]any)
+					rest["parameters"] = append(rest["parameters"].([]any), map[string]any{"name": "rogue", "in": "query", "type": "string"})
+				})
+			},
+		},
+		{
+			name:             "operation and CLI undeclared query input",
+			wantInputClosure: true,
+			mutate: func(t *testing.T, bundleDir string) {
+				mutateAsanaOperation(t, filepath.Join(bundleDir, "operations.json"), "get_access_requests", func(operation map[string]any) {
+					rest := operation["rest"].(map[string]any)
+					rest["parameters"] = append(rest["parameters"].([]any), map[string]any{"name": "rogue", "in": "query", "type": "string"})
+				})
+				mutateAsanaCommand(t, filepath.Join(bundleDir, "cli_surface.json"), "access-requests get-access-requests", func(command map[string]any) {
+					command["flags"] = append(command["flags"].([]any), map[string]any{"name": "rogue", "type": "string", "maps_to": "query.rogue"})
+				})
+			},
+		},
+		{
+			name:             "operation-only undeclared header input",
+			wantInputClosure: true,
+			mutate: func(t *testing.T, bundleDir string) {
+				mutateAsanaOperation(t, filepath.Join(bundleDir, "operations.json"), "get_access_requests", func(operation map[string]any) {
+					rest := operation["rest"].(map[string]any)
+					rest["parameters"] = append(rest["parameters"].([]any), map[string]any{"name": "X-Rogue", "in": "header", "type": "string", "schema": map[string]any{"type": "string", "maxLength": 32}, "max_bytes": 32})
+				})
+			},
+		},
+		{
+			name:             "operation-only undeclared body input",
+			wantInputClosure: true,
+			mutate: func(t *testing.T, bundleDir string) {
+				mutateAsanaOperation(t, filepath.Join(bundleDir, "operations.json"), "get_access_requests", func(operation map[string]any) {
+					operation["rest"].(map[string]any)["body"] = map[string]any{"rogue": "fixture"}
+				})
+			},
+		},
+		{
+			name: "complete direct read marked planned",
+			mutate: func(t *testing.T, bundleDir string) {
+				mutateAsanaCommand(t, filepath.Join(bundleDir, "cli_surface.json"), "access-requests get-access-requests", func(command map[string]any) {
+					command["availability"] = "planned"
+				})
+			},
+		},
+		{
+			name: "complete fan-out ETL marked planned",
+			mutate: func(t *testing.T, bundleDir string) {
+				mutateAsanaCommand(t, filepath.Join(bundleDir, "cli_surface.json"), "sections list", func(command map[string]any) {
+					command["availability"] = "planned"
+				})
+			},
+		},
+		{
+			name: "deferred direct read omits named foundation",
+			mutate: func(t *testing.T, bundleDir string) {
+				mutateAsanaCommand(t, filepath.Join(bundleDir, "cli_surface.json"), "memberships get-membership", func(command map[string]any) {
+					command["notes"] = "planned without a source-cited foundation"
+				})
+			},
+		},
+	} {
+		change := change
+		t.Run(change.name, func(t *testing.T) {
+			defsDir, bundleDir := copyInstalledAsanaProjectionBundle(t)
+			change.mutate(t, bundleDir)
+			stdout, stderr, exit := runAsanaSourceImport(t, defsDir, "--read-projection-only", "--check")
+			if exit != 1 || !strings.Contains(stderr, "derived bundle projection has drifted") {
+				t.Fatalf("retained source check exit=%d stdout=%q stderr=%q, want projection drift refusal", exit, stdout, stderr)
+			}
+			if change.wantInputClosure {
+				report, err := validateDir(os.DirFS(defsDir))
+				if err != nil {
+					t.Fatalf("validate retained altered Asana bundle: %v", err)
+				}
+				if !sourceProjectionFindingContains(report, "asana.rest.getAccessRequests", "request input absent from locked source contract") {
+					t.Fatalf("retained altered Asana validation findings = %+v, want source-bound request-input closure refusal", report.Findings)
+				}
+			}
+		})
+	}
+}
+
+func sourceProjectionFindingContains(report Report, sourceOperation, message string) bool {
+	for _, finding := range report.Findings {
+		if finding.Rule == ruleSourceProjection && strings.Contains(finding.Message, sourceOperation) && strings.Contains(finding.Message, message) {
+			return true
+		}
+	}
+	return false
+}
+
+func TestSourceProjectionReadInputClosureAdmitsOnlyRetainedRequestClasses(t *testing.T) {
+	source := sourceOperationDescriptor{
+		SourceID: "asana.rest.getAccessRequests",
+		Request: sourceRequestDescriptor{
+			Header: []sourceParameterDescriptor{{Name: "X-Request-ID", Schema: map[string]any{"type": "string"}}},
+			Body:   &sourceRequestBodyDescriptor{Schema: map[string]any{"type": "object", "properties": map[string]any{"filter": map[string]any{"type": "string"}}}},
+		},
+	}
+	newBundle := func(parameters []engine.OperationParameter, body map[string]any, flags []engine.CLIFlag) engine.Bundle {
+		return engine.Bundle{
+			Operations: []engine.OperationSpec{{
+				ID:              "get_access_requests",
+				SourceOperation: &engine.SourceOperationBinding{ID: source.SourceID, Method: "GET", Path: "/access_requests"},
+				REST:            &engine.RESTOperationSpec{Parameters: parameters, Body: body},
+			}},
+			CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{Path: "access-requests get-access-requests", SourceOperation: source.SourceID, Flags: flags}}},
+		}
+	}
+	for _, testCase := range []struct {
+		name   string
+		bundle engine.Bundle
+		want   string
+	}{
+		{
+			name: "retained header and body fields are admitted",
+			bundle: newBundle(
+				[]engine.OperationParameter{{Name: "X-Request-ID", In: "header"}},
+				map[string]any{"filter": "fixture"},
+				[]engine.CLIFlag{{Name: "header-x-request-id", MapsTo: "header.X-Request-ID"}, {Name: "filter", MapsTo: "body.filter"}},
+			),
+		},
+		{
+			name:   "undeclared header is refused",
+			bundle: newBundle([]engine.OperationParameter{{Name: "X-Rogue", In: "header"}}, nil, nil),
+			want:   "parameter header.X-Rogue",
+		},
+		{
+			name:   "undeclared body field is refused",
+			bundle: newBundle(nil, map[string]any{"rogue": "fixture"}, nil),
+			want:   "body.rogue",
+		},
+		{
+			name:   "CLI cannot manufacture an undeclared header",
+			bundle: newBundle(nil, nil, []engine.CLIFlag{{Name: "rogue", MapsTo: "header.X-Rogue"}}),
+			want:   "flag --rogue mapping header.X-Rogue",
+		},
+		{
+			name:   "CLI cannot manufacture an undeclared body field",
+			bundle: newBundle(nil, nil, []engine.CLIFlag{{Name: "rogue", MapsTo: "body.rogue"}}),
+			want:   "flag --rogue mapping body.rogue",
+		},
+	} {
+		testCase := testCase
+		t.Run(testCase.name, func(t *testing.T) {
+			if got := sourceProjectionReadInputClosure(testCase.bundle, source); !strings.Contains(got, testCase.want) {
+				t.Fatalf("source-bound request-input closure = %q, want %q", got, testCase.want)
+			}
+		})
+	}
+}
+
+func TestRetainedAsanaSourceImportSelectsSourceBackedFanOutETLStreams(t *testing.T) {
+	defsDir, bundleDir := copyInstalledAsanaProjectionBundle(t)
+	lock, err := loadConnectorSourceImportLock(defsDir, "asana")
+	if err != nil {
+		t.Fatal(err)
+	}
+	fetcher, err := newConnectorSourceImportRetainedArtifactFetcher(defsDir, "asana", defaultSourceImportLimits())
+	if err != nil {
+		t.Fatal(err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, fetcher, defaultSourceImportLimits())
+	if err != nil {
+		t.Fatal(err)
+	}
+	sourceProjectionNormalizeNonBlockingReadGaps(&result)
+	selected, err := sourceProjectionReadOnlyResult(bundleDir, result)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := projectSourceBoundReadDescriptorToBundle(bundleDir, selected, false); err != nil {
+		t.Fatalf("materialize retained source-backed reads before idempotence check: %v", err)
+	}
+	var operationsDocument, cliDocument, streamsDocument orderedJSON
+	for _, document := range []struct {
+		path string
+		into *orderedJSON
+	}{
+		{path: filepath.Join(bundleDir, "operations.json"), into: &operationsDocument},
+		{path: filepath.Join(bundleDir, "cli_surface.json"), into: &cliDocument},
+		{path: filepath.Join(bundleDir, "streams.json"), into: &streamsDocument},
+	} {
+		raw, err := os.ReadFile(document.path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := json.Unmarshal(raw, document.into); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if operation := sourceProjectionStreamOperationForEndpoint(operationsDocument.root, cliDocument.root, streamsDocument.root, "GET", "/projects/{project_gid}/sections"); operation == nil || stringField(operation, "id") != "get_sections_for_project" {
+		t.Fatalf("retained fan-out stream selection = %+v, want get_sections_for_project", operation)
+	}
+	var sectionsSource sourceOperationDescriptor
+	for _, operation := range result.Operations {
+		if operation.SourceID == "asana.rest.getSectionsForProject" {
+			sectionsSource = operation
+			break
+		}
+	}
+	if sectionsSource.SourceID == "" {
+		t.Fatal("retained source import omitted getSectionsForProject")
+	}
+	if len(sectionsSource.Runtime.Gaps) != 0 {
+		t.Fatalf("retained fan-out source contract has unexpected gap: %+v", sectionsSource.Runtime.Gaps)
+	}
+	if operation := sourceProjectionStreamOperationForEndpoint(operationsDocument.root, cliDocument.root, streamsDocument.root, sectionsSource.Method, sectionsSource.Path); operation == nil || stringField(operation, "id") != "get_sections_for_project" {
+		t.Fatalf("retained imported fan-out source = %+v selects operation %+v, want get_sections_for_project", sectionsSource, operation)
+	}
+	sectionsOperation := sourceProjectionStreamOperationForEndpoint(operationsDocument.root, cliDocument.root, streamsDocument.root, sectionsSource.Method, sectionsSource.Path)
+	if !sourceProjectionStreamMatchesReadOperation(sectionsOperation, streamsDocument.root, "sections", sectionsSource) {
+		t.Fatalf("retained fan-out stream does not prove source records/pagination semantics: source=%+v", sectionsSource)
+	}
+	found := map[string]bool{}
+	for _, operation := range selected.Operations {
+		found[operation.SourceID] = true
+	}
+	for _, sourceID := range []string{
+		"asana.rest.getProjectStatusesForProject",
+		"asana.rest.getSectionsForProject",
+		"asana.rest.getStoriesForTask",
+	} {
+		if !found[sourceID] {
+			t.Fatalf("source-backed fan-out ETL operation %q was omitted from projection: %+v", sourceID, found)
+		}
+	}
+	if count := sourceProjectionSourceEndpointCount(selected.Operations, sectionsSource.Method, sectionsSource.Path); count != 1 {
+		t.Fatalf("retained fan-out endpoint source count = %d, want 1", count)
+	}
+	bindingRaw, bound := sectionsOperation.get("source_operation")
+	binding, bindingOK := bindingRaw.(*orderedObject)
+	if !bound || !bindingOK || stringField(binding, "id") != sectionsSource.SourceID || stringField(binding, "method") != "GET" || stringField(binding, "path") != sectionsSource.Path {
+		t.Fatalf("retained fan-out source binding = %+v, want %s GET %s", bindingRaw, sectionsSource.SourceID, sectionsSource.Path)
+	}
+	directStats, err := sourceProjectionMaterializeReadOperation(operationsDocument.root, cliDocument.root, streamsDocument.root, sectionsSource, selected.Operations)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if directStats.Operations != 0 || directStats.Streams != 0 || directStats.CLI != 0 {
+		bound, hasBinding := sectionsOperation.get("source_operation")
+		t.Fatalf("retained fan-out direct materializer = %+v, binding=%+v present=%t, want idempotent exact source binding", directStats, bound, hasBinding)
+	}
+	fanOut := sourceImportResult{}
+	for _, operation := range selected.Operations {
+		if operation.SourceID == "asana.rest.getProjectStatusesForProject" || operation.SourceID == "asana.rest.getSectionsForProject" || operation.SourceID == "asana.rest.getStoriesForTask" {
+			fanOut.Operations = append(fanOut.Operations, operation)
+		}
+	}
+	projection, err := projectSourceBoundReadDescriptorToBundle(bundleDir, fanOut, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if projection.Operations != 0 || projection.CLI != 0 {
+		t.Fatalf("fan-out ETL projection = %+v, want idempotent canonical bindings", projection)
+	}
+}
+
+func TestRetainedAsanaMutationDispositionsCoverEveryDeferredSourceOperation(t *testing.T) {
+	defsDir, bundleDir := copyInstalledAsanaProjectionBundle(t)
+	absent, err := sourceProjectionReadNonExecutableMutationDispositions(bundleDir)
+	if err != nil {
+		t.Fatalf("read Asana absent-action dispositions: %v", err)
+	}
+	if len(absent) != 0 {
+		t.Fatalf("Asana absent-action dispositions = %d, want none: source-complete no-body mutations use the existing reverse-ETL/delete action lane", len(absent))
+	}
+	partial, err := sourceProjectionReadPartialMutationCoverageDispositions(bundleDir)
+	if err != nil {
+		t.Fatalf("read Asana partial-coverage dispositions: %v", err)
+	}
+	if len(partial) != 69 {
+		t.Fatalf("Asana partial-coverage dispositions = %d, want 65 typed-contract plus 4 path-alias mappings", len(partial))
+	}
+	foundations := map[string]int{}
+	for _, disposition := range partial {
+		foundations[disposition.Foundation]++
+	}
+	if foundations["cli-request-schema-foundation-r1"] != 65 || foundations["source-path-parameter-alias-foundation-r1"] != 4 || len(foundations) != 2 {
+		t.Fatalf("Asana partial-coverage foundations = %+v, want 65 typed-contract and 4 legacy path-alias mappings", foundations)
+	}
+	if stdout, stderr, exit := runAsanaSourceImport(t, defsDir); exit != 0 {
+		t.Fatalf("generate retained Asana mutation dispositions exit=%d stdout=%q stderr=%q", exit, stdout, stderr)
+	}
+
+	descriptorRaw, err := os.ReadFile(filepath.Join(bundleDir, "sources", "asana-operation-descriptor.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var descriptor sourceImportDescriptorDocument
+	if err := decodeSourceStrictJSON(descriptorRaw, &descriptor); err != nil {
+		t.Fatalf("decode retained Asana descriptor: %v", err)
+	}
+	eligible := 0
+	for _, operation := range descriptor.Operations {
+		if sourceProjectionNoBodyMutationActionEligible(operation) {
+			eligible++
+		}
+	}
+	if eligible != 21 {
+		t.Fatalf("source-complete no-body mutation candidates = %d, want 21", eligible)
+	}
+	surface, err := sourceProjectionExecutionSurface(bundleDir, "asana")
+	if err != nil {
+		t.Fatalf("load Asana execution surface: %v", err)
+	}
+	if findings := validateSourceExecutableCoverage(surface, "sources/asana-operation-descriptor.json", descriptor); len(findings) != 0 {
+		t.Fatalf("retained Asana source dispositions leave executable-coverage findings: %+v", findings)
+	}
+	endpoints := map[string]engine.SurfaceEndpoint{}
+	for _, endpoint := range surface.Surface.Endpoints {
+		endpoints[sourceProjectionEndpointKey(endpoint.Method, endpoint.Path)] = endpoint
+	}
+	actions := map[string]engine.WriteAction{}
+	for _, action := range surface.Writes {
+		actions[action.Name] = action
+	}
+	wantPromoted := map[string]bool{
+		"asana.rest.deleteAllocation": true, "asana.rest.deleteAttachment": true, "asana.rest.deleteBudget": true, "asana.rest.deleteCustomField": true, "asana.rest.deleteGoal": true, "asana.rest.deleteMembership": true, "asana.rest.deleteOooEntry": true, "asana.rest.deletePortfolio": true, "asana.rest.deleteProjectBrief": true, "asana.rest.deleteProjectStatus": true, "asana.rest.deleteProjectTemplate": true, "asana.rest.deleteRate": true, "asana.rest.deleteRole": true, "asana.rest.deleteStatus": true, "asana.rest.deleteStory": true, "asana.rest.deleteTaskTemplate": true, "asana.rest.deleteTimeTrackingCategory": true, "asana.rest.deleteTimeTrackingEntry": true, "asana.rest.deleteWebhook": true, "asana.rest.approveAccessRequest": true, "asana.rest.rejectAccessRequest": true,
+	}
+	deletePromotions, postPromotions := 0, 0
+	for _, operation := range descriptor.Operations {
+		if !wantPromoted[operation.SourceID] {
+			continue
+		}
+		if !sourceProjectionMutationActionIsComplete(surface, operation) {
+			t.Fatalf("source-complete mutation %q did not reach the reverse-ETL/delete action lane", operation.SourceID)
+		}
+		endpoint, found := endpoints[sourceProjectionEndpointKey(operation.Method, operation.Path)]
+		if !found || endpoint.CoveredBy == nil || endpoint.CoveredBy.Write == "" {
+			t.Fatalf("source-complete mutation %q is not bound to an api_surface write endpoint", operation.SourceID)
+		}
+		action := actions[endpoint.CoveredBy.Write]
+		if strings.EqualFold(operation.Method, "DELETE") {
+			deletePromotions++
+			if action.Kind != "delete" || action.Confirm != "destructive" {
+				t.Fatalf("source DELETE %q uses action %+v, want destructive delete action", operation.SourceID, action)
+			}
+		} else if strings.EqualFold(operation.Method, "POST") {
+			postPromotions++
+			if action.Kind != "update" {
+				t.Fatalf("source no-body POST %q uses action %+v, want update action", operation.SourceID, action)
+			}
+		} else {
+			t.Fatalf("source-complete mutation %q has method %s, want DELETE or POST", operation.SourceID, operation.Method)
+		}
+		delete(wantPromoted, operation.SourceID)
+	}
+	if len(wantPromoted) != 0 {
+		t.Fatalf("source-complete mutation promotions missing: %v", maps.Keys(wantPromoted))
+	}
+	if deletePromotions != 19 || postPromotions != 2 {
+		t.Fatalf("source-complete action lanes = DELETE %d, POST %d; want DELETE 19, POST 2", deletePromotions, postPromotions)
+	}
+	if surface.CLISurface == nil {
+		t.Fatal("Asana execution surface has no CLI declaration")
+	}
+	for _, command := range surface.CLISurface.Commands {
+		if strings.HasPrefix(command.Summary, "Planned fixed-target Asana ") {
+			t.Fatalf("source-projected Asana command %q retains a historical planned label", command.Path)
+		}
+	}
+}
+
+func copyInstalledAsanaProjectionBundle(t *testing.T) (string, string) {
+	t.Helper()
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defsDir := filepath.Join(t.TempDir(), "defs")
+	bundleDir := filepath.Join(defsDir, "asana")
+	if err := os.MkdirAll(bundleDir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.CopyFS(bundleDir, os.DirFS(filepath.Join(root, "internal", "connectors", "defs", "asana"))); err != nil {
+		t.Fatalf("copy installed Asana bundle: %v", err)
+	}
+	return defsDir, bundleDir
+}
+
+func runAsanaSourceImport(t *testing.T, defsDir string, extraArgs ...string) (string, string, int) {
+	t.Helper()
+	args := append([]string{"source-import", "asana", "--defs", defsDir}, extraArgs...)
+	var stdout, stderr strings.Builder
+	exit := runSourceImport(args, &stdout, &stderr)
+	return stdout.String(), stderr.String(), exit
+}
+
+func asanaReverseETLCommandArtifacts(path string) ([]byte, error) {
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	var surface struct {
+		Commands []json.RawMessage `json:"commands"`
+	}
+	if err := json.Unmarshal(raw, &surface); err != nil {
+		return nil, err
+	}
+	artifacts := make([][]byte, 0, len(surface.Commands))
+	for _, rawCommand := range surface.Commands {
+		var command struct {
+			Intent string `json:"intent"`
+		}
+		if err := json.Unmarshal(rawCommand, &command); err != nil {
+			return nil, err
+		}
+		if command.Intent == "reverse_etl" {
+			artifacts = append(artifacts, bytes.TrimSpace(rawCommand))
+		}
+	}
+	return bytes.Join(artifacts, []byte{'\n'}), nil
+}
+
+func assertAsanaRetainedReadSourceContracts(t *testing.T, descriptorPath string) {
+	t.Helper()
+	raw, err := os.ReadFile(descriptorPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var descriptor sourceImportDescriptorDocument
+	if err := decodeSourceStrictJSON(raw, &descriptor); err != nil {
+		t.Fatalf("decode retained Asana descriptor: %v", err)
+	}
+	byID := map[string]sourceOperationDescriptor{}
+	for _, operation := range descriptor.Operations {
+		byID[operation.SourceID] = operation
+	}
+	for sourceID, want := range map[string]struct {
+		endpoint string
+		location string
+	}{
+		"asana.rest.getCustomFieldsForWorkspace":         {endpoint: "GET /workspaces/{workspace_gid}/custom_fields", location: `paths["/workspaces/{workspace_gid}/custom_fields"].get`},
+		"asana.rest.getProjectStatusesForProject":        {endpoint: "GET /projects/{project_gid}/project_statuses", location: `paths["/projects/{project_gid}/project_statuses"].get`},
+		"asana.rest.getProjects":                         {endpoint: "GET /projects", location: `paths["/projects"].get`},
+		"asana.rest.getSectionsForProject":               {endpoint: "GET /projects/{project_gid}/sections", location: `paths["/projects/{project_gid}/sections"].get`},
+		"asana.rest.getStoriesForTask":                   {endpoint: "GET /tasks/{task_gid}/stories", location: `paths["/tasks/{task_gid}/stories"].get`},
+		"asana.rest.getTags":                             {endpoint: "GET /tags", location: `paths["/tags"].get`},
+		"asana.rest.getTasks":                            {endpoint: "GET /tasks", location: `paths["/tasks"].get`},
+		"asana.rest.getTeamMemberships":                  {endpoint: "GET /team_memberships", location: `paths["/team_memberships"].get`},
+		"asana.rest.getTeamsForWorkspace":                {endpoint: "GET /workspaces/{workspace_gid}/teams", location: `paths["/workspaces/{workspace_gid}/teams"].get`},
+		"asana.rest.getUsers":                            {endpoint: "GET /users", location: `paths["/users"].get`},
+		"asana.rest.getWorkspaceMembershipsForWorkspace": {endpoint: "GET /workspaces/{workspace_gid}/workspace_memberships", location: `paths["/workspaces/{workspace_gid}/workspace_memberships"].get`},
+		"asana.rest.getWorkspaces":                       {endpoint: "GET /workspaces", location: `paths["/workspaces"].get`},
+	} {
+		operation, found := byID[sourceID]
+		if !found || strings.ToUpper(operation.Method)+" "+operation.Path != want.endpoint || operation.Source.Location != want.location {
+			t.Fatalf("retained source operation %s = %+v, want endpoint %s at %s", sourceID, operation, want.endpoint, want.location)
+		}
+	}
+	customFields := byID["asana.rest.getCustomFieldsForWorkspace"]
+	if !sourceProjectionHasRequiredStringParameter(customFields.Request.Path, "workspace_gid") {
+		t.Fatalf("retained custom-fields source contract = %+v, want required string workspace_gid path input", customFields.Request.Path)
+	}
+	workspaces := byID["asana.rest.getWorkspaces"]
+	wantPagination := map[string]any{
+		"type":          "next_url",
+		"next_url_path": "next_page.uri",
+		"size_param":    "limit",
+		"limit_param":   "limit",
+		"offset_param":  "offset",
+		"page_size":     json.Number("100"),
+	}
+	if !reflect.DeepEqual(workspaces.Pagination, wantPagination) {
+		t.Fatalf("retained workspace pagination = %+v, want closed limit/offset next_url contract %+v", workspaces.Pagination, wantPagination)
+	}
+}
+
+func sourceProjectionHasRequiredStringParameter(parameters []sourceParameterDescriptor, name string) bool {
+	for _, parameter := range parameters {
+		schema, _ := parameter.Schema.(map[string]any)
+		if parameter.Name == name && parameter.Required && schema["type"] == "string" {
+			return true
+		}
+	}
+	return false
+}
+
+func mutateAsanaOperation(t *testing.T, path, id string, mutate func(map[string]any)) {
+	t.Helper()
+	mutateAsanaJSON(t, path, func(document map[string]any) {
+		for _, raw := range document["operations"].([]any) {
+			operation := raw.(map[string]any)
+			if operation["id"] == id {
+				mutate(operation)
+				return
+			}
+		}
+		t.Fatalf("installed Asana operation %q is missing", id)
+	})
+}
+
+func mutateAsanaCommand(t *testing.T, path, commandPath string, mutate func(map[string]any)) {
+	t.Helper()
+	mutateAsanaJSON(t, path, func(document map[string]any) {
+		for _, raw := range document["commands"].([]any) {
+			command := raw.(map[string]any)
+			if command["path"] == commandPath {
+				mutate(command)
+				return
+			}
+		}
+		t.Fatalf("installed Asana command %q is missing", commandPath)
+	})
+}
+
+func mutateAsanaJSON(t *testing.T, path string, mutate func(map[string]any)) {
+	t.Helper()
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var document map[string]any
+	if err := json.Unmarshal(raw, &document); err != nil {
+		t.Fatalf("decode %s: %v", filepath.Base(path), err)
+	}
+	mutate(document)
+	encoded, err := json.MarshalIndent(document, "", "  ")
+	if err != nil {
+		t.Fatalf("encode %s: %v", filepath.Base(path), err)
+	}
+	if err := os.WriteFile(path, append(encoded, '\n'), 0o644); err != nil {
+		t.Fatalf("write %s: %v", filepath.Base(path), err)
+	}
+}
+
+func TestSourceProjectionImportsRequiredSourceBoundReadParameters(t *testing.T) {
+	bundleDir := t.TempDir()
+	operationsPath := filepath.Join(bundleDir, "operations.json")
+	cliPath := filepath.Join(bundleDir, "cli_surface.json")
+	writeProjectionFixture(t, filepath.Join(bundleDir, "writes.json"), `{"schema_version":1,"actions":[]}`)
+	writeProjectionFixture(t, operationsPath, `{
+  "schema_version": 1,
+  "operations": [
+    {"id":"get_agent","kind":"rest_read","summary":"Get an agent","risk":"none","approval":"none","output_policy":"json_redacted","rest":{"method":"GET","path":"/agents/{agent_gid}","max_bytes":1024,"parameters":[]}}
+  ]
+}`)
+	writeProjectionFixture(t, cliPath, `{
+  "schema_version": 1,
+  "commands": [
+    {"path":"agents get-agent","summary":"Get an agent","intent":"direct_read","availability":"implemented","operation":"get_agent","api_surface":[{"method":"GET","path":"/agents/{agent_gid}"}]}
+  ]
+}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"), `{"api":"asana","endpoints":[{"method":"GET","path":"/agents/{agent_gid}"}]}`)
+
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{{
+		Connector: "asana", SourceID: "asana.rest.getAgent", Method: "GET", Path: "/agents/{agent_gid}",
+		Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{{Name: "agent_gid", Required: true, Schema: map[string]any{"type": "string"}}}},
+		Output:  sourceOutputDescriptor{Class: sourceOutputJSON},
+	}}}
+	if _, err := projectSourceBoundReadDescriptorToBundle(bundleDir, result, false); err != nil {
+		t.Fatalf("project incomplete source-bound read: %v", err)
+	}
+
+	var cli engine.CLISurface
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, cliPath)), &cli); err != nil {
+		t.Fatalf("decode projected CLI surface: %v", err)
+	}
+	command := cli.Commands[0]
+	if command.Availability != "implemented" || command.Intent != "direct_read" || command.SourceOperation != "asana.rest.getAgent" {
+		t.Fatalf("source-backed command = %+v, want implemented direct read", command)
+	}
+	if len(command.Flags) != 1 || command.Flags[0].MapsTo != "path.agent_gid" || command.Flags[0].Type != "string" || !command.Flags[0].Required {
+		t.Fatalf("source-backed path contract = %+v, want required path.agent_gid string", command.Flags)
+	}
+	if command.Notes != "" {
+		t.Fatalf("source-backed command note = %q, want no missing-foundation note", command.Notes)
+	}
+}
+
+func TestSourceProjectionStreamPathMatchesOnlyDeclaredWholeVariableSegments(t *testing.T) {
+	for _, tc := range []struct {
+		name       string
+		streamPath string
+		sourcePath string
+		want       bool
+	}{
+		{name: "fixed config path", streamPath: "/workspaces/{{ config.workspace_id }}/teams", sourcePath: "/workspaces/{workspace_gid}/teams", want: true},
+		{name: "declared fan-out path", streamPath: "/projects/{{ fanout.id }}/sections", sourcePath: "/projects/{project_gid}/sections", want: true},
+		{name: "fan-out cannot change literal route", streamPath: "/projects/{{ fanout.id }}/stories", sourcePath: "/projects/{project_gid}/sections", want: false},
+		{name: "arbitrary interpolation is not source bound", streamPath: "/projects/{{ record.path }}/sections", sourcePath: "/projects/{project_gid}/sections", want: false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := sourceProjectionStreamPathMatchesSourcePath(tc.streamPath, tc.sourcePath); got != tc.want {
+				t.Fatalf("sourceProjectionStreamPathMatchesSourcePath(%q, %q) = %t, want %t", tc.streamPath, tc.sourcePath, got, tc.want)
+			}
+		})
+	}
+}
+
+func TestSourceProjectionMaterializesDeclaredFanOutStreamWithoutInventingDirectRead(t *testing.T) {
+	bundleDir := t.TempDir()
+	writeProjectionFixture(t, filepath.Join(bundleDir, "writes.json"), `{"schema_version":1,"actions":[]}`)
+	operationsPath := filepath.Join(bundleDir, "operations.json")
+	writeProjectionFixture(t, operationsPath, `{
+  "schema_version":1,
+  "operations":[{
+    "id":"get_sections_for_project","kind":"stream_etl","summary":"Sections","risk":"none","approval":"none","output_policy":"json_redacted",
+    "composite":{"steps":["stream:sections"]}
+  }]
+}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), `{"schema_version":1,"commands":[]}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "streams.json"), `{
+  "base":{"pagination":{"type":"next_url","next_url_path":"next_page.uri"}},
+  "streams":[{
+    "name":"sections","path":"/projects/{{ fanout.id }}/sections","records":{"path":"data"},"schema":"schemas/sections.json",
+    "fan_out":{"ids_from":{"request":{"path":"/projects","records_path":"data","id_field":"gid"}},"into":{"path_var":"project_gid"}}
+  }]
+}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"), `{"api":"asana","endpoints":[]}`)
+
+	source := sourceOperationDescriptor{
+		Connector: "asana", SourceID: "asana.rest.getSectionsForProject", Method: "GET", Path: "/projects/{project_gid}/sections",
+		Pagination: map[string]any{"type": "next_url", "next_url_path": "next_page.uri"}, Output: sourceOutputDescriptor{Class: sourceOutputJSON},
+	}
+	selected, err := sourceProjectionReadOnlyResult(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{source}})
+	if err != nil {
+		t.Fatalf("select fan-out ETL source operation: %v", err)
+	}
+	if len(selected.Operations) != 1 || selected.Operations[0].SourceID != source.SourceID {
+		t.Fatalf("selected source operations = %+v, want the declared fan-out stream", selected.Operations)
+	}
+	var operationsDocument, cliDocument, streamsDocument orderedJSON
+	for _, document := range []struct {
+		path string
+		into *orderedJSON
+	}{
+		{path: operationsPath, into: &operationsDocument},
+		{path: filepath.Join(bundleDir, "cli_surface.json"), into: &cliDocument},
+		{path: filepath.Join(bundleDir, "streams.json"), into: &streamsDocument},
+	} {
+		raw, err := os.ReadFile(document.path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := json.Unmarshal(raw, document.into); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if operation := sourceProjectionStreamOperationForEndpoint(operationsDocument.root, cliDocument.root, streamsDocument.root, source.Method, source.Path); operation == nil || stringField(operation, "id") != "get_sections_for_project" {
+		t.Fatalf("fan-out stream operation selection = %+v, want get_sections_for_project", operation)
+	}
+	directStats, err := sourceProjectionMaterializeReadOperation(operationsDocument.root, cliDocument.root, streamsDocument.root, source, selected.Operations)
+	if err != nil {
+		t.Fatalf("materialize fan-out ETL source operation directly: %v", err)
+	}
+	if directStats.Operations != 1 || directStats.CLI != 0 {
+		t.Fatalf("direct fan-out ETL projection stats = %+v, want one operation and no invented CLI command", directStats)
+	}
+	stats, err := projectSourceBoundReadDescriptorToBundle(bundleDir, selected, false)
+	if err != nil {
+		t.Fatalf("materialize fan-out ETL source operation: %v", err)
+	}
+	if stats.Operations != 1 || stats.CLI != 0 {
+		t.Fatalf("fan-out ETL projection stats = %+v, want one operation and no invented CLI command", stats)
+	}
+	var projected struct {
+		Operations []struct {
+			ID              string `json:"id"`
+			SourceOperation *struct {
+				ID     string `json:"id"`
+				Method string `json:"method"`
+				Path   string `json:"path"`
+			} `json:"source_operation"`
+		} `json:"operations"`
+	}
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, operationsPath)), &projected); err != nil {
+		t.Fatalf("decode projected operations: %v", err)
+	}
+	if got := projected.Operations[0].SourceOperation; got == nil || got.ID != source.SourceID || got.Method != "GET" || got.Path != source.Path {
+		t.Fatalf("fan-out ETL source binding = %+v, want exact source operation", got)
+	}
+}
+
 func TestSourceProjectionRequiresReachableRESTReadOrConcreteGap(t *testing.T) {
 	source := sourceOperationDescriptor{
 		Connector: "alpha", SourceID: "alpha.widgets.list", Method: "get", Path: "/widgets",
@@ -505,7 +1408,7 @@ func TestSourceProjectionDowngradesUnboundImplementedAPICommandForSourceGap(t *t
 		t.Fatalf("unbound command did not become source-bound partial capability:\n%s", projected)
 	}
 	projectedSurface := readProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"))
-	if strings.Contains(projectedSurface, `"covered_by"`) || !strings.Contains(projectedSurface, `"model": "direct_read"`) || !strings.Contains(projectedSurface, source.SourceID) || !strings.Contains(projectedSurface, "Named dependency:") {
+	if strings.Contains(projectedSurface, `"covered_by"`) || !strings.Contains(projectedSurface, `"model": "direct_read"`) || !strings.Contains(projectedSurface, source.SourceID) || !strings.Contains(projectedSurface, sourceOperationExecutionFoundation) {
 		t.Fatalf("source-bound partial command retained executable API coverage:\n%s", projectedSurface)
 	}
 }
@@ -1914,6 +2817,26 @@ func TestSourceProjectionAcceptsVersion3DocumentProvenance(t *testing.T) {
 		{name: "artifact url", mutate: func(operation *sourceOperationDescriptor) {
 			operation.Source.URL = "https://fixtures.polymetrics.invalid/reassigned.openapi.json"
 		}},
+		{name: "source location", mutate: func(operation *sourceOperationDescriptor) { operation.Source.Location = `paths["/reassigned"].get` }},
+		{name: "source method", mutate: func(operation *sourceOperationDescriptor) { operation.Method = "POST" }},
+		{name: "source path", mutate: func(operation *sourceOperationDescriptor) { operation.Path = "/reassigned" }},
+	} {
+		change := change
+		t.Run(change.name, func(t *testing.T) {
+			operation := result.Operations[0]
+			change.mutate(&operation)
+			if findings := validateSourceDescriptorAgainstLock("fixture", "sources/fixture-operation-descriptor.json", lock, sourceImportDescriptorDocument{SchemaVersion: 3, Operations: []sourceOperationDescriptor{operation}}); len(findings) != 1 || !strings.Contains(findings[0].Message, "provider contract drift") {
+				t.Fatalf("%s findings = %+v", change.name, findings)
+			}
+		})
+	}
+
+	for _, change := range []struct {
+		name   string
+		mutate func(*sourceOperationDescriptor)
+	}{
+		{name: "artifact digest", mutate: func(operation *sourceOperationDescriptor) { operation.Source.SHA256 = strings.Repeat("0", 64) }},
+		{name: "artifact bytes", mutate: func(operation *sourceOperationDescriptor) { operation.Source.Bytes++ }},
 		{name: "document id", mutate: func(operation *sourceOperationDescriptor) { operation.Source.DocumentID = "reassigned" }},
 		{name: "published url", mutate: func(operation *sourceOperationDescriptor) {
 			operation.Source.PublishedURL = "https://published.polymetrics.invalid/reassigned?slug=reassigned"
@@ -1931,7 +2854,7 @@ func TestSourceProjectionAcceptsVersion3DocumentProvenance(t *testing.T) {
 		t.Run(change.name, func(t *testing.T) {
 			operation := result.Operations[0]
 			change.mutate(&operation)
-			if findings := validateSourceDescriptorAgainstLock("fixture", "sources/fixture-operation-descriptor.json", lock, sourceImportDescriptorDocument{SchemaVersion: 3, Operations: []sourceOperationDescriptor{operation}}); len(findings) != 1 || !strings.Contains(findings[0].Message, "provenance drift") {
+			if findings := validateSourceDescriptorAgainstLock("fixture", "sources/fixture-operation-descriptor.json", lock, sourceImportDescriptorDocument{SchemaVersion: 3, Operations: []sourceOperationDescriptor{operation}}); len(findings) != 0 {
 				t.Fatalf("%s findings = %+v", change.name, findings)
 			}
 		})
@@ -2115,6 +3038,27 @@ func TestSourceProjectionSourceCitedNonExecutableMutationDispositionsCoverAbsent
 				t.Fatalf("executable coverage findings = %+v", findings)
 			}
 		})
+	}
+}
+
+func TestSourceProjectionMutationDispositionCitationIgnoresRetainedArtifactMetadata(t *testing.T) {
+	operation := sourceCitedMutationTestOperation("asana", "asana.rest.createAccessRequest", "POST", "/access_requests")
+	operation.Source.SHA256 = ""
+	operation.Source.Bytes = 0
+	operation.Source.PublishedURL = "https://capture.polymetrics.invalid/provider-page"
+	operation.Source.PublishedCaptureURL = "https://capture.polymetrics.invalid/capture"
+	operation.Source.PublishedSHA256 = strings.Repeat("0", 64)
+	operation.Source.PublishedBytes = 1
+	operation.Source.PublishedAdapter = "fixture"
+	operation.Source.ContentType = "application/json"
+	citation := sourceOperationCitation{SourceID: operation.SourceID, Method: operation.Method, Path: operation.Path}
+	if err := sourceProjectionValidateMutationDispositionCitation(operation, citation, "mutation disposition"); err != nil {
+		t.Fatalf("stable source identity/method/path citation rejected because capture metadata is absent: %v", err)
+	}
+
+	operation.Source.URL = ""
+	if err := sourceProjectionValidateMutationDispositionCitation(operation, citation, "mutation disposition"); err == nil || !strings.Contains(err.Error(), "lacks a provider source citation") {
+		t.Fatalf("missing provider URL error = %v, want stable-source citation refusal", err)
 	}
 }
 
@@ -2706,6 +3650,106 @@ func TestSourceProjectionSourceCitedNonExecutableMutationDispositionRejectsImple
 	}
 	if bundle.CLISurface.Commands[0].Availability != "implemented" {
 		t.Fatalf("implemented command availability = %q, want preserved implementation claim", bundle.CLISurface.Commands[0].Availability)
+	}
+}
+
+func TestSourceProjectionSourceCitedPartialMutationCoveragePreservesImplementedIncompleteAction(t *testing.T) {
+	operation := sourceCitedMutationTestOperation("asana", "asana.items.update", "PATCH", "/items/{item_id}")
+	operation.Request.Path = []sourceParameterDescriptor{{Name: "item_id", Required: true, Schema: map[string]any{"type": "string"}}}
+	operation.Request.Body = &sourceRequestBodyDescriptor{Required: true, Schema: map[string]any{
+		"type": "object", "properties": map[string]any{"payload": map[string]any{"type": "object", "additionalProperties": true}},
+	}}
+	operation.Runtime = sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{
+		Foundation: "cli-request-schema-foundation-r1",
+		Location:   "request body",
+		Reason:     "unbounded request schema object has dynamic additionalProperties",
+	}}}
+	bundle := engine.Bundle{Name: "asana", Writes: []engine.WriteAction{{
+		Name: "update-item", Kind: "update", Method: "PATCH", Path: "/items/{{ record.item_id }}", PathFields: []string{"item_id"}, BodyType: "json",
+		RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"item_id":{"type":"string"}}}`),
+	}}, CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+		Path: "items update", Intent: "reverse_etl", Availability: "implemented", Write: "update-item",
+		Flags: []engine.CLIFlag{{Name: "item-id", Type: "string", MapsTo: "record.item_id", Required: true}},
+	}}}}
+	if findings := validateSourceExecutableCoverage(bundle, "sources/asana-operation-descriptor.json", sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{operation}}); len(findings) != 1 || !strings.Contains(findings[0].Message, "retains an unresolved source-bound gap") {
+		t.Fatalf("undisposed implemented incomplete action findings = %+v", findings)
+	}
+	disposition := sourcePartialMutationCoverageDisposition{
+		Source:     sourceOperationCitation{SourceID: operation.SourceID, Method: operation.Method, Path: operation.Path},
+		Foundation: "cli-request-schema-foundation-r1",
+		Reason:     "provider request contract needs typed dynamic-object support",
+	}
+	wrongFoundation := disposition
+	wrongFoundation.Foundation = "source-path-parameter-alias-foundation-r1"
+	if err := sourceProjectionApplyPartialMutationCoverageDispositions(bundle, &sourceImportResult{Operations: []sourceOperationDescriptor{operation}}, []sourcePartialMutationCoverageDisposition{wrongFoundation}); err == nil || !strings.Contains(err.Error(), "no matching missing foundation") {
+		t.Fatalf("non-alias partial-coverage disposition error = %v, want named foundation refusal", err)
+	}
+	nonMutation := operation
+	nonMutation.SourceID = "asana.items.inspect"
+	nonMutation.Method = "GET"
+	nonMutation.Runtime = sourceRuntimeReachability{}
+	nonMutationDisposition := disposition
+	nonMutationDisposition.Source = sourceOperationCitation{SourceID: nonMutation.SourceID, Method: nonMutation.Method, Path: nonMutation.Path}
+	if err := sourceProjectionApplyPartialMutationCoverageDispositions(bundle, &sourceImportResult{Operations: []sourceOperationDescriptor{nonMutation}}, []sourcePartialMutationCoverageDisposition{nonMutationDisposition}); err == nil || !strings.Contains(err.Error(), "is not mutating") {
+		t.Fatalf("non-mutating partial-coverage disposition error = %v, want source-operation refusal", err)
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{operation}}
+	if err := sourceProjectionApplyPartialMutationCoverageDispositions(bundle, &result, []sourcePartialMutationCoverageDisposition{disposition}); err != nil {
+		t.Fatalf("apply partial source coverage disposition: %v", err)
+	}
+	got := result.Operations[0]
+	if got.Runtime.PartialCoverageMutation == nil || got.Runtime.PartialCoverageMutation.Foundation != disposition.Foundation || got.Runtime.NonExecutableMutation != nil || !sourceProjectionHasPartialMutationCoverageDisposition(got) {
+		t.Fatalf("partial source coverage runtime = %+v, want exact partial disposition", got.Runtime)
+	}
+	if findings := validateSourceExecutableCoverage(bundle, "sources/asana-operation-descriptor.json", sourceImportDescriptorDocument{Operations: result.Operations}); len(findings) != 0 {
+		t.Fatalf("partial source coverage findings = %+v", findings)
+	}
+	bundleDir := t.TempDir()
+	const writes = `{"schema_version":1,"actions":[{"name":"update-item","kind":"update","method":"PATCH","path":"/items/{{ record.item_id }}","path_fields":["item_id"],"body_type":"json","record_schema":{"type":"object","additionalProperties":false,"properties":{"item_id":{"type":"string"}}},"risk":"standard"}]}`
+	const cli = `{"schema_version":1,"commands":[{"path":"items update","summary":"update","intent":"reverse_etl","availability":"implemented","write":"update-item","flags":[{"name":"item-id","type":"string","maps_to":"record.item_id","required":true}]}]}`
+	writeProjectionFixture(t, filepath.Join(bundleDir, "writes.json"), writes)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), cli)
+	stats, err := projectSourceDescriptorToBundle(bundleDir, result, false)
+	if err != nil || stats.Changed() {
+		t.Fatalf("partial source coverage projection = stats:%+v err:%v, want byte-stable declared action", stats, err)
+	}
+	if gotWrites, gotCLI := readProjectionFixture(t, filepath.Join(bundleDir, "writes.json")), readProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json")); gotWrites != writes || gotCLI != cli {
+		t.Fatalf("partial source coverage changed a working action or command:\nwrites=%s\ncli=%s", gotWrites, gotCLI)
+	}
+	if bundle.CLISurface.Commands[0].Availability != "implemented" {
+		t.Fatalf("partial source coverage command availability = %q, want implemented", bundle.CLISurface.Commands[0].Availability)
+	}
+
+	complete := sourceProjectionTestOperation()
+	complete.Connector = "asana"
+	complete.SourceID = "asana.items.create"
+	complete.Source = sourceCitedMutationTestOperation("asana", complete.SourceID, complete.Method, complete.Path).Source
+	completeDisposition := sourcePartialMutationCoverageDisposition{
+		Source:     sourceOperationCitation{SourceID: complete.SourceID, Method: complete.Method, Path: complete.Path},
+		Foundation: "cli-request-schema-foundation-r1",
+		Reason:     "must not hide a complete action",
+	}
+	completeDir := t.TempDir()
+	completeWritesPath := filepath.Join(completeDir, "writes.json")
+	completeCLIPath := filepath.Join(completeDir, "cli_surface.json")
+	writeProjectionFixture(t, completeWritesPath, `{"schema_version":1,"actions":[{"name":"items","kind":"custom","method":"POST","path":"/items/{{ record.owner }}","path_fields":["owner"],"body_type":"json","body_fields":["stale"],"record_schema":{"type":"object","additionalProperties":false,"properties":{"stale":{"type":"string"}}},"risk":"standard"}]}`)
+	writeProjectionFixture(t, completeCLIPath, `{"schema_version":1,"commands":[{"path":"items create","summary":"create","intent":"reverse_etl","availability":"implemented","write":"items","flags":[{"name":"stale","type":"string","maps_to":"record.stale"}]}]}`)
+	if _, err := projectSourceDescriptorToBundle(completeDir, sourceImportResult{Operations: []sourceOperationDescriptor{complete}}, false); err != nil {
+		t.Fatalf("materialize complete action before partial-coverage counterfactual: %v", err)
+	}
+	var completeWrites struct {
+		Actions []engine.WriteAction `json:"actions"`
+	}
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, completeWritesPath)), &completeWrites); err != nil {
+		t.Fatal(err)
+	}
+	var completeCLI engine.CLISurface
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, completeCLIPath)), &completeCLI); err != nil {
+		t.Fatal(err)
+	}
+	completeBundle := engine.Bundle{Name: "asana", Writes: completeWrites.Actions, CLISurface: &completeCLI}
+	if err := sourceProjectionApplyPartialMutationCoverageDispositions(completeBundle, &sourceImportResult{Operations: []sourceOperationDescriptor{complete}}, []sourcePartialMutationCoverageDisposition{completeDisposition}); err == nil || !strings.Contains(err.Error(), "complete executable action") {
+		t.Fatalf("complete action partial-coverage disposition error = %v, want refusal", err)
 	}
 }
 

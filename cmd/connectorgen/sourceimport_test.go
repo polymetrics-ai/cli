@@ -866,6 +866,31 @@ func TestSourceOutputClassifiesOnlyJSONAsJSON(t *testing.T) {
 	}
 }
 
+func TestSourceInferredNextURLPaginationRetainsClosedLimitOffsetControls(t *testing.T) {
+	responses := []sourceResponseDescriptor{{
+		Status: "200",
+		Declaration: map[string]any{"content": map[string]any{
+			"application/json": map[string]any{"schema": map[string]any{"properties": map[string]any{
+				"next_page": map[string]any{"type": "object", "properties": map[string]any{
+					"uri": map[string]any{"type": "string", "format": "uri"},
+				}},
+			}}},
+		}},
+	}}
+	query := []sourceParameterDescriptor{
+		{Name: "limit", Schema: map[string]any{"type": "integer", "minimum": json.Number("1"), "maximum": json.Number("100")}},
+		{Name: "offset", Schema: map[string]any{"type": "string"}},
+	}
+	got := sourceInferredNextURLPagination(responses, query)
+	want := map[string]any{
+		"type": "next_url", "next_url_path": "next_page.uri",
+		"size_param": "limit", "limit_param": "limit", "offset_param": "offset", "page_size": 100,
+	}
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("inferred next-url pagination = %#v, want %#v", got, want)
+	}
+}
+
 func TestSourceImportRejectsArtifactDriftAndSizeBeforeParsing(t *testing.T) {
 	t.Parallel()
 	raw := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
