@@ -204,3 +204,19 @@ Built a fresh temporary `pm`, initialised a fresh temporary project, and invoked
 - [x] Passed focused conflict tests (19.500s), full changed packages: `cmd/connectorgen` (177.850s), engine (9.928s), commandrunner (22.072s), Asana defs (5.582s), App (267.112s), and CLI (456.149s). Scoped vet, tidy, lint, agent-contract, declaration-admission, runtime-preflight, canon, connector-boundary, docs validation, website scripts (34/34), and certification subject/matrix/candidates/sweep all passed.
 - [x] Built `pm` and ran every implemented Asana command in its own initialized credential-free project. `212/212` reached `missing --credential` (exit 1): 106 direct reads, 12 ETL, 94 reverse ETL; zero unknown/blocked/provider results.
 - [ ] Website typecheck remains unavailable locally because `tsc` is absent. Aggregate `go test ./...` and `make verify` remain CI-owned due this runner's per-command limit.
+
+## R6 merge-blocker repair
+
+- [x] `go test -timeout 20m -count=1 ./internal/connectors/commandrunner`
+  passed (22.353s), including schema/encoding/OpenAPI-sibling/batch structured
+  unavailable-disposition and arbitrary-prose refusal controls.
+- [x] `go test -timeout 20m -count=1 ./internal/connectors/engine` passed
+  (11.504s), including both adapter methods with zero auth/requester calls on
+  source-bound ETL drift.
+- [x] Rebuilt `pm` and confirmed the four real Asana unavailable examples
+  return exact declared schema, encoding+schema, OpenAPI-sibling, and generic
+  batch dispositions at exit 7 before any credential/provider action.
+- [x] Source import check (249), validate (553/zero), surface-sync (zero),
+  runtime preflight, canon, and scoped vet passed. `make lint` was attempted
+  but could not start because another process held its parallel lint lock; it
+  is not claimed as a pass.

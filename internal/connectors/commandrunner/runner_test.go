@@ -2349,6 +2349,37 @@ func TestRunSourceBoundReadMissingFoundationRefusesBeforeDispatch(t *testing.T) 
 	}
 }
 
+func TestPreflightUnavailableCommandReturnsOnlyDeclaredStructuredDisposition(t *testing.T) {
+	for _, test := range []struct {
+		name         string
+		availability string
+		notes        string
+	}{
+		{name: "schema", availability: "planned", notes: "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAccessRequest"},
+		{name: "encoding", availability: "planned", notes: "missing_foundation=cli-request-encoding-foundation-r1; missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAttachment"},
+		{name: "openapi sibling", availability: "planned", notes: "missing_foundation=cli-openapi30-reference-sibling-foundation-r1; source_operation=asana.rest.getMembership"},
+		{name: "batch", availability: "unsupported_api", notes: "not_applicable=generic_batch_wrapper; source_operation=asana.rest.createBatchRequest"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+				Path: "widgets unavailable", Intent: "reverse_etl", Availability: test.availability, Notes: test.notes,
+			}}}}
+			_, _, err := resolvePreflightCommand(connector, []string{"widgets", "unavailable"})
+			var blocked *BlockedCommandError
+			if !errors.As(err, &blocked) || blocked.Reason != test.notes {
+				t.Fatalf("preflight = %#v, want exact declared disposition %q", err, test.notes)
+			}
+		})
+	}
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "widgets prose", Intent: "reverse_etl", Availability: "planned", Notes: "missing foundation is described in prose",
+	}}}}
+	_, _, err := resolvePreflightCommand(connector, []string{"widgets", "prose"})
+	if err == nil || strings.Contains(err.Error(), "missing foundation is described in prose") {
+		t.Fatalf("arbitrary note controlled unavailable reason: %v", err)
+	}
+}
+
 func TestRunOperationDirectReadRejectsRepeatedHeaderFlagsBeforeDispatch(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
 		Path: "widgets list", Intent: "direct_read", Availability: "implemented", Operation: "acme.widgets.list", OutputPolicy: "json_redacted",

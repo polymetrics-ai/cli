@@ -132,6 +132,34 @@ after the source-lock audit has exited.
 
 No certification policy, live provider calls, generic request interface, or edits to another worker's branch belong in this PR. The retained Asana artifact is solely a hermetic shared-foundation control, not a claim of certification or a substitute for Batch-1 materialization review.
 
+## R6 merge-blocker repair — 2026-08-27
+
+## Task Delivery Header
+
+- Issue: Refs #4352 — source-bound read execution foundation, R6 repair.
+- Base branch: `main` at `b9b2478b3b2451d632d28b9aa138a170ad835110`.
+- Merges into: `fm/cli-source-bound-read-execution-r1-continuation` → `main`.
+- Delivery: normal non-force advance of existing PR #4356, exact remote head/base read-back, then a fresh independent audit; no PR merge.
+- Working branch: `fm/cli-source-bound-read-execution-r1-continuation`.
+- Task: preserve every Asana row while returning its structured declared unavailable disposition at runtime, and move source-bound ETL structural preflight before adapter auth admission.
+- Verification: red/green commandrunner and adapter tests; built binary unavailable examples; changed packages; generator/surface/runtime/boundary gates; exact credential-free census.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| Every unavailable Asana row reports its declared reason | live | Schema, encoding, OpenAPI-sibling, and batch command calls yield a typed blocked error whose `Reason` matches declaration-owned structured fields. |
+| Structural ETL drift precedes auth | live | Adapter `Read` and `ReadWithOutcome` each return structural drift with zero auth-admission and requester calls. |
+| No surface or executor is fabricated | live | Generator/surface/preflight checks and 249-command census preserve 212 implemented / 37 unavailable. |
+
+**Red:** R6 built-binary census observed 0/37 unavailable rows with their true
+reason, and an adapter counter reached authentication once for a source-bound
+stream path mismatch. **Green:** use structured command fields (never
+untrusted notes) and preflight before `executeWithAuthCohort`, retaining the
+inner preflight as defense in depth. The canonical GSD prompts were executed
+inline because compatible isolated workers are unavailable and the contract
+forbids role spawning. Skills: golang-how-to, golang-cli, golang-testing,
+golang-error-handling, golang-security, golang-safety, golang-design-patterns,
+golang-structs-interfaces, golang-context, golang-documentation, golang-lint.
+
 ## R2 independent-audit gap closure
 
 > Superseded in part by captain instruction `021.msg`: historical planned-read

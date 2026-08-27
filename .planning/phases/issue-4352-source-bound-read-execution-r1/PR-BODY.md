@@ -115,3 +115,15 @@ passes.
 - `6f41f52ae` — implementation, generated artifacts, and verification evidence
 - current-main reconciliation — regenerated outputs and 212-command
   credential-boundary census
+
+## R6 repair
+
+- All 37 unavailable Asana rows now return only their exact generator-owned
+  `missing_foundation` or `not_applicable=generic_batch_wrapper` disposition,
+  before lifecycle/executor fallback. The runner refuses arbitrary prose as a
+  declaration authority. Rebuilt-binary schema, encoding, OpenAPI-sibling, and
+  batch examples all exit 7 with their declared reason.
+- `Connector.Read` and `ReadWithOutcome` now structurally preflight
+  source-bound ETL identity before authentication admission, while keeping the
+  existing inner check as defense in depth. Adapter tests assert zero auth and
+  requester calls on method/path/records/pagination drift.

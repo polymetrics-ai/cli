@@ -548,13 +548,19 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 		}
 		return connectors.CommandSurfaceCommand{}, command, unsupportedCommandError(connector.Name(), command, cmd)
 	}
-	if strings.HasPrefix(strings.TrimSpace(cmd.Notes), "missing_foundation=source-bound-read-execution-r1:") {
+	if reason, ok := declaredUnavailableReason(cmd.Notes); ok {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
 			Connector:    connector.Name(),
 			Command:      command,
 			Intent:       cmd.Intent,
 			Availability: cmd.Availability,
-			Reason:       strings.TrimSpace(cmd.Notes),
+			Reason:       reason,
+		}
+	}
+	if strings.HasPrefix(strings.TrimSpace(cmd.Notes), "missing_foundation=source-bound-read-execution-r1:") {
+		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+			Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability,
+			Reason: strings.TrimSpace(cmd.Notes),
 		}
 	}
 	if cmd.Availability == "deferred" {
@@ -589,6 +595,49 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
 		Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: blockReason(cmd),
 	}
+}
+
+// declaredUnavailableReason recognizes only the generator-owned unavailable
+// disposition grammar. Notes remain presentation text in general; this narrow
+// decoder refuses arbitrary prose and returns no authority for an unknown key,
+// duplicate key, malformed identifier, or missing source identity.
+func declaredUnavailableReason(notes string) (string, bool) {
+	parts := strings.Split(strings.TrimSpace(notes), "; ")
+	if len(parts) < 2 {
+		return "", false
+	}
+	foundations := 0
+	notApplicable := false
+	source := ""
+	for _, part := range parts {
+		key, value, ok := strings.Cut(part, "=")
+		if !ok || strings.TrimSpace(value) != value || value == "" {
+			return "", false
+		}
+		switch key {
+		case "missing_foundation":
+			if notApplicable || safety.ValidateIdentifier(value, "missing foundation") != nil {
+				return "", false
+			}
+			foundations++
+		case "not_applicable":
+			if foundations != 0 || notApplicable || value != "generic_batch_wrapper" {
+				return "", false
+			}
+			notApplicable = true
+		case "source_operation":
+			if source != "" || safety.ValidateIdentifier(value, "source operation") != nil {
+				return "", false
+			}
+			source = value
+		default:
+			return "", false
+		}
+	}
+	if source == "" || (foundations == 0 && !notApplicable) {
+		return "", false
+	}
+	return strings.TrimSpace(notes), true
 }
 
 func unsupportedCommandError(connectorName, command string, cmd connectors.CommandSurfaceCommand) *BlockedCommandError {

@@ -189,3 +189,18 @@ Record exact commands, intended red failure, and full green result as each group
 - **Integration green:** genuine source-import/source-projection conflicts retain both #4356 partial-coverage and #4357 write-disabled-artifact calls in normal and read-only import modes. Focused conflict tests passed in `19.500s`; full changed packages passed: `cmd/connectorgen` (177.850s), engine (9.928s), commandrunner (22.072s), Asana defs (5.582s), App (267.112s), CLI (456.149s).
 - **Derived/runtime green:** source import checked 249 Asana operations; validate reported 553 connectors/zero findings; surface sync made zero corrections; operation evidence reported 1,774 rows/five rollups with fixed-100 green. Docs/manual/skills/website data were regenerated; docs validation and 34 website scripts passed. The rebuilt binary ran 212 credential-free isolated commands: `106 direct_read + 12 ETL + 94 reverse_etl`, every one `missing --credential`, zero failures/provider I/O.
 - **Constraint:** `tsc` is unavailable for website typecheck. Aggregate `go test ./...` and `make verify` remain CI-owned under this runner's per-command limit; neither is claimed locally.
+
+## R6 merge-blocker repair
+
+- **F1 Red:** R6's exact-head built binary returned generic executor/lifecycle
+  text for all 36 planned and one unsupported Asana rows. **Green:** runner
+  accepts only the generator-owned `missing_foundation` or
+  `not_applicable=generic_batch_wrapper` grammar with one source identity;
+  schema, encoding, OpenAPI-sibling, and generic-batch unit controls pass and
+  real rebuilt-binary calls return their exact declared disposition (exit 7).
+  Arbitrary prose is rejected as authority.
+- **F2 Red:** R6's adapter overlay observed one AuthenticationAdmission call
+  before a source-bound ETL path mismatch. **Green:** `Connector.Read` and
+  `ReadWithOutcome` preflight structural identity before auth while retaining
+  the executor's inner check. The adapter regression asserts the structural
+  error and `0/0` auth-admission/requester calls for both methods.

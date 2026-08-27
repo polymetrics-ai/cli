@@ -188,6 +188,9 @@ func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit f
 	if err != nil {
 		return err
 	}
+	if err := preflightDeclaredSourceBoundStreamRead(c.bundle, stream); err != nil {
+		return err
+	}
 	if err := preflightSourceBoundStreamOrigin(c.bundle, req.Config, stream); err != nil {
 		return err
 	}
@@ -202,6 +205,9 @@ func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit f
 func (c *Connector) ReadWithOutcome(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	stream, err := findStream(c.bundle, req.Stream)
 	if err != nil {
+		return err
+	}
+	if err := preflightDeclaredSourceBoundStreamRead(c.bundle, stream); err != nil {
 		return err
 	}
 	if err := preflightSourceBoundStreamOrigin(c.bundle, req.Config, stream); err != nil {
