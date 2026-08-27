@@ -2,10 +2,11 @@
 
 ## Focused and changed-package proof
 
+- `go test -timeout 20m ./cmd/connectorgen -run '^(TestSourceImportPreflightsUnusedGrammarObjects|TestSourceImportDoesNotTreatDepthAsDocumentSafetyExemption|TestSourceImportReservesRequestMediaExpansionBeforeCloning|TestSourceImportReservesInboundExpansionBeforeEventConstruction|TestSourceImportReservesCallbackReferenceChainsBeforeCloning|TestSourceImportProviderDialectContracts|TestSourceImportReservesResolvedResponseChildrenBeforeCloning|TestSourceImportRejectsUnsafeOrRetainsMalformedSourceForms|TestSourceReferenceResolverCachesNormalizedTargetsWithoutBypassingCounts)$' -count=1` — PASS (`ok polymetrics.ai/cmd/connectorgen 1.215s`) after integrating `origin/main@cf29d302c`. This proves #4358's complete grammar preflight remains active, while a depth-limited Stripe operation cannot mask an independent unsafe component or steal request-media/inbound/reference expansion ownership.
+
 - `go test -timeout 20m ./cmd/connectorgen -run '^(TestSourceImportStripeReferenceDepthOperationLocal|TestSourceImportRejectsUnsafeReferences|TestSourceReferenceResolverCachesNormalizedTargetsWithoutBypassingCounts)$' -count=1` — PASS (`ok polymetrics.ai/cmd/connectorgen 1.095s`).
-- `go test -timeout 20m ./cmd/connectorgen -count=1` — PASS.
-- `go test -timeout 20m ./internal/connectors/engine -count=1` — PASS (`ok polymetrics.ai/internal/connectors/engine 15.313s`).
-- `go test -timeout 20m ./internal/connectors/commandrunner -count=1` — PASS.
+- `go test -timeout 20m ./cmd/connectorgen -count=1` — PASS (`ok polymetrics.ai/cmd/connectorgen 176.351s`).
+- `go test -timeout 20m ./internal/connectors/engine ./internal/connectors/commandrunner -count=1` — PASS (`engine 10.161s`; `commandrunner 22.547s`).
 - `go vet ./...` — PASS.
 - `go build ./cmd/connectorgen` — PASS.
 - `go build ./cmd/pm` — PASS.
@@ -34,9 +35,9 @@ unchanged reference accounting.
 - `make connectorgen-certification-matrix` — PASS.
 - `make connectorgen-certification-candidates` — PASS.
 - `make connectorgen-certification-sweep` — PASS.
-- `make connector-boundary` — PASS.
-- `make connector-canon-check` — PASS.
-- `make release-workflow-check` — PASS.
+- `make connector-boundary` — not recordable locally: the launcher returned before its two already-running process groups exposed terminal exit status. Per Firstmate instruction, no third process was started and neither was terminated; the exact blocker is recorded in the Firstmate status file for recovery/CI confirmation.
+- `make connector-canon-check` — PASS (`connector canon check: ok`).
+- `make release-workflow-check` — PASS (`installed GitHub certification archive proof passed`).
 
 ## Delivery constraints and deliberately inapplicable checks
 
