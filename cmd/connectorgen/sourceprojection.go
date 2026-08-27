@@ -3632,11 +3632,9 @@ func sourceProjectionClosedSchema(raw any, requireExplicitClosedObject bool) (an
 			return nil, fmt.Errorf("source composition wrapper has %s without an explicit type", keyword)
 		}
 	}
-	primary := ""
 	if len(types) > 0 {
-		primary = types[0]
 		if len(types) == 1 {
-			out["type"] = primary
+			out["type"] = types[0]
 		} else {
 			values := make([]any, len(types))
 			for index := range types {
@@ -3668,12 +3666,12 @@ func sourceProjectionClosedSchema(raw any, requireExplicitClosedObject bool) (an
 		}
 		out["x-source-discriminator"] = discriminator
 	}
-	switch primary {
-	case "string":
+	if sourceProjectionContainsString(types, "string") {
 		if _, bounded := out["maxLength"]; !bounded {
 			out["maxLength"] = json.Number(fmt.Sprintf("%d", sourceProjectionDefaultStringBytes))
 		}
-	case "array":
+	}
+	if sourceProjectionContainsString(types, "array") {
 		items, exists := schema["items"]
 		if !exists {
 			return nil, fmt.Errorf("array schema has no items")
@@ -3686,9 +3684,10 @@ func sourceProjectionClosedSchema(raw any, requireExplicitClosedObject bool) (an
 		if _, bounded := out["maxItems"]; !bounded {
 			out["maxItems"] = json.Number(fmt.Sprintf("%d", sourceProjectionDefaultArrayItems))
 		}
-	case "object":
+	}
+	if sourceProjectionContainsString(types, "object") {
 		additional, exists := schema["additionalProperties"]
-		if requireExplicitClosedObject && !exists {
+		if (requireExplicitClosedObject || hasComposition) && !exists {
 			return nil, fmt.Errorf("composition object must explicitly set additionalProperties to false")
 		}
 		if exists && additional != false {

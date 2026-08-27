@@ -2892,6 +2892,40 @@ func TestSourceProjectionSchemaPreservesClosedComposition(t *testing.T) {
 	}
 }
 
+func TestSourceProjectionClosedCompositionPreservesNullableObjectWrapperRegardlessOfTypeOrder(t *testing.T) {
+	raw := map[string]any{
+		"type":                 []any{"null", "object"},
+		"additionalProperties": false,
+		"required":             []any{"selector"},
+		"properties": map[string]any{
+			"selector": map[string]any{"type": "string", "minLength": 1, "maxLength": 32},
+		},
+		"anyOf": []any{
+			map[string]any{"type": "null"},
+			map[string]any{"type": "object", "additionalProperties": false, "properties": map[string]any{"selector": map[string]any{"type": "string", "minLength": 1, "maxLength": 32}}},
+		},
+	}
+
+	projected, err := sourceProjectionSchema(raw)
+	if err != nil {
+		t.Fatalf("sourceProjectionSchema(): %v", err)
+	}
+	encoded, err := json.Marshal(projected)
+	if err != nil {
+		t.Fatalf("marshal projected schema: %v", err)
+	}
+	schema, err := engine.CompileSchema(encoded)
+	if err != nil {
+		t.Fatalf("CompileSchema(): %v", err)
+	}
+	if err := schema.Validate(map[string]any{}); err == nil || !strings.Contains(err.Error(), "required property") {
+		t.Fatalf("projected nullable object accepted missing wrapper property: %v", err)
+	}
+	if err := schema.Validate(map[string]any{"selector": "name"}); err != nil {
+		t.Fatalf("projected nullable object rejected declared wrapper property: %v", err)
+	}
+}
+
 func TestBatch1ClosedSchemaCompositionManifestReconciles(t *testing.T) {
 	encoded, err := os.ReadFile(filepath.Join("testdata", "sourceprojection", "batch1-closed-schema-composition-manifest.json.gz.b64"))
 	if err != nil {

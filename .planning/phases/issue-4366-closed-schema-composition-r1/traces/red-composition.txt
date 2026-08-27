@@ -28,3 +28,14 @@ FAIL	polymetrics.ai/internal/connectors/engine
 The fixture corruption discovered in the first attempted manifest test was
 replaced with the checked-in gzip/base64 immutable manifest fixture before this
 record was written; it did not alter the red production failures above.
+
+```text
+$ go test -timeout 20m ./cmd/connectorgen -run TestSourceProjectionClosedCompositionPreservesNullableObjectWrapperRegardlessOfTypeOrder -count=1
+--- FAIL: TestSourceProjectionClosedCompositionPreservesNullableObjectWrapperRegardlessOfTypeOrder
+    sourceprojection_test.go:2922: projected nullable object accepted missing wrapper property: <nil>
+FAIL	polymetrics.ai/cmd/connectorgen
+```
+
+This review-discovered red test was added before changing the projection loop:
+it covered a closed nullable object wrapper whose provider type array lists
+`null` before `object`.
