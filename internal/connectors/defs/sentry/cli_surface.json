@@ -1,0 +1,33 @@
+{
+  "tagline": "Sentry command surface",
+  "usage": "pm sentry <command>",
+  "source_cli": {
+    "docs": "https://docs.sentry.io/api/"
+  },
+  "groups": [
+    {
+      "id": "seer",
+      "title": "Seer",
+      "commands": [
+        "seer list-models"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "seer list-models",
+      "summary": "List the declared Sentry Seer models.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "sentry.seer_models_list",
+      "source_operation": "sentry.rest.listSeerModels",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/0/seer/models/"
+        }
+      ],
+      "output_policy": "json_redacted"
+    }
+  ]
+}

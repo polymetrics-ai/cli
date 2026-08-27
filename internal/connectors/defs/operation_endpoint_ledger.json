@@ -11593,7 +11593,14 @@
   "sendowl": [],
   "sendpulse": [],
   "senseforce": [],
-  "sentry": [],
+  "sentry": [
+    {
+      "method": "GET",
+      "path": "/api/0/seer/models/",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    }
+  ],
   "serpstat": [],
   "service-now": [],
   "sharepoint-lists-enterprise": [],

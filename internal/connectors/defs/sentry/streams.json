@@ -1,6 +1,13 @@
 {
   "base": {
     "url": "{{ config.base_url }}",
+    "routes": [
+      {
+        "name": "sentry_api_v0",
+        "base_url": "{{ config.base_url }}",
+        "version": "api"
+      }
+    ],
     "user_agent": "polymetrics-go-cli",
     "auth": [
       {
