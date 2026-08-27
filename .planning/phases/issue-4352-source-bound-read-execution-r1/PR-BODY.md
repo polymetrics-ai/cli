@@ -125,5 +125,6 @@ passes.
   batch examples all exit 7 with their declared reason.
 - `Connector.Read` and `ReadWithOutcome` now structurally preflight
   source-bound ETL identity before authentication admission, while keeping the
-  existing inner check as defense in depth. Adapter tests assert zero auth and
-  requester calls on method/path/records/pagination drift.
+  existing inner check as defense in depth. The adapter regression asserts zero
+  auth and requester calls on structural source-path drift; the shared
+  preflight retains its existing method/records/pagination controls.
