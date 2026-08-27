@@ -512,13 +512,15 @@ func readOperationEvidenceSourceLock(path, connector string) (operationEvidenceS
 		input.Absence = &absence
 		return input, nil
 	}
-	// Version 3 is the document-owned import contract. Decode it through the
-	// exact source-import parser so rest.source_documents[].operations cannot
-	// drift from source import. Version 1/2 evidence intentionally retains its
-	// historical tolerant projection: operation-evidence must still emit a
-	// source-trace gap for a bad digest or account for a duplicate operation,
-	// rather than fail before reporting that observable regression.
-	if lock.SchemaVersion == 3 || (lock.SchemaVersion == 2 && lock.Rest.SourceKind != "") {
+	legacyReference, err := operationEvidenceLegacyReferenceWire(raw, lock.SchemaVersion)
+	if err != nil {
+		return operationEvidenceSourceInput{}, fmt.Errorf("parse source lock for %q: %w", connector, err)
+	}
+	// Version 3 and an explicit non-null v2 source-reference discriminator are
+	// the strict source-import contracts. Historical byte-backed v2 evidence
+	// still uses its tolerant projection, but reference-only fields cannot be
+	// silently discarded or reinterpreted on that path.
+	if lock.SchemaVersion == 3 || legacyReference {
 		strictLock, err := parseSourceImportLock(raw, connector)
 		if err != nil {
 			return operationEvidenceSourceInput{}, fmt.Errorf("parse source lock for %q through source-import schema: %w", connector, err)
@@ -526,6 +528,51 @@ func readOperationEvidenceSourceLock(path, connector string) (operationEvidenceS
 		return operationEvidenceSourceInputFromImportLock(input, strictLock)
 	}
 	return operationEvidenceSourceInputFromLegacyLock(input, lock)
+}
+
+func operationEvidenceLegacyReferenceWire(raw []byte, schemaVersion int) (bool, error) {
+	if schemaVersion != 2 {
+		return false, nil
+	}
+	var root map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &root); err != nil {
+		return false, fmt.Errorf("decode source lock fields: %w", err)
+	}
+	var rest map[string]json.RawMessage
+	if restRaw, exists := root["rest"]; exists {
+		if err := json.Unmarshal(restRaw, &rest); err != nil {
+			return false, fmt.Errorf("decode source lock rest fields: %w", err)
+		}
+	}
+	if kindRaw, exists := rest["source_kind"]; exists {
+		var kind string
+		if err := json.Unmarshal(kindRaw, &kind); err != nil || kind == "" {
+			return false, fmt.Errorf("source-reference discriminator rest.source_kind must be a non-empty string")
+		}
+		return true, nil
+	}
+	for _, field := range []string{"operations_found", "coverage_confidence"} {
+		if _, exists := root[field]; exists {
+			return false, fmt.Errorf("byte-backed v2 source lock cannot declare reference-only field %s", field)
+		}
+	}
+	for _, field := range []string{"operation_counts", "supplements"} {
+		if _, exists := rest[field]; exists {
+			return false, fmt.Errorf("byte-backed v2 source lock cannot declare reference-only field rest.%s", field)
+		}
+	}
+	if operationsRaw, exists := rest["operations"]; exists {
+		var operations []map[string]json.RawMessage
+		if err := json.Unmarshal(operationsRaw, &operations); err != nil {
+			return false, fmt.Errorf("decode source lock REST operations: %w", err)
+		}
+		for _, operation := range operations {
+			if _, exists := operation["source_url"]; exists {
+				return false, fmt.Errorf("byte-backed v2 source lock cannot declare reference-only field rest.operations[].source_url")
+			}
+		}
+	}
+	return false, nil
 }
 
 func operationEvidenceSourceInputFromLegacyLock(input operationEvidenceSourceInput, lock operationEvidenceRawLock) (operationEvidenceSourceInput, error) {

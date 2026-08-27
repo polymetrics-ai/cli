@@ -2322,7 +2322,7 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 		return []Finding{sourceProjectionFinding(connector, file, sourceImportUnavailableFindingMessage(unavailable))}
 	}
 	wantSchemaVersion := 2
-	if lock.SchemaVersion == 3 {
+	if lock.SchemaVersion == 3 || lock.isLegacySourceReference() {
 		wantSchemaVersion = 3
 	}
 	if descriptor.SchemaVersion != wantSchemaVersion {
@@ -2336,35 +2336,26 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 	if lock.SchemaVersion == 3 {
 		for _, document := range lock.Rest.SourceDocuments {
 			for _, operation := range document.Operations {
-				form := document.sourceKind()
-				version := ""
-				if form == sourceImportDocumentKindOpenAPI {
-					if document.Artifact.Swagger != "" {
-						form = "swagger"
-						version = document.Artifact.Swagger
-					} else {
-						version = document.Artifact.OpenAPI
-					}
-				}
+				source := sourceImportExpectedV3DescriptorProvenance(document, operation)
 				expected[operation.ID] = expectedSource{
-					source: sourceImportSource{
-						URL:                 document.Artifact.SourceURL,
-						SHA256:              strings.ToLower(document.Artifact.SHA256),
-						Bytes:               document.Artifact.Bytes,
-						Location:            operation.SourceLocation,
-						Form:                form,
-						Version:             version,
-						DocumentID:          document.ID,
-						PublishedURL:        document.PublishedSource.SourceURL,
-						PublishedCaptureURL: document.PublishedSource.CaptureURL,
-						PublishedSHA256:     strings.ToLower(document.PublishedSource.SHA256),
-						PublishedBytes:      document.PublishedSource.Bytes,
-						PublishedAdapter:    document.PublishedSource.Adapter,
-						ContentType:         document.ContentType,
-						CitationURL:         operation.CitationURL,
-					},
+					source:              source,
 					providerOperationID: operation.OperationID,
 				}
+			}
+		}
+	} else if lock.isLegacySourceReference() {
+		artifacts, err := sourceImportLegacyReferenceArtifacts(lock)
+		if err != nil {
+			return []Finding{sourceProjectionFinding(connector, file, "source-reference provenance: "+err.Error())}
+		}
+		for _, operation := range lock.Rest.Operations {
+			artifact, found := artifacts[operation.SourceURL]
+			if !found {
+				return []Finding{sourceProjectionFinding(connector, file, "source-reference operation "+operation.ID+" cites an undeclared source URL")}
+			}
+			expected[operation.ID] = expectedSource{
+				source:              sourceImportReferenceProvenance(artifact, operation.SourceLocation, sourceImportReferenceForm(artifact)),
+				providerOperationID: operation.OperationID,
 			}
 		}
 	} else {
@@ -2400,7 +2391,7 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 		if operation.Source.SHA256 != expectedOperation.source.SHA256 || operation.Source.Bytes != expectedOperation.source.Bytes || (expectedOperation.source.Location != "" && operation.Source.Location != expectedOperation.source.Location) {
 			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provenance drift for "+identity)}
 		}
-		if lock.SchemaVersion == 3 && (operation.ProviderOperationID != expectedOperation.providerOperationID || operation.Source.URL != expectedOperation.source.URL || operation.Source.Form != expectedOperation.source.Form || operation.Source.Version != expectedOperation.source.Version || operation.Source.DocumentID != expectedOperation.source.DocumentID || operation.Source.PublishedURL != expectedOperation.source.PublishedURL || operation.Source.PublishedCaptureURL != expectedOperation.source.PublishedCaptureURL || operation.Source.PublishedSHA256 != expectedOperation.source.PublishedSHA256 || operation.Source.PublishedBytes != expectedOperation.source.PublishedBytes || operation.Source.PublishedAdapter != expectedOperation.source.PublishedAdapter || operation.Source.ContentType != expectedOperation.source.ContentType || operation.Source.CitationURL != expectedOperation.source.CitationURL) {
+		if (lock.SchemaVersion == 3 || lock.isLegacySourceReference()) && (operation.ProviderOperationID != expectedOperation.providerOperationID || operation.Source.URL != expectedOperation.source.URL || operation.Source.Form != expectedOperation.source.Form || operation.Source.Version != expectedOperation.source.Version || operation.Source.DocumentID != expectedOperation.source.DocumentID || operation.Source.PublishedURL != expectedOperation.source.PublishedURL || operation.Source.PublishedCaptureURL != expectedOperation.source.PublishedCaptureURL || operation.Source.PublishedSHA256 != expectedOperation.source.PublishedSHA256 || operation.Source.PublishedBytes != expectedOperation.source.PublishedBytes || operation.Source.PublishedAdapter != expectedOperation.source.PublishedAdapter || operation.Source.ContentType != expectedOperation.source.ContentType || operation.Source.CitationURL != expectedOperation.source.CitationURL) {
 			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provenance drift for "+identity)}
 		}
 		if operation.Runtime.MergeBlocked != (len(operation.Runtime.Gaps) > 0) {
@@ -2408,6 +2399,40 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 		}
 	}
 	return nil
+}
+
+func sourceImportExpectedV3DescriptorProvenance(document sourceImportRESTDocument, operation sourceImportRESTOperation) sourceImportSource {
+	if document.isSourceReference() {
+		source := sourceImportReferenceProvenance(document.sourceArtifact(), operation.SourceLocation, sourceImportReferenceForm(document.sourceArtifact()))
+		source.DocumentID = document.ID
+		return source
+	}
+	form := document.sourceKind()
+	version := ""
+	if form == sourceImportDocumentKindOpenAPI {
+		if document.Artifact.Swagger != "" {
+			form = "swagger"
+			version = document.Artifact.Swagger
+		} else {
+			version = document.Artifact.OpenAPI
+		}
+	}
+	return sourceImportSource{
+		URL:                 document.Artifact.SourceURL,
+		SHA256:              strings.ToLower(document.Artifact.SHA256),
+		Bytes:               document.Artifact.Bytes,
+		Location:            operation.SourceLocation,
+		Form:                form,
+		Version:             version,
+		DocumentID:          document.ID,
+		PublishedURL:        document.PublishedSource.SourceURL,
+		PublishedCaptureURL: document.PublishedSource.CaptureURL,
+		PublishedSHA256:     strings.ToLower(document.PublishedSource.SHA256),
+		PublishedBytes:      document.PublishedSource.Bytes,
+		PublishedAdapter:    document.PublishedSource.Adapter,
+		ContentType:         document.ContentType,
+		CitationURL:         operation.CitationURL,
+	}
 }
 
 func validateSourceExecutableCoverage(bundle engine.Bundle, file string, descriptor sourceImportDescriptorDocument) []Finding {

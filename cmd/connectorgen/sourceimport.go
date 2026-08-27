@@ -1038,6 +1038,9 @@ func sourceImportLegacyReferenceArtifacts(lock sourceImportLock) (map[string]sou
 		count := 0
 		for _, operation := range lock.Rest.Operations {
 			if operation.SourceURL == supplement.SourceURL {
+				if operation.SourceLocation != supplement.SourceLocation {
+					return nil, fmt.Errorf("source-reference operation %q citation location %q does not match supplement %q location %q", operation.ID, operation.SourceLocation, supplement.SourceURL, supplement.SourceLocation)
+				}
 				count++
 			}
 		}
@@ -1927,16 +1930,9 @@ func sourceImportReferenceOperation(connector string, operation sourceImportREST
 		Protocol:            operation.Protocol,
 		SourceID:            operation.ID,
 		ProviderOperationID: operation.OperationID,
-		Source: sourceImportSource{
-			URL:      artifact.SourceURL,
-			SHA256:   strings.ToLower(artifact.SHA256),
-			Bytes:    artifact.Bytes,
-			Location: operation.SourceLocation,
-			Form:     form.Family,
-			Version:  form.Version,
-		},
-		Method: strings.ToLower(operation.Method),
-		Path:   operation.Path,
+		Source:              sourceImportReferenceProvenance(artifact, operation.SourceLocation, form),
+		Method:              strings.ToLower(operation.Method),
+		Path:                operation.Path,
 		Runtime: sourceRuntimeReachability{
 			MergeBlocked: true,
 			Gaps: []sourceContractGap{sourceContractGapFor(
@@ -1945,6 +1941,21 @@ func sourceImportReferenceOperation(connector string, operation sourceImportREST
 				"canonical provider source is cited without retained bytes; request, response, pagination, authentication, and execution contract details are source_contract_unavailable",
 			)},
 		},
+	}
+}
+
+// sourceImportReferenceProvenance is the complete provenance a
+// declaration-only source reference can honestly project. Both source import
+// and descriptor validation use it so source_reference documents cannot drift
+// from the retained legacy-reference form by selecting the wrong artifact.
+func sourceImportReferenceProvenance(artifact sourceImportArtifact, location string, form sourceDocumentForm) sourceImportSource {
+	return sourceImportSource{
+		URL:      artifact.SourceURL,
+		SHA256:   strings.ToLower(artifact.SHA256),
+		Bytes:    artifact.Bytes,
+		Location: location,
+		Form:     form.Family,
+		Version:  form.Version,
 	}
 }
 

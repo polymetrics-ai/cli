@@ -221,8 +221,24 @@ FAIL
 - F3: the two-operation primary/supplemental citation URL swap remained
   admitted even though the source counts were unchanged.
 
-### Green — pending execution
+### Green — 2026-08-27, before current-main integration
 
-After the smallest shared repair, repeat the focused command, merge current
-`origin/main` normally, then repeat it and record all generator/engine/runner
-gates in `VERIFICATION.md`.
+```text
+go test -timeout 20m ./cmd/connectorgen \
+  -run 'Test(SourceImportReferenceDescriptorsValidateThroughCLI|OperationEvidenceLegacyByteBackedLocksRejectReferenceOnlyFields|SourceImportLegacyReferenceRejectsCrossSourceCitationSwap)$' \
+  -count=1 -v
+PASS
+```
+
+- One shared reference-provenance constructor is used by import and validation.
+  It selects `sourceArtifact()` for schema-v3 references, preserves the
+  reference form/version, and makes legacy cited descriptors schema v3 without
+  changing byte-backed v1/v2 expectations.
+- The operation-evidence reader scans raw v2 field presence before its tolerant
+  path. Only a non-empty `rest.source_kind` reaches the strict legacy-reference
+  parser; null and all reference-only overlays fail closed while an unchanged
+  byte-backed v2 fixture still yields one evidence operation.
+- Supplement-attributed operations must repeat the supplement's declared exact
+  source location, so the count-preserving cross-source swap is rejected.
+- Next: merge `origin/main` normally and repeat this suite plus the required
+  generator, engine, runner, docs, boundary, and release checks.
