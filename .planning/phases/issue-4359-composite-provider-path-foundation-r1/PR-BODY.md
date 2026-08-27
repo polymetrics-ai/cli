@@ -46,8 +46,8 @@ generic path-template substitution feature.
 - `make tidy-check lint smoke-no-build agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check`
 - `go test -timeout 20m ./internal/cli`
 
-The last two commands were still completing when this PR body was prepared;
-their final results are recorded in the verification artifact and handoff.
+All listed commands passed locally; their exact results are recorded in the
+verification artifact and handoff.
 `source-import circleci --check` is deliberately unavailable on this foundation
 base: Batch 1's retained CircleCI source-lock directory is not imported here.
 
