@@ -78,6 +78,16 @@ another worker's branch. Final validation is serialized with 12 GiB free disk.
 
 ## r4 direct-PR completion state
 
+## F1 source/local request-input closure state — 2026-08-27
+
+Independent current-main audit F1 is active. The #4356 branch is at
+`5d6cc316c17f63368f072171dd4d2fe80a7f75fb` on `main`
+`1324c52bab0b224ed8958858af7676b8b8e191b4`; no production edit has started.
+The current probe target is the retained Asana `get_access_requests` source
+operation. Required red/green and exact final verification are recorded in
+`PLAN.md` and `TDD-LEDGER.md`. Do not move the pending Firstmate instruction
+until the repair is pushed and its remote base/head are verified.
+
 The immutable #4356 review set is frozen and locally green on
 `fm/cli-source-bound-read-execution-r1-continuation`. The final repair adds
 closed source paging, public-only origin preflight before `withApp`, direct

@@ -1,5 +1,45 @@
 # Source-bound read execution foundation
 
+## F1 source/local request-input closure — 2026-08-27
+
+### Task delivery header
+
+- **Issue:** Refs #4352; repair the existing #4356 branch after independent
+  current-main audit finding F1 at `5d6cc316c17f63368f072171dd4d2fe80a7f75fb`.
+- **Base / delivery:** `main` at `1324c52bab0b224ed8958858af7676b8b8e191b4`;
+  normal fast-forward commits only to
+  `fm/cli-source-bound-read-execution-r1-continuation`. PR #4356 remains open;
+  no force push or merge is authorized.
+- **Problem:** A retained source-bound GET can retain a declaration-owned
+  `path`/`query` parameter absent from the exact locked source contract. The
+  audited Asana `get_access_requests` `query.rogue` probe passes both
+  `source-import --check` and `validate`.
+- **Scope:** Close source-to-local *and* local-to-source request inputs for
+  admitted source-bound reads. Optional source filters may stay omitted, but a
+  local operation parameter or CLI `maps_to` input must be source-declared.
+  Provider paging remains a separate closed pagination contract; headers/body
+  are admitted only when the retained source contract admits that class.
+- **Out of scope:** No source locks/captures, provider bytes, generic HTTP
+  executor, credentials, live I/O, other worktrees, or #4351-owned generic
+  admission rules.
+
+### Inline GSD / TDD plan
+
+The compatible isolated Pi worker runtime is unavailable and the canonical
+delivery contract forbids role spawning, so `discuss-phase`,
+`plan-phase --tdd`, `execute-phase`, `verify-work`, and `code-review` are
+resolved and executed inline for this bounded repair. Required skills used:
+`golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`,
+`golang-security`, `golang-safety`, `golang-design-patterns`,
+`golang-structs-interfaces`, and `golang-lint`.
+
+| Slice | Red evidence | Green acceptance |
+| --- | --- | --- |
+| Operation-only extra | Add `query.rogue` to retained Asana `get_access_requests`; prove source-import check and validate currently accept it. | Projection removes it from the derived parameter block; source-import check detects that drift and validate reports an exact source-projection finding. |
+| Operation + CLI extra | Add the same operation input and `--rogue -> query.rogue`; prove both commands currently accept the altered bundle. | Check and validation reject the operation and CLI declaration pair; valid retained optional filters remain untouched. |
+| Input classes | Use source-bound fixtures with path/query plus unwanted header/body mappings. | Closure permits only names/classes retained by the descriptor, preserves config-bound path fields and closed pagination placement, and cannot make a header/body executor claim. |
+| Regression / delivery | Run affected generator/runtime/CLI packages, generated source and documentation gates, then fresh credential-free Asana census. | Publish one normal reviewed repair and record its exact SHA for a separate audit. |
+
 ## Repair r4 task delivery header
 
 - Issue: Refs #4352 — source-bound read execution foundation; repair existing PR #4356.

@@ -1,5 +1,22 @@
 # TDD Ledger — #4352 source-bound read execution foundation
 
+## F1 source/local request-input closure — 2026-08-27
+
+- **Planned red:** in a copied retained Asana bundle, append optional
+  `query.rogue` to `get_access_requests`; then repeat with
+  `--rogue -> query.rogue` on `access-requests get-access-requests`.
+  Before the repair, `source-import --read-projection-only --check` and
+  `validate` accept both altered inputs despite their absence from the pinned
+  descriptor.
+- **Green target:** source import derives the closed operation parameter set
+  (removing the unknown local input), so check mode reports drift; validation
+  independently rejects each altered bundle. It must treat source paging as
+  declared pagination rather than a raw caller parameter and permit
+  header/body only where the source request declares those classes.
+- **Review target:** assert both source-to-local requiredness and
+  local-to-source closure; an unknown operation parameter must not become
+  harmless merely because no CLI flag maps to it.
+
 ## Repair r4 frozen red/green evidence
 
 | Finding | Red before implementation | Required complete green result |

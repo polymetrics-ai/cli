@@ -1,5 +1,19 @@
 # Verification — #4352 source-bound read execution foundation
 
+## F1 source/local request-input closure checklist — 2026-08-27
+
+- [ ] Operation-only `query.rogue` red recorded; source-import check and
+  validate fail after repair.
+- [ ] Operation-plus-CLI `--rogue -> query.rogue` red recorded; source-import
+  check and validate fail after repair.
+- [ ] Header/body class closure, source paging placement, and valid Asana
+  optional-filter preservation have focused regressions.
+- [ ] Affected Go packages and full `cmd/connectorgen` pass.
+- [ ] Source import, validate, surface sync, operation evidence, declaration
+  admission, runtime preflight, canon, docs/website validation, and an actual
+  fresh 212-command credential-boundary census pass.
+- [ ] Exact pushed SHA/base are recorded; a separate fresh audit is pending.
+
 ## Repair r4 checklist
 
 - [x] AUDIT-001 paging red/green: projection, engine/direct read, CLI/App parity, and generated help.
