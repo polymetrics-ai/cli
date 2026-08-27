@@ -3903,6 +3903,116 @@ func TestSourceProjectionSourceCitedMutationDispositionRejectsPOSTGraphQLQuery(t
 	}
 }
 
+// TestSourceProjectionCitedOnlyMutationDispositionsKeepReferenceClosed covers
+// the source-import result used by the Batch 6–7 cited-only cohorts. A source
+// reference has no request/response contract, so a connector-owned mutation
+// disposition cannot add a second runtime explanation to its exact closed
+// projection.
+func TestSourceProjectionCitedOnlyMutationDispositionsKeepReferenceClosed(t *testing.T) {
+	t.Parallel()
+	lock, err := parseSourceImportLock(sourceImportV3SourceReferenceLock(t, "salesloft", "people", "https://docs.provider.example.test/salesloft/people", strings.Repeat("b", 64), 512, "POST", "/v2/People"), "salesloft")
+	if err != nil {
+		t.Fatalf("parse cited-only mutation lock: %v", err)
+	}
+	imported, err := importSourceLockResult(context.Background(), lock, nil, defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import cited-only mutation lock: %v", err)
+	}
+	if len(imported.Operations) != 1 {
+		t.Fatalf("cited-only mutation operation count = %d, want 1", len(imported.Operations))
+	}
+	operation := imported.Operations[0]
+	citation := sourceOperationCitation{SourceID: operation.SourceID, Method: operation.Method, Path: operation.Path}
+	partialBundle := engine.Bundle{Name: "salesloft", CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+		Path:         "people create",
+		Intent:       "reverse_etl",
+		Availability: "implemented",
+		APISurface:   []engine.CLISurfaceEndpointRef{{Method: "POST", Path: "/v2/People"}},
+	}}}}
+
+	tests := []struct {
+		name  string
+		apply func(*sourceImportResult) error
+	}{
+		{
+			name: "non executable",
+			apply: func(result *sourceImportResult) error {
+				return sourceProjectionApplyNonExecutableMutationDispositions(engine.Bundle{Name: "salesloft", CLISurface: &engine.CLISurface{}}, result, []sourceNonExecutableMutationDisposition{{Source: citation, Reason: "provider mutation needs a typed foundation"}})
+			},
+		},
+		{
+			name: "partial coverage",
+			apply: func(result *sourceImportResult) error {
+				return sourceProjectionApplyPartialMutationCoverageDispositions(partialBundle, result, []sourcePartialMutationCoverageDisposition{{Source: citation, Foundation: sourceContractUnavailableFoundation, Reason: "provider mutation needs a typed foundation"}})
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := sourceImportResult{DescriptorSchemaVersion: imported.DescriptorSchemaVersion, Operations: []sourceOperationDescriptor{operation}}
+			before, err := marshalSourceImportResult(result)
+			if err != nil {
+				t.Fatalf("marshal closed reference before disposition: %v", err)
+			}
+			err = tt.apply(&result)
+			if err == nil || !strings.Contains(err.Error(), "closed source-reference projection") || !strings.Contains(err.Error(), operation.SourceID) || !strings.Contains(err.Error(), operation.Source.Location) {
+				t.Fatalf("cited-only disposition error = %v, want actionable closed-reference refusal for %q at %q", err, operation.SourceID, operation.Source.Location)
+			}
+			after, marshalErr := marshalSourceImportResult(result)
+			if marshalErr != nil {
+				t.Fatalf("marshal closed reference after disposition refusal: %v", marshalErr)
+			}
+			if !bytes.Equal(after, before) {
+				t.Fatalf("cited-only disposition changed closed descriptor:\nbefore=%s\nafter=%s", before, after)
+			}
+		})
+	}
+}
+
+// TestSourceProjectionMutationDispositionInputRemainsFailClosed keeps the
+// normal byte-backed path strict while the cited-only guard above is added.
+func TestSourceProjectionMutationDispositionInputRemainsFailClosed(t *testing.T) {
+	t.Parallel()
+	operation := sourceCitedMutationTestOperation("copper", "copper.rest.createPerson", "POST", "/people")
+	citation := sourceOperationCitation{SourceID: operation.SourceID, Method: operation.Method, Path: operation.Path}
+	valid := sourceNonExecutableMutationDisposition{Source: citation, Reason: "provider mutation needs a typed foundation"}
+
+	unchanged := sourceImportResult{Operations: []sourceOperationDescriptor{operation}}
+	before, err := marshalSourceImportResult(unchanged)
+	if err != nil {
+		t.Fatalf("marshal absent disposition baseline: %v", err)
+	}
+	if err := sourceProjectionApplyNonExecutableMutationDispositions(engine.Bundle{Name: "copper", CLISurface: &engine.CLISurface{}}, &unchanged, nil); err != nil {
+		t.Fatalf("absent mutation disposition: %v", err)
+	}
+	after, err := marshalSourceImportResult(unchanged)
+	if err != nil {
+		t.Fatalf("marshal absent disposition result: %v", err)
+	}
+	if !bytes.Equal(before, after) {
+		t.Fatalf("absent mutation disposition changed byte-backed descriptor:\nbefore=%s\nafter=%s", before, after)
+	}
+
+	for _, tt := range []struct {
+		name         string
+		dispositions []sourceNonExecutableMutationDisposition
+		want         string
+	}{
+		{name: "duplicate", dispositions: []sourceNonExecutableMutationDisposition{valid, valid}, want: "duplicate source operation"},
+		{name: "unknown", dispositions: []sourceNonExecutableMutationDisposition{{Source: sourceOperationCitation{SourceID: "copper.rest.unknown", Method: "POST", Path: "/people"}, Reason: valid.Reason}}, want: "unknown source operation"},
+		{name: "mismatched", dispositions: []sourceNonExecutableMutationDisposition{{Source: sourceOperationCitation{SourceID: operation.SourceID, Method: "PATCH", Path: operation.Path}, Reason: valid.Reason}}, want: "does not match provider source operation"},
+		{name: "non mutating", dispositions: []sourceNonExecutableMutationDisposition{{Source: sourceOperationCitation{SourceID: operation.SourceID, Method: "GET", Path: operation.Path}, Reason: valid.Reason}}, want: "not mutating"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			result := sourceImportResult{Operations: []sourceOperationDescriptor{operation}}
+			err := sourceProjectionApplyNonExecutableMutationDispositions(engine.Bundle{Name: "copper", CLISurface: &engine.CLISurface{}}, &result, tt.dispositions)
+			if err == nil || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("%s mutation disposition error = %v, want %q", tt.name, err, tt.want)
+			}
+		})
+	}
+}
+
 func TestSourceProjectionSourceCitedMutationDispositionLeavesExistingProjectionByteIdentical(t *testing.T) {
 	root, err := repoRoot()
 	if err != nil {

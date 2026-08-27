@@ -10,12 +10,30 @@
 
 ## Red
 
-Pending. Production code has not been edited. The exact failing command and
-observed failure will be recorded before the green implementation.
+2026-08-27 — executed before production edits:
+
+```text
+go test -timeout 20m ./cmd/connectorgen -run 'TestSourceProjection(CitedOnlyMutationDispositionsKeepReferenceClosed|MutationDispositionInputRemainsFailClosed|SourceCitedNonExecutableMutationDispositionRejectsCompleteAction|SourceCitedPartialMutationCoveragePreservesImplementedIncompleteAction|SourceCitedMutationDispositionLeavesExistingProjectionByteIdentical)$' -count=1 -v
+```
+
+Failed as intended only in the new cited-only cases:
+
+- `non executable`: `sourceProjectionApplyNonExecutableMutationDispositions`
+  returned `nil` after layering its runtime disposition/gap onto
+  `salesloft.rest.people.post`.
+- `partial coverage`: `sourceProjectionApplyPartialMutationCoverageDispositions`
+  likewise returned `nil` after adding partial-coverage metadata/gap.
+
+Both failures prove the contradiction before descriptor output: the test
+expects an actionable closed-reference refusal and byte-for-byte unchanged
+descriptor. Existing contract-complete controls passed: complete-action and
+implemented-action refusal, valid partial coverage with an existing typed
+foundation, existing GitHub projection byte stability, and the new absent,
+duplicate, unknown, mismatched, and non-mutating citation matrix.
 
 ## Green
 
-Pending red evidence.
+Pending implementation.
 
 ## Refactor
 
