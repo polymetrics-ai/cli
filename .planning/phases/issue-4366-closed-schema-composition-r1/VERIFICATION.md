@@ -38,7 +38,8 @@ were refreshed.
 - Focused green suite passed for source import/projection, engine composition,
   commandrunner preflight, deferred no-artifact behavior, and the 608-row
   fixture.
-- `go test -timeout 20m ./cmd/connectorgen -count=1` passed in `215.464s`.
+- Final `go test -timeout 20m ./cmd/connectorgen -count=1` passed in
+  `426.837s` after the review-fix commit.
 - `go test -timeout 20m ./internal/connectors/engine -count=1` passed in
   `10.729s`.
 - `go test -timeout 20m ./internal/connectors/commandrunner -count=1` passed
@@ -81,3 +82,10 @@ were refreshed.
   repository's 550+ connector suite; the repository instruction directs that
   CI carry that broad aggregate after the focused packages and individual
   `make verify` gates above pass.
+
+### Review handoff
+
+`REVIEW.md` freezes the one accepted review finding, its fix, and the clean
+fresh Codex re-review at `6c9b4d50d284344a919317956a456c6857c39f19`. The PR
+will use the repository's trusted-author Claude automatic-review route after
+it is opened; no provider or credential review evidence is claimed.
