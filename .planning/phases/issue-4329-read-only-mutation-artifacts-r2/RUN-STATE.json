@@ -1,0 +1,11 @@
+{
+  "issue": 4329,
+  "state": "current_main_noop_proof_verified_pending_push",
+  "base": "main",
+  "working_branch": "fix/4329-read-only-mutation-artifacts",
+  "scope": "shared connectorgen source-import/projection/coverage behavior and issue evidence only",
+  "current_main": "1324c52bab0b224ed8958858af7676b8b8e191b4",
+  "head_after_noop_integration": "36ac3b0e8c424efda8a73345932af57138526a49",
+  "merge_base": "1324c52bab0b224ed8958858af7676b8b8e191b4",
+  "next": "push this current-main evidence checkpoint to PR #4357, verify its API head/base, then obtain a fresh independent Codex audit and wait for required CI"
+}
