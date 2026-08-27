@@ -111,6 +111,69 @@ The next and only acceptance action is a normal push of the reviewed commit to
 the existing #4356 branch followed by a fresh independent audit of that exact
 remote SHA. Do not merge.
 
+## R5-pass current-main reconciliation — 2026-08-27
+
+### Task delivery header
+
+- **Issue:** Refs #4352 — source-bound read execution foundation; continuing
+  existing PR #4356.
+- **Base branch:** `main` at
+  `b9b2478b3b2451d632d28b9aa138a170ad835110` (#4357).
+- **Merges into:**
+  `fm/cli-source-bound-read-execution-r1-continuation` → `main`.
+- **Delivery:** keep PR #4356 open against `main`; integrate current `main`
+  only by a normal merge so the existing remote branch can be advanced
+  non-force, regenerate all affected artifacts, prove the repairs again, and
+  obtain a fresh independent audit of the new exact head. No merge to `main`
+  is authorized.
+- **Working branch:** `fm/cli-source-bound-read-execution-r1-continuation`,
+  starting clean at `566ab08eb671b2e322483c6a8629e7c5d3747db6`.
+- **Task:** reconcile #4356's closed source-bound read and promoted Asana
+  mutation contracts with #4357's write-disabled mutation-artifact retention,
+  without widening an executor, changing retained source bytes/locks, or
+  regressing any frozen finding.
+- **Verification:** conflict review; focused and full changed-package tests;
+  source import, validation, surface sync, operation evidence, admission,
+  runtime preflight, canon, docs/website checks; generated artifact checks;
+  rebuilt credential-free 212-command Asana census; remote PR head/base read
+  back; and a new independent exact-head audit.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| All six R3 findings remain closed after #4357 | live | The pre-existing red/green regressions for paging, origin order, direct stream binding, mutation promotion, isolated fixed-100, and generated documentation remain green on the integrated tree. |
+| #4357 read-only mutation retention remains intact | live | Its focused source-import/projection and bundle metadata regressions pass, proving disabled mutation artifacts stay declared rather than being pruned or made executable. |
+| Derived surfaces describe one exact contract | live | Regeneration leaves source/JSON/manual/skill/website checks with zero drift; generated Asana counts are 106 direct reads + 12 ETL + 94 reverse ETL = 212 implemented, 37 unavailable. |
+| Runtime reachability remains bounded | live | Every implemented Asana command reaches only `missing --credential` in its own credential-free project; no invocation is unknown, blocked, or provider I/O. |
+
+### Frozen finding carry-forward
+
+`/Users/karthiksivadas/karthik-agent-workspace/data/cli-source-bound-read-execution-reaudit-codex-r3/report.md`
+was reread in full before reconciliation. AUDIT-001 through AUDIT-006 remain
+frozen and green at the R5-audited head `566ab08…`; #4357 may be integrated
+only if it preserves every listed invariant. The R5 independent audit at
+`/Users/karthiksivadas/karthik-agent-workspace/data/cli-source-bound-read-execution-reaudit-codex-r5/report.md`
+is evidence for that immutable parent only, not authorization to merge or to
+skip the required new exact-head audit.
+
+### Inline GSD/TDD implementation plan
+
+The canonical single-worker contract forbids role spawning and this runtime has
+no compatible isolated GSD worker. The generated `discuss-phase` and
+`plan-phase --tdd` prompts were therefore executed inline. Required skills:
+`golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`,
+`golang-security`, `golang-safety`, `golang-design-patterns`,
+`golang-structs-interfaces`, `golang-context`, `golang-concurrency`,
+`golang-documentation`, `golang-lint`, `vercel-react-best-practices`, and
+`vercel-composition-patterns`. The unavailable `frontend-design` and
+`web-design-guidelines` skills are not substituted; this scope updates only
+generated website data, not React UI.
+
+| Slice | Red evidence | Green acceptance |
+| --- | --- | --- |
+| Current-main integration | The branch does not contain #4357 and its shared source-projection/engine contracts cannot be assumed compatible. | A normal merge resolves every conflict by preserving both source-bound-read and write-disabled-artifact assertions; affected regressions pass. |
+| Derived-surface reconciliation | Generated Asana source/JSON/manual/website artifacts may be stale after integration. | Canonical generators/checks report no drift and semantic counts equal 106/12/94/212/37. |
+| Runtime/review proof | The R5 census and audit cover the immutable old head only. | New head passes full changed packages and the fresh 212-command credential-boundary census, then waits for an independent audit. |
+
 ## Fresh-audit F6 / AUDIT-002 convergence
 
 - **Classification:** `fix_created:07251df15c904cad0f91a43724810dffa133b81d`.
