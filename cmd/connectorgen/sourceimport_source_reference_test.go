@@ -673,6 +673,55 @@ func TestOperationEvidenceProviderAbsenceRejectsReferenceOnlyFields(t *testing.T
 	}
 }
 
+// TestOperationEvidenceLegacyReferenceCannotHideBehindProviderAbsence uses the
+// complete immutable Outreach inventory, rather than an isolated field overlay.
+// A valid source-reference form is still an inventory and must be strictly
+// admitted or rejected before either provider-absence result can discard it.
+func TestOperationEvidenceLegacyReferenceCannotHideBehindProviderAbsence(t *testing.T) {
+	t.Parallel()
+	states := []struct {
+		name  string
+		apply func(map[string]any)
+	}{
+		{"skipped", func(lock map[string]any) {
+			lock["state"] = "skipped"
+			lock["skip"] = map[string]any{
+				"attempted_url": outreachOpenAPIURL,
+				"reason":        "provider source unavailable",
+				"detail":        "adversarial provider-absence overlay",
+			}
+		}},
+		{"dynamic", func(lock map[string]any) {
+			lock["state"] = "dynamic"
+			lock["dynamic"] = map[string]any{
+				"reason": "provider inventory is dynamic",
+				"detail": "adversarial provider-absence overlay",
+			}
+		}},
+	}
+	for _, state := range states {
+		state := state
+		t.Run(state.name, func(t *testing.T) {
+			var lock map[string]any
+			if err := json.Unmarshal(sourceImportOutreachReferenceLock(t), &lock); err != nil {
+				t.Fatal(err)
+			}
+			state.apply(lock)
+			raw, err := json.Marshal(lock)
+			if err != nil {
+				t.Fatal(err)
+			}
+			path := filepath.Join(t.TempDir(), "outreach-operation-source-lock.json")
+			if err := os.WriteFile(path, raw, 0o644); err != nil {
+				t.Fatal(err)
+			}
+			if _, err := readOperationEvidenceSourceLock(path, "outreach"); err == nil {
+				t.Fatalf("schema-v2 source-reference inventory was accepted behind state=%q", state.name)
+			}
+		})
+	}
+}
+
 // TestSourceReferenceDescriptorsRejectExactContractTampering ensures a
 // source-reference operation remains the declaration-only lock projection. It
 // intentionally checks both the retained legacy adapter and the general v3
@@ -838,6 +887,71 @@ func TestSourceReferenceSurfaceSyncRejectsTamperedDescriptor(t *testing.T) {
 				t.Fatalf("surface-sync source-reference tamper error = %v, want exact-contract refusal", err)
 			}
 		})
+	}
+}
+
+// TestSourceReferenceSurfaceSyncRejectsMarkerBypass proves the lock/descriptor
+// validation gateway cannot be selected by a mutable source-document kind. The
+// citation raw fields remain while the marker and exact foundation gap are
+// tampered, so accepting this input would permit materialization of evidence
+// that has no execution contract.
+func TestSourceReferenceSurfaceSyncRejectsMarkerBypass(t *testing.T) {
+	t.Parallel()
+	connector := "fixture"
+	baselineRaw := sourceImportV3SourceReferenceLock(t, connector, "fixture-source", "https://docs.polymetrics.invalid/fixture/openapi", strings.Repeat("a", 64), 512, "GET", "/widgets")
+	lock, err := parseSourceImportLock(baselineRaw, connector)
+	if err != nil {
+		t.Fatal(err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, nil, defaultSourceImportLimits())
+	if err != nil {
+		t.Fatal(err)
+	}
+	descriptorRaw, err := marshalSourceImportResult(result)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var descriptor sourceImportDescriptorDocument
+	if err := decodeSourceStrictJSON(descriptorRaw, &descriptor); err != nil {
+		t.Fatal(err)
+	}
+	descriptor.MergeBlocked = false
+	descriptor.Gaps = nil
+	for index := range descriptor.Operations {
+		descriptor.Operations[index].Runtime.MergeBlocked = false
+		descriptor.Operations[index].Runtime.Gaps = nil
+	}
+
+	var tampered map[string]any
+	if err := json.Unmarshal(baselineRaw, &tampered); err != nil {
+		t.Fatal(err)
+	}
+	document := tampered["rest"].(map[string]any)["source_documents"].([]any)[0].(map[string]any)
+	document["kind"] = sourceImportDocumentKindOpenAPI
+	// source_reference intentionally remains present: the malformed checked-in
+	// lock must be parsed, not waved through by a header-only kind sniff.
+
+	lockRaw, err := json.Marshal(tampered)
+	if err != nil {
+		t.Fatal(err)
+	}
+	descriptorRaw, err = json.Marshal(descriptor)
+	if err != nil {
+		t.Fatal(err)
+	}
+	bundleDir := filepath.Join(t.TempDir(), connector)
+	sourcesDir := filepath.Join(bundleDir, "sources")
+	if err := os.MkdirAll(sourcesDir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(sourcesDir, connector+"-operation-source-lock.json"), lockRaw, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(sourcesDir, connector+"-operation-descriptor.json"), descriptorRaw, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := syncCheckedInSourceProjection(bundleDir, connector, true); err == nil {
+		t.Fatal("surface-sync accepted a citation descriptor after marker and exact-gap tampering")
 	}
 }
 

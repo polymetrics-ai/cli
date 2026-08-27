@@ -504,7 +504,7 @@ func readOperationEvidenceSourceLock(path, connector string) (operationEvidenceS
 	// evidence-only because they have no document operations to suppress.
 	isProviderAbsence := lock.State == "skipped" || lock.State == "dynamic"
 	hasV3DocumentInventory := lock.SchemaVersion == 3 && len(lock.Rest.SourceDocuments) != 0
-	if isProviderAbsence && !hasV3DocumentInventory {
+	if isProviderAbsence && !hasV3DocumentInventory && !legacyReference {
 		absence := operationEvidenceAbsence{State: lock.State}
 		if lock.Skip != nil {
 			absence.Reason = lock.Skip.Reason

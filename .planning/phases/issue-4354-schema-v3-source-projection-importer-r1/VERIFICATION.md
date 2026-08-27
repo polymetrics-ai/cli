@@ -227,3 +227,38 @@ ordinary merge commit `449f18cdd`.
   provider proof, credentials, source-byte retention/re-pin, or certification.
   A fresh independent exact-head Codex audit remains the required next gate;
   do not merge.
+
+## Exact-head R3 B1/B2 repair — pending execution (2026-08-27)
+
+- B1 must run `skipped` and `dynamic` against the complete valid legacy-v2
+  259-operation reference fixture. Isolated raw-field overlays are supporting
+  coverage only, never a substitute.
+- B2 must prove `surface-sync` no longer makes lock validation conditional on
+  a marker-only header scan. The adversarial lock retains citation raw fields
+  while the discriminator and descriptor gap are tampered.
+- Before final validation and normal non-force push, merge
+  `origin/main@2165619ec8f5f9d4141b491b7a5a64bc460d0c71` into this branch as
+  instructed by Firstmate. Resolve only a generator-owned current artifact if
+  that merge has such a conflict.
+- Required final gates: focused B1/B2 plus provenance/gap tests; full changed
+  package and engine/commandrunner packages; `go vet`; both builds;
+  tidy/lint/docs/smoke; agent contract; `connectorgen validate`,
+  `surface-sync --check`, and `operation-evidence . --check`; connector
+  boundary and release-workflow checks; credential-free zero-command
+  observation; inline code review; no-mistakes CI-ready outcome; and a fresh
+  independent exact-head audit. No provider, live credential, certification,
+  source re-pin, or reverse-ETL action is permitted.
+
+### Focused red/green complete
+
+- **Red:** `TestOperationEvidenceLegacyReferenceCannotHideBehindProviderAbsence`
+  failed for both `skipped` and `dynamic` as a complete 259-row fixture;
+  `TestSourceReferenceSurfaceSyncRejectsMarkerBypass` accepted a descriptor
+  whose v3 citation marker and exact gaps were tampered.
+- **Green:** the combined B1/B2, exact descriptor/provenance, and 259-row
+  suite passed. `readOperationEvidenceSourceLock` now blocks absence only when
+  there is neither a v3 document inventory nor a legacy reference inventory;
+  `surface-sync` fully parses and descriptor-binds all checked-in locks before
+  projection.
+- **Not yet final:** current-main merge, scoped/full gate run, inline code
+  review, no-mistakes pipeline, CI, and independent exact-head audit remain.

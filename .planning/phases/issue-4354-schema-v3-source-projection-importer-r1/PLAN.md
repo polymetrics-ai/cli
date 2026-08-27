@@ -173,3 +173,57 @@ surface delta of `0`.
    surface-sync gateway. Do not add an Outreach lock, command, request
    contract, executor, provider I/O, hash certification gate, or generic
    route/evidence escape.
+
+## Exact-head R3 admission repair (2026-08-27)
+
+## Task Delivery Header
+
+- Issue: Refs #4354 — feat(connectors): make Outreach full-surface pilot auditable
+- Base branch: `main` (`b9b2478b3b2451d632d28b9aa138a170ad835110` at repair start; merge current `origin/main@2165619ec8f5f9d4141b491b7a5a64bc460d0c71` normally before final validation and publication).
+- Merges into: `main`.
+- Delivery: Existing PR #4358 remains open; the same branch receives a normal non-force push of a committed B1/B2 repair, then an independent exact-head audit and CI run are requested. No merge authority.
+- Working branch: `feat/4354-schema-v3-source-projection`.
+- Task: Close the legacy-v2 provider-absence and schema-v3 marker-bypass admission defects without changing the declaration-only Outreach usable-surface delta of zero.
+- Verification: Focused red/green tests, changed and dependent package tests, generator/validation gates, credential-free boundary inspection, an inline code review, no-mistakes pipeline, CI, and independent exact-head audit.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| Complete legacy-v2 citation inventory cannot be hidden by `skipped` or `dynamic` | live | Each state is overlaid on the full valid 259-row reference fixture and `readOperationEvidenceSourceLock` must reject it before a provider-absence result with zero operations can be returned. |
+| Citation-only v3 data cannot bypass strict lock/descriptor binding through a mutable `kind` marker | live | A genuine v3 reference lock is mutated only by changing `kind`, while its citation fields remain and the descriptor’s exact gap is removed; `surface-sync --check` must fail before projection. |
+| Valid Outreach citation evidence remains truthful | live | The exact fixture asserts 259 unique source-linked rows (253 OpenAPI, 6 Custom Objects), six disabled lane keys, exact `source_contract_unavailable`, and zero generated commands. |
+| A credential-bound Outreach command reaches preflight | fake | The required usable-surface delta is zero: no Outreach command exists and fabricating one would violate the task. A credential-free built binary must instead return `unknown command \"outreach\"`. |
+
+### B1/B2 red-green slices
+
+1. **Red B1:** add a table-driven `skipped`/`dynamic` regression using the
+   immutable full legacy reference fixture, not an isolated raw-wire overlay.
+   It must show the pre-repair code returns a provider-absence envelope rather
+   than parsing its 259 reference operations.
+2. **Green B1:** detect the complete legacy reference form and strictly parse
+   and validate it before *any* provider-absence return. Keep the null/empty
+   discriminator and ordinary legacy reference-only field drift rejections.
+3. **Red B2:** mutate a genuine schema-v3 source-reference lock by changing
+   the source document `kind` away from `source_reference`, retaining its raw
+   `source_reference` citation, and removing/replacing the descriptor’s exact
+   `source_contract_unavailable` gap. It must currently pass the mutable
+   header-scan gateway and reach projection.
+4. **Green B2:** fully parse the checked-in lock before projection and always
+   validate the descriptor against the parsed lock. A citation-only descriptor
+   must bind exact connector/protocol/method/path/provenance, empty execution
+   contracts, `MergeBlocked:true`, and exactly the named foundation gap.
+5. **Refactor / boundary review:** retain provenance-swap and exact-gap
+   protections. Do not introduce provider I/O, credentials, hash/certification
+   promotion, an executor, a generic request surface, source mapping, or an
+   Outreach command.
+
+### GSD execution record
+
+`scripts/gsd doctor`, `sources`, and generated prompts for `discuss-phase`,
+`plan-phase --tdd`, `execute-phase`, `verify-work`, and `code-review` were
+resolved for this repair. The canonical single-worker contract forbids role
+spawning, so those commands are executed inline; this plan, TDD ledger, and
+verification checklist are the durable fallback record. Required skills:
+`golang-how-to`, `golang-testing`, `golang-error-handling`, `golang-security`,
+`golang-safety`, and `golang-lint`. No user-facing CLI flag/help/manual/website
+contract changes are planned; this only makes invalid source-import evidence
+fail closed.

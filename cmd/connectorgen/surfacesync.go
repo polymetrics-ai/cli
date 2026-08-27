@@ -239,22 +239,16 @@ func syncCheckedInSourceProjection(bundleDir, connector string, check bool) (sou
 	if descriptor.SchemaVersion != 2 && descriptor.SchemaVersion != 3 {
 		return sourceProjectionStats{}, fmt.Errorf("source descriptor schema_version = %d, want 2 or 3", descriptor.SchemaVersion)
 	}
-	// A source reference is evidence only. Validate its descriptor against the
-	// exact lock-owned contract before passing it to a materializer, so a
-	// removed gap or invented execution field cannot turn citation data into a
-	// surface-sync input.
-	reference, err := sourceImportLockDeclaresSourceReference(lockRaw)
+	// The checked-in lock owns every descriptor contract. Parse and bind it
+	// before projection rather than using a mutable header marker to decide
+	// whether validation applies: otherwise changing a citation document's kind
+	// can turn declaration-only evidence into a materialization input.
+	lock, err := parseSourceImportLock(lockRaw, connector)
 	if err != nil {
-		return sourceProjectionStats{}, fmt.Errorf("parse source lock reference header: %w", err)
+		return sourceProjectionStats{}, fmt.Errorf("parse source lock: %w", err)
 	}
-	if reference {
-		lock, err := parseSourceImportLock(lockRaw, connector)
-		if err != nil {
-			return sourceProjectionStats{}, fmt.Errorf("parse source lock: %w", err)
-		}
-		if findings := validateSourceDescriptorAgainstLock(connector, filepath.ToSlash(filepath.Join("sources", connector+"-operation-descriptor.json")), lock, descriptor); len(findings) != 0 {
-			return sourceProjectionStats{}, fmt.Errorf("validate canonical source descriptor: %s", findings[0].Message)
-		}
+	if findings := validateSourceDescriptorAgainstLock(connector, filepath.ToSlash(filepath.Join("sources", connector+"-operation-descriptor.json")), lock, descriptor); len(findings) != 0 {
+		return sourceProjectionStats{}, fmt.Errorf("validate canonical source descriptor: %s", findings[0].Message)
 	}
 	return projectSourceDescriptorToBundle(bundleDir, sourceImportResult{
 		Operations:     descriptor.Operations,

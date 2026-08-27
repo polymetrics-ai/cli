@@ -64,6 +64,73 @@ reuse or weaken it.
 Pending. Record error-wrapping, defensive-copy, ordering, provenance, and
 generic-escape review outcomes after the final implementation.
 
+## Exact-head R3 B1/B2 repair — planned before production edits (2026-08-27)
+
+| Slice | Red assertion | Green assertion | Boundary retained |
+| --- | --- | --- | --- |
+| B1 full legacy reference with provider absence | The complete 259-row valid legacy reference fixture plus either `state: skipped` or `state: dynamic` is returned as provider absence and loses its source operations. | Both inputs fail strict reference validation before absence projection. | Null/empty discriminators and ordinary reference-only legacy field drift still fail; ordinary byte-backed absence remains supported. |
+| B2 v3 marker/descriptor bypass | Changing only `source_documents[].kind`, retaining raw citation fields, and removing the descriptor’s exact foundation gap lets `surface-sync` project the descriptor. | The lock is parsed and descriptor-bound before projection, so malformed citation evidence and gap drift fail closed. | Exact provenance swap / exact-gap tests stay green; no citation becomes materializable. |
+
+### Red command
+
+```sh
+go test -timeout 20m ./cmd/connectorgen \
+  -run 'Test(OperationEvidenceLegacyReferenceCannotHideBehindProviderAbsence|SourceReferenceSurfaceSyncRejectsMarkerBypass)$' \
+  -count=1 -v
+```
+
+Expected pre-green observations:
+
+- `skipped` and `dynamic` report a provider absence for the full source
+  inventory rather than rejecting the contradictory reference form.
+- A v3 lock with citation raw fields but an altered `kind` avoids the old
+  marker-only gate, and a descriptor with the exact gap removed reaches the
+  projection path.
+
+Production edits are prohibited until this red command has failed and is
+recorded below. The green command is identical plus existing exact-contract and
+provenance-swap regressions.
+
+### Red — 2026-08-27
+
+The planned command failed before production edits:
+
+```text
+TestOperationEvidenceLegacyReferenceCannotHideBehindProviderAbsence/skipped:
+schema-v2 source-reference inventory was accepted behind state="skipped"
+TestOperationEvidenceLegacyReferenceCannotHideBehindProviderAbsence/dynamic:
+schema-v2 source-reference inventory was accepted behind state="dynamic"
+TestSourceReferenceSurfaceSyncRejectsMarkerBypass:
+surface-sync accepted a citation descriptor after marker and exact-gap tampering
+```
+
+This independently reproduces both R3 blockers on the full fixture. The next
+production change may only move strict parsing ahead of the legacy absence
+return and make checked-in source projection parse/bind every lock before its
+descriptor reaches materialization.
+
+### Green — 2026-08-27
+
+The same focused run plus the pre-existing provenance and exact-gap suite is
+green after the smallest shared foundation change:
+
+```sh
+go test -timeout 20m ./cmd/connectorgen \
+  -run 'Test(OperationEvidenceLegacyReferenceCannotHideBehindProviderAbsence|OperationEvidenceProviderAbsenceRejectsReferenceOnlyFields|SourceReferenceDescriptorsRejectExactContractTampering|SourceReferenceSurfaceSyncRejectsTamperedDescriptor|SourceReferenceSurfaceSyncRejectsMarkerBypass|SourceImportLegacyReferenceRejectsCrossSourceCitationSwap|ExactOutreachReferenceProjectsAgainstCurrentMainBundle)$' \
+  -count=1 -v
+```
+
+- B1 includes `legacyReference` in the absence guard, so both absent-state
+  variants reach `parseSourceImportLock` rather than returning a zero-row
+  provider-absence envelope.
+- B2 removes the marker-only helper from the source-sync trust boundary.
+  `syncCheckedInSourceProjection` fully parses every checked-in lock and
+  validates every descriptor before projection. The adversarial altered kind
+  fails strict document validation before a descriptor can materialize.
+- The exact 259-row, six-lane, provenance-swap, and exact gap tests remain
+  green. No new command, request contract, credential flow, provider call, or
+  certification condition was added.
+
 ## Verify repair red
 
 2026-08-26 — GitHub Verify runs `32978972653` and `32978973162` both failed
