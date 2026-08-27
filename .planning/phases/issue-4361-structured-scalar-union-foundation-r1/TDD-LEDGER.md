@@ -19,6 +19,10 @@ go test -timeout 20m ./cmd/connectorgen -run TestSourceProjectionNullableStringU
 
 Both commands failed only at the expected nullable-scalar declaration boundary; no provider I/O or credentials were used.
 
+### Empty-string baseline proof
+
+`origin/main`'s `validateRequiredCommandFlags` decoded every required JSON flag and then called `commandValueEmpty`; its string branch treats `strings.TrimSpace("") == ""` as missing. The pre-change JSON decoder returned `""` for the literal JSON value `""`, so a required named JSON flag already failed as `missing required flag`. Xero's source-declared `delete_payment.Status` schema is exactly `{"type":["string","null"]}` with no `minLength`, but the command-required policy was independently stricter and remains unchanged. The green test asserts that existing policy; the nullable repair changes only the formerly-empty `nil` result for explicit JSON `null`, which the declaration schema then authorizes or rejects.
+
 ## Green
 
 Pending implementation and exact results.

@@ -1795,7 +1795,11 @@ func validateRequiredCommandFlags(cmd connectors.CommandSurfaceCommand, flags ma
 		if err != nil {
 			return err
 		}
-		if commandValueEmpty(value) {
+		// A required named JSON field may explicitly carry the provider-declared
+		// JSON null value. Its declaration-backed schema, not generic required
+		// flag presence, decides whether that null arm is valid. Empty text keeps
+		// the established missing-required behavior.
+		if commandValueEmpty(value) && !(flag.Type == "json" && value == nil) {
 			return missingRequiredFlagError(cmd, flag.Name)
 		}
 	}

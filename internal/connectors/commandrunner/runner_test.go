@@ -3071,7 +3071,7 @@ func TestBuildWriteCommandValidatesSourceDeclaredNullableStringJSON(t *testing.T
 		wantErr string
 	}{
 		{name: "declared string", flags: map[string][]string{"payment-id": {"fixture-payment-id"}, "status": {`"fixture status"`}}, want: "fixture status"},
-		{name: "declared empty string", flags: map[string][]string{"payment-id": {"fixture-payment-id"}, "status": {`""`}}, want: ""},
+		{name: "declared empty string remains missing", flags: map[string][]string{"payment-id": {"fixture-payment-id"}, "status": {`""`}}, wantErr: "missing required flag --status"},
 		{name: "declared null", flags: map[string][]string{"payment-id": {"fixture-payment-id"}, "status": {"null"}}, want: nil},
 		{name: "number", flags: map[string][]string{"payment-id": {"fixture-payment-id"}, "status": {"7"}}, wantErr: "does not match type"},
 		{name: "boolean", flags: map[string][]string{"payment-id": {"fixture-payment-id"}, "status": {"true"}}, wantErr: "does not match type"},

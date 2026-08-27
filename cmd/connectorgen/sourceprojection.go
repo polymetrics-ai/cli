@@ -3816,7 +3816,7 @@ func sourceProjectCommand(command *orderedObject, contract sourceActionContract)
 				flag.set("summary", summary)
 			}
 		}
-		flagType := sourceProjectionFlagType(contract.Fields[name])
+		flagType := sourceProjectionRecordFlagType(contract.Fields[name])
 		flag.set("type", flagType)
 		if contract.BareStringFields[name] {
 			flag.set("allow_bare_string", true)
@@ -3964,6 +3964,38 @@ func sourceProjectionFlagType(schema any) string {
 	}
 }
 
+// sourceProjectionRecordFlagType is intentionally narrower than the generic
+// parameter projection. A named reverse-ETL record field with exactly
+// string|null needs strict JSON input so the provider-declared null cannot be
+// confused with ordinary command text. Path and query parameters retain their
+// existing wire-text projection rules.
+func sourceProjectionRecordFlagType(schema any) string {
+	if sourceProjectionExactNullableString(schema) {
+		return "json"
+	}
+	return sourceProjectionFlagType(schema)
+}
+
+func sourceProjectionExactNullableString(schema any) bool {
+	object, ok := schema.(map[string]any)
+	if !ok {
+		return false
+	}
+	rawTypes, ok := object["type"].([]any)
+	if !ok {
+		return false
+	}
+	types := make([]string, 0, len(rawTypes))
+	for _, rawType := range rawTypes {
+		typeName, ok := rawType.(string)
+		if !ok {
+			return false
+		}
+		types = append(types, typeName)
+	}
+	return len(types) == 2 && ((types[0] == "string" && types[1] == "null") || (types[0] == "null" && types[1] == "string"))
+}
+
 // setSourceField retains the complete projected provider schema and marks a
 // source-declared multi-kind field whose named JSON flag may accept its string
 // arm as ordinary CLI text. The field remains a bounded, declaration-owned
@@ -3972,7 +4004,7 @@ func sourceProjectionFlagType(schema any) string {
 func (contract *sourceActionContract) setSourceField(name string, sourceSchema, projectedSchema any) {
 	contract.Fields[name] = projectedSchema
 	contract.markSourceSecret(name, sourceSchema)
-	if sourceProjectionFlagType(projectedSchema) == "json" && sourceProjectionContainsStringArm(sourceSchema) {
+	if sourceProjectionRecordFlagType(projectedSchema) == "json" && sourceProjectionContainsStringArm(sourceSchema) && !sourceProjectionExactNullableString(projectedSchema) {
 		contract.BareStringFields[name] = true
 		return
 	}
@@ -5292,7 +5324,7 @@ func sourceActionCoversOperation(action engine.WriteAction, command engine.CLICo
 	}
 	for name := range contract.Fields {
 		flag := flags[name]
-		flagType := sourceProjectionFlagType(contract.Fields[name])
+		flagType := sourceProjectionRecordFlagType(contract.Fields[name])
 		if !properties[name] || flag.MapsTo == "" || !sourceProjectionFieldEquivalent(recordProperties[name], contract.Fields[name]) ||
 			flag.Type != flagType || flag.MaxBytes != int(sourceProjectionFlagMaxBytes(contract.Fields[name], flagType)) ||
 			flag.AllowBareString != contract.BareStringFields[name] ||
