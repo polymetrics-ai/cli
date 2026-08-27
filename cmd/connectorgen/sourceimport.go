@@ -8651,6 +8651,7 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 		logln(stderr, "connectorgen source-import: apply source-cited partial mutation coverage dispositions:", err)
 		return 1
 	}
+	sourceProjectionApplyWriteDisabledMutationArtifacts(surface, &result)
 	raw, err := marshalSourceImportResult(result)
 	if err != nil {
 		logln(stderr, "connectorgen source-import: encode descriptors:", err)
@@ -8730,6 +8731,7 @@ func runSourceImportReadProjection(opts sourceImportOptions, result sourceImport
 		logln(stderr, "connectorgen source-import: apply source-cited partial mutation coverage dispositions:", err)
 		return 1
 	}
+	sourceProjectionApplyWriteDisabledMutationArtifacts(surface, &result)
 	raw, err := marshalSourceImportResult(result)
 	if err != nil {
 		logln(stderr, "connectorgen source-import: encode descriptors:", err)

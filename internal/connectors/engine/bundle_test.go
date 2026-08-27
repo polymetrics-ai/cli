@@ -173,6 +173,9 @@ func TestBundleLoadHappyPathFullBundle(t *testing.T) {
 	if b.Metadata.Name != "acme" {
 		t.Fatalf("Metadata.Name = %q", b.Metadata.Name)
 	}
+	if !b.Metadata.Capabilities.WriteDeclared || b.Metadata.Capabilities.Write {
+		t.Fatalf("metadata capabilities write declaration = %+v, want explicit write=false", b.Metadata.Capabilities)
+	}
 	if b.Spec == nil {
 		t.Fatalf("Spec not compiled")
 	}
@@ -2067,6 +2070,23 @@ func TestBundleLoadMetaSchemaViolation(t *testing.T) {
 	_, err := Load(fsys, "acme")
 	if err == nil {
 		t.Fatalf("expected meta-schema violation error for metadata.json missing capabilities")
+	}
+}
+
+func TestBundleLoadRejectsMetadataCapabilitiesWithoutWrite(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/metadata.json"] = &fstest.MapFile{Data: []byte(`{
+		"name": "acme",
+		"display_name": "Test Connector",
+		"description": "a test connector",
+		"integration_type": "api",
+		"release_stage": "ga",
+		"capabilities": { "check": true, "read": true, "query": false, "cdc": false, "dynamic_schema": false }
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil || !strings.Contains(err.Error(), "write") {
+		t.Fatalf("Load missing capabilities.write error = %v, want explicit write-member refusal", err)
 	}
 }
 

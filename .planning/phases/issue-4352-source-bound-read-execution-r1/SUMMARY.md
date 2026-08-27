@@ -65,8 +65,9 @@ admitted as a declaration.
 
 ## Integration
 
-PR #4353 remains open and unmerged. It requires fresh automated review for the
-final commit range and the normal human merge gate.
+PR #4356 remains open and unmerged. It requires a fresh independent Codex audit
+of the new exact head, normal automated review coverage, and the human merge
+gate.
 
 ## r4 repair delta for PR #4356
 

@@ -14,6 +14,9 @@ Provide a shared, closed source-bound read execution foundation. A mapped source
   mutation whose locked request contract still needs a named shared foundation.
   It requires exact source ID/method/path and a matching incomplete action; it
   cannot downgrade, invent, or conceal an operation.
+- Reconciled #4357's source-cited write-disabled mutation artifacts. They need
+  explicit `metadata.capabilities.write=false` and retained provider citation;
+  complete declared delete/reverse-ETL actions retain their executable lane.
 - Captain correction `021.msg` supersedes the historical 9/100 partition:
   source import materializes all source-complete retained Asana GET contracts
   in their true executor lane—106 bounded direct reads and 12 exact
@@ -27,29 +30,55 @@ Provide a shared, closed source-bound read execution foundation. A mapped source
 
 The source locations above are from `data/connector-operation-mapping-reports/100-connectors/batch-1/asana.json`.
 
+## Asana surface
+
+The locked source has 249 operations. The current executable count is **212**:
+
+| Intent | Implemented |
+| --- | ---: |
+| `direct_read` | 106 |
+| `etl` | 12 |
+| `reverse_etl` | 94 |
+| **Total** | **212** |
+
+**37** operations remain unavailable only with their exact provider citation
+and concrete `missing_foundation` (or the explicitly unsupported `/batch`
+wrapper). The historical claim that the 21 source-complete mutations were
+non-executable has been removed.
+
 ## TDD / GSD Evidence
 
 - Lifecycle: inline/manual `discuss-phase` → `plan-phase --tdd` → `execute-phase` → `verify-work` → `code-review`, recorded in `.planning/phases/issue-4352-source-bound-read-execution-r1/`. Inline fallback was required because compatible isolated workers were unavailable and the canonical contract forbids role spawning.
 - Red: source projection test failed before implementation because `get_access_requests` had no source binding.
 - Green: source projection, route-substitution/no-dispatch, missing-foundation/no-dispatch, direct-vs-stream, and Asana preflight controls pass. Full evidence is in `TDD-LEDGER.md` and `VERIFICATION.md`.
-- Skills: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`.
+- Frozen findings AUDIT-001 through AUDIT-006 were reread and carried forward.
+  The R5 independent pass applies only to immutable parent `566ab08…`; this
+  reconciliation requires a fresh audit of the pushed exact head.
+- Skills: `golang-how-to`, `golang-cli`, `golang-testing`,
+  `golang-error-handling`, `golang-security`, `golang-safety`,
+  `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`,
+  `golang-concurrency`, `golang-documentation`, `golang-lint`,
+  `vercel-react-best-practices`, and `vercel-composition-patterns`.
 
 ## Testing
 
-- `go test -timeout 20m -count=1 ./cmd/connectorgen` — passed in 150.671s
-- `go test -timeout 20m -count=1 ./internal/connectors/engine`
-- `go test -timeout 20m -count=1 ./internal/connectors/commandrunner`
-- Focused Asana source-bound/reverse-ETL/delete and root-help/skill tests
-- `go run ./cmd/connectorgen source-import asana --read-projection-only --check`
-  — 249 operations verified
-- `go run ./cmd/connectorgen validate internal/connectors/defs` — 553
-  connectors, 0 findings
-- `go run ./cmd/connectorgen surface-sync internal/connectors/defs --check` —
-  553 connectors, zero drift
-- `go vet ./...`; `go build ./cmd/pm`; `make tidy-check`; `make docs-check-no-build`; `make lint`; `make agent-contract-check`; `make connectorgen-validate`; `make connectorgen-surface-sync`; `make connector-runtime-preflight`; `make smoke-no-build`; `make connector-canon-check`; `npm --prefix website run typecheck`; `git diff --check`
-- Built-binary preflight in a fresh project: `pm asana access-requests get-access-requests --json` reached `missing --credential` (exit 1), with no configured credential and no provider request.
+- Focused conflict tests passed in 19.500s; full changed packages passed:
+  `cmd/connectorgen` (177.850s), engine (9.928s), commandrunner (22.072s),
+  Asana defs (5.582s), App (267.112s), and CLI (456.149s).
+- Source import verified 249 Asana operations; validation reported 553
+  connectors/zero findings; surface sync made zero corrections; operation
+  evidence reported 1,774 rows/five rollups with fixed-100 green.
+- Declaration admission, runtime preflight, canon, connector-boundary,
+  certification subject/matrix/candidates/sweep, scoped vet, tidy, lint,
+  agent-contract, docs validation, and 34 website script tests passed.
+- Rebuilt `pm`; in 212 isolated initialized credential-free projects, all 212
+  commands reached `missing --credential` (exit 1), with no unknown, blocked,
+  or provider result.
 
-`connector-boundary` and `release-installed-github-certification.sh` exceeded the local per-command runner limit. They are intentionally not claimed as passing; CI/PR remains the gate.
+`npm --prefix website run typecheck` could not start because `tsc` is absent.
+Aggregate `go test ./...` and `make verify` were not run locally due the
+runner's per-command limit; they remain CI checks and are not claimed as local
+passes.
 
 ## CLI / Docs / Website
 
@@ -66,17 +95,23 @@ The source locations above are from `data/connector-operation-mapping-reports/10
   must rerun source import/check and leave any non-scalar/header/body or absent
   typed contract deferred with a concrete named foundation; it must never use
   historical `planned` metadata to hide an otherwise capable source operation.
-- The retained Asana mutation inventory is 21 absent non-executable actions,
-  65 implemented reverse-ETL request-schema gaps, and 4 implemented delete
-  path-parameter alias gaps. The 69 existing commands remain implemented;
-  no provider behavior is claimed or invoked.
+- The 19 source-complete DELETEs and two no-body POST mutations are now
+  promoted through the existing typed reverse-ETL/delete path. The executable
+  total is 212 (106 direct reads, 12 ETL, 94 reverse ETL); 37 only retain exact
+  source-cited unavailable foundations. No provider behavior was invoked.
 
 ## Follow-up / Integration
 
-- Do not merge from this task. Before integrating after certification/mapping foundations land, run fresh exact-head testing, an independent audit, and real connector-shaped evidence for Outreach and every other connector using this edge.
+- Current `main` `b9b2478…` is integrated through normal Git ancestry. Its
+  write-disabled mutation-artifact policy is preserved alongside this repair;
+  no source lock or provider bytes were rewritten.
+- Do not merge from this task. Obtain a fresh independent Codex audit of the
+  pushed exact head before human merge consideration.
 - Automated review route: Claude automatic review is expected on PR open. Confirm it covers the final commit range, disposition any actionable findings, and use Copilot only if Claude is unavailable.
 
 ## Checkpoints
 
 - `80f36f8c1` — planning/TDD checkpoint
 - `6f41f52ae` — implementation, generated artifacts, and verification evidence
+- current-main reconciliation — regenerated outputs and 212-command
+  credential-boundary census

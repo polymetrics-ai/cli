@@ -196,3 +196,11 @@ Built a fresh temporary `pm`, initialised a fresh temporary project, and invoked
 - Checked `pm --help`, `pm asana --help`, and the generated Asana manual/skill output.
 - `docs/connectors/asana/{MANUAL,SKILL}.md`, `docs/skills/pm-asana/SKILL.md`, the connector catalog, and website generated connector data were refreshed.
 - Top-level `docs/cli/**` did not need a hand-authored command-tree change; broad unrelated generated pages were intentionally not included.
+
+## R5-pass current-main reconciliation — 2026-08-27
+
+- [x] Reconciled `main` `b9b2478b3b2451d632d28b9aa138a170ad835110` with the existing #4356 repair. The only real overlaps were source-import and source-projection behavior/tests; both partial mutation coverage and write-disabled artifact projection are retained.
+- [x] Regenerated source import, surface, docs/manual, skills, and website data. Check mode verified 249 Asana operations; validation reported 553 connectors/zero findings; surface sync reported zero corrections; operation evidence reported 1,774 rows/five rollups and green fixed-100 checks.
+- [x] Passed focused conflict tests (19.500s), full changed packages: `cmd/connectorgen` (177.850s), engine (9.928s), commandrunner (22.072s), Asana defs (5.582s), App (267.112s), and CLI (456.149s). Scoped vet, tidy, lint, agent-contract, declaration-admission, runtime-preflight, canon, connector-boundary, docs validation, website scripts (34/34), and certification subject/matrix/candidates/sweep all passed.
+- [x] Built `pm` and ran every implemented Asana command in its own initialized credential-free project. `212/212` reached `missing --credential` (exit 1): 106 direct reads, 12 ETL, 94 reverse ETL; zero unknown/blocked/provider results.
+- [ ] Website typecheck remains unavailable locally because `tsc` is absent. Aggregate `go test ./...` and `make verify` remain CI-owned due this runner's per-command limit.

@@ -45,3 +45,10 @@ full generator package, source/operation evidence, runtime preflight, canon,
 docs/website generation, and a 212/212 credential-boundary census. A fresh
 independent Codex audit of the pushed SHA remains required before review
 threads can be closed or a human considers merge.
+
+## R5-pass current-main reconciliation review
+
+- Reviewed `main` `b9b2478…` for the two real overlaps. The resolution preserves #4356's source-cited partial mutation coverage before #4357's separate explicit-write-disabled artifact; neither can fabricate an action, route, transport, or command.
+- The artifact remains fail-closed: it needs an exact retained provider citation and explicit `metadata.capabilities.write=false`. Complete deletes/reverse-ETL actions remain executable.
+- Diff check, full changed-package tests, generator checks, docs/website generation, and the fresh 212-command credential-boundary census are green. No unresolved local finding remains.
+- A fresh independent Codex audit of the pushed exact head remains required. PR #4356 stays open/unmerged; website `tsc` and aggregate suite are CI constraints, not local passes.

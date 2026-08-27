@@ -155,3 +155,7 @@ typecheck is not runnable locally because `tsc` is absent; aggregate
 `go test ./...` and `make verify` are intentionally left to CI. Next: commit
 this evidence checkpoint, non-force push only to the existing #4356 branch,
 verify remote head/base, then leave the PR open for the separate fresh audit.
+
+## R5-pass current-main reconciliation — 2026-08-27
+
+Fetched `origin/main` at `b9b2478b3b2451d632d28b9aa138a170ad835110` and reconciled the incoming #4357 write-disabled mutation-artifact foundation with the existing #4356 source-bound read repair. Both source-projection paths, all changed-package/generator/docs evidence, and the 212-command credential boundary are green. Push the new branch head non-force, read back its remote SHA and PR base, and leave it open for a new independent audit; the R5 pass covers only `566ab08…`. Do not merge the PR.

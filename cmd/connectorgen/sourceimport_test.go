@@ -1164,6 +1164,102 @@ func TestSourceImportCommandUsesOnlyConnectorOwnedLockAndCheckMode(t *testing.T)
 	}
 }
 
+func TestSourceImportCommandDerivesWriteDisabledMutationArtifacts(t *testing.T) {
+	defsRoot := t.TempDir()
+	bundleDir := filepath.Join(defsRoot, "alpha")
+	sourcesDir := filepath.Join(bundleDir, "sources")
+	if err := os.MkdirAll(sourcesDir, 0o755); err != nil {
+		t.Fatalf("create source fixture directory: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(sourcesDir, "alpha-operation-source-lock.json"), loadSourceImportFixture(t, filepath.Join("alpha", "alpha-operation-source-lock.json")), 0o644); err != nil {
+		t.Fatalf("write source lock: %v", err)
+	}
+	const metadata = `{
+	  "name":"alpha",
+	  "display_name":"Alpha",
+	  "description":"fixture",
+	  "integration_type":"api",
+	  "release_stage":"ga",
+	  "capabilities":{"check":true,"read":true,"write":false,"query":false,"cdc":false,"dynamic_schema":false}
+	}`
+	if err := os.WriteFile(filepath.Join(bundleDir, "metadata.json"), []byte(metadata), 0o644); err != nil {
+		t.Fatalf("write write-disabled metadata: %v", err)
+	}
+
+	outPath := filepath.Join(sourcesDir, "alpha-operation-descriptor.json")
+	args := []string{"source-import", "alpha", "--defs", defsRoot, "--out", outPath}
+	var stdout, stderr bytes.Buffer
+	if exit := runSourceImportWithFetcher(args, &stdout, &stderr, fixtureSourceImportFetcher(t)); exit != 0 {
+		t.Fatalf("write-disabled source-import exit = %d, stderr = %s", exit, stderr.String())
+	}
+	raw, err := os.ReadFile(outPath)
+	if err != nil {
+		t.Fatalf("read imported descriptor: %v", err)
+	}
+	var descriptor sourceImportDescriptorDocument
+	if err := decodeSourceStrictJSON(raw, &descriptor); err != nil {
+		t.Fatalf("decode imported descriptor: %v", err)
+	}
+	var mutation sourceOperationDescriptor
+	for _, operation := range descriptor.Operations {
+		if operation.SourceID == "alpha.rest.post_/widgets" {
+			mutation = operation
+			break
+		}
+	}
+	if !sourceProjectionHasNonExecutableMutationDisposition(mutation) {
+		t.Fatalf("imported mutation = %#v, want source-cited non-executable artifact", mutation)
+	}
+	if mutation.Runtime.NonExecutableMutation.Reason != sourceWriteDisabledMutationArtifactReason ||
+		mutation.Runtime.NonExecutableMutation.Source.SourceID != mutation.SourceID ||
+		!strings.EqualFold(mutation.Runtime.NonExecutableMutation.Source.Method, mutation.Method) ||
+		mutation.Runtime.NonExecutableMutation.Source.Path != mutation.Path {
+		t.Fatalf("imported mutation artifact = %#v, want exact automatic source citation", mutation.Runtime.NonExecutableMutation)
+	}
+	if !sourceOperationHasFoundationGap(mutation, sourceNonExecutableMutationDispositionFoundation) {
+		t.Fatalf("imported mutation gaps = %#v, want named non-executable foundation", mutation.Runtime.Gaps)
+	}
+
+	stdout.Reset()
+	stderr.Reset()
+	if exit := runSourceImportWithFetcher(append(args, "--check"), &stdout, &stderr, fixtureSourceImportFetcher(t)); exit != 0 {
+		t.Fatalf("write-disabled source-import --check exit = %d, stderr = %s", exit, stderr.String())
+	}
+}
+
+func TestSourceImportCommandRejectsOmittedWriteCapabilityBeforeArtifactAdmission(t *testing.T) {
+	defsRoot := t.TempDir()
+	bundleDir := filepath.Join(defsRoot, "alpha")
+	sourcesDir := filepath.Join(bundleDir, "sources")
+	if err := os.MkdirAll(sourcesDir, 0o755); err != nil {
+		t.Fatalf("create source fixture directory: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(sourcesDir, "alpha-operation-source-lock.json"), loadSourceImportFixture(t, filepath.Join("alpha", "alpha-operation-source-lock.json")), 0o644); err != nil {
+		t.Fatalf("write source lock: %v", err)
+	}
+	const metadataWithoutWrite = `{
+	  "name":"alpha",
+	  "display_name":"Alpha",
+	  "description":"fixture",
+	  "integration_type":"api",
+	  "release_stage":"ga",
+	  "capabilities":{"check":true,"read":true,"query":false,"cdc":false,"dynamic_schema":false}
+	}`
+	if err := os.WriteFile(filepath.Join(bundleDir, "metadata.json"), []byte(metadataWithoutWrite), 0o644); err != nil {
+		t.Fatalf("write metadata without write capability: %v", err)
+	}
+
+	outPath := filepath.Join(sourcesDir, "alpha-operation-descriptor.json")
+	args := []string{"source-import", "alpha", "--defs", defsRoot, "--out", outPath}
+	var stdout, stderr bytes.Buffer
+	if exit := runSourceImportWithFetcher(args, &stdout, &stderr, fixtureSourceImportFetcher(t)); exit != 1 || !strings.Contains(stderr.String(), "capabilities.write must be explicitly declared") {
+		t.Fatalf("source-import missing capabilities.write exit = %d stderr = %s, want explicit write declaration refusal", exit, stderr.String())
+	}
+	if _, err := os.Stat(outPath); !os.IsNotExist(err) {
+		t.Fatalf("source-import with omitted capabilities.write wrote descriptor: %v", err)
+	}
+}
+
 func TestSourceImportRejectsSymlinkedSourcesDirectoryEvenInsideConnectorBundle(t *testing.T) {
 	t.Parallel()
 	defsRoot := t.TempDir()
