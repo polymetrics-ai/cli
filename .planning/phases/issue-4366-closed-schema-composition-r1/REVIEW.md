@@ -16,6 +16,7 @@
 | ID | Finding | Disposition | Fix | Evidence |
 | --- | --- | --- | --- | --- |
 | R1 | An untyped `oneOf`/`anyOf`/`allOf` wrapper could carry `properties`, `items`, or other object/array-only siblings. Projection would not retain those siblings, risking source-semantic loss if it were admitted. | Accepted | `6c9b4d50d284344a919317956a456c6857c39f19` rejects that wrapper in source admission and projection, retaining a source-cited `typed_input_schema` gap instead. | New importer and projection regressions plus final `go test -timeout 20m ./cmd/connectorgen -count=1` passed. |
+| R2 | The projection selected only the first declared type. A nullable composition wrapper expressed as `type: ["null", "object"]` therefore lost its object-level closure and required fields. | Accepted | `9fdf96dc4818c104cab5ac7455a79cfd18e575b6` converts every declared type kind and requires an explicit closed boundary for an object wrapper carrying composition. | New red/green regression proves `{}` is rejected and the declared object remains accepted; full `cmd/connectorgen` is recorded in `VERIFICATION.md`. |
 
 ## Prior exact-SHA Codex re-review
 
