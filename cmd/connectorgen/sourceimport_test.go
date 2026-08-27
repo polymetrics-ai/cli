@@ -1202,6 +1202,49 @@ func TestSourceImportCommandDerivesWriteDisabledMutationArtifacts(t *testing.T) 
 	}
 }
 
+func TestSourceImportCommandRejectsOmittedWriteCapabilityBeforeArtifactAdmission(t *testing.T) {
+	defsRoot := t.TempDir()
+	bundleDir := filepath.Join(defsRoot, "alpha")
+	sourcesDir := filepath.Join(bundleDir, "sources")
+	if err := os.MkdirAll(sourcesDir, 0o755); err != nil {
+		t.Fatalf("create source fixture directory: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(sourcesDir, "alpha-operation-source-lock.json"), loadSourceImportFixture(t, filepath.Join("alpha", "alpha-operation-source-lock.json")), 0o644); err != nil {
+		t.Fatalf("write source lock: %v", err)
+	}
+	const metadataWithoutWrite = `{
+	  "name":"alpha",
+	  "display_name":"Alpha",
+	  "description":"fixture",
+	  "integration_type":"api",
+	  "release_stage":"ga",
+	  "capabilities":{"check":true,"read":true,"query":false,"cdc":false,"dynamic_schema":false}
+	}`
+	if err := os.WriteFile(filepath.Join(bundleDir, "metadata.json"), []byte(metadataWithoutWrite), 0o644); err != nil {
+		t.Fatalf("write metadata without write capability: %v", err)
+	}
+
+	outPath := filepath.Join(sourcesDir, "alpha-operation-descriptor.json")
+	args := []string{"source-import", "alpha", "--defs", defsRoot, "--out", outPath}
+	var stdout, stderr bytes.Buffer
+	if exit := runSourceImportWithFetcher(args, &stdout, &stderr, fixtureSourceImportFetcher(t)); exit != 1 || !strings.Contains(stderr.String(), "no complete executable action") {
+		t.Fatalf("source-import missing capabilities.write exit = %d stderr = %s, want executable coverage failure", exit, stderr.String())
+	}
+	raw, err := os.ReadFile(outPath)
+	if err != nil {
+		t.Fatalf("read rejected source descriptor: %v", err)
+	}
+	var descriptor sourceImportDescriptorDocument
+	if err := decodeSourceStrictJSON(raw, &descriptor); err != nil {
+		t.Fatalf("decode rejected source descriptor: %v", err)
+	}
+	for _, operation := range descriptor.Operations {
+		if sourceProjectionOperationMutates(operation) && operation.Runtime.NonExecutableMutation != nil {
+			t.Fatalf("omitted capabilities.write emitted automatic artifact: %#v", operation.Runtime)
+		}
+	}
+}
+
 func TestSourceImportRejectsSymlinkedSourcesDirectoryEvenInsideConnectorBundle(t *testing.T) {
 	t.Parallel()
 	defsRoot := t.TempDir()

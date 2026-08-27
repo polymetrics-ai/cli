@@ -2509,6 +2509,76 @@ func TestSourceProjectionWriteCapableBundlesDoNotAutoDeferMutations(t *testing.T
 	}
 }
 
+func TestSourceProjectionAutomaticMutationArtifactRejectsOmittedWriteDeclaration(t *testing.T) {
+	metadata, err := os.ReadFile(filepath.Join("..", "..", "internal", "connectors", "defs", "sentry", "metadata.json"))
+	if err != nil {
+		t.Fatalf("read current Sentry metadata: %v", err)
+	}
+	var document map[string]any
+	if err := json.Unmarshal(metadata, &document); err != nil {
+		t.Fatalf("decode current Sentry metadata: %v", err)
+	}
+	capabilities, ok := document["capabilities"].(map[string]any)
+	if !ok {
+		t.Fatalf("current Sentry capabilities = %#v, want object", document["capabilities"])
+	}
+	delete(capabilities, "write")
+	metadata, err = json.Marshal(document)
+	if err != nil {
+		t.Fatalf("encode adversarial Sentry metadata: %v", err)
+	}
+	bundleDir := t.TempDir()
+	writeProjectionFixture(t, filepath.Join(bundleDir, "metadata.json"), string(metadata))
+	surface, err := sourceProjectionExecutionSurface(bundleDir, "sentry")
+	if err != nil {
+		t.Fatalf("load adversarial Sentry metadata: %v", err)
+	}
+
+	lockRaw, err := os.ReadFile(filepath.Join("testdata", "issue4329", "sentry-operation-source-lock.json"))
+	if err != nil {
+		t.Fatalf("read preserved Sentry source lock: %v", err)
+	}
+	lock, err := parseSourceImportLock(lockRaw, "sentry")
+	if err != nil {
+		t.Fatalf("parse preserved Sentry source lock: %v", err)
+	}
+	var operation sourceOperationDescriptor
+	for _, candidate := range lock.Rest.Operations {
+		if candidate.OperationID != "createOrganizationDashboard" {
+			continue
+		}
+		operation = sourceOperationDescriptor{
+			Connector: "sentry", SourceID: candidate.OperationID, Method: candidate.Method, Path: candidate.Path,
+			ProviderOperationID: candidate.OperationID,
+			Source:              sourceImportSource{URL: lock.Rest.SourceURL, SHA256: lock.Rest.SHA256, Bytes: lock.Rest.Bytes, Location: candidate.SourceLocation, Form: "openapi", Version: lock.Rest.OpenAPI},
+		}
+		break
+	}
+	if operation.SourceID == "" || !sourceProjectionOperationMutates(operation) {
+		t.Fatalf("source-locked Sentry mutation = %#v", operation)
+	}
+
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{operation}}
+	if got := sourceProjectionApplyWriteDisabledMutationArtifacts(surface, &result); got != 0 {
+		t.Fatalf("automatic mutation artifact count = %d, want 0 without explicit capabilities.write=false", got)
+	}
+	if result.Operations[0].Runtime.NonExecutableMutation != nil {
+		t.Fatalf("omitted capabilities.write emitted automatic artifact: %#v", result.Operations[0].Runtime)
+	}
+
+	disposition := sourceNonExecutableMutationDisposition{
+		Source: sourceOperationCitation{SourceID: operation.SourceID, Method: operation.Method, Path: operation.Path},
+		Reason: sourceWriteDisabledMutationArtifactReason,
+	}
+	result.Operations[0].Runtime.NonExecutableMutation = &disposition
+	result.Operations[0].Runtime.Gaps = []sourceContractGap{sourceProjectionNonExecutableMutationRuntimeGap(result.Operations[0], disposition)}
+	result.Operations[0].Runtime.MergeBlocked = true
+	findings := validateSourceExecutableCoverage(surface, "sources/sentry-operation-descriptor.json", sourceImportDescriptorDocument{Operations: result.Operations})
+	if len(findings) != 1 || !strings.Contains(findings[0].Message, "requires connector metadata capabilities.write=false") {
+		t.Fatalf("omitted capabilities.write coverage findings = %+v, want explicit write declaration refusal", findings)
+	}
+}
+
 func TestSourceProjectionWriteDisabledMutationArtifactsRequireProviderCitation(t *testing.T) {
 	operation := sourceCitedMutationTestOperation("sentry", "deleteOrganizationDashboard", "DELETE", "/api/0/dashboards/current/")
 	operation.Source = sourceImportSource{}

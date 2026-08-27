@@ -2070,6 +2070,23 @@ func TestBundleLoadMetaSchemaViolation(t *testing.T) {
 	}
 }
 
+func TestBundleLoadRejectsMetadataCapabilitiesWithoutWrite(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/metadata.json"] = &fstest.MapFile{Data: []byte(`{
+		"name": "acme",
+		"display_name": "Test Connector",
+		"description": "a test connector",
+		"integration_type": "api",
+		"release_stage": "ga",
+		"capabilities": { "check": true, "read": true, "query": false, "cdc": false, "dynamic_schema": false }
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil || !strings.Contains(err.Error(), "write") {
+		t.Fatalf("Load missing capabilities.write error = %v, want explicit write-member refusal", err)
+	}
+}
+
 func TestBundleLoadAllIteratesBundles(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	for k, v := range fullValidBundleFS("beta") {
