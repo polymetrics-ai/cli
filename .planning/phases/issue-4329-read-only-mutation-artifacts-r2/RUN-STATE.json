@@ -1,8 +1,8 @@
 {
   "issue": 4329,
-  "state": "audit_m1_planned_red_test_pending",
+  "state": "audit_m1_verified_pending_commit",
   "base": "main",
   "working_branch": "fix/4329-read-only-mutation-artifacts",
   "scope": "shared connectorgen source-import/projection/coverage behavior and issue evidence only",
-  "next": "add and run the M1 missing capabilities.write red test, preserve explicit presence through metadata decoding, then rerun Sentry/Vercel and delete/reverse-ETL acceptance before a normal repair push"
+  "next": "commit the verified M1 repair and evidence, push a normal fast-forward update to PR #4357, confirm API base/head, then obtain a fresh independent Codex audit"
 }

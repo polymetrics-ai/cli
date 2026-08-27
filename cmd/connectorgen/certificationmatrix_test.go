@@ -50,6 +50,18 @@ func TestCertificationDiscoverFunctionKindsFromRuntimeSource(t *testing.T) {
 	}
 }
 
+func TestCertificationDiscoverFunctionKindsExcludesJSONHiddenCapabilityState(t *testing.T) {
+	kinds, err := discoverFunctionKinds(repoRootForCertificationTest(t))
+	if err != nil {
+		t.Fatalf("discoverFunctionKinds() error = %v", err)
+	}
+	for _, kind := range kinds {
+		if kind.ID == "capability:write_declared" {
+			t.Fatalf("discoverFunctionKinds() exposed JSON-hidden capability state: %#v", kind)
+		}
+	}
+}
+
 func TestCertificationOperationExecutorAnnotationsAreRealPaths(t *testing.T) {
 	kinds, err := discoverFunctionKinds(repoRootForCertificationTest(t))
 	if err != nil {

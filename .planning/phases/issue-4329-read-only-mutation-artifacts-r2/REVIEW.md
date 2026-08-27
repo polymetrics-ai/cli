@@ -23,12 +23,20 @@
   their declared `reverse_etl` command/action relationship, rather than a
   hand-constructed citation. It confirms the artifact rule never serves as a
   policy gate for a complete executable delete.
+- Independent audit of `e6418bb1dc50001eefc438d4fb8c62e441de25c9` found
+  **M1, accepted and fixed:** a Go `bool` cannot distinguish omitted
+  `capabilities.write` from explicit `false`, so automatic artifacts could be
+  admitted without an explicit opt-out. The repair preserves member presence,
+  requires `write` in the schema/import path, and keeps the field out of the
+  public certification inventory. Red-to-green regressions cover omitted
+  metadata, source-import admission, Sentry/Vercel retention, action/delete
+  precedence, and certification drift.
 
 ## Required independent review
 
-After the current-main integration commit is pushed, obtain the Captain-requested
-fresh independent Codex audit of that exact SHA. Record its result in the PR
-review coverage before requesting merge.
+After the audit-M1 repair commit is pushed, obtain the Captain-requested fresh
+independent Codex audit of that exact SHA. Record its result in the PR review
+coverage before requesting merge.
 
 ## Automated review route
 

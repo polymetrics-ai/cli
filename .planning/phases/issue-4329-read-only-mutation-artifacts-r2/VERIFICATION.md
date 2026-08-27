@@ -2,14 +2,16 @@
 
 ## Status
 
-Local verification is complete for the current-main integration. A fresh
-independent audit of the exact integration SHA and required remote CI remain
-pending after push.
+Local verification is complete for the audit-M1 repair on top of the
+current-main integration. A fresh independent audit of the exact pushed repair
+SHA and required remote CI remain pending after push.
 
 ## Completed evidence
 
 - **Red:** `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestSourceProjectionWriteDisabledLockedSourcesRetainMutationArtifacts|TestSourceProjectionWriteDisabledMutationArtifactsPreserveExecutableDeletes)$'` failed before production code with undefined `sourceProjectionApplyWriteDisabledMutationArtifacts`.
 - **Green:** `GOFLAGS=-p=3 go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestSourceProjectionWriteDisabledLockedSourcesRetainMutationArtifacts|TestSourceProjectionWriteDisabledMutationArtifactsPreserveExecutableDeletes|TestSourceProjectionWriteCapableBundlesDoNotAutoDeferMutations|TestSourceProjectionWriteDisabledMutationArtifactsRequireProviderCitation|TestSourceProjectionWriteDisabledMutationArtifactsRetainGraphQLMutations|TestSourceImportCommandDerivesWriteDisabledMutationArtifacts)$'` passed (1.093s).
+- **Audit M1 red:** `GOFLAGS=-p=3 go test -count=1 -timeout 20m ./cmd/connectorgen ./internal/connectors/engine -run '^(TestBundleLoadRejectsMetadataCapabilitiesWithoutWrite|TestSourceProjectionAutomaticMutationArtifactRejectsOmittedWriteDeclaration|TestSourceImportCommandRejectsOmittedWriteCapabilityBeforeArtifactAdmission)$'` failed before the repair: the metadata parser accepted absent `write`, projection emitted an automatic artifact, and source-import completed.
+- **Audit M1 green:** the same three-test command passed after preserving `write` member presence in `engine.Capabilities`, requiring `metadata.capabilities.write`, and refusing omitted metadata in source-import. The focused Sentry/Vercel/action-precedence suite passed (1.142s); the focused certification guard plus matrix passed (1.160s).
 
 ## Source-lock regression vectors
 
@@ -47,6 +49,25 @@ pending after push.
 - `make agent-contract-check`; `make connectorgen-validate`; `make connectorgen-surface-sync`; `make connectorgen-declaration-admission`; `make connectorgen-operation-evidence`; `make github-parity-artifacts-check`; `make connectorgen-certification-matrix`; `make connectorgen-certification-candidates`; `make connectorgen-certification-sweep`; `make connector-boundary`; `make connector-canon-check`; and `make release-workflow-check` — PASS. The generator validated 553 connectors, source surface sync made zero corrections, declaration admission found zero findings, operation evidence is current at 1,525 rows, and the boundary scan found zero findings.
 - `git diff --check` and `gofmt -d` over changed Go files — PASS (no output).
 
+## Audit M1 repair details
+
+- A missing `metadata.capabilities.write` member now fails closed. JSON
+  decoding records whether that particular member was present, and automatic
+  source-cited non-executable mutation artifacts require that it was explicitly
+  set to `false`.
+- Existing `write:true`, provider-citation, complete-action, and
+  implemented-action precedence remains covered by the projection regressions.
+  The Sentry/Vercel full-lock vectors still retain 103/237 source-cited
+  mutations while preserving the named executable delete/reverse-ETL controls.
+- `WriteDeclared` is tagged `json:"-"`; certification discovery now excludes
+  JSON-hidden decoder state. `make connectorgen-certification-matrix` is green
+  without modifying a generated certification shard.
+- Repair-local passes: engine (9.800s), commandrunner (22.177s), serial CLI
+  (488.445s), `go vet ./...`, `go build ./cmd/pm`, `make lint`,
+  `make connector-runtime-preflight`, `make connector-canon-check`,
+  `make docs-check-no-build`, `make smoke-no-build`, and the generator gates
+  listed above. Full current repair `cmd/connectorgen` passed in 229.037s.
+
 ## Built-binary command boundary
 
 This shared foundation adds **zero** connector commands and changes no existing
@@ -62,7 +83,7 @@ is the only remaining gap to a built-binary credential-boundary proof.
 
 ## Remaining remote gates
 
-- Push the exact green SHA to the existing PR and confirm its API-reported
+- Push the exact green repair SHA to the existing PR and confirm its API-reported
   `base.ref=main`.
 - Obtain the Captain-requested fresh, separate Codex audit of the exact pushed
   integration SHA, then disposition any

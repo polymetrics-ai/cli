@@ -15,3 +15,8 @@ binary credential probe.
 
 Local verification is recorded in `VERIFICATION.md`; remote PR/audit/CI gates
 remain pending.
+
+Audit M1 additionally closes the omitted-member loophole: automatic artifacts
+now require a JSON-explicit `capabilities.write: false`, rather than treating
+an absent field as an opt-out. The internal presence marker is not a public
+capability and therefore does not alter certification output.

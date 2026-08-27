@@ -19,6 +19,10 @@ write action, request schema, transport, partial command, or source-lock edit.
   capability, no actual complete action exists, and the exact provider citation
   is present.
 - Complete/implemented actions win; deletes and reverse-ETL are not suppressed.
+- Audit M1 repair: omission is not an opt-out. Automatic artifacts require the
+  actual JSON member `metadata.capabilities.write: false`; omitted metadata is
+  rejected before source-import writes a descriptor. The internal presence bit
+  is JSON-hidden and is excluded from the generated certification inventory.
 - The PR adds **0 user commands**. Its usable-surface delta is that a real
   write-disabled source bundle may retain its supported read/ETL commands
   instead of failing all source coverage because provider mutations coexist.
@@ -42,6 +46,11 @@ write action, request schema, transport, partial command, or source-lock edit.
 - Audit fix: automatic artifacts now require explicit
   `metadata.capabilities.write=false` at both projection and validation; a
   red-to-green test prevents a hand-edited `write:true` descriptor bypass.
+- Audit M1: a second red-to-green regression removes `write` from actual
+  Sentry metadata and proves engine loading, source projection, and
+  source-import reject it. Sentry/Vercel full-lock and action/delete precedence
+  coverage remains green; the certification-matrix guard proves the presence
+  bit cannot become a false public capability.
 - PASS after current-main integration: focused full-lock acceptance (1.118s),
   full `cmd/connectorgen` (154.269s), engine (14.192s), commandrunner
   (24.871s), runtime-preflight (8.737s), and CLI (438.166s) suites;
@@ -70,8 +79,9 @@ Skills used: `golang-how-to`, `golang-cli`, `golang-testing`,
 ## Delivery record
 
 The first independent audit found and this PR fixed the write-capable artifact
-bypass. Pending: the Captain-requested fresh separate Codex audit of the exact
-current-main integration SHA, Claude-auto review result, and required CI
+bypass. The next independent audit found and this PR fixed M1's omitted-write
+admission. Pending: the Captain-requested fresh separate Codex audit of the
+exact pushed repair SHA, Claude-auto review result, and required CI
 status. The remaining built-binary credential-boundary proof belongs to the
 named downstream source-bound-read foundation because this PR deliberately adds
 zero connector commands. Do not merge from this PR.

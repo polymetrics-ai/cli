@@ -2530,11 +2530,11 @@ func TestSourceProjectionAutomaticMutationArtifactRejectsOmittedWriteDeclaration
 	}
 	bundleDir := t.TempDir()
 	writeProjectionFixture(t, filepath.Join(bundleDir, "metadata.json"), string(metadata))
-	surface, err := sourceProjectionExecutionSurface(bundleDir, "sentry")
+	_, err = sourceProjectionExecutionSurface(bundleDir, "sentry")
 	if err == nil || !strings.Contains(err.Error(), "capabilities.write must be explicitly declared") {
 		t.Fatalf("load adversarial Sentry metadata error = %v, want explicit write declaration refusal", err)
 	}
-	surface = engine.Bundle{Name: "sentry", Metadata: engine.Metadata{Name: "sentry", Capabilities: engine.Capabilities{Read: true}}}
+	surface := engine.Bundle{Name: "sentry", Metadata: engine.Metadata{Name: "sentry", Capabilities: engine.Capabilities{Read: true}}}
 
 	lockRaw, err := os.ReadFile(filepath.Join("testdata", "issue4329", "sentry-operation-source-lock.json"))
 	if err != nil {
