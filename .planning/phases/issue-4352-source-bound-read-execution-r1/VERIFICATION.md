@@ -16,6 +16,29 @@
   fresh 212-command credential-boundary census pass.
 - [ ] Exact pushed SHA/base are recorded; a separate fresh audit is pending.
 
+### Current-head audit ledger (AUDIT-001–006)
+
+`003.msg` fetched `origin/main` at
+`1324c52bab0b224ed8958858af7676b8b8e191b4`; it is already the merge base of
+the repair head, so no no-op merge was created. `004.msg` requires the frozen
+audit be accounted for rather than treating F1 as a standalone readiness claim:
+
+- [x] **001:** source projection excludes raw paging from caller parameters;
+  fresh source-import and surface-sync are clean.
+- [x] **002:** App/CLI origin-before-credential coverage remains green in the
+  full App and CLI suites.
+- [x] **003:** App/direct stream binding regression remains green in the full
+  engine suite.
+- [x] **004:** the existing action/delete lane is covered by the fresh Asana
+  definition suite and 212-command credential-boundary census.
+- [x] **005:** operation evidence reports fixed-100 passed.
+- [x] **006:** docs validation, website generation, and all 34 website script
+  tests pass; no generated file drift remains.
+
+The F1 repair adds the independent descriptor-to-local input closure; it does
+not narrow or waive any of the original six findings. The next authority is a
+fresh, separate audit of the exact pushed SHA.
+
 ## Repair r4 checklist
 
 - [x] AUDIT-001 paging red/green: projection, engine/direct read, CLI/App parity, and generated help.
