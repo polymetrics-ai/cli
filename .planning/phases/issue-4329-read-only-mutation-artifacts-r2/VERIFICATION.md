@@ -62,6 +62,20 @@ SHA and required remote CI remain pending after push.
 - `WriteDeclared` is tagged `json:"-"`; certification discovery now excludes
   JSON-hidden decoder state. `make connectorgen-certification-matrix` is green
   without modifying a generated certification shard.
+- **Current-main evidence (inbox 003):** after `git fetch origin main`, both
+  the resolved `origin/main` and merge base were
+  `1324c52bab0b224ed8958858af7676b8b8e191b4`; head
+  `36ac3b0e8c424efda8a73345932af57138526a49` already contained it, so no merge
+  commit or conflict resolution was required. The focused M1/Sentry/Vercel/
+  delete/citation/action/certification suite passed: connectorgen 2.079s,
+  engine 0.988s, commandrunner 10.768s.
+- **Connector-shaped credential boundary:** a freshly rebuilt `./pm` initialized
+  a fresh project with no credential, then `./pm github label delete --name
+  bug --root <project> --json` exited 1 with `missing --credential`. It
+  dispatches an existing source-cited destructive control and makes no provider
+  request. The 12 KB temporary project was moved to Trash (recoverable). This
+  does not claim a Sentry/Vercel user command; none is added by this shared
+  foundation.
 - Repair-local passes: engine (9.800s), commandrunner (22.177s), serial CLI
   (488.445s), `go vet ./...`, `go build ./cmd/pm`, `make lint`,
   `make connector-runtime-preflight`, `make connector-canon-check`,

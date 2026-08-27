@@ -61,6 +61,14 @@ write action, request schema, transport, partial command, or source-lock edit.
   serial CLI (488.445s), `make connectorgen-certification-matrix`, lint,
   runtime-preflight, docs, canon, smoke, `go vet`, `go build`, and
   `git diff --check`.
+- Current-main evidence: `git fetch origin main` found
+  `1324c52bab0b224ed8958858af7676b8b8e191b4` already equal to this branch's
+  merge base, so integration was a no-op with no conflict or discarded work.
+  Rebuilt binary witness: in a fresh no-credential project, `./pm github label
+  delete --name bug --root <project> --json` exited 1 at `missing
+  --credential`. This is the existing source-cited GitHub delete control; it
+  proves the shared command foundation reaches its credential boundary without
+  provider I/O and does not claim a new Sentry/Vercel user command.
 - PASS after current-main integration: focused full-lock acceptance (1.118s),
   full `cmd/connectorgen` (154.269s), engine (14.192s), commandrunner
   (24.871s), runtime-preflight (8.737s), and CLI (438.166s) suites;

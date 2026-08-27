@@ -90,5 +90,26 @@ worktree, source-lock bytes, connector declarations, write actions, and active
   `cmd/connectorgen`, engine, commandrunner, and CLI suites; generator and
   applicable repository gates; `go build ./cmd/pm`; source-lock Sentry/Vercel
   inventory plus real delete/reverse-ETL controls; `git diff --check`. No new
-  implemented `pm` command exists, so no new credential-boundary probe is
-  claimed. Obtain a fresh separate Codex audit of the exact pushed repair SHA.
+  implemented Sentry/Vercel `pm` command exists, so their eventual
+  credential-boundary proof remains downstream. The existing source-cited
+  GitHub delete control is the connector-shaped binary witness for the shared
+  command foundation. Obtain a fresh separate Codex audit of the exact pushed
+  repair SHA.
+
+## Current-main evidence — inbox 003
+
+- `git fetch origin main` resolved `origin/main` to
+  `1324c52bab0b224ed8958858af7676b8b8e191b4`. It was already the merge base
+  of repair head `36ac3b0e8c424efda8a73345932af57138526a49`, so integration is
+  a clean no-op: no force, reset, stash, conflict resolution, or discarded
+  work was needed.
+- Re-ran the exact M1/Sentry/Vercel/delete/citation/complete-action/
+  certification focused suite across connectorgen, engine, and commandrunner;
+  all passed. Rebuilt `./pm`, initialized a fresh project without a credential,
+  and ran the existing source-cited GitHub `label delete --name bug` control.
+  It exited 1 at `missing --credential`, proving dispatch reaches the
+  credential boundary without a provider request. It is not a claim that this
+  foundation materialized a Sentry or Vercel user command.
+- The temporary 12 KB proof project was moved to Trash (recoverable). Push the
+  final evidence checkpoint normally, then obtain a fresh independent audit of
+  that resulting exact head. Do not merge the PR.
