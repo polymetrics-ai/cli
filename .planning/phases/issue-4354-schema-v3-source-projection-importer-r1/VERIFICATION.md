@@ -158,3 +158,39 @@ reclassify, or promote those rows.
   collection boundary. It is therefore not recorded as a captured pass; the
   explicit focused repair command above is the asserted Go-test evidence and
   CI remains the aggregate authority.
+
+## Frozen independent-audit repair verification — 2026-08-27
+
+The frozen independent audit rejected `21480fcd9ce5701164bafb82666ffe5bbc3934c4`
+for F1/F2/F3. The repair was made as a new red/green wave, then current
+`origin/main@b9b2478b3b2451d632d28b9aa138a170ad835110` was integrated through
+ordinary merge commit `449f18cdd`.
+
+- **Red:** the new import → validate test failed for both reference forms;
+  operation evidence accepted all six v2 reference-only overlays; and the
+  primary/supplemental citation swap was admitted.
+- **Green:** `TestSourceImportReferenceDescriptorsValidateThroughCLI` passes
+  legacy-v2 reference and true v3 `source_reference` forms; the v2 baseline
+  still yields one evidence operation while each overlay fails; and the
+  count-preserving cross-source swap fails location binding.
+- **Outreach truth:** exact fixture proof continues to assert all 259 rows,
+  253 primary + 6 supplemental citations, `source_contract_unavailable`, and
+  disabled ETL/reverse-ETL/direct-read/direct-write/binary-download/
+  binary-upload lanes. It does not write a production lock, descriptor,
+  generated evidence row, request contract, or command. Usable surface delta
+  is **0**.
+- **Captured local passes:** focused source-reference suite; full
+  `go test -timeout 20m ./cmd/connectorgen -count=1` (159.355s); engine
+  package; commandrunner package (22.522s); `go vet ./...`; both builds;
+  tidy; lint; docs validation; agent-contract; `connectorgen validate`
+  (553/0); surface-sync (553/0); operation-evidence (1,525 rows/5 rollups,
+  fixed-100 passed); and `git diff --check origin/main...HEAD`.
+- **Long aggregate collection:** `make connector-boundary` and
+  `make release-workflow-check` were started and reached their repository-wide
+  boundary/release phases, but this tool environment did not preserve their
+  terminal exit statuses after the 30-second collection boundary. They are
+  deliberately not claimed as passes; CI and the fresh audit must observe
+  them on the exact pushed head.
+- **Explicitly not run:** aggregate `go test -timeout 20m ./...`; repository
+  guidance assigns the full suite to CI. No live provider, credential, or
+  reverse-ETL action was attempted.

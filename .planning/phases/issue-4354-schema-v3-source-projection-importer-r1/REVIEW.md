@@ -70,3 +70,20 @@ No blocking finding after review of the repair diff.
    protocol, method, textual identity, route, and citation-mixture checks.
    Digest use remains provenance-only; no credential, live request, generic
    HTTP/shell/SQL control, or executor was introduced.
+
+## Frozen audit repair review — 2026-08-27
+
+- Review target: production repair `8ab4fa3b1` plus normal integration of
+  `origin/main@b9b2478b3b2451d632d28b9aa138a170ad835110`.
+- F1 uses the same reference provenance constructor on import and validation;
+  v3 selects `document.sourceArtifact()` and legacy reference descriptors are
+  correctly schema v3. Byte-backed v1/v2 expected forms are unchanged.
+- F2 inspects raw JSON field presence before tolerant v2 evidence projection.
+  An explicit null discriminator is invalid; only a non-empty discriminator
+  reaches the strict source-import reference parser. This keeps ordinary
+  byte-backed v2 compatibility while refusing every reference-only overlay.
+- F3 verifies each supplement-attributed operation repeats that supplement's
+  exact declared location; URL/count membership alone cannot authenticate a
+  citation assignment.
+- No blocking local review finding. A fresh independent exact-head audit is
+  still required by the delivery brief; this inline review does not replace it.

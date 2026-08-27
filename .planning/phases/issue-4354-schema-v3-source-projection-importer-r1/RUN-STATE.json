@@ -4,7 +4,7 @@
   "base": "main",
   "branch": "feat/4354-schema-v3-source-projection",
   "delivery": "direct-pr",
-  "status": "pr_repair_pushed_ci_and_audit_pending",
+  "status": "frozen_audit_repair_verified_locally_push_and_exact_head_audit_pending",
   "gsd": {
     "mode": "inline-manual-fallback",
     "commands_resolved": [
@@ -22,10 +22,10 @@
     "base": "main",
     "head": "feat/4354-schema-v3-source-projection",
     "head_sha_at_creation": "cdaf4849eee5da74998dc097eb60d6ba7d81b7cd",
-    "repair_sha": "013c997d158542457406f30b7d1b096d5cd794fa",
+    "repair_sha": "8ab4fa3b1",
     "review_route": "claude_auto",
     "review_status": "pending"
   },
   "constraint": "The candidate Outreach lock enumerates two provider documents but neither exact raw source artifact is retained in the candidate, current main, or local Git object store. Byte-backed import remains strict and cannot fetch, re-pin, or substitute derived bytes. The active slice adds an explicit declaration-only source-reference path that preserves canonical URLs and operation identities without claiming byte-backed import, credential validity, certification, or executability.",
-  "verify_repair": "Verify runs 32978972653 and 32978973162 exposed a stale line-layout help assertion, not an importer regression. Commit 013c997d158542457406f30b7d1b096d5cd794fa strengthens the contract assertion; focused red/green, full cmd/connectorgen, scoped vet, and diff checks passed before normal push."
+  "verify_repair": "Frozen audit F1/F2/F3 was repaired with CLI-path import-to-validate tests for legacy/v3 reference forms, v2 operation-evidence raw-field overlays (including null discriminator), and cross-source citation location binding. Current origin/main b9b2478b3b2451d632d28b9aa138a170ad835110 was merged normally at 449f18cdd. Captured full cmd/connectorgen, engine/runner, vet/build, generator, docs, lint, and diff gates are in VERIFICATION.md; boundary/release terminal statuses were not retained by the local collection harness and are not claimed as passes."
 }
