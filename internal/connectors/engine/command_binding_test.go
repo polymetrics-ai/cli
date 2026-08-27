@@ -330,6 +330,15 @@ func TestResolveImplementedCommandBindingRejectsUnprovenCircleCICompositeProject
 			command: baseCommand,
 		},
 		{
+			name: "conflicting source URL",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.CompositeProviderPathIdentity.SourceURL = "https://example.invalid/openapi.json"
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
 			name: "reordered config keys",
 			bundle: func() Bundle {
 				bundle := circleCICompositeProjectSlugBundle()
@@ -352,6 +361,15 @@ func TestResolveImplementedCommandBindingRejectsUnprovenCircleCICompositeProject
 			bundle: func() Bundle {
 				bundle := circleCICompositeProjectSlugBundle()
 				bundle.CompositeProviderPathIdentity.ConfigKeys = []string{"vcs_type", "org", "repo", "project"}
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
+			name: "repeated config key",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.CompositeProviderPathIdentity.ConfigKeys = []string{"vcs_type", "org", "org"}
 				return bundle
 			},
 			command: baseCommand,
@@ -389,6 +407,15 @@ func TestResolveImplementedCommandBindingRejectsUnprovenCircleCICompositeProject
 			bundle: func() Bundle {
 				bundle := circleCICompositeProjectSlugBundle()
 				bundle.Streams[0].Path = "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/extra"
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
+			name: "changed runtime literal",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.Streams[0].Path = "/projects/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}"
 				return bundle
 			},
 			command: baseCommand,
@@ -470,6 +497,20 @@ func TestResolveImplementedCommandBindingRejectsUnprovenCircleCICompositeProject
 			}
 		})
 	}
+	if _, err := resolveImplementedCommandBinding(circleCICompositeProjectSlugBundle(), baseCommand, circleCICompositeProjectSlugHook{}); err == nil {
+		t.Fatal("hook-routed CircleCI transport passed the closed composite identity proof")
+	}
+}
+
+type circleCICompositeProjectSlugHook struct{}
+
+func (circleCICompositeProjectSlugHook) ConnectorName() string { return "circleci" }
+
+func (circleCICompositeProjectSlugHook) CommandBindingTransport(binding connectors.CommandBindingIdentity) (string, string, bool) {
+	if binding == (connectors.CommandBindingIdentity{Kind: connectors.CommandBindingStream, ID: "projects"}) {
+		return http.MethodGet, "/project/{vcs_type}/{org}/{repo}", true
+	}
+	return "", "", false
 }
 
 func TestCircleCICompositeProviderPathIdentityLoadsFromTheSourceCitedSurface(t *testing.T) {
