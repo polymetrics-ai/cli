@@ -22,10 +22,12 @@ CLI help/manual/website parity is not applicable: the work neither changes a `pm
 2. **Green — source-local resolution.** Add source-document-local normalized-reference memoization and retain the existing per-traversal cycle/reference/resource checks. Replace all-document reference preflight with per-operation resolution so exact operations produce full descriptors.
 3. **Green — bounded operation-local gap.** Introduce a typed finite-depth error. For v2/v3 gap-enabled locks only, turn that error into a source-cited skeletal descriptor carrying `cli-source-descriptor-foundation-r1`, its exact operation location, and a merge-blocking runtime gap. Preserve hard rejection for malformed, external, cyclic, ambiguous, target-kind, and resource-exhaustion errors.
 4. **Refactor — lock projection and generator controls.** Ensure operation identity validation accepts the retained descriptor, source-descriptor serialization is stable, and source-projection cannot materialize a command from an incomplete descriptor. Update verification evidence only as a consequence of these tested behaviors.
+5. **CI-repair Red/Green — current-main preflight without depth abort.** After integrating #4358, restore its complete source-grammar preflight and reproduce the full package failure. Keep its validation of unused malformed/dynamic references and non-response expansion exhaustion, but recognize only typed finite depth exhaustion for gap-enabled locks. Continue scanning later component entries so depth cannot mask an independent external or malformed reference; let the per-operation importer produce the exact incomplete descriptor.
 
 ## Verification plan
 
 - `go test -timeout 20m ./cmd/connectorgen -run 'TestSourceImportStripeReferenceDepthOperationLocal|TestSourceImportRejectsUnsafeReferences' -count=1`
+- `go test -timeout 20m ./cmd/connectorgen -run '^(TestSourceImportPreflightsUnusedGrammarObjects|TestSourceImportReservesNonResponseReferenceExpansionBeforeCloning|TestSourceImportStripeReferenceDepthOperationLocal|TestSourceImportRejectsUnsafeReferences)$' -count=1`
 - `go test -timeout 20m ./cmd/connectorgen -count=1`
 - `go test -timeout 20m ./internal/connectors/engine -count=1`
 - `go test -timeout 20m ./internal/connectors/commandrunner -count=1`

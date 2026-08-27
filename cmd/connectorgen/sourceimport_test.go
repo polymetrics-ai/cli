@@ -2081,6 +2081,19 @@ func TestSourceImportPreflightsUnusedGrammarObjects(t *testing.T) {
 	}
 }
 
+func TestSourceImportDoesNotTreatDepthAsDocumentSafetyExemption(t *testing.T) {
+	t.Parallel()
+	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"First":{"$ref":"#/components/schemas/Second"},"Second":{"$ref":"#/components/schemas/Third"},"Third":{"type":"string"},"Unsafe":{"$ref":"https://provider.invalid/unused.json"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"#/components/schemas/First"}}}}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/depth-is-not-safety-exemption.json", raw)
+	lock.SchemaVersion = 2
+	limits := defaultSourceImportLimits()
+	limits.MaxReferenceDepth = 1
+	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), limits)
+	if err == nil || !strings.Contains(err.Error(), "external reference") {
+		t.Fatalf("depth safety exemption error = %v, want external reference", err)
+	}
+}
+
 func TestSourceImportPreservesExactYAMLNumericBounds(t *testing.T) {
 	t.Parallel()
 	raw := []byte(`openapi: 3.1.0
