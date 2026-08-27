@@ -83,6 +83,42 @@ func TestBatch1DeferredManifestRejectsUnsafeOrAmbiguousDeferredRecords(t *testin
 	}
 }
 
+func TestBatch1DeferredCatalogsPreserveEveryDeferredSourceIdentity(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, err := os.ReadFile(filepath.Join(root, "docs", "architecture", "batch1-source-operation-mapping-manifest.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	manifest, err := decodeBatch1DeferredManifest(raw)
+	if err != nil {
+		t.Fatal(err)
+	}
+	catalogs, err := buildBatch1DeferredCatalogs(manifest, filepath.Join(root, "internal", "connectors", "defs"))
+	if err != nil {
+		t.Fatalf("build catalogs: %v", err)
+	}
+	if got := len(catalogs.Inventory); got != 1910 {
+		t.Fatalf("inventory rows = %d, want 1910", got)
+	}
+	if got := len(catalogs.Sources); got != 1910 {
+		t.Fatalf("source rows = %d, want 1910", got)
+	}
+	if got := len(catalogs.Declarations); got != 1910 {
+		t.Fatalf("declaration rows = %d, want 1910", got)
+	}
+	for index, declaration := range catalogs.Declarations {
+		if declaration.State != declarationAdmissionStateDeferred || declaration.Binding.Kind != "command" || declaration.Binding.ID != declaration.Command {
+			t.Fatalf("declaration %d is not an operation-free deferred command: %+v", index, declaration)
+		}
+		if declaration.Foundation == nil || declaration.Foundation.Component != "runtime_executor" || declaration.Foundation.Evidence != "runtime_executor_absent" {
+			t.Fatalf("declaration %d has no closed runtime gap: %+v", index, declaration.Foundation)
+		}
+	}
+}
+
 func batch1DeferredFixture(t *testing.T) batch1DeferredManifest {
 	t.Helper()
 	const fixture = `{

@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"os"
+	"path/filepath"
+	"sort"
 	"strings"
 )
 
@@ -86,6 +89,16 @@ type batch1DeferredCensus struct {
 	Runnable         int
 	Declarable       int
 	Deferred         int
+}
+
+// batch1DeferredCatalogs is the source/declaration triple generated from the
+// manifest. Each row is intentionally operation-free: it makes the source
+// target discoverable while reserving the actual typed lane for its later
+// foundation PR.
+type batch1DeferredCatalogs struct {
+	Inventory    []declarationAdmissionInventoryOperation
+	Sources      []declarationAdmissionSourceOperation
+	Declarations []declarationAdmissionDeclaration
 }
 
 func decodeBatch1DeferredManifest(raw []byte) (batch1DeferredManifest, error) {
@@ -192,6 +205,146 @@ func (manifest batch1DeferredManifest) deferredRecords() []batch1DeferredRecord 
 		}
 	}
 	return deferred
+}
+
+func buildBatch1DeferredCatalogs(manifest batch1DeferredManifest, defsRoot string) (batch1DeferredCatalogs, error) {
+	if _, err := manifest.reconcilePublishedCensus(); err != nil {
+		return batch1DeferredCatalogs{}, err
+	}
+	catalogs := batch1DeferredCatalogs{
+		Inventory:    make([]declarationAdmissionInventoryOperation, 0, manifest.Invariants.Deferred),
+		Sources:      make([]declarationAdmissionSourceOperation, 0, manifest.Invariants.Deferred),
+		Declarations: make([]declarationAdmissionDeclaration, 0, manifest.Invariants.Deferred),
+	}
+	reviewedLocks := map[string]declarationAdmissionReviewedSourceLock{}
+	for _, record := range manifest.deferredRecords() {
+		lockRelative, err := batch1DeferredRelativeLockPath(record)
+		if err != nil {
+			return batch1DeferredCatalogs{}, err
+		}
+		lock, found := reviewedLocks[lockRelative]
+		if !found {
+			raw, err := os.ReadFile(filepath.Join(defsRoot, filepath.FromSlash(lockRelative)))
+			if err != nil {
+				return batch1DeferredCatalogs{}, fmt.Errorf("read Batch 1 source lock %q: %w", lockRelative, err)
+			}
+			lock, err = parseDeclarationAdmissionSourceLock(raw, record.Provider)
+			if err != nil {
+				return batch1DeferredCatalogs{}, fmt.Errorf("validate Batch 1 source lock %q: %w", lockRelative, err)
+			}
+			reviewedLocks[lockRelative] = lock
+		}
+		reviewed, found := lock.Operations[record.Source.OperationID]
+		if !found {
+			return batch1DeferredCatalogs{}, fmt.Errorf("Batch 1 source record %q is absent from its reviewed source lock", record.RecordKey)
+		}
+		if err := batch1DeferredReviewedSourceMatchesManifest(record, reviewed); err != nil {
+			return batch1DeferredCatalogs{}, err
+		}
+
+		destructiveKind := batch1DeferredDestructiveKind(record)
+		binding := declarationAdmissionBinding{Kind: "command", ID: record.IntendedCLIPath.Path}
+		foundation := batch1DeferredAdmissionFoundation(record)
+		catalogs.Inventory = append(catalogs.Inventory, declarationAdmissionInventoryOperation{
+			Connector:         record.Provider,
+			SourceID:          record.Source.OperationID,
+			SourceLock:        lockRelative,
+			SourceOperationID: record.Source.OperationID,
+		})
+		catalogs.Sources = append(catalogs.Sources, declarationAdmissionSourceOperation{
+			Connector:           record.Provider,
+			ID:                  record.Source.OperationID,
+			Protocol:            record.Source.Protocol,
+			SourceURL:           record.Source.URL,
+			Location:            record.Source.Location,
+			ProviderOperationID: record.Source.ProviderOperationID,
+			Method:              record.Source.Method,
+			Path:                record.Source.Path,
+			Binding:             binding,
+			DestructiveKind:     destructiveKind,
+		})
+		catalogs.Declarations = append(catalogs.Declarations, declarationAdmissionDeclaration{
+			Connector:  record.Provider,
+			SourceID:   record.Source.OperationID,
+			Lane:       batch1DeferredAdmissionLane(record.Lane),
+			Command:    record.IntendedCLIPath.Path,
+			State:      declarationAdmissionStateDeferred,
+			Canonical:  declarationAdmissionEndpoint{Method: record.CanonicalTarget.Endpoint.Method, Path: record.CanonicalTarget.Endpoint.Path},
+			Binding:    binding,
+			Foundation: &foundation,
+		})
+	}
+	sort.Slice(catalogs.Inventory, func(i, j int) bool {
+		if catalogs.Inventory[i].Connector != catalogs.Inventory[j].Connector {
+			return catalogs.Inventory[i].Connector < catalogs.Inventory[j].Connector
+		}
+		return catalogs.Inventory[i].SourceID < catalogs.Inventory[j].SourceID
+	})
+	sort.Slice(catalogs.Sources, func(i, j int) bool {
+		if catalogs.Sources[i].Connector != catalogs.Sources[j].Connector {
+			return catalogs.Sources[i].Connector < catalogs.Sources[j].Connector
+		}
+		return catalogs.Sources[i].ID < catalogs.Sources[j].ID
+	})
+	sort.Slice(catalogs.Declarations, func(i, j int) bool {
+		if catalogs.Declarations[i].Connector != catalogs.Declarations[j].Connector {
+			return catalogs.Declarations[i].Connector < catalogs.Declarations[j].Connector
+		}
+		return catalogs.Declarations[i].SourceID < catalogs.Declarations[j].SourceID
+	})
+	return catalogs, nil
+}
+
+func batch1DeferredRelativeLockPath(record batch1DeferredRecord) (string, error) {
+	const defsPrefix = "internal/connectors/defs/"
+	if !strings.HasPrefix(record.Source.Lock, defsPrefix) {
+		return "", fmt.Errorf("Batch 1 source record %q: source_lock is outside connector definitions", record.RecordKey)
+	}
+	relative := strings.TrimPrefix(record.Source.Lock, defsPrefix)
+	clean := filepath.ToSlash(filepath.Clean(filepath.FromSlash(relative)))
+	if clean != relative || !strings.HasPrefix(relative, record.Provider+"/sources/") || !strings.HasSuffix(relative, "-operation-source-lock.json") {
+		return "", fmt.Errorf("Batch 1 source record %q: source_lock is not a connector-owned operation lock", record.RecordKey)
+	}
+	return relative, nil
+}
+
+func batch1DeferredReviewedSourceMatchesManifest(record batch1DeferredRecord, reviewed declarationAdmissionReviewedOperation) error {
+	if reviewed.Protocol != record.Source.Protocol || reviewed.SourceURL != record.Source.URL || reviewed.Location != record.Source.Location ||
+		reviewed.ProviderOperationID != record.Source.ProviderOperationID || !strings.EqualFold(reviewed.Method, record.Source.Method) || reviewed.Path != record.Source.Path {
+		return fmt.Errorf("Batch 1 source record %q does not match its reviewed provider citation and target", record.RecordKey)
+	}
+	return nil
+}
+
+func batch1DeferredDestructiveKind(record batch1DeferredRecord) string {
+	if record.CanonicalTarget.Endpoint.Method == "DELETE" {
+		return "delete"
+	}
+	return "none"
+}
+
+func batch1DeferredAdmissionLane(lane string) string {
+	switch lane {
+	case "binary_read":
+		return declarationAdmissionLaneBinaryDownload
+	case "binary_write":
+		return declarationAdmissionLaneBinaryUpload
+	default:
+		return lane
+	}
+}
+
+func batch1DeferredAdmissionFoundation(record batch1DeferredRecord) declarationAdmissionFoundation {
+	return declarationAdmissionFoundation{
+		ID:        record.MissingImplementation.Foundation,
+		Reason:    record.MissingImplementation.Component + " unavailable: " + record.MissingImplementation.Evidence,
+		Component: "runtime_executor",
+		Evidence:  "runtime_executor_absent",
+		Target: declarationAdmissionEndpoint{
+			Method: record.CanonicalTarget.Endpoint.Method,
+			Path:   record.CanonicalTarget.Endpoint.Path,
+		},
+	}
 }
 
 func isBatch1ManifestSchemaVersion(raw json.RawMessage) bool {
