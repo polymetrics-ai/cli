@@ -23,8 +23,21 @@ are absent; no live provider fetch or synthetic artifact may replace them.
 - RED: `go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportV3RenderedReferenceCoverageOnlyRequiresExplicitClosedProof$' -count=1` failed before implementation with `json: unknown field "coverage_only"`.
 - GREEN: `go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportV3RenderedReferenceCoverageOnly' -count=1` passed.
 - Regression: `go test -timeout 20m ./cmd/connectorgen -run '^(TestSourceImportVersion3RenderedReference|TestSourceRetainRetainsRenderedReferenceAndBundleArtifacts|TestSourceImport_RejectsUnknownSectionAndIndependentIndexOverflow)$' -count=1` passed.
-- Full-package correction: `go test -timeout 20m ./cmd/connectorgen -count=1` first failed only because the existing `TestSourceImportVersion3RenderedReferenceRetainsCapturedEvidenceWithoutOperations` fixture omitted the newly required discriminator. The fixture now declares `coverage_only:true`; its focused regression with all coverage-only tests passes.
+- Full-package correction: `go test -timeout 20m ./cmd/connectorgen -count=1` first failed only because the existing `TestSourceImportVersion3RenderedReferenceRetainsCapturedEvidenceWithoutOperations` fixture omitted the newly required discriminator. The fixture now declares `coverage_only:true`; its focused regression with all coverage-only tests passes. The corrected full package passed in 193.136 seconds.
 - Batch source check: `git ls-tree -r --name-only fm/cli-map-batch8910-r1 -- internal/connectors/defs` shows only the five lock/crosswalk/disposition files, not retained artifact content or manifests. The five lock inventories total 720 operations and list 15 zero-operation rendered documents; their 15 pinned digest paths are absent from `git rev-list --all --objects`.
+
+## Local-only importer/projection witness
+
+`TestSourceImportV3RenderedReferenceCoverageOnlyRetainsAndVerifiesLockedBytes`
+first retains fixture bytes with a fake setup fetcher. It then invokes the real
+`source-import` command and `--check` with a nil fetcher, so production must
+construct `newConnectorSourceImportRetainedArtifactFetcher` and read only the
+checked-in lock, manifest, and content-addressed artifact. Both commands pass,
+report zero operations and `writes=0 cli=0`, and the test asserts that no
+`writes.json`, `cli_surface.json`, or `operations.json` is fabricated. The
+Batch 8–10 generator's separate `http.Client.Do` regeneration path is therefore
+not a missing source-import/projection capability; its absent local artifacts
+remain the exact evidence gap for the 720-row exercise.
 
 ## CLI documentation parity
 

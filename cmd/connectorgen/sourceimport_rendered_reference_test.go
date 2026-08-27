@@ -258,6 +258,25 @@ func TestSourceImportV3RenderedReferenceCoverageOnlyRetainsAndVerifiesLockedByte
 	if len(result.Operations) != 0 || len(result.InboundEvents) != 0 {
 		t.Fatalf("retained coverage result fabricated records: %#v", result)
 	}
+	output := filepath.Join(t.TempDir(), "fixture-operation-descriptor.json")
+	var importStdout, importStderr bytes.Buffer
+	args := []string{"source-import", lock.Connector, "--defs", defsRoot, "--out", output}
+	if code := runSourceImportWithFetcher(args, &importStdout, &importStderr, nil); code != 0 {
+		t.Fatalf("local-only coverage source-import exit=%d stdout=%q stderr=%q", code, importStdout.String(), importStderr.String())
+	}
+	if !strings.Contains(importStdout.String(), "0 operation(s)") || !strings.Contains(importStdout.String(), "writes=0 cli=0") {
+		t.Fatalf("local-only coverage source-import output = %q", importStdout.String())
+	}
+	importStdout.Reset()
+	importStderr.Reset()
+	if code := runSourceImportWithFetcher(append(args, "--check"), &importStdout, &importStderr, nil); code != 0 {
+		t.Fatalf("local-only coverage source-import check exit=%d stdout=%q stderr=%q", code, importStdout.String(), importStderr.String())
+	}
+	for _, surface := range []string{"writes.json", "cli_surface.json", "operations.json"} {
+		if _, err := os.Stat(filepath.Join(defsRoot, lock.Connector, surface)); !os.IsNotExist(err) {
+			t.Fatalf("zero-operation coverage fabricated %s: %v", surface, err)
+		}
+	}
 
 	artifactPath := filepath.Join(defsRoot, lock.Connector, "sources", sourceImportRetainedArtifactDirectory, strings.ToLower(lock.Rest.SourceDocuments[0].Artifact.SHA256)+sourceImportRetainedArtifactExtension)
 	if err := os.WriteFile(artifactPath, append(append([]byte(nil), page...), '\n'), 0o644); err != nil {
