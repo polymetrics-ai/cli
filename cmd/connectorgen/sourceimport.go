@@ -8502,6 +8502,7 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 		logln(stderr, "connectorgen source-import: apply source-cited mutation dispositions:", err)
 		return 1
 	}
+	sourceProjectionApplyWriteDisabledMutationArtifacts(surface, &result)
 	raw, err := marshalSourceImportResult(result)
 	if err != nil {
 		logln(stderr, "connectorgen source-import: encode descriptors:", err)

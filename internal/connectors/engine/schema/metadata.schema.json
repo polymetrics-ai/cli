@@ -13,6 +13,7 @@
     "release_stage": { "type": "string" },
     "capabilities": {
       "type": "object",
+      "required": ["write"],
       "additionalProperties": false,
       "properties": {
         "check": { "type": "boolean" },

@@ -1944,6 +1944,9 @@ func capabilityFieldsFromSource(repoRoot, path string) (map[string]string, error
 				continue
 			}
 			for _, field := range structure.Fields.List {
+				if capabilityFieldIsJSONHidden(field) {
+					continue
+				}
 				for _, name := range field.Names {
 					found[snakeIdentifier(name.Name)] = sourceSymbol(repoRoot, path, typeSpec.Name.Name+"."+name.Name)
 				}
@@ -1954,6 +1957,22 @@ func capabilityFieldsFromSource(repoRoot, path string) (map[string]string, error
 		return nil, fmt.Errorf("capability source %q declares no Capabilities fields", path)
 	}
 	return found, nil
+}
+
+// capabilityFieldIsJSONHidden excludes parser bookkeeping such as a presence
+// sentinel from the public connector-capability inventory. A capability is a
+// JSON metadata contract, so a field explicitly hidden from that contract is
+// not a new certified function kind.
+func capabilityFieldIsJSONHidden(field *ast.Field) bool {
+	if field.Tag == nil {
+		return false
+	}
+	tag, err := strconv.Unquote(field.Tag.Value)
+	if err != nil {
+		return false
+	}
+	jsonName, found := reflect.StructTag(tag).Lookup("json")
+	return found && strings.Split(jsonName, ",")[0] == "-"
 }
 
 func operationKindsFromSource(repoRoot, path string) (map[string]string, error) {
