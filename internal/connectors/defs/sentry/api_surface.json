@@ -1651,9 +1651,8 @@
     {
       "method": "GET",
       "path": "/api/0/seer/models/",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+      "covered_by": {
+        "direct_read": "seer list-models"
       }
     },
     {

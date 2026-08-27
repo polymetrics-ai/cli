@@ -136603,8 +136603,7 @@
       "title": "Sentry Connection Specification",
       "type": "object",
       "required": [
-        "auth_token",
-        "base_url"
+        "auth_token"
       ],
       "properties": {
         "auth_token": {
@@ -136615,7 +136614,8 @@
         "base_url": {
           "type": "string",
           "format": "uri",
-          "description": "Sentry API base URL, e.g. https://sentry.io or https://\u003cself-hosted-host\u003e. Required: legacy derives this from a hostname config value (default sentry.io), but that cross-key derivation has no engine mechanism today (see docs.md Known limits), so this bundle requires the fully-formed URL instead."
+          "default": "https://sentry.io",
+          "description": "Sentry API base URL, e.g. https://sentry.io or https://\u003cself-hosted-host\u003e. Defaults to https://sentry.io; self-hosted Sentry connections must set their fully-formed URL explicitly."
         },
         "organization": {
           "type": "string",

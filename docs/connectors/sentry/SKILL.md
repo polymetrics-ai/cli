@@ -28,7 +28,7 @@ Reads Sentry projects, issues, error events, and releases through the Sentry RES
 
 ## Configuration
 
-- base_url (required)
+- base_url
 - max_pages
 - organization
 - page_size
@@ -62,6 +62,14 @@ Reads Sentry projects, issues, error events, and releases through the Sentry RES
 
 - read risk: external Sentry API read of project, issue, event, and release data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+## Command Surface
+
+- Sentry command surface
+- Usage: pm sentry <command>
+- Seer
+- Other Commands
+  - seer list-models - List the declared Sentry Seer models. [intent=direct_read availability=implemented operation=sentry.seer_models_list]; flags: --page, --page-cursor
 
 ## Commands
 

@@ -27,7 +27,7 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url (required)
+  base_url
   max_pages
   organization
   page_size
@@ -58,6 +58,13 @@ SYNC MODES
 SECURITY
   read risk: external Sentry API read of project, issue, event, and release data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+COMMAND SURFACE
+  Sentry command surface
+  Usage: pm sentry <command>
+  Seer
+  Other Commands
+    seer list-models - List the declared Sentry Seer models. [intent=direct_read availability=implemented operation=sentry.seer_models_list]; flags: --page, --page-cursor
 
 EXAMPLES
   # Inspect as a manual

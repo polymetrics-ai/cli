@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync/atomic"
 	"testing"
 
 	"polymetrics.ai/internal/app"
@@ -105,6 +106,85 @@ func TestSourceBoundOriginRejectsBeforeAppOrCredential(t *testing.T) {
 		if strings.Contains(output, forbidden) {
 			t.Fatalf("invalid source origin reached App or credential handling (%q):\n%s", forbidden, output)
 		}
+	}
+}
+
+func TestSentrySeerModelsCommandStopsBeforeProviderIOWithoutCredential(t *testing.T) {
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	spy := &sentrySeerModelsTransportSpy{}
+	oldTransport := http.DefaultTransport
+	http.DefaultTransport = spy
+	t.Cleanup(func() { http.DefaultTransport = oldTransport })
+
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"sentry", "seer", "list-models", "--root", root}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("Run(sentry seer list-models) unexpectedly succeeded; stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+	if got := strings.TrimSpace(stdout.String() + stderr.String()); got != "error: missing --credential" {
+		t.Fatalf("Run(sentry seer list-models) output = %q, want %q", got, "error: missing --credential")
+	}
+	if got := spy.requests.Load(); got != 0 {
+		t.Fatalf("Run(sentry seer list-models) provider requests = %d, want zero", got)
+	}
+}
+
+type sentrySeerModelsTransportSpy struct {
+	requests atomic.Int64
+}
+
+func (spy *sentrySeerModelsTransportSpy) RoundTrip(*http.Request) (*http.Response, error) {
+	spy.requests.Add(1)
+	return nil, fmt.Errorf("unexpected Sentry provider I/O")
+}
+
+func TestSentrySeerModelsHelpAndBareNamespaces(t *testing.T) {
+	for _, testCase := range []struct {
+		name string
+		args []string
+		want []string
+	}{
+		{
+			name: "connector help topic",
+			args: []string{"help", "sentry"},
+			want: []string{"Sentry connector manual", "seer list-models"},
+		},
+		{
+			name: "bare connector",
+			args: []string{"sentry"},
+			want: []string{"pm sentry - Sentry command surface", "seer - see pm sentry seer --help"},
+		},
+		{
+			name: "bare command group",
+			args: []string{"sentry", "seer"},
+			want: []string{"pm sentry seer - Sentry seer commands", "seer list-models"},
+		},
+		{
+			name: "command help",
+			args: []string{"sentry", "seer", "list-models", "--help"},
+			want: []string{"INTENT\n  direct_read", "OPERATION\n  sentry.seer_models_list", "No command-specific flags."},
+		},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			if code := cli.Run(testCase.args, &stdout, &stderr); code != 0 {
+				t.Fatalf("Run(%v) code = %d; stdout=%s stderr=%s", testCase.args, code, stdout.String(), stderr.String())
+			}
+			for _, want := range testCase.want {
+				if !strings.Contains(stdout.String(), want) {
+					t.Fatalf("Run(%v) help omitted %q:\n%s", testCase.args, want, stdout.String())
+				}
+			}
+		})
+	}
+
+	var stdout, stderr bytes.Buffer
+	if code := cli.Run([]string{"sentry", "seer", "unknown"}, &stdout, &stderr); code == 0 || !strings.Contains(stdout.String()+stderr.String(), `unknown command "seer unknown"`) {
+		t.Fatalf("Run(invalid Sentry command) code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
 	}
 }
 
