@@ -2081,6 +2081,57 @@ func TestSourceImportPreflightsUnusedGrammarObjects(t *testing.T) {
 	}
 }
 
+func TestSourceImportDoesNotTreatDepthAsDocumentSafetyExemption(t *testing.T) {
+	t.Parallel()
+	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"First":{"$ref":"#/components/schemas/Second"},"Second":{"$ref":"#/components/schemas/Third"},"Third":{"type":"string"},"Unsafe":{"$ref":"https://provider.invalid/unused.json"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"#/components/schemas/First"}}}}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/depth-is-not-safety-exemption.json", raw)
+	lock.SchemaVersion = 2
+	lock.Rest.ReferenceDepthLimit = 1
+	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "external reference") {
+		t.Fatalf("depth safety exemption error = %v, want external reference", err)
+	}
+
+	deepExternal := `{"$ref":"https://provider.invalid/hidden-after-depth.json"}`
+	for range 64 {
+		deepExternal = `{"type":"array","items":` + deepExternal + `}`
+	}
+	raw = []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"DeepUnsafe":` + deepExternal + `}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"#/components/schemas/DeepUnsafe"}}}}}}}}}`)
+	lock = sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/deep-depth-is-not-safety-exemption.json", raw)
+	lock.SchemaVersion = 2
+	lock.Rest.ReferenceDepthLimit = 1
+	_, err = importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "external reference") {
+		t.Fatalf("deep depth safety exemption error = %v, want external reference", err)
+	}
+
+	deepDynamic := `{"$dynamicRef":"#/components/schemas/Hidden"}`
+	for range 64 {
+		deepDynamic = `{"type":"array","items":` + deepDynamic + `}`
+	}
+	raw = []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"DeepDynamic":` + deepDynamic + `}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"#/components/schemas/DeepDynamic"}}}}}}}}}`)
+	lock = sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/deep-dynamic-is-not-safety-exemption.json", raw)
+	lock.SchemaVersion = 2
+	lock.Rest.ReferenceDepthLimit = 1
+	_, err = importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "cli-openapi-dynamic-ref-foundation-r1") {
+		t.Fatalf("deep depth safety exemption error = %v, want dynamic reference refusal", err)
+	}
+
+	deepCycle := `{"$ref":"#/components/schemas/Loop"}`
+	for range 64 {
+		deepCycle = `{"type":"array","items":` + deepCycle + `}`
+	}
+	raw = []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"DeepCycle":` + deepCycle + `,"Loop":{"$ref":"#/components/schemas/DeepCycle"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"#/components/schemas/DeepCycle"}}}}}}}}}`)
+	lock = sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/deep-cycle-is-not-safety-exemption.json", raw)
+	lock.SchemaVersion = 2
+	lock.Rest.ReferenceDepthLimit = 1
+	_, err = importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "reference cycle") {
+		t.Fatalf("deep depth safety exemption error = %v, want reference cycle", err)
+	}
+}
+
 func TestSourceImportPreservesExactYAMLNumericBounds(t *testing.T) {
 	t.Parallel()
 	raw := []byte(`openapi: 3.1.0
@@ -2898,6 +2949,303 @@ func TestSourceImportKeepsDepthBoundFiniteAfterProviderIncrease(t *testing.T) {
 	}
 }
 
+func TestSourceImportStripeReferenceDepthOperationLocal(t *testing.T) {
+	t.Parallel()
+	raw := sourceStripeReferenceToleranceDocument(3)
+	lock := sourceStripeReferenceToleranceLock(raw)
+	fetcher := sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil })
+
+	complete, err := importSourceLockResult(context.Background(), lock, fetcher, defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import complete retained Stripe source evidence: %v", err)
+	}
+	completeByID := sourceOperationsByID(complete.Operations)
+	for _, sourceID := range []string{
+		"GetAccount",
+		"DeleteAccountsAccount",
+		"GetAccountsAccount",
+	} {
+		operation, ok := completeByID[sourceID]
+		if !ok {
+			t.Fatalf("complete import omitted retained Stripe source ID %q: %#v", sourceID, complete.Operations)
+		}
+		if operation.Runtime.MergeBlocked || len(operation.Runtime.Gaps) != 0 || len(operation.Responses) != 1 {
+			t.Fatalf("complete Stripe source descriptor %q = %#v", sourceID, operation)
+		}
+	}
+	if schema := descriptorResponse(t, completeByID["GetAccountsAccount"], "200").Declaration.(map[string]any)["content"].(map[string]any)["application/json"].(map[string]any)["schema"].(map[string]any); schema["type"] != "string" {
+		t.Fatalf("complete nested Stripe response did not resolve its source-backed schema: %#v", schema)
+	}
+
+	limits := defaultSourceImportLimits()
+	limits.MaxReferenceDepth = 1
+	bounded, err := importSourceLockResult(context.Background(), lock, fetcher, limits)
+	if err != nil {
+		t.Fatalf("bounded Stripe source import aborted instead of retaining its affected operation: %v", err)
+	}
+	boundedByID := sourceOperationsByID(bounded.Operations)
+	for _, sourceID := range []string{"GetAccount", "DeleteAccountsAccount"} {
+		operation, ok := boundedByID[sourceID]
+		if !ok || operation.Runtime.MergeBlocked || len(operation.Runtime.Gaps) != 0 || len(operation.Responses) != 1 {
+			t.Fatalf("unaffected Stripe source operation %q = %#v", sourceID, operation)
+		}
+	}
+	nested, ok := boundedByID["GetAccountsAccount"]
+	if !ok {
+		t.Fatalf("bounded import omitted nested Stripe source operation: %#v", bounded.Operations)
+	}
+	if len(nested.Responses) != 0 || len(nested.Output.Success) != 0 {
+		t.Fatalf("incomplete Stripe descriptor invented a request/response contract: %#v", nested)
+	}
+	if !nested.Runtime.MergeBlocked || len(nested.Runtime.Gaps) != 1 {
+		t.Fatalf("bounded nested Stripe runtime = %#v", nested.Runtime)
+	}
+	if !sourceProjectionHasBlockingGap(nested.Runtime.Gaps) {
+		t.Fatalf("incomplete Stripe descriptor lost its source-projection materialization block: %#v", nested.Runtime.Gaps)
+	}
+	gap := nested.Runtime.Gaps[0]
+	if gap.Foundation != "cli-source-descriptor-foundation-r1" || gap.Location != `paths["/v1/accounts/{account}"].get` || !strings.Contains(gap.Reason, "reference depth limit exceeded") {
+		t.Fatalf("bounded nested Stripe gap = %#v", gap)
+	}
+	if nested.ProviderOperationID != "GetAccountsAccount" || nested.Source.URL != "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json" || nested.Source.Location != `paths["/v1/accounts/{account}"].get` || nested.Method != "get" || nested.Path != "/v1/accounts/{account}" {
+		t.Fatalf("bounded nested Stripe citation drift = %#v", nested)
+	}
+}
+
+func TestSourceImportRetainedStripeCorpus(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defsDir := filepath.Join(root, "internal", "connectors", "defs")
+	lock, err := loadConnectorSourceImportLock(defsDir, "stripe")
+	if err != nil {
+		t.Fatalf("load retained Stripe source lock: %v", err)
+	}
+	if lock.SchemaVersion != 2 || lock.Rest.Bytes != 7_967_776 || lock.Rest.SHA256 != "3653ad45bbec54fcbe461c541c908355b715018bdf455a0e11b27bedb2cbdee5" || lock.Rest.ReferenceDepthLimit != 1 || len(lock.Rest.Operations) != 589 {
+		t.Fatalf("retained Stripe source lock drifted: schema=%d bytes=%d sha=%q reference_depth_limit=%d operations=%d", lock.SchemaVersion, lock.Rest.Bytes, lock.Rest.SHA256, lock.Rest.ReferenceDepthLimit, len(lock.Rest.Operations))
+	}
+	limits := defaultSourceImportLimits()
+	fetcher, err := newConnectorSourceImportRetainedArtifactFetcher(defsDir, "stripe", limits)
+	if err != nil {
+		t.Fatalf("open retained Stripe source artifact: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, fetcher, limits)
+	if err != nil {
+		t.Fatalf("import exact retained Stripe source artifact: %v", err)
+	}
+	if got, want := len(result.Operations), len(lock.Rest.Operations); got != want {
+		t.Fatalf("retained Stripe descriptors = %d, want every %d locked operations", got, want)
+	}
+	locked := make(map[string]sourceImportRESTOperation, len(lock.Rest.Operations))
+	for _, operation := range lock.Rest.Operations {
+		key := sourceRetainedStripeOperationKey(operation.OperationID, operation.Method, operation.Path)
+		if _, duplicate := locked[key]; duplicate {
+			t.Fatalf("retained Stripe lock repeats provider operation identity %q", operation.ID)
+		}
+		locked[key] = operation
+	}
+	seen := make(map[string]sourceOperationDescriptor, len(result.Operations))
+	byProviderOperationID := make(map[string]sourceOperationDescriptor, len(result.Operations))
+	depthGaps := 0
+	foundationReasons := make(map[string]int)
+	for _, operation := range result.Operations {
+		if _, duplicate := seen[operation.SourceID]; duplicate {
+			t.Fatalf("retained Stripe import repeats source ID %q", operation.SourceID)
+		}
+		seen[operation.SourceID] = operation
+		byProviderOperationID[operation.ProviderOperationID] = operation
+		lockedOperation, found := locked[sourceRetainedStripeOperationKey(operation.ProviderOperationID, operation.Method, operation.Path)]
+		if !found {
+			t.Fatalf("retained Stripe import emitted an unlocked provider operation: %#v", operation)
+		}
+		if operation.ProviderOperationID != lockedOperation.OperationID || operation.Method != strings.ToLower(lockedOperation.Method) || operation.Path != lockedOperation.Path || operation.Source.URL != lock.Rest.SourceURL || operation.Source.Location != lockedOperation.SourceLocation {
+			t.Fatalf("retained Stripe descriptor citation drift for %q: %#v", operation.SourceID, operation)
+		}
+		for _, gap := range operation.Runtime.Gaps {
+			if gap.Foundation == sourceDescriptorFoundation {
+				foundationReasons[gap.Reason]++
+			}
+			if gap.Foundation == sourceDescriptorFoundation && strings.Contains(gap.Reason, "response reference depth limit exceeded") {
+				depthGaps++
+				if len(operation.Responses) != 0 || len(operation.Output.Success) != 0 || !operation.Runtime.MergeBlocked {
+					t.Fatalf("over-depth Stripe response descriptor invented a contract: %#v", operation)
+				}
+			}
+		}
+	}
+	for _, operationID := range []string{"GetAccount", "DeleteAccountsAccount"} {
+		operation, found := byProviderOperationID[operationID]
+		if !found {
+			t.Fatalf("retained Stripe import omitted exact provider operation %q", operationID)
+		}
+		if len(operation.Responses) != 0 || len(operation.Output.Success) != 0 || !operation.Runtime.MergeBlocked || !sourceOperationHasResponseDepthGap(operation) {
+			t.Fatalf("retained Stripe source operation %q did not keep its exact incomplete response contract condition: %#v", operationID, operation)
+		}
+	}
+	if depthGaps != len(lock.Rest.Operations) {
+		t.Fatalf("retained Stripe response-reference depth gaps = %d, want one exact operation-local %s gap for every %d locked operations; foundation reasons=%#v", depthGaps, sourceDescriptorFoundation, len(lock.Rest.Operations), foundationReasons)
+	}
+}
+
+func sourceOperationHasResponseDepthGap(operation sourceOperationDescriptor) bool {
+	for _, gap := range operation.Runtime.Gaps {
+		if gap.Foundation == sourceDescriptorFoundation && strings.Contains(gap.Reason, "response reference depth limit exceeded") {
+			return true
+		}
+	}
+	return false
+}
+
+func TestSourceImportLockReferenceDepthLimitOnlyNarrows(t *testing.T) {
+	lock := sourceImportLock{Rest: sourceImportREST{ReferenceDepthLimit: 2}}
+	limits := defaultSourceImportLimits()
+	effective, err := sourceImportLimitsForLock(lock, limits)
+	if err != nil {
+		t.Fatalf("apply lower source lock reference depth limit: %v", err)
+	}
+	if effective.MaxReferenceDepth != 2 || effective.MaxSchemaBytes != limits.MaxSchemaBytes || effective.MaxResolvedDescriptorBytes != limits.MaxResolvedDescriptorBytes || effective.MaxReferences != limits.MaxReferences {
+		t.Fatalf("source lock changed more than its bounded reference cap: effective=%#v limits=%#v", effective, limits)
+	}
+
+	lock.Rest.ReferenceDepthLimit = limits.MaxReferenceDepth + 1
+	if _, err := sourceImportLimitsForLock(lock, limits); err == nil || !strings.Contains(err.Error(), "exceeds importer limit") {
+		t.Fatalf("source lock expanded importer reference budget: %v", err)
+	}
+}
+
+func sourceRetainedStripeOperationKey(operationID, method, path string) string {
+	return operationID + "\x00" + strings.ToUpper(method) + "\x00" + path
+}
+
+func TestSourceImportRetainsUnusedDepthDisposition(t *testing.T) {
+	raw := []byte(`{"openapi":"3.0.0","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"operationId":"GetItems","responses":{"200":{"description":"ok"}}}}},"components":{"responses":{"UnusedRoot":{"$ref":"#/components/responses/UnusedNext"},"UnusedNext":{"$ref":"#/components/responses/UnusedLeaf"},"UnusedLeaf":{"description":"ok"}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/unused-depth.json", raw)
+	lock.SchemaVersion = 2
+	lock.Rest.Operations = []sourceImportRESTOperation{{ID: "alpha.rest.GetItems", Protocol: "rest", Method: "GET", Path: "/items", OperationID: "GetItems", SourceLocation: `paths["/items"].get`}}
+	limits := defaultSourceImportLimits()
+	limits.MaxReferenceDepth = 1
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), limits)
+	if err != nil {
+		t.Fatalf("unused finite-depth component must be retained or explicitly rejected: %v", err)
+	}
+	operation, found := sourceOperationsByID(result.Operations)["GetItems"]
+	if !found || operation.Runtime.MergeBlocked || len(operation.Runtime.Gaps) != 0 || len(operation.Responses) != 1 {
+		t.Fatalf("unrelated source operation lost its complete contract: %#v", operation)
+	}
+	for _, gap := range result.Gaps {
+		if gap.Foundation == sourceDescriptorFoundation && gap.Location == `source component components.responses["UnusedRoot"]` && strings.Contains(gap.Reason, "response reference depth limit exceeded") {
+			return
+		}
+	}
+	t.Fatalf("unused over-depth component disappeared without a source-cited disposition: %#v", result.Gaps)
+}
+
+func TestSourceImportGapLockRejectsUnusedSchemaResourceExhaustion(t *testing.T) {
+	largeDescription := strings.Repeat("x", 10_000)
+	raw := []byte(`{"openapi":"3.0.0","info":{"title":"x","version":"1"},"components":{"schemas":{"TooLarge":{"type":"object","description":"` + largeDescription + `","properties":{"value":{"type":"string"}}}}},"paths":{"/items":{"get":{"operationId":"GetItems","responses":{"200":{"description":"ok"}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/unused-resource.json", raw)
+	lock.SchemaVersion = 2
+	lock.Rest.Operations = []sourceImportRESTOperation{{ID: "alpha.rest.GetItems", Protocol: "rest", Method: "GET", Path: "/items", OperationID: "GetItems", SourceLocation: `paths["/items"].get`}}
+	limits := defaultSourceImportLimits()
+	limits.MaxResolvedDescriptorBytes = 9_000
+	_, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), limits)
+	if err == nil || !strings.Contains(err.Error(), "resolved schema expansion document byte limit exceeded") {
+		t.Fatalf("gap-enabled unused resource exhaustion error = %v, want terminal schema expansion limit", err)
+	}
+}
+
+func TestSourceImportRejectsUnsafeReferences(t *testing.T) {
+	t.Parallel()
+	cases := []struct {
+		name   string
+		raw    []byte
+		limits func(sourceImportLimits) sourceImportLimits
+		want   string
+	}{
+		{
+			name: "external reference",
+			raw: sourceProviderOperationDocument("3.0.0", "/items", "get", "GetItems", map[string]any{
+				"200": map[string]any{"description": "ok", "content": map[string]any{"application/json": map[string]any{"schema": map[string]any{"$ref": "https://provider.invalid/components/schemas/Item"}}}},
+			}, nil),
+			limits: func(limits sourceImportLimits) sourceImportLimits { return limits },
+			want:   "external reference",
+		},
+		{
+			name: "malformed local reference",
+			raw: sourceProviderOperationDocument("3.0.0", "/items", "get", "GetItems", map[string]any{
+				"200": map[string]any{"description": "ok", "content": map[string]any{"application/json": map[string]any{"schema": map[string]any{"$ref": "#components/schemas/Item"}}}},
+			}, nil),
+			limits: func(limits sourceImportLimits) sourceImportLimits { return limits },
+			want:   "must be a local artifact JSON Pointer",
+		},
+		{
+			name: "ambiguous schema reference",
+			raw: sourceProviderOperationDocument("3.0.0", "/items", "get", "GetItems", map[string]any{
+				"200": map[string]any{"description": "ok", "content": map[string]any{"application/json": map[string]any{"schema": map[string]any{"$ref": "#/components/schemas/Item", "maxLength": 8}}}},
+			}, map[string]any{"schemas": map[string]any{"Item": map[string]any{"type": "string", "maxLength": 8}}}),
+			limits: func(limits sourceImportLimits) sourceImportLimits { return limits },
+			want:   "ambiguous schema reference",
+		},
+		{
+			name: "cyclic response reference",
+			raw: sourceProviderOperationDocument("3.0.0", "/items", "get", "GetItems", map[string]any{
+				"200": map[string]any{"$ref": "#/components/responses/A"},
+			}, map[string]any{"responses": map[string]any{
+				"A": map[string]any{"$ref": "#/components/responses/B"},
+				"B": map[string]any{"$ref": "#/components/responses/A"},
+			}}),
+			limits: func(limits sourceImportLimits) sourceImportLimits { return limits },
+			want:   "reference cycle",
+		},
+		{
+			name:   "reference count exhaustion",
+			raw:    sourceStripeReferenceToleranceDocument(3),
+			limits: func(limits sourceImportLimits) sourceImportLimits { limits.MaxReferences = 1; return limits },
+			want:   "reference count limit exceeded",
+		},
+	}
+
+	for _, tc := range cases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			lock := sourceImportFixtureLock("stripe", "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json", tc.raw)
+			lock.SchemaVersion = 2
+			_, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return tc.raw, nil }), tc.limits(defaultSourceImportLimits()))
+			if err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("unsafe reference import error = %v, want %q", err, tc.want)
+			}
+		})
+	}
+}
+
+func TestSourceReferenceResolverCachesNormalizedTargetsWithoutBypassingCounts(t *testing.T) {
+	t.Parallel()
+	limits := defaultSourceImportLimits()
+	doc, form, err := parseSourceImportDocument([]byte(`{"openapi":"3.0.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Item":{"type":"string","maxLength":1}}}}`))
+	if err != nil {
+		t.Fatalf("parse source document: %v", err)
+	}
+	resolver := sourceReferenceResolver{}
+	countBudget := &sourceImportCountBudget{limit: limits.MaxOperations}
+	if err := sourcePrepareSourceDocument(doc, form, limits, &resolver, countBudget); err != nil {
+		t.Fatalf("prepare source document: %v", err)
+	}
+	for _, reference := range []string{"#/components/schemas/Item", "#/components/schemas/%49tem"} {
+		target, _, _, resolved, err := resolver.referenceTarget(map[string]any{"$ref": reference}, sourceReferenceSchema, nil, 0)
+		if err != nil || !resolved {
+			t.Fatalf("resolve normalized reference %q: target=%#v resolved=%t err=%v", reference, target, resolved, err)
+		}
+	}
+	if len(resolver.normalizedReferences) != 2 || len(resolver.referenceTargets) != 1 {
+		t.Fatalf("normalized reference memoization = normalized=%#v targets=%#v", resolver.normalizedReferences, resolver.referenceTargets)
+	}
+	if resolver.references != 2 {
+		t.Fatalf("reference memoization bypassed traversal accounting: references=%d", resolver.references)
+	}
+}
+
 func sourceProviderNestedResponseDocument(openAPI, path, operationID string, depth int) []byte {
 	schema := sourceProviderNestedSchema(depth)
 	return sourceProviderOperationDocument(openAPI, path, "get", operationID, map[string]any{
@@ -2935,7 +3283,10 @@ func sourceProviderReferenceChainDocument(depth int) []byte {
 		if index+1 < depth {
 			child = map[string]any{"$ref": "#/components/schemas/" + fmt.Sprintf("account_level_%02d", index+1)}
 		}
-		schemas[name] = map[string]any{"type": "object", "properties": map[string]any{"next": child}}
+		schemas[name] = map[string]any{
+			"type":       "object",
+			"properties": map[string]any{"next": child},
+		}
 	}
 	return sourceProviderOperationDocument("3.0.0", "/v1/account", "get", "GetAccount", map[string]any{
 		"200": map[string]any{
@@ -2943,6 +3294,70 @@ func sourceProviderReferenceChainDocument(depth int) []byte {
 			"content":     map[string]any{"application/json": map[string]any{"schema": map[string]any{"$ref": "#/components/schemas/account_level_00"}}},
 		},
 	}, map[string]any{"schemas": schemas})
+}
+
+func sourceStripeReferenceToleranceDocument(depth int) []byte {
+	schemas := map[string]any{}
+	for index := 0; index < depth; index++ {
+		name := fmt.Sprintf("account_level_%02d", index)
+		child := map[string]any{"type": "string"}
+		if index+1 < depth {
+			child = map[string]any{"$ref": "#/components/schemas/" + fmt.Sprintf("account_level_%02d", index+1)}
+		}
+		schemas[name] = child
+	}
+	pathParameter := map[string]any{"name": "account", "in": "path", "required": true, "schema": map[string]any{"type": "string", "maxLength": 256}}
+	document := map[string]any{
+		"openapi":    "3.0.0",
+		"info":       map[string]any{"title": "Stripe API", "version": "2026-07-29.dahlia"},
+		"components": map[string]any{"schemas": schemas},
+		"paths": map[string]any{
+			"/v1/account": map[string]any{"get": map[string]any{
+				"operationId": "GetAccount",
+				"responses":   map[string]any{"200": map[string]any{"description": "account response"}},
+			}},
+			"/v1/accounts/{account}": map[string]any{
+				"delete": map[string]any{
+					"operationId": "DeleteAccountsAccount",
+					"parameters":  []any{pathParameter},
+					"responses":   map[string]any{"200": map[string]any{"description": "account deleted"}},
+				},
+				"get": map[string]any{
+					"operationId": "GetAccountsAccount",
+					"parameters":  []any{pathParameter},
+					"responses": map[string]any{"200": map[string]any{
+						"description": "account response",
+						"content":     map[string]any{"application/json": map[string]any{"schema": map[string]any{"$ref": "#/components/schemas/account_level_00"}}},
+					}},
+				},
+			},
+		},
+	}
+	raw, err := json.Marshal(document)
+	if err != nil {
+		panic(err)
+	}
+	return raw
+}
+
+func sourceStripeReferenceToleranceLock(raw []byte) sourceImportLock {
+	lock := sourceImportFixtureLock("stripe", "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json", raw)
+	lock.SchemaVersion = 2
+	lock.Rest.InfoVersion = "2026-07-29.dahlia"
+	lock.Rest.Operations = []sourceImportRESTOperation{
+		{ID: "stripe.rest.GetAccount", Protocol: "rest", Method: "GET", Path: "/v1/account", OperationID: "GetAccount", SourceLocation: `paths["/v1/account"].get`},
+		{ID: "stripe.rest.DeleteAccountsAccount", Protocol: "rest", Method: "DELETE", Path: "/v1/accounts/{account}", OperationID: "DeleteAccountsAccount", SourceLocation: `paths["/v1/accounts/{account}"].delete`},
+		{ID: "stripe.rest.GetAccountsAccount", Protocol: "rest", Method: "GET", Path: "/v1/accounts/{account}", OperationID: "GetAccountsAccount", SourceLocation: `paths["/v1/accounts/{account}"].get`},
+	}
+	return lock
+}
+
+func sourceOperationsByID(operations []sourceOperationDescriptor) map[string]sourceOperationDescriptor {
+	byID := make(map[string]sourceOperationDescriptor, len(operations))
+	for _, operation := range operations {
+		byID[operation.SourceID] = operation
+	}
+	return byID
 }
 
 func sourceVercelPatternPropertiesDocument() []byte {
