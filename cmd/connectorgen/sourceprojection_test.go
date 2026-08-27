@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"maps"
 	"os"
@@ -12,6 +13,7 @@ import (
 	"strings"
 	"testing"
 
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
 )
@@ -2842,6 +2844,111 @@ func loadInstalledGitHubSourceProjection(t *testing.T) (engine.Bundle, sourceImp
 		t.Fatalf("decode GitHub source descriptor: %v", err)
 	}
 	return bundle, descriptor
+}
+
+func TestSourceProjectionRetainedStripeDepthGapStopsAtRegistryPreflight(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defsDir := filepath.Join(root, "internal", "connectors", "defs")
+	lock, err := loadConnectorSourceImportLock(defsDir, "stripe")
+	if err != nil {
+		t.Fatalf("load retained Stripe source lock: %v", err)
+	}
+	limits := defaultSourceImportLimits()
+	limits.MaxReferenceDepth = 1
+	fetcher, err := newConnectorSourceImportRetainedArtifactFetcher(defsDir, "stripe", limits)
+	if err != nil {
+		t.Fatalf("open retained Stripe source artifact: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, fetcher, limits)
+	if err != nil {
+		t.Fatalf("import retained Stripe source artifact: %v", err)
+	}
+	var source sourceOperationDescriptor
+	for _, candidate := range result.Operations {
+		if !strings.EqualFold(candidate.Method, "GET") || !sourceProjectionReadHasBlockingGap(candidate) {
+			continue
+		}
+		for _, gap := range candidate.Runtime.Gaps {
+			if gap.Foundation == sourceDescriptorFoundation && strings.Contains(gap.Reason, "response reference depth limit exceeded") {
+				source = candidate
+				break
+			}
+		}
+		if source.SourceID != "" {
+			break
+		}
+	}
+	if source.SourceID == "" {
+		t.Fatal("retained Stripe import has no GET response-reference-depth descriptor for projection preflight")
+	}
+
+	bundleDir := t.TempDir()
+	writeProjectionFixture(t, filepath.Join(bundleDir, "metadata.json"), `{"name":"stripe","capabilities":{"read":true,"write":false}}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "writes.json"), `{"schema_version":1,"actions":[]}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "operations.json"), fmt.Sprintf(`{
+  "operations": [{
+    "id": "retained-stripe-depth-gap",
+    "kind": "rest_read",
+    "summary": "retained source proof only",
+    "risk": "low",
+    "approval": "none",
+    "output_policy": "json_redacted",
+    "rest": {"method": %q, "path": %q, "max_bytes": 1024}
+  }]
+}`, source.Method, source.Path))
+	const commandPath = "audit retained stripe depth-gap"
+	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), fmt.Sprintf(`{
+  "schema_version": 1,
+  "commands": [{
+    "path": %q,
+    "summary": "Planned fixed-target retained Stripe descriptor",
+    "intent": "direct_read",
+    "availability": "planned",
+    "operation": "retained-stripe-depth-gap",
+    "api_surface": [{"method": %q, "path": %q}]
+  }]
+}`, commandPath, source.Method, source.Path))
+
+	stats, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{source}}, false)
+	if err != nil {
+		t.Fatalf("project retained Stripe depth gap: %v", err)
+	}
+	if stats.CLI == 0 || stats.Operations == 0 {
+		t.Fatalf("retained Stripe depth-gap projection did not annotate its command and operation: %+v", stats)
+	}
+	var projected struct {
+		Operations []engine.OperationSpec `json:"operations"`
+	}
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, filepath.Join(bundleDir, "operations.json"))), &projected); err != nil {
+		t.Fatalf("decode projected operation registry input: %v", err)
+	}
+	var surface engine.CLISurface
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"))), &surface); err != nil {
+		t.Fatalf("decode projected command surface: %v", err)
+	}
+	if len(surface.Commands) != 1 || !strings.Contains(surface.Commands[0].Notes, "missing_foundation="+sourceDescriptorFoundation) || !strings.Contains(surface.Commands[0].Notes, "source_operation="+source.SourceID) {
+		t.Fatalf("retained Stripe projected unavailable command = %#v", surface.Commands)
+	}
+
+	registry := connectors.NewEmptyRegistry()
+	registry.Register(engine.New(engine.Bundle{
+		Name:       "stripe",
+		Metadata:   engine.Metadata{Name: "stripe", Capabilities: engine.Capabilities{Read: true, WriteDeclared: true}},
+		Operations: projected.Operations,
+		CLISurface: &surface,
+	}, nil))
+	connector, found := registry.Get("stripe")
+	if !found {
+		t.Fatal("projected Stripe connector was not admitted to the registry")
+	}
+	err = commandrunner.Preflight(connector, strings.Fields(commandPath))
+	var blocked *commandrunner.BlockedCommandError
+	if !errors.As(err, &blocked) || !strings.Contains(blocked.Reason, "missing_foundation="+sourceDescriptorFoundation) || !strings.Contains(blocked.Reason, "source_operation="+source.SourceID) {
+		t.Fatalf("registry command preflight = %v, want exact retained missing-foundation disposition", err)
+	}
 }
 
 func writeProjectionFixture(t *testing.T, path, content string) {

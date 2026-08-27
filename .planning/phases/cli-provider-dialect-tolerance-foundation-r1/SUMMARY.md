@@ -1,41 +1,49 @@
 ---
 coverage:
   - id: D1
-    description: Source-cited Stripe GET/DELETE operations stay complete when their local contracts resolve.
+    description: The exact retained Stripe artifact accounts for all 589 locked source operations with unique source citations.
     verification:
       - kind: unit
-        ref: TestSourceImportStripeReferenceDepthOperationLocal
+        ref: TestSourceImportRetainedStripeCorpus
         status: pass
     human_judgment: false
   - id: D2
-    description: An over-depth local Stripe reference retains only the exact operation as a merge-blocked source descriptor.
+    description: A bounded response-reference chain becomes an operation-local source-descriptor condition without fabricating a request or response contract.
     verification:
       - kind: unit
-        ref: TestSourceImportStripeReferenceDepthOperationLocal
+        ref: TestSourceImportRetainedStripeCorpus; TestSourceImportStripeReferenceDepthOperationLocal
         status: pass
     human_judgment: false
   - id: D3
-    description: Unsafe and resource-exhausting references remain rejected, while target memoization preserves traversal counts.
+    description: Unused over-depth components are accounted for, while hidden malformed, dynamic, external, cyclic, and resource-exhausting input remains terminal.
     verification:
       - kind: unit
-        ref: TestSourceImportRejectsUnsafeReferences; TestSourceReferenceResolverCachesNormalizedTargetsWithoutBypassingCounts
+        ref: TestSourceImportRetainsUnusedDepthDisposition; TestSourceImportDoesNotTreatDepthAsDocumentSafetyExemption; TestSourceImportGapLockRejectsUnusedSchemaResourceExhaustion
+        status: pass
+    human_judgment: false
+  - id: D4
+    description: A retained source descriptor condition reaches registry-backed commandrunner preflight before credentials, executor dispatch, or provider I/O.
+    verification:
+      - kind: unit
+        ref: TestSourceProjectionRetainedStripeDepthGapStopsAtRegistryPreflight
         status: pass
     human_judgment: false
 ---
 
 # Summary — Stripe provider-dialect tolerance foundation
 
-The importer keeps current-main's full source-grammar preflight while resolving
-local pointer targets through per-document normalization and memoization. Cycle
-detection, target-kind validation, traversal/reference counts, and byte budgets
-remain bounded. Only a typed finite-depth error for a gap-enabled lock is
-allowed past preflight, so its affected operation can be handled locally.
+The importer retains current-main's full source-grammar preflight and source
+document-local normalized-reference memoization. A byte-backed v1/v2 lock can
+only declare a lower `reference_depth_limit`, never enlarge the caller’s
+resource or traversal budget. Typed reference-depth outcomes are retained as
+source-cited, merge-blocking `cli-source-descriptor-foundation-r1` conditions;
+all other unsafe or resource outcomes remain terminal.
 
-A typed depth exhaustion is retained only for a source-lock version that
-already permits source contract gaps. It emits a source-cited skeletal
-descriptor with `cli-source-descriptor-foundation-r1`, exact method/path/source
-location, and a merge-blocking projection gap. Other unsafe reference errors
-remain hard import failures. No Stripe bundle or command was generated.
+The restored immutable Stripe source is imported locally from its retained
+7,967,776-byte, SHA-256-pinned artifact. Its 589 source operations remain
+visible through the source descriptor, `api_surface`, crosswalk/disposition,
+and generated operation evidence. No Stripe route, CLI command, credential
+path, or provider-I/O surface is materialized.
 
 Manual inline GSD fallback: the project contract forbids spawning workflow
 roles in this runtime, so `discuss-phase`, `plan-phase --tdd`, `execute-phase`,

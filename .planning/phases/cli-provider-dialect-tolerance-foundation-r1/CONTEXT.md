@@ -14,19 +14,20 @@
 
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
-| A normal Stripe GET/DELETE identity remains a complete source descriptor | fake | The public source is not fetched. A hermetic reduced fixture retains the exact lock's source URL, source IDs, operation IDs, methods, paths, and source locations; the importer must emit both complete descriptors. |
-| A nested Stripe reference failure is retained only for its operation | fake | The retained artifact is not present on current `main`; a reduced fixture preserves the exact Stripe operation citation and an OpenAPI-local nested `$ref` chain. The test asserts the unaffected operation is complete and the affected operation has the precise source-descriptor foundation gap. |
+| Stripe GET/DELETE identities remain source-cited and unique | live | The restored connector-owned immutable Stripe lock and retained artifact are imported through the production retained-artifact reader. The test asserts the known GET/DELETE IDs, method/path, source URL, and source locations remain in the 589-descriptor result. |
+| Stripe reference failure is retained only for its operation | live | The exact 7,967,776-byte immutable retained artifact is imported through the production source resolver. The lock-local depth cap yields one typed response-reference missing-foundation condition for every affected locked operation, with no fabricated response/output contract. |
 | Unsafe references remain rejected | fake | Focused hermetic fixtures are necessary to bound malformed/external/cyclic/ambiguous/reference-budget input deterministically. Each asserts a non-nil import error rather than a retained descriptor. |
-| Existing source rows and all six lane views remain represented | live | Existing ledger/evidence generators read the checked-in Stripe source-cited surface and operation evidence. The checks must retain each source ID/row; no Stripe command is added or claimed runnable. |
+| Existing source rows and all six lane views remain represented | live | Restored Batch 1 source lock, crosswalk, and disposition artifacts pair every locked Stripe source ID with its source-cited declaration evidence. Existing ledger/evidence generators retain the rows; no Stripe command is added or claimed runnable. |
+| A source descriptor gap reaches runtime preflight before I/O | live | A temporary declaration-owned bundle is projected, loaded by the bundle registry, and refused by `commandrunner.Preflight` with the exact `missing_foundation` marker before credentials or an executor are reached. |
 
 ## Current evidence and constraints
 
 - `origin/main` is `cf29d302c` after #4358 source-reference projection integration.
-- `internal/connectors/defs/stripe/api_surface.json` contains 589 endpoints, 581 of which have `operation.source_url` citations.
-- The previously retained exact Stripe lock and artifact are present in repository history at `47c606453`: lock schema v2, 589 operations, source artifact `3653ad45…b2cbdee5`, 7,967,776 bytes, OpenAPI 3.0.0. Current `main` intentionally does not carry that source directory, so this foundation does not restore or materialize it.
-- `cmd/connectorgen/sourceimport.go` keeps #4358's `preflightDocument` over all paths/components. This foundation preserves it for every malformed/dynamic/resource error but makes the one typed finite reference-depth condition operation-local for gap-enabled source locks.
+- `internal/connectors/defs/stripe/api_surface.json` contains 589 endpoints. The restored source lock, crosswalk, declaration disposition, and canonical descriptor provide the authoritative per-operation source citations across lane views.
+- The immutable Batch 1 Stripe evidence is retained in repository history at `c01b852f4`: lock schema v2, 589 operations, source artifact `3653ad45…b2cbdee5`, 7,967,776 bytes, OpenAPI 3.0.0. The independent audit requires it to be restored in this narrowly scoped foundation so the production retained-artifact reader is tested against exact source evidence; no source byte or hash is changed.
+- `cmd/connectorgen/sourceimport.go` keeps #4358's `preflightDocument` over all paths/components. A byte-backed v1/v2 lock may declare only a lower `rest.reference_depth_limit`; this foundation preserves malformed/dynamic/resource rejection while making that one typed finite reference-depth condition operation-local for gap-enabled source locks.
 - PR #4358 preserves source-reference descriptors where complete byte-backed source contracts are unavailable. It does not alter the source resolver and must not be represented as resolving Stripe reference depth.
 
 ## Scope guard
 
-This is shared importer work only. It changes neither Stripe bundle definitions nor command materialization, credential behavior, hashes, certificates, deletes, reverse ETL, runtime safety policy, or provider I/O. Its direct-PR review route is frozen after push for Firstmate's independent audit.
+This is shared importer work plus immutable retained Stripe test evidence. It changes neither executable Stripe bundle behavior nor command materialization, credential behavior, source hashes/certificates, deletes, reverse ETL, runtime safety policy, or provider I/O. Its direct-PR review route is frozen after push for Firstmate's independent audit.

@@ -1716,6 +1716,22 @@ URL, capture identity, and provider operation ID; a document-qualified locked
 `id` is the descriptor source identity even when the provider repeats an
 `operationId` in another document.
 
+A byte-backed v1/v2 REST lock may declare a positive
+`rest.reference_depth_limit` only when the retained provider dialect needs a
+smaller, source-local `$ref` chain bound. The declared value can only narrow
+the invocation's existing finite reference-depth limit; it cannot increase any
+reference, byte, node, document, or artifact budget. When that bounded chain
+prevents exact request or response projection, the importer keeps the locked
+operation identity and its exact source citation in a merge-blocking
+`cli-source-descriptor-foundation-r1` condition. It emits no partial response,
+output, action, or command. Ordinary operations that resolve within the same
+bound keep their complete source descriptor. The full source grammar is still
+scanned: an unreferenced over-depth component receives a deterministic
+source-cited descriptor gap, while malformed, external, ambiguous, cyclic, or
+resource-exhausting input remains terminal. This is an importer tolerance for
+the retained source dialect, never a generic transport or provider-I/O escape
+hatch.
+
 For a `rendered_reference`, an operation's `citation_url` cannot be the generic
 published reference page merely because it shares that page's origin. It must
 either carry a non-empty fragment that exactly names the operation's locked

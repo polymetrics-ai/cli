@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "stripe",
+  "artifacts": [
+    {
+      "sha256": "3653ad45bbec54fcbe461c541c908355b715018bdf455a0e11b27bedb2cbdee5",
+      "bytes": 7967776,
+      "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
+      "retrieved_at": "2026-08-24T11:55:22Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

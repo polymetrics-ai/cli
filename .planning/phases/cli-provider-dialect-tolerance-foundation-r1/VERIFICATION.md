@@ -1,58 +1,30 @@
 # Verification — Stripe provider-dialect tolerance foundation
 
-## Focused and changed-package proof
+## Source descriptor and regression proof
 
-- `go test -timeout 20m ./cmd/connectorgen -run '^(TestSourceImportPreflightsUnusedGrammarObjects|TestSourceImportDoesNotTreatDepthAsDocumentSafetyExemption|TestSourceImportReservesRequestMediaExpansionBeforeCloning|TestSourceImportReservesInboundExpansionBeforeEventConstruction|TestSourceImportReservesCallbackReferenceChainsBeforeCloning|TestSourceImportProviderDialectContracts|TestSourceImportReservesResolvedResponseChildrenBeforeCloning|TestSourceImportRejectsUnsafeOrRetainsMalformedSourceForms|TestSourceReferenceResolverCachesNormalizedTargetsWithoutBypassingCounts)$' -count=1` — PASS (`ok polymetrics.ai/cmd/connectorgen 1.215s`) after integrating `origin/main@cf29d302c`. This proves #4358's complete grammar preflight remains active, while a depth-limited Stripe operation cannot mask an independent unsafe component or steal request-media/inbound/reference expansion ownership.
+- `go test -timeout 20m ./cmd/connectorgen -run '^(TestSourceImportDoesNotTreatDepthAsDocumentSafetyExemption|TestSourceImportRetainedStripeCorpus|TestSourceImportLockReferenceDepthLimitOnlyNarrows|TestSourceImportRetainsUnusedDepthDisposition|TestSourceImportGapLockRejectsUnusedSchemaResourceExhaustion|TestSourceProjectionRetainedStripeDepthGapStopsAtRegistryPreflight)$' -count=1` — PASS (`2.289s`). It proves the immutable 7,967,776-byte Stripe artifact emits all 589 locked source descriptors, including the cited `GetAccount` GET and `DeleteAccountsAccount` DELETE identities. Each gets one exact operation-local response-reference-depth condition without invented responses/output; unseen over-depth components get a source-cited condition; hidden external, dynamic, and cyclic inputs remain terminal.
+- `go run ./cmd/connectorgen source-import stripe` — PASS: `stripe, 589 operation(s), 0 inbound event(s) imported; source projection updated writes=0 cli=0`.
+- `go run ./cmd/connectorgen source-import stripe --check` — PASS: `stripe, 589 operation(s), 0 inbound event(s) verified`.
+- `go test -timeout 20m ./cmd/connectorgen -count=1` — PASS (`228.103s`).
+- `go test -timeout 20m ./internal/connectors/engine -count=1` — PASS (`11.697s`).
+- `go test -timeout 20m ./internal/connectors/commandrunner -count=1` — PASS (`21.603s`). The registry-to-`commandrunner.Preflight` assertion is in the full generator suite; it reaches the exact `missing_foundation=cli-source-descriptor-foundation-r1` condition before credentials, executor dispatch, or provider I/O.
+- `go vet ./...`; `go build ./cmd/connectorgen`; `go build ./cmd/pm`; `git diff --check` — PASS.
 
-- `go test -timeout 20m ./cmd/connectorgen -run '^(TestSourceImportStripeReferenceDepthOperationLocal|TestSourceImportRejectsUnsafeReferences|TestSourceReferenceResolverCachesNormalizedTargetsWithoutBypassingCounts)$' -count=1` — PASS (`ok polymetrics.ai/cmd/connectorgen 1.095s`).
-- `go test -timeout 20m ./cmd/connectorgen -count=1` — PASS (`ok polymetrics.ai/cmd/connectorgen 176.351s`).
-- `go test -timeout 20m ./internal/connectors/engine ./internal/connectors/commandrunner -count=1` — PASS (`engine 10.161s`; `commandrunner 22.547s`).
-- `go vet ./...` — PASS.
-- `go build ./cmd/connectorgen` — PASS.
-- `go build ./cmd/pm` — PASS.
-- `git diff --check` — PASS.
-
-The focused red command before the production change is recorded in
-[`TDD-LEDGER.md`](TDD-LEDGER.md): it returned the connector-wide preflight
-`reference depth limit exceeded` failure. The green test proves complete
-Stripe GET/DELETE identity, exact nested projection, operation-local retained
-failure, source-projection blocking, normalized pointer memoization, and
-unchanged reference accounting.
+The focused red command and the earlier current-main failure are retained in
+[`TDD-LEDGER.md`](TDD-LEDGER.md). The synthetic Stripe fixture proves an exact
+complete source descriptor where the retained contract fits the bound; the
+immutable real artifact proves the source-cited operation-local incomplete
+case, not a false executable claim.
 
 ## Repository verification gates
 
-- `make tidy-check` — PASS.
-- `make lint` — PASS (the initial run correctly reported the deleted global-preflight helpers as unused; removal of that dead architecture made the final run clean).
-- `make docs-check-no-build` — PASS (`Validated connector docs in docs/connectors`).
-- `make smoke-no-build` — PASS.
-- `make agent-contract-check` — PASS.
-- `make connectorgen-validate` — PASS (553 connectors, 0 findings).
-- `make connectorgen-surface-sync` — PASS (553 scanned; 0 changes).
-- `make connectorgen-declaration-admission` — PASS (1 connector, 1 source operation, 0 findings).
-- `make connectorgen-operation-evidence` — PASS (1774 rows; 5 rollups; fixed-100 passed).
-- `make github-parity-artifacts-check` — PASS.
-- `make connectorgen-certification-subject` — PASS.
-- `make connectorgen-certification-matrix` — PASS.
-- `make connectorgen-certification-candidates` — PASS.
-- `make connectorgen-certification-sweep` — PASS.
-- `make connector-boundary` — not recordable locally: the launcher returned before its two already-running process groups exposed terminal exit status. Per Firstmate instruction, no third process was started and neither was terminated; the exact blocker is recorded in the Firstmate status file for recovery/CI confirmation.
-- `make connector-canon-check` — PASS (`connector canon check: ok`).
-- `make release-workflow-check` — PASS (`installed GitHub certification archive proof passed`).
+- `make tidy-check lint docs-check smoke-no-build agent-contract-check connectorgen-validate connectorgen-surface-sync connectorgen-declaration-admission connectorgen-operation-evidence github-parity-artifacts-check` — PASS. `connectorgen validate` checked 553 connectors with zero findings; operation evidence is current at 2,363 rows and five rollups.
+- `go run ./cmd/connectorgen certification-subject` — regenerated the required derived subject after Stripe source projection changed its input fingerprint.
+- `make connectorgen-certification-subject connectorgen-certification-matrix connectorgen-certification-candidates connectorgen-certification-sweep connector-canon-check release-workflow-check` — PASS. The installed GitHub certification archive proof passed.
+- `make connector-boundary` — PASS: whole-tree `outcome: clean`, 325 files checked, 553 connectors loaded, no findings or warnings.
 
-## Delivery constraints and deliberately inapplicable checks
+## Generated evidence and scope
 
-- This foundation changes no `pm` command, flags, manual/help surface,
-  connector definition, generated Stripe artifact, or website page. Help,
-  website, and `pm stripe …` missing-credential evidence are therefore not
-  applicable; recording any command as runnable would be false.
-- No credentials, live provider requests, source downloads, certificates,
-  hashes, delete actions, reverse-ETL actions, or generic provider-I/O escape
-  hatch were used or added.
-- The retained Stripe source artifact is absent from current `main`. The
-  hermetic fixture records its known source URL and exact source operation
-  identities; the historical artifact hash and follow-up request-contract
-  blockers are documented in `CONTEXT.md`.
-- Full `go test -timeout 20m ./...` and monolithic `make verify` are not run
-  in this per-command worker because repository guidance says to run changed
-  packages and each make gate independently; CI owns the full monolithic
-  suite.
+- Generated from the exact retained source: `stripe-operation-descriptor.json` (589 descriptors), the Stripe `api_surface.json` source-foundation annotations, `internal/connectors/operation-evidence.json` (589 source-cited Stripe rows across the declared lane classifications), and `certifications/current-subject.json`.
+- No Stripe command, action, route, generic HTTP/body/shell escape hatch, credential, or provider I/O was added. Therefore no command is described as credential-bound runnable; all unresolved Stripe contracts remain precise source-descriptor missing-foundation conditions.
+- Full `go test -timeout 20m ./...` and monolithic `make verify` are intentionally not run in this per-command worker: project guidance directs changed-package testing plus each applicable make gate individually, while CI runs the monolithic suite.
