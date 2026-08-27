@@ -144,6 +144,36 @@ func structuredRESTBodySchemaWithTarget(targetSchema string) json.RawMessage {
 	}`)
 }
 
+func TestValidateOperationStructuredJSONBodyFieldAcceptsExactNullableString(t *testing.T) {
+	batchable := false
+	op := OperationSpec{
+		ID:            "acme.widgets.update_label",
+		Kind:          "rest_write",
+		Summary:       "Update a fixed widget label",
+		Risk:          "standard",
+		Approval:      "plan-preview-confirm-execute",
+		OutputPolicy:  "json",
+		MutationClass: "update",
+		Batchable:     &batchable,
+		REST: &RESTOperationSpec{
+			Method:      http.MethodPatch,
+			Path:        "/widgets/{widget_id}",
+			ContentType: "application/json",
+			MaxBytes:    1024,
+			BodySchema: json.RawMessage(`{
+				"type":"object","additionalProperties":false,"required":["label"],
+				"properties":{"label":{"type":["string","null"],"maxLength":64}}
+			}`),
+		},
+	}
+	if err := ValidateOperationStructuredJSONBodyField(op, "label"); err != nil {
+		t.Fatalf("exact nullable string structured field: %v", err)
+	}
+	if err := ValidateOperationDirectWriteCLIFlags(op, []CLIFlag{{Name: "label", Type: "json", MapsTo: "body.label", Required: true, MaxBytes: 64}}); err != nil {
+		t.Fatalf("exact nullable string JSON flag: %v", err)
+	}
+}
+
 func TestOperationDirectWriteStructuredRESTBodyIsExactAndPreviewBound(t *testing.T) {
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

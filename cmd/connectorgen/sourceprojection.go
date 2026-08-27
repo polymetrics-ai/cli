@@ -31,6 +31,11 @@ const (
 	sourceOperationExecutionFoundation               = "closed-source-operation-execution-foundation-r1"
 	sourceNonExecutableMutationDispositionFoundation = "source-cited-non-executable-mutation-foundation-r1"
 	sourcePartialMutationCoverageFoundation          = "source-cited-partial-mutation-coverage-foundation-r1"
+	// sourceStructuredScalarUnionFoundation marks a source-declared field that
+	// needs the shared engine's strict JSON scalar grammar. It is intentionally
+	// field-scoped below: a general source gap never changes existing command
+	// flags or opens an arbitrary JSON body channel.
+	sourceStructuredScalarUnionFoundation = "cli-structured-scalar-union-foundation-r1"
 	// sourceReadOnlyOperationFoundation is intentionally distinct from the
 	// mutation disposition. A read-only declaration can never satisfy mutation
 	// coverage, even when its endpoint currently lacks an executable action.
@@ -139,6 +144,7 @@ func sourceProjectionImplementedDirectReadCommandPaths(cli *orderedObject, endpo
 type sourceActionContract struct {
 	Fields           map[string]any
 	BareStringFields map[string]bool
+	StrictJSONFields map[string]bool
 	SecretFields     map[string]bool
 	Required         map[string]bool
 	PathFields       []string
@@ -3052,7 +3058,7 @@ func sourceProjectionActionPropertyCount(action *orderedObject) int {
 }
 
 func sourceContractForAction(operation sourceOperationDescriptor, action *orderedObject) (sourceActionContract, error) {
-	contract := sourceActionContract{Fields: map[string]any{}, BareStringFields: map[string]bool{}, SecretFields: map[string]bool{}, Required: map[string]bool{}}
+	contract := sourceActionContract{Fields: map[string]any{}, BareStringFields: map[string]bool{}, StrictJSONFields: map[string]bool{}, SecretFields: map[string]bool{}, Required: map[string]bool{}}
 	// A retained source gap does not authorize a raw body. It does permit a
 	// source-owned named field to use the bounded JSON flag path when its exact
 	// nested shape is not expressible by the closed record-schema subset.
@@ -3072,7 +3078,7 @@ func sourceContractForAction(operation sourceOperationDescriptor, action *ordere
 		if err != nil {
 			return sourceActionContract{}, err
 		}
-		contract.setSourceField(parameter.Name, parameter.Schema, converted)
+		contract.setSourceField(parameter.Name, parameter.Schema, converted, false)
 		contract.Required[parameter.Name] = true
 		contract.PathFields = append(contract.PathFields, parameter.Name)
 	}
@@ -3084,7 +3090,7 @@ func sourceContractForAction(operation sourceOperationDescriptor, action *ordere
 		if err != nil {
 			return sourceActionContract{}, err
 		}
-		contract.setSourceField(parameter.Name, parameter.Schema, converted)
+		contract.setSourceField(parameter.Name, parameter.Schema, converted, false)
 		// One record field can legitimately bind more than one declared input
 		// location (for example a path `name` plus an optional body `name`).
 		// Requiredness is the union of those declarations: an optional second
@@ -3135,7 +3141,7 @@ func sourceContractForAction(operation sourceOperationDescriptor, action *ordere
 			if err != nil {
 				return sourceActionContract{}, err
 			}
-			contract.setSourceField(name, properties[name], converted)
+			contract.setSourceField(name, properties[name], converted, sourceProjectionNullableStringFieldRequiresStrictJSON(operation, name))
 			// Preserve a required path/query occurrence when the provider also
 			// exposes the same field as an optional body member.
 			contract.Required[name] = contract.Required[name] || required[name]
@@ -3206,7 +3212,7 @@ func sourceProjectionRetainDeclaredHookFields(action *orderedObject, contract *s
 		if err != nil {
 			return fmt.Errorf("project hook field %q: %w", name, err)
 		}
-		contract.setSourceField(name, properties[name], converted)
+		contract.setSourceField(name, properties[name], converted, false)
 		contract.Required[name] = required[name]
 	}
 	return nil
@@ -3262,8 +3268,7 @@ func sourceContractForConcreteVariant(operation sourceOperationDescriptor, actio
 		if err != nil {
 			return sourceActionContract{}, err
 		}
-		contract.Fields[name] = converted
-		contract.markSourceSecret(name, properties[name])
+		contract.setSourceField(name, properties[name], converted, sourceProjectionNullableStringFieldRequiresStrictJSON(operation, name))
 		contract.Required[name] = contract.Required[name] || rootRequired[name] || variantRequired[name]
 		contract.BodyFields = append(contract.BodyFields, name)
 	}
@@ -3396,9 +3401,12 @@ func sourceContractForExistingClosedAction(operation sourceOperationDescriptor, 
 		}
 		properties[name] = converted
 	}
-	contract := sourceActionContract{Fields: properties, BareStringFields: map[string]bool{}, SecretFields: map[string]bool{}, Required: sourceSchemaRequired(schema)}
+	contract := sourceActionContract{Fields: properties, BareStringFields: map[string]bool{}, StrictJSONFields: map[string]bool{}, SecretFields: map[string]bool{}, Required: sourceSchemaRequired(schema)}
 	for _, name := range sortedSourceMapKeys(properties) {
 		contract.markSourceSecret(name, rawProperties[name])
+		if sourceProjectionNullableStringFieldRequiresStrictJSON(operation, name) && sourceProjectionExactNullableString(properties[name]) {
+			contract.StrictJSONFields[name] = true
+		}
 	}
 	contract.BodyType = stringField(action, "body_type")
 	for _, raw := range arrayField(action, "body_fields") {
@@ -3816,7 +3824,7 @@ func sourceProjectCommand(command *orderedObject, contract sourceActionContract)
 				flag.set("summary", summary)
 			}
 		}
-		flagType := sourceProjectionFlagType(contract.Fields[name])
+		flagType := sourceProjectionRecordFlagType(contract.Fields[name], contract.StrictJSONFields[name])
 		flag.set("type", flagType)
 		if contract.BareStringFields[name] {
 			flag.set("allow_bare_string", true)
@@ -3964,15 +3972,61 @@ func sourceProjectionFlagType(schema any) string {
 	}
 }
 
+// sourceProjectionRecordFlagType changes a field only when the source
+// descriptor carries the exact structured-scalar foundation gap for it. This
+// keeps admitted source projections byte-stable while allowing a deferred,
+// source-declared string|null field to retain its distinct JSON null arm.
+func sourceProjectionRecordFlagType(schema any, strictNullableString bool) string {
+	if strictNullableString && sourceProjectionExactNullableString(schema) {
+		return "json"
+	}
+	return sourceProjectionFlagType(schema)
+}
+
+func sourceProjectionNullableStringFieldRequiresStrictJSON(operation sourceOperationDescriptor, field string) bool {
+	location := "request body.properties." + field
+	for _, gap := range operation.Runtime.Gaps {
+		if gap.Foundation == sourceStructuredScalarUnionFoundation && gap.Location == location {
+			return true
+		}
+	}
+	return false
+}
+
+func sourceProjectionExactNullableString(schema any) bool {
+	object, ok := schema.(map[string]any)
+	if !ok {
+		return false
+	}
+	rawTypes, ok := object["type"].([]any)
+	if !ok {
+		return false
+	}
+	types := make([]string, 0, len(rawTypes))
+	for _, rawType := range rawTypes {
+		typeName, ok := rawType.(string)
+		if !ok {
+			return false
+		}
+		types = append(types, typeName)
+	}
+	return len(types) == 2 && ((types[0] == "string" && types[1] == "null") || (types[0] == "null" && types[1] == "string"))
+}
+
 // setSourceField retains the complete projected provider schema and marks a
 // source-declared multi-kind field whose named JSON flag may accept its string
 // arm as ordinary CLI text. The field remains a bounded, declaration-owned
 // JSON value: objects and arrays still require JSON, and the record schema
 // validates the final value before any provider I/O.
-func (contract *sourceActionContract) setSourceField(name string, sourceSchema, projectedSchema any) {
+func (contract *sourceActionContract) setSourceField(name string, sourceSchema, projectedSchema any, strictNullableString bool) {
 	contract.Fields[name] = projectedSchema
 	contract.markSourceSecret(name, sourceSchema)
-	if sourceProjectionFlagType(projectedSchema) == "json" && sourceProjectionContainsStringArm(sourceSchema) {
+	if strictNullableString && sourceProjectionExactNullableString(projectedSchema) {
+		contract.StrictJSONFields[name] = true
+	} else {
+		delete(contract.StrictJSONFields, name)
+	}
+	if sourceProjectionRecordFlagType(projectedSchema, contract.StrictJSONFields[name]) == "json" && sourceProjectionContainsStringArm(sourceSchema) && !sourceProjectionExactNullableString(projectedSchema) {
 		contract.BareStringFields[name] = true
 		return
 	}
@@ -5292,7 +5346,7 @@ func sourceActionCoversOperation(action engine.WriteAction, command engine.CLICo
 	}
 	for name := range contract.Fields {
 		flag := flags[name]
-		flagType := sourceProjectionFlagType(contract.Fields[name])
+		flagType := sourceProjectionRecordFlagType(contract.Fields[name], contract.StrictJSONFields[name])
 		if !properties[name] || flag.MapsTo == "" || !sourceProjectionFieldEquivalent(recordProperties[name], contract.Fields[name]) ||
 			flag.Type != flagType || flag.MaxBytes != int(sourceProjectionFlagMaxBytes(contract.Fields[name], flagType)) ||
 			flag.AllowBareString != contract.BareStringFields[name] ||

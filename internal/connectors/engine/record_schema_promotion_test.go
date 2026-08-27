@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"strings"
 	"testing"
+
+	"polymetrics.ai/internal/connectors/defs"
 )
 
 func TestInspectRecordSchemaExpandsUnionArmsBeforeMeasuring(t *testing.T) {
@@ -119,6 +121,32 @@ func TestValidateStructuredJSONRecordFieldAllowsDeclaredScalarUnionOnly(t *testi
 	}`)
 	if err := ValidateStructuredJSONRecordField(scalar, "choice"); err == nil || !strings.Contains(err.Error(), "object or array") {
 		t.Fatalf("single scalar JSON field error = %v, want generic-scalar refusal", err)
+	}
+}
+
+func TestValidateStructuredJSONRecordFieldAcceptsSourceDeclaredNullableString(t *testing.T) {
+	tests := []struct {
+		connector string
+		action    string
+		field     string
+	}{
+		{connector: "twilio", action: "create_address", field: "City"},
+		{connector: "xero", action: "delete_payment", field: "Status"},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.connector+"/"+testCase.action+"/"+testCase.field, func(t *testing.T) {
+			bundle, err := Load(defs.FS, testCase.connector)
+			if err != nil {
+				t.Fatalf("Load(%s): %v", testCase.connector, err)
+			}
+			action, err := findWriteAction(bundle, testCase.action)
+			if err != nil {
+				t.Fatalf("findWriteAction(%s): %v", testCase.action, err)
+			}
+			if err := ValidateStructuredJSONRecordField(action.RecordSchema, testCase.field); err != nil {
+				t.Fatalf("source-declared nullable string field %s.%s: %v", testCase.action, testCase.field, err)
+			}
+		})
 	}
 }
 
