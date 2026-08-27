@@ -1,10 +1,14 @@
 package engine
 
 import (
+	"encoding/json"
 	"net/http"
+	"strings"
 	"testing"
+	"testing/fstest"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/defs"
 )
 
 func TestResolveImplementedCommandBindingCoversEveryAdmissionRuntimeKind(t *testing.T) {
@@ -249,4 +253,334 @@ func TestResolveImplementedCommandBindingMapsGraphQLOperationToTransport(t *test
 	if resolved.Equivalence != CommandEndpointGraphQLTransport || resolved.TransportMethod != http.MethodPost || resolved.TransportPath != "/graphql" {
 		t.Fatalf("GraphQL operation resolution = %+v", resolved)
 	}
+}
+
+// TestResolveImplementedCommandBindingProvesEveryCircleCICompositeProjectSlugBinding
+// reproduces the eleven source-backed Batch-1 bindings that cannot pass the
+// ordinary one-slot placeholder proof: CircleCI documents one project-slug
+// identity while the existing transport requires its vcs/org/repo components.
+func TestResolveImplementedCommandBindingProvesEveryCircleCICompositeProjectSlugBinding(t *testing.T) {
+	bundle := circleCICompositeProjectSlugBundle()
+	identity := bundle.CompositeProviderPathIdentity
+	if identity == nil || len(identity.Bindings) != 11 {
+		t.Fatalf("composite identity = %+v, want eleven declared source bindings", identity)
+	}
+
+	for _, binding := range identity.Bindings {
+		binding := binding
+		t.Run(binding.SourceID, func(t *testing.T) {
+			resolved, err := ResolveImplementedCommandBinding(bundle, compositeProviderPathCommand(binding))
+			if err != nil {
+				t.Fatalf("ResolveImplementedCommandBinding: %v", err)
+			}
+			if resolved.Equivalence != CommandEndpointCompositeProviderPathIdentity {
+				t.Fatalf("equivalence = %q, want %q", resolved.Equivalence, CommandEndpointCompositeProviderPathIdentity)
+			}
+		})
+	}
+}
+
+// The composite proof must stay closed. These cases cover the places a future
+// generic placeholder feature might accidentally widen it: identity metadata,
+// connector, lane, binding, method, and every relevant transport-path shape.
+func TestResolveImplementedCommandBindingRejectsUnprovenCircleCICompositeProjectSlugSubstitutions(t *testing.T) {
+	base := circleCICompositeProjectSlugBundle()
+	if base.CompositeProviderPathIdentity == nil {
+		t.Fatal("composite identity is required for the rejection matrix")
+	}
+	baseCommand := compositeProviderPathCommand(base.CompositeProviderPathIdentity.Bindings[0])
+	binaryUploadCommand := compositeProviderPathCommand(base.CompositeProviderPathIdentity.Bindings[6])
+	binaryUploadCommand.Intent = "binary_upload"
+	tests := []struct {
+		name    string
+		bundle  func() Bundle
+		command connectors.CommandSurfaceCommand
+	}{
+		{
+			name: "missing identity configuration",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.CompositeProviderPathIdentity = nil
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
+			name: "cross connector declaration",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.Name = "acme"
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
+			name: "invalid source digest",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.CompositeProviderPathIdentity.SourceSHA256 = "not-a-sha256"
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
+			name: "non HTTPS source URL",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.CompositeProviderPathIdentity.SourceURL = "file:///tmp/openapi.json"
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
+			name: "reordered config keys",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.CompositeProviderPathIdentity.ConfigKeys = []string{"org", "vcs_type", "repo"}
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
+			name: "partial config keys",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.CompositeProviderPathIdentity.ConfigKeys = []string{"vcs_type", "org"}
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
+			name: "extra config key",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.CompositeProviderPathIdentity.ConfigKeys = []string{"vcs_type", "org", "repo", "project"}
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
+			name: "repeated config key",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.CompositeProviderPathIdentity.ConfigKeys = []string{"vcs_type", "org", "org"}
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
+			name: "reordered source binding",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bindings := bundle.CompositeProviderPathIdentity.Bindings
+				bindings[0], bindings[1] = bindings[1], bindings[0]
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
+			name: "partial runtime path",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.Streams[0].Path = "/project/{{ config.vcs_type }}/{{ config.org }}"
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
+			name: "reordered runtime components",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.Streams[0].Path = "/project/{{ config.org }}/{{ config.vcs_type }}/{{ config.repo }}"
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
+			name: "extra runtime component",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.Streams[0].Path = "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/extra"
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
+			name: "changed runtime literal",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.Streams[0].Path = "/projects/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}"
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
+			name: "absolute runtime path",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.Streams[0].Path = "https://circleci.com/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}"
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
+			name: "query runtime path",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.Streams[0].Path += "?page-token={token}"
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
+			name: "route transport",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.Streams[0].Route = "alternate"
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
+			name: "wrong method",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.Streams[0].Method = http.MethodPost
+				return bundle
+			},
+			command: baseCommand,
+		},
+		{
+			name: "direct read operation",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.Operations = []OperationSpec{{ID: "circleci.project.get", Kind: "rest_read", REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}"}}}
+				return bundle
+			},
+			command: connectors.CommandSurfaceCommand{Path: "project get", Intent: "direct_read", Availability: "implemented", Operation: "circleci.project.get", APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/project/{project-slug}"}}},
+		},
+		{
+			name: "direct write operation",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.Operations = []OperationSpec{{ID: "circleci.project.put", Kind: "rest_write", REST: &RESTOperationSpec{Method: http.MethodPut, Path: "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}"}}}
+				return bundle
+			},
+			command: connectors.CommandSurfaceCommand{Path: "project update", Intent: "direct_write", Availability: "implemented", Operation: "circleci.project.put", APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPut, Path: "/project/{project-slug}"}}},
+		},
+		{
+			name: "binary download operation",
+			bundle: func() Bundle {
+				bundle := circleCICompositeProjectSlugBundle()
+				bundle.Operations = []OperationSpec{{ID: "circleci.project.download", Kind: "binary_download", Binary: &BinaryOperationSpec{Method: http.MethodGet, Path: "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}"}}}
+				return bundle
+			},
+			command: connectors.CommandSurfaceCommand{Path: "project download", Intent: "binary_download", Availability: "implemented", Operation: "circleci.project.download", APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/project/{project-slug}"}}},
+		},
+		{
+			name:    "binary upload write",
+			bundle:  circleCICompositeProjectSlugBundle,
+			command: binaryUploadCommand,
+		},
+	}
+
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			if resolved, err := ResolveImplementedCommandBinding(testCase.bundle(), testCase.command); err == nil {
+				t.Fatalf("ResolveImplementedCommandBinding = %+v, nil error; want closed composite-proof refusal", resolved)
+			}
+		})
+	}
+	hook := compositeProviderPathHook{
+		binding: connectors.CommandBindingIdentity{Kind: connectors.CommandBindingStream, ID: base.CompositeProviderPathIdentity.Bindings[0].BindingID},
+		method:  base.CompositeProviderPathIdentity.Bindings[0].Method,
+		path: strings.Replace(
+			base.CompositeProviderPathIdentity.Bindings[0].Path,
+			"{"+base.CompositeProviderPathIdentity.Placeholder+"}",
+			compositeProviderPathRuntimeSegments(base.CompositeProviderPathIdentity.ConfigKeys),
+			1,
+		),
+	}
+	if _, err := resolveImplementedCommandBinding(circleCICompositeProjectSlugBundle(), baseCommand, hook); err == nil {
+		t.Fatal("hook-routed CircleCI transport passed the closed composite identity proof")
+	}
+}
+
+type compositeProviderPathHook struct {
+	binding connectors.CommandBindingIdentity
+	method  string
+	path    string
+}
+
+func (compositeProviderPathHook) ConnectorName() string { return "test" }
+
+func (hook compositeProviderPathHook) CommandBindingTransport(binding connectors.CommandBindingIdentity) (string, string, bool) {
+	if binding == hook.binding {
+		return hook.method, hook.path, true
+	}
+	return "", "", false
+}
+
+func TestCircleCICompositeProviderPathIdentityLoadsFromTheSourceCitedSurface(t *testing.T) {
+	bundle, err := Load(defs.FS, "circleci")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, circleci): %v", err)
+	}
+	identity := bundle.CompositeProviderPathIdentity
+	if identity == nil {
+		t.Fatal("CircleCI composite_provider_path_identity.json omitted the closed source identity")
+	}
+	if len(identity.Bindings) != 11 || identity.Connector != bundle.Name {
+		t.Fatalf("CircleCI composite identity = %+v, want its declaration-owned connector and eleven bindings", identity)
+	}
+}
+
+func TestCompositeProviderPathIdentityOwnsItsConnectorIdentity(t *testing.T) {
+	bundle, err := Load(defs.FS, "circleci")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, circleci): %v", err)
+	}
+	identity := bundle.CompositeProviderPathIdentity
+	if identity == nil {
+		t.Fatal("composite_provider_path_identity.json omitted the closed source identity")
+	}
+	if identity.Connector != bundle.Name {
+		t.Fatalf("identity connector = %q, want bundle connector %q", identity.Connector, bundle.Name)
+	}
+}
+
+func TestBundleLoadRejectsCompositeProviderPathIdentityForAnotherConnector(t *testing.T) {
+	fSys := fullValidBundleFS("acme")
+	identity := circleCICompositeProjectSlugBundle().CompositeProviderPathIdentity
+	raw, err := json.Marshal(identity)
+	if err != nil {
+		t.Fatalf("json.Marshal(identity): %v", err)
+	}
+	fSys["acme/"+compositeProviderPathIdentityFile] = &fstest.MapFile{Data: raw}
+	if _, err := Load(fSys, "acme"); err == nil || !strings.Contains(err.Error(), "does not match bundle") {
+		t.Fatalf("Load cross-connector composite identity error = %v, want closed connector rejection", err)
+	}
+}
+
+func circleCICompositeProjectSlugBundle() Bundle {
+	bundle, err := Load(defs.FS, "circleci")
+	if err != nil {
+		panic(err)
+	}
+	return bundle
+}
+
+func compositeProviderPathCommand(binding CompositeProviderPathBinding) connectors.CommandSurfaceCommand {
+	command := connectors.CommandSurfaceCommand{
+		Path:         binding.SourceID,
+		Intent:       binding.Intent,
+		Availability: "implemented",
+		APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: binding.Method, Path: binding.Path}},
+	}
+	if binding.BindingKind == "stream" {
+		command.Stream = binding.BindingID
+	} else {
+		command.Write = binding.BindingID
+	}
+	return command
 }
