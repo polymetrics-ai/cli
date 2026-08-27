@@ -87,3 +87,26 @@ No blocking finding after review of the repair diff.
   citation assignment.
 - No blocking local review finding. A fresh independent exact-head audit is
   still required by the delivery brief; this inline review does not replace it.
+
+## Fresh admission-hardening inline review — 2026-08-27
+
+- Review target: `3fc3ec7556132c8bcefec8ceb0ed3797b959f9a3`, with the
+  follow-up surface-sync regression correction included before broader gates.
+  The adapter-generated `verify-work` and `code-review` prompts were reviewed
+  and executed inline because the canonical contract permits no role spawning
+  in this runner.
+- **Provider absence:** raw v2 reference-wire inspection now happens after
+  connector identity but before either skipped/dynamic return. It rejects
+  explicit null as a declared discriminator and preserves the ordinary
+  byte-backed path when no reference field exists.
+- **Citation-only descriptor:** legacy and v3 reference rows are compared to
+  their shared lock-derived descriptor. This binds connector/protocol/method/
+  path/provider identity, full provenance, empty execution fields, and the
+  exact blocked/gap state. Pure citation-only descriptors also retain their
+  complete root gap set.
+- **Surface sync:** only a lock that declares a source-reference form enters
+  the strict lock/descriptor gateway; it is checked before any materializer
+  call. The change adds no generic route, HTTP, shell, SQL, credential,
+  provider-I/O, command, or executor path.
+- No blocking inline finding. This review is not independent; the required
+  fresh exact-head Codex audit remains pending and the PR must not merge.

@@ -194,3 +194,36 @@ ordinary merge commit `449f18cdd`.
 - **Explicitly not run:** aggregate `go test -timeout 20m ./...`; repository
   guidance assigns the full suite to CI. No live provider, credential, or
   reverse-ETL action was attempted.
+
+## Fresh admission-hardening verification — 2026-08-27
+
+- **Red/green:** the exact new provider-absence and descriptor/surface-sync
+  adversarial suite failed before production edits and passes after the repair.
+  It covers both skipped/dynamic v2 absence states, all reference-only fields
+  including `rest.source_kind: null`, legacy-v2 and v3 reference descriptor
+  identity/provenance/contract tampering, runtime/root gap removal and
+  replacement, and the surface-sync gateway.
+- **Changed package:** `go test -timeout 20m ./cmd/connectorgen -count=1` —
+  pass in `168.282s`. One first-pass synthetic-fixture regression was removed
+  by not propagating descriptor schema version into the pre-existing
+  materializer; focused regression coverage then passed before the full rerun.
+- **Dependent packages:** `go test -timeout 20m
+  ./internal/connectors/engine -count=1` — pass (`12.761s`); `go test
+  -timeout 20m ./internal/connectors/commandrunner -count=1` — pass
+  (`22.475s`).
+- **Build/static:** `go vet ./...`, `go build ./cmd/connectorgen`, `go build
+  ./cmd/pm`, `make tidy-check`, and `make lint` — pass (`0 issues`).
+- **Canonical checks:** `connectorgen validate` — `553/0`; `surface-sync
+  --check` — `553` scanned/zero drift; `operation-evidence --check` — `1525`
+  rows, five rollups, fixed-100 passed; `agentcontractgen check` — pass.
+- **Repository checks:** `make docs-check`, `make smoke-no-build`, `make
+  connector-boundary` (553 loaded/clean), and `make release-workflow-check`
+  (including installed GitHub certification archive proof) — pass.
+- **Usable surface:** a fresh credential-free temp project built from this
+  branch returns `error: unknown command "outreach"` (exit `2`) for
+  `pm outreach prospects list`. This confirms delta `0`; no fabricated
+  command exists to reach a credential boundary.
+- **Explicitly not claimed:** aggregate `go test -timeout 20m ./...`, live
+  provider proof, credentials, source-byte retention/re-pin, or certification.
+  A fresh independent exact-head Codex audit remains the required next gate;
+  do not merge.
