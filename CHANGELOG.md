@@ -1,5 +1,49 @@
 # Changelog
 
+## [0.3.0](https://github.com/polymetrics-ai/cli/compare/v0.2.1...v0.3.0) (2026-08-27)
+
+
+### Features
+
+* **certification:** port foundation parity projection to main ([#4262](https://github.com/polymetrics-ai/cli/issues/4262)) ([454ea18](https://github.com/polymetrics-ai/cli/commit/454ea182d85d6309ebfcc61475365306c03b8dcb))
+* **connectorgen:** add declaration admission certification ([#4351](https://github.com/polymetrics-ai/cli/issues/4351)) ([1324c52](https://github.com/polymetrics-ai/cli/commit/1324c52bab0b224ed8958858af7676b8b8e191b4))
+* **connectorgen:** add source-reference projection ([#4358](https://github.com/polymetrics-ai/cli/issues/4358)) ([cf29d30](https://github.com/polymetrics-ai/cli/commit/cf29d302c13f7fcd340d31ad6dc27872880ccf42))
+* **connectorgen:** add v3 multi-document source locks ([#4320](https://github.com/polymetrics-ai/cli/issues/4320)) ([cf493b8](https://github.com/polymetrics-ai/cli/commit/cf493b83455aca3dc38164cee01520f5be5803cf))
+* **connectorgen:** make source locks usable ([#4350](https://github.com/polymetrics-ai/cli/issues/4350)) ([b339839](https://github.com/polymetrics-ai/cli/commit/b33983927d863032dac8220949990506e812937d))
+* **connectorgen:** project operation evidence ([#4322](https://github.com/polymetrics-ai/cli/issues/4322)) ([486b92b](https://github.com/polymetrics-ai/cli/commit/486b92b4246a8c993cd229a56e9a6b5af87deea6))
+* **connectorgen:** retain pinned source artifacts ([#4348](https://github.com/polymetrics-ai/cli/issues/4348)) ([db28926](https://github.com/polymetrics-ai/cli/commit/db289265354bcc7370bcc79a572f022a5668571c))
+* **connectors:** add binary upload CLI surface ([#4343](https://github.com/polymetrics-ai/cli/issues/4343)) ([060bb78](https://github.com/polymetrics-ai/cli/commit/060bb7864e3419e09ab10e000bb14ac1ea3724ec))
+* **engine:** add declaration-owned operation routes ([#4317](https://github.com/polymetrics-ai/cli/issues/4317)) ([6410fe5](https://github.com/polymetrics-ai/cli/commit/6410fe59c7ed9017dbe3f830f4361d4d015cd8e9))
+* **engine:** close batch-1 connector declaration gaps ([#4297](https://github.com/polymetrics-ai/cli/issues/4297)) ([51dd6d4](https://github.com/polymetrics-ai/cli/commit/51dd6d468e4a40ece70c36efb81df4fdede8a8b6))
+* **engine:** prove composite provider path identities ([#4360](https://github.com/polymetrics-ai/cli/issues/4360)) ([7cd0412](https://github.com/polymetrics-ai/cli/commit/7cd0412ae388ad10342e9c1153260c6e787e5757))
+* **sentry:** add exact Seer Models route override ([#4370](https://github.com/polymetrics-ai/cli/issues/4370)) ([813f457](https://github.com/polymetrics-ai/cli/commit/813f457a925f7ee3fe3bea101a43e445992c8552))
+* **synctransport:** compose definition-owned production adapters ([#4286](https://github.com/polymetrics-ai/cli/issues/4286)) ([acb85dc](https://github.com/polymetrics-ai/cli/commit/acb85dc036f073e2233740b83c87ab73c64ca019))
+* **synctransport:** compose typed reverse-ETL destinations ([#4304](https://github.com/polymetrics-ai/cli/issues/4304)) ([74aaa62](https://github.com/polymetrics-ai/cli/commit/74aaa6232d335b6bcff48a781d7b7a717692f5cf))
+* **twenty:** recover CRM all-ops connector ([#4298](https://github.com/polymetrics-ai/cli/issues/4298)) ([2e60a50](https://github.com/polymetrics-ai/cli/commit/2e60a5074fe294d29cd3f6d464d18b410131e38f))
+
+
+### Bug Fixes
+
+* **certification:** derive operation write action kinds ([#4272](https://github.com/polymetrics-ai/cli/issues/4272)) ([31bfe62](https://github.com/polymetrics-ai/cli/commit/31bfe62eba72ea906a4fa152027db6af1f77908b))
+* **connectorgen:** add source-cited mutation dispositions ([#4340](https://github.com/polymetrics-ai/cli/issues/4340)) ([3c394a0](https://github.com/polymetrics-ai/cli/commit/3c394a0efe24b0a8601306ae405debaedca0f609))
+* **connectorgen:** derive runtime-valid generated command paths ([#4346](https://github.com/polymetrics-ai/cli/issues/4346)) ([60f85ae](https://github.com/polymetrics-ai/cli/commit/60f85ae948fa1e48708c1b9dc9c371ee4187f8de))
+* **connectorgen:** generalize env-only secret flags ([#4334](https://github.com/polymetrics-ai/cli/issues/4334)) ([2766437](https://github.com/polymetrics-ai/cli/commit/27664370c5a74b1a07d15707a63deed333f9aa3a))
+* **connectorgen:** preserve declared artifact identity queries ([#4335](https://github.com/polymetrics-ai/cli/issues/4335)) ([8127de4](https://github.com/polymetrics-ai/cli/commit/8127de41875ccdf3e1e11a4d09558b7e4a6f4eb2))
+* **connectorgen:** retain bounded provider dialect contracts ([#4339](https://github.com/polymetrics-ai/cli/issues/4339)) ([edf2925](https://github.com/polymetrics-ai/cli/commit/edf2925e3c12924243cb459e981b33cffd69e6c8))
+* **connectorgen:** retain cyclic schema gaps ([#4327](https://github.com/polymetrics-ai/cli/issues/4327)) ([e338cd3](https://github.com/polymetrics-ai/cli/commit/e338cd30160be6d3e1b4eba21f74df1f580094ba))
+* **connectorgen:** retain write-disabled mutation artifacts ([#4357](https://github.com/polymetrics-ai/cli/issues/4357)) ([b9b2478](https://github.com/polymetrics-ai/cli/commit/b9b2478b3b2451d632d28b9aa138a170ad835110))
+* **connectorgen:** separate provider schemas from execution bounds ([#4345](https://github.com/polymetrics-ai/cli/issues/4345)) ([19cb538](https://github.com/polymetrics-ai/cli/commit/19cb53801f61e2f377638298d4c9f117a6ebe54a))
+* **connectorgen:** support rendered-reference source locks ([#4332](https://github.com/polymetrics-ai/cli/issues/4332)) ([3c66c33](https://github.com/polymetrics-ai/cli/commit/3c66c33b8cf02e1146bcfc92da1d55660405f68b))
+* **connectorgen:** support source-cited read-only operations ([#4341](https://github.com/polymetrics-ai/cli/issues/4341)) ([43cda89](https://github.com/polymetrics-ai/cli/commit/43cda892489b2cc1315767496f39b6594e3c2e5a))
+* **credential:** reject empty credential material ([#4310](https://github.com/polymetrics-ai/cli/issues/4310)) ([e62ae21](https://github.com/polymetrics-ai/cli/commit/e62ae21d428f0d27225f9bff564dc2cd797f6b65))
+* **engine:** reconcile source-bound read capabilities ([#4356](https://github.com/polymetrics-ai/cli/issues/4356)) ([2165619](https://github.com/polymetrics-ai/cli/commit/2165619ec8f5f9d4141b491b7a5a64bc460d0c71))
+* **reverse-etl:** complete action-binding delivery contract ([#4330](https://github.com/polymetrics-ai/cli/issues/4330)) ([1b893f3](https://github.com/polymetrics-ai/cli/commit/1b893f34812fc059ad4c6c69739dbe0d85f0f7eb))
+
+
+### Performance Improvements
+
+* **defs:** slim production source-lock embed ([484c18c](https://github.com/polymetrics-ai/cli/commit/484c18cf30cb77244d2e7d2c5194a55338b40209)), closes [#4299](https://github.com/polymetrics-ai/cli/issues/4299)
+
 ## [0.2.1](https://github.com/polymetrics-ai/cli/compare/v0.2.0...v0.2.1) (2026-08-18)
 
 
