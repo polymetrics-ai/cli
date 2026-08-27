@@ -217,7 +217,8 @@ func runSurfaceSync(args []string, stdout, stderr io.Writer) int {
 
 func syncCheckedInSourceProjection(bundleDir, connector string, check bool) (sourceProjectionStats, error) {
 	lockPath := filepath.Join(bundleDir, "sources", connector+"-operation-source-lock.json")
-	if _, err := os.Stat(lockPath); err != nil {
+	lockRaw, err := os.ReadFile(lockPath)
+	if err != nil {
 		if os.IsNotExist(err) {
 			return sourceProjectionStats{}, nil
 		}
@@ -237,6 +238,17 @@ func syncCheckedInSourceProjection(bundleDir, connector string, check bool) (sou
 	}
 	if descriptor.SchemaVersion != 2 && descriptor.SchemaVersion != 3 {
 		return sourceProjectionStats{}, fmt.Errorf("source descriptor schema_version = %d, want 2 or 3", descriptor.SchemaVersion)
+	}
+	// The checked-in lock owns every descriptor contract. Parse and bind it
+	// before projection rather than using a mutable header marker to decide
+	// whether validation applies: otherwise changing a citation document's kind
+	// can turn declaration-only evidence into a materialization input.
+	lock, err := parseSourceImportLock(lockRaw, connector)
+	if err != nil {
+		return sourceProjectionStats{}, fmt.Errorf("parse source lock: %w", err)
+	}
+	if findings := validateSourceDescriptorAgainstLock(connector, filepath.ToSlash(filepath.Join("sources", connector+"-operation-descriptor.json")), lock, descriptor); len(findings) != 0 {
+		return sourceProjectionStats{}, fmt.Errorf("validate canonical source descriptor: %s", findings[0].Message)
 	}
 	return projectSourceMutationMappingsToBundle(bundleDir, sourceImportResult{
 		Operations:     descriptor.Operations,

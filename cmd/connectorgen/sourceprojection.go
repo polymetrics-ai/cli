@@ -174,6 +174,13 @@ func projectSourceMutationMappingsToBundle(bundleDir string, result sourceImport
 }
 
 func projectSourceDescriptorToBundleMode(bundleDir string, result sourceImportResult, check, materializeReads, reconcileReadSurface bool) (sourceProjectionStats, error) {
+	// A cited-only descriptor contributes source-to-declaration evidence, but it
+	// has no executable contract. Remove it before *any* mode-specific
+	// projection transform so source references cannot become an execution gate.
+	result = sourceProjectionMaterializableResult(result)
+	if len(result.Operations) == 0 {
+		return sourceProjectionStats{}, nil
+	}
 	if err := validateSourceProjectionExecutionEnvelopes(result); err != nil {
 		return sourceProjectionStats{}, err
 	}
@@ -340,6 +347,12 @@ func projectSourceDescriptorToBundleMode(bundleDir string, result sourceImportRe
 	stats.Surface += readGapStats.Surface
 
 	for _, operation := range result.Operations {
+		// A source reference carries operation identity and a cited provider URL,
+		// not a request/response contract. It may update evidence and validation,
+		// but it must never materialize or mutate a declaration-owned action.
+		if sourceOperationHasFoundationGap(operation, sourceContractUnavailableFoundation) {
+			continue
+		}
 		_, readOnly, readOnlyErr := sourceProjectionReadOnlyDeclaration(declarationBundle, operation)
 		if readOnlyErr != nil {
 			return stats, fmt.Errorf("source operation %s: %w", operation.SourceID, readOnlyErr)
@@ -511,6 +524,18 @@ func projectSourceDescriptorToBundleMode(bundleDir string, result sourceImportRe
 		}
 	}
 	return stats, nil
+}
+
+func sourceProjectionMaterializableResult(result sourceImportResult) sourceImportResult {
+	filtered := result
+	filtered.Operations = make([]sourceOperationDescriptor, 0, len(result.Operations))
+	for _, operation := range result.Operations {
+		if sourceOperationHasFoundationGap(operation, sourceContractUnavailableFoundation) {
+			continue
+		}
+		filtered.Operations = append(filtered.Operations, operation)
+	}
+	return filtered
 }
 
 // sourceProjectionMaterializeNoBodyMutationActions promotes a source-complete
@@ -4167,7 +4192,7 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 		return []Finding{sourceProjectionFinding(connector, file, sourceImportUnavailableFindingMessage(unavailable))}
 	}
 	wantSchemaVersion := 2
-	if lock.SchemaVersion == 3 {
+	if lock.SchemaVersion == 3 || lock.isLegacySourceReference() {
 		wantSchemaVersion = 3
 	}
 	if descriptor.SchemaVersion != wantSchemaVersion {
@@ -4176,44 +4201,50 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 	type expectedSource struct {
 		source              sourceImportSource
 		providerOperationID string
+		reference           *sourceOperationDescriptor
 		method              string
 		path                string
 	}
 	expected := map[string]expectedSource{}
+	referenceGaps := []sourceContractGap{}
+	referenceCount := 0
 	if lock.SchemaVersion == 3 {
 		for _, document := range lock.Rest.SourceDocuments {
 			for _, operation := range document.Operations {
-				form := document.sourceKind()
-				version := ""
-				if form == sourceImportDocumentKindOpenAPI {
-					if document.Artifact.Swagger != "" {
-						form = "swagger"
-						version = document.Artifact.Swagger
-					} else {
-						version = document.Artifact.OpenAPI
-					}
-				}
-				expected[operation.ID] = expectedSource{
-					source: sourceImportSource{
-						URL:                 document.Artifact.SourceURL,
-						SHA256:              strings.ToLower(document.Artifact.SHA256),
-						Bytes:               document.Artifact.Bytes,
-						Location:            operation.SourceLocation,
-						Form:                form,
-						Version:             version,
-						DocumentID:          document.ID,
-						PublishedURL:        document.PublishedSource.SourceURL,
-						PublishedCaptureURL: document.PublishedSource.CaptureURL,
-						PublishedSHA256:     strings.ToLower(document.PublishedSource.SHA256),
-						PublishedBytes:      document.PublishedSource.Bytes,
-						PublishedAdapter:    document.PublishedSource.Adapter,
-						ContentType:         document.ContentType,
-						CitationURL:         operation.CitationURL,
-					},
+				source := sourceImportExpectedV3DescriptorProvenance(document, operation)
+				expectedOperation := expectedSource{
+					source:              source,
 					providerOperationID: operation.OperationID,
 					method:              strings.ToUpper(operation.Method),
 					path:                operation.Path,
 				}
+				if document.isSourceReference() {
+					reference := sourceImportReferenceOperation(lock.Connector, operation, document.sourceArtifact(), sourceImportReferenceForm(document.sourceArtifact()))
+					reference.Source.DocumentID = document.ID
+					expectedOperation.reference = &reference
+					referenceGaps = append(referenceGaps, reference.Runtime.Gaps...)
+					referenceCount++
+				}
+				expected[operation.ID] = expectedOperation
+			}
+		}
+	} else if lock.isLegacySourceReference() {
+		artifacts, err := sourceImportLegacyReferenceArtifacts(lock)
+		if err != nil {
+			return []Finding{sourceProjectionFinding(connector, file, "source-reference provenance: "+err.Error())}
+		}
+		for _, operation := range lock.Rest.Operations {
+			artifact, found := artifacts[operation.SourceURL]
+			if !found {
+				return []Finding{sourceProjectionFinding(connector, file, "source-reference operation "+operation.ID+" cites an undeclared source URL")}
+			}
+			reference := sourceImportReferenceOperation(lock.Connector, operation, artifact, sourceImportReferenceForm(artifact))
+			referenceGaps = append(referenceGaps, reference.Runtime.Gaps...)
+			referenceCount++
+			expected[operation.ID] = expectedSource{
+				source:              sourceImportReferenceProvenance(artifact, operation.SourceLocation, sourceImportReferenceForm(artifact)),
+				providerOperationID: operation.OperationID,
+				reference:           &reference,
 			}
 		}
 	} else {
@@ -4231,6 +4262,12 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 	for _, field := range lock.GraphQL.MutationFields {
 		expected[fmt.Sprintf("%s.graphql.mutation.%s", connector, field.Name)] = expectedSource{source: sourceImportSource{SHA256: strings.ToLower(firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)), Bytes: firstPositiveInt64(lock.GraphQL.ProjectionBytes, lock.GraphQL.Bytes)}}
 	}
+	if referenceCount > 0 && !descriptor.MergeBlocked {
+		return []Finding{sourceProjectionFinding(connector, file, "source descriptor reference contract drift: merge_blocked must remain true")}
+	}
+	if referenceCount == len(expected) && !reflect.DeepEqual(sourceSortedGaps(descriptor.Gaps), sourceSortedGaps(referenceGaps)) {
+		return []Finding{sourceProjectionFinding(connector, file, "source descriptor reference contract drift: descriptor gaps do not match the cited source contract")}
+	}
 	actual := map[string]sourceOperationDescriptor{}
 	for _, operation := range descriptor.Operations {
 		if _, duplicate := actual[operation.SourceID]; duplicate {
@@ -4246,6 +4283,13 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 		if !ok {
 			return []Finding{sourceProjectionFinding(connector, file, "source descriptor is missing identity "+identity)}
 		}
+		if expectedOperation.reference != nil && !reflect.DeepEqual(operation, *expectedOperation.reference) {
+			// A cited-only source has no request or response contract to repair
+			// downstream. Its exact operation descriptor is therefore the closed
+			// lock projection: identity, provenance, empty execution fields, and
+			// the sole source_contract_unavailable gap all travel together.
+			return []Finding{sourceProjectionFinding(connector, file, "source descriptor reference contract drift for "+identity)}
+		}
 		if (expectedOperation.source.URL != "" && operation.Source.URL != expectedOperation.source.URL) || (expectedOperation.source.Location != "" && operation.Source.Location != expectedOperation.source.Location) || (expectedOperation.method != "" && (!strings.EqualFold(operation.Method, expectedOperation.method) || operation.Path != expectedOperation.path)) {
 			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provider contract drift for "+identity)}
 		}
@@ -4257,6 +4301,40 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 		}
 	}
 	return nil
+}
+
+func sourceImportExpectedV3DescriptorProvenance(document sourceImportRESTDocument, operation sourceImportRESTOperation) sourceImportSource {
+	if document.isSourceReference() {
+		source := sourceImportReferenceProvenance(document.sourceArtifact(), operation.SourceLocation, sourceImportReferenceForm(document.sourceArtifact()))
+		source.DocumentID = document.ID
+		return source
+	}
+	form := document.sourceKind()
+	version := ""
+	if form == sourceImportDocumentKindOpenAPI {
+		if document.Artifact.Swagger != "" {
+			form = "swagger"
+			version = document.Artifact.Swagger
+		} else {
+			version = document.Artifact.OpenAPI
+		}
+	}
+	return sourceImportSource{
+		URL:                 document.Artifact.SourceURL,
+		SHA256:              strings.ToLower(document.Artifact.SHA256),
+		Bytes:               document.Artifact.Bytes,
+		Location:            operation.SourceLocation,
+		Form:                form,
+		Version:             version,
+		DocumentID:          document.ID,
+		PublishedURL:        document.PublishedSource.SourceURL,
+		PublishedCaptureURL: document.PublishedSource.CaptureURL,
+		PublishedSHA256:     strings.ToLower(document.PublishedSource.SHA256),
+		PublishedBytes:      document.PublishedSource.Bytes,
+		PublishedAdapter:    document.PublishedSource.Adapter,
+		ContentType:         document.ContentType,
+		CitationURL:         operation.CitationURL,
+	}
 }
 
 func validateSourceExecutableCoverage(bundle engine.Bundle, file string, descriptor sourceImportDescriptorDocument) []Finding {
