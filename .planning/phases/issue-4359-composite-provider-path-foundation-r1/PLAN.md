@@ -15,8 +15,8 @@
 ## Slice 3 — Green and refactor
 
 1. Add a declaration-owned, schema-validated identity proof record at the existing API-surface/equivalence boundary. It carries a per-binding source ID, provider operation ID, source URL/digest/location, command intent, binding identity, method, canonical path, provider placeholder, and exact config-key order.
-2. Validate it fail-closed: it is accepted only for the eleven named CircleCI source/binding rows, exact `https://circleci.com/api/v2/openapi.json` citation/digest, `{project-slug}`, and exactly `[vcs_type, org, repo]`; no other connector/configuration is admitted.
-3. At the resolver, allow the proof only when command intent, binding, method, all non-identity literals, and relative transport match and the provider placeholder expands to exactly the three declared config segments. Preserve current proof branches and do not alter request execution.
+2. Validate it fail-closed as a declaration-owned record: its connector matches the loaded bundle; every row retains source identity, ordered index, ETL-stream or reverse-ETL-write lane, canonical relative path, and a single declared placeholder; its exact CircleCI URL/digest, `{project-slug}`, `[vcs_type, org, repo]`, and eleven rows remain only in `defs/circleci/composite_provider_path_identity.json`.
+3. At the resolver, allow the proof only when one declared row matches command intent, binding, method, canonical path, all non-identity literals, and relative transport, and its provider placeholder inverts to exactly its declared ordered config segments. Preserve current proof branches and do not alter request execution.
 4. Add focused loader/schema coverage and retain exact resolution tests for all six lanes.
 
 ## Slice 4 — Integration proof

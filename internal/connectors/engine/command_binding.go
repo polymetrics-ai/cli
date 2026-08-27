@@ -184,7 +184,7 @@ func proveCommandEndpointEquivalence(b Bundle, cmd connectors.CommandSurfaceComm
 
 	runtimeComparable, runtimeChange := commandBindingComparablePathWithProof(runtime.path)
 	declaredComparable, declaredChange := commandBindingComparablePathWithProof(canonicalPath)
-	if proof, matched, err := proveCircleCICompositeProviderPathIdentity(b, cmd, binding, runtime, canonicalMethod, canonicalPath, runtimeChange, declaredChange, hookTransport); err != nil {
+	if proof, matched, err := proveCompositeProviderPathIdentity(b, cmd, binding, runtime, canonicalMethod, canonicalPath, runtimeChange, declaredChange, hookTransport); err != nil {
 		return "", err
 	} else if matched {
 		return proof, nil
@@ -205,12 +205,11 @@ func proveCommandEndpointEquivalence(b Bundle, cmd connectors.CommandSurfaceComm
 	return "", fmt.Errorf("runtime endpoint %s %s is not canonically equivalent to %s %s", runtime.method, runtime.path, canonicalMethod, canonicalPath)
 }
 
-// proveCircleCICompositeProviderPathIdentity is deliberately a closed proof
-// for the retained CircleCI OpenAPI project's project-slug identity. It cannot
-// be configured for another connector or another shape: validation requires
-// the complete source-cited manifest, and this function requires the one exact
-// runtime expansion to vcs_type/org/repo.
-func proveCircleCICompositeProviderPathIdentity(b Bundle, cmd connectors.CommandSurfaceCommand, binding connectors.CommandBindingIdentity, runtime commandRuntimeEndpoint, canonicalMethod, canonicalPath, runtimeChange, declaredChange string, hookTransport bool) (string, bool, error) {
+// proveCompositeProviderPathIdentity accepts only a fully named, declaration-
+// owned source binding. It derives one exact inverse transport from the
+// declared placeholder and ordered config keys; it never interpolates command
+// input or exposes a general path substitution facility.
+func proveCompositeProviderPathIdentity(b Bundle, cmd connectors.CommandSurfaceCommand, binding connectors.CommandBindingIdentity, runtime commandRuntimeEndpoint, canonicalMethod, canonicalPath, runtimeChange, declaredChange string, hookTransport bool) (string, bool, error) {
 	if b.CompositeProviderPathIdentity == nil {
 		return "", false, nil
 	}
@@ -219,8 +218,8 @@ func proveCircleCICompositeProviderPathIdentity(b Bundle, cmd connectors.Command
 	}
 
 	var expected *CompositeProviderPathBinding
-	for index := range circleCICompositeProviderPathBindings {
-		candidate := &circleCICompositeProviderPathBindings[index]
+	for index := range b.CompositeProviderPathIdentity.Bindings {
+		candidate := &b.CompositeProviderPathIdentity.Bindings[index]
 		if candidate.Intent == cmd.Intent && candidate.BindingKind == binding.Kind && candidate.BindingID == binding.ID &&
 			candidate.Method == canonicalMethod && candidate.Path == canonicalPath {
 			expected = candidate
@@ -231,19 +230,28 @@ func proveCircleCICompositeProviderPathIdentity(b Bundle, cmd connectors.Command
 		return "", false, nil
 	}
 	if hookTransport {
-		return "", false, fmt.Errorf("CircleCI composite provider path identity does not permit hook transport")
+		return "", false, fmt.Errorf("composite provider path identity does not permit hook transport")
 	}
 	if runtimeChange != "" || declaredChange != "" || runtime.route != "" || runtime.baseURL != "" {
-		return "", false, fmt.Errorf("CircleCI composite provider path identity requires the declared relative transport path without query, suffix, annotation, route, or base override")
+		return "", false, fmt.Errorf("composite provider path identity requires the declared relative transport path without query, suffix, annotation, route, or base override")
 	}
-	if strings.Count(canonicalPath, "{project-slug}") != 1 {
-		return "", false, fmt.Errorf("CircleCI composite provider path identity requires exactly one {project-slug} placeholder")
+	placeholder := "{" + b.CompositeProviderPathIdentity.Placeholder + "}"
+	if strings.Count(canonicalPath, placeholder) != 1 {
+		return "", false, fmt.Errorf("composite provider path identity requires exactly one declared placeholder")
 	}
-	expectedRuntimePath := strings.Replace(canonicalPath, "{project-slug}", "{vcs_type}/{org}/{repo}", 1)
+	expectedRuntimePath := strings.Replace(canonicalPath, placeholder, compositeProviderPathRuntimeSegments(b.CompositeProviderPathIdentity.ConfigKeys), 1)
 	if runtime.path != expectedRuntimePath || strings.ToUpper(runtime.method) != expected.Method {
-		return "", false, fmt.Errorf("CircleCI composite provider path identity requires %s %s transport, got %s %s", expected.Method, expectedRuntimePath, runtime.method, runtime.path)
+		return "", false, fmt.Errorf("composite provider path identity requires %s %s transport, got %s %s", expected.Method, expectedRuntimePath, runtime.method, runtime.path)
 	}
 	return CommandEndpointCompositeProviderPathIdentity, true, nil
+}
+
+func compositeProviderPathRuntimeSegments(configKeys []string) string {
+	segments := make([]string, len(configKeys))
+	for index, key := range configKeys {
+		segments[index] = "{" + key + "}"
+	}
+	return strings.Join(segments, "/")
 }
 
 func commandBindingEquivalenceProof(runtimePath, canonicalPath, runtimeChange, canonicalChange string) string {

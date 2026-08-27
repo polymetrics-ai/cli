@@ -28,8 +28,21 @@ identity, reordered declarations, partial/reordered/extra/absolute/query/route
 transport, method drift, cross-connector configuration, and direct-read,
 direct-write, binary-download, and binary-upload lanes.
 
-## Refactor / review
+## Refactor / CI boundary repair
 
-Pending final independent review. The implementation remains a closed
-equivalence proof; no request interpolation, execution, parser, method, body,
-or credential logic changed.
+`go test -timeout 20m ./internal/connectors/engine -run '^TestCompositeProviderPathIdentityOwnsItsConnectorIdentity$' -count=1`
+
+Red: the new declaration-ownership assertion failed to compile because the
+identity type did not expose an owning connector. This protected the CI repair
+from retaining any provider-specific allow-list in shared engine code.
+
+Green: `CompositeProviderPathIdentity` now reads its connector, citation,
+placeholder, ordered components, and source rows only from the declaration.
+The provider-neutral engine validates the closed row shape and derives only
+the declared inverse transport. It admits no direct/binary lane, hook, route,
+base override, query, suffix, annotation, method, binding, or literal-path
+variation. `go run ./cmd/connectorgen boundary . --json` reports clean.
+
+No request interpolation, execution, parser, method, body, credential, or
+source-lock logic changed. A fresh exact-head independent review remains
+required after this repair commit.

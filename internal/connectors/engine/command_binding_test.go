@@ -261,27 +261,15 @@ func TestResolveImplementedCommandBindingMapsGraphQLOperationToTransport(t *test
 // identity while the existing transport requires its vcs/org/repo components.
 func TestResolveImplementedCommandBindingProvesEveryCircleCICompositeProjectSlugBinding(t *testing.T) {
 	bundle := circleCICompositeProjectSlugBundle()
-
-	tests := []struct {
-		name    string
-		command connectors.CommandSurfaceCommand
-	}{
-		{name: "projects stream", command: circleCICompositeCommand("projects list", "etl", "projects", "", http.MethodGet, "/project/{project-slug}")},
-		{name: "pipelines stream", command: circleCICompositeCommand("pipelines list", "etl", "pipelines", "", http.MethodGet, "/project/{project-slug}/pipeline")},
-		{name: "schedules stream", command: circleCICompositeCommand("schedules list", "etl", "schedules", "", http.MethodGet, "/project/{project-slug}/schedule")},
-		{name: "checkout keys stream", command: circleCICompositeCommand("checkout keys list", "etl", "checkout_keys", "", http.MethodGet, "/project/{project-slug}/checkout-key")},
-		{name: "environment variables stream", command: circleCICompositeCommand("environment variables list", "etl", "environment_variables", "", http.MethodGet, "/project/{project-slug}/envvar")},
-		{name: "insights workflow summary stream", command: circleCICompositeCommand("insights workflow summary list", "etl", "insights_workflow_summary", "", http.MethodGet, "/insights/{project-slug}/workflows")},
-		{name: "create schedule", command: circleCICompositeCommand("create schedule apply", "reverse_etl", "", "create_schedule", http.MethodPost, "/project/{project-slug}/schedule")},
-		{name: "create environment variable", command: circleCICompositeCommand("create environment variable apply", "reverse_etl", "", "create_environment_variable", http.MethodPost, "/project/{project-slug}/envvar")},
-		{name: "create checkout key", command: circleCICompositeCommand("create checkout key apply", "reverse_etl", "", "create_checkout_key", http.MethodPost, "/project/{project-slug}/checkout-key")},
-		{name: "delete environment variable", command: circleCICompositeCommand("delete environment variable apply", "reverse_etl", "", "delete_environment_variable", http.MethodDelete, "/project/{project-slug}/envvar/{name}")},
-		{name: "delete checkout key", command: circleCICompositeCommand("delete checkout key apply", "reverse_etl", "", "delete_checkout_key", http.MethodDelete, "/project/{project-slug}/checkout-key/{fingerprint}")},
+	identity := bundle.CompositeProviderPathIdentity
+	if identity == nil || len(identity.Bindings) != 11 {
+		t.Fatalf("composite identity = %+v, want eleven declared source bindings", identity)
 	}
 
-	for _, testCase := range tests {
-		t.Run(testCase.name, func(t *testing.T) {
-			resolved, err := ResolveImplementedCommandBinding(bundle, testCase.command)
+	for _, binding := range identity.Bindings {
+		binding := binding
+		t.Run(binding.SourceID, func(t *testing.T) {
+			resolved, err := ResolveImplementedCommandBinding(bundle, compositeProviderPathCommand(binding))
 			if err != nil {
 				t.Fatalf("ResolveImplementedCommandBinding: %v", err)
 			}
@@ -296,7 +284,13 @@ func TestResolveImplementedCommandBindingProvesEveryCircleCICompositeProjectSlug
 // generic placeholder feature might accidentally widen it: identity metadata,
 // connector, lane, binding, method, and every relevant transport-path shape.
 func TestResolveImplementedCommandBindingRejectsUnprovenCircleCICompositeProjectSlugSubstitutions(t *testing.T) {
-	baseCommand := circleCICompositeCommand("projects list", "etl", "projects", "", http.MethodGet, "/project/{project-slug}")
+	base := circleCICompositeProjectSlugBundle()
+	if base.CompositeProviderPathIdentity == nil {
+		t.Fatal("composite identity is required for the rejection matrix")
+	}
+	baseCommand := compositeProviderPathCommand(base.CompositeProviderPathIdentity.Bindings[0])
+	binaryUploadCommand := compositeProviderPathCommand(base.CompositeProviderPathIdentity.Bindings[6])
+	binaryUploadCommand.Intent = "binary_upload"
 	tests := []struct {
 		name    string
 		bundle  func() Bundle
@@ -321,19 +315,19 @@ func TestResolveImplementedCommandBindingRejectsUnprovenCircleCICompositeProject
 			command: baseCommand,
 		},
 		{
-			name: "unretained source digest",
+			name: "invalid source digest",
 			bundle: func() Bundle {
 				bundle := circleCICompositeProjectSlugBundle()
-				bundle.CompositeProviderPathIdentity.SourceSHA256 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+				bundle.CompositeProviderPathIdentity.SourceSHA256 = "not-a-sha256"
 				return bundle
 			},
 			command: baseCommand,
 		},
 		{
-			name: "conflicting source URL",
+			name: "non HTTPS source URL",
 			bundle: func() Bundle {
 				bundle := circleCICompositeProjectSlugBundle()
-				bundle.CompositeProviderPathIdentity.SourceURL = "https://example.invalid/openapi.json"
+				bundle.CompositeProviderPathIdentity.SourceURL = "file:///tmp/openapi.json"
 				return bundle
 			},
 			command: baseCommand,
@@ -486,7 +480,7 @@ func TestResolveImplementedCommandBindingRejectsUnprovenCircleCICompositeProject
 		{
 			name:    "binary upload write",
 			bundle:  circleCICompositeProjectSlugBundle,
-			command: circleCICompositeCommand("schedule upload", "binary_upload", "", "create_schedule", http.MethodPost, "/project/{project-slug}/schedule"),
+			command: binaryUploadCommand,
 		},
 	}
 
@@ -497,18 +491,32 @@ func TestResolveImplementedCommandBindingRejectsUnprovenCircleCICompositeProject
 			}
 		})
 	}
-	if _, err := resolveImplementedCommandBinding(circleCICompositeProjectSlugBundle(), baseCommand, circleCICompositeProjectSlugHook{}); err == nil {
+	hook := compositeProviderPathHook{
+		binding: connectors.CommandBindingIdentity{Kind: connectors.CommandBindingStream, ID: base.CompositeProviderPathIdentity.Bindings[0].BindingID},
+		method:  base.CompositeProviderPathIdentity.Bindings[0].Method,
+		path: strings.Replace(
+			base.CompositeProviderPathIdentity.Bindings[0].Path,
+			"{"+base.CompositeProviderPathIdentity.Placeholder+"}",
+			compositeProviderPathRuntimeSegments(base.CompositeProviderPathIdentity.ConfigKeys),
+			1,
+		),
+	}
+	if _, err := resolveImplementedCommandBinding(circleCICompositeProjectSlugBundle(), baseCommand, hook); err == nil {
 		t.Fatal("hook-routed CircleCI transport passed the closed composite identity proof")
 	}
 }
 
-type circleCICompositeProjectSlugHook struct{}
+type compositeProviderPathHook struct {
+	binding connectors.CommandBindingIdentity
+	method  string
+	path    string
+}
 
-func (circleCICompositeProjectSlugHook) ConnectorName() string { return "circleci" }
+func (compositeProviderPathHook) ConnectorName() string { return "test" }
 
-func (circleCICompositeProjectSlugHook) CommandBindingTransport(binding connectors.CommandBindingIdentity) (string, string, bool) {
-	if binding == (connectors.CommandBindingIdentity{Kind: connectors.CommandBindingStream, ID: "projects"}) {
-		return http.MethodGet, "/project/{vcs_type}/{org}/{repo}", true
+func (hook compositeProviderPathHook) CommandBindingTransport(binding connectors.CommandBindingIdentity) (string, string, bool) {
+	if binding == hook.binding {
+		return hook.method, hook.path, true
 	}
 	return "", "", false
 }
@@ -522,8 +530,22 @@ func TestCircleCICompositeProviderPathIdentityLoadsFromTheSourceCitedSurface(t *
 	if identity == nil {
 		t.Fatal("CircleCI composite_provider_path_identity.json omitted the closed source identity")
 	}
-	if len(identity.Bindings) != 11 || identity.SourceSHA256 != circleCICompositeProviderPathSourceSHA {
-		t.Fatalf("CircleCI composite identity = %+v, want retained digest and eleven bindings", identity)
+	if len(identity.Bindings) != 11 || identity.Connector != bundle.Name {
+		t.Fatalf("CircleCI composite identity = %+v, want its declaration-owned connector and eleven bindings", identity)
+	}
+}
+
+func TestCompositeProviderPathIdentityOwnsItsConnectorIdentity(t *testing.T) {
+	bundle, err := Load(defs.FS, "circleci")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, circleci): %v", err)
+	}
+	identity := bundle.CompositeProviderPathIdentity
+	if identity == nil {
+		t.Fatal("composite_provider_path_identity.json omitted the closed source identity")
+	}
+	if identity.Connector != bundle.Name {
+		t.Fatalf("identity connector = %q, want bundle connector %q", identity.Connector, bundle.Name)
 	}
 }
 
@@ -535,54 +557,30 @@ func TestBundleLoadRejectsCompositeProviderPathIdentityForAnotherConnector(t *te
 		t.Fatalf("json.Marshal(identity): %v", err)
 	}
 	fSys["acme/"+compositeProviderPathIdentityFile] = &fstest.MapFile{Data: raw}
-	if _, err := Load(fSys, "acme"); err == nil || !strings.Contains(err.Error(), "only defined for circleci") {
+	if _, err := Load(fSys, "acme"); err == nil || !strings.Contains(err.Error(), "does not match bundle") {
 		t.Fatalf("Load cross-connector composite identity error = %v, want closed connector rejection", err)
 	}
 }
 
-func circleCICompositeCommand(path, intent, stream, write, method, endpoint string) connectors.CommandSurfaceCommand {
-	return connectors.CommandSurfaceCommand{
-		Path: path, Intent: intent, Availability: "implemented", Stream: stream, Write: write,
-		APISurface: []connectors.CommandSurfaceEndpointRef{{Method: method, Path: endpoint}},
+func circleCICompositeProjectSlugBundle() Bundle {
+	bundle, err := Load(defs.FS, "circleci")
+	if err != nil {
+		panic(err)
 	}
+	return bundle
 }
 
-func circleCICompositeProjectSlugBundle() Bundle {
-	return Bundle{
-		Name: "circleci",
-		CompositeProviderPathIdentity: &CompositeProviderPathIdentity{
-			SourceURL:    "https://circleci.com/api/v2/openapi.json",
-			SourceSHA256: "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
-			Placeholder:  "project-slug",
-			ConfigKeys:   []string{"vcs_type", "org", "repo"},
-			Bindings: []CompositeProviderPathBinding{
-				{SourceID: "circleci.rest.getProjectBySlug", ProviderOperationID: "getProjectBySlug", SourceLocation: `paths["/project/{project-slug}"].get`, Intent: "etl", BindingKind: "stream", BindingID: "projects", Method: http.MethodGet, Path: "/project/{project-slug}"},
-				{SourceID: "circleci.rest.listPipelinesForProject", ProviderOperationID: "listPipelinesForProject", SourceLocation: `paths["/project/{project-slug}/pipeline"].get`, Intent: "etl", BindingKind: "stream", BindingID: "pipelines", Method: http.MethodGet, Path: "/project/{project-slug}/pipeline"},
-				{SourceID: "circleci.rest.listSchedulesForProject", ProviderOperationID: "listSchedulesForProject", SourceLocation: `paths["/project/{project-slug}/schedule"].get`, Intent: "etl", BindingKind: "stream", BindingID: "schedules", Method: http.MethodGet, Path: "/project/{project-slug}/schedule"},
-				{SourceID: "circleci.rest.listCheckoutKeys", ProviderOperationID: "listCheckoutKeys", SourceLocation: `paths["/project/{project-slug}/checkout-key"].get`, Intent: "etl", BindingKind: "stream", BindingID: "checkout_keys", Method: http.MethodGet, Path: "/project/{project-slug}/checkout-key"},
-				{SourceID: "circleci.rest.listEnvVars", ProviderOperationID: "listEnvVars", SourceLocation: `paths["/project/{project-slug}/envvar"].get`, Intent: "etl", BindingKind: "stream", BindingID: "environment_variables", Method: http.MethodGet, Path: "/project/{project-slug}/envvar"},
-				{SourceID: "circleci.rest.getProjectWorkflowMetrics", ProviderOperationID: "getProjectWorkflowMetrics", SourceLocation: `paths["/insights/{project-slug}/workflows"].get`, Intent: "etl", BindingKind: "stream", BindingID: "insights_workflow_summary", Method: http.MethodGet, Path: "/insights/{project-slug}/workflows"},
-				{SourceID: "circleci.rest.createSchedule", ProviderOperationID: "createSchedule", SourceLocation: `paths["/project/{project-slug}/schedule"].post`, Intent: "reverse_etl", BindingKind: "write", BindingID: "create_schedule", Method: http.MethodPost, Path: "/project/{project-slug}/schedule"},
-				{SourceID: "circleci.rest.createEnvVar", ProviderOperationID: "createEnvVar", SourceLocation: `paths["/project/{project-slug}/envvar"].post`, Intent: "reverse_etl", BindingKind: "write", BindingID: "create_environment_variable", Method: http.MethodPost, Path: "/project/{project-slug}/envvar"},
-				{SourceID: "circleci.rest.createCheckoutKey", ProviderOperationID: "createCheckoutKey", SourceLocation: `paths["/project/{project-slug}/checkout-key"].post`, Intent: "reverse_etl", BindingKind: "write", BindingID: "create_checkout_key", Method: http.MethodPost, Path: "/project/{project-slug}/checkout-key"},
-				{SourceID: "circleci.rest.deleteEnvVar", ProviderOperationID: "deleteEnvVar", SourceLocation: `paths["/project/{project-slug}/envvar/{name}"].delete`, Intent: "reverse_etl", BindingKind: "write", BindingID: "delete_environment_variable", Method: http.MethodDelete, Path: "/project/{project-slug}/envvar/{name}"},
-				{SourceID: "circleci.rest.deleteCheckoutKey", ProviderOperationID: "deleteCheckoutKey", SourceLocation: `paths["/project/{project-slug}/checkout-key/{fingerprint}"].delete`, Intent: "reverse_etl", BindingKind: "write", BindingID: "delete_checkout_key", Method: http.MethodDelete, Path: "/project/{project-slug}/checkout-key/{fingerprint}"},
-			},
-		},
-		Streams: []StreamSpec{
-			{Name: "projects", Method: http.MethodGet, Path: "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}"},
-			{Name: "pipelines", Method: http.MethodGet, Path: "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/pipeline"},
-			{Name: "schedules", Method: http.MethodGet, Path: "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/schedule"},
-			{Name: "checkout_keys", Method: http.MethodGet, Path: "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/checkout-key"},
-			{Name: "environment_variables", Method: http.MethodGet, Path: "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/envvar"},
-			{Name: "insights_workflow_summary", Method: http.MethodGet, Path: "/insights/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/workflows"},
-		},
-		Writes: []WriteAction{
-			{Name: "create_schedule", Method: http.MethodPost, Path: "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/schedule"},
-			{Name: "create_environment_variable", Method: http.MethodPost, Path: "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/envvar"},
-			{Name: "create_checkout_key", Method: http.MethodPost, Path: "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/checkout-key"},
-			{Name: "delete_environment_variable", Method: http.MethodDelete, Path: "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/envvar/{{ record.name }}"},
-			{Name: "delete_checkout_key", Method: http.MethodDelete, Path: "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/checkout-key/{{ record.fingerprint }}"},
-		},
+func compositeProviderPathCommand(binding CompositeProviderPathBinding) connectors.CommandSurfaceCommand {
+	command := connectors.CommandSurfaceCommand{
+		Path:         binding.SourceID,
+		Intent:       binding.Intent,
+		Availability: "implemented",
+		APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: binding.Method, Path: binding.Path}},
 	}
+	if binding.BindingKind == "stream" {
+		command.Stream = binding.BindingID
+	} else {
+		command.Write = binding.BindingID
+	}
+	return command
 }

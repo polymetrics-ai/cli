@@ -55,7 +55,7 @@ type Bundle struct {
 	Certification                 *CertificationSpec                     // certification.json; nil when absent
 	RawCertification              json.RawMessage                        // verbatim certification.json bytes; nil when absent
 	RateLimits                    *connsdk.RateLimits                    // rate_limits.json; nil when absent
-	CompositeProviderPathIdentity *CompositeProviderPathIdentity         // composite_provider_path_identity.json; nil except for the closed CircleCI proof
+	CompositeProviderPathIdentity *CompositeProviderPathIdentity         // composite_provider_path_identity.json; nil when no closed source-cited proof is declared
 	Docs                          string                                 // docs.md
 	Fixtures                      fs.FS                                  // fixtures/ subtree; nil when absent
 }

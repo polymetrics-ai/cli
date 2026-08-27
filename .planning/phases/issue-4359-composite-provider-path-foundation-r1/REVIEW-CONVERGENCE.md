@@ -94,3 +94,15 @@ for all eleven proposed commands here. The required fresh-project,
 credential-free `missing --credential` proofs are therefore an explicit Batch 1
 integration gate after this foundation is applied, never a reason to fabricate
 or import connector command declarations into this branch.
+
+## CI boundary correction pending final re-review
+
+CI run `33039407885` correctly found that the first implementation duplicated
+provider policy in shared engine Go. The corrective slice removes every
+CircleCI URL, digest, placeholder, component-order, and binding-list literal
+from production `internal/connectors/engine/**`. The declaration now carries
+its owning connector and ordered row number; the provider-neutral validator
+checks only the closed source-cited record shape, while the equivalence
+boundary permits the one exact inverse constructed from that record. This
+preserves the frozen six-lane matrix and adds no execution capability. A
+fresh-context reviewer must assess the full range including this correction.
