@@ -140,6 +140,124 @@ func TestSourceImportAcceptsStringScalarUnionPathWireContract(t *testing.T) {
 	}
 }
 
+func TestSourceImportClosesReferencedNestedCompositionWithoutChangingSourceIdentity(t *testing.T) {
+	t.Parallel()
+	artifact := []byte(`{
+  "openapi":"3.0.3",
+  "info":{"title":"fixture","version":"1"},
+  "components":{"schemas":{
+    "Name":{"type":"string","minLength":1,"maxLength":64},
+    "ID":{"type":"integer","minimum":1,"maximum":999999},
+    "Selector":{"oneOf":[{"$ref":"#/components/schemas/Name"},{"$ref":"#/components/schemas/ID"}]},
+    "Request":{"allOf":[
+      {"type":"object","additionalProperties":false,"required":["selector"],"properties":{"selector":{"$ref":"#/components/schemas/Selector"}}},
+      {"type":"object","additionalProperties":false,"properties":{"selector":{"$ref":"#/components/schemas/Selector"}}}
+    ]}
+  }},
+  "paths":{"/items":{"post":{"operationId":"createItem","requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Request"}}}},"responses":{"200":{"description":"ok"}}}}}
+}`)
+	result := importInlineSourceResult(t, artifact, defaultSourceImportLimits())
+	if len(result.Operations) != 1 {
+		t.Fatalf("operations = %d, want 1", len(result.Operations))
+	}
+	operation := result.Operations[0]
+	if operation.SourceID != "createItem" || operation.Method != "post" || operation.Path != "/items" || operation.Source.Location != `paths["/items"].post` {
+		t.Fatalf("source identity changed while closing composition: %#v", operation)
+	}
+	if operation.Runtime.MergeBlocked || len(operation.Runtime.Gaps) != 0 {
+		t.Fatalf("closed referenced composition remained deferred: %+v", operation.Runtime)
+	}
+	if operation.Request.Body == nil {
+		t.Fatal("closed referenced composition lost request body")
+	}
+	projected, err := sourceProjectionSchema(operation.Request.Body.Schema)
+	if err != nil {
+		t.Fatalf("project referenced composition: %v", err)
+	}
+	raw, err := json.Marshal(projected)
+	if err != nil {
+		t.Fatalf("marshal projected composition: %v", err)
+	}
+	if _, err := engine.CompileSchema(raw); err != nil {
+		t.Fatalf("compiled projected composition: %v", err)
+	}
+}
+
+func TestSourceImportRejectsExternalCompositionReferenceBeforeProviderIO(t *testing.T) {
+	t.Parallel()
+	artifact := []byte(`{
+  "openapi":"3.0.3", "info":{"title":"fixture","version":"1"},
+  "paths":{"/items":{"post":{"operationId":"createItem","requestBody":{"content":{"application/json":{"schema":{"oneOf":[{"$ref":"https://provider.invalid/components/schemas/Item"},{"type":"null"}]}}}},"responses":{"200":{"description":"ok"}}}}}
+}`)
+	_, err := importInlineSourceResultError(artifact, defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "external reference") {
+		t.Fatalf("external composition reference error = %v, want local pre-I/O rejection", err)
+	}
+}
+
+func TestSourceImportRetainsNonClosedCompositionAsExactMissingFoundation(t *testing.T) {
+	t.Parallel()
+	artifact := []byte(`{
+  "openapi":"3.0.3", "info":{"title":"fixture","version":"1"},
+  "paths":{"/items/{item_id}":{"post":{"operationId":"createDeferredItem","parameters":[{"name":"item_id","in":"path","required":true,"schema":{"type":"string","maxLength":64}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"oneOf":[
+    {"type":"object","required":["name"],"properties":{"name":{"type":"string","maxLength":64}}},
+    {"type":"object","additionalProperties":false,"required":["id"],"properties":{"id":{"type":"integer","minimum":1,"maximum":999999}}}
+  ]}}}},"responses":{"200":{"description":"ok"}}}}}
+}`)
+	limits := defaultSourceImportLimits()
+	// Versioned source descriptors retain provider operations that the current
+	// execution foundation cannot yet admit; this fixture exercises that same
+	// inventory-preserving path rather than dropping the source operation.
+	limits.AllowSourceContractGaps = true
+	limits.UseExecutionEnvelopes = true
+	result := importInlineSourceResult(t, artifact, limits)
+	if len(result.Operations) != 1 {
+		t.Fatalf("operations = %d, want 1", len(result.Operations))
+	}
+	operation := result.Operations[0]
+	if operation.SourceID != "createDeferredItem" || operation.Method != "post" || operation.Path != "/items/{item_id}" || operation.Source.Location != `paths["/items/{item_id}"].post` {
+		t.Fatalf("non-closed composition lost exact source identity: %#v", operation)
+	}
+	if !operation.Runtime.MergeBlocked || len(operation.Runtime.Gaps) != 1 {
+		t.Fatalf("non-closed composition runtime = %+v, want one merge-blocked retained foundation gap", operation.Runtime)
+	}
+	gap := operation.Runtime.Gaps[0]
+	if gap.Foundation != "cli-request-schema-foundation-r1" || gap.Location != "request body" || !strings.Contains(gap.Reason, "additionalProperties") {
+		t.Fatalf("non-closed composition gap = %+v, want exact typed-input disposition", gap)
+	}
+}
+
+func TestSourceImportRetainsCyclicCompositionAsExactMissingFoundation(t *testing.T) {
+	t.Parallel()
+	artifact := []byte(`{
+  "openapi":"3.0.3", "info":{"title":"fixture","version":"1"},
+  "components":{"schemas":{"Loop":{"oneOf":[{"$ref":"#/components/schemas/Loop"},{"type":"null"}]}}},
+  "paths":{"/items":{"post":{"operationId":"createCyclicItem","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Loop"}}}},"responses":{"200":{"description":"ok"}}}}}
+}`)
+	limits := defaultSourceImportLimits()
+	limits.AllowSourceContractGaps = true
+	limits.UseExecutionEnvelopes = true
+	result := importInlineSourceResult(t, artifact, limits)
+	if len(result.Operations) != 1 {
+		t.Fatalf("operations = %d, want 1", len(result.Operations))
+	}
+	operation := result.Operations[0]
+	if operation.SourceID != "createCyclicItem" || operation.Method != "post" || operation.Path != "/items" || operation.Source.Location != `paths["/items"].post` || !operation.Runtime.MergeBlocked {
+		t.Fatalf("cyclic composition lost source identity or remained executable: %#v", operation)
+	}
+	var cycleGap *sourceContractGap
+	for index := range operation.Runtime.Gaps {
+		gap := &operation.Runtime.Gaps[index]
+		if gap.Foundation == sourceRecursiveSchemaFoundation {
+			cycleGap = gap
+			break
+		}
+	}
+	if cycleGap == nil || !strings.Contains(cycleGap.Reason, "#/components/schemas/Loop") {
+		t.Fatalf("cyclic composition gaps = %+v, want source-cited recursive-schema disposition", operation.Runtime.Gaps)
+	}
+}
+
 func TestSourceImportVersion3RepresentsGongWorkspaceQueryWithPMExecutionEnvelope(t *testing.T) {
 	t.Parallel()
 	artifact := []byte(`{

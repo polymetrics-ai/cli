@@ -7753,10 +7753,25 @@ func validateBoundedRequestSchemaWithinEnum(schema any, form sourceDocumentForm,
 	if err := sourceValidateSchemaForm(object, form); err != nil {
 		return err
 	}
-	for _, composition := range []string{"oneOf", "anyOf", "allOf", "not"} {
-		if _, exists := object[composition]; exists {
-			return fmt.Errorf("ambiguous request schema uses %s", composition)
+	hasComposition := false
+	for _, composition := range []string{"oneOf", "anyOf", "allOf"} {
+		rawArms, exists := object[composition]
+		if !exists {
+			continue
 		}
+		hasComposition = true
+		arms, ok := rawArms.([]any)
+		if !ok || len(arms) == 0 {
+			return fmt.Errorf("request schema %s must be a non-empty array of schema objects", composition)
+		}
+		for index, arm := range arms {
+			if err := validateBoundedRequestSchemaWithinEnum(arm, form, limits, depth+1, boundedByFiniteSet); err != nil {
+				return fmt.Errorf("request schema %s arm %d: %w", composition, index, err)
+			}
+		}
+	}
+	if _, exists := object["not"]; exists {
+		return fmt.Errorf("unsupported request schema keyword not")
 	}
 	for _, keyword := range []string{"contains", "if", "then", "else", "unevaluatedItems", "contentSchema", "$defs", "definitions", "dependencies"} {
 		if _, exists := object[keyword]; exists {
@@ -7783,6 +7798,13 @@ func validateBoundedRequestSchemaWithinEnum(schema any, form sourceDocumentForm,
 	}
 	if len(typeNames) == 0 {
 		if bounded {
+			return nil
+		}
+		if hasComposition {
+			// The composition children above each received the same bounded
+			// grammar validation. A wrapper with no direct type is valid JSON
+			// Schema and must remain a typed composition rather than being
+			// flattened or discarded.
 			return nil
 		}
 		return fmt.Errorf("unbounded request schema has no type")

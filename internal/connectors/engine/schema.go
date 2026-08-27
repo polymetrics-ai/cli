@@ -35,6 +35,8 @@ type schemaNode struct {
 	items                *schemaNode
 	prefixItems          []*schemaNode
 	oneOf                []*schemaNode
+	anyOf                []*schemaNode
+	allOf                []*schemaNode
 	enum                 []any
 	pattern              *regexp.Regexp
 	format               string
@@ -101,6 +103,10 @@ var annotationKeywords = map[string]bool{
 	"title":       true,
 	"description": true,
 	"$schema":     true,
+	// Source import preserves an OpenAPI discriminator as provenance for a
+	// closed oneOf contract. oneOf still supplies executable selection; this
+	// annotation retains the provider's declared selector without widening it.
+	"x-source-discriminator": true,
 }
 
 // structuralKeywords are the only keywords this dialect understands
@@ -112,6 +118,8 @@ var structuralKeywords = map[string]bool{
 	"patternProperties":    true,
 	"items":                true,
 	"oneOf":                true,
+	"anyOf":                true,
+	"allOf":                true,
 	"enum":                 true,
 	"pattern":              true,
 	"minLength":            true,
@@ -251,24 +259,25 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 		n.items = child
 	}
 
-	if raw, ok := m["oneOf"]; ok {
-		var subs []map[string]json.RawMessage
-		if err := json.Unmarshal(raw, &subs); err != nil || len(subs) == 0 {
-			if err != nil {
-				return nil, fmt.Errorf("compile schema: oneOf: %w", err)
-			}
-			return nil, fmt.Errorf("compile schema: oneOf must contain at least one schema object")
+	for _, composition := range []string{"oneOf", "anyOf", "allOf"} {
+		raw, ok := m[composition]
+		if !ok {
+			continue
 		}
-		n.oneOf = make([]*schemaNode, len(subs))
-		for index, sub := range subs {
-			if sub == nil {
-				return nil, fmt.Errorf("compile schema: oneOf.%d must be a schema object", index)
+		children, err := compileComposition(raw, composition, allowPrefixItems)
+		if err != nil {
+			return nil, err
+		}
+		switch composition {
+		case "oneOf":
+			n.oneOf = children
+		case "anyOf":
+			n.anyOf = children
+		case "allOf":
+			if err := validateAllOfConsistency(children); err != nil {
+				return nil, err
 			}
-			child, err := compileNode(sub, allowPrefixItems)
-			if err != nil {
-				return nil, fmt.Errorf("compile schema: oneOf.%d: %w", index, err)
-			}
-			n.oneOf[index] = child
+			n.allOf = children
 		}
 	}
 
@@ -396,6 +405,103 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 	}
 
 	return n, nil
+}
+
+// compileComposition compiles the three JSON Schema composition keywords into
+// the same closed node dialect as ordinary properties. A duplicate alternative
+// is not merely redundant here: it makes oneOf selection ambiguous and hides
+// provider-spec drift in anyOf/allOf, so declaration admission rejects it.
+func compileComposition(raw json.RawMessage, keyword string, allowPrefixItems bool) ([]*schemaNode, error) {
+	var subs []map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &subs); err != nil || len(subs) == 0 {
+		if err != nil {
+			return nil, fmt.Errorf("compile schema: %s: %w", keyword, err)
+		}
+		return nil, fmt.Errorf("compile schema: %s must contain at least one schema object", keyword)
+	}
+
+	children := make([]*schemaNode, len(subs))
+	seen := make(map[string]int, len(subs))
+	for index, sub := range subs {
+		if sub == nil {
+			return nil, fmt.Errorf("compile schema: %s.%d must be a schema object", keyword, index)
+		}
+		canonical, err := json.Marshal(sub)
+		if err != nil {
+			return nil, fmt.Errorf("compile schema: %s.%d canonicalize: %w", keyword, index, err)
+		}
+		if prior, duplicate := seen[string(canonical)]; duplicate {
+			return nil, fmt.Errorf("compile schema: %s.%d duplicates alternative %d", keyword, index, prior)
+		}
+		seen[string(canonical)] = index
+		child, err := compileNode(sub, allowPrefixItems)
+		if err != nil {
+			return nil, fmt.Errorf("compile schema: %s.%d: %w", keyword, index, err)
+		}
+		children[index] = child
+	}
+	return children, nil
+}
+
+// validateAllOfConsistency rejects intersections that can never match before
+// a request reaches a provider. More involved intersections still retain every
+// child validator and therefore fail in Schema.Validate before transport.
+func validateAllOfConsistency(children []*schemaNode) error {
+	var types []string
+	var enum []any
+	for _, child := range children {
+		if len(child.types) > 0 {
+			if types == nil {
+				types = append([]string(nil), child.types...)
+			} else {
+				types = intersectSchemaTypes(types, child.types)
+				if len(types) == 0 {
+					return fmt.Errorf("compile schema: allOf has contradictory type constraints")
+				}
+			}
+		}
+		if len(child.enum) == 0 {
+			continue
+		}
+		if enum == nil {
+			enum = append([]any(nil), child.enum...)
+			continue
+		}
+		intersection := make([]any, 0, len(enum))
+		for _, candidate := range enum {
+			for _, permitted := range child.enum {
+				if enumEquals(candidate, permitted) {
+					intersection = append(intersection, candidate)
+					break
+				}
+			}
+		}
+		if len(intersection) == 0 {
+			return fmt.Errorf("compile schema: allOf has contradictory enum constraints")
+		}
+		enum = intersection
+	}
+	return nil
+}
+
+func intersectSchemaTypes(left, right []string) []string {
+	seen := make(map[string]bool, len(left))
+	for _, leftType := range left {
+		for _, rightType := range right {
+			switch {
+			case leftType == rightType:
+				seen[leftType] = true
+			case (leftType == "number" && rightType == "integer") || (leftType == "integer" && rightType == "number"):
+				seen["integer"] = true
+			}
+		}
+	}
+	out := make([]string, 0, len(seen))
+	for typeName := range seen {
+		out = append(out, typeName)
+	}
+	sort.Strings(out)
+	return out
 }
 
 // compileStringLength accepts the draft-07 string cardinality pair. Header
@@ -567,6 +673,22 @@ func (n *schemaNode) validate(v any, path string) error {
 		}
 		if matches != 1 {
 			return fmt.Errorf("%s: oneOf expected exactly one schema match, got %d", displayPath(path), matches)
+		}
+	}
+	if len(n.anyOf) != 0 {
+		matches := 0
+		for _, alternative := range n.anyOf {
+			if err := alternative.validate(v, path); err == nil {
+				matches++
+			}
+		}
+		if matches == 0 {
+			return fmt.Errorf("%s: anyOf expected at least one schema match", displayPath(path))
+		}
+	}
+	for index, alternative := range n.allOf {
+		if err := alternative.validate(v, path); err != nil {
+			return fmt.Errorf("%s: allOf alternative %d: %w", displayPath(path), index, err)
 		}
 	}
 

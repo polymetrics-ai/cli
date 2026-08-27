@@ -3503,16 +3503,52 @@ func sourceAnySlice(value any) []any {
 }
 
 func sourceProjectionSchema(raw any) (any, error) {
+	return sourceProjectionClosedSchema(raw, false)
+}
+
+// sourceProjectionClosedSchema converts only the source schema vocabulary the
+// engine can enforce locally. Composition is retained as composition -- it is
+// never flattened into a permissive object or a generic JSON body. Every
+// object below a composition arm must state its own closed boundary, because
+// an absent additionalProperties keyword is open in the provider schema.
+func sourceProjectionClosedSchema(raw any, requireExplicitClosedObject bool) (any, error) {
 	schema, ok := raw.(map[string]any)
 	if !ok {
 		return nil, fmt.Errorf("source schema is not an object")
 	}
-	if _, exists := schema["oneOf"]; exists {
-		return nil, fmt.Errorf("oneOf requires a typed gap")
+
+	out := map[string]any{}
+	hasComposition := false
+	for _, keyword := range []string{"oneOf", "anyOf", "allOf"} {
+		rawArms, exists := schema[keyword]
+		if !exists {
+			continue
+		}
+		hasComposition = true
+		arms, ok := rawArms.([]any)
+		if !ok || len(arms) == 0 {
+			return nil, fmt.Errorf("source schema %s must be a non-empty array of schema objects", keyword)
+		}
+		convertedArms := make([]any, len(arms))
+		seen := make(map[string]int, len(arms))
+		for index, arm := range arms {
+			converted, err := sourceProjectionClosedSchema(arm, true)
+			if err != nil {
+				return nil, fmt.Errorf("source schema %s arm %d: %w", keyword, index, err)
+			}
+			canonical, err := json.Marshal(converted)
+			if err != nil {
+				return nil, fmt.Errorf("source schema %s arm %d canonicalize: %w", keyword, index, err)
+			}
+			if prior, duplicate := seen[string(canonical)]; duplicate {
+				return nil, fmt.Errorf("source schema %s arm %d duplicates arm %d", keyword, index, prior)
+			}
+			seen[string(canonical)] = index
+			convertedArms[index] = converted
+		}
+		out[keyword] = convertedArms
 	}
-	if _, exists := schema["anyOf"]; exists {
-		return nil, fmt.Errorf("anyOf requires a typed gap")
-	}
+
 	types := []string{}
 	switch typed := schema["type"].(type) {
 	case string:
@@ -3525,25 +3561,33 @@ func sourceProjectionSchema(raw any) (any, error) {
 			}
 			types = append(types, name)
 		}
+	case nil:
+		if !hasComposition {
+			return nil, fmt.Errorf("source schema has no type")
+		}
 	default:
 		return nil, fmt.Errorf("source schema has no type")
 	}
-	if nullable, _ := schema["nullable"].(bool); nullable && !sourceProjectionContainsString(types, "null") {
+	if nullable, _ := schema["nullable"].(bool); nullable && len(types) == 0 {
+		return nil, fmt.Errorf("nullable source schema has no type")
+	} else if nullable && !sourceProjectionContainsString(types, "null") {
 		types = append(types, "null")
 	}
-	if len(types) == 0 {
+	if len(types) == 0 && !hasComposition {
 		return nil, fmt.Errorf("source schema has no type")
 	}
-	primary := types[0]
-	out := map[string]any{}
-	if len(types) == 1 {
-		out["type"] = primary
-	} else {
-		values := make([]any, len(types))
-		for index := range types {
-			values[index] = types[index]
+	primary := ""
+	if len(types) > 0 {
+		primary = types[0]
+		if len(types) == 1 {
+			out["type"] = primary
+		} else {
+			values := make([]any, len(types))
+			for index := range types {
+				values[index] = types[index]
+			}
+			out["type"] = values
 		}
-		out["type"] = values
 	}
 	if enum, ok := schema["enum"].([]any); ok && len(enum) > 0 {
 		out["enum"] = enum
@@ -3551,10 +3595,22 @@ func sourceProjectionSchema(raw any) (any, error) {
 	if sourceProjectionDeclaredSecret(schema) {
 		out["x-secret"] = true
 	}
-	for _, key := range []string{"pattern", "minLength", "maxLength", "minItems", "maxItems", "minProperties", "maxProperties"} {
+	for _, key := range []string{"pattern", "minLength", "maxLength", "minItems", "maxItems", "minProperties", "maxProperties", "minimum", "maximum"} {
 		if value, exists := schema[key]; exists {
 			out[key] = value
 		}
+	}
+	for _, key := range []string{"exclusiveMinimum", "exclusiveMaximum"} {
+		if value, exists := schema[key]; exists && value != false {
+			return nil, fmt.Errorf("source schema %s has no closed engine representation", key)
+		}
+	}
+	if rawDiscriminator, exists := schema["discriminator"]; exists {
+		discriminator, err := sourceProjectionDiscriminator(rawDiscriminator)
+		if err != nil {
+			return nil, err
+		}
+		out["x-source-discriminator"] = discriminator
 	}
 	switch primary {
 	case "string":
@@ -3566,7 +3622,7 @@ func sourceProjectionSchema(raw any) (any, error) {
 		if !exists {
 			return nil, fmt.Errorf("array schema has no items")
 		}
-		converted, err := sourceProjectionSchema(items)
+		converted, err := sourceProjectionClosedSchema(items, requireExplicitClosedObject)
 		if err != nil {
 			return nil, err
 		}
@@ -3575,13 +3631,17 @@ func sourceProjectionSchema(raw any) (any, error) {
 			out["maxItems"] = json.Number(fmt.Sprintf("%d", sourceProjectionDefaultArrayItems))
 		}
 	case "object":
-		if additional, exists := schema["additionalProperties"]; exists && additional != false {
+		additional, exists := schema["additionalProperties"]
+		if requireExplicitClosedObject && !exists {
+			return nil, fmt.Errorf("composition object must explicitly set additionalProperties to false")
+		}
+		if exists && additional != false {
 			return nil, fmt.Errorf("dynamic additionalProperties requires a typed gap")
 		}
 		properties, _ := schema["properties"].(map[string]any)
 		convertedProperties := map[string]any{}
 		for _, name := range sortedSourceMapKeys(properties) {
-			converted, err := sourceProjectionSchema(properties[name])
+			converted, err := sourceProjectionClosedSchema(properties[name], requireExplicitClosedObject)
 			if err != nil {
 				return nil, fmt.Errorf("property %q: %w", name, err)
 			}
@@ -3592,6 +3652,40 @@ func sourceProjectionSchema(raw any) (any, error) {
 		if required := sourceAnySlice(schema["required"]); len(required) > 0 {
 			out["required"] = required
 		}
+	}
+	if hasComposition {
+		raw, err := json.Marshal(out)
+		if err != nil {
+			return nil, fmt.Errorf("marshal closed source composition: %w", err)
+		}
+		if _, err := engine.CompileSchema(raw); err != nil {
+			return nil, fmt.Errorf("closed source composition: %w", err)
+		}
+	}
+	return out, nil
+}
+
+func sourceProjectionDiscriminator(raw any) (map[string]any, error) {
+	discriminator, ok := raw.(map[string]any)
+	if !ok {
+		return nil, fmt.Errorf("source schema discriminator is not an object")
+	}
+	propertyName, ok := discriminator["propertyName"].(string)
+	if !ok || strings.TrimSpace(propertyName) == "" {
+		return nil, fmt.Errorf("source schema discriminator has no propertyName")
+	}
+	out := map[string]any{"propertyName": propertyName}
+	if rawMapping, exists := discriminator["mapping"]; exists {
+		mapping, ok := rawMapping.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("source schema discriminator mapping is not an object")
+		}
+		for name, target := range mapping {
+			if _, ok := target.(string); !ok {
+				return nil, fmt.Errorf("source schema discriminator mapping %q is not a string", name)
+			}
+		}
+		out["mapping"] = mapping
 	}
 	return out, nil
 }

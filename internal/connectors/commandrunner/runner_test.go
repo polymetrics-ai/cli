@@ -3050,6 +3050,49 @@ func TestBuildWriteCommandPreservesDeclaredScalarUnionJSONFlag(t *testing.T) {
 	}
 }
 
+func TestBuildWriteCommandValidatesClosedCompositionBeforePlan(t *testing.T) {
+	bundle := engine.Bundle{
+		Name: "acme",
+		Writes: []engine.WriteAction{{
+			Name: "create_composed_item", Method: http.MethodPost, Path: "/items",
+			RecordSchema: json.RawMessage(`{
+				"type":"object","additionalProperties":false,"required":["nullable","shape","label"],
+				"properties":{
+					"nullable":{"oneOf":[{"type":"string"},{"type":"null"}]},
+					"shape":{"anyOf":[
+						{"type":"object","additionalProperties":false,"required":["kind","radius"],"properties":{"kind":{"type":"string","enum":["circle"]},"radius":{"type":"number","minimum":0}}},
+						{"type":"object","additionalProperties":false,"required":["kind","side"],"properties":{"kind":{"type":"string","enum":["square"]},"side":{"type":"number","minimum":0}}}
+					]},
+					"label":{"allOf":[{"type":"string","minLength":3},{"type":"string","pattern":"^[a-z]+$"}]}
+				}
+			}`),
+			Risk: "standard",
+		}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path: "items create", Intent: "reverse_etl", Availability: "implemented", Write: "create_composed_item",
+			Flags: []engine.CLIFlag{
+				{Name: "nullable", Type: "json", MapsTo: "record.nullable", Required: true},
+				{Name: "shape", Type: "json", MapsTo: "record.shape", Required: true},
+				{Name: "label", Type: "string", MapsTo: "record.label", Required: true},
+			},
+		}}},
+	}
+	connector := engine.New(bundle, nil)
+	valid := Request{Path: []string{"items", "create"}, Flags: map[string][]string{
+		"nullable": {`"ready"`}, "shape": {`{"kind":"circle","radius":2}`}, "label": {"circle"},
+	}}
+	if _, err := BuildWriteCommand(context.Background(), connector, valid); err != nil {
+		t.Fatalf("BuildWriteCommand valid closed composition: %v", err)
+	}
+	invalid := valid
+	invalid.Flags = map[string][]string{
+		"nullable": {`"ready"`}, "shape": {`{"kind":"triangle","radius":2}`}, "label": {"circle"},
+	}
+	if _, err := BuildWriteCommand(context.Background(), connector, invalid); err == nil || !strings.Contains(err.Error(), "anyOf") {
+		t.Fatalf("BuildWriteCommand invalid closed composition = %v, want local anyOf refusal before plan/executor", err)
+	}
+}
+
 func TestBuildOperationDirectWriteCommandSupportsDottedStructuredBodyField(t *testing.T) {
 	batchable := false
 	bundle := engine.Bundle{
