@@ -23,10 +23,27 @@ Both commands failed only at the expected nullable-scalar declaration boundary; 
 
 `origin/main`'s `validateRequiredCommandFlags` decoded every required JSON flag and then called `commandValueEmpty`; its string branch treats `strings.TrimSpace("") == ""` as missing. The pre-change JSON decoder returned `""` for the literal JSON value `""`, so a required named JSON flag already failed as `missing required flag`. Xero's source-declared `delete_payment.Status` schema is exactly `{"type":["string","null"]}` with no `minLength`, but the command-required policy was independently stricter and remains unchanged. The green test asserts that existing policy; the nullable repair changes only the formerly-empty `nil` result for explicit JSON `null`, which the declaration schema then authorizes or rejects.
 
+### Full generator regression classification
+
+The captured branch run `go test -timeout 20m ./cmd/connectorgen` failed after 190.301s in exactly two pre-existing GitHub projection tests: `TestInstalledReverseActions_CoverProviderRequestContract` (three missing source-field rows) and `TestSourceProjectionSourceCitedMutationDispositionLeavesExistingProjectionByteIdentical` (`CLI:32`). A clean detached worktree at the same `origin/main` SHA `2165619ec8f5f9d4141b491b7a5a64bc460d0c71` passed the identical command after 190.128s. This was a patch regression, not a baseline blocker. The repair records `StrictJSONFields` only when the source descriptor has the exact `cli-structured-scalar-union-foundation-r1` field-location gap; existing admitted source projections retain their prior byte-identical flag representations. The repaired full run passed after 181.143s.
+
 ## Green
 
-Pending implementation and exact results.
+The implementation accepts only a two-member `string|null` (or `null|string`) type array with one of each member. It leaves all other scalar shapes subject to the prior refusal and preserves the closed top-level-field schema boundary.
+
+```sh
+go test -timeout 20m ./cmd/connectorgen -run TestSourceProjectionNullableStringUsesStrictNamedJSONFlag
+# ok   polymetrics.ai/cmd/connectorgen  1.118s
+go test -timeout 20m ./internal/connectors/engine -run 'TestValidateStructuredJSONRecordFieldAcceptsSourceDeclaredNullableString|TestValidateOperationStructuredJSONBodyFieldAcceptsExactNullableString'
+# ok   polymetrics.ai/internal/connectors/engine  (cached)
+go test -timeout 20m ./internal/connectors/commandrunner -run TestBuildWriteCommandValidatesSourceDeclaredNullableStringJSON
+# ok   polymetrics.ai/internal/connectors/commandrunner  (cached)
+go test -timeout 20m ./cmd/connectorgen
+# ok   polymetrics.ai/cmd/connectorgen  181.143s
+```
+
+The commandrunner test uses the source-backed Xero `delete_payment.Status` field and proves string and explicit JSON `null` materialize, while a number, boolean, array, object, unknown field, missing field, `""`, and `null` against a string-only field fail during closed-command validation.
 
 ## Refactor
 
-Pending; no broad union, generic body, connector exception, or raw transport input is permitted.
+The reusable type decoder removes duplication between structured-field admission and the string-arm check. Generator projection keeps the same closed action/record path and has no Twilio/Xero-name exception, raw body, route, method, action, provider I/O, or credential change.
