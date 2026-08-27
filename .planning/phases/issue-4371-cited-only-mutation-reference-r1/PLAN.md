@@ -3,7 +3,7 @@
 ## Task Delivery Header
 
 - Issue: Closes #4371 — fix(connectorgen): keep cited-only mutation references closed; Refs #4291 — Batch 6–7 connector delivery.
-- Base branch: `main` (`origin/main@cf29d302c13f7fcd340d31ad6dc27872880ccf42` at task start).
+- Base branch: `main` (`origin/main@cf29d302c13f7fcd340d31ad6dc27872880ccf42` at task start; normally rebased to `origin/main@813f457a925f7ee3fe3bea101a43e445992c8552` before publication).
 - Merges into: `main`.
 - Delivery: Normal direct pull request open against `main`, committed and normally pushed from the working branch after current-main integration, local gates, exact-head audit request, and GitHub API base read-back. Human/captain controls merge.
 - Working branch: `fm/cli-cited-only-mutation-reference-foundation-r1`.

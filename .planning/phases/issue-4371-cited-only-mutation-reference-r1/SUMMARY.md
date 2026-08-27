@@ -50,7 +50,8 @@ disposition paths preserve their imported provider operation identities. It
 also covers the common seam reproduced by nine Batch 8–10 pinned-local cases,
 without treating those unavailable inputs as current-main generated output.
 
-The canonical GSD lifecycle was executed inline because the project contract
-forbids worker-role spawning: discussion and TDD plan, red/green/refactor
-implementation, verification, and code review prompts are recorded in the
-phase artifacts.
+The canonical GSD lifecycle was executed inline for the implementation worker:
+discussion and TDD plan, red/green/refactor implementation, verification, and
+code-review prompts are recorded in the phase artifacts. The separately
+required fresh-context Codex audit was read-only and independently reviewed
+the final code SHA recorded in `REVIEW.md`.

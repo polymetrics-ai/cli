@@ -18,6 +18,8 @@ review role.
 | F1 | high | Explicit non-executable disposition changed a cited-only descriptor before strict validation. | Fixed by pre-mutation closed-reference rejection; red/green test covers it. |
 | F2 | high | Partial-coverage disposition could make the same illegal second-gap change. | Fixed by the shared pre-mutation rejection; red/green test covers it. |
 | F3 | high | Automatic write-disabled mutation artifact could reintroduce F1 after explicit applications. | Fixed by skip when the sole `source_contract_unavailable` gap exists; red/green test covers it. |
+| R2 | medium evidence | The first rebase record named the old base and pre-rebase audit SHA. | Fixed: current `origin/main` and final code-audit SHA are recorded in the verification artifact. |
+| R3 | low coverage | Partial-coverage invalid citation variants lacked direct duplicate/unknown/mismatch coverage. | Fixed by the partial-disposition table in `TestSourceProjectionMutationDispositionInputRemainsFailClosed`. |
 | R1 | none | No additional correctness, security, race, output, source-provenance, command-reachability, or CLI/docs parity finding. | Accepted: zero blockers at this review SHA. |
 
 ## Review checks
@@ -40,9 +42,9 @@ review role.
 
 ## Independent Codex exact-head audit
 
-- Audited head: `8ce9632aac9ebfccb7ce1db127e73b982bc4d8c6` against
-  `origin/main`.
-- Result: no High, Medium, or Low finding; no merge blocker from the audit.
+- Audited code head: `b90e4956f3d33e9bb11863a2c9ce23fa3655dc32` against
+  `origin/main@813f457a925f7ee3fe3bea101a43e445992c8552`.
+- Result: zero code/security/surface blocker from the final independent audit.
 - The separate fresh-context reviewer confirmed that the two explicit paths
   reject after citation validation and before mutation, the automatic path
   skips the closed descriptor, and the Salesloft/Copper matrix preserves sole
@@ -50,5 +52,5 @@ review role.
 - It reran focused source-projection/source-reference checks plus
   `TestRunSourceBoundReadMissingFoundationRefusesBeforeDispatch`; all passed.
   It also confirmed `git diff --check` and a clean worktree.
-- This documentation record follows the audited head and contains no
+- This documentation record follows the audited code head and contains no
   implementation, test, generated, connector, or executable-surface change.

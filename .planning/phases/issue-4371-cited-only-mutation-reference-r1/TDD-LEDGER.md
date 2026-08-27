@@ -76,3 +76,23 @@ the two explicit paths identical without broadening the validator or accepted
 input. The write-disabled skip is intentionally local to the exact
 `source_contract_unavailable` gap; ordinary source-backed mutations retain the
 existing automatic artifact behavior.
+
+## Post-rebase audit regression
+
+The first independent audit of the rebased range found that the invalid
+citation matrix directly exercised only the non-executable disposition path.
+Before the final audit, the same table was extended to partial-coverage
+dispositions: absent input remains byte-stable and duplicate, unknown,
+mismatched, and non-mutating citations remain fail-closed.
+
+```text
+go test -timeout 20m ./cmd/connectorgen -run 'TestSourceProjectionMutationDispositionInputRemainsFailClosed' -count=1 -v
+PASS (all non-executable and partial subtests)
+```
+
+Red: the first partial duplicate fixture modeled a complete action, so the
+existing complete-action guard rejected it before the duplicate assertion.
+Green: its retained request body now includes the unresolved dynamic payload
+that makes the declared action intentionally incomplete; the same input then
+reaches and proves the existing duplicate guard. The final table passed before
+commit `b90e4956f3d33e9bb11863a2c9ce23fa3655dc32`.
