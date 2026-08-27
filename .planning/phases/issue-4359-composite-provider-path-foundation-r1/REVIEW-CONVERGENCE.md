@@ -76,3 +76,21 @@
 Fresh-context Codex audit completed against `b9b2478b3b2451d632d28b9aa138a170ad835110` with the read-only Batch-1 witness `5de7078bfbe2c21db9e200dafe29adfba9e0f91b`; Claude Code was unavailable in this environment. It found F-4359-004 and F-4359-005 above and required an explicit per-binding source identity plus an honest no-CLI-on-base limitation before red work. It independently confirmed the existing safe boundary: CLI preflight occurs before `ResolveConnectorCredential`, `ResolveConnectorCredential` returns `missing --credential`, and reverse-ETL repeats preflight before plan construction.
 
 The auditor counted ten literal `/project/` bindings. The task's eleven-command set additionally contains `insights workflow summary list`, whose source lock uses the same documented `{project-slug}` identity at `/insights/{project-slug}/workflows`; it remains in scope but must be individually enumerated in the closed proof. The initial finding set is frozen with that clarification. Production code remains unmodified; commit this record before red work.
+
+## Final independent re-review
+
+Fresh-context Codex independently re-reviewed the complete immutable range
+`b9b2478b3b2451d632d28b9aa138a170ad835110..880c3c452274b227d91450aa5680188087f95a0e`
+after the final code commit. Verdict: **PASS — no blocker, critical, high,
+medium, or low code findings.** It verified the exact source URL/digest,
+ordered `vcs_type/org/repo` identity, all eleven source rows, six-lane refusal
+matrix, and explicit runtime inventory classification. Claude Code remained
+unavailable, so this is the recorded independent-Codex substitution.
+
+The re-review confirmed the one deliberate limitation: this foundation branch
+does not contain Batch 1's generated CircleCI `cli_surface.json` or retained
+source lock. The built binary consequently reports `unknown command "circleci"`
+for all eleven proposed commands here. The required fresh-project,
+credential-free `missing --credential` proofs are therefore an explicit Batch 1
+integration gate after this foundation is applied, never a reason to fabricate
+or import connector command declarations into this branch.
