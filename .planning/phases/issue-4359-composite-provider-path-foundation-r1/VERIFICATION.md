@@ -34,4 +34,5 @@
 
 - [x] Fresh-context Codex audit replaces unavailable Claude audit and records immutable source SHA.
 - [x] Fresh-context Codex re-review records final code SHA `56808f8d2732f9d545982af4a1934a1e9b8dba5d`, six-lane results, and no production-code finding. Its low PR-body evidence wording finding was resolved without changing code.
-- [ ] PR base API response is exactly `main`.
+- [x] Fresh-context exact-head Codex re-review of `b9b2478b3b2451d632d28b9aa138a170ad835110..fbc320592427cece41e6944bcf2f476ec4f62794` — pass, zero findings. It confirms the certification recovery changes only the generator-owned declaration fingerprint, preserves all six lanes and source/CLI/App surfaces, and leaves no additional technical gate before normal push.
+- [x] REST API read-back for PR #4360 confirms base `main`, remote head `fbc320592427cece41e6944bcf2f476ec4f62794`, and the corrected PR body.

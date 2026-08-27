@@ -122,3 +122,23 @@ specific URL/digest/placeholder values. This is resolved in `PR-BODY.md` by
 describing the retained source lock as the exact CircleCI witness and the
 runtime as the closed row/inverse validator. This evidence-only correction did
 not change the reviewed code SHA.
+
+## Final exact-head re-review after certification recovery
+
+Fresh-context Codex independently reviewed
+`b9b2478b3b2451d632d28b9aa138a170ad835110..fbc320592427cece41e6944bcf2f476ec4f62794`.
+Verdict: **PASS — zero critical, high, medium, or low findings.**
+
+It confirmed that `74c49c5e9..fbc320592` changes only phase evidence and the
+generator-owned `internal/connectors/certifications/current-subject.json`. The
+artifact changes only its declarations SHA-256 and derived fingerprint; the
+source-projection, CLI-mapping, and relevant-config digests remain unchanged.
+The generator correctly includes the embedded CircleCI composite declaration
+as a declaration input, while source locks and CLI/API mapping remain excluded.
+
+The reviewer independently reproduced the precise Verify failure at
+`certification-subject --check`, confirmed the strict subject and dependent
+certification checks pass after regeneration, and reconfirmed the source-lock
+witness, provider-neutral engine, closed six-lane matrix, source/CLI/App
+non-change, and absence of CircleCI literals in non-test engine Go. No further
+technical review is required for this code state.

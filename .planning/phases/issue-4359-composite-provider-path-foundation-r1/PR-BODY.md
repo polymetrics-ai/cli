@@ -74,10 +74,13 @@ I/O, request/body escape, or raw transport capability is introduced here.
 
 ## Review disposition
 
-Claude Code was unavailable. A fresh-context independent Codex re-review of
-`b9b2478…56808f8d2` found no production-code blocker. Its one low-severity
-evidence wording finding is resolved in this PR body: exact CircleCI values
-are declaration/source-lock evidence, while the shared engine enforces the
-closed declaration shape and exact declared inverse. The review verified the
-closed endpoint surface, runtime embedding policy, six-lane isolation, and the
-honest Batch 1 credential-boundary limitation. No Copilot fallback was needed.
+Claude Code was unavailable. Fresh-context independent Codex re-reviews of the
+production repair (`b9b2478…56808f8d2`) and final certification recovery
+(`b9b2478…fbc320592`) found no blocker. The first review's one low-severity
+evidence wording finding is resolved here: exact CircleCI values are
+declaration/source-lock evidence, while the shared engine enforces the closed
+declaration shape and exact declared inverse. The final review confirmed that
+the recovery changes only the generator-owned declaration fingerprint and
+preserves the closed endpoint surface, runtime embedding policy, six-lane
+isolation, and honest Batch 1 credential-boundary limitation. No Copilot
+fallback was needed.
