@@ -1100,3 +1100,34 @@ legacy-parity retention; `make lint` returned `0 issues`; `go test -timeout 20m
 ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight`,
 `make connectorgen-operation-evidence`, and `make connectorgen-surface-sync` all passed. The
 normal push remains the final delivery check.
+
+### Certification-subject advisory provenance gate
+
+The required normal push then reached the checked-in certification-subject freshness gate. A
+read-only component calculation against the task merge base `060bb7864` established that its
+tracked artifact already had the current declaration (`2482ac…`), source-projection
+(`ecaa8f…`), and CLI-mapping (`149111…`) digests, but a different relevant-config digest
+(`4b59f…` tracked versus `640b23…` recomputed). The 180 mappings are not present at that base.
+The stale subject therefore predates this branch and is unrelated to the exact mappings. The
+artifact remains useful provenance, but its freshness cannot be an admission condition for a
+mapping-only delivery.
+
+- **Red:** `make connectorgen-certification-subject` rejects a valid, historical subject solely
+  because its deterministic repository inputs have moved; the default `--check` must remain a
+  strict stale failure, and a missing or malformed provenance artifact must remain a hard error.
+- **Green condition:** introduce an explicit `--advisory-stale` check mode for the ordinary
+  verification target. It may pass only after parsing and validating the committed artifact; on
+  a valid mismatch it must report the stale provenance without writing or regenerating it. The
+  strict command remains available for deliberate subject-refresh work. Regression tests cover
+  strict stale failure, advisory valid-stale reporting with byte-for-byte artifact preservation,
+  and advisory rejection of an invalid artifact.
+
+**Green:** `--check` remains strict. `--check --advisory-stale` now parses the checked-in subject
+before emitting its explicit advisory, refuses a missing or malformed artifact, and leaves a
+valid historical artifact byte-for-byte unchanged. The standard verification target uses that
+advisory mode; the direct command remains strict by default for deliberate provenance refresh.
+`go test -timeout 20m ./cmd/connectorgen -run 'TestCertificationSubject(Check|Advisory)'`, the
+full `go test -timeout 20m ./cmd/connectorgen`, `make connectorgen-certification-subject`,
+`make connectorgen-certification-matrix`, `make connectorgen-certification-candidates`, and
+`make connectorgen-certification-sweep` passed. No subject, matrix, candidate, sweep, source,
+or connector artifact was regenerated.
