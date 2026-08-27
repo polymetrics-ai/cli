@@ -7,8 +7,9 @@
 - Scope: source-import admission, source projection, engine validation,
   record-schema promotion, commandrunner parity, generated GitHub projection,
   and Batch 1 reconciliation evidence.
-- Route after PR open: `claude_auto` for the trusted-author, main-targeted PR;
-  fallback `none` unless the automation fails or is skipped.
+- Review route: a fresh independent Codex review of the exact post-policy-
+  correction head is required before merge consideration. Do not wait for,
+  request, or claim a Claude review.
 
 ## Finding and disposition
 
@@ -16,7 +17,7 @@
 | --- | --- | --- | --- | --- |
 | R1 | An untyped `oneOf`/`anyOf`/`allOf` wrapper could carry `properties`, `items`, or other object/array-only siblings. Projection would not retain those siblings, risking source-semantic loss if it were admitted. | Accepted | `6c9b4d50d284344a919317956a456c6857c39f19` rejects that wrapper in source admission and projection, retaining a source-cited `typed_input_schema` gap instead. | New importer and projection regressions plus final `go test -timeout 20m ./cmd/connectorgen -count=1` passed. |
 
-## Fresh exact-SHA Codex re-review
+## Prior exact-SHA Codex re-review
 
 Reviewed `6c9b4d50d284344a919317956a456c6857c39f19` after R1 was fixed.
 
@@ -31,6 +32,8 @@ Reviewed `6c9b4d50d284344a919317956a456c6857c39f19` after R1 was fixed.
 
 ## External review status
 
-Pending PR creation. After opening, inspect the actual Claude workflow and
-comments for this commit range; record the PR URL, review SHA, coverage route,
-and every disposition here before merge consideration.
+The original trusted-author automatic-review route is superseded. The PR stays
+open while an independent Codex review covers the exact post-policy-correction
+head. Record that SHA, the CI state, connector-shaped proof, remaining gap, and
+every finding disposition in the PR before merge consideration. No Claude
+review is awaited, requested, or claimed.

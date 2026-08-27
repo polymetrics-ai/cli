@@ -87,5 +87,6 @@ were refreshed.
 
 `REVIEW.md` freezes the one accepted review finding, its fix, and the clean
 fresh Codex re-review at `6c9b4d50d284344a919317956a456c6857c39f19`. The PR
-will use the repository's trusted-author Claude automatic-review route after
-it is opened; no provider or credential review evidence is claimed.
+requires a fresh independent Codex re-review of the exact post-policy-
+correction head before merge consideration; no Claude review is awaited,
+requested, or claimed. No provider or credential review evidence is claimed.
