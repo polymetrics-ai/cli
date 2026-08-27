@@ -123,3 +123,38 @@ reclassify, or promote those rows.
 - Focused red, focused green, full `cmd/connectorgen`, scoped vet, and diff
   checks passed; the repair was pushed normally. A fresh CI run and independent
   audit remain pending for the repaired head.
+
+## Independent-audit repair verification — 2026-08-27
+
+- Repair checkpoint: `4fdb68f981a95d4ef13fbcf10d1a9a6ffd03d454`.
+- `git fetch origin main` read `origin/main` as
+  `1324c52bab0b224ed8958858af7676b8b8e191b4`; it is already the exact merge
+  base of the repair, so no empty merge or history rewrite was made.
+- Captured after that current-main read:
+
+  ```text
+  go test -timeout 20m ./cmd/connectorgen -run '<exact audit-repair source-reference set>' -count=1
+  PASS
+  go vet ./...
+  PASS
+  git diff --check origin/main...HEAD
+  PASS
+  ```
+
+- Fresh captured gates also passed: `go build ./cmd/connectorgen`, `go build
+  ./cmd/pm`, source-import help rendering, `make tidy-check`, `make lint`,
+  `make docs-check`, `make smoke-no-build`, `go run ./cmd/agentcontractgen
+  check`, `connectorgen validate`, `surface-sync --check`,
+  `operation-evidence --check`, `connector-boundary`, and
+  `release-workflow-check` (the latter has no aggregate banner).
+- **Credential-free built-binary observation:** in a fresh initialized project
+  with no credential added, `pm outreach prospects list` returns `error:
+  unknown command "outreach"`. This is not a credential-boundary success or
+  failure: it is the expected proof that this foundation materialized no
+  Outreach `pm` command. Usable-surface delta remains **0**, so no normal
+  credential boundary exists to exercise without fabricating a command.
+- The complete `cmd/connectorgen` package was run locally after this repair,
+  but this tool environment did not retain an exit status across its long
+  collection boundary. It is therefore not recorded as a captured pass; the
+  explicit focused repair command above is the asserted Go-test evidence and
+  CI remains the aggregate authority.
