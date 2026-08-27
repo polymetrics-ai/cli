@@ -11,6 +11,9 @@ generic path-template substitution feature.
 
 - Added the explicitly embedded and inventory-classified
   `circleci/composite_provider_path_identity.json` runtime declaration.
+- Integrated current `main` at `2165619e` by a normal merge. Its only conflict
+  was the generator-owned certification subject, regenerated canonically; no
+  CircleCI route, source lock, CLI surface, or command mapping changed.
 - Keep the CircleCI URL, retained SHA-256, placeholder, ordered config keys,
   and all eleven named source/binding rows in its one declaration. The
   provider-neutral engine validates a closed source-cited record shape and
@@ -62,6 +65,10 @@ Current-head Verify initially found the derived certification subject stale afte
 this declaration change; its owning generator refreshed only
 `internal/connectors/certifications/current-subject.json`, and the strict
 subject plus dependent certification checks now pass.
+After the current-main merge, full engine/generator/definitions/commandrunner/
+App/CLI tests, definition/source/generator checks, docs, lint, smoke, release,
+and connector-canon gates passed locally. The current-head CI remains the
+terminal record for the complete gate set.
 
 ## Credential and command-surface boundary
 

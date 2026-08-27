@@ -62,3 +62,26 @@ declarations SHA-256 and derived subject fingerprint. The strict subject check
 and the certification matrix, candidates, and sweep checks pass afterwards.
 No source lock, provider identity, executable command, route, credential, or
 six-lane eligibility changed.
+
+## Current-main integration recovery
+
+`git merge --no-ff origin/main -m 'merge: integrate origin/main into composite provider path foundation'`
+
+Red: after `origin/main` advanced to
+`2165619ec8f5f9d4141b491b7a5a64bc460d0c71` (#4356), its source-bound-read
+foundation changed declaration, source-projection, and CLI-mapping inputs. The
+normal merge correctly conflicted only in the generator-owned certification
+subject; neither the declaration-owned CircleCI proof nor any CircleCI command
+surface conflicted.
+
+Green: the canonical `go run ./cmd/connectorgen certification-subject`
+generator resolved that sole artifact, retaining main's new source-projection
+and CLI-mapping hashes and deriving the combined declaration SHA-256 and
+fingerprint. Merge commit `4d7f57894` contains the unmodified closed CircleCI
+proof plus current main. Post-merge full engine, generator, definitions,
+commandrunner, App, and CLI suites passed; definition validation, surface sync,
+declaration admission, operation evidence, certification projections, Asana
+source import, docs, tidy, lint, smoke, contract, GitHub-artifact, connector
+canon, and release workflow gates passed. The built binary still returns
+`unknown command "circleci"` (exit 2), proving no Batch-1 CLI surface was
+invented; the focused eleven-row closed-proof test matrix remains green.

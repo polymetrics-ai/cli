@@ -142,3 +142,14 @@ certification checks pass after regeneration, and reconfirmed the source-lock
 witness, provider-neutral engine, closed six-lane matrix, source/CLI/App
 non-change, and absence of CircleCI literals in non-test engine Go. No further
 technical review is required for this code state.
+
+## Current-main integration
+
+After #4356 merged to `origin/main` at
+`2165619ec8f5f9d4141b491b7a5a64bc460d0c71`, this branch integrated it by the
+normal non-force merge commit `4d7f57894`. The only conflict was the generated
+certification subject; its owning generator reconciled current-main's
+source-projection/CLI-mapping inputs with this branch's declaration input. No
+CircleCI proof, source lock, runtime route, CLI surface, App path, or lane
+eligibility was hand-resolved or broadened. A fresh exact-head independent
+Codex review is required after the normal push.
