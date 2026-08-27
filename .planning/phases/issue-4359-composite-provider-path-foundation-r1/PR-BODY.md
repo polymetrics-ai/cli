@@ -45,6 +45,8 @@ generic path-template substitution feature.
 - `go run ./cmd/connectorgen surface-sync internal/connectors/defs --check`
 - `go run ./cmd/connectorgen declaration-admission internal/connectors/defs`
 - `go run ./cmd/connectorgen operation-evidence . --check`
+- `go run ./cmd/connectorgen certification-subject --check`
+- `make connectorgen-certification-matrix connectorgen-certification-candidates connectorgen-certification-sweep`
 - `make docs-check`
 - `make tidy-check lint smoke-no-build agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check`
 - `go test -timeout 20m ./internal/cli`
@@ -56,6 +58,10 @@ connectorgen-validate connectorgen-surface-sync connector-boundary
 release-workflow-check` gate.
 `source-import circleci --check` is deliberately unavailable on this foundation
 base: Batch 1's retained CircleCI source-lock directory is not imported here.
+Current-head Verify initially found the derived certification subject stale after
+this declaration change; its owning generator refreshed only
+`internal/connectors/certifications/current-subject.json`, and the strict
+subject plus dependent certification checks now pass.
 
 ## Credential and command-surface boundary
 

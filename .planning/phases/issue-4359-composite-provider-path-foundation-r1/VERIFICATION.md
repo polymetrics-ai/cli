@@ -17,6 +17,7 @@
 - [x] `go run ./cmd/connectorgen surface-sync internal/connectors/defs --check` — 553 scanned, 0 changes.
 - [x] `go run ./cmd/connectorgen declaration-admission internal/connectors/defs` — 1 connector, 1 source operation, 0 findings.
 - [x] `go run ./cmd/connectorgen operation-evidence . --check` — current, 1,525 rows / 5 rollups / fixed-100 passed.
+- [x] Current-head CI recovery: `go run ./cmd/connectorgen certification-subject` refreshed only `internal/connectors/certifications/current-subject.json` after Verify run `33042859184` found its declaration fingerprint stale; `go run ./cmd/connectorgen certification-subject --check`, `make connectorgen-certification-matrix`, `make connectorgen-certification-candidates`, and `make connectorgen-certification-sweep` then passed.
 
 ## Repository checks
 

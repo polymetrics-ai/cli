@@ -46,3 +46,19 @@ variation. `go run ./cmd/connectorgen boundary . --json` reports clean.
 No request interpolation, execution, parser, method, body, credential, or
 source-lock logic changed. A fresh exact-head independent review remains
 required after this repair commit.
+
+## Current-head CI generated-subject recovery
+
+`gh-axi run view 33042859184 --job 98420150790 --log-failed`
+
+Red: current-head CI completed all earlier Verify work, then correctly stopped
+at `go run ./cmd/connectorgen certification-subject --check`: the committed
+subject's declarations fingerprint predated the new embedded CircleCI
+declaration. This is generated-evidence drift, not an engine or route failure.
+
+Green: `go run ./cmd/connectorgen certification-subject` refreshed only
+`internal/connectors/certifications/current-subject.json`, changing its
+declarations SHA-256 and derived subject fingerprint. The strict subject check
+and the certification matrix, candidates, and sweep checks pass afterwards.
+No source lock, provider identity, executable command, route, credential, or
+six-lane eligibility changed.
