@@ -494,9 +494,10 @@ func TestSourceImportVersion3RenderedReferenceRetainsCapturedEvidenceWithoutOper
 	sidecar := []byte(`{"navigation":"reference index"}`)
 	sidecarDigest := sha256.Sum256(sidecar)
 	wire["rest"].(map[string]any)["source_documents"] = append(wire["rest"].(map[string]any)["source_documents"].([]any), map[string]any{
-		"id":           "sidecar",
-		"kind":         "rendered_reference",
-		"content_type": "application/json",
+		"id":            "sidecar",
+		"kind":          "rendered_reference",
+		"coverage_only": true,
+		"content_type":  "application/json",
 		"artifact": map[string]any{
 			"source_url": "https://fixtures.polymetrics.invalid/reference/navigation.json",
 			"sha256":     hex.EncodeToString(sidecarDigest[:]),
