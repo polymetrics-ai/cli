@@ -2,18 +2,27 @@
 
 ## Status
 
-Planning complete; implementation and RED evidence pending.
+Foundation implementation is green locally. Cohort fan-in is blocked on missing
+checked-in retained bytes and artifact manifests; no live provider fetch or
+synthetic artifact is permitted to replace them.
 
 ## Acceptance checklist
 
-- [ ] Explicit zero-operation rendered coverage validates only with retained bytes, source lock, manifest provenance and a closed marker.
-- [ ] Missing, malformed, unverified, accidental-empty, duplicate and mixed-document variants fail closed with location.
-- [ ] Non-empty rendered-reference and OpenAPI v1-v3 source-lock/import behavior has unchanged byte/count checks.
-- [ ] Exactly 720 source-cited deferred rows reconcile as 187 Amplitude + 49 Dremio + 193 Ashby + 84 Workable + 207 HiBob.
+- [x] Explicit zero-operation rendered coverage validates only with retained bytes, source lock, manifest provenance and a closed marker.
+- [x] Missing, malformed, unverified, accidental-empty, duplicate and mixed-document variants fail closed with location.
+- [x] Non-empty rendered-reference and OpenAPI v1-v3 source-lock/import behavior has unchanged byte/count checks.
+- [ ] Exactly 720 source-cited deferred rows reconcile as 187 Amplitude + 49 Dremio + 193 Ashby + 84 Workable + 207 HiBob. Blocked: the current Batch 8–10 branch has only locks/crosswalks/dispositions, no `sources/artifacts/` files or retained-artifact manifests for these five source locks.
 - [ ] Rows preserve exact source citation, provider operation ID, stable identity, applicable lane, and exactly one `missing_foundation` disposition.
 - [ ] Deferred command preflight stops before credential/transport/record/mutation; retained runnable command boundary still reaches missing credential.
 - [ ] Generator/projection/evidence/surface-sync/validate and bounded JSON duplicate invariants pass.
 - [ ] Formatting, vet, build, diff, individual repository gates, rebase, exact-head review, and PR API base verification pass.
+
+## Foundation evidence
+
+- RED: `go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportV3RenderedReferenceCoverageOnlyRequiresExplicitClosedProof$' -count=1` failed before implementation with `json: unknown field "coverage_only"`.
+- GREEN: `go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportV3RenderedReferenceCoverageOnly' -count=1` passed.
+- Regression: `go test -timeout 20m ./cmd/connectorgen -run '^(TestSourceImportVersion3RenderedReference|TestSourceRetainRetainsRenderedReferenceAndBundleArtifacts|TestSourceImport_RejectsUnknownSectionAndIndependentIndexOverflow)$' -count=1` passed.
+- Batch source check: `git ls-tree -r --name-only fm/cli-map-batch8910-r1 -- internal/connectors/defs` shows only the five lock/crosswalk/disposition files, not retained artifact content or manifests. The five lock inventories total 720 operations and list 15 zero-operation rendered documents; their 15 pinned digest paths are absent from `git rev-list --all --objects`.
 
 ## CLI documentation parity
 
