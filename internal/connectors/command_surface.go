@@ -254,20 +254,21 @@ func ValidCommandFoundationEvidence(component, evidence string) bool {
 }
 
 type CommandSurfaceCommand struct {
-	Path          string
-	Summary       string
-	Intent        string
-	Availability  string
-	Stream        string
-	Write         string
-	Operation     string
-	SourceCLIPath string
-	SourceURL     string
-	Flags         []CommandSurfaceFlag
-	Constraints   []CommandSurfaceConstraint
-	Examples      []string
-	APISurface    []CommandSurfaceEndpointRef
-	OutputPolicy  string
+	Path            string
+	Summary         string
+	Intent          string
+	Availability    string
+	Stream          string
+	Write           string
+	Operation       string
+	SourceOperation string
+	SourceCLIPath   string
+	SourceURL       string
+	Flags           []CommandSurfaceFlag
+	Constraints     []CommandSurfaceConstraint
+	Examples        []string
+	APISurface      []CommandSurfaceEndpointRef
+	OutputPolicy    string
 	// RedactFields is retained for bundle compatibility. Commandrunner does not
 	// use it to mutate connector-command records or errors, or forward it to
 	// executor requests.

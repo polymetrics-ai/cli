@@ -753,6 +753,12 @@ func operationPaginationParameterNames(pagination *orderedObject) map[string]boo
 		}
 		add(count)
 		add(stringField(pagination, "size_param"))
+	case "next_url":
+		add(stringField(pagination, "size_param"))
+		add(stringField(pagination, "limit_param"))
+		add(stringField(pagination, "offset_param"))
+	case "link_header":
+		add(stringField(pagination, "size_param"))
 	}
 	return names
 }

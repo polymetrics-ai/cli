@@ -851,18 +851,23 @@ type SurfaceOperation struct {
 // opt-in per kind; unsupported kinds stay metadata-only and unknown kinds are
 // rejected by the meta-schema.
 type OperationSpec struct {
-	ID            string            `json:"id"`
-	Kind          string            `json:"kind"`
-	Summary       string            `json:"summary"`
-	Description   string            `json:"description,omitempty"`
-	SourceURL     string            `json:"source_url,omitempty"`
-	Risk          string            `json:"risk"`
-	Approval      string            `json:"approval"`
-	OutputPolicy  string            `json:"output_policy"`
-	AuthScopes    []string          `json:"auth_scopes,omitempty"`
-	MutationClass string            `json:"mutation_class,omitempty"`
-	Destructive   bool              `json:"destructive,omitempty"`
-	Confirmation  *ConfirmationSpec `json:"confirmation,omitempty"`
+	ID string `json:"id"`
+	// SourceOperation is the exact locked provider operation that this
+	// declaration materializes. It is optional for legacy declarations, but a
+	// source-projected command must repeat its ID and is refused unless this
+	// method/path binding agrees with the selected executor.
+	SourceOperation *SourceOperationBinding `json:"source_operation,omitempty"`
+	Kind            string                  `json:"kind"`
+	Summary         string                  `json:"summary"`
+	Description     string                  `json:"description,omitempty"`
+	SourceURL       string                  `json:"source_url,omitempty"`
+	Risk            string                  `json:"risk"`
+	Approval        string                  `json:"approval"`
+	OutputPolicy    string                  `json:"output_policy"`
+	AuthScopes      []string                `json:"auth_scopes,omitempty"`
+	MutationClass   string                  `json:"mutation_class,omitempty"`
+	Destructive     bool                    `json:"destructive,omitempty"`
+	Confirmation    *ConfirmationSpec       `json:"confirmation,omitempty"`
 	// Batchable gates this operation out of a bulk plan when explicitly false.
 	// It is a pointer because false is restrictive while the omitted default is
 	// permissive; see WriteAction.Batchable for the matching write-action
@@ -884,6 +889,16 @@ type OperationSpec struct {
 	LocalFile *LocalFileOperationSpec `json:"local_file,omitempty"`
 	Browser   *BrowserOperationSpec   `json:"browser,omitempty"`
 	Composite *CompositeOperationSpec `json:"composite,omitempty"`
+}
+
+// SourceOperationBinding is deliberately an identity plus a fixed wire
+// endpoint, not a provider URL or a generic transport configuration. The
+// source projection owns its creation from a locked descriptor; runtime only
+// checks that a command cannot substitute another declaration endpoint.
+type SourceOperationBinding struct {
+	ID     string `json:"id"`
+	Method string `json:"method"`
+	Path   string `json:"path"`
 }
 
 // IsBatchable reports whether the operation may be placed in a bulk plan.
@@ -1233,26 +1248,30 @@ type CommandBindingIdentity struct {
 
 // CLICommand is one provider-inspired command path.
 type CLICommand struct {
-	Path          string                         `json:"path"`
-	Summary       string                         `json:"summary"`
-	Intent        string                         `json:"intent"`
-	Availability  string                         `json:"availability"`
-	Stream        string                         `json:"stream,omitempty"`
-	Write         string                         `json:"write,omitempty"`
-	SourceCLIPath string                         `json:"source_cli_path,omitempty"`
-	SourceURL     string                         `json:"source_url,omitempty"`
-	Flags         []CLIFlag                      `json:"flags,omitempty"`
-	Constraints   []CLIConstraint                `json:"constraints,omitempty"`
-	Examples      []string                       `json:"examples,omitempty"`
-	APISurface    []CLISurfaceEndpointRef        `json:"api_surface,omitempty"`
-	OutputPolicy  string                         `json:"output_policy,omitempty"`
-	RedactFields  []string                       `json:"redact_fields,omitempty"`
-	Operation     string                         `json:"operation,omitempty"`
-	Risk          string                         `json:"risk,omitempty"`
-	Approval      string                         `json:"approval,omitempty"`
-	Foundation    *CommandFoundation             `json:"foundation_gap,omitempty"`
-	Unsupported   *CommandUnsupportedDisposition `json:"unsupported_disposition,omitempty"`
-	Notes         string                         `json:"notes,omitempty"`
+	Path          string                  `json:"path"`
+	Summary       string                  `json:"summary"`
+	Intent        string                  `json:"intent"`
+	Availability  string                  `json:"availability"`
+	Stream        string                  `json:"stream,omitempty"`
+	Write         string                  `json:"write,omitempty"`
+	SourceCLIPath string                  `json:"source_cli_path,omitempty"`
+	SourceURL     string                  `json:"source_url,omitempty"`
+	Flags         []CLIFlag               `json:"flags,omitempty"`
+	Constraints   []CLIConstraint         `json:"constraints,omitempty"`
+	Examples      []string                `json:"examples,omitempty"`
+	APISurface    []CLISurfaceEndpointRef `json:"api_surface,omitempty"`
+	OutputPolicy  string                  `json:"output_policy,omitempty"`
+	RedactFields  []string                `json:"redact_fields,omitempty"`
+	Operation     string                  `json:"operation,omitempty"`
+	// SourceOperation names the locked provider identity selected by a
+	// source-projected command. It must match OperationSpec.SourceOperation
+	// before commandrunner may reach credential resolution.
+	SourceOperation string                         `json:"source_operation,omitempty"`
+	Risk            string                         `json:"risk,omitempty"`
+	Approval        string                         `json:"approval,omitempty"`
+	Foundation      *CommandFoundation             `json:"foundation_gap,omitempty"`
+	Unsupported     *CommandUnsupportedDisposition `json:"unsupported_disposition,omitempty"`
+	Notes           string                         `json:"notes,omitempty"`
 }
 
 // CLISurfaceEndpointRef points from a command to a tracked api_surface row.
@@ -2865,9 +2884,35 @@ func validateOperations(ops []OperationSpec) error {
 		if block != expected {
 			return fmt.Errorf("operation %d (%q) kind %q must declare %s block, got %s", i, op.ID, op.Kind, expected, block)
 		}
+		if err := validateSourceOperationBinding(i, op); err != nil {
+			return err
+		}
 		if err := validateOperationSemantics(i, op); err != nil {
 			return err
 		}
+	}
+	return nil
+}
+
+func validateSourceOperationBinding(i int, op OperationSpec) error {
+	binding := op.SourceOperation
+	if binding == nil {
+		return nil
+	}
+	if strings.TrimSpace(binding.ID) == "" || strings.TrimSpace(binding.Method) == "" || strings.TrimSpace(binding.Path) == "" {
+		return fmt.Errorf("operation %d (%q) source_operation requires non-empty id, method, and path", i, op.ID)
+	}
+	if strings.ToUpper(strings.TrimSpace(binding.Method)) != http.MethodGet {
+		return fmt.Errorf("operation %d (%q) source_operation currently supports only GET reads, got %s", i, op.ID, strings.ToUpper(strings.TrimSpace(binding.Method)))
+	}
+	if isAbsoluteHTTPURL(binding.Path) || strings.HasPrefix(strings.TrimSpace(binding.Path), "//") || !strings.HasPrefix(binding.Path, "/") {
+		return fmt.Errorf("operation %d (%q) source_operation path must be connector-relative", i, op.ID)
+	}
+	if op.REST != nil && (!strings.EqualFold(op.REST.Method, binding.Method) || op.REST.Path != binding.Path) {
+		return fmt.Errorf("operation %d (%q) source_operation must match its declared REST method/path", i, op.ID)
+	}
+	if op.Kind != "rest_read" && op.Kind != "stream_etl" {
+		return fmt.Errorf("operation %d (%q) source_operation is supported only by rest_read or stream_etl", i, op.ID)
 	}
 	return nil
 }
@@ -3314,7 +3359,13 @@ func restPaginationQueryParameters(spec PaginationSpec) []string {
 		appendName(valueOrDefault(spec.StartIndexParam, defaultStartIndexParam))
 		appendName(valueOrDefault(spec.CountParam, defaultStartIndexCount))
 		appendName(spec.SizeParam)
-	case "next_url", "link_header", "none", "":
+	case "next_url":
+		appendName(spec.SizeParam)
+		appendName(spec.LimitParam)
+		appendName(spec.OffsetParam)
+	case "link_header":
+		appendName(spec.SizeParam)
+	case "none", "":
 		// These have no operation query mechanics to verify.
 	}
 	return names

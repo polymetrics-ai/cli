@@ -214,6 +214,71 @@ func resolveStreamRoute(b Bundle, cfg connectors.RuntimeConfig, stream StreamSpe
 	return resolveOperationRoute(b, cfg, stream.Route, stream.Name, stream.Path, "")
 }
 
+// preflightSourceBoundOperationOrigin prevents a source-bound operation from
+// inheriting a caller-selected base_url. The provider-relative operation path
+// is already sealed by source_operation; the origin must be equally
+// declaration-owned before authentication construction can begin.
+func preflightSourceBoundOperationOrigin(b Bundle, cfg connectors.RuntimeConfig, operation OperationSpec) error {
+	if operation.SourceOperation == nil {
+		return nil
+	}
+	path := operationRoutePath(operation)
+	return preflightSourceBoundRouteOrigin(b, cfg, operation.Route, operation.ID, path, operation.SourceURL)
+}
+
+func preflightSourceBoundStreamOrigin(b Bundle, cfg connectors.RuntimeConfig, stream StreamSpec) error {
+	var sourceBound *OperationSpec
+	for index := range b.Operations {
+		operation := &b.Operations[index]
+		if operation.Kind != "stream_etl" || operation.Composite == nil || operation.SourceOperation == nil {
+			continue
+		}
+		for _, step := range operation.Composite.Steps {
+			if step != "stream:"+stream.Name {
+				continue
+			}
+			if sourceBound != nil {
+				return fmt.Errorf("source-bound stream %q is selected by more than one source-bound operation", stream.Name)
+			}
+			sourceBound = operation
+		}
+	}
+	if sourceBound == nil {
+		return nil
+	}
+	return preflightSourceBoundRouteOrigin(b, cfg, stream.Route, stream.Name, stream.Path, sourceBound.SourceURL)
+}
+
+func preflightSourceBoundRouteOrigin(b Bundle, cfg connectors.RuntimeConfig, selection, operation, path, sourceURL string) error {
+	defaultConfig := materializeConfigDefaults(b, connectors.RuntimeConfig{})
+	expected, err := resolveOperationRoute(b, defaultConfig, selection, operation, path, sourceURL)
+	if err != nil {
+		return fmt.Errorf("source-bound provider operation %q cannot resolve its declared origin: %w", operation, err)
+	}
+	configured, err := resolveOperationRoute(b, materializeConfigDefaults(b, cfg), selection, operation, path, sourceURL)
+	if err != nil {
+		return fmt.Errorf("source-bound provider operation %q rejects configured origin: %w", operation, err)
+	}
+	expectedKey, err := sourceBoundBaseURLKey(expected)
+	if err != nil {
+		return fmt.Errorf("source-bound provider operation %q has an invalid declared origin", operation)
+	}
+	configuredKey, err := sourceBoundBaseURLKey(configured)
+	if err != nil || configuredKey != expectedKey {
+		return fmt.Errorf("source-bound provider operation %q rejects configured base_url override", operation)
+	}
+	return nil
+}
+
+func sourceBoundBaseURLKey(raw string) (string, error) {
+	parsed, err := url.Parse(strings.TrimSpace(raw))
+	if err != nil || parsed.Scheme == "" || parsed.Host == "" || (parsed.Scheme != "https" && parsed.Scheme != "http") || parsed.User != nil || parsed.RawQuery != "" || parsed.Fragment != "" {
+		return "", fmt.Errorf("invalid HTTP base URL")
+	}
+	path := strings.TrimRight(parsed.EscapedPath(), "/")
+	return strings.ToLower(parsed.Scheme) + "://" + strings.ToLower(parsed.Host) + path, nil
+}
+
 func resolveWriteActionRoute(b Bundle, cfg connectors.RuntimeConfig, action WriteAction) (string, error) {
 	if strings.TrimSpace(action.Route) != "" && strings.TrimSpace(action.BaseURL) != "" {
 		return "", operationRouteFailure(b, action.Name, action.Route, "", "write action declares both route and base_url")

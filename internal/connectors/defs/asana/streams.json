@@ -3,17 +3,37 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}"
+      }
     ],
     "pagination": {
-      "type": "next_url",
-      "next_url_path": "next_page.uri"
+      "limit_param": "limit",
+      "next_url_path": "next_page.uri",
+      "offset_param": "offset",
+      "page_size": 100,
+      "size_param": "limit",
+      "type": "next_url"
     },
-    "check": { "method": "GET", "path": "/users/me" },
+    "check": {
+      "method": "GET",
+      "path": "/users/me"
+    },
     "error_map": [
-      { "status": 401, "hint": "asana access token is missing or invalid; re-run pm credentials add asana" },
-      { "status": 403, "hint": "asana account lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "asana rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "asana access token is missing or invalid; re-run pm credentials add asana"
+      },
+      {
+        "status": 403,
+        "hint": "asana account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "asana rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
@@ -24,7 +44,9 @@
         "limit": "100",
         "opt_fields": "gid,name,resource_type"
       },
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/workspaces.json"
     },
     {
@@ -33,9 +55,14 @@
       "query": {
         "limit": "100",
         "opt_fields": "gid,name,resource_type,created_at,modified_at",
-        "workspace": { "template": "{{ config.workspace_id }}", "omit_when_absent": true }
+        "workspace": {
+          "template": "{{ config.workspace_id }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/projects.json"
     },
     {
@@ -44,11 +71,22 @@
       "query": {
         "limit": "100",
         "opt_fields": "gid,name,resource_type,created_at,modified_at,completed",
-        "workspace": { "template": "{{ config.workspace_id }}", "omit_when_absent": true },
-        "project": { "template": "{{ config.project_id }}", "omit_when_absent": true },
-        "assignee": { "template": "{{ config.assignee }}", "omit_when_absent": true }
+        "workspace": {
+          "template": "{{ config.workspace_id }}",
+          "omit_when_absent": true
+        },
+        "project": {
+          "template": "{{ config.project_id }}",
+          "omit_when_absent": true
+        },
+        "assignee": {
+          "template": "{{ config.assignee }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/tasks.json"
     },
     {
@@ -56,9 +94,14 @@
       "path": "/users",
       "query": {
         "opt_fields": "gid,name,resource_type,email",
-        "workspace": { "template": "{{ config.workspace_id }}", "omit_when_absent": true }
+        "workspace": {
+          "template": "{{ config.workspace_id }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/users.json"
     },
     {
@@ -67,7 +110,9 @@
       "query": {
         "opt_fields": "gid,name,resource_type,description,visibility"
       },
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/teams.json"
     },
     {
@@ -75,9 +120,14 @@
       "path": "/tags",
       "query": {
         "opt_fields": "gid,name,resource_type,color,notes,created_at",
-        "workspace": { "template": "{{ config.workspace_id }}", "omit_when_absent": true }
+        "workspace": {
+          "template": "{{ config.workspace_id }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/tags.json"
     },
     {
@@ -86,12 +136,20 @@
       "query": {
         "opt_fields": "gid,name,resource_type,created_at"
       },
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "fan_out": {
         "ids_from": {
-          "request": { "path": "/projects", "records_path": "data", "id_field": "gid" }
+          "request": {
+            "path": "/projects",
+            "records_path": "data",
+            "id_field": "gid"
+          }
         },
-        "into": { "path_var": "project_gid" },
+        "into": {
+          "path_var": "project_gid"
+        },
         "stamp_field": "project_gid"
       },
       "schema": "schemas/sections.json"
@@ -102,12 +160,20 @@
       "query": {
         "opt_fields": "gid,resource_type,created_at,resource_subtype,text,type,created_by.gid,created_by.name"
       },
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "fan_out": {
         "ids_from": {
-          "request": { "path": "/tasks", "records_path": "data", "id_field": "gid" }
+          "request": {
+            "path": "/tasks",
+            "records_path": "data",
+            "id_field": "gid"
+          }
         },
-        "into": { "path_var": "task_gid" },
+        "into": {
+          "path_var": "task_gid"
+        },
         "stamp_field": "task_gid"
       },
       "schema": "schemas/stories.json"
@@ -118,7 +184,9 @@
       "query": {
         "opt_fields": "gid,name,resource_type,type,enabled,description"
       },
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/custom_fields.json"
     },
     {
@@ -127,12 +195,20 @@
       "query": {
         "opt_fields": "gid,resource_type,title,text,color,created_at,modified_at"
       },
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "fan_out": {
         "ids_from": {
-          "request": { "path": "/projects", "records_path": "data", "id_field": "gid" }
+          "request": {
+            "path": "/projects",
+            "records_path": "data",
+            "id_field": "gid"
+          }
         },
-        "into": { "path_var": "project_gid" },
+        "into": {
+          "path_var": "project_gid"
+        },
         "stamp_field": "project_gid"
       },
       "schema": "schemas/project_statuses.json"
@@ -142,10 +218,18 @@
       "path": "/team_memberships",
       "query": {
         "opt_fields": "gid,resource_type,is_guest,is_admin,is_limited_access,user.gid,user.name,team.gid,team.name",
-        "team": { "template": "{{ config.team_id }}", "omit_when_absent": true },
-        "workspace": { "template": "{{ config.workspace_id }}", "omit_when_absent": true }
+        "team": {
+          "template": "{{ config.team_id }}",
+          "omit_when_absent": true
+        },
+        "workspace": {
+          "template": "{{ config.workspace_id }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/team_memberships.json"
     },
     {
@@ -154,7 +238,9 @@
       "query": {
         "opt_fields": "gid,resource_type,is_active,is_admin,is_guest,user.gid,user.name"
       },
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/workspace_memberships.json"
     }
   ]

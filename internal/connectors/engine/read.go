@@ -76,6 +76,12 @@ func readWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, 
 	if err != nil {
 		return err
 	}
+	if err := preflightDeclaredSourceBoundStreamRead(b, stream); err != nil {
+		return err
+	}
+	if err := preflightSourceBoundStreamOrigin(b, req.Config, stream); err != nil {
+		return err
+	}
 
 	req.Config = materializeConfigDefaults(b, req.Config)
 

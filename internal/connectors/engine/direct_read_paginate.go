@@ -392,10 +392,15 @@ func pagingParamsForStrategy(spec PaginationSpec, strategy string) (navigation, 
 	case "start_index":
 		return []string{valueOrDefault(spec.StartIndexParam, defaultStartIndexParam)},
 			[]string{valueOrDefault(spec.CountParam, defaultStartIndexCount), spec.SizeParam}
-	default:
-		// next_url and link_header address pages by whole URL, so no query
-		// parameter of theirs can collide with a caller's flag.
+	case "next_url":
+		// A next URL is still the sole public navigation channel. These names
+		// are only the provider-owned query controls the engine may put on page
+		// one and admit from a returned continuation URL.
+		return []string{spec.OffsetParam}, []string{spec.SizeParam, spec.LimitParam}
+	case "link_header":
 		return nil, []string{spec.SizeParam}
+	default:
+		return nil, nil
 	}
 }
 

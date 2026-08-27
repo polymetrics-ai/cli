@@ -65,6 +65,9 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
+	if err := preflightSourceBoundOperationOrigin(b, req.Config, op); err != nil {
+		return connectors.DirectReadResult{}, err
+	}
 	commandQueryFields := map[string]struct{}(nil)
 	if req.CommandBindings != nil {
 		if !operationDirectReadBindingsDeclaredByCommand(b, op.ID, req.CommandBindings.Path, req.CommandBindings.Query, req.CommandBindings.Body, req.CommandBindings.RawBody) {
@@ -240,6 +243,169 @@ func PreflightOperationDirectRead(b Bundle, operation, method, endpointPath stri
 		return fmt.Errorf("operation direct read has no executable response cap")
 	}
 	return validateDirectReadOutputPolicy(outputPolicy, op.REST.Path, nil, connectors.RuntimeConfig{})
+}
+
+// PreflightSourceBoundRead verifies the extra identity edge carried by a
+// source-projected command. The fixed operation direct-read preflight remains
+// responsible for executor kind, response cap, output policy, and the normal
+// method/path comparison; this check proves that the command cannot replace
+// the locked provider identity with another declaration that happens to share
+// an executor.
+func PreflightSourceBoundRead(b Bundle, operation, sourceOperation, method, endpointPath string) error {
+	op, err := operationDirectReadSpec(b, operation)
+	if err != nil {
+		return err
+	}
+	return preflightSourceOperationBinding(op, sourceOperation, method, endpointPath)
+}
+
+// PreflightSourceBoundStreamRead proves that a source-projected collection is
+// still the exact declared stream, rather than a direct-read operation relabelled
+// as ETL. Bundle loading owns the stream schema and paginator validation; this
+// preflight binds the command's source identity, composite step, and route.
+func PreflightSourceBoundStreamRead(b Bundle, streamName, sourceOperation, method, endpointPath string) error {
+	op, err := sourceBoundStreamOperation(b, streamName)
+	if err != nil {
+		return err
+	}
+	if err := preflightSourceOperationBinding(op, sourceOperation, method, endpointPath); err != nil {
+		return err
+	}
+	stream, err := findStream(b, streamName)
+	if err != nil {
+		return fmt.Errorf("source-bound stream %q: %w", streamName, err)
+	}
+	streamMethod := stream.Method
+	if streamMethod == "" {
+		streamMethod = http.MethodGet
+	}
+	if !strings.EqualFold(streamMethod, method) || !sourceBoundStreamPathMatchesLockedPath(stream.Path, endpointPath) {
+		return fmt.Errorf("source-bound stream %q endpoint %s %q does not match locked source endpoint %s %q", streamName, strings.ToUpper(streamMethod), stream.Path, strings.ToUpper(method), endpointPath)
+	}
+	if strings.TrimSpace(stream.Records.Path) == "" || strings.TrimSpace(stream.SchemaRef) == "" {
+		return fmt.Errorf("source-bound stream %q lacks declared record semantics", streamName)
+	}
+	if stream.Pagination == nil && b.HTTP.Pagination == nil {
+		return fmt.Errorf("source-bound stream %q lacks declared pagination semantics", streamName)
+	}
+	for _, step := range op.Composite.Steps {
+		if step == "stream:"+streamName {
+			return nil
+		}
+	}
+	return fmt.Errorf("operation %q does not select declared stream %q", op.ID, streamName)
+}
+
+// preflightDeclaredSourceBoundStreamRead applies the same source-bound stream
+// proof to direct engine callers that commandrunner applies to CLI commands.
+// Legacy streams have no SourceOperation and retain their established path.
+func preflightDeclaredSourceBoundStreamRead(b Bundle, stream StreamSpec) error {
+	var sourceBound *OperationSpec
+	for index := range b.Operations {
+		operation := &b.Operations[index]
+		if operation.Kind != "stream_etl" || operation.Composite == nil || operation.SourceOperation == nil {
+			continue
+		}
+		for _, step := range operation.Composite.Steps {
+			if step != "stream:"+stream.Name {
+				continue
+			}
+			if sourceBound != nil {
+				return fmt.Errorf("source-bound stream %q is selected by more than one source-bound operation", stream.Name)
+			}
+			sourceBound = operation
+		}
+	}
+	if sourceBound == nil {
+		return nil
+	}
+	binding := sourceBound.SourceOperation
+	return PreflightSourceBoundStreamRead(b, stream.Name, binding.ID, binding.Method, binding.Path)
+}
+
+// sourceBoundStreamPathMatchesLockedPath accepts only declaration-owned
+// connection values that occupy an entire source path-variable segment. It is
+// deliberately narrower than interpolation: literal route segments must be
+// identical, so a configured value cannot select another provider route.
+func sourceBoundStreamPathMatchesLockedPath(streamPath, lockedPath string) bool {
+	streamParts := strings.Split(strings.Trim(streamPath, "/"), "/")
+	lockedParts := strings.Split(strings.Trim(lockedPath, "/"), "/")
+	if len(streamParts) != len(lockedParts) {
+		return false
+	}
+	for index := range streamParts {
+		if streamParts[index] == lockedParts[index] {
+			continue
+		}
+		if (sourceBoundConfigPathSegment(streamParts[index]) || sourceBoundFanOutPathSegment(streamParts[index])) && sourceBoundLockedPathSegment(lockedParts[index]) {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
+func sourceBoundConfigPathSegment(segment string) bool {
+	return strings.HasPrefix(segment, "{{ config.") && strings.HasSuffix(segment, " }}") && len(strings.TrimSuffix(strings.TrimPrefix(segment, "{{ config."), " }}")) > 0
+}
+
+func sourceBoundFanOutPathSegment(segment string) bool {
+	return segment == "{{ fanout.id }}"
+}
+
+func sourceBoundLockedPathSegment(segment string) bool {
+	return strings.HasPrefix(segment, "{") && strings.HasSuffix(segment, "}") && len(strings.TrimSuffix(strings.TrimPrefix(segment, "{"), "}")) > 0
+}
+
+func sourceBoundStreamOperation(b Bundle, streamName string) (OperationSpec, error) {
+	var match *OperationSpec
+	for index := range b.Operations {
+		operation := &b.Operations[index]
+		if operation.Kind != "stream_etl" || operation.Composite == nil {
+			continue
+		}
+		selectsStream := false
+		for _, step := range operation.Composite.Steps {
+			if step == "stream:"+streamName {
+				selectsStream = true
+				break
+			}
+		}
+		if !selectsStream {
+			continue
+		}
+		if match != nil {
+			return OperationSpec{}, fmt.Errorf("source-bound stream %q is selected by more than one stream_etl operation", streamName)
+		}
+		match = operation
+	}
+	if match == nil {
+		return OperationSpec{}, fmt.Errorf("source-bound stream %q has no declared stream_etl operation", streamName)
+	}
+	return *match, nil
+}
+
+func preflightSourceOperationBinding(op OperationSpec, sourceOperation, method, endpointPath string) error {
+	if strings.TrimSpace(sourceOperation) == "" {
+		return fmt.Errorf("source-bound read command has no source operation identity")
+	}
+	binding := op.SourceOperation
+	if binding == nil {
+		return fmt.Errorf("operation %q is missing source_operation binding", op.ID)
+	}
+	if binding.ID != sourceOperation {
+		return fmt.Errorf("operation %q source operation %q does not match command source operation %q", op.ID, binding.ID, sourceOperation)
+	}
+	if !strings.EqualFold(binding.Method, method) {
+		return fmt.Errorf("operation %q source method %s does not match command method %s", op.ID, strings.ToUpper(binding.Method), strings.ToUpper(method))
+	}
+	if binding.Path != endpointPath {
+		return fmt.Errorf("operation %q source path %q does not match command path %q", op.ID, binding.Path, endpointPath)
+	}
+	if op.REST != nil && (!strings.EqualFold(op.REST.Method, binding.Method) || op.REST.Path != binding.Path) {
+		return fmt.Errorf("operation %q source binding does not match its declared REST endpoint", op.ID)
+	}
+	return nil
 }
 
 // PreflightOperationDirectReadBindings proves that every command-controlled
