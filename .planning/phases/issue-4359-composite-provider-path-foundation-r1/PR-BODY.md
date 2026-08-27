@@ -11,8 +11,11 @@ generic path-template substitution feature.
 
 - Added the explicitly embedded and inventory-classified
   `circleci/composite_provider_path_identity.json` runtime declaration.
-- Require exact CircleCI URL, retained SHA-256, placeholder, ordered config
-  keys, and all eleven named source/binding rows before equivalence is possible.
+- Keep the CircleCI URL, retained SHA-256, placeholder, ordered config keys,
+  and all eleven named source/binding rows in its one declaration. The
+  provider-neutral engine validates a closed source-cited record shape and
+  resolves only a row's exact declared inverse; Batch 1's retained source lock
+  is the independent witness for the declaration's exact CircleCI values.
 - Resolve only the six ETL stream and five reverse-ETL write bindings through
   `composite_provider_path_identity`; reject all other lanes and malformed,
   conflicting, partial, reordered, repeated, extra, absolute, query, route,
@@ -47,7 +50,10 @@ generic path-template substitution feature.
 - `go test -timeout 20m ./internal/cli`
 
 All listed commands passed locally; their exact results are recorded in the
-verification artifact and handoff.
+verification artifact and handoff. The CI-boundary repair additionally passed
+the full `make tidy-check lint smoke-no-build agent-contract-check
+connectorgen-validate connectorgen-surface-sync connector-boundary
+release-workflow-check` gate.
 `source-import circleci --check` is deliberately unavailable on this foundation
 base: Batch 1's retained CircleCI source-lock directory is not imported here.
 
@@ -63,6 +69,9 @@ I/O, request/body escape, or raw transport capability is introduced here.
 ## Review disposition
 
 Claude Code was unavailable. A fresh-context independent Codex re-review of
-`b9b2478…880c3c452` passed with no findings. It verified source identity,
+`b9b2478…56808f8d2` found no production-code blocker. Its one low-severity
+evidence wording finding is resolved in this PR body: exact CircleCI values
+are declaration/source-lock evidence, while the shared engine enforces the
+closed declaration shape and exact declared inverse. The review verified the
 closed endpoint surface, runtime embedding policy, six-lane isolation, and the
 honest Batch 1 credential-boundary limitation. No Copilot fallback was needed.

@@ -27,9 +27,10 @@
 - [x] `make github-parity-artifacts-check connector-canon-check` — pass.
 - [x] Website data/type check not applicable: no CLI, docs, website, or generated website-data source changed; `make docs-check` covers connector-document parity.
 - [x] `git diff --check` before implementation commits.
+- [x] CI-boundary repair rerun: focused/full engine tests; `./internal/connectors/defs`, `./internal/connectors/commandrunner`, `./internal/app`, and `./internal/cli`; `go build ./cmd/pm`; `go vet` for changed/runtime packages; `go test ./cmd/connectorgen`; `connectorgen validate`, `surface-sync --check`, `declaration-admission`, and `operation-evidence --check`; `make docs-check`; and `make tidy-check lint smoke-no-build agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check` — pass.
 
 ## Review and delivery
 
 - [x] Fresh-context Codex audit replaces unavailable Claude audit and records immutable source SHA.
-- [x] Fresh-context Codex re-review records final code SHA `880c3c452274b227d91450aa5680188087f95a0e`, six-lane results, and PASS/no code findings.
+- [x] Fresh-context Codex re-review records final code SHA `56808f8d2732f9d545982af4a1934a1e9b8dba5d`, six-lane results, and no production-code finding. Its low PR-body evidence wording finding was resolved without changing code.
 - [ ] PR base API response is exactly `main`.

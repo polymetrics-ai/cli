@@ -106,3 +106,19 @@ checks only the closed source-cited record shape, while the equivalence
 boundary permits the one exact inverse constructed from that record. This
 preserves the frozen six-lane matrix and adds no execution capability. A
 fresh-context reviewer must assess the full range including this correction.
+
+## Fresh exact-head review after CI correction
+
+Fresh-context Codex reviewed
+`b9b2478b3b2451d632d28b9aa138a170ad835110..56808f8d2732f9d545982af4a1934a1e9b8dba5d`.
+It found no production-code blocker and confirmed that Batch-1's retained
+source lock exactly matches all eleven declaration rows, current source-backed
+stream/write templates match the declaration inverse, all six lanes remain
+closed, and preflight still precedes credential resolution and provider I/O.
+
+It found one low-severity PR-body overstatement: the provider-neutral engine
+validates a closed declaration shape, rather than hard-coding the declaration's
+specific URL/digest/placeholder values. This is resolved in `PR-BODY.md` by
+describing the retained source lock as the exact CircleCI witness and the
+runtime as the closed row/inverse validator. This evidence-only correction did
+not change the reviewed code SHA.
