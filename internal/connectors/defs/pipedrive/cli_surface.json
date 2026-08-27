@@ -20,9 +20,10 @@
       "path": "operations get-activity-types",
       "summary": "Declared etl: GET /activityTypes.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getactivitytypes-2 has no declaration-owned executable etl route."
+      "notes": "Provider GET /activityTypes is bound to the existing activity_types stream with its connector-owned schema and pagination contract.",
+      "stream": "activity_types"
     },
     {
       "path": "operations post-activity-types",
@@ -170,9 +171,10 @@
       "path": "operations get-currencies",
       "summary": "Declared etl: GET /currencies.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getcurrencies-16 has no declaration-owned executable etl route."
+      "notes": "Provider GET /currencies is bound to the existing currencies stream with its connector-owned schema and pagination contract.",
+      "stream": "currencies"
     },
     {
       "path": "operations delete-deal-fields",
@@ -188,9 +190,10 @@
       "path": "operations get-deal-fields",
       "summary": "Declared etl: GET /dealFields.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getdealfields-18 has no declaration-owned executable etl route."
+      "notes": "Provider GET /dealFields is bound to the existing deal_fields stream with its connector-owned schema and pagination contract.",
+      "stream": "deal_fields"
     },
     {
       "path": "operations post-deal-fields",
@@ -584,9 +587,10 @@
       "path": "operations get-filters",
       "summary": "Declared etl: GET /filters.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getfilters-51 has no declaration-owned executable etl route."
+      "notes": "Provider GET /filters is bound to the existing filters stream with its connector-owned schema and pagination contract.",
+      "stream": "filters"
     },
     {
       "path": "operations post-filters",
@@ -708,17 +712,19 @@
       "path": "operations get-lead-fields",
       "summary": "Declared etl: GET /leadFields.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getleadfields-62 has no declaration-owned executable etl route."
+      "notes": "Provider GET /leadFields is bound to the existing lead_fields stream with its connector-owned schema and pagination contract.",
+      "stream": "lead_fields"
     },
     {
       "path": "operations get-lead-labels",
       "summary": "Declared etl: GET /leadLabels.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getleadlabels-63 has no declaration-owned executable etl route."
+      "notes": "Provider GET /leadLabels is bound to the existing lead_labels stream with its connector-owned schema and pagination contract.",
+      "stream": "lead_labels"
     },
     {
       "path": "operations post-lead-labels",
@@ -754,9 +760,10 @@
       "path": "operations get-leads",
       "summary": "Declared etl: GET /leads.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getleads-67 has no declaration-owned executable etl route."
+      "notes": "Provider GET /leads is bound to the existing leads stream with its connector-owned schema and pagination contract.",
+      "stream": "leads"
     },
     {
       "path": "operations post-leads",
@@ -848,17 +855,19 @@
       "path": "operations get-lead-sources",
       "summary": "Declared etl: GET /leadSources.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getleadsources-75 has no declaration-owned executable etl route."
+      "notes": "Provider GET /leadSources is bound to the existing lead_sources stream with its connector-owned schema and pagination contract.",
+      "stream": "lead_sources"
     },
     {
       "path": "operations get-legacy-teams",
       "summary": "Declared etl: GET /legacyTeams.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getteams-76 has no declaration-owned executable etl route."
+      "notes": "Provider GET /legacyTeams is bound to the existing legacy_teams stream with its connector-owned schema and pagination contract.",
+      "stream": "legacy_teams"
     },
     {
       "path": "operations post-legacy-teams",
@@ -1056,9 +1065,10 @@
       "path": "operations get-notes",
       "summary": "Declared etl: GET /notes.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getnotes-93 has no declaration-owned executable etl route."
+      "notes": "Provider GET /notes is bound to the existing notes stream with its connector-owned schema and pagination contract.",
+      "stream": "notes"
     },
     {
       "path": "operations post-notes",
@@ -1210,9 +1220,10 @@
       "path": "operations get-organization-fields",
       "summary": "Declared etl: GET /organizationFields.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getorganizationfields-107 has no declaration-owned executable etl route."
+      "notes": "Provider GET /organizationFields is bound to the existing organization_fields stream with its connector-owned schema and pagination contract.",
+      "stream": "organization_fields"
     },
     {
       "path": "operations post-organization-fields",
@@ -1486,9 +1497,10 @@
       "path": "operations get-person-fields",
       "summary": "Declared etl: GET /personFields.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getpersonfields-130 has no declaration-owned executable etl route."
+      "notes": "Provider GET /personFields is bound to the existing person_fields stream with its connector-owned schema and pagination contract.",
+      "stream": "person_fields"
     },
     {
       "path": "operations post-person-fields",
@@ -1738,9 +1750,10 @@
       "path": "operations get-product-fields",
       "summary": "Declared etl: GET /productFields.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getproductfields-151 has no declaration-owned executable etl route."
+      "notes": "Provider GET /productFields is bound to the existing product_fields stream with its connector-owned schema and pagination contract.",
+      "stream": "product_fields"
     },
     {
       "path": "operations post-product-fields",
@@ -2108,9 +2121,10 @@
       "path": "operations get-roles",
       "summary": "Declared etl: GET /roles.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getroles-181 has no declaration-owned executable etl route."
+      "notes": "Provider GET /roles is bound to the existing roles stream with its connector-owned schema and pagination contract.",
+      "stream": "roles"
     },
     {
       "path": "operations post-roles",
@@ -2328,9 +2342,10 @@
       "path": "operations get-users",
       "summary": "Declared etl: GET /users.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getusers-200 has no declaration-owned executable etl route."
+      "notes": "Provider GET /users is bound to the existing users stream with its connector-owned schema and pagination contract.",
+      "stream": "users"
     },
     {
       "path": "operations post-users",
@@ -2468,9 +2483,10 @@
       "path": "operations get-webhooks",
       "summary": "Declared etl: GET /webhooks.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getwebhooks-211 has no declaration-owned executable etl route."
+      "notes": "Provider GET /webhooks is bound to the existing webhooks stream with its connector-owned schema and pagination contract.",
+      "stream": "webhooks"
     },
     {
       "path": "operations post-webhooks",
@@ -2496,41 +2512,46 @@
       "path": "operations get-deals",
       "summary": "Declared etl: GET /deals.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.local-api-surface.get-deals-214 has no declaration-owned executable etl route."
+      "notes": "Provider GET /deals is bound to the existing deals stream with its connector-owned schema and pagination contract.",
+      "stream": "deals"
     },
     {
       "path": "operations get-persons",
       "summary": "Declared etl: GET /persons.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.local-api-surface.get-persons-215 has no declaration-owned executable etl route."
+      "notes": "Provider GET /persons is bound to the existing persons stream with its connector-owned schema and pagination contract.",
+      "stream": "persons"
     },
     {
       "path": "operations get-organizations",
       "summary": "Declared etl: GET /organizations.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.local-api-surface.get-organizations-216 has no declaration-owned executable etl route."
+      "notes": "Provider GET /organizations is bound to the existing organizations stream with its connector-owned schema and pagination contract.",
+      "stream": "organizations"
     },
     {
       "path": "operations get-activities",
       "summary": "Declared etl: GET /activities.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.local-api-surface.get-activities-217 has no declaration-owned executable etl route."
+      "notes": "Provider GET /activities is bound to the existing activities stream with its connector-owned schema and pagination contract.",
+      "stream": "activities"
     },
     {
       "path": "operations get-products",
       "summary": "Declared etl: GET /products.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.local-api-surface.get-products-218 has no declaration-owned executable etl route."
+      "notes": "Provider GET /products is bound to the existing products stream with its connector-owned schema and pagination contract.",
+      "stream": "products"
     }
   ]
 }

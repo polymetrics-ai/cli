@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "connector": "shipstation",
+  "artifacts": [
+    {
+      "sha256": "c71c20d26559b1d0dad5c3718889fc8d4063cfad3abeaf5f63cc1651bef32307",
+      "bytes": 186490,
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "identity_query": true,
+      "retrieved_at": "2026-08-24T12:03:25Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

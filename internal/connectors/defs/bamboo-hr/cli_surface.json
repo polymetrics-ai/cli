@@ -6,9 +6,10 @@
       "path": "operations get-api-v1-1-employees-employee-id-time-off-policies",
       "summary": "Declared etl: GET /api/v1_1/employees/{employeeId}/time_off/policies.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-employee-time-off-policies-v1-1-1 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1_1/employees/{employeeId}/time_off/policies is bound to the existing employee_time_off_policies_v1_1 stream with its connector-owned schema and pagination contract.",
+      "stream": "employee_time_off_policies_v1_1"
     },
     {
       "path": "operations put-api-v1-1-employees-employee-id-time-off-policies",
@@ -54,25 +55,28 @@
       "path": "operations get-api-v1-1-performance-employees-employee-id-goals-aggregate",
       "summary": "Declared etl: GET /api/v1_1/performance/employees/{employeeId}/goals/aggregate.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-goals-aggregate-v1-1-6 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1_1/performance/employees/{employeeId}/goals/aggregate is bound to the existing goals_aggregate_v1_1 stream with its connector-owned schema and pagination contract.",
+      "stream": "goals_aggregate_v1_1"
     },
     {
       "path": "operations get-api-v1-1-performance-employees-employee-id-goals-filters",
       "summary": "Declared etl: GET /api/v1_1/performance/employees/{employeeId}/goals/filters.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-goals-filters-v1-1-7 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1_1/performance/employees/{employeeId}/goals/filters is bound to the existing goals_filters_v1_1 stream with its connector-owned schema and pagination contract.",
+      "stream": "goals_filters_v1_1"
     },
     {
       "path": "operations get-api-v1-2-datasets",
       "summary": "Declared etl: GET /api/v1_2/datasets.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-datasets-v1-2-8 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1_2/datasets is bound to the existing datasets_v1_2 stream with its connector-owned schema and pagination contract.",
+      "stream": "datasets_v1_2"
     },
     {
       "path": "operations post-api-v1-2-datasets-dataset-name-field-options",
@@ -88,25 +92,28 @@
       "path": "operations get-api-v1-2-datasets-dataset-name-fields",
       "summary": "Declared etl: GET /api/v1_2/datasets/{datasetName}/fields.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-fields-from-dataset-v1-2-10 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1_2/datasets/{datasetName}/fields is bound to the existing fields_from_dataset_v1_2 stream with its connector-owned schema and pagination contract.",
+      "stream": "fields_from_dataset_v1_2"
     },
     {
       "path": "operations get-api-v1-2-performance-employees-employee-id-goals-aggregate",
       "summary": "Declared etl: GET /api/v1_2/performance/employees/{employeeId}/goals/aggregate.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-goals-aggregate-v1-2-11 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1_2/performance/employees/{employeeId}/goals/aggregate is bound to the existing goals_aggregate_v1_2 stream with its connector-owned schema and pagination contract.",
+      "stream": "goals_aggregate_v1_2"
     },
     {
       "path": "operations get-api-v1-2-performance-employees-employee-id-goals-filters",
       "summary": "Declared etl: GET /api/v1_2/performance/employees/{employeeId}/goals/filters.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-goals-filters-v1-2-12 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1_2/performance/employees/{employeeId}/goals/filters is bound to the existing goals_filters_v1_2 stream with its connector-owned schema and pagination contract.",
+      "stream": "goals_filters_v1_2"
     },
     {
       "path": "operations get-api-v1-alert-configurations",
@@ -184,17 +191,19 @@
       "path": "operations get-api-v1-applicant-tracking-applications",
       "summary": "Declared etl: GET /api/v1/applicant_tracking/applications.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-applications-19 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/applicant_tracking/applications is bound to the existing applications stream with its connector-owned schema and pagination contract.",
+      "stream": "applications"
     },
     {
       "path": "operations get-api-v1-applicant-tracking-applications-application-id",
       "summary": "Declared etl: GET /api/v1/applicant_tracking/applications/{applicationId}.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-application-details-20 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/applicant_tracking/applications/{applicationId} is bound to the existing application_details stream with its connector-owned schema and pagination contract.",
+      "stream": "application_details"
     },
     {
       "path": "operations post-api-v1-applicant-tracking-applications-application-id-comments",
@@ -220,9 +229,10 @@
       "path": "operations get-api-v1-applicant-tracking-hiring-leads",
       "summary": "Declared etl: GET /api/v1/applicant_tracking/hiring_leads.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-hiring-leads-23 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/applicant_tracking/hiring_leads is bound to the existing hiring_leads stream with its connector-owned schema and pagination contract.",
+      "stream": "hiring_leads"
     },
     {
       "path": "operations post-api-v1-applicant-tracking-job-opening",
@@ -238,81 +248,91 @@
       "path": "operations get-api-v1-applicant-tracking-jobs",
       "summary": "Declared etl: GET /api/v1/applicant_tracking/jobs.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-job-summaries-25 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/applicant_tracking/jobs is bound to the existing job_summaries stream with its connector-owned schema and pagination contract.",
+      "stream": "job_summaries"
     },
     {
       "path": "operations get-api-v1-applicant-tracking-locations",
       "summary": "Declared etl: GET /api/v1/applicant_tracking/locations.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-company-locations-26 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/applicant_tracking/locations is bound to the existing company_locations stream with its connector-owned schema and pagination contract.",
+      "stream": "company_locations"
     },
     {
       "path": "operations get-api-v1-applicant-tracking-statuses",
       "summary": "Declared etl: GET /api/v1/applicant_tracking/statuses.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-statuses-27 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/applicant_tracking/statuses is bound to the existing statuses stream with its connector-owned schema and pagination contract.",
+      "stream": "statuses"
     },
     {
       "path": "operations get-api-v1-benefit-company-benefit",
       "summary": "Declared etl: GET /api/v1/benefit/company_benefit.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-company-benefits-28 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/benefit/company_benefit is bound to the existing company_benefits stream with its connector-owned schema and pagination contract.",
+      "stream": "company_benefits"
     },
     {
       "path": "operations get-api-v1-benefit-employee-benefit",
       "summary": "Declared etl: GET /api/v1/benefit/employee_benefit.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-employee-benefits-29 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/benefit/employee_benefit is bound to the existing employee_benefits stream with its connector-owned schema and pagination contract.",
+      "stream": "employee_benefits"
     },
     {
       "path": "operations get-api-v1-benefit-member-benefit",
       "summary": "Declared etl: GET /api/v1/benefit/member_benefit.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-member-benefit-events-30 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/benefit/member_benefit is bound to the existing member_benefit_events stream with its connector-owned schema and pagination contract.",
+      "stream": "member_benefit_events"
     },
     {
       "path": "operations get-api-v1-benefitcoverages",
       "summary": "Declared etl: GET /api/v1/benefitcoverages.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-benefit-coverages-31 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/benefitcoverages is bound to the existing benefit_coverages stream with its connector-owned schema and pagination contract.",
+      "stream": "benefit_coverages"
     },
     {
       "path": "operations get-api-v1-benefits-member-benefits",
       "summary": "Declared etl: GET /api/v1/benefits/member-benefits.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-member-benefits-32 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/benefits/member-benefits is bound to the existing member_benefits stream with its connector-owned schema and pagination contract.",
+      "stream": "member_benefits"
     },
     {
       "path": "operations get-api-v1-benefits-settings-deduction-types-all",
       "summary": "Declared etl: GET /api/v1/benefits/settings/deduction_types/all.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-benefit-deduction-types-33 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/benefits/settings/deduction_types/all is bound to the existing benefit_deduction_types stream with its connector-owned schema and pagination contract.",
+      "stream": "benefit_deduction_types"
     },
     {
       "path": "operations get-api-v1-company-information",
       "summary": "Declared etl: GET /api/v1/company_information.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-company-information-34 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/company_information is bound to the existing company_information stream with its connector-owned schema and pagination contract.",
+      "stream": "company_information"
     },
     {
       "path": "operations patch-api-v1-company-profile-data-company-information",
@@ -348,9 +368,10 @@
       "path": "operations get-api-v1-company-profile-integrations",
       "summary": "Declared etl: GET /api/v1/company-profile-integrations.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-company-profile-integrations-38 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/company-profile-integrations is bound to the existing company_profile_integrations stream with its connector-owned schema and pagination contract.",
+      "stream": "company_profile_integrations"
     },
     {
       "path": "operations get-api-v1-compensation-benchmarks",
@@ -932,17 +953,19 @@
       "path": "operations get-api-v1-custom-reports",
       "summary": "Declared etl: GET /api/v1/custom-reports.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-reports-89 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/custom-reports is bound to the existing reports stream with its connector-owned schema and pagination contract.",
+      "stream": "reports"
     },
     {
       "path": "operations get-api-v1-custom-reports-report-id",
       "summary": "Declared etl: GET /api/v1/custom-reports/{reportId}.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-report-by-id-90 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/custom-reports/{reportId} is bound to the existing report_by_id stream with its connector-owned schema and pagination contract.",
+      "stream": "report_by_id"
     },
     {
       "path": "operations get-api-v1-custom-reports-legacy-field-map",
@@ -976,9 +999,10 @@
       "path": "operations get-api-v1-datasets",
       "summary": "Declared etl: GET /api/v1/datasets.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-datasets-v1-93 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/datasets is bound to the existing datasets_v1 stream with its connector-owned schema and pagination contract.",
+      "stream": "datasets_v1"
     },
     {
       "path": "operations post-api-v1-datasets-dataset-name",
@@ -1004,9 +1028,10 @@
       "path": "operations get-api-v1-datasets-dataset-name-fields",
       "summary": "Declared etl: GET /api/v1/datasets/{datasetName}/fields.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-fields-from-dataset-v1-96 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/datasets/{datasetName}/fields is bound to the existing fields_from_dataset_v1 stream with its connector-owned schema and pagination contract.",
+      "stream": "fields_from_dataset_v1"
     },
     {
       "path": "operations get-api-v1-employee-verifications-employees-employee-id",
@@ -1070,9 +1095,10 @@
       "path": "operations get-api-v1-employeedependents",
       "summary": "Declared etl: GET /api/v1/employeedependents.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-employee-dependents-102 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/employeedependents is bound to the existing employee_dependents stream with its connector-owned schema and pagination contract.",
+      "stream": "employee_dependents"
     },
     {
       "path": "operations post-api-v1-employeedependents",
@@ -1088,9 +1114,10 @@
       "path": "operations get-api-v1-employeedependents-id",
       "summary": "Declared etl: GET /api/v1/employeedependents/{id}.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-employee-dependent-104 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/employeedependents/{id} is bound to the existing employee_dependent stream with its connector-owned schema and pagination contract.",
+      "stream": "employee_dependent"
     },
     {
       "path": "operations put-api-v1-employeedependents-id",
@@ -1106,9 +1133,10 @@
       "path": "operations get-api-v1-employees",
       "summary": "Declared etl: GET /api/v1/employees.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-employees-106 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/employees is bound to the existing employee_roster stream with its connector-owned schema and pagination contract.",
+      "stream": "employee_roster"
     },
     {
       "path": "operations post-api-v1-employees",
@@ -1196,9 +1224,10 @@
       "path": "operations get-api-v1-employees-employee-id-time-off-calculator",
       "summary": "Declared etl: GET /api/v1/employees/{employeeId}/time_off/calculator.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-time-off-balance-114 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/employees/{employeeId}/time_off/calculator is bound to the existing time_off_balance stream with its connector-owned schema and pagination contract.",
+      "stream": "time_off_balance"
     },
     {
       "path": "operations put-api-v1-employees-employee-id-time-off-history",
@@ -1214,9 +1243,10 @@
       "path": "operations get-api-v1-employees-employee-id-time-off-policies",
       "summary": "Declared etl: GET /api/v1/employees/{employeeId}/time_off/policies.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-employee-time-off-policies-v1-116 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/employees/{employeeId}/time_off/policies is bound to the existing employee_time_off_policies stream with its connector-owned schema and pagination contract.",
+      "stream": "employee_time_off_policies"
     },
     {
       "path": "operations put-api-v1-employees-employee-id-time-off-policies",
@@ -1334,9 +1364,10 @@
       "path": "operations get-api-v1-employees-id-tables-table",
       "summary": "Declared etl: GET /api/v1/employees/{id}/tables/{table}.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-employee-table-data-127 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/employees/{id}/tables/{table} is bound to the existing employee_table_data stream with its connector-owned schema and pagination contract.",
+      "stream": "employee_table_data"
     },
     {
       "path": "operations post-api-v1-employees-id-tables-table",
@@ -1372,25 +1403,28 @@
       "path": "operations get-api-v1-employees-changed",
       "summary": "Declared etl: GET /api/v1/employees/changed.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-changed-employee-ids-131 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/employees/changed is bound to the existing changed_employee_ids stream with its connector-owned schema and pagination contract.",
+      "stream": "changed_employee_ids"
     },
     {
       "path": "operations get-api-v1-employees-changed-tables-table",
       "summary": "Declared etl: GET /api/v1/employees/changed/tables/{table}.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-changed-employee-table-data-132 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/employees/changed/tables/{table} is bound to the existing changed_employee_table_data stream with its connector-owned schema and pagination contract.",
+      "stream": "changed_employee_table_data"
     },
     {
       "path": "operations get-api-v1-employees-directory",
       "summary": "Declared etl: GET /api/v1/employees/directory.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
+      "stream": "employees",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-employees-directory-133 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/employees/directory is bound to the existing employees stream with its connector-owned schema and pagination contract."
     },
     {
       "path": "operations post-api-v1-employees-files-categories",
@@ -1708,17 +1742,19 @@
       "path": "operations get-api-v1-meta-currency-types",
       "summary": "Declared etl: GET /api/v1/meta/currency/types.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-all-currency-types-160 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/meta/currency/types is bound to the existing all_currency_types stream with its connector-owned schema and pagination contract.",
+      "stream": "all_currency_types"
     },
     {
       "path": "operations get-api-v1-meta-fields",
       "summary": "Declared etl: GET /api/v1/meta/fields.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-fields-161 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/meta/fields is bound to the existing meta_fields stream with its connector-owned schema and pagination contract.",
+      "stream": "meta_fields"
     },
     {
       "path": "operations get-api-v1-meta-industries",
@@ -1738,9 +1774,10 @@
       "path": "operations get-api-v1-meta-lists",
       "summary": "Declared etl: GET /api/v1/meta/lists.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-list-fields-163 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/meta/lists is bound to the existing meta_lists stream with its connector-owned schema and pagination contract.",
+      "stream": "meta_lists"
     },
     {
       "path": "operations put-api-v1-meta-lists-list-field-id",
@@ -1770,33 +1807,37 @@
       "path": "operations get-api-v1-meta-provinces-country-id",
       "summary": "Declared etl: GET /api/v1/meta/provinces/{countryId}.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-states-by-country-id-166 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/meta/provinces/{countryId} is bound to the existing states_by_country_id stream with its connector-owned schema and pagination contract.",
+      "stream": "states_by_country_id"
     },
     {
       "path": "operations get-api-v1-meta-tables",
       "summary": "Declared etl: GET /api/v1/meta/tables.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-tabular-fields-167 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/meta/tables is bound to the existing tabular_fields stream with its connector-owned schema and pagination contract.",
+      "stream": "tabular_fields"
     },
     {
       "path": "operations get-api-v1-meta-time-off-policies",
       "summary": "Declared etl: GET /api/v1/meta/time_off/policies.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-time-off-policies-168 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/meta/time_off/policies is bound to the existing time_off_policies stream with its connector-owned schema and pagination contract.",
+      "stream": "time_off_policies"
     },
     {
       "path": "operations get-api-v1-meta-time-off-types",
       "summary": "Declared etl: GET /api/v1/meta/time_off/types.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-time-off-types-169 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/meta/time_off/types is bound to the existing time_off_types stream with its connector-owned schema and pagination contract.",
+      "stream": "time_off_types"
     },
     {
       "path": "operations get-api-v1-meta-timezones",
@@ -1844,9 +1885,10 @@
       "path": "operations get-api-v1-meta-users",
       "summary": "Declared etl: GET /api/v1/meta/users.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-users-173 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/meta/users is bound to the existing users stream with its connector-owned schema and pagination contract.",
+      "stream": "users"
     },
     {
       "path": "operations get-api-v1-new-hire-packets",
@@ -2126,9 +2168,10 @@
       "path": "operations get-api-v1-performance-employees-employee-id-goals",
       "summary": "Declared etl: GET /api/v1/performance/employees/{employeeId}/goals.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-goals-197 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/performance/employees/{employeeId}/goals is bound to the existing goals stream with its connector-owned schema and pagination contract.",
+      "stream": "goals"
     },
     {
       "path": "operations post-api-v1-performance-employees-employee-id-goals",
@@ -2164,9 +2207,10 @@
       "path": "operations get-api-v1-performance-employees-employee-id-goals-goal-id-aggregate",
       "summary": "Declared etl: GET /api/v1/performance/employees/{employeeId}/goals/{goalId}/aggregate.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-goal-aggregate-201 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/performance/employees/{employeeId}/goals/{goalId}/aggregate is bound to the existing goal_aggregate stream with its connector-owned schema and pagination contract.",
+      "stream": "goal_aggregate"
     },
     {
       "path": "operations post-api-v1-performance-employees-employee-id-goals-goal-id-close",
@@ -2182,9 +2226,10 @@
       "path": "operations get-api-v1-performance-employees-employee-id-goals-goal-id-comments",
       "summary": "Declared etl: GET /api/v1/performance/employees/{employeeId}/goals/{goalId}/comments.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-goal-comments-203 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/performance/employees/{employeeId}/goals/{goalId}/comments is bound to the existing goal_comments stream with its connector-owned schema and pagination contract.",
+      "stream": "goal_comments"
     },
     {
       "path": "operations post-api-v1-performance-employees-employee-id-goals-goal-id-comments",
@@ -2260,49 +2305,55 @@
       "path": "operations get-api-v1-performance-employees-employee-id-goals-aggregate",
       "summary": "Declared etl: GET /api/v1/performance/employees/{employeeId}/goals/aggregate.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-goals-aggregate-v1-211 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/performance/employees/{employeeId}/goals/aggregate is bound to the existing goals_aggregate_v1 stream with its connector-owned schema and pagination contract.",
+      "stream": "goals_aggregate_v1"
     },
     {
       "path": "operations get-api-v1-performance-employees-employee-id-goals-alignment-options",
       "summary": "Declared etl: GET /api/v1/performance/employees/{employeeId}/goals/alignmentOptions.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-alignable-goal-options-212 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/performance/employees/{employeeId}/goals/alignmentOptions is bound to the existing alignable_goal_options stream with its connector-owned schema and pagination contract.",
+      "stream": "alignable_goal_options"
     },
     {
       "path": "operations get-api-v1-performance-employees-employee-id-goals-can-create-goals",
       "summary": "Declared etl: GET /api/v1/performance/employees/{employeeId}/goals/canCreateGoals.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-goal-creation-permission-213 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/performance/employees/{employeeId}/goals/canCreateGoals is bound to the existing goal_creation_permission stream with its connector-owned schema and pagination contract.",
+      "stream": "goal_creation_permission"
     },
     {
       "path": "operations get-api-v1-performance-employees-employee-id-goals-filters",
       "summary": "Declared etl: GET /api/v1/performance/employees/{employeeId}/goals/filters.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-goals-filters-v1-214 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/performance/employees/{employeeId}/goals/filters is bound to the existing goals_filters_v1 stream with its connector-owned schema and pagination contract.",
+      "stream": "goals_filters_v1"
     },
     {
       "path": "operations get-api-v1-performance-employees-employee-id-goals-share-options",
       "summary": "Declared etl: GET /api/v1/performance/employees/{employeeId}/goals/shareOptions.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-goal-share-options-215 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/performance/employees/{employeeId}/goals/shareOptions is bound to the existing goal_share_options stream with its connector-owned schema and pagination contract.",
+      "stream": "goal_share_options"
     },
     {
       "path": "operations get-api-v1-reports-id",
       "summary": "Declared etl: GET /api/v1/reports/{id}.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-company-report-216 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/reports/{id} is bound to the existing company_report stream with its connector-owned schema and pagination contract.",
+      "stream": "company_report"
     },
     {
       "path": "operations post-api-v1-reports-custom",
@@ -2318,9 +2369,10 @@
       "path": "operations get-api-v1-scheduling-schedules",
       "summary": "Declared etl: GET /api/v1/scheduling/schedules.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.scheduling-list-schedules-218 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/scheduling/schedules is bound to the existing scheduling_list_schedules stream with its connector-owned schema and pagination contract.",
+      "stream": "scheduling_list_schedules"
     },
     {
       "path": "operations post-api-v1-scheduling-schedules",
@@ -2346,9 +2398,10 @@
       "path": "operations get-api-v1-scheduling-schedules-id",
       "summary": "Declared etl: GET /api/v1/scheduling/schedules/{id}.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.scheduling-get-schedule-221 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/scheduling/schedules/{id} is bound to the existing scheduling_get_schedule stream with its connector-owned schema and pagination contract.",
+      "stream": "scheduling_get_schedule"
     },
     {
       "path": "operations patch-api-v1-scheduling-schedules-id",
@@ -2378,17 +2431,19 @@
       "path": "operations get-api-v1-scheduling-shift-assessments",
       "summary": "Declared etl: GET /api/v1/scheduling/shift-assessments.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.scheduling-list-shift-assessments-224 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/scheduling/shift-assessments is bound to the existing scheduling_list_shift_assessments stream with its connector-owned schema and pagination contract.",
+      "stream": "scheduling_list_shift_assessments"
     },
     {
       "path": "operations get-api-v1-scheduling-shifts",
       "summary": "Declared etl: GET /api/v1/scheduling/shifts.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.scheduling-list-shifts-225 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/scheduling/shifts is bound to the existing scheduling_list_shifts stream with its connector-owned schema and pagination contract.",
+      "stream": "scheduling_list_shifts"
     },
     {
       "path": "operations post-api-v1-scheduling-shifts",
@@ -2414,9 +2469,10 @@
       "path": "operations get-api-v1-scheduling-shifts-id",
       "summary": "Declared etl: GET /api/v1/scheduling/shifts/{id}.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.scheduling-get-shift-228 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/scheduling/shifts/{id} is bound to the existing scheduling_get_shift stream with its connector-owned schema and pagination contract.",
+      "stream": "scheduling_get_shift"
     },
     {
       "path": "operations patch-api-v1-scheduling-shifts-id",
@@ -2442,17 +2498,19 @@
       "path": "operations get-api-v1-scheduling-timezones",
       "summary": "Declared etl: GET /api/v1/scheduling/timezones.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.scheduling-list-timezones-231 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/scheduling/timezones is bound to the existing scheduling_list_timezones stream with its connector-owned schema and pagination contract.",
+      "stream": "scheduling_list_timezones"
     },
     {
       "path": "operations get-api-v1-time-off-requests",
       "summary": "Declared etl: GET /api/v1/time_off/requests.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-time-off-requests-232 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/time_off/requests is bound to the existing time_off_requests stream with its connector-owned schema and pagination contract.",
+      "stream": "time_off_requests"
     },
     {
       "path": "operations put-api-v1-time-off-requests-request-id-status",
@@ -2468,9 +2526,10 @@
       "path": "operations get-api-v1-time-off-whos-out",
       "summary": "Declared etl: GET /api/v1/time_off/whos_out.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-whos-out-234 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/time_off/whos_out is bound to the existing whos_out stream with its connector-owned schema and pagination contract.",
+      "stream": "whos_out"
     },
     {
       "path": "operations post-api-v1-time-tracking-clock-entries-delete",
@@ -2546,25 +2605,28 @@
       "path": "operations get-api-v1-time-tracking-timesheet-entries",
       "summary": "Declared etl: GET /api/v1/time_tracking/timesheet_entries.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-timesheet-entries-242 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/time_tracking/timesheet_entries is bound to the existing timesheet_entries stream with its connector-owned schema and pagination contract.",
+      "stream": "timesheet_entries"
     },
     {
       "path": "operations get-api-v1-time-tracking-break-assessments",
       "summary": "Declared etl: GET /api/v1/time-tracking/break-assessments.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-break-assessments-243 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/time-tracking/break-assessments is bound to the existing break_assessments stream with its connector-owned schema and pagination contract.",
+      "stream": "break_assessments"
     },
     {
       "path": "operations get-api-v1-time-tracking-break-policies",
       "summary": "Declared etl: GET /api/v1/time-tracking/break-policies.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-break-policies-244 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/time-tracking/break-policies is bound to the existing break_policies stream with its connector-owned schema and pagination contract.",
+      "stream": "break_policies"
     },
     {
       "path": "operations post-api-v1-time-tracking-break-policies",
@@ -2590,9 +2652,10 @@
       "path": "operations get-api-v1-time-tracking-break-policies-id",
       "summary": "Declared etl: GET /api/v1/time-tracking/break-policies/{id}.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-break-policy-247 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/time-tracking/break-policies/{id} is bound to the existing break_policy stream with its connector-owned schema and pagination contract.",
+      "stream": "break_policy"
     },
     {
       "path": "operations patch-api-v1-time-tracking-break-policies-id",
@@ -2628,9 +2691,10 @@
       "path": "operations get-api-v1-time-tracking-break-policies-id-breaks",
       "summary": "Declared etl: GET /api/v1/time-tracking/break-policies/{id}/breaks.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-break-policy-breaks-251 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/time-tracking/break-policies/{id}/breaks is bound to the existing break_policy_breaks stream with its connector-owned schema and pagination contract.",
+      "stream": "break_policy_breaks"
     },
     {
       "path": "operations post-api-v1-time-tracking-break-policies-id-breaks",
@@ -2656,9 +2720,10 @@
       "path": "operations get-api-v1-time-tracking-break-policies-id-employees",
       "summary": "Declared etl: GET /api/v1/time-tracking/break-policies/{id}/employees.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-break-policy-employees-254 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/time-tracking/break-policies/{id}/employees is bound to the existing break_policy_employees stream with its connector-owned schema and pagination contract.",
+      "stream": "break_policy_employees"
     },
     {
       "path": "operations put-api-v1-time-tracking-break-policies-id-sync",
@@ -2704,9 +2769,10 @@
       "path": "operations get-api-v1-time-tracking-breaks-id",
       "summary": "Declared etl: GET /api/v1/time-tracking/breaks/{id}.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-break-259 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/time-tracking/breaks/{id} is bound to the existing break stream with its connector-owned schema and pagination contract.",
+      "stream": "break"
     },
     {
       "path": "operations patch-api-v1-time-tracking-breaks-id",
@@ -2800,17 +2866,19 @@
       "path": "operations get-api-v1-time-tracking-employees-id-break-availabilities",
       "summary": "Declared etl: GET /api/v1/time-tracking/employees/{id}/break-availabilities.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-employee-break-availabilities-268 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/time-tracking/employees/{id}/break-availabilities is bound to the existing employee_break_availabilities stream with its connector-owned schema and pagination contract.",
+      "stream": "employee_break_availabilities"
     },
     {
       "path": "operations get-api-v1-time-tracking-employees-id-break-policies",
       "summary": "Declared etl: GET /api/v1/time-tracking/employees/{id}/break-policies.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-employee-break-policies-269 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/time-tracking/employees/{id}/break-policies is bound to the existing employee_break_policies stream with its connector-owned schema and pagination contract.",
+      "stream": "employee_break_policies"
     },
     {
       "path": "operations get-api-v1-time-tracking-hour-entries",
@@ -2874,9 +2942,10 @@
       "path": "operations get-api-v1-time-tracking-projects",
       "summary": "Declared etl: GET /api/v1/time-tracking/projects.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-projects-275 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/time-tracking/projects is bound to the existing projects stream with its connector-owned schema and pagination contract.",
+      "stream": "projects"
     },
     {
       "path": "operations post-api-v1-time-tracking-projects-2",
@@ -2912,17 +2981,19 @@
       "path": "operations get-api-v1-time-tracking-projects-project-id",
       "summary": "Declared etl: GET /api/v1/time-tracking/projects/{projectId}.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-project-279 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/time-tracking/projects/{projectId} is bound to the existing project stream with its connector-owned schema and pagination contract.",
+      "stream": "project"
     },
     {
       "path": "operations get-api-v1-time-tracking-projects-project-id-tasks",
       "summary": "Declared etl: GET /api/v1/time-tracking/projects/{projectId}/tasks.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-project-tasks-280 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/time-tracking/projects/{projectId}/tasks is bound to the existing project_tasks stream with its connector-owned schema and pagination contract.",
+      "stream": "project_tasks"
     },
     {
       "path": "operations post-api-v1-time-tracking-projects-project-id-tasks",
@@ -2938,9 +3009,10 @@
       "path": "operations get-api-v1-time-tracking-shift-differentials",
       "summary": "Declared etl: GET /api/v1/time-tracking/shift-differentials.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-shift-differentials-282 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/time-tracking/shift-differentials is bound to the existing shift_differentials stream with its connector-owned schema and pagination contract.",
+      "stream": "shift_differentials"
     },
     {
       "path": "operations post-api-v1-time-tracking-shift-differentials",
@@ -2966,9 +3038,10 @@
       "path": "operations get-api-v1-time-tracking-shift-differentials-id",
       "summary": "Declared etl: GET /api/v1/time-tracking/shift-differentials/{id}.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-shift-differential-285 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/time-tracking/shift-differentials/{id} is bound to the existing shift_differential stream with its connector-owned schema and pagination contract.",
+      "stream": "shift_differential"
     },
     {
       "path": "operations patch-api-v1-time-tracking-shift-differentials-id",
@@ -2994,9 +3067,10 @@
       "path": "operations get-api-v1-time-tracking-tasks-id",
       "summary": "Declared etl: GET /api/v1/time-tracking/tasks/{id}.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-task-288 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/time-tracking/tasks/{id} is bound to the existing task stream with its connector-owned schema and pagination contract.",
+      "stream": "task"
     },
     {
       "path": "operations patch-api-v1-time-tracking-tasks-id",
@@ -3104,17 +3178,19 @@
       "path": "operations get-api-v1-timetracking-record-id",
       "summary": "Declared etl: GET /api/v1/timetracking/record/{id}.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-time-tracking-record-298 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/timetracking/record/{id} is bound to the existing time_tracking_record stream with its connector-owned schema and pagination contract.",
+      "stream": "time_tracking_record"
     },
     {
       "path": "operations get-api-v1-training-category",
       "summary": "Declared etl: GET /api/v1/training/category.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-training-categories-299 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/training/category is bound to the existing training_categories stream with its connector-owned schema and pagination contract.",
+      "stream": "training_categories"
     },
     {
       "path": "operations post-api-v1-training-category",
@@ -3194,9 +3270,10 @@
       "path": "operations get-api-v1-training-type",
       "summary": "Declared etl: GET /api/v1/training/type.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-training-types-307 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/training/type is bound to the existing training_types stream with its connector-owned schema and pagination contract.",
+      "stream": "training_types"
     },
     {
       "path": "operations post-api-v1-training-type",
@@ -3232,9 +3309,10 @@
       "path": "operations get-api-v1-webhooks",
       "summary": "Declared etl: GET /api/v1/webhooks.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-webhooks-311 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/webhooks is bound to the existing webhooks stream with its connector-owned schema and pagination contract.",
+      "stream": "webhooks"
     },
     {
       "path": "operations post-api-v1-webhooks",
@@ -3260,9 +3338,10 @@
       "path": "operations get-api-v1-webhooks-id",
       "summary": "Declared etl: GET /api/v1/webhooks/{id}.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-webhook-314 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/webhooks/{id} is bound to the existing webhook stream with its connector-owned schema and pagination contract.",
+      "stream": "webhook"
     },
     {
       "path": "operations put-api-v1-webhooks-id",
@@ -3292,17 +3371,19 @@
       "path": "operations get-api-v1-webhooks-monitor-fields",
       "summary": "Declared etl: GET /api/v1/webhooks/monitor_fields.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.list-monitor-fields-317 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/webhooks/monitor_fields is bound to the existing monitor_fields stream with its connector-owned schema and pagination contract.",
+      "stream": "monitor_fields"
     },
     {
       "path": "operations get-api-v1-webhooks-post-fields",
       "summary": "Declared etl: GET /api/v1/webhooks/post-fields.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.provider.get-post-fields-318 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/webhooks/post-fields is bound to the existing post_fields stream with its connector-owned schema and pagination contract.",
+      "stream": "post_fields"
     },
     {
       "path": "operations post-api-v2-datasets-dataset-name-data",
@@ -3328,9 +3409,10 @@
       "path": "operations get-api-v1-benefit-company-benefit-type",
       "summary": "Declared etl: GET /api/v1/benefit/company_benefit/type.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.local-api-surface.get-api-v1-benefit-company-benefit-type-321 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/benefit/company_benefit/type is bound to the existing company_benefit_types stream with its connector-owned schema and pagination contract.",
+      "stream": "company_benefit_types"
     },
     {
       "path": "operations delete-api-v1-benefit-company-benefit-id",
@@ -3346,9 +3428,10 @@
       "path": "operations get-api-v1-benefit-company-benefit-id",
       "summary": "Declared etl: GET /api/v1/benefit/company_benefit/{id}.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.local-api-surface.get-api-v1-benefit-company-benefit-id-323 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/benefit/company_benefit/{id} is bound to the existing company_benefit stream with its connector-owned schema and pagination contract.",
+      "stream": "company_benefit"
     },
     {
       "path": "operations put-api-v1-benefit-company-benefit-id",
@@ -3384,9 +3467,10 @@
       "path": "operations get-api-v1-company-eins",
       "summary": "Declared etl: GET /api/v1/company_eins.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-      "notes": "Blocked: locked source operation bamboo-hr.local-api-surface.get-api-v1-company-eins-327 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v1/company_eins is bound to the existing company_eins stream with its connector-owned schema and pagination contract.",
+      "stream": "company_eins"
     },
     {
       "path": "operations delete-api-v1-employee-direct-deposit-accounts-id",

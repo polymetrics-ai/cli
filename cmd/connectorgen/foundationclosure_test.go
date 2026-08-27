@@ -245,6 +245,96 @@ func TestCertificationSubjectCheckRejectsEveryRepositoryInput(t *testing.T) {
 	}
 }
 
+func TestCertificationSubjectCheckAdvisesValidStaleArtifactWithoutMutatingIt(t *testing.T) {
+	root := t.TempDir()
+	inputs := map[string]string{
+		"internal/connectors/defs/example/operations.json":       `{"operations":[]}`,
+		"internal/connectors/defs/example/sources/contract.json": `{"source":"locked"}`,
+		"internal/connectors/defs/example/cli_surface.json":      `{"commands":[]}`,
+		"internal/connectors/defs/example/rate_limits.json":      `{"scopes":[]}`,
+	}
+	for path, contents := range inputs {
+		fullPath := filepath.Join(root, filepath.FromSlash(path))
+		if err := os.MkdirAll(filepath.Dir(fullPath), 0o755); err != nil {
+			t.Fatalf("mkdir %s: %v", path, err)
+		}
+		if err := os.WriteFile(fullPath, []byte(contents), 0o600); err != nil {
+			t.Fatalf("write %s: %v", path, err)
+		}
+	}
+
+	var stdout, stderr bytes.Buffer
+	if code := runCertificationSubject([]string{"certification-subject", root}, &stdout, &stderr); code != 0 {
+		t.Fatalf("write subject exit=%d stderr=%q", code, stderr.String())
+	}
+	artifactPath := filepath.Join(root, filepath.FromSlash(certificationSubjectArtifactPath))
+	before, err := os.ReadFile(artifactPath)
+	if err != nil {
+		t.Fatalf("read initial subject: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "internal/connectors/defs/example/rate_limits.json"), []byte(`{"changed":true}`), 0o600); err != nil {
+		t.Fatalf("mutate relevant config: %v", err)
+	}
+
+	stdout.Reset()
+	stderr.Reset()
+	if code := runCertificationSubject([]string{"certification-subject", root, "--check"}, &stdout, &stderr); code != 1 {
+		t.Fatalf("strict stale check exit=%d stdout=%q stderr=%q, want 1", code, stdout.String(), stderr.String())
+	}
+	if !strings.Contains(stderr.String(), "current subject is stale") {
+		t.Fatalf("strict stale check stderr=%q, want stale diagnostic", stderr.String())
+	}
+
+	stdout.Reset()
+	stderr.Reset()
+	if code := runCertificationSubject([]string{"certification-subject", root, "--check", "--advisory-stale"}, &stdout, &stderr); code != 0 {
+		t.Fatalf("advisory stale check exit=%d stdout=%q stderr=%q, want 0", code, stdout.String(), stderr.String())
+	}
+	if !strings.Contains(stdout.String(), "advisory: current subject is stale; provenance retained") {
+		t.Fatalf("advisory stale check stdout=%q, want provenance diagnostic", stdout.String())
+	}
+	after, err := os.ReadFile(artifactPath)
+	if err != nil {
+		t.Fatalf("read advisory subject: %v", err)
+	}
+	if !bytes.Equal(after, before) {
+		t.Fatalf("advisory stale check rewrote subject artifact")
+	}
+}
+
+func TestCertificationSubjectAdvisoryStaleRejectsInvalidArtifact(t *testing.T) {
+	root := t.TempDir()
+	for path, contents := range map[string]string{
+		"internal/connectors/defs/example/operations.json":       `{"operations":[]}`,
+		"internal/connectors/defs/example/sources/contract.json": `{"source":"locked"}`,
+		"internal/connectors/defs/example/cli_surface.json":      `{"commands":[]}`,
+		"internal/connectors/defs/example/rate_limits.json":      `{"scopes":[]}`,
+	} {
+		fullPath := filepath.Join(root, filepath.FromSlash(path))
+		if err := os.MkdirAll(filepath.Dir(fullPath), 0o755); err != nil {
+			t.Fatalf("mkdir %s: %v", path, err)
+		}
+		if err := os.WriteFile(fullPath, []byte(contents), 0o600); err != nil {
+			t.Fatalf("write %s: %v", path, err)
+		}
+	}
+	artifactPath := filepath.Join(root, filepath.FromSlash(certificationSubjectArtifactPath))
+	if err := os.MkdirAll(filepath.Dir(artifactPath), 0o755); err != nil {
+		t.Fatalf("mkdir artifact parent: %v", err)
+	}
+	if err := os.WriteFile(artifactPath, []byte(`not json`), 0o600); err != nil {
+		t.Fatalf("write invalid subject: %v", err)
+	}
+
+	var stdout, stderr bytes.Buffer
+	if code := runCertificationSubject([]string{"certification-subject", root, "--check", "--advisory-stale"}, &stdout, &stderr); code != 1 {
+		t.Fatalf("invalid advisory subject exit=%d stdout=%q stderr=%q, want 1", code, stdout.String(), stderr.String())
+	}
+	if !strings.Contains(stderr.String(), "current subject artifact must remain valid") {
+		t.Fatalf("invalid advisory subject stderr=%q, want validity diagnostic", stderr.String())
+	}
+}
+
 func TestCertificationSubjectForBinarySeparatesProofTimeProvenance(t *testing.T) {
 	root := t.TempDir()
 	for path, contents := range map[string]string{

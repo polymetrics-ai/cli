@@ -5,8 +5,8 @@
   "source_basis": {
     "source_lock": "sources/launchdarkly-parity-source-lock.json",
     "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
-    "source_sha256": "41fc8c76b779790f405bc0f1f500ab54a6a3695bb14a9916c537c180e5469419",
-    "source_bytes": 2953979,
+    "source_sha256": "5712a80c347abfc6a731296e487eee0e9d282ef910ba10c3ff16949daa8d9b3e",
+    "source_bytes": 2936808,
     "operations_found": 397,
     "mapped_operations": 399,
     "old_api_surface_rows": 7,

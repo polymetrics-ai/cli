@@ -162,9 +162,10 @@
       "path": "operations get-v0-base-id-table-id-or-name",
       "summary": "Declared etl: GET /v0/{baseId}/{tableIdOrName}.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.list-records-15 has no declaration-owned executable etl route."
+      "notes": "Provider GET /v0/{baseId}/{tableIdOrName} is bound to the existing records stream with its connector-owned schema and pagination contract.",
+      "stream": "records"
     },
     {
       "path": "operations patch-v0-base-id-table-id-or-name",
@@ -244,9 +245,10 @@
       "path": "operations get-v0-base-id-table-id-or-name-record-id-comments",
       "summary": "Declared etl: GET /v0/{baseId}/{tableIdOrName}/{recordId}/comments.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.list-comments-23 has no declaration-owned executable etl route."
+      "notes": "Provider GET /v0/{baseId}/{tableIdOrName}/{recordId}/comments is bound to the existing comments stream with its connector-owned schema and pagination contract.",
+      "stream": "comments"
     },
     {
       "path": "operations post-v0-base-id-table-id-or-name-record-id-comments",
@@ -332,9 +334,10 @@
       "path": "operations get-v0-bases-base-id-webhooks",
       "summary": "Declared etl: GET /v0/bases/{baseId}/webhooks.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.list-webhooks-32 has no declaration-owned executable etl route."
+      "notes": "Provider GET /v0/bases/{baseId}/webhooks is bound to the existing webhooks stream with its connector-owned schema and pagination contract.",
+      "stream": "webhooks"
     },
     {
       "path": "operations post-v0-bases-base-id-webhooks",
@@ -394,9 +397,10 @@
       "path": "operations get-v0-meta-bases",
       "summary": "Declared etl: GET /v0/meta/bases.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.list-bases-38 has no declaration-owned executable etl route."
+      "notes": "Provider GET /v0/meta/bases is bound to the existing bases stream with its connector-owned schema and pagination contract.",
+      "stream": "bases"
     },
     {
       "path": "operations post-v0-meta-bases",
@@ -598,9 +602,10 @@
       "path": "operations get-v0-meta-bases-base-id-tables",
       "summary": "Declared etl: GET /v0/meta/bases/{baseId}/tables.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://airtable.com/developers/web/api/introduction",
-      "notes": "Blocked: locked source operation airtable.provider.get-base-schema-57 has no declaration-owned executable etl route."
+      "notes": "Provider GET /v0/meta/bases/{baseId}/tables is bound to the existing tables stream with its connector-owned schema and pagination contract.",
+      "stream": "tables"
     },
     {
       "path": "operations post-v0-meta-bases-base-id-tables",

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "bamboo-hr",
+  "artifacts": [
+    {
+      "sha256": "a04e654442c3980b7f3172b7160404723a1ae096ca78aca1cead0721f1177890",
+      "bytes": 1627565,
+      "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
+      "retrieved_at": "2026-08-24T12:05:15Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

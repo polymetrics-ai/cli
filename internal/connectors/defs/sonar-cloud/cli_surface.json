@@ -86,9 +86,10 @@
       "path": "operations get-api-components-search",
       "summary": "Declared etl: GET /api/components/search.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://sonarcloud.io/api/webservices/list",
-      "notes": "Blocked: locked source operation sonar-cloud.provider.search-7 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/components/search is bound to the existing components stream with its connector-owned schema and pagination contract.",
+      "stream": "components"
     },
     {
       "path": "operations get-api-components-show",
@@ -194,9 +195,10 @@
       "path": "operations get-api-hotspots-search",
       "summary": "Declared etl: GET /api/hotspots/search.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://sonarcloud.io/api/webservices/list",
-      "notes": "Blocked: locked source operation sonar-cloud.provider.search-16 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/hotspots/search is bound to the existing hotspots stream with its connector-owned schema and pagination contract.",
+      "stream": "hotspots"
     },
     {
       "path": "operations get-api-hotspots-show",
@@ -304,9 +306,10 @@
       "path": "operations get-api-issues-search",
       "summary": "Declared etl: GET /api/issues/search.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://sonarcloud.io/api/webservices/list",
-      "notes": "Blocked: locked source operation sonar-cloud.provider.search-26 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/issues/search is bound to the existing issues stream with its connector-owned schema and pagination contract.",
+      "stream": "issues"
     },
     {
       "path": "operations post-api-issues-set-severity",
@@ -356,9 +359,10 @@
       "path": "operations get-api-languages-list",
       "summary": "Declared etl: GET /api/languages/list.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://sonarcloud.io/api/webservices/list",
-      "notes": "Blocked: locked source operation sonar-cloud.provider.list-31 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/languages/list is bound to the existing languages stream with its connector-owned schema and pagination contract.",
+      "stream": "languages"
     },
     {
       "path": "operations get-api-measures-component",
@@ -420,9 +424,10 @@
       "path": "operations get-api-metrics-search",
       "summary": "Declared etl: GET /api/metrics/search.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://sonarcloud.io/api/webservices/list",
-      "notes": "Blocked: locked source operation sonar-cloud.provider.search-36 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/metrics/search is bound to the existing metrics stream with its connector-owned schema and pagination contract.",
+      "stream": "metrics"
     },
     {
       "path": "operations get-api-metrics-types",
@@ -680,9 +685,10 @@
       "path": "operations get-api-project-analyses-search",
       "summary": "Declared etl: GET /api/project_analyses/search.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://sonarcloud.io/api/webservices/list",
-      "notes": "Blocked: locked source operation sonar-cloud.provider.search-61 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/project_analyses/search is bound to the existing project_analyses stream with its connector-owned schema and pagination contract.",
+      "stream": "project_analyses"
     },
     {
       "path": "operations post-api-project-analyses-set-baseline",
@@ -916,9 +922,10 @@
       "path": "operations get-api-projects-search",
       "summary": "Declared etl: GET /api/projects/search.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://sonarcloud.io/api/webservices/list",
-      "notes": "Blocked: locked source operation sonar-cloud.provider.search-82 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/projects/search is bound to the existing projects stream with its connector-owned schema and pagination contract.",
+      "stream": "projects"
     },
     {
       "path": "operations post-api-projects-update-key",
@@ -1032,9 +1039,10 @@
       "path": "operations get-api-qualitygates-list",
       "summary": "Declared etl: GET /api/qualitygates/list.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://sonarcloud.io/api/webservices/list",
-      "notes": "Blocked: locked source operation sonar-cloud.provider.list-93 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/qualitygates/list is bound to the existing quality_gates stream with its connector-owned schema and pagination contract.",
+      "stream": "quality_gates"
     },
     {
       "path": "operations get-api-qualitygates-project-status",
@@ -1398,9 +1406,10 @@
       "path": "operations get-api-rules-search",
       "summary": "Declared etl: GET /api/rules/search.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://sonarcloud.io/api/webservices/list",
-      "notes": "Blocked: locked source operation sonar-cloud.provider.search-125 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/rules/search is bound to the existing rules stream with its connector-owned schema and pagination contract.",
+      "stream": "rules"
     },
     {
       "path": "operations get-api-rules-show",
@@ -1736,9 +1745,10 @@
       "path": "operations get-api-webhooks-list",
       "summary": "Declared etl: GET /api/webhooks/list.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://sonarcloud.io/api/webservices/list",
-      "notes": "Blocked: locked source operation sonar-cloud.provider.list-153 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/webhooks/list is bound to the existing webhooks stream with its connector-owned schema and pagination contract.",
+      "stream": "webhooks"
     },
     {
       "path": "operations post-api-webhooks-update",
@@ -1782,9 +1792,10 @@
       "path": "operations get-api-measures-search",
       "summary": "Declared etl: GET /api/measures/search.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://sonarcloud.io/api/webservices/list",
-      "notes": "Blocked: locked source operation sonar-cloud.local-api-surface.get-api-measures-search-157 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/measures/search is bound to the existing measures stream with its connector-owned schema and pagination contract.",
+      "stream": "measures"
     }
   ]
 }

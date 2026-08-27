@@ -20,9 +20,10 @@
       "path": "operations get-wp-json-wc-v3-coupons",
       "summary": "Declared etl: GET /wp-json/wc/v3/coupons.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-coupons-2-2 has no declaration-owned executable etl route."
+      "notes": "Provider GET /wp-json/wc/v3/coupons is bound to the existing coupons stream with its connector-owned schema and pagination contract.",
+      "stream": "coupons"
     },
     {
       "path": "operations post-wp-json-wc-v3-coupons",
@@ -82,9 +83,10 @@
       "path": "operations get-wp-json-wc-v3-customers",
       "summary": "Declared etl: GET /wp-json/wc/v3/customers.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-customers-8-8 has no declaration-owned executable etl route."
+      "notes": "Provider GET /wp-json/wc/v3/customers is bound to the existing customers stream with its connector-owned schema and pagination contract.",
+      "stream": "customers"
     },
     {
       "path": "operations post-wp-json-wc-v3-customers",
@@ -270,9 +272,10 @@
       "path": "operations get-wp-json-wc-v3-orders",
       "summary": "Declared etl: GET /wp-json/wc/v3/orders.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-orders-23-23 has no declaration-owned executable etl route."
+      "notes": "Provider GET /wp-json/wc/v3/orders is bound to the existing orders stream with its connector-owned schema and pagination contract.",
+      "stream": "orders"
     },
     {
       "path": "operations post-wp-json-wc-v3-orders",
@@ -510,9 +513,10 @@
       "path": "operations get-wp-json-wc-v3-products",
       "summary": "Declared etl: GET /wp-json/wc/v3/products.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-products-44-44 has no declaration-owned executable etl route."
+      "notes": "Provider GET /wp-json/wc/v3/products is bound to the existing products stream with its connector-owned schema and pagination contract.",
+      "stream": "products"
     },
     {
       "path": "operations post-wp-json-wc-v3-products",

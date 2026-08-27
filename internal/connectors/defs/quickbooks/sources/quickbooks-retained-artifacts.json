@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "quickbooks",
+  "artifacts": [
+    {
+      "sha256": "24c6accfab8236fdba4f03bff33214dab5b891e3a0c82b243cf6ca4f297fdb7a",
+      "bytes": 387314,
+      "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
+      "retrieved_at": "2026-08-24T12:05:15Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

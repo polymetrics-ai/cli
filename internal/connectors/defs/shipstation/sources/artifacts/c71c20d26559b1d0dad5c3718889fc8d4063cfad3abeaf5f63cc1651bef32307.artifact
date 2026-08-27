@@ -1,0 +1,5950 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "ShipStation V1 API (Legacy)",
+    "version": "1.0.0",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/license/mit/"
+    },
+    "contact": {
+      "name": "ShipStation Support",
+      "email": "support@shipstation.com",
+      "url": "https://www.shipstation.com/contact/"
+    },
+    "description": "The ShipStation V1 API (Legacy) provides comprehensive functionality for managing orders, shipments, carriers, and more within the ShipStation platform.\n\n## Getting Started\nNew integrations should use [ShipStation API V2](/apis/@shipstation-v2/openapi.yaml) whenever possible. This V1 API is maintained for existing integrations.\n"
+  },
+  "servers": [
+    {
+      "url": "https://ssapi.shipstation.com",
+      "description": "Production Server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "accounts",
+      "description": "Account management and tag operations",
+      "x-displayName": "Accounts"
+    },
+    {
+      "name": "carriers",
+      "description": "Carrier information and package/service listings",
+      "x-displayName": "Carriers"
+    },
+    {
+      "name": "customers",
+      "description": "Customer management",
+      "x-displayName": "Customers"
+    },
+    {
+      "name": "fulfillments",
+      "description": "Fulfillment operations",
+      "x-displayName": "Fulfillments"
+    },
+    {
+      "name": "orders",
+      "description": "Order management and operations",
+      "x-displayName": "Orders"
+    },
+    {
+      "name": "products",
+      "description": "Product catalog management",
+      "x-displayName": "Products"
+    },
+    {
+      "name": "shipments",
+      "description": "Shipment operations and rate shopping",
+      "x-displayName": "Shipments"
+    },
+    {
+      "name": "stores",
+      "description": "Store configuration and management",
+      "x-displayName": "Stores"
+    },
+    {
+      "name": "users",
+      "description": "User management",
+      "x-displayName": "Users"
+    },
+    {
+      "name": "warehouses",
+      "description": "Warehouse and fulfillment location management",
+      "x-displayName": "Warehouses"
+    },
+    {
+      "name": "webhooks",
+      "description": "Webhook subscription management",
+      "x-displayName": "Webhooks"
+    }
+  ],
+  "paths": {
+    "/orders/createorder": {
+      "post": {
+        "summary": "Create or update order",
+        "description": "Create a new order or update an existing order. If the `orderKey` is specified, ShipStation will attempt to locate the order with that key. If found, the existing order will be updated. If not found, a new order will be created with that `orderKey`.\n\n**Note:** This call does not currently support partial updates. The entire resource must be provided in the body of the request.\n\nOnly orders in an open status (`awaiting_payment`, `awaiting_shipment`, `on_hold`) can be updated. Orders in `cancelled` and `shipped` states may not be updated.\n",
+        "tags": [
+          "orders"
+        ],
+        "operationId": "create_update_order",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Order"
+              },
+              "examples": {
+                "basic_order": {
+                  "summary": "Basic order example",
+                  "value": {
+                    "orderNumber": "TEST-ORDER-API-DOCS",
+                    "orderKey": "0f6bec18-3e89-4771-83aa-f392d84f4c74",
+                    "orderDate": "2015-06-29T08:46:27.000Z",
+                    "paymentDate": "2015-06-29T08:46:27.000Z",
+                    "shipByDate": "2015-07-05T00:00:00.000Z",
+                    "orderStatus": "awaiting_shipment",
+                    "customerUsername": "headhoncho@whitehouse.gov",
+                    "customerEmail": "headhoncho@whitehouse.gov",
+                    "billTo": {
+                      "name": "The President",
+                      "country": "US"
+                    },
+                    "shipTo": {
+                      "name": "The President",
+                      "company": "US Govt",
+                      "street1": "1600 Pennsylvania Ave",
+                      "street2": "Oval Office",
+                      "city": "Washington",
+                      "state": "DC",
+                      "postalCode": "20500",
+                      "country": "US",
+                      "phone": "555-555-5555",
+                      "residential": true
+                    },
+                    "items": [
+                      {
+                        "lineItemKey": "vd08-MSLbtx",
+                        "sku": "ABC123",
+                        "name": "Test item #1",
+                        "quantity": 2,
+                        "unitPrice": 99.99,
+                        "weight": {
+                          "value": 24,
+                          "units": "ounces"
+                        }
+                      }
+                    ],
+                    "amountPaid": 218.73,
+                    "taxAmount": 5,
+                    "shippingAmount": 10,
+                    "customerNotes": "Please ship as soon as possible!",
+                    "requestedShippingService": "Priority Mail"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order created or updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                },
+                "examples": {
+                  "success": {
+                    "summary": "Successful response",
+                    "value": {
+                      "orderId": 93348442,
+                      "orderNumber": "TEST-ORDER-API-DOCS",
+                      "orderKey": "0f6bec18-3e89-4771-83aa-f392d84f4c74",
+                      "orderDate": "2015-06-29T08:46:27.000Z",
+                      "createDate": "2016-01-12T16:03:06.893Z",
+                      "modifyDate": "2016-01-12T16:03:06.893Z",
+                      "paymentDate": "2015-06-29T08:46:27.000Z",
+                      "shipByDate": "2015-07-05T00:00:00.000Z",
+                      "orderStatus": "awaiting_shipment",
+                      "customerId": 37701499,
+                      "customerUsername": "headhoncho@whitehouse.gov",
+                      "customerEmail": "headhoncho@whitehouse.gov",
+                      "orderTotal": 194.43,
+                      "amountPaid": 218.73,
+                      "taxAmount": 5,
+                      "shippingAmount": 10
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/orders": {
+      "get": {
+        "summary": "List orders",
+        "description": "Obtains a list of orders that match the specified criteria. All filters are optional. If no filters are provided, recent orders will be returned.\n",
+        "tags": [
+          "orders"
+        ],
+        "operationId": "list_orders",
+        "parameters": [
+          {
+            "name": "customerName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Returns orders that match the specified customer name"
+          },
+          {
+            "name": "itemKeyword",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Returns orders containing items matching the specified keyword. Fields searched are Sku, Description, and Options.\n"
+          },
+          {
+            "name": "createDateStart",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Returns orders created in ShipStation after the specified date"
+          },
+          {
+            "name": "createDateEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Returns orders created in ShipStation before the specified date"
+          },
+          {
+            "name": "modifyDateStart",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Returns orders modified after the specified date"
+          },
+          {
+            "name": "modifyDateEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Returns orders modified before the specified date"
+          },
+          {
+            "name": "orderDateStart",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Returns orders greater than the specified date"
+          },
+          {
+            "name": "orderDateEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Returns orders less than or equal to the specified date"
+          },
+          {
+            "name": "orderNumber",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by order number (performs a \"starts with\" search)"
+          },
+          {
+            "name": "orderStatus",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "awaiting_payment",
+                "awaiting_shipment",
+                "pending_fulfillment",
+                "shipped",
+                "on_hold",
+                "cancelled",
+                "rejected_fulfillment"
+              ]
+            },
+            "description": "Filter by order status"
+          },
+          {
+            "name": "paymentDateStart",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Returns orders paid after the specified date"
+          },
+          {
+            "name": "paymentDateEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Returns orders paid before the specified date"
+          },
+          {
+            "name": "storeId",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Filter orders to a single store"
+          },
+          {
+            "$ref": "#/components/parameters/sort_by_param"
+          },
+          {
+            "$ref": "#/components/parameters/sort_dir_param"
+          },
+          {
+            "$ref": "#/components/parameters/page_param"
+          },
+          {
+            "$ref": "#/components/parameters/page_size_param"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of orders retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "orders": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Order"
+                      }
+                    },
+                    "total": {
+                      "type": "integer",
+                      "description": "Total number of orders matching criteria",
+                      "example": 2
+                    },
+                    "page": {
+                      "type": "integer",
+                      "description": "Current page number",
+                      "example": 1
+                    },
+                    "pages": {
+                      "type": "integer",
+                      "description": "Total number of pages",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/orders/{orderId}": {
+      "get": {
+        "summary": "Get order",
+        "description": "Retrieves a single order by its ID",
+        "tags": [
+          "orders"
+        ],
+        "operationId": "get_order",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The system-generated order ID",
+            "example": 93348442
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete order",
+        "description": "Removes order from ShipStation's UI. This is a \"soft\" delete action so the order will still exist in the database, but will be set to inactive.\n",
+        "tags": [
+          "orders"
+        ],
+        "operationId": "delete_order",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The order ID to delete",
+            "example": 93348442
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "The requested order has been deleted."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/orders/createorders": {
+      "post": {
+        "summary": "Create or update multiple orders",
+        "description": "Create or update multiple orders in one request. If the `orderKey` is specified, ShipStation will attempt to locate the order with that key. If found, the existing order will be updated. If not found, a new order will be created.\n\nFor split orders, the `orderKey` is always required when creating or updating orders, and the `orderId` is always required for updates.\n\nThis call does not currently support partial updates; the entire resource must be provided in the body of the request.\n\nOnly orders in an open status (`awaiting_payment`, `awaiting_shipment`, `pending_fulfillment`, `on_hold`) can be updated. Orders in `cancelled` or `shipped` status may not be updated.\n",
+        "tags": [
+          "orders"
+        ],
+        "operationId": "create_update_multiple_orders",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "maxItems": 100,
+                "items": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              },
+              "examples": {
+                "multiple_orders": {
+                  "summary": "Multiple orders example",
+                  "value": [
+                    {
+                      "orderNumber": "TEST-ORDER-API-DOCS-01",
+                      "orderKey": "0f6bec18-3e89-4881-83aa-f392d84f4c74",
+                      "orderDate": "2015-06-29T08:46:27.000Z",
+                      "orderStatus": "awaiting_shipment",
+                      "customerEmail": "headhoncho@whitehouse.gov",
+                      "shipTo": {
+                        "name": "The President",
+                        "company": "US Govt",
+                        "street1": "1600 Pennsylvania Ave",
+                        "city": "Washington",
+                        "state": "DC",
+                        "postalCode": "20500",
+                        "country": "US"
+                      },
+                      "items": [
+                        {
+                          "sku": "ABC123",
+                          "name": "Test item #1",
+                          "quantity": 2,
+                          "unitPrice": 99.99
+                        }
+                      ]
+                    },
+                    {
+                      "orderNumber": "TEST-ORDER-API-DOCS-02",
+                      "orderKey": "0d6bec18-3e79-4981-83ca-f392d84f4c19",
+                      "orderDate": "2015-06-29T08:46:27.000Z",
+                      "orderStatus": "awaiting_shipment",
+                      "customerEmail": "headhoncho@whitehouse.gov",
+                      "shipTo": {
+                        "name": "The President",
+                        "street1": "1600 Pennsylvania Ave",
+                        "city": "Washington",
+                        "state": "DC",
+                        "postalCode": "20500",
+                        "country": "US"
+                      },
+                      "items": [
+                        {
+                          "sku": "XYZ789",
+                          "name": "Test item #2",
+                          "quantity": 1,
+                          "unitPrice": 49.99
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Orders created or updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "hasErrors": {
+                      "type": "boolean",
+                      "description": "Whether any errors occurred",
+                      "example": false
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "orderId": {
+                            "type": "integer",
+                            "example": 123456789
+                          },
+                          "orderNumber": {
+                            "type": "string",
+                            "example": "TEST-ORDER-API-DOCS-01"
+                          },
+                          "orderKey": {
+                            "type": "string",
+                            "example": "0f6bec18-3e89-4881-83aa-f392d84f4c74"
+                          },
+                          "success": {
+                            "type": "boolean",
+                            "example": true
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": ""
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/orders/addtag": {
+      "post": {
+        "summary": "Add tag to order",
+        "description": "Adds a tag to an order",
+        "tags": [
+          "orders"
+        ],
+        "operationId": "add_tag_to_order",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "orderId",
+                  "tagId"
+                ],
+                "properties": {
+                  "orderId": {
+                    "type": "integer",
+                    "description": "Order ID to tag",
+                    "example": 123456
+                  },
+                  "tagId": {
+                    "type": "integer",
+                    "description": "Tag ID to apply",
+                    "example": 1234
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tag added successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Tag added successfully."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/orders/removetag": {
+      "post": {
+        "summary": "Remove tag from order",
+        "description": "Removes a tag from the specified order",
+        "tags": [
+          "orders"
+        ],
+        "operationId": "remove_tag_from_order",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "orderId",
+                  "tagId"
+                ],
+                "properties": {
+                  "orderId": {
+                    "type": "integer",
+                    "description": "Order ID",
+                    "example": 123456
+                  },
+                  "tagId": {
+                    "type": "integer",
+                    "description": "Tag ID to remove",
+                    "example": 1234
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tag removed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Tag removed successfully."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/orders/assignuser": {
+      "post": {
+        "summary": "Assign user to order",
+        "description": "Assigns a user to an order. If ANY of the orders within the array are not found, no orders will have a user assigned to them.\n",
+        "tags": [
+          "orders"
+        ],
+        "operationId": "assign_user_to_order",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "orderIds",
+                  "userId"
+                ],
+                "properties": {
+                  "orderIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "description": "Array of order IDs to assign",
+                    "example": [
+                      123456789,
+                      12345679
+                    ]
+                  },
+                  "userId": {
+                    "type": "string",
+                    "description": "User GUID to assign to orders",
+                    "example": "123456AB-ab12-3c4d-5e67-89f1abc1defa"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User assigned successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User assigned successfully."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/orders/unassignuser": {
+      "post": {
+        "summary": "Unassign user from order",
+        "description": "Unassigns a user from an order. If ANY of the orders within the array are not found, no orders will have their users unassigned.\n",
+        "tags": [
+          "orders"
+        ],
+        "operationId": "unassign_user_from_order",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "orderIds"
+                ],
+                "properties": {
+                  "orderIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "description": "Array of order IDs to unassign",
+                    "example": [
+                      123456789,
+                      12345679
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User unassigned successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User unassigned successfully."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/orders/holduntil": {
+      "post": {
+        "summary": "Hold order until date",
+        "description": "Changes the status of the order to On Hold until the specified date, when the status will automatically change to Awaiting Shipment.\n",
+        "tags": [
+          "orders"
+        ],
+        "operationId": "hold_order_until",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "orderId",
+                  "holdUntilDate"
+                ],
+                "properties": {
+                  "orderId": {
+                    "type": "integer",
+                    "description": "Order ID to hold",
+                    "example": 1072467
+                  },
+                  "holdUntilDate": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Date when order moves from on_hold to awaiting_shipment",
+                    "example": "2014-12-01"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order held successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Order held successfully."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/orders/restorefromhold": {
+      "post": {
+        "summary": "Restore order from hold",
+        "description": "Changes the status of the order from On Hold to Awaiting Shipment. This endpoint is used when a holdUntilDate is attached to an order.\n",
+        "tags": [
+          "orders"
+        ],
+        "operationId": "restore_order_from_hold",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "orderId"
+                ],
+                "properties": {
+                  "orderId": {
+                    "type": "integer",
+                    "description": "Order ID to restore",
+                    "example": 1234567
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order restored successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "The requested order has been restored"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/orders/markasshipped": {
+      "post": {
+        "summary": "Mark order as shipped",
+        "description": "Marks an order as Shipped without creating a label in ShipStation",
+        "tags": [
+          "orders"
+        ],
+        "operationId": "mark_order_as_shipped",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "orderId",
+                  "carrierCode"
+                ],
+                "properties": {
+                  "orderId": {
+                    "type": "integer",
+                    "description": "Order ID to mark as shipped",
+                    "example": 93348442
+                  },
+                  "carrierCode": {
+                    "type": "string",
+                    "description": "Carrier code",
+                    "example": "usps"
+                  },
+                  "shipDate": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Date order was shipped",
+                    "example": "2014-04-01"
+                  },
+                  "trackingNumber": {
+                    "type": "string",
+                    "description": "Tracking number",
+                    "example": "913492493294329421"
+                  },
+                  "notifyCustomer": {
+                    "type": "boolean",
+                    "description": "Whether to notify customer",
+                    "default": false,
+                    "example": true
+                  },
+                  "notifySalesChannel": {
+                    "type": "boolean",
+                    "description": "Whether to notify sales channel",
+                    "default": false,
+                    "example": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order marked as shipped successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "orderId": {
+                      "type": "integer",
+                      "example": 123456789
+                    },
+                    "orderNumber": {
+                      "type": "string",
+                      "example": "ABC123"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/orders/createlabelfororder": {
+      "post": {
+        "summary": "Create label for order",
+        "description": "Creates a shipping label for an existing order. The `labelData` field returned in the response is a base64 encoded PDF value. You can decode and save the output as a PDF file to retrieve a printable label.\n\n**IMPORTANT:** You must have at least one active Manual Store on your ShipStation account to create labels with this endpoint.\n",
+        "tags": [
+          "orders"
+        ],
+        "operationId": "create_label_for_order",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "orderId",
+                  "carrierCode",
+                  "serviceCode",
+                  "confirmation",
+                  "shipDate"
+                ],
+                "properties": {
+                  "orderId": {
+                    "type": "integer",
+                    "description": "The order ID",
+                    "example": 93348442
+                  },
+                  "carrierCode": {
+                    "type": "string",
+                    "description": "Carrier code",
+                    "example": "fedex"
+                  },
+                  "serviceCode": {
+                    "type": "string",
+                    "description": "Service code",
+                    "example": "fedex_2day"
+                  },
+                  "packageCode": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Package type code",
+                    "example": "package"
+                  },
+                  "confirmation": {
+                    "type": "string",
+                    "enum": [
+                      "none",
+                      "delivery",
+                      "signature",
+                      "adult_signature",
+                      "direct_signature"
+                    ],
+                    "description": "Delivery confirmation type",
+                    "example": "none"
+                  },
+                  "shipDate": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Ship date",
+                    "example": "2014-04-03"
+                  },
+                  "weight": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/Weight"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Package weight (optional, uses order weight if not specified)"
+                  },
+                  "dimensions": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/Dimensions"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Package dimensions (optional)"
+                  },
+                  "insuranceOptions": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/InsuranceOptions"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Insurance options (optional)"
+                  },
+                  "internationalOptions": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/InternationalOptions"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "International shipping options for customs (optional)"
+                  },
+                  "advancedOptions": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/AdvancedOptions"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Advanced shipping options (optional)"
+                  },
+                  "testLabel": {
+                    "type": "boolean",
+                    "description": "Whether to create a test label (USPS only)",
+                    "example": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Label created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "shipmentId": {
+                      "type": "integer",
+                      "description": "The shipment identifier",
+                      "example": 123456789
+                    },
+                    "shipmentCost": {
+                      "type": "number",
+                      "description": "The cost of the label",
+                      "example": 8.25
+                    },
+                    "insuranceCost": {
+                      "type": "number",
+                      "description": "Insurance cost amount",
+                      "example": 0
+                    },
+                    "trackingNumber": {
+                      "type": "string",
+                      "description": "The tracking number",
+                      "example": "9405511899564298878910"
+                    },
+                    "labelData": {
+                      "type": "string",
+                      "description": "Base64 encoded PDF label data",
+                      "example": "JVBERi0xLjQKJeLjz9MKMiAwIG9iago..."
+                    },
+                    "formData": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "description": "Base64 encoded form data if applicable"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/orders/listbytag": {
+      "get": {
+        "summary": "List orders by tag",
+        "description": "Obtains a list of orders that have been tagged with the specified tagId",
+        "tags": [
+          "orders"
+        ],
+        "operationId": "list_orders_by_tag",
+        "parameters": [
+          {
+            "name": "orderStatus",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "awaiting_payment",
+                "awaiting_shipment",
+                "pending_fulfillment",
+                "shipped",
+                "on_hold",
+                "cancelled"
+              ]
+            },
+            "description": "The order's status",
+            "example": "awaiting_shipment"
+          },
+          {
+            "name": "tagId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID of the tag",
+            "example": 53974
+          },
+          {
+            "$ref": "#/components/parameters/page_param"
+          },
+          {
+            "$ref": "#/components/parameters/page_size_param"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of orders retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "orders": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Order"
+                      }
+                    },
+                    "total": {
+                      "type": "integer",
+                      "description": "Total number of orders",
+                      "example": 1
+                    },
+                    "page": {
+                      "type": "integer",
+                      "description": "Current page number",
+                      "example": 1
+                    },
+                    "pages": {
+                      "type": "integer",
+                      "description": "Total number of pages",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/shipments/getrates": {
+      "post": {
+        "summary": "Get shipping rates",
+        "description": "Retrieves shipping rates for the specified shipping details. Use this endpoint to compare rates across different carriers and services before creating a label.\n",
+        "tags": [
+          "shipments"
+        ],
+        "operationId": "get_rates",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "carrierCode",
+                  "fromPostalCode",
+                  "toCountry",
+                  "toPostalCode",
+                  "weight"
+                ],
+                "properties": {
+                  "carrierCode": {
+                    "type": "string",
+                    "description": "Carrier code to get rates from",
+                    "example": "fedex"
+                  },
+                  "serviceCode": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Specific service code (optional)"
+                  },
+                  "packageCode": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Package type code (optional)"
+                  },
+                  "fromPostalCode": {
+                    "type": "string",
+                    "description": "Origin postal code",
+                    "example": "78703"
+                  },
+                  "toCountry": {
+                    "type": "string",
+                    "description": "Destination country (two-letter ISO code)",
+                    "example": "US"
+                  },
+                  "toPostalCode": {
+                    "type": "string",
+                    "description": "Destination postal code",
+                    "example": "20500"
+                  },
+                  "toState": {
+                    "type": "string",
+                    "description": "Destination state (required for UPS)",
+                    "example": "DC"
+                  },
+                  "toCity": {
+                    "type": "string",
+                    "description": "Destination city (optional)",
+                    "example": "Washington"
+                  },
+                  "weight": {
+                    "$ref": "#/components/schemas/Weight"
+                  },
+                  "dimensions": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/Dimensions"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "confirmation": {
+                    "type": "string",
+                    "enum": [
+                      "none",
+                      "delivery",
+                      "signature",
+                      "adult_signature",
+                      "direct_signature"
+                    ],
+                    "description": "Delivery confirmation type",
+                    "example": "delivery"
+                  },
+                  "residential": {
+                    "type": "boolean",
+                    "description": "Whether destination is residential",
+                    "example": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "List of available shipping rates",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "serviceName": {
+                        "type": "string",
+                        "example": "FedEx Ground®"
+                      },
+                      "serviceCode": {
+                        "type": "string",
+                        "example": "fedex_ground"
+                      },
+                      "shipmentCost": {
+                        "type": "number",
+                        "example": 8.25
+                      },
+                      "otherCost": {
+                        "type": "number",
+                        "example": 0.33
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/shipments/createlabel": {
+      "post": {
+        "summary": "Create shipping label",
+        "description": "Creates a shipping label. The `labelData` field returned in the response is a base64 encoded PDF value. You can decode and save the output as a PDF file to retrieve a printable label.\n\n**IMPORTANT:** You must have at least one active Manual Store on your ShipStation account to create labels with this endpoint.\n",
+        "tags": [
+          "shipments"
+        ],
+        "operationId": "create_shipment_label",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "carrierCode",
+                  "serviceCode",
+                  "packageCode",
+                  "shipDate",
+                  "weight",
+                  "shipFrom",
+                  "shipTo"
+                ],
+                "properties": {
+                  "carrierCode": {
+                    "type": "string",
+                    "description": "Carrier code",
+                    "example": "fedex"
+                  },
+                  "serviceCode": {
+                    "type": "string",
+                    "description": "Service code",
+                    "example": "fedex_ground"
+                  },
+                  "packageCode": {
+                    "type": "string",
+                    "description": "Package type code",
+                    "example": "package"
+                  },
+                  "confirmation": {
+                    "type": "string",
+                    "enum": [
+                      "none",
+                      "delivery",
+                      "signature",
+                      "adult_signature",
+                      "direct_signature"
+                    ],
+                    "description": "Delivery confirmation type",
+                    "example": "delivery"
+                  },
+                  "shipDate": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Ship date",
+                    "example": "2014-04-03"
+                  },
+                  "weight": {
+                    "$ref": "#/components/schemas/Weight"
+                  },
+                  "dimensions": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/Dimensions"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "shipFrom": {
+                    "$ref": "#/components/schemas/Address"
+                  },
+                  "shipTo": {
+                    "$ref": "#/components/schemas/Address"
+                  },
+                  "insuranceOptions": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/InsuranceOptions"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "internationalOptions": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/InternationalOptions"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "advancedOptions": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/AdvancedOptions"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "testLabel": {
+                    "type": "boolean",
+                    "description": "Whether to create a test label",
+                    "example": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Label created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "shipmentId": {
+                      "type": "integer",
+                      "example": 123456789
+                    },
+                    "shipmentCost": {
+                      "type": "number",
+                      "example": 8.25
+                    },
+                    "insuranceCost": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "trackingNumber": {
+                      "type": "string",
+                      "example": "9405511899564298878910"
+                    },
+                    "labelData": {
+                      "type": "string",
+                      "description": "Base64 encoded PDF label data",
+                      "example": "JVBERi0xLjQKJeLjz9MKMiAwIG9iago..."
+                    },
+                    "formData": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "description": "Base64 encoded form data if applicable"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/shipments/voidlabel": {
+      "post": {
+        "summary": "Void shipment label",
+        "description": "Voids the specified label by shipmentId",
+        "tags": [
+          "shipments"
+        ],
+        "operationId": "void_label",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "shipmentId"
+                ],
+                "properties": {
+                  "shipmentId": {
+                    "type": "integer",
+                    "description": "ID of the shipment to void",
+                    "example": 12345
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Label voided successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "approved": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Label voided successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/shipments": {
+      "get": {
+        "summary": "List shipments",
+        "description": "Obtains a list of shipments that match the specified criteria.\n\n**Note:** Only valid shipments with labels generated in ShipStation will be returned. Orders that have been marked as Shipped through the UI or API will not appear as they are considered external shipments.\n",
+        "tags": [
+          "shipments"
+        ],
+        "operationId": "list_shipments",
+        "parameters": [
+          {
+            "name": "recipientName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Returns shipments shipped to the specified recipient name"
+          },
+          {
+            "name": "recipientCountryCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Returns shipments shipped to the specified country code (two-letter ISO)"
+          },
+          {
+            "name": "orderNumber",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Returns shipments whose orders have the specified order number"
+          },
+          {
+            "name": "orderId",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Returns shipments whose orders have the specified order ID"
+          },
+          {
+            "name": "carrierCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Returns shipments shipped with the specified carrier"
+          },
+          {
+            "name": "serviceCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Returns shipments shipped with the specified shipping service"
+          },
+          {
+            "name": "trackingNumber",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Returns shipments with the specified tracking number"
+          },
+          {
+            "name": "createDateStart",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Returns shipments created on or after the specified date"
+          },
+          {
+            "name": "createDateEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Returns shipments created on or before the specified date"
+          },
+          {
+            "name": "shipDateStart",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Returns shipments with shipDate on or after the specified date"
+          },
+          {
+            "name": "shipDateEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Returns shipments with shipDate on or before the specified date"
+          },
+          {
+            "name": "voidDateStart",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Returns shipments voided on or after the specified date"
+          },
+          {
+            "name": "voidDateEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Returns shipments voided on or before the specified date"
+          },
+          {
+            "name": "storeId",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Returns shipments whose orders belong to the specified store ID"
+          },
+          {
+            "name": "includeShipmentItems",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Specifies whether to include shipment items with results"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ShipDate",
+                "CreateDate"
+              ]
+            },
+            "description": "Sort the responses by a set value. If left empty, the response will be sorted by ascending createDate.\n"
+          },
+          {
+            "$ref": "#/components/parameters/sort_dir_param"
+          },
+          {
+            "$ref": "#/components/parameters/page_param"
+          },
+          {
+            "$ref": "#/components/parameters/page_size_param"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of shipments retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "shipments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "shipmentId": {
+                            "type": "integer",
+                            "example": 33974374
+                          },
+                          "orderId": {
+                            "type": "integer",
+                            "example": 43945660
+                          },
+                          "orderKey": {
+                            "type": "string",
+                            "example": "8061c220f0794a9b92460b8bae6837e4"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "example": "123456AB-ab12-3c4d-5e67-89f1abc1defa"
+                          },
+                          "orderNumber": {
+                            "type": "string",
+                            "example": "100038-1"
+                          },
+                          "createDate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2014-10-03T06:51:33Z"
+                          },
+                          "shipDate": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2014-10-03"
+                          },
+                          "shipmentCost": {
+                            "type": "number",
+                            "example": 1.93
+                          },
+                          "insuranceCost": {
+                            "type": "number",
+                            "example": 0
+                          },
+                          "trackingNumber": {
+                            "type": "string",
+                            "example": "9400111899561704681189"
+                          },
+                          "isReturnLabel": {
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "batchNumber": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "example": "100301"
+                          },
+                          "carrierCode": {
+                            "type": "string",
+                            "example": "stamps_com"
+                          },
+                          "serviceCode": {
+                            "type": "string",
+                            "example": "usps_first_class_mail"
+                          },
+                          "packageCode": {
+                            "type": "string",
+                            "example": "package"
+                          },
+                          "confirmation": {
+                            "type": "string",
+                            "example": "delivery"
+                          },
+                          "warehouseId": {
+                            "anyOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "example": 16079
+                          },
+                          "voided": {
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "voidDate": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "format": "date-time"
+                          },
+                          "marketplaceNotified": {
+                            "type": "boolean",
+                            "example": true
+                          },
+                          "notifyErrorMessage": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "shipTo": {
+                            "$ref": "#/components/schemas/Address"
+                          },
+                          "weight": {
+                            "$ref": "#/components/schemas/Weight"
+                          },
+                          "dimensions": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/components/schemas/Dimensions"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "insuranceOptions": {
+                            "$ref": "#/components/schemas/InsuranceOptions"
+                          },
+                          "advancedOptions": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/components/schemas/AdvancedOptions"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "shipmentItems": {
+                            "anyOf": [
+                              {
+                                "type": "array"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "orderItemId": {
+                                  "type": "integer",
+                                  "example": 56568665
+                                },
+                                "lineItemKey": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "sku": {
+                                  "type": "string",
+                                  "example": "SQ3785739"
+                                },
+                                "name": {
+                                  "type": "string",
+                                  "example": "Potato Kitten"
+                                },
+                                "imageUrl": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "weight": {
+                                  "anyOf": [
+                                    {
+                                      "$ref": "#/components/schemas/Weight"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "quantity": {
+                                  "type": "integer",
+                                  "example": 1
+                                },
+                                "unitPrice": {
+                                  "type": "number",
+                                  "example": 1
+                                },
+                                "warehouseLocation": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "options": {
+                                  "anyOf": [
+                                    {
+                                      "type": "array"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "items": {
+                                    "$ref": "#/components/schemas/ItemOption"
+                                  }
+                                },
+                                "productId": {
+                                  "anyOf": [
+                                    {
+                                      "type": "integer"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "example": 7565777
+                                },
+                                "fulfillmentSku": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          },
+                          "labelData": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "description": "Base64 encoded PDF label data"
+                          },
+                          "formData": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "total": {
+                      "type": "integer",
+                      "description": "Total number of shipments",
+                      "example": 2
+                    },
+                    "page": {
+                      "type": "integer",
+                      "description": "Current page number",
+                      "example": 1
+                    },
+                    "pages": {
+                      "type": "integer",
+                      "description": "Total number of pages",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/carriers": {
+      "get": {
+        "summary": "List carriers",
+        "description": "List all shipping providers connected to this account",
+        "tags": [
+          "carriers"
+        ],
+        "operationId": "list_carriers",
+        "responses": {
+          "200": {
+            "description": "List of carriers retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "example": "FedEx"
+                      },
+                      "code": {
+                        "type": "string",
+                        "example": "fedex"
+                      },
+                      "accountNumber": {
+                        "type": "string",
+                        "example": "297929999"
+                      },
+                      "requiresFundedAccount": {
+                        "type": "boolean",
+                        "example": false
+                      },
+                      "balance": {
+                        "type": "number",
+                        "example": 0
+                      },
+                      "nickname": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ],
+                        "example": "SS"
+                      },
+                      "shippingProviderId": {
+                        "type": "integer",
+                        "example": 12348
+                      },
+                      "primary": {
+                        "type": "boolean",
+                        "example": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/carriers/addfunds": {
+      "post": {
+        "summary": "Add funds to carrier account",
+        "description": "Adds funds to a carrier account using the payment information on file.\n\n**IMPORTANT:** Requires approval from apisupport@shipstation.com before use.\n",
+        "tags": [
+          "carriers"
+        ],
+        "operationId": "add_funds_to_carrier",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "carrierCode",
+                  "amount"
+                ],
+                "properties": {
+                  "carrierCode": {
+                    "type": "string",
+                    "description": "The carrier to add funds to",
+                    "example": "fedex"
+                  },
+                  "amount": {
+                    "type": "number",
+                    "minimum": 10,
+                    "maximum": 10000,
+                    "description": "Dollar amount to add (min $10, max $10,000)",
+                    "example": 20
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Funds added successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "Stamps.com"
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "stamps_com"
+                    },
+                    "accountNumber": {
+                      "type": "string",
+                      "example": "SS123"
+                    },
+                    "requiresFundedAccount": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "balance": {
+                      "type": "number",
+                      "example": 24.14
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/carriers/getcarrier": {
+      "get": {
+        "summary": "Get carrier by code",
+        "description": "Retrieves the shipping carrier account details for the specified carrierCode. Use this method to determine a carrier's account balance.\n",
+        "tags": [
+          "carriers"
+        ],
+        "operationId": "get_carrier",
+        "parameters": [
+          {
+            "name": "carrierCode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The code for the carrier account to retrieve",
+            "example": "stamps_com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Carrier retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "Stamps.com"
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "stamps_com"
+                    },
+                    "accountNumber": {
+                      "type": "string",
+                      "example": "SS123"
+                    },
+                    "requiresFundedAccount": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "balance": {
+                      "type": "number",
+                      "example": 24.27
+                    },
+                    "nickname": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "example": null
+                    },
+                    "shippingProviderId": {
+                      "type": "integer",
+                      "example": 12345
+                    },
+                    "primary": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/carriers/listpackages": {
+      "get": {
+        "summary": "List packages",
+        "description": "Retrieves a list of packages for the specified carrier",
+        "tags": [
+          "carriers"
+        ],
+        "operationId": "list_packages",
+        "parameters": [
+          {
+            "name": "carrierCode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The carrier's code",
+            "example": "fedex"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of packages retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "carrierCode": {
+                        "type": "string",
+                        "example": "express_1"
+                      },
+                      "code": {
+                        "type": "string",
+                        "example": "flat_rate_envelope"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Flat Rate Envelope"
+                      },
+                      "domestic": {
+                        "type": "boolean",
+                        "example": true
+                      },
+                      "international": {
+                        "type": "boolean",
+                        "example": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/carriers/listservices": {
+      "get": {
+        "summary": "List services",
+        "description": "Retrieves the list of available shipping services provided by the specified carrier",
+        "tags": [
+          "carriers"
+        ],
+        "operationId": "list_services",
+        "parameters": [
+          {
+            "name": "carrierCode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The carrier's code",
+            "example": "fedex"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of services retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "carrierCode": {
+                        "type": "string",
+                        "example": "fedex"
+                      },
+                      "code": {
+                        "type": "string",
+                        "example": "fedex_ground"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "FedEx Ground®"
+                      },
+                      "domestic": {
+                        "type": "boolean",
+                        "example": true
+                      },
+                      "international": {
+                        "type": "boolean",
+                        "example": false
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/stores": {
+      "get": {
+        "summary": "List stores",
+        "description": "Retrieve the list of installed stores on the account",
+        "tags": [
+          "stores"
+        ],
+        "operationId": "list_stores",
+        "parameters": [
+          {
+            "name": "showInactive",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Whether to include inactive stores"
+          },
+          {
+            "name": "marketplaceId",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Filter by marketplace type"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of stores retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "storeId": {
+                        "type": "integer",
+                        "example": 12345
+                      },
+                      "storeName": {
+                        "type": "string",
+                        "example": "My Shopify Store"
+                      },
+                      "marketplaceId": {
+                        "type": "integer",
+                        "example": 36
+                      },
+                      "marketplaceName": {
+                        "type": "string",
+                        "example": "Shopify"
+                      },
+                      "active": {
+                        "type": "boolean",
+                        "example": true
+                      },
+                      "createDate": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "modifyDate": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "autoRefresh": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/stores/{storeId}": {
+      "get": {
+        "summary": "Get store",
+        "description": "Retrieves information for a specific store by its ID",
+        "tags": [
+          "stores"
+        ],
+        "operationId": "get_store",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Unique identifier for the store",
+            "example": 12345
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Store retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "storeId": {
+                      "type": "integer",
+                      "example": 12345
+                    },
+                    "storeName": {
+                      "type": "string",
+                      "example": "My Shopify Store"
+                    },
+                    "marketplaceId": {
+                      "type": "integer",
+                      "example": 36
+                    },
+                    "marketplaceName": {
+                      "type": "string",
+                      "example": "Shopify"
+                    },
+                    "active": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "createDate": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "modifyDate": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "autoRefresh": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update store",
+        "description": "Updates an existing store. This call does not currently support partial updates. The entire resource must be provided in the body of the request.\n",
+        "tags": [
+          "stores"
+        ],
+        "operationId": "update_store",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Unique identifier for the store",
+            "example": 12345
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "storeId": {
+                    "type": "integer",
+                    "example": 12345
+                  },
+                  "storeName": {
+                    "type": "string",
+                    "example": "WooCommerce Store"
+                  },
+                  "marketplaceId": {
+                    "type": "integer",
+                    "example": 36
+                  },
+                  "marketplaceName": {
+                    "type": "string",
+                    "example": "WooCommerce"
+                  },
+                  "integrationUrl": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "example": "http://shipstation-test.wpengine.com"
+                  },
+                  "active": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "companyName": {
+                    "type": "string",
+                    "example": ""
+                  },
+                  "phone": {
+                    "type": "string",
+                    "example": ""
+                  },
+                  "publicEmail": {
+                    "type": "string",
+                    "example": ""
+                  },
+                  "website": {
+                    "type": "string",
+                    "example": ""
+                  },
+                  "autoRefresh": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "statusMappings": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "orderStatus": {
+                          "type": "string",
+                          "example": "awaiting_shipment"
+                        },
+                        "statusKey": {
+                          "type": "string",
+                          "example": "Processing"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Store updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "storeId": {
+                      "type": "integer"
+                    },
+                    "storeName": {
+                      "type": "string"
+                    },
+                    "marketplaceId": {
+                      "type": "integer"
+                    },
+                    "marketplaceName": {
+                      "type": "string"
+                    },
+                    "active": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/stores/deactivate": {
+      "post": {
+        "summary": "Deactivate store",
+        "description": "Deactivates the specified store",
+        "tags": [
+          "stores"
+        ],
+        "operationId": "deactivate_store",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "storeId"
+                ],
+                "properties": {
+                  "storeId": {
+                    "type": "integer",
+                    "description": "ID of the store to deactivate",
+                    "example": 12345
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Store deactivated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Store deactivated successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/stores/reactivate": {
+      "post": {
+        "summary": "Reactivate store",
+        "description": "Reactivates the specified store.\n\n**Note:** Stores are active by default.\n",
+        "tags": [
+          "stores"
+        ],
+        "operationId": "reactivate_store",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "storeId"
+                ],
+                "properties": {
+                  "storeId": {
+                    "type": "integer",
+                    "description": "ID of the store to reactivate",
+                    "example": 12345
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Store reactivated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Store reactivated successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/stores/refreshstore": {
+      "post": {
+        "summary": "Refresh store",
+        "description": "Initiates a store refresh. If storeId is not specified, a store refresh will be initiated for all refreshable stores on that account.\n",
+        "tags": [
+          "stores"
+        ],
+        "operationId": "refresh_store",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "storeId": {
+                    "type": "integer",
+                    "description": "Store that will get refreshed (optional)",
+                    "example": 12345
+                  },
+                  "refreshDate": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Starting date for new order imports (YYYY-MM-DD HH:MM:SS in PST). This is only needed if retrieving historical orders.\n",
+                    "example": "2020-05-29T15:05:02Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Store refresh initiated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Store refresh initiated"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/stores/getrefreshstatus": {
+      "get": {
+        "summary": "Get store refresh status",
+        "description": "Retrieves the refresh status of a given store",
+        "tags": [
+          "stores"
+        ],
+        "operationId": "get_store_refresh_status",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Store whose status will be retrieved",
+            "example": 12345
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Store refresh status retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "storeId": {
+                      "type": "integer",
+                      "example": 12345
+                    },
+                    "refreshDate": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/stores/marketplaces": {
+      "get": {
+        "summary": "List marketplaces",
+        "description": "Lists the marketplaces that can be integrated with ShipStation",
+        "tags": [
+          "stores"
+        ],
+        "operationId": "list_marketplaces",
+        "responses": {
+          "200": {
+            "description": "List of marketplaces retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "example": "Shopify"
+                      },
+                      "marketplaceId": {
+                        "type": "integer",
+                        "example": 36
+                      },
+                      "canRefresh": {
+                        "type": "boolean",
+                        "example": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/warehouses": {
+      "get": {
+        "summary": "List warehouses",
+        "description": "Retrieves a list of your Ship From Locations (formerly known as warehouses).\n\n**Note:** In the API, the endpoint is called warehouse, but the process actually affects Ship From Locations in the UI.\n",
+        "tags": [
+          "warehouses"
+        ],
+        "operationId": "list_warehouses",
+        "responses": {
+          "200": {
+            "description": "List of warehouses retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "warehouseId": {
+                        "type": "integer",
+                        "example": 12345
+                      },
+                      "warehouseName": {
+                        "type": "string",
+                        "example": "Headquarters"
+                      },
+                      "originAddress": {
+                        "$ref": "#/components/schemas/Address"
+                      },
+                      "returnAddress": {
+                        "anyOf": [
+                          {
+                            "$ref": "#/components/schemas/Address"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "isDefault": {
+                        "type": "boolean",
+                        "example": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/warehouses/{warehouseId}": {
+      "get": {
+        "summary": "Get warehouse",
+        "description": "Returns a specific Ship From Location (formerly known as warehouse).\n\n**Note:** In the API, the endpoint is called warehouse, but the process actually affects Ship From Locations in the UI.\n",
+        "tags": [
+          "warehouses"
+        ],
+        "operationId": "get_warehouse",
+        "parameters": [
+          {
+            "name": "warehouseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Warehouse ID",
+            "example": 12345
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Warehouse retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "warehouseId": {
+                      "type": "integer",
+                      "example": 12345
+                    },
+                    "warehouseName": {
+                      "type": "string",
+                      "example": "Headquarters"
+                    },
+                    "originAddress": {
+                      "$ref": "#/components/schemas/Address"
+                    },
+                    "returnAddress": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/components/schemas/Address"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "isDefault": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete warehouse",
+        "description": "Removes a warehouse from ShipStation's UI and sets it to Inactive status. This is a \"soft\" delete action.\n\n**Note:** In the API, the endpoint is called warehouse, but the process actually affects Ship From Locations in the UI.\n",
+        "tags": [
+          "warehouses"
+        ],
+        "operationId": "delete_warehouse",
+        "parameters": [
+          {
+            "name": "warehouseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Warehouse ID to delete",
+            "example": 12345
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Warehouse deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "The requested warehouse has been deleted."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/warehouses/createwarehouse": {
+      "post": {
+        "summary": "Create warehouse",
+        "description": "Adds a Ship From Location (formerly known as warehouse) to your account.\n\n**Note:** In the API, the endpoint is called warehouse, but the process actually affects Ship From Locations in the UI.\n",
+        "tags": [
+          "warehouses"
+        ],
+        "operationId": "create_warehouse",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "originAddress"
+                ],
+                "properties": {
+                  "warehouseName": {
+                    "type": "string",
+                    "description": "Name of Ship From Location",
+                    "example": "New Ship From Location"
+                  },
+                  "originAddress": {
+                    "$ref": "#/components/schemas/Address"
+                  },
+                  "returnAddress": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/Address"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "isDefault": {
+                    "type": "boolean",
+                    "description": "Whether this will be the default Ship From Location",
+                    "example": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Warehouse created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "warehouseId": {
+                      "type": "integer",
+                      "example": 12345
+                    },
+                    "warehouseName": {
+                      "type": "string"
+                    },
+                    "originAddress": {
+                      "$ref": "#/components/schemas/Address"
+                    },
+                    "returnAddress": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/components/schemas/Address"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "isDefault": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/warehouses/updatewarehouse": {
+      "put": {
+        "summary": "Update warehouse",
+        "description": "Updates an existing Ship From Location (formerly known as warehouse).\n\n**Note:** In the API, the endpoint is called warehouse, but the process actually affects Ship From Locations in the UI.\n",
+        "tags": [
+          "warehouses"
+        ],
+        "operationId": "update_warehouse",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "warehouseId",
+                  "originAddress"
+                ],
+                "properties": {
+                  "warehouseId": {
+                    "type": "integer",
+                    "description": "Unique identifier for the warehouse",
+                    "example": 17977
+                  },
+                  "warehouseName": {
+                    "type": "string",
+                    "description": "Name of Ship From Location",
+                    "example": "Flagship Location"
+                  },
+                  "originAddress": {
+                    "$ref": "#/components/schemas/Address"
+                  },
+                  "returnAddress": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/Address"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "isDefault": {
+                    "type": "boolean",
+                    "description": "Whether this will be the default Ship From Location",
+                    "example": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Warehouse updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "warehouseId": {
+                      "type": "integer"
+                    },
+                    "warehouseName": {
+                      "type": "string"
+                    },
+                    "originAddress": {
+                      "$ref": "#/components/schemas/Address"
+                    },
+                    "returnAddress": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/components/schemas/Address"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "isDefault": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "summary": "List products",
+        "description": "Obtains a list of products that match the specified criteria",
+        "tags": [
+          "products"
+        ],
+        "operationId": "list_products",
+        "parameters": [
+          {
+            "name": "sku",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Returns products that match the specified SKU"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Returns products that match the specified product name"
+          },
+          {
+            "name": "productCategoryId",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Returns products that match the specified productCategoryId"
+          },
+          {
+            "name": "productTypeId",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Returns products that match the specified productTypeId"
+          },
+          {
+            "name": "tagId",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Returns products that match the specified tagId"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Returns products created after the specified date"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Returns products created before the specified date"
+          },
+          {
+            "name": "showInactive",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Specifies whether to include inactive products"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "SKU",
+                "ModifyDate",
+                "CreateDate"
+              ]
+            },
+            "description": "Sorts the order of the response"
+          },
+          {
+            "$ref": "#/components/parameters/sort_dir_param"
+          },
+          {
+            "$ref": "#/components/parameters/page_param"
+          },
+          {
+            "$ref": "#/components/parameters/page_size_param"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of products retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "productId": {
+                            "type": "integer",
+                            "example": 123456789
+                          },
+                          "sku": {
+                            "type": "string",
+                            "example": "BEAU-000"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Beautiful"
+                          },
+                          "price": {
+                            "type": "number",
+                            "example": 0
+                          },
+                          "active": {
+                            "type": "boolean",
+                            "example": true
+                          }
+                        }
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pages": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/products/{productId}": {
+      "get": {
+        "summary": "Get product",
+        "description": "Retrieves a single product by its ID",
+        "tags": [
+          "products"
+        ],
+        "operationId": "get_product",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The system-generated identifier for the Product",
+            "example": 123456789
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "productId": {
+                      "type": "integer",
+                      "example": 123456789
+                    },
+                    "sku": {
+                      "type": "string",
+                      "example": "BEAU-000"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Beautiful"
+                    },
+                    "price": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "active": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update product",
+        "description": "Updates an existing product. This call does not currently support partial updates. The entire resource must be provided in the body of the request.\n",
+        "tags": [
+          "products"
+        ],
+        "operationId": "update_product",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The system-generated identifier for the Product",
+            "example": 123456789
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "productId": {
+                    "type": "integer",
+                    "example": 123456789
+                  },
+                  "sku": {
+                    "type": "string",
+                    "example": "BEAU-000"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Beautiful"
+                  },
+                  "price": {
+                    "type": "number",
+                    "example": 0
+                  },
+                  "active": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "weightOz": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "defaultCarrierCode": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "defaultServiceCode": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Product updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "productId": {
+                      "type": "integer"
+                    },
+                    "sku": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "active": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/customers": {
+      "get": {
+        "summary": "List customers",
+        "description": "Obtains a list of customers that match the specified criteria",
+        "tags": [
+          "customers"
+        ],
+        "operationId": "list_customers",
+        "parameters": [
+          {
+            "name": "stateCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Returns customers that reside in the specified stateCode"
+          },
+          {
+            "name": "countryCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Returns customers that reside in the specified countryCode (two-letter ISO)"
+          },
+          {
+            "name": "marketplaceId",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Returns customers that purchased from the specified marketplaceId"
+          },
+          {
+            "name": "tagId",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Returns customers that have been tagged with the specified tagId"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Name",
+                "ModifyDate",
+                "CreateDate"
+              ]
+            },
+            "description": "Sorts the order of the response"
+          },
+          {
+            "$ref": "#/components/parameters/sort_dir_param"
+          },
+          {
+            "$ref": "#/components/parameters/page_param"
+          },
+          {
+            "$ref": "#/components/parameters/page_size_param"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of customers retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "customers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "customerId": {
+                            "type": "integer",
+                            "example": 12345678
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Cam Newton"
+                          },
+                          "company": {
+                            "type": "string",
+                            "example": "Test Company"
+                          },
+                          "email": {
+                            "type": "string",
+                            "example": "supermancam@example.com"
+                          },
+                          "phone": {
+                            "type": "string",
+                            "example": "555-555-5555"
+                          },
+                          "city": {
+                            "type": "string",
+                            "example": "Auburn"
+                          },
+                          "state": {
+                            "type": "string",
+                            "example": "AL"
+                          },
+                          "countryCode": {
+                            "type": "string",
+                            "example": "US"
+                          }
+                        }
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pages": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/customers/{customerId}": {
+      "get": {
+        "summary": "Get customer",
+        "description": "Retrieves a single customer by ID",
+        "tags": [
+          "customers"
+        ],
+        "operationId": "get_customer",
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The system-generated identifier for the Customer",
+            "example": 12345678
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "customerId": {
+                      "type": "integer",
+                      "example": 12345678
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Cam Newton"
+                    },
+                    "company": {
+                      "type": "string",
+                      "example": "Test Company"
+                    },
+                    "street1": {
+                      "type": "string",
+                      "example": "123 War Eagle Lane"
+                    },
+                    "city": {
+                      "type": "string",
+                      "example": "Auburn"
+                    },
+                    "state": {
+                      "type": "string",
+                      "example": "AL"
+                    },
+                    "postalCode": {
+                      "type": "string",
+                      "example": "36830"
+                    },
+                    "countryCode": {
+                      "type": "string",
+                      "example": "US"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "example": "555-555-5555"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "supermancam@example.com"
+                    },
+                    "addressVerified": {
+                      "type": "string",
+                      "example": "Verified"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "List users",
+        "description": "Retrieves a list of users for the account",
+        "tags": [
+          "users"
+        ],
+        "operationId": "list_users",
+        "parameters": [
+          {
+            "name": "showInactive",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Determines whether or not inactive users will be returned",
+            "example": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of users retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "userId": {
+                        "type": "string",
+                        "example": "123456AB-ab12-3c4d-5e67-89f1abc1defa"
+                      },
+                      "userName": {
+                        "type": "string",
+                        "example": "john.doe"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                      },
+                      "email": {
+                        "type": "string",
+                        "example": "john.doe@example.com"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/fulfillments": {
+      "get": {
+        "summary": "List fulfillments",
+        "description": "Obtains a list of fulfillments that match the specified criteria.\n\n**Note:** Orders that have been marked as shipped either through the UI or API will appear in the response as they are considered fulfillments.\n",
+        "tags": [
+          "fulfillments"
+        ],
+        "operationId": "list_fulfillments",
+        "parameters": [
+          {
+            "name": "fulfillmentId",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Returns the fulfillment with the specified fulfillment ID"
+          },
+          {
+            "name": "orderId",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Returns fulfillments whose orders have the specified order ID"
+          },
+          {
+            "name": "orderNumber",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Returns fulfillments whose orders have the specified order number"
+          },
+          {
+            "name": "trackingNumber",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Returns fulfillments with the specified tracking number"
+          },
+          {
+            "name": "recipientName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Returns fulfillments shipped to the specified recipient name"
+          },
+          {
+            "name": "createDateStart",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Returns fulfillments created on or after the specified date"
+          },
+          {
+            "name": "createDateEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Returns fulfillments created on or before the specified date"
+          },
+          {
+            "name": "shipDateStart",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Returns fulfillments with shipDate on or after the specified date"
+          },
+          {
+            "name": "shipDateEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Returns fulfillments with shipDate on or before the specified date"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ShipDate",
+                "CreateDate"
+              ]
+            },
+            "description": "Sort the responses by a set value"
+          },
+          {
+            "$ref": "#/components/parameters/sort_dir_param"
+          },
+          {
+            "$ref": "#/components/parameters/page_param"
+          },
+          {
+            "$ref": "#/components/parameters/page_size_param"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of fulfillments retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "fulfillments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "fulfillmentId": {
+                            "type": "integer"
+                          },
+                          "orderId": {
+                            "type": "integer"
+                          },
+                          "orderNumber": {
+                            "type": "string"
+                          },
+                          "trackingNumber": {
+                            "type": "string"
+                          },
+                          "shipDate": {
+                            "type": "string",
+                            "format": "date"
+                          },
+                          "carrierCode": {
+                            "type": "string"
+                          },
+                          "serviceCode": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pages": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/webhooks": {
+      "get": {
+        "summary": "List webhooks",
+        "description": "Retrieves a list of registered webhooks for the account",
+        "tags": [
+          "webhooks"
+        ],
+        "operationId": "list_webhooks",
+        "responses": {
+          "200": {
+            "description": "List of webhooks retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "webhooks": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "WebHookID": {
+                            "type": "integer",
+                            "example": 123456
+                          },
+                          "SellerID": {
+                            "type": "integer"
+                          },
+                          "StoreID": {
+                            "anyOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "example": 12345
+                          },
+                          "HookType": {
+                            "type": "string",
+                            "example": "ORDER_NOTIFY"
+                          },
+                          "MessageFormat": {
+                            "type": "string"
+                          },
+                          "Url": {
+                            "type": "string",
+                            "example": "http://example.com/webhook"
+                          },
+                          "Name": {
+                            "type": "string",
+                            "example": "My Webhook"
+                          },
+                          "BulkCopyBatchID": {
+                            "anyOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "example": null
+                          },
+                          "BulkCopyRecordID": {
+                            "anyOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "example": null
+                          },
+                          "Active": {
+                            "type": "boolean"
+                          },
+                          "WebHookLogs": {
+                            "type": "array",
+                            "items": {
+                              "type": "object"
+                            }
+                          },
+                          "Seller": {
+                            "anyOf": [
+                              {
+                                "type": "object"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "Store": {
+                            "anyOf": [
+                              {
+                                "type": "object"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/webhooks/subscribe": {
+      "post": {
+        "summary": "Subscribe to webhook",
+        "description": "Subscribes to a specific type of webhook. If a store_id is passed in, the webhooks will only be triggered for that specific store_id.\n\n**Note:** Webhooks can only be modified through the ShipStation UI under Account Settings.\n",
+        "tags": [
+          "webhooks"
+        ],
+        "operationId": "subscribe_webhook",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "target_url",
+                  "event"
+                ],
+                "properties": {
+                  "target_url": {
+                    "type": "string",
+                    "description": "The URL to send the webhooks to",
+                    "example": "http://someexamplewebhookurl.com/neworder"
+                  },
+                  "event": {
+                    "type": "string",
+                    "enum": [
+                      "ORDER_NOTIFY",
+                      "ITEM_ORDER_NOTIFY",
+                      "SHIP_NOTIFY",
+                      "ITEM_SHIP_NOTIFY",
+                      "FULFILLMENT_SHIPPED",
+                      "FULFILLMENT_REJECTED"
+                    ],
+                    "description": "The type of webhook to subscribe to",
+                    "example": "ORDER_NOTIFY"
+                  },
+                  "store_id": {
+                    "anyOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Store ID (optional - webhooks will only trigger for this store)",
+                    "example": 12345
+                  },
+                  "friendly_name": {
+                    "type": "string",
+                    "description": "Display name for the webhook",
+                    "example": "My Webhook"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook subscription created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "WebHookID": {
+                      "type": "integer",
+                      "example": 123456
+                    },
+                    "HookType": {
+                      "type": "string"
+                    },
+                    "Url": {
+                      "type": "string"
+                    },
+                    "Name": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/webhooks/{webhookId}": {
+      "delete": {
+        "summary": "Unsubscribe from webhook",
+        "description": "Unsubscribes from a certain webhook",
+        "tags": [
+          "webhooks"
+        ],
+        "operationId": "unsubscribe_webhook",
+        "parameters": [
+          {
+            "name": "webhookId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "A unique ID generated by ShipStation and assigned to each webhook",
+            "example": 123456
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Webhook unsubscribed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Webhook deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/bad_request"
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/not_found"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    },
+    "/accounts/listtags": {
+      "get": {
+        "summary": "List account tags",
+        "description": "List all tags defined for this account",
+        "tags": [
+          "accounts"
+        ],
+        "operationId": "list_account_tags",
+        "responses": {
+          "200": {
+            "description": "List of tags retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "tagId": {
+                        "type": "integer",
+                        "example": 8362
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Backorder"
+                      },
+                      "color": {
+                        "type": "string",
+                        "example": "#800080"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/server_error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "HTTP Basic Authentication using ShipStation API Key and Secret"
+      }
+    },
+    "parameters": {
+      "page_param": {
+        "name": "page",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        },
+        "description": "Page number"
+      },
+      "page_size_param": {
+        "name": "pageSize",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 500,
+          "default": 100
+        },
+        "description": "Number of results per page. Maximum 500."
+      },
+      "sort_by_param": {
+        "name": "sortBy",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "OrderDate",
+            "ModifyDate",
+            "CreateDate"
+          ]
+        },
+        "description": "Field to sort results by"
+      },
+      "sort_dir_param": {
+        "name": "sortDir",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "ASC",
+            "DESC"
+          ],
+          "default": "ASC"
+        },
+        "description": "Sort direction"
+      }
+    },
+    "responses": {
+      "bad_request": {
+        "description": "Bad Request - The request could not be understood or was missing required parameters",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Invalid request parameters"
+                }
+              }
+            }
+          }
+        }
+      },
+      "unauthorized": {
+        "description": "Unauthorized - Authentication credentials are missing or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Invalid API credentials"
+                }
+              }
+            }
+          }
+        }
+      },
+      "not_found": {
+        "description": "Not Found - The specified resource was not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Resource not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "server_error": {
+        "description": "Internal Server Error - An error occurred on the server",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "An internal error occurred"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Address": {
+        "type": "object",
+        "description": "Physical address for shipping or billing",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the recipient",
+            "example": "John Doe"
+          },
+          "company": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Company name",
+            "example": "Acme Corp"
+          },
+          "street1": {
+            "type": "string",
+            "description": "First line of the street address",
+            "example": "123 Main St"
+          },
+          "street2": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Second line of the street address",
+            "example": "Apt 4B"
+          },
+          "street3": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Third line of the street address",
+            "example": "Building B"
+          },
+          "city": {
+            "type": "string",
+            "description": "City name",
+            "example": "Austin"
+          },
+          "state": {
+            "type": "string",
+            "description": "State or province code",
+            "example": "TX"
+          },
+          "postalCode": {
+            "type": "string",
+            "description": "Postal or ZIP code",
+            "example": "78701"
+          },
+          "country": {
+            "type": "string",
+            "description": "Two-letter ISO country code",
+            "example": "US"
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Phone number",
+            "example": "512-555-1234"
+          },
+          "residential": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Whether the address is residential",
+            "example": true
+          },
+          "addressVerified": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Address verification status",
+            "example": "Address validated successfully"
+          }
+        }
+      },
+      "Weight": {
+        "type": "object",
+        "description": "Weight measurement",
+        "required": [
+          "value",
+          "units"
+        ],
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "Weight value",
+            "example": 24
+          },
+          "units": {
+            "type": "string",
+            "enum": [
+              "pounds",
+              "ounces",
+              "grams"
+            ],
+            "description": "Weight unit of measurement",
+            "example": "ounces"
+          }
+        }
+      },
+      "Dimensions": {
+        "type": "object",
+        "description": "Package dimensions",
+        "required": [
+          "length",
+          "width",
+          "height",
+          "units"
+        ],
+        "properties": {
+          "length": {
+            "type": "number",
+            "description": "Length",
+            "example": 7
+          },
+          "width": {
+            "type": "number",
+            "description": "Width",
+            "example": 5
+          },
+          "height": {
+            "type": "number",
+            "description": "Height",
+            "example": 6
+          },
+          "units": {
+            "type": "string",
+            "enum": [
+              "inches",
+              "centimeters"
+            ],
+            "description": "Dimension unit of measurement",
+            "example": "inches"
+          }
+        }
+      },
+      "InsuranceOptions": {
+        "type": "object",
+        "description": "Shipping insurance options",
+        "properties": {
+          "provider": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "enum": [
+              "none",
+              "carrier",
+              "xcover",
+              "parcelguard",
+              "shipsurance"
+            ],
+            "description": "Insurance provider",
+            "example": "carrier"
+          },
+          "insureShipment": {
+            "type": "boolean",
+            "description": "Whether to insure the shipment",
+            "example": true
+          },
+          "insuredValue": {
+            "type": "number",
+            "description": "Insured value amount",
+            "example": 200
+          }
+        }
+      },
+      "InternationalOptions": {
+        "type": "object",
+        "description": "International shipping options",
+        "properties": {
+          "contents": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "enum": [
+              "merchandise",
+              "documents",
+              "gift",
+              "returned_goods",
+              "sample"
+            ],
+            "description": "Type of contents",
+            "example": "merchandise"
+          },
+          "customsItems": {
+            "anyOf": [
+              {
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/CustomsItem"
+            },
+            "description": "Array of customs items"
+          },
+          "nonDelivery": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "enum": [
+              "return_to_sender",
+              "treat_as_abandoned"
+            ],
+            "description": "Action to take if delivery fails",
+            "example": "return_to_sender"
+          }
+        }
+      },
+      "CustomsItem": {
+        "type": "object",
+        "description": "Customs item for international shipments",
+        "properties": {
+          "customsItemId": {
+            "type": "integer",
+            "description": "System-generated customs item ID",
+            "example": 11558268
+          },
+          "description": {
+            "type": "string",
+            "description": "Item description",
+            "example": "Cotton T-Shirt"
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "Quantity",
+            "example": 2
+          },
+          "value": {
+            "type": "number",
+            "description": "Item value",
+            "example": 49.99
+          },
+          "harmonizedTariffCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Harmonized tariff code",
+            "example": "6109.10.0012"
+          },
+          "countryOfOrigin": {
+            "type": "string",
+            "description": "Two-letter ISO country code",
+            "example": "US"
+          },
+          "manufacturerProductIdType": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ManufacturerProductIdentifierType"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The type of identifier used for the manufacturer product ID.",
+            "example": "gtin"
+          },
+          "manufacturerProductId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The manufacturer's product identifier corresponding to the `manufacturerProductIdType`.",
+            "example": "012345678905"
+          },
+          "manufacturerNsProductId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "A non-standardized product identifier unique to the manufacturer's own system that does not follow an internationally recognized standard (e.g. a SKU).",
+            "example": "MY-SKU-12345"
+          },
+          "cpscCertificates": {
+            "anyOf": [
+              {
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "List of CPSC eFiling certificates associated with this product.",
+            "items": {
+              "$ref": "#/components/schemas/CpscCertificateItem"
+            }
+          }
+        }
+      },
+      "AdvancedOptions": {
+        "type": "object",
+        "description": "Advanced shipping options",
+        "properties": {
+          "warehouseId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Warehouse ID",
+            "example": 98765
+          },
+          "nonMachinable": {
+            "type": "boolean",
+            "description": "Whether the package is non-machinable",
+            "example": false
+          },
+          "saturdayDelivery": {
+            "type": "boolean",
+            "description": "Whether to deliver on Saturday",
+            "example": false
+          },
+          "containsAlcohol": {
+            "type": "boolean",
+            "description": "Whether the package contains alcohol",
+            "example": false
+          },
+          "mergedOrSplit": {
+            "type": "boolean",
+            "description": "Whether this is a merged or split order",
+            "example": false
+          },
+          "mergedIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Array of merged order IDs"
+          },
+          "parentId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Parent order ID for split orders",
+            "example": 93348442
+          },
+          "storeId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Store ID",
+            "example": 12345
+          },
+          "customField1": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Custom field 1",
+            "example": "Custom data that you can add to an order"
+          },
+          "customField2": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Custom field 2",
+            "example": "Per UI settings, this can appear on some carrier labels"
+          },
+          "customField3": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Custom field 3",
+            "example": "https://help.shipstation.com/hc/en-us/articles/206639957"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Order source",
+            "example": "Webstore"
+          },
+          "billToParty": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Bill to party",
+            "example": "third_party"
+          },
+          "billToAccount": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Bill to account",
+            "example": "123456789"
+          },
+          "billToPostalCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Bill to postal code",
+            "example": "78701"
+          },
+          "billToCountryCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Bill to country code",
+            "example": "US"
+          },
+          "movementIndicator": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "c2c",
+                  "b2c",
+                  "c2b",
+                  "b2b"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "An indicator that will tell the carrier the type of movement for the shipment.",
+            "example": "b2c"
+          }
+        }
+      },
+      "OrderItem": {
+        "type": "object",
+        "description": "Item in an order",
+        "properties": {
+          "orderItemId": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "System-generated order item ID",
+            "example": 128836912
+          },
+          "lineItemKey": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "External line item key",
+            "example": "vd08-MSLbtx"
+          },
+          "sku": {
+            "type": "string",
+            "description": "Product SKU",
+            "example": "ABC123"
+          },
+          "name": {
+            "type": "string",
+            "description": "Item name",
+            "example": "Test item #1"
+          },
+          "imageUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Item image URL",
+            "example": "https://example.com/images/product.jpg"
+          },
+          "weight": {
+            "$ref": "#/components/schemas/Weight"
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "Quantity",
+            "example": 2
+          },
+          "unitPrice": {
+            "type": "number",
+            "description": "Unit price",
+            "example": 99.99
+          },
+          "taxAmount": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Tax amount",
+            "example": 2.5
+          },
+          "shippingAmount": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Shipping amount",
+            "example": 5
+          },
+          "warehouseLocation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Warehouse location",
+            "example": "Aisle 1, Bin 7"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemOption"
+            },
+            "description": "Item options"
+          },
+          "productId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Product ID",
+            "example": 7239919
+          },
+          "fulfillmentSku": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Fulfillment SKU",
+            "example": "SKU-Fulfilled"
+          },
+          "adjustment": {
+            "type": "boolean",
+            "description": "Whether this is an adjustment item",
+            "example": false
+          },
+          "upc": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "UPC code",
+            "example": "32-65-98"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "description": "Creation timestamp"
+          },
+          "modifyDate": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "description": "Last modification timestamp"
+          }
+        }
+      },
+      "ItemOption": {
+        "type": "object",
+        "description": "Item option/variant",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Option name",
+            "example": "Size"
+          },
+          "value": {
+            "type": "string",
+            "description": "Option value",
+            "example": "Large"
+          }
+        }
+      },
+      "Order": {
+        "type": "object",
+        "description": "Complete order object",
+        "properties": {
+          "orderId": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "System-generated identifier for the order",
+            "example": 93348442
+          },
+          "orderNumber": {
+            "type": "string",
+            "description": "User-defined order number",
+            "example": "TEST-ORDER-API-DOCS"
+          },
+          "orderKey": {
+            "type": "string",
+            "description": "Unique key for the order",
+            "example": "0f6bec18-3e89-4771-83aa-f392d84f4c74"
+          },
+          "orderDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date the order was placed",
+            "example": "2015-06-29T08:46:27Z"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "description": "Timestamp when order was created in ShipStation",
+            "example": "2016-01-12T16:03:06Z"
+          },
+          "modifyDate": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true,
+            "description": "Timestamp when order was last modified",
+            "example": "2016-01-12T16:03:06Z"
+          },
+          "paymentDate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "format": "date-time",
+            "description": "Date the order was paid",
+            "example": "2015-06-29T08:46:27Z"
+          },
+          "shipByDate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "format": "date-time",
+            "description": "Date the order should be shipped by",
+            "example": "2015-07-05T00:00:00Z"
+          },
+          "orderStatus": {
+            "type": "string",
+            "enum": [
+              "awaiting_payment",
+              "awaiting_shipment",
+              "pending_fulfillment",
+              "shipped",
+              "on_hold",
+              "cancelled",
+              "rejected_fulfillment"
+            ],
+            "description": "Current status of the order",
+            "example": "awaiting_shipment"
+          },
+          "customerId": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Unique identifier for the customer",
+            "example": 37701499
+          },
+          "customerUsername": {
+            "type": "string",
+            "description": "Customer username or identifier",
+            "example": "headhoncho@whitehouse.gov"
+          },
+          "customerEmail": {
+            "type": "string",
+            "format": "email",
+            "description": "Customer email address",
+            "example": "headhoncho@whitehouse.gov"
+          },
+          "billTo": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "shipTo": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderItem"
+            },
+            "description": "Array of order items"
+          },
+          "orderTotal": {
+            "type": "number",
+            "readOnly": true,
+            "description": "Total order amount",
+            "example": 194.43
+          },
+          "amountPaid": {
+            "type": "number",
+            "description": "Amount paid by customer",
+            "example": 218.73
+          },
+          "taxAmount": {
+            "type": "number",
+            "description": "Total tax amount",
+            "example": 5
+          },
+          "shippingAmount": {
+            "type": "number",
+            "description": "Shipping amount",
+            "example": 10
+          },
+          "customerNotes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Notes from the customer",
+            "example": "Please ship as soon as possible!"
+          },
+          "internalNotes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Internal notes (not visible to customer)",
+            "example": "Customer called and would like to upgrade shipping"
+          },
+          "gift": {
+            "type": "boolean",
+            "description": "Whether this is a gift order",
+            "example": false
+          },
+          "giftMessage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Gift message",
+            "example": "Happy Birthday!"
+          },
+          "paymentMethod": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Payment method used",
+            "example": "Credit Card"
+          },
+          "requestedShippingService": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Shipping service requested by customer",
+            "example": "Priority Mail"
+          },
+          "carrierCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Carrier code",
+            "example": "fedex"
+          },
+          "serviceCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Service code",
+            "example": "fedex_2day"
+          },
+          "packageCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Package type code",
+            "example": "package"
+          },
+          "confirmation": {
+            "type": "string",
+            "enum": [
+              "none",
+              "delivery",
+              "signature",
+              "adult_signature",
+              "direct_signature"
+            ],
+            "description": "Delivery confirmation type",
+            "example": "none"
+          },
+          "shipDate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "format": "date",
+            "description": "Date the order was shipped",
+            "example": "2015-07-02"
+          },
+          "holdUntilDate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "format": "date",
+            "description": "Date to hold order until",
+            "example": "2015-07-05"
+          },
+          "weight": {
+            "$ref": "#/components/schemas/Weight"
+          },
+          "dimensions": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Dimensions"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "insuranceOptions": {
+            "$ref": "#/components/schemas/InsuranceOptions"
+          },
+          "internationalOptions": {
+            "$ref": "#/components/schemas/InternationalOptions"
+          },
+          "advancedOptions": {
+            "$ref": "#/components/schemas/AdvancedOptions"
+          },
+          "tagIds": {
+            "anyOf": [
+              {
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "items": {
+              "type": "integer"
+            },
+            "description": "Array of tag IDs associated with this order"
+          },
+          "userId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "readOnly": true,
+            "description": "User assigned to order (GUID format)",
+            "example": "123456AB-ab12-3c4d-5e67-89f1abc1defa"
+          },
+          "externallyFulfilled": {
+            "type": "boolean",
+            "readOnly": true,
+            "description": "Whether order is externally fulfilled",
+            "example": false
+          },
+          "externallyFulfilledBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "readOnly": true,
+            "description": "External fulfillment provider name",
+            "example": "Amazon FBA"
+          }
+        }
+      },
+      "ManufacturerProductIdentifierType": {
+        "title": "ManufacturerProductIdentifierType",
+        "type": "string",
+        "enum": [
+          "undefined",
+          "gtin",
+          "ean",
+          "isbn",
+          "upc",
+          "mpn",
+          "sku"
+        ],
+        "description": "The type of manufacturer product identifier. GTIN (Global Trade Item Number), EAN (European Article Number), ISBN (International Standard Book Number), UPC (Universal Product Code), MPN (Manufacturer Part Number), SKU (Stock Keeping Unit). Use `undefined` when the specific identifier type is not defined in this list."
+      },
+      "CpscCertificateItem": {
+        "title": "CpscCertificateItem",
+        "type": "object",
+        "description": "A US Consumer Product Safety Commission (CPSC) eFiling certificate associated with a product in the shipment.",
+        "additionalProperties": false,
+        "properties": {
+          "certifierId": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "Unique identifier assigned to the certifier by the CPSC.",
+            "example": "CERT-12345"
+          },
+          "certificateVersionId": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "The version identifier of the CPSC certificate.",
+            "example": "v1.0"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "basicAuth": []
+    }
+  ]
+}

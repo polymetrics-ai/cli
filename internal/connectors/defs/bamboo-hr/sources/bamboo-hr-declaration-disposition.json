@@ -5,8 +5,8 @@
   "source_basis": {
     "source_lock": "sources/bamboo-hr-parity-source-lock.json",
     "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-    "source_sha256": "ecfc63823d7f08942bec89f7175ac6fedc582b07177346fdc8e4d03400ebf15a",
-    "source_bytes": 1562871,
+    "source_sha256": "a04e654442c3980b7f3172b7160404723a1ae096ca78aca1cead0721f1177890",
+    "source_bytes": 1627565,
     "operations_found": 319,
     "mapped_operations": 345,
     "old_api_surface_rows": 340,

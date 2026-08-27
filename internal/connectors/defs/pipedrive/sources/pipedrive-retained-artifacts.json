@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "pipedrive",
+  "artifacts": [
+    {
+      "sha256": "302b0d7c2c1a6cb96a2d299717c6be0c2cf3eac6dfd884ea8352962ebf501c2b",
+      "bytes": 1782400,
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "retrieved_at": "2026-08-24T12:03:25Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

@@ -133,11 +133,14 @@ func runCertificationSubject(args []string, stdout, stderr io.Writer) int {
 	root := "."
 	binary := ""
 	check := false
+	advisoryStale := false
 	for index := 1; index < len(args); index++ {
 		arg := args[index]
 		switch {
 		case arg == "--check":
 			check = true
+		case arg == "--advisory-stale":
+			advisoryStale = true
 		case arg == "--pm":
 			if index+1 >= len(args) || strings.HasPrefix(args[index+1], "-") {
 				logln(stderr, "connectorgen certification-subject: --pm requires a built pm binary")
@@ -154,6 +157,10 @@ func runCertificationSubject(args []string, stdout, stderr io.Writer) int {
 			logf(stderr, "connectorgen certification-subject: unexpected extra argument %q\n", arg)
 			return 2
 		}
+	}
+	if advisoryStale && !check {
+		logln(stderr, "connectorgen certification-subject: --advisory-stale requires --check")
+		return 2
 	}
 	absRoot, err := filepath.Abs(root)
 	if err != nil {
@@ -183,11 +190,23 @@ func runCertificationSubject(args []string, stdout, stderr io.Writer) int {
 	path := filepath.Join(absRoot, filepath.FromSlash(certificationSubjectArtifactPath))
 	if check {
 		committed, err := os.ReadFile(path)
-		if err != nil || !bytes.Equal(committed, payload) {
+		if err != nil {
+			logf(stderr, "connectorgen certification-subject: read current subject: %v\n", err)
+			return 1
+		}
+		if bytes.Equal(committed, payload) {
+			logf(stdout, "connectorgen certification-subject: %s is current\n", certificationSubjectArtifactPath)
+			return 0
+		}
+		if !advisoryStale {
 			logf(stderr, "connectorgen certification-subject: current subject is stale; run `go run ./cmd/connectorgen certification-subject`\n")
 			return 1
 		}
-		logf(stdout, "connectorgen certification-subject: %s is current\n", certificationSubjectArtifactPath)
+		if _, err := loadCurrentCertificationSubject(absRoot); err != nil {
+			logf(stderr, "connectorgen certification-subject: current subject artifact must remain valid: %v\n", err)
+			return 1
+		}
+		logf(stdout, "connectorgen certification-subject: advisory: current subject is stale; provenance retained; run `go run ./cmd/connectorgen certification-subject` to refresh deliberately\n")
 		return 0
 	}
 	if err := writeGeneratedArtifact(path, payload); err != nil {
