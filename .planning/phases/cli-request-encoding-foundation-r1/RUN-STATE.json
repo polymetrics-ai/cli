@@ -1,0 +1,10 @@
+{
+  "issue": 4367,
+  "phase": "cli-request-encoding-foundation-r1",
+  "base": "cf29d302c13f7fcd340d31ad6dc27872880ccf42",
+  "branch": "fm/cli-request-encoding-foundation-r1",
+  "status": "planned",
+  "mode": "inline_manual_gsd",
+  "manifest_dependency": "#4364 is deliberately not copied; reconciliation is source-derived",
+  "tdd": "red_pending"
+}
