@@ -2128,6 +2128,9 @@ func sourceProjectionApplyNonExecutableMutationDispositions(bundle engine.Bundle
 		if err := sourceProjectionValidateNonExecutableMutationDispositionCitation(operation, disposition); err != nil {
 			return err
 		}
+		if err := sourceProjectionValidateCitedOnlyMutationDisposition(operation, "mutation disposition"); err != nil {
+			return err
+		}
 		if sourceProjectionMutationActionIsComplete(bundle, operation) {
 			return fmt.Errorf("mutation disposition source operation %q already has a complete executable action", operation.SourceID)
 		}
@@ -2180,6 +2183,9 @@ func sourceProjectionApplyPartialMutationCoverageDispositions(bundle engine.Bund
 		if err := sourceProjectionValidatePartialMutationCoverageDispositionCitation(operation, disposition); err != nil {
 			return err
 		}
+		if err := sourceProjectionValidateCitedOnlyMutationDisposition(operation, "partial mutation coverage disposition"); err != nil {
+			return err
+		}
 		if sourceProjectionMutationActionIsComplete(bundle, operation) {
 			return fmt.Errorf("partial mutation coverage disposition source operation %q already has a complete executable action", operation.SourceID)
 		}
@@ -2224,7 +2230,12 @@ func sourceProjectionApplyWriteDisabledMutationArtifacts(bundle engine.Bundle, r
 	artifacts := 0
 	for index := range result.Operations {
 		operation := &result.Operations[index]
-		if !sourceProjectionOperationMutates(*operation) || operation.Runtime.NonExecutableMutation != nil {
+		if !sourceProjectionOperationMutates(*operation) ||
+			operation.Runtime.NonExecutableMutation != nil ||
+			sourceOperationHasFoundationGap(*operation, sourceContractUnavailableFoundation) {
+			// A cited-only reference has already recorded its only truthful
+			// foundation explanation. A write-disabled declaration cannot supply
+			// the unavailable request/response contract or add another gap.
 			continue
 		}
 		if _, declared, err := sourceProjectionReadOnlyDeclaration(bundle, *operation); err != nil || declared {
@@ -2263,6 +2274,18 @@ func sourceProjectionValidateNonExecutableMutationDispositionCitation(operation 
 
 func sourceProjectionValidatePartialMutationCoverageDispositionCitation(operation sourceOperationDescriptor, disposition sourcePartialMutationCoverageDisposition) error {
 	return sourceProjectionValidateMutationDispositionCitation(operation, disposition.Source, "partial mutation coverage disposition")
+}
+
+// sourceProjectionValidateCitedOnlyMutationDisposition keeps a
+// source-reference operation as the exact closed projection of its retained
+// citation. It deliberately refuses before either caller can append a second
+// gap or disposition payload: source_contract_unavailable already names the
+// only honest foundation limitation when no request/response contract exists.
+func sourceProjectionValidateCitedOnlyMutationDisposition(operation sourceOperationDescriptor, kind string) error {
+	if !sourceOperationHasFoundationGap(operation, sourceContractUnavailableFoundation) {
+		return nil
+	}
+	return fmt.Errorf("%s source operation %q at %s#%s is a closed source-reference projection with source_contract_unavailable and cannot accept a mutation disposition", kind, operation.SourceID, operation.Source.URL, operation.Source.Location)
 }
 
 func sourceProjectionValidateMutationDispositionCitation(operation sourceOperationDescriptor, citation sourceOperationCitation, kind string) error {
