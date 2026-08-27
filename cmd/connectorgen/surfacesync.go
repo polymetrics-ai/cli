@@ -250,7 +250,7 @@ func syncCheckedInSourceProjection(bundleDir, connector string, check bool) (sou
 	if findings := validateSourceDescriptorAgainstLock(connector, filepath.ToSlash(filepath.Join("sources", connector+"-operation-descriptor.json")), lock, descriptor); len(findings) != 0 {
 		return sourceProjectionStats{}, fmt.Errorf("validate canonical source descriptor: %s", findings[0].Message)
 	}
-	return projectSourceDescriptorToBundle(bundleDir, sourceImportResult{
+	return projectSourceMutationMappingsToBundle(bundleDir, sourceImportResult{
 		Operations:     descriptor.Operations,
 		InboundEvents:  descriptor.InboundEvents,
 		Extensions:     descriptor.Extensions,

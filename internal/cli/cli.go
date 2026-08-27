@@ -907,6 +907,27 @@ func runMaybeConnectorCommandWithRegistry(ctx context.Context, root, connectorNa
 		}
 		return validationErrorf("%v", err)
 	}
+	credential := flags.first("credential")
+	if credential == "" {
+		credential = flags.first("connection")
+	}
+	if command, found := connectorSurfaceCommand(surface, strings.Join(path, " ")); found && strings.TrimSpace(command.SourceOperation) != "" {
+		// First reject an explicitly supplied origin without consulting any
+		// project state. A persisted credential can only add a public default;
+		// it must not delay rejection of an untrusted command-line override.
+		if err := commandrunner.PreflightSourceBoundOrigin(connector, path, config); err != nil {
+			return err
+		}
+		if credential != "" {
+			preflightConfig, err := app.PublicCredentialConfiguration(root, connectorName, credential, config)
+			if err != nil {
+				return err
+			}
+			if err := commandrunner.PreflightSourceBoundOrigin(connector, path, preflightConfig); err != nil {
+				return err
+			}
+		}
+	}
 	approval, err := prepareReverseApprovalCarrier(flags, os.Stdin)
 	if err != nil {
 		return err

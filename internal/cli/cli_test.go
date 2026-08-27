@@ -2,13 +2,17 @@ package cli_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
+	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/cli"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
@@ -78,6 +82,108 @@ func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestSourceBoundOriginRejectsBeforeAppOrCredential(t *testing.T) {
+	root := filepath.Join(t.TempDir(), "uninitialized-project")
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{
+		"--root", root,
+		"asana", "custom-fields", "list",
+		"--credential", "unresolved-credential",
+		"--config", "base_url=https://invalid.example",
+	}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("Run(source-bound invalid origin) succeeded; stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+	output := stdout.String() + stderr.String()
+	if !strings.Contains(output, `source-bound provider operation "custom_fields" rejects configured base_url override`) {
+		t.Fatalf("invalid source origin did not reach source-bound preflight:\n%s", output)
+	}
+	for _, forbidden := range []string{"missing project", "missing --credential"} {
+		if strings.Contains(output, forbidden) {
+			t.Fatalf("invalid source origin reached App or credential handling (%q):\n%s", forbidden, output)
+		}
+	}
+}
+
+func TestSourceBoundOriginRejectsPersistedCredentialConfigBeforeVault(t *testing.T) {
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	project, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	credential, err := project.AddCredential(context.Background(), app.AddCredentialRequest{
+		Name:      "asana-persisted-origin",
+		Connector: "asana",
+		Config:    map[string]string{"base_url": "https://invalid.example"},
+	})
+	if err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+	if err := os.Remove(filepath.Join(root, ".polymetrics", "vault", credential.ID+".enc")); err != nil {
+		t.Fatalf("remove temporary encrypted credential: %v", err)
+	}
+
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{
+		"--root", root,
+		"asana", "custom-fields", "list",
+		"--credential", credential.Name,
+	}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("Run(persisted source-bound invalid origin) succeeded; stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+	output := stdout.String() + stderr.String()
+	if !strings.Contains(output, `source-bound provider operation "custom_fields" rejects configured base_url override`) {
+		t.Fatalf("persisted invalid source origin did not reach early preflight:\n%s", output)
+	}
+	if strings.Contains(output, "read encrypted credential") {
+		t.Fatalf("persisted invalid source origin reached vault access:\n%s", output)
+	}
+}
+
+func TestSourceBoundReadHelpUsesClosedPagingFlags(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"asana", "agents", "get-agents-for-workspace", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(source-bound help) code = %d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	help := stdout.String()
+	commandFlags, _, found := strings.Cut(help, "PAGE FLAGS")
+	if !found {
+		t.Fatalf("source-bound direct-read help omitted declared page navigation:\n%s", help)
+	}
+	for _, want := range []string{"--page (integer)", "--page-cursor (string)"} {
+		if !strings.Contains(help, want) {
+			t.Fatalf("source-bound direct-read help omitted %q:\n%s", want, help)
+		}
+	}
+	for _, rawPagingFlag := range []string{"\n  --offset", "\n  --limit"} {
+		if strings.Contains(commandFlags, rawPagingFlag) {
+			t.Fatalf("source-bound direct-read command flags expose raw provider paging %q:\n%s", strings.TrimSpace(rawPagingFlag), help)
+		}
+	}
+}
+
+func TestPromotedAsanaMutationHelpIsExecutableRatherThanHistoricalPlan(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"asana", "allocations", "delete-allocation", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(promoted Asana mutation help) code = %d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	help := stdout.String()
+	for _, want := range []string{"AVAILABILITY\n  implemented", "WRITE\n  delete_allocation", "Implemented source-bound Asana mutation"} {
+		if !strings.Contains(help, want) {
+			t.Fatalf("promoted Asana mutation help omitted %q:\n%s", want, help)
+		}
+	}
+	if strings.Contains(help, "Planned fixed-target Asana mutation") {
+		t.Fatalf("promoted Asana mutation help retains historical planned label:\n%s", help)
 	}
 }
 

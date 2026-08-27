@@ -29,7 +29,7 @@
 | `apple-search-ads` | [`icons/simple-icons/apple.svg`](../icons/simple-icons/apple.svg) | Apple Ads | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developer.apple.com/documentation/apple_search_ads) | bundle definition |
 | `appsflyer` | [`icons/appsflyer.svg`](../icons/appsflyer.svg) | AppsFlyer | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://dev.appsflyer.com/hc/reference) | bundle definition |
 | `apptivo` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Apptivo | `api` | ga | check, catalog, read, write | 4 | 1 | [Documentation](https://www.apptivo.com/api-reference/) | bundle definition |
-| `asana` | [`icons/asana.svg`](../icons/asana.svg) | Asana | `api` | ga | check, catalog, read, write | 12 | 73 | [Documentation](https://developers.asana.com/reference/rest-api-reference) | bundle definition |
+| `asana` | [`icons/asana.svg`](../icons/asana.svg) | Asana | `api` | ga | check, catalog, read, write | 12 | 94 | [Documentation](https://developers.asana.com/reference/rest-api-reference) | bundle definition |
 | `ashby` | [`icons/ashby.svg`](../icons/ashby.svg) | Ashby | `api` | alpha | check, catalog, read, write | 71 | 98 | [Documentation](https://developers.ashbyhq.com/) | bundle definition |
 | `assemblyai` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | AssemblyAI | `api` | ga | check, catalog, read, write | 8 | 1 | [Documentation](https://www.assemblyai.com/docs) | bundle definition |
 | `auth0` | [`icons/auth0.svg`](../icons/auth0.svg) | Auth0 | `api` | beta | check, catalog, read, write | 7 | 8 | [Documentation](https://auth0.com/docs/api/management/v2) | bundle definition |

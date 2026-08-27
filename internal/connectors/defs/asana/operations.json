@@ -18,14 +18,37 @@
       "rest": {
         "method": "GET",
         "path": "/access_requests",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "target",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "user",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAccessRequests",
+        "method": "GET",
+        "path": "/access_requests"
       }
     },
     {
       "id": "create_access_request",
       "kind": "rest_write",
       "summary": "Create an access request",
-      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAccessRequest",
       "source_url": "https://developers.asana.com/reference/createaccessrequest",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -60,7 +83,7 @@
       "id": "approve_access_request",
       "kind": "rest_write",
       "summary": "Approve an access request",
-      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action approve_access_request.",
       "source_url": "https://developers.asana.com/reference/approveaccessrequest",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -81,7 +104,7 @@
       "id": "reject_access_request",
       "kind": "rest_write",
       "summary": "Reject an access request",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action reject_access_request.",
       "source_url": "https://developers.asana.com/reference/rejectaccessrequest",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -116,7 +139,45 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/agents",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAgentsForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/agents"
       }
     },
     {
@@ -137,7 +198,25 @@
       "rest": {
         "method": "GET",
         "path": "/agents/{agent_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "agent_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAgent",
+        "method": "GET",
+        "path": "/agents/{agent_gid}"
       }
     },
     {
@@ -158,7 +237,55 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/ai_studio/runs",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "division_gid",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "end_at",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "start_at",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAiStudioRuns",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/ai_studio/runs"
       }
     },
     {
@@ -179,7 +306,54 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/ai_studio/seats",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "division_gid",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "type": "enum",
+            "values": [
+              "active",
+              "revoked"
+            ]
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAiStudioSeats",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/ai_studio/seats"
       }
     },
     {
@@ -200,14 +374,32 @@
       "rest": {
         "method": "GET",
         "path": "/allocations/{allocation_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "allocation_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAllocation",
+        "method": "GET",
+        "path": "/allocations/{allocation_gid}"
       }
     },
     {
       "id": "update_allocation",
       "kind": "rest_write",
       "summary": "Update an allocation",
-      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateAllocation",
       "source_url": "https://developers.asana.com/reference/updateallocation",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -247,7 +439,7 @@
       "id": "delete_allocation",
       "kind": "rest_write",
       "summary": "Delete an allocation",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action delete_allocation.",
       "source_url": "https://developers.asana.com/reference/deleteallocation",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -282,14 +474,61 @@
       "rest": {
         "method": "GET",
         "path": "/allocations",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "assignee",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "parent",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAllocations",
+        "method": "GET",
+        "path": "/allocations"
       }
     },
     {
       "id": "create_allocation",
       "kind": "rest_write",
       "summary": "Create an allocation",
-      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAllocation",
       "source_url": "https://developers.asana.com/reference/createallocation",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -338,14 +577,32 @@
       "rest": {
         "method": "GET",
         "path": "/attachments/{attachment_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "attachment_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAttachment",
+        "method": "GET",
+        "path": "/attachments/{attachment_gid}"
       }
     },
     {
       "id": "delete_attachment",
       "kind": "rest_write",
       "summary": "Delete an attachment",
-      "description": "planned destructive attachment operation; blocked until named write action has a typed schema, redaction, idempotency evidence, confirm: \"destructive\", and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action delete_attachment.",
       "source_url": "https://developers.asana.com/reference/deleteattachment",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -380,14 +637,52 @@
       "rest": {
         "method": "GET",
         "path": "/attachments",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "parent",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAttachmentsForObject",
+        "method": "GET",
+        "path": "/attachments"
       }
     },
     {
       "id": "create_attachment_for_object",
       "kind": "file_upload",
       "summary": "Upload an attachment",
-      "description": "planned bounded attachment upload; blocked until file-upload input mode, JSON response redaction, max-byte policy, multipart fixture evidence, plan -> preview -> approval -> execute, and typed confirmation are authored.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-encoding-foundation-r1; missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAttachmentForObject",
       "source_url": "https://developers.asana.com/reference/createattachmentforobject",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -422,14 +717,84 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/audit_log_events",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "actor_gid",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "actor_type",
+            "in": "query",
+            "type": "enum",
+            "values": [
+              "user",
+              "asana",
+              "asana_support",
+              "anonymous",
+              "external_administrator"
+            ]
+          },
+          {
+            "name": "end_at",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "event_type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "resource_gid",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "start_at",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getAuditLogEvents",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/audit_log_events"
       }
     },
     {
       "id": "create_batch_request",
       "kind": "composite",
       "summary": "Submit parallel requests",
-      "description": "Asana /batch is a generic subrequest wrapper that would expose raw method/path/body passthrough; every underlying documented operation is represented as its own typed row instead.",
+      "description": "Not-applicable source-bound provider generic wrapper: not_applicable=generic_batch_wrapper; source_operation=asana.rest.createBatchRequest",
       "source_url": "https://developers.asana.com/reference/createbatchrequest",
       "risk": "high",
       "approval": "not exposed; generic batch subrequests are disallowed to avoid raw API passthrough",
@@ -464,14 +829,32 @@
       "rest": {
         "method": "GET",
         "path": "/budgets",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "parent",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getBudgets",
+        "method": "GET",
+        "path": "/budgets"
       }
     },
     {
       "id": "create_budget",
       "kind": "rest_write",
       "summary": "Create a budget",
-      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createBudget",
       "source_url": "https://developers.asana.com/reference/createbudget",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -520,14 +903,32 @@
       "rest": {
         "method": "GET",
         "path": "/budgets/{budget_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "budget_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getBudget",
+        "method": "GET",
+        "path": "/budgets/{budget_gid}"
       }
     },
     {
       "id": "update_budget",
       "kind": "rest_write",
       "summary": "Update a budget",
-      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateBudget",
       "source_url": "https://developers.asana.com/reference/updatebudget",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -567,7 +968,7 @@
       "id": "delete_budget",
       "kind": "rest_write",
       "summary": "Delete a budget",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action delete_budget.",
       "source_url": "https://developers.asana.com/reference/deletebudget",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -602,7 +1003,45 @@
       "rest": {
         "method": "GET",
         "path": "/projects/{project_gid}/custom_field_settings",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getCustomFieldSettingsForProject",
+        "method": "GET",
+        "path": "/projects/{project_gid}/custom_field_settings"
       }
     },
     {
@@ -623,7 +1062,45 @@
       "rest": {
         "method": "GET",
         "path": "/portfolios/{portfolio_gid}/custom_field_settings",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "portfolio_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getCustomFieldSettingsForPortfolio",
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}/custom_field_settings"
       }
     },
     {
@@ -644,7 +1121,45 @@
       "rest": {
         "method": "GET",
         "path": "/goals/{goal_gid}/custom_field_settings",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "goal_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getCustomFieldSettingsForGoal",
+        "method": "GET",
+        "path": "/goals/{goal_gid}/custom_field_settings"
       }
     },
     {
@@ -665,7 +1180,25 @@
       "rest": {
         "method": "GET",
         "path": "/teams/{team_gid}/custom_field_settings",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "team_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getCustomFieldSettingsForTeam",
+        "method": "GET",
+        "path": "/teams/{team_gid}/custom_field_settings"
       }
     },
     {
@@ -686,14 +1219,32 @@
       "rest": {
         "method": "GET",
         "path": "/custom_fields/{custom_field_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "custom_field_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getCustomField",
+        "method": "GET",
+        "path": "/custom_fields/{custom_field_gid}"
       }
     },
     {
       "id": "delete_custom_field",
       "kind": "rest_write",
       "summary": "Delete a custom field",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action delete_custom_field.",
       "source_url": "https://developers.asana.com/reference/deletecustomfield",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -712,6 +1263,11 @@
     },
     {
       "id": "get_custom_fields_for_workspace",
+      "source_operation": {
+        "id": "asana.rest.getCustomFieldsForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/custom_fields"
+      },
       "kind": "stream_etl",
       "summary": "Get a workspace's custom fields",
       "description": "Implemented Asana operation mapped to {'stream': 'custom_fields'}.",
@@ -749,7 +1305,45 @@
       "rest": {
         "method": "GET",
         "path": "/custom_types",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getCustomTypes",
+        "method": "GET",
+        "path": "/custom_types"
       }
     },
     {
@@ -770,7 +1364,25 @@
       "rest": {
         "method": "GET",
         "path": "/custom_types/{custom_type_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "custom_type_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getCustomType",
+        "method": "GET",
+        "path": "/custom_types/{custom_type_gid}"
       }
     },
     {
@@ -791,7 +1403,30 @@
       "rest": {
         "method": "GET",
         "path": "/events",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "resource",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "sync",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getEvents",
+        "method": "GET",
+        "path": "/events"
       }
     },
     {
@@ -812,7 +1447,25 @@
       "rest": {
         "method": "GET",
         "path": "/goal_relationships/{goal_relationship_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "goal_relationship_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getGoalRelationship",
+        "method": "GET",
+        "path": "/goal_relationships/{goal_relationship_gid}"
       }
     },
     {
@@ -833,14 +1486,57 @@
       "rest": {
         "method": "GET",
         "path": "/goal_relationships",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "supported_goal",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "resource_subtype",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getGoalRelationships",
+        "method": "GET",
+        "path": "/goal_relationships"
       }
     },
     {
       "id": "remove_supporting_relationship",
       "kind": "rest_write",
       "summary": "Removes a supporting goal relationship",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeSupportingRelationship",
       "source_url": "https://developers.asana.com/reference/removesupportingrelationship",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -894,14 +1590,32 @@
       "rest": {
         "method": "GET",
         "path": "/goals/{goal_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "goal_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getGoal",
+        "method": "GET",
+        "path": "/goals/{goal_gid}"
       }
     },
     {
       "id": "delete_goal",
       "kind": "rest_write",
       "summary": "Delete a goal",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action delete_goal.",
       "source_url": "https://developers.asana.com/reference/deletegoal",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -936,14 +1650,76 @@
       "rest": {
         "method": "GET",
         "path": "/goals",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "is_workspace_level",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "portfolio",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "project",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "task",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "team",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getGoals",
+        "method": "GET",
+        "path": "/goals"
       }
     },
     {
       "id": "remove_followers",
       "kind": "rest_write",
       "summary": "Remove a collaborator from a goal",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowers",
       "source_url": "https://developers.asana.com/reference/removefollowers",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -997,14 +1773,32 @@
       "rest": {
         "method": "GET",
         "path": "/goals/{goal_gid}/parentGoals",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "goal_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getParentGoalsForGoal",
+        "method": "GET",
+        "path": "/goals/{goal_gid}/parentGoals"
       }
     },
     {
       "id": "remove_custom_field_setting_for_goal",
       "kind": "rest_write",
       "summary": "Remove a custom field from a goal",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForGoal",
       "source_url": "https://developers.asana.com/reference/removecustomfieldsettingforgoal",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -1058,7 +1852,25 @@
       "rest": {
         "method": "GET",
         "path": "/jobs/{job_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "job_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getJob",
+        "method": "GET",
+        "path": "/jobs/{job_gid}"
       }
     },
     {
@@ -1079,14 +1891,64 @@
       "rest": {
         "method": "GET",
         "path": "/memberships",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "member",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "parent",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "resource_subtype",
+            "in": "query",
+            "type": "enum",
+            "values": [
+              "project_membership"
+            ]
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getMemberships",
+        "method": "GET",
+        "path": "/memberships"
       }
     },
     {
       "id": "create_membership",
       "kind": "rest_write",
       "summary": "Create a membership",
-      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-openapi30-reference-sibling-foundation-r1; missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createMembership",
       "source_url": "https://developers.asana.com/reference/createmembership",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -1121,7 +1983,7 @@
       "id": "get_membership",
       "kind": "rest_read",
       "summary": "Get a membership",
-      "description": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
+      "description": "Unavailable source-bound provider read: missing_foundation=cli-openapi30-reference-sibling-foundation-r1; source_operation=asana.rest.getMembership",
       "source_url": "https://developers.asana.com/reference/getmembership",
       "risk": "none",
       "approval": "none; read-only fixed-target operation remains bounded and redacted",
@@ -1142,7 +2004,7 @@
       "id": "update_membership",
       "kind": "rest_write",
       "summary": "Update a membership",
-      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateMembership",
       "source_url": "https://developers.asana.com/reference/updatemembership",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -1182,7 +2044,7 @@
       "id": "delete_membership",
       "kind": "rest_write",
       "summary": "Delete a membership",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action delete_membership.",
       "source_url": "https://developers.asana.com/reference/deletemembership",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -1217,14 +2079,32 @@
       "rest": {
         "method": "GET",
         "path": "/ooo_entries/{ooo_entry_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "ooo_entry_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getOooEntry",
+        "method": "GET",
+        "path": "/ooo_entries/{ooo_entry_gid}"
       }
     },
     {
       "id": "delete_ooo_entry",
       "kind": "rest_write",
       "summary": "Delete an OOO entry",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action delete_ooo_entry.",
       "source_url": "https://developers.asana.com/reference/deleteoooentry",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -1259,14 +2139,68 @@
       "rest": {
         "method": "GET",
         "path": "/ooo_entries",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getOooEntries",
+        "method": "GET",
+        "path": "/ooo_entries"
       }
     },
     {
       "id": "create_organization_export",
       "kind": "rest_write",
       "summary": "Create an organization export request",
-      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createOrganizationExport",
       "source_url": "https://developers.asana.com/reference/createorganizationexport",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -1315,7 +2249,25 @@
       "rest": {
         "method": "GET",
         "path": "/organization_exports/{organization_export_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "organization_export_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getOrganizationExport",
+        "method": "GET",
+        "path": "/organization_exports/{organization_export_gid}"
       }
     },
     {
@@ -1336,7 +2288,54 @@
       "rest": {
         "method": "GET",
         "path": "/portfolio_memberships",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "portfolio",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "user",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getPortfolioMemberships",
+        "method": "GET",
+        "path": "/portfolio_memberships"
       }
     },
     {
@@ -1357,7 +2356,25 @@
       "rest": {
         "method": "GET",
         "path": "/portfolio_memberships/{portfolio_membership_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "portfolio_membership_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getPortfolioMembership",
+        "method": "GET",
+        "path": "/portfolio_memberships/{portfolio_membership_gid}"
       }
     },
     {
@@ -1378,7 +2395,50 @@
       "rest": {
         "method": "GET",
         "path": "/portfolios/{portfolio_gid}/portfolio_memberships",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "portfolio_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "user",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getPortfolioMembershipsForPortfolio",
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}/portfolio_memberships"
       }
     },
     {
@@ -1399,7 +2459,50 @@
       "rest": {
         "method": "GET",
         "path": "/portfolios",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "owner",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getPortfolios",
+        "method": "GET",
+        "path": "/portfolios"
       }
     },
     {
@@ -1420,14 +2523,32 @@
       "rest": {
         "method": "GET",
         "path": "/portfolios/{portfolio_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "portfolio_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getPortfolio",
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}"
       }
     },
     {
       "id": "delete_portfolio",
       "kind": "rest_write",
       "summary": "Delete a portfolio",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action delete_portfolio.",
       "source_url": "https://developers.asana.com/reference/deleteportfolio",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -1462,14 +2583,52 @@
       "rest": {
         "method": "GET",
         "path": "/portfolios/{portfolio_gid}/items",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "portfolio_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getItemsForPortfolio",
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}/items"
       }
     },
     {
       "id": "remove_item_for_portfolio",
       "kind": "rest_write",
       "summary": "Remove a portfolio item",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeItemForPortfolio",
       "source_url": "https://developers.asana.com/reference/removeitemforportfolio",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -1509,7 +2668,7 @@
       "id": "remove_custom_field_setting_for_portfolio",
       "kind": "rest_write",
       "summary": "Remove a custom field from a portfolio",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForPortfolio",
       "source_url": "https://developers.asana.com/reference/removecustomfieldsettingforportfolio",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -1549,7 +2708,7 @@
       "id": "remove_members_for_portfolio",
       "kind": "rest_write",
       "summary": "Remove users from a portfolio",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeMembersForPortfolio",
       "source_url": "https://developers.asana.com/reference/removemembersforportfolio",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -1603,14 +2762,32 @@
       "rest": {
         "method": "GET",
         "path": "/project_briefs/{project_brief_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_brief_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectBrief",
+        "method": "GET",
+        "path": "/project_briefs/{project_brief_gid}"
       }
     },
     {
       "id": "delete_project_brief",
       "kind": "rest_write",
       "summary": "Delete a project brief",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action delete_project_brief.",
       "source_url": "https://developers.asana.com/reference/deleteprojectbrief",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -1645,7 +2822,25 @@
       "rest": {
         "method": "GET",
         "path": "/project_memberships/{project_membership_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_membership_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectMembership",
+        "method": "GET",
+        "path": "/project_memberships/{project_membership_gid}"
       }
     },
     {
@@ -1666,7 +2861,50 @@
       "rest": {
         "method": "GET",
         "path": "/projects/{project_gid}/project_memberships",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "user",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectMembershipsForProject",
+        "method": "GET",
+        "path": "/projects/{project_gid}/project_memberships"
       }
     },
     {
@@ -1687,7 +2925,25 @@
       "rest": {
         "method": "GET",
         "path": "/project_portfolio_settings/{project_portfolio_setting_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_portfolio_setting_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectPortfolioSetting",
+        "method": "GET",
+        "path": "/project_portfolio_settings/{project_portfolio_setting_gid}"
       }
     },
     {
@@ -1708,7 +2964,45 @@
       "rest": {
         "method": "GET",
         "path": "/projects/{project_gid}/project_portfolio_settings",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectPortfolioSettingsForProject",
+        "method": "GET",
+        "path": "/projects/{project_gid}/project_portfolio_settings"
       }
     },
     {
@@ -1729,7 +3023,45 @@
       "rest": {
         "method": "GET",
         "path": "/portfolios/{portfolio_gid}/project_portfolio_settings",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "portfolio_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectPortfolioSettingsForPortfolio",
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}/project_portfolio_settings"
       }
     },
     {
@@ -1750,14 +3082,32 @@
       "rest": {
         "method": "GET",
         "path": "/project_statuses/{project_status_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_status_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectStatus",
+        "method": "GET",
+        "path": "/project_statuses/{project_status_gid}"
       }
     },
     {
       "id": "delete_project_status",
       "kind": "rest_write",
       "summary": "Delete a project status",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action delete_project_status.",
       "source_url": "https://developers.asana.com/reference/deleteprojectstatus",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -1793,6 +3143,11 @@
         "steps": [
           "stream:project_statuses"
         ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectStatusesForProject",
+        "method": "GET",
+        "path": "/projects/{project_gid}/project_statuses"
       }
     },
     {
@@ -1813,14 +3168,32 @@
       "rest": {
         "method": "GET",
         "path": "/project_templates/{project_template_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_template_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectTemplate",
+        "method": "GET",
+        "path": "/project_templates/{project_template_gid}"
       }
     },
     {
       "id": "delete_project_template",
       "kind": "rest_write",
       "summary": "Delete a project template",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action delete_project_template.",
       "source_url": "https://developers.asana.com/reference/deleteprojecttemplate",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -1855,7 +3228,49 @@
       "rest": {
         "method": "GET",
         "path": "/project_templates",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "team",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectTemplates",
+        "method": "GET",
+        "path": "/project_templates"
       }
     },
     {
@@ -1876,7 +3291,45 @@
       "rest": {
         "method": "GET",
         "path": "/teams/{team_gid}/project_templates",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "team_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectTemplatesForTeam",
+        "method": "GET",
+        "path": "/teams/{team_gid}/project_templates"
       }
     },
     {
@@ -1898,6 +3351,11 @@
         "steps": [
           "stream:projects"
         ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjects",
+        "method": "GET",
+        "path": "/projects"
       }
     },
     {
@@ -1953,7 +3411,25 @@
       "rest": {
         "method": "GET",
         "path": "/projects/{project_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProject",
+        "method": "GET",
+        "path": "/projects/{project_gid}"
       }
     },
     {
@@ -2035,7 +3511,45 @@
       "rest": {
         "method": "GET",
         "path": "/tasks/{task_gid}/projects",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "task_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectsForTask",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/projects"
       }
     },
     {
@@ -2056,7 +3570,50 @@
       "rest": {
         "method": "GET",
         "path": "/teams/{team_gid}/projects",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "team_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "archived",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectsForTeam",
+        "method": "GET",
+        "path": "/teams/{team_gid}/projects"
       }
     },
     {
@@ -2077,7 +3634,50 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/projects",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "archived",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getProjectsForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/projects"
       }
     },
     {
@@ -2098,14 +3698,174 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/projects/search",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "completed",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "completed_at.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "completed_at.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "completed_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "completed_on.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "completed_on.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_at.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_at.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_on.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_on.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_at.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_at.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_on.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_on.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "members.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "members.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "owner.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "portfolios.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "sort_ascending",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "type": "enum",
+            "values": [
+              "due_date",
+              "created_at",
+              "completed_at",
+              "modified_at",
+              "relevance"
+            ]
+          },
+          {
+            "name": "start_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "start_on.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "start_on.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "teams.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "text",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.searchProjectsForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/projects/search"
       }
     },
     {
       "id": "remove_custom_field_setting_for_project",
       "kind": "rest_write",
       "summary": "Remove a custom field from a project",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForProject",
       "source_url": "https://developers.asana.com/reference/removecustomfieldsettingforproject",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -2159,14 +3919,32 @@
       "rest": {
         "method": "GET",
         "path": "/projects/{project_gid}/task_counts",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTaskCountsForProject",
+        "method": "GET",
+        "path": "/projects/{project_gid}/task_counts"
       }
     },
     {
       "id": "remove_members_for_project",
       "kind": "rest_write",
       "summary": "Remove users from a project",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeMembersForProject",
       "source_url": "https://developers.asana.com/reference/removemembersforproject",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -2206,7 +3984,7 @@
       "id": "remove_followers_for_project",
       "kind": "rest_write",
       "summary": "Remove followers from a project",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowersForProject",
       "source_url": "https://developers.asana.com/reference/removefollowersforproject",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -2260,14 +4038,56 @@
       "rest": {
         "method": "GET",
         "path": "/rates",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "parent",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "resource",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getRates",
+        "method": "GET",
+        "path": "/rates"
       }
     },
     {
       "id": "create_rate",
       "kind": "rest_write",
       "summary": "Create a rate",
-      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createRate",
       "source_url": "https://developers.asana.com/reference/createrate",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -2316,14 +4136,32 @@
       "rest": {
         "method": "GET",
         "path": "/rates/{rate_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "rate_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getRate",
+        "method": "GET",
+        "path": "/rates/{rate_gid}"
       }
     },
     {
       "id": "update_rate",
       "kind": "rest_write",
       "summary": "Update a rate",
-      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateRate",
       "source_url": "https://developers.asana.com/reference/updaterate",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -2363,7 +4201,7 @@
       "id": "delete_rate",
       "kind": "rest_write",
       "summary": "Delete a rate",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action delete_rate.",
       "source_url": "https://developers.asana.com/reference/deleterate",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -2398,7 +4236,51 @@
       "rest": {
         "method": "GET",
         "path": "/reactions",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "emoji_base",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "target",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getReactionsOnObject",
+        "method": "GET",
+        "path": "/reactions"
       }
     },
     {
@@ -2419,14 +4301,56 @@
       "rest": {
         "method": "GET",
         "path": "/roles",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "archived",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getRoles",
+        "method": "GET",
+        "path": "/roles"
       }
     },
     {
       "id": "create_role",
       "kind": "rest_write",
       "summary": "Create a role",
-      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createRole",
       "source_url": "https://developers.asana.com/reference/createrole",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -2475,14 +4399,32 @@
       "rest": {
         "method": "GET",
         "path": "/roles/{role_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "role_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getRole",
+        "method": "GET",
+        "path": "/roles/{role_gid}"
       }
     },
     {
       "id": "update_role",
       "kind": "rest_write",
       "summary": "Update a role",
-      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateRole",
       "source_url": "https://developers.asana.com/reference/updaterole",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -2522,7 +4464,7 @@
       "id": "delete_role",
       "kind": "rest_write",
       "summary": "Delete a role",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action delete_role.",
       "source_url": "https://developers.asana.com/reference/deleterole",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -2557,7 +4499,25 @@
       "rest": {
         "method": "GET",
         "path": "/sections/{section_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "section_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getSection",
+        "method": "GET",
+        "path": "/sections/{section_gid}"
       }
     },
     {
@@ -2640,6 +4600,11 @@
         "steps": [
           "stream:sections"
         ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getSectionsForProject",
+        "method": "GET",
+        "path": "/projects/{project_gid}/sections"
       }
     },
     {
@@ -2700,14 +4665,32 @@
       "rest": {
         "method": "GET",
         "path": "/status_updates/{status_update_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "status_update_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getStatus",
+        "method": "GET",
+        "path": "/status_updates/{status_update_gid}"
       }
     },
     {
       "id": "delete_status",
       "kind": "rest_write",
       "summary": "Delete a status update",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action delete_status.",
       "source_url": "https://developers.asana.com/reference/deletestatus",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -2742,7 +4725,50 @@
       "rest": {
         "method": "GET",
         "path": "/status_updates",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "parent",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "created_since",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getStatusesForObject",
+        "method": "GET",
+        "path": "/status_updates"
       }
     },
     {
@@ -2763,14 +4789,32 @@
       "rest": {
         "method": "GET",
         "path": "/stories/{story_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "story_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getStory",
+        "method": "GET",
+        "path": "/stories/{story_gid}"
       }
     },
     {
       "id": "delete_story",
       "kind": "rest_write",
       "summary": "Delete a story",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action delete_story.",
       "source_url": "https://developers.asana.com/reference/deletestory",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -2806,6 +4850,11 @@
         "steps": [
           "stream:stories"
         ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getStoriesForTask",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/stories"
       }
     },
     {
@@ -2866,7 +4915,45 @@
       "rest": {
         "method": "GET",
         "path": "/goals/{goal_gid}/stories",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "goal_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getStoriesForGoal",
+        "method": "GET",
+        "path": "/goals/{goal_gid}/stories"
       }
     },
     {
@@ -2888,6 +4975,11 @@
         "steps": [
           "stream:tags"
         ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTags",
+        "method": "GET",
+        "path": "/tags"
       }
     },
     {
@@ -2943,7 +5035,25 @@
       "rest": {
         "method": "GET",
         "path": "/tags/{tag_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "tag_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTag",
+        "method": "GET",
+        "path": "/tags/{tag_gid}"
       }
     },
     {
@@ -3025,7 +5135,45 @@
       "rest": {
         "method": "GET",
         "path": "/tasks/{task_gid}/tags",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "task_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTagsForTask",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/tags"
       }
     },
     {
@@ -3046,7 +5194,45 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/tags",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTagsForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/tags"
       }
     },
     {
@@ -3067,7 +5253,24 @@
       "rest": {
         "method": "GET",
         "path": "/task_templates",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "project",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTaskTemplates",
+        "method": "GET",
+        "path": "/task_templates"
       }
     },
     {
@@ -3088,14 +5291,32 @@
       "rest": {
         "method": "GET",
         "path": "/task_templates/{task_template_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "task_template_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTaskTemplate",
+        "method": "GET",
+        "path": "/task_templates/{task_template_gid}"
       }
     },
     {
       "id": "delete_task_template",
       "kind": "rest_write",
       "summary": "Delete a task template",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action delete_task_template.",
       "source_url": "https://developers.asana.com/reference/deletetasktemplate",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -3131,6 +5352,11 @@
         "steps": [
           "stream:tasks"
         ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTasks",
+        "method": "GET",
+        "path": "/tasks"
       }
     },
     {
@@ -3186,7 +5412,25 @@
       "rest": {
         "method": "GET",
         "path": "/tasks/{task_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "task_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTask",
+        "method": "GET",
+        "path": "/tasks/{task_gid}"
       }
     },
     {
@@ -3268,7 +5512,50 @@
       "rest": {
         "method": "GET",
         "path": "/projects/{project_gid}/tasks",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "project_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "completed_since",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTasksForProject",
+        "method": "GET",
+        "path": "/projects/{project_gid}/tasks"
       }
     },
     {
@@ -3289,7 +5576,50 @@
       "rest": {
         "method": "GET",
         "path": "/sections/{section_gid}/tasks",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "section_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "completed_since",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTasksForSection",
+        "method": "GET",
+        "path": "/sections/{section_gid}/tasks"
       }
     },
     {
@@ -3310,7 +5640,45 @@
       "rest": {
         "method": "GET",
         "path": "/tags/{tag_gid}/tasks",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "tag_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTasksForTag",
+        "method": "GET",
+        "path": "/tags/{tag_gid}/tasks"
       }
     },
     {
@@ -3331,7 +5699,50 @@
       "rest": {
         "method": "GET",
         "path": "/user_task_lists/{user_task_list_gid}/tasks",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user_task_list_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "completed_since",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTasksForUserTaskList",
+        "method": "GET",
+        "path": "/user_task_lists/{user_task_list_gid}/tasks"
       }
     },
     {
@@ -3352,7 +5763,45 @@
       "rest": {
         "method": "GET",
         "path": "/tasks/{task_gid}/subtasks",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "task_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getSubtasksForTask",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/subtasks"
       }
     },
     {
@@ -3373,14 +5822,52 @@
       "rest": {
         "method": "GET",
         "path": "/tasks/{task_gid}/dependencies",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "task_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getDependenciesForTask",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/dependencies"
       }
     },
     {
       "id": "remove_dependencies_for_task",
       "kind": "rest_write",
       "summary": "Unlink dependencies from a task",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeDependenciesForTask",
       "source_url": "https://developers.asana.com/reference/removedependenciesfortask",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -3434,14 +5921,52 @@
       "rest": {
         "method": "GET",
         "path": "/tasks/{task_gid}/dependents",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "task_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getDependentsForTask",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/dependents"
       }
     },
     {
       "id": "remove_dependents_for_task",
       "kind": "rest_write",
       "summary": "Unlink dependents from a task",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeDependentsForTask",
       "source_url": "https://developers.asana.com/reference/removedependentsfortask",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -3481,7 +6006,7 @@
       "id": "remove_project_for_task",
       "kind": "rest_write",
       "summary": "Remove a project from a task",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeProjectForTask",
       "source_url": "https://developers.asana.com/reference/removeprojectfortask",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -3521,7 +6046,7 @@
       "id": "remove_tag_for_task",
       "kind": "rest_write",
       "summary": "Remove a tag from a task",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeTagForTask",
       "source_url": "https://developers.asana.com/reference/removetagfortask",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -3561,7 +6086,7 @@
       "id": "remove_follower_for_task",
       "kind": "rest_write",
       "summary": "Remove followers from a task",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowerForTask",
       "source_url": "https://developers.asana.com/reference/removefollowerfortask",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -3615,7 +6140,26 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/tasks/custom_id/{custom_id}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "custom_id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTaskForCustomID",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/tasks/custom_id/{custom_id}"
       }
     },
     {
@@ -3636,7 +6180,304 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/tasks/search",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "assigned_by.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "assigned_by.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "assignee.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "assignee.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "commented_on_by.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "completed",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "completed_at.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "completed_at.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "completed_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "completed_on.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "completed_on.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_at.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_at.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_by.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_by.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_on.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "created_on.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_at.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_at.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_on.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "due_on.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "followers.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "followers.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "has_attachment",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "is_blocked",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "is_blocking",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "is_subtask",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "liked_by.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "modified_at.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "modified_at.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "modified_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "modified_on.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "modified_on.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "portfolios.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "projects.all",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "projects.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "projects.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "resource_subtype",
+            "in": "query",
+            "type": "enum",
+            "values": [
+              "default_task",
+              "milestone",
+              "approval",
+              "custom"
+            ]
+          },
+          {
+            "name": "sections.all",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "sections.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "sections.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "sort_ascending",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "type": "enum",
+            "values": [
+              "due_date",
+              "created_at",
+              "completed_at",
+              "likes",
+              "modified_at",
+              "relevance"
+            ]
+          },
+          {
+            "name": "start_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "start_on.after",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "start_on.before",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "tags.all",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "tags.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "tags.not",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "teams.any",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "text",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.searchTasksForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/tasks/search"
       }
     },
     {
@@ -3657,7 +6498,25 @@
       "rest": {
         "method": "GET",
         "path": "/team_memberships/{team_membership_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "team_membership_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTeamMembership",
+        "method": "GET",
+        "path": "/team_memberships/{team_membership_gid}"
       }
     },
     {
@@ -3679,6 +6538,11 @@
         "steps": [
           "stream:team_memberships"
         ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTeamMemberships",
+        "method": "GET",
+        "path": "/team_memberships"
       }
     },
     {
@@ -3699,7 +6563,45 @@
       "rest": {
         "method": "GET",
         "path": "/teams/{team_gid}/team_memberships",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "team_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTeamMembershipsForTeam",
+        "method": "GET",
+        "path": "/teams/{team_gid}/team_memberships"
       }
     },
     {
@@ -3720,7 +6622,51 @@
       "rest": {
         "method": "GET",
         "path": "/users/{user_gid}/team_memberships",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTeamMembershipsForUser",
+        "method": "GET",
+        "path": "/users/{user_gid}/team_memberships"
       }
     },
     {
@@ -3741,11 +6687,34 @@
       "rest": {
         "method": "GET",
         "path": "/teams/{team_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "team_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTeam",
+        "method": "GET",
+        "path": "/teams/{team_gid}"
       }
     },
     {
       "id": "get_teams_for_workspace",
+      "source_operation": {
+        "id": "asana.rest.getTeamsForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/teams"
+      },
       "kind": "stream_etl",
       "summary": "Get teams in a workspace",
       "description": "Implemented Asana operation mapped to {'stream': 'teams'}.",
@@ -3783,14 +6752,58 @@
       "rest": {
         "method": "GET",
         "path": "/users/{user_gid}/teams",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "organization",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTeamsForUser",
+        "method": "GET",
+        "path": "/users/{user_gid}/teams"
       }
     },
     {
       "id": "remove_user_for_team",
       "kind": "rest_write",
       "summary": "Remove a user from a team",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeUserForTeam",
       "source_url": "https://developers.asana.com/reference/removeuserforteam",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -3844,7 +6857,25 @@
       "rest": {
         "method": "GET",
         "path": "/time_periods/{time_period_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "time_period_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimePeriod",
+        "method": "GET",
+        "path": "/time_periods/{time_period_gid}"
       }
     },
     {
@@ -3865,7 +6896,55 @@
       "rest": {
         "method": "GET",
         "path": "/time_periods",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "end_on",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "start_on",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimePeriods",
+        "method": "GET",
+        "path": "/time_periods"
       }
     },
     {
@@ -3886,14 +6965,32 @@
       "rest": {
         "method": "GET",
         "path": "/time_tracking_categories/{time_tracking_category_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "time_tracking_category_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimeTrackingCategory",
+        "method": "GET",
+        "path": "/time_tracking_categories/{time_tracking_category_gid}"
       }
     },
     {
       "id": "update_time_tracking_category",
       "kind": "rest_write",
       "summary": "Update a time tracking category",
-      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateTimeTrackingCategory",
       "source_url": "https://developers.asana.com/reference/updatetimetrackingcategory",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -3933,7 +7030,7 @@
       "id": "delete_time_tracking_category",
       "kind": "rest_write",
       "summary": "Delete a time tracking category",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action delete_time_tracking_category.",
       "source_url": "https://developers.asana.com/reference/deletetimetrackingcategory",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -3968,7 +7065,55 @@
       "rest": {
         "method": "GET",
         "path": "/time_tracking_categories/{time_tracking_category_gid}/time_tracking_entries",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "time_tracking_category_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimeTrackingEntriesForTimeTrackingCategory",
+        "method": "GET",
+        "path": "/time_tracking_categories/{time_tracking_category_gid}/time_tracking_entries"
       }
     },
     {
@@ -3989,14 +7134,57 @@
       "rest": {
         "method": "GET",
         "path": "/time_tracking_categories",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "is_archived",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimeTrackingCategories",
+        "method": "GET",
+        "path": "/time_tracking_categories"
       }
     },
     {
       "id": "create_time_tracking_category",
       "kind": "rest_write",
       "summary": "Create a time tracking category",
-      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createTimeTrackingCategory",
       "source_url": "https://developers.asana.com/reference/createtimetrackingcategory",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -4045,7 +7233,45 @@
       "rest": {
         "method": "GET",
         "path": "/tasks/{task_gid}/time_tracking_entries",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "task_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimeTrackingEntriesForTask",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/time_tracking_entries"
       }
     },
     {
@@ -4066,14 +7292,32 @@
       "rest": {
         "method": "GET",
         "path": "/time_tracking_entries/{time_tracking_entry_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "time_tracking_entry_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimeTrackingEntry",
+        "method": "GET",
+        "path": "/time_tracking_entries/{time_tracking_entry_gid}"
       }
     },
     {
       "id": "delete_time_tracking_entry",
       "kind": "rest_write",
       "summary": "Delete a time tracking entry",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action delete_time_tracking_entry.",
       "source_url": "https://developers.asana.com/reference/deletetimetrackingentry",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -4108,7 +7352,79 @@
       "rest": {
         "method": "GET",
         "path": "/time_tracking_entries",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "attributable_to",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "entered_on_end_date",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "entered_on_start_date",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "portfolio",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "task",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "timesheet_approval_status",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "user",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimeTrackingEntries",
+        "method": "GET",
+        "path": "/time_tracking_entries"
       }
     },
     {
@@ -4129,14 +7445,32 @@
       "rest": {
         "method": "GET",
         "path": "/timesheet_approval_statuses/{timesheet_approval_status_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "timesheet_approval_status_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimesheetApprovalStatus",
+        "method": "GET",
+        "path": "/timesheet_approval_statuses/{timesheet_approval_status_gid}"
       }
     },
     {
       "id": "update_timesheet_approval_status",
       "kind": "rest_write",
       "summary": "Update a timesheet approval status",
-      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateTimesheetApprovalStatus",
       "source_url": "https://developers.asana.com/reference/updatetimesheetapprovalstatus",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -4190,14 +7524,72 @@
       "rest": {
         "method": "GET",
         "path": "/timesheet_approval_statuses",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "approval_statuses",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "from_date",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "to_date",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "user",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getTimesheetApprovalStatuses",
+        "method": "GET",
+        "path": "/timesheet_approval_statuses"
       }
     },
     {
       "id": "create_timesheet_approval_status",
       "kind": "rest_write",
       "summary": "Create a timesheet approval status",
-      "description": "planned admin/elevated reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, required scope evidence, typed confirmation where destructive, fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createTimesheetApprovalStatus",
       "source_url": "https://developers.asana.com/reference/createtimesheetapprovalstatus",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -4246,7 +7638,67 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/typeahead",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "resource_type",
+            "in": "query",
+            "type": "enum",
+            "required": true,
+            "values": [
+              "actor",
+              "agent",
+              "custom_field",
+              "goal",
+              "project",
+              "project_template",
+              "portfolio",
+              "tag",
+              "task",
+              "team",
+              "user"
+            ]
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "type": "enum",
+            "values": [
+              "custom_field",
+              "portfolio",
+              "project",
+              "tag",
+              "task",
+              "user"
+            ]
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.typeaheadForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/typeahead"
       }
     },
     {
@@ -4267,7 +7719,25 @@
       "rest": {
         "method": "GET",
         "path": "/user_task_lists/{user_task_list_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user_task_list_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getUserTaskList",
+        "method": "GET",
+        "path": "/user_task_lists/{user_task_list_gid}"
       }
     },
     {
@@ -4288,7 +7758,31 @@
       "rest": {
         "method": "GET",
         "path": "/users/{user_gid}/user_task_list",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getUserTaskListForUser",
+        "method": "GET",
+        "path": "/users/{user_gid}/user_task_list"
       }
     },
     {
@@ -4310,6 +7804,11 @@
         "steps": [
           "stream:users"
         ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getUsers",
+        "method": "GET",
+        "path": "/users"
       }
     },
     {
@@ -4330,7 +7829,30 @@
       "rest": {
         "method": "GET",
         "path": "/users/{user_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getUser",
+        "method": "GET",
+        "path": "/users/{user_gid}"
       }
     },
     {
@@ -4351,7 +7873,65 @@
       "rest": {
         "method": "GET",
         "path": "/users/{user_gid}/favorites",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "resource_type",
+            "in": "query",
+            "type": "enum",
+            "required": true,
+            "values": [
+              "portfolio",
+              "project",
+              "tag",
+              "task",
+              "user",
+              "project_template"
+            ]
+          },
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getFavoritesForUser",
+        "method": "GET",
+        "path": "/users/{user_gid}/favorites"
       }
     },
     {
@@ -4372,7 +7952,25 @@
       "rest": {
         "method": "GET",
         "path": "/teams/{team_gid}/users",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "team_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getUsersForTeam",
+        "method": "GET",
+        "path": "/teams/{team_gid}/users"
       }
     },
     {
@@ -4393,7 +7991,25 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/users",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getUsersForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/users"
       }
     },
     {
@@ -4414,7 +8030,31 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/users/{user_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getUserForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/users/{user_gid}"
       }
     },
     {
@@ -4435,14 +8075,57 @@
       "rest": {
         "method": "GET",
         "path": "/webhooks",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "resource",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getWebhooks",
+        "method": "GET",
+        "path": "/webhooks"
       }
     },
     {
       "id": "create_webhook",
       "kind": "rest_write",
       "summary": "Establish a webhook",
-      "description": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createWebhook",
       "source_url": "https://developers.asana.com/reference/createwebhook",
       "risk": "medium",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -4491,14 +8174,32 @@
       "rest": {
         "method": "GET",
         "path": "/webhooks/{webhook_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "webhook_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getWebhook",
+        "method": "GET",
+        "path": "/webhooks/{webhook_gid}"
       }
     },
     {
       "id": "update_webhook",
       "kind": "rest_write",
       "summary": "Update a webhook",
-      "description": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateWebhook",
       "source_url": "https://developers.asana.com/reference/updatewebhook",
       "risk": "medium",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -4538,7 +8239,7 @@
       "id": "delete_webhook",
       "kind": "rest_write",
       "summary": "Delete a webhook",
-      "description": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
+      "description": "Implemented Asana operation mapped to declared reverse-ETL action delete_webhook.",
       "source_url": "https://developers.asana.com/reference/deletewebhook",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -4573,7 +8274,25 @@
       "rest": {
         "method": "GET",
         "path": "/workspace_memberships/{workspace_membership_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_membership_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getWorkspaceMembership",
+        "method": "GET",
+        "path": "/workspace_memberships/{workspace_membership_gid}"
       }
     },
     {
@@ -4594,11 +8313,54 @@
       "rest": {
         "method": "GET",
         "path": "/users/{user_gid}/workspace_memberships",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "user_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "pagination": {
+          "limit_param": "limit",
+          "next_url_path": "next_page.uri",
+          "offset_param": "offset",
+          "page_size": 100,
+          "size_param": "limit",
+          "type": "next_url"
+        },
+        "pagination_parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getWorkspaceMembershipsForUser",
+        "method": "GET",
+        "path": "/users/{user_gid}/workspace_memberships"
       }
     },
     {
       "id": "get_workspace_memberships_for_workspace",
+      "source_operation": {
+        "id": "asana.rest.getWorkspaceMembershipsForWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/workspace_memberships"
+      },
       "kind": "stream_etl",
       "summary": "Get the workspace memberships for a workspace",
       "description": "Implemented Asana operation mapped to {'stream': 'workspace_memberships'}.",
@@ -4620,6 +8382,11 @@
     },
     {
       "id": "get_workspaces",
+      "source_operation": {
+        "id": "asana.rest.getWorkspaces",
+        "method": "GET",
+        "path": "/workspaces"
+      },
       "kind": "stream_etl",
       "summary": "Get multiple workspaces",
       "description": "Implemented Asana operation mapped to {'stream': 'workspaces'}.",
@@ -4657,14 +8424,32 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getWorkspace",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}"
       }
     },
     {
       "id": "remove_user_for_workspace",
       "kind": "rest_write",
       "summary": "Remove a user from a workspace or organization",
-      "description": "planned destructive reverse-ETL action; blocked until a named write action has a bounded record schema, redaction, idempotency notes, confirm: \"destructive\", sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
+      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeUserForWorkspace",
       "source_url": "https://developers.asana.com/reference/removeuserforworkspace",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -4718,7 +8503,30 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/events",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "workspace_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "sync",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getWorkspaceEvents",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/events"
       }
     }
   ]

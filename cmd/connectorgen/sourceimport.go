@@ -34,7 +34,7 @@ import (
 // intermediate descriptor. It intentionally owns no execution controls: a
 // connector name selects its checked-in lock, and that lock alone supplies the
 // byte-backed artifact identity or an explicit declaration-only citation.
-const sourceImportUsage = `connectorgen source-import <connector> [--out <path>] [--defs <dir>] [--check]
+const sourceImportUsage = `connectorgen source-import <connector> [--out <path>] [--defs <dir>] [--check] [--read-projection-only]
 
 Verifies a byte-backed connector-owned source lock against its tracked retained
 artifact copy, or projects an explicit declaration-only source reference, and
@@ -45,6 +45,9 @@ generators. It never contacts a provider or a local cache.
   --out <path>    descriptor output path (default: connector-owned canonical descriptor)
   --defs <dir>    connector defs root (default internal/connectors/defs)
   --check         compare generated descriptors with --out; do not write
+  --read-projection-only
+                  verify or materialize only source-bound read declarations;
+                  preserve existing write contracts unchanged
 
 The source lock is authoritative. A mismatch against its selected byte or
 canonical-JSON identity requires a source-lock refresh; this command never
@@ -595,10 +598,21 @@ type sourceNonExecutableMutationDisposition struct {
 	Reason string                  `json:"reason"`
 }
 
+// sourcePartialMutationCoverageDisposition records the exact source operation
+// behind an already working, but source-incomplete declared mutation. It does
+// not change the action or command; it makes the missing shared request
+// foundation explicit at the source-operation granularity.
+type sourcePartialMutationCoverageDisposition struct {
+	Source     sourceOperationCitation `json:"source"`
+	Foundation string                  `json:"foundation"`
+	Reason     string                  `json:"reason"`
+}
+
 type sourceRuntimeReachability struct {
-	MergeBlocked          bool                                    `json:"merge_blocked"`
-	Gaps                  []sourceContractGap                     `json:"gaps,omitempty"`
-	NonExecutableMutation *sourceNonExecutableMutationDisposition `json:"non_executable_mutation,omitempty"`
+	MergeBlocked            bool                                      `json:"merge_blocked"`
+	Gaps                    []sourceContractGap                       `json:"gaps,omitempty"`
+	NonExecutableMutation   *sourceNonExecutableMutationDisposition   `json:"non_executable_mutation,omitempty"`
+	PartialCoverageMutation *sourcePartialMutationCoverageDisposition `json:"partial_coverage_mutation,omitempty"`
 }
 
 type sourceParameterWireDescriptor struct {
@@ -1805,7 +1819,12 @@ func importSourceLockResultV3(ctx context.Context, lock sourceImportLock, fetche
 	}
 	// Version 3 is the immutable document-owned contract and therefore the
 	// first descriptor version that can make PM execution policy explicit
-	// without rewriting legacy canonical descriptor bytes.
+	// without rewriting legacy canonical descriptor bytes.  The source remains
+	// authoritative even where PM cannot yet execute one of its request
+	// contracts: retain that operation with a source-bound runtime gap instead
+	// of refusing to generate the complete locked inventory.  Execution
+	// envelopes still make the representable portion of the contract explicit.
+	limits.AllowSourceContractGaps = true
 	limits.UseExecutionEnvelopes = true
 	result := sourceImportResult{DescriptorSchemaVersion: 3, Operations: []sourceOperationDescriptor{}}
 	for _, document := range lock.Rest.SourceDocuments {
@@ -6673,7 +6692,7 @@ func importSourceOperation(documentContext sourceImportDocumentContext, doc map[
 		}
 		sourceID = locked.ID
 	}
-	pagination, err := sourcePagination(operation, resolver)
+	pagination, err := sourcePagination(operation, responses, request.Query, resolver)
 	if err != nil {
 		return sourceOperationDescriptor{}, fmt.Errorf("%s: %w", location, err)
 	}
@@ -8470,21 +8489,138 @@ func sourceOutputClassForMediaType(mediaType string) (sourceOutputClass, error) 
 	return sourceOutputBinary, nil
 }
 
-func sourcePagination(operation map[string]any, resolver *sourceReferenceResolver) (any, error) {
+func sourcePagination(operation map[string]any, responses []sourceResponseDescriptor, query []sourceParameterDescriptor, resolver *sourceReferenceResolver) (any, error) {
 	var keys []string
 	for key := range operation {
 		if strings.Contains(strings.ToLower(key), "pagination") {
 			keys = append(keys, key)
 		}
 	}
-	if len(keys) == 0 {
-		return nil, nil
-	}
-	sort.Strings(keys)
 	if len(keys) > 1 {
+		sort.Strings(keys)
 		return nil, fmt.Errorf("ambiguous pagination metadata")
 	}
-	return resolver.resolve(operation[keys[0]])
+	if len(keys) == 1 {
+		return resolver.resolve(operation[keys[0]])
+	}
+	return sourceInferredNextURLPagination(responses, query), nil
+}
+
+// sourceInferredNextURLPagination recognizes the fully declared response
+// shape used by APIs such as Asana: a successful JSON envelope names a
+// next_page object whose uri member is an absolute URI.  It is deliberately
+// narrower than guessing from parameter names or prose, so it cannot turn a
+// generic response link into an ETL claim.  The returned dialect is the
+// engine's closed next_url paginator and contains only provider-owned field
+// names from the retained response schema.
+func sourceInferredNextURLPagination(responses []sourceResponseDescriptor, query []sourceParameterDescriptor) any {
+	paths := map[string]bool{}
+	for _, response := range responses {
+		if !sourceSuccessfulResponseStatus(response.Status) {
+			continue
+		}
+		declaration, ok := response.Declaration.(map[string]any)
+		if !ok {
+			continue
+		}
+		content, ok := declaration["content"].(map[string]any)
+		if !ok {
+			continue
+		}
+		for mediaType, rawMedia := range content {
+			if !sourceJSONMediaType(mediaType) {
+				continue
+			}
+			media, ok := rawMedia.(map[string]any)
+			if !ok {
+				continue
+			}
+			if path, found := sourceNextPageURIPath(media["schema"]); found {
+				paths[path] = true
+			}
+		}
+	}
+	if len(paths) != 1 {
+		return nil
+	}
+	for path := range paths {
+		pagination := map[string]any{"type": "next_url", "next_url_path": path}
+		if pageSize, ok := sourceInferredNextURLLimitOffsetPageSize(query); ok {
+			// The source response owns continuation through next_page.uri, but
+			// Asana's source contract produces that URI only after an initial
+			// bounded limit request. These remain engine-owned pagination
+			// controls, never raw command flags: size_param drives page one and
+			// offset_param admits the provider-returned continuation URL.
+			pagination["size_param"] = "limit"
+			pagination["limit_param"] = "limit"
+			pagination["offset_param"] = "offset"
+			pagination["page_size"] = pageSize
+		}
+		return pagination
+	}
+	return nil
+}
+
+// sourceInferredNextURLLimitOffsetPageSize recognizes the exact bounded
+// limit/offset pair behind a next_page.uri response. The response shape proves
+// the continuation authority; the two typed query declarations prove which
+// source-owned controls the declarative engine may send and subsequently admit
+// in that returned URL. This narrow derivation deliberately does not infer a
+// pager from parameter names alone.
+func sourceInferredNextURLLimitOffsetPageSize(query []sourceParameterDescriptor) (int, bool) {
+	var limit, offset *sourceParameterDescriptor
+	for index := range query {
+		parameter := &query[index]
+		switch parameter.Name {
+		case "limit":
+			limit = parameter
+		case "offset":
+			offset = parameter
+		}
+	}
+	if limit == nil || offset == nil || !sourceScalarWireSchema(offset.Schema) {
+		return 0, false
+	}
+	schema, ok := limit.Schema.(map[string]any)
+	if !ok || schema["type"] != "integer" {
+		return 0, false
+	}
+	maximum := sourcePositiveInteger(schema["maximum"])
+	if maximum <= 0 || maximum > int64(math.MaxInt) {
+		return 0, false
+	}
+	return int(maximum), true
+}
+
+func sourceNextPageURIPath(schema any) (string, bool) {
+	root, ok := schema.(map[string]any)
+	if !ok {
+		return "", false
+	}
+	properties, ok := root["properties"].(map[string]any)
+	if !ok {
+		return "", false
+	}
+	for _, name := range sortedSourceMapKeys(properties) {
+		normalized := strings.ReplaceAll(strings.ReplaceAll(strings.ToLower(name), "_", ""), "-", "")
+		if normalized != "nextpage" {
+			continue
+		}
+		nextPage, ok := properties[name].(map[string]any)
+		if !ok || nextPage["type"] != "object" {
+			continue
+		}
+		nextProperties, ok := nextPage["properties"].(map[string]any)
+		if !ok {
+			continue
+		}
+		uri, ok := nextProperties["uri"].(map[string]any)
+		if !ok || uri["type"] != "string" || uri["format"] != "uri" {
+			continue
+		}
+		return name + ".uri", true
+	}
+	return "", false
 }
 
 func sourceServerLayerFrom(object map[string]any) (sourceServerLayer, error) {
@@ -8877,11 +9013,12 @@ func marshalSourceImportResult(result sourceImportResult) ([]byte, error) {
 }
 
 type sourceImportOptions struct {
-	Connector string
-	DefsDir   string
-	Output    string
-	CacheDir  string
-	Check     bool
+	Connector          string
+	DefsDir            string
+	Output             string
+	CacheDir           string
+	Check              bool
+	ReadProjectionOnly bool
 }
 
 func runSourceImport(args []string, stdout, stderr io.Writer) int {
@@ -8931,6 +9068,9 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 		logln(stderr, "connectorgen source-import:", err)
 		return 1
 	}
+	if opts.ReadProjectionOnly {
+		return runSourceImportReadProjection(opts, result, stdout, stderr)
+	}
 	surface, err := sourceProjectionExecutionSurface(filepath.Join(opts.DefsDir, opts.Connector), opts.Connector)
 	if err != nil {
 		logln(stderr, "connectorgen source-import: load declaration-owned execution surface:", err)
@@ -8941,11 +9081,20 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 		logln(stderr, "connectorgen source-import: read source-cited mutation dispositions:", err)
 		return 1
 	}
+	partialMutationCoverageDispositions, err := sourceProjectionReadPartialMutationCoverageDispositions(filepath.Join(opts.DefsDir, opts.Connector))
+	if err != nil {
+		logln(stderr, "connectorgen source-import: read source-cited partial mutation coverage dispositions:", err)
+		return 1
+	}
 	sourceProjectionNormalizeNonBlockingReadGaps(&result)
 	sourceProjectionRestoreSourceBoundDirectReadPathFlags(&surface, result)
 	sourceProjectionAnnotateUnreachableReadGaps(surface, &result)
 	if err := sourceProjectionApplyNonExecutableMutationDispositions(surface, &result, mutationDispositions); err != nil {
 		logln(stderr, "connectorgen source-import: apply source-cited mutation dispositions:", err)
+		return 1
+	}
+	if err := sourceProjectionApplyPartialMutationCoverageDispositions(surface, &result, partialMutationCoverageDispositions); err != nil {
+		logln(stderr, "connectorgen source-import: apply source-cited partial mutation coverage dispositions:", err)
 		return 1
 	}
 	sourceProjectionApplyWriteDisabledMutationArtifacts(surface, &result)
@@ -8981,6 +9130,76 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 	return 0
 }
 
+// runSourceImportReadProjection materializes or verifies only the declarative
+// source-bound read bridge. Its two phases are deliberate: first the bundle
+// receives the eligible read bindings; then the refreshed declaration surface
+// records which remaining reads still lack an executable foundation. Annotating
+// before projection would make that derived absence mask a valid new binding.
+func runSourceImportReadProjection(opts sourceImportOptions, result sourceImportResult, stdout, stderr io.Writer) int {
+	bundleDir := filepath.Join(opts.DefsDir, opts.Connector)
+	sourceProjectionNormalizeNonBlockingReadGaps(&result)
+	projectionResult, err := sourceProjectionReadOnlyResult(bundleDir, result)
+	if err != nil {
+		logln(stderr, "connectorgen source-import: select materialized source-bound reads:", err)
+		return 1
+	}
+	projection, err := projectSourceBoundReadDescriptorToBundle(bundleDir, projectionResult, opts.Check)
+	if err != nil {
+		logln(stderr, "connectorgen source-import: source-bound read projection:", err)
+		return 1
+	}
+	if opts.Check && projection.Changed() {
+		logln(stderr, fmt.Sprintf("connectorgen source-import: descriptor or derived bundle projection has drifted (writes=%d cli=%d); rerun without --check after source-lock verification", projection.Writes, projection.CLI))
+		return 1
+	}
+
+	surface, err := sourceProjectionExecutionSurface(bundleDir, opts.Connector)
+	if err != nil {
+		logln(stderr, "connectorgen source-import: load declaration-owned execution surface:", err)
+		return 1
+	}
+	sourceProjectionAnnotateUnreachableReadGaps(surface, &result)
+	mutationDispositions, err := sourceProjectionReadNonExecutableMutationDispositions(bundleDir)
+	if err != nil {
+		logln(stderr, "connectorgen source-import: read source-cited mutation dispositions:", err)
+		return 1
+	}
+	partialMutationCoverageDispositions, err := sourceProjectionReadPartialMutationCoverageDispositions(bundleDir)
+	if err != nil {
+		logln(stderr, "connectorgen source-import: read source-cited partial mutation coverage dispositions:", err)
+		return 1
+	}
+	if err := sourceProjectionApplyNonExecutableMutationDispositions(surface, &result, mutationDispositions); err != nil {
+		logln(stderr, "connectorgen source-import: apply source-cited mutation dispositions:", err)
+		return 1
+	}
+	if err := sourceProjectionApplyPartialMutationCoverageDispositions(surface, &result, partialMutationCoverageDispositions); err != nil {
+		logln(stderr, "connectorgen source-import: apply source-cited partial mutation coverage dispositions:", err)
+		return 1
+	}
+	sourceProjectionApplyWriteDisabledMutationArtifacts(surface, &result)
+	raw, err := marshalSourceImportResult(result)
+	if err != nil {
+		logln(stderr, "connectorgen source-import: encode descriptors:", err)
+		return 1
+	}
+	existing, readErr := os.ReadFile(opts.Output)
+	if opts.Check {
+		if readErr != nil || !bytes.Equal(existing, raw) {
+			logln(stderr, fmt.Sprintf("connectorgen source-import: descriptor or derived bundle projection has drifted (writes=%d cli=%d); rerun without --check after source-lock verification", projection.Writes, projection.CLI))
+			return 1
+		}
+		logln(stdout, fmt.Sprintf("connectorgen source-import: %s, %d operation(s), %d inbound event(s) verified", opts.Connector, len(result.Operations), len(result.InboundEvents)))
+		return 0
+	}
+	if err := os.WriteFile(opts.Output, raw, 0o644); err != nil {
+		logln(stderr, "connectorgen source-import: write descriptors:", err)
+		return 1
+	}
+	logln(stdout, fmt.Sprintf("connectorgen source-import: %s, %d operation(s), %d inbound event(s) imported; source projection updated writes=%d cli=%d", opts.Connector, len(result.Operations), len(result.InboundEvents), projection.Writes, projection.CLI))
+	return 0
+}
+
 // sourceImportLockRequiresRetainedArtifact distinguishes a terminal,
 // explicitly unavailable v3 source inventory from an artifact-bearing lock.
 // Every actual artifact remains mandatory and is therefore served only by the
@@ -9010,6 +9229,8 @@ func parseSourceImportOptions(args []string) (sourceImportOptions, error) {
 		switch arg := args[i]; arg {
 		case "--check":
 			opts.Check = true
+		case "--read-projection-only":
+			opts.ReadProjectionOnly = true
 		case "--defs", "--out", "--cache-dir":
 			if i+1 >= len(args) {
 				return sourceImportOptions{}, fmt.Errorf("%s requires a value", arg)

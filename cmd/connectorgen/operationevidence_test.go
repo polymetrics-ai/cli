@@ -198,6 +198,30 @@ func TestOperationEvidenceRejectsDuplicateV3InventoryBeforeAbsenceProjection(t *
 	}
 }
 
+func TestOperationEvidenceReadsAsanaVersion3DocumentOwnedLock(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	input, err := readOperationEvidenceSourceLock(filepath.Join(root, "internal", "connectors", "defs", "asana", "sources", "asana-operation-source-lock.json"), "asana")
+	if err != nil {
+		t.Fatalf("read Asana version-3 source lock: %v", err)
+	}
+	if len(input.Operations) != 249 {
+		t.Fatalf("Asana source operations = %d, want 249", len(input.Operations))
+	}
+	for _, operation := range input.Operations {
+		if operation.ID != "asana.rest.getAccessRequests" {
+			continue
+		}
+		if operation.Method != "GET" || operation.Path != "/access_requests" || operation.Trace.URL != "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml" || operation.Trace.Location != `paths["/access_requests"].get` || operation.Trace.SHA256 == "" || operation.Trace.Bytes <= 0 {
+			t.Fatalf("Asana access-request evidence = %+v, want document-owned source trace", operation)
+		}
+		return
+	}
+	t.Fatal("Asana access-request source operation is absent")
+}
+
 func TestOperationEvidenceReportsEachMissingEvidenceKind(t *testing.T) {
 	cases := []struct {
 		name   string
@@ -452,6 +476,7 @@ func TestOperationEvidenceCheckRunsFixed100Gate(t *testing.T) {
 func operationEvidenceWorkspace(t *testing.T) string {
 	t.Helper()
 	root := t.TempDir()
+	copyOperationEvidenceTree(t, filepath.Join("..", "..", "internal", "connectors", "defs", "asana"), filepath.Join(root, "internal", "connectors", "defs", "asana"))
 	copyOperationEvidenceTree(t, filepath.Join("..", "..", "internal", "connectors", "defs", "github"), filepath.Join(root, "internal", "connectors", "defs", "github"))
 	copyOperationEvidenceFile(t, filepath.Join("..", "..", "internal", "connectors", "operation-evidence-fixed-100.json"), filepath.Join(root, "internal", "connectors", "operation-evidence-fixed-100.json"))
 	copyOperationEvidenceFile(t, filepath.Join("..", "..", "internal", "connectors", "certifications", "current-subject.json"), filepath.Join(root, "internal", "connectors", "certifications", "current-subject.json"))
@@ -464,14 +489,14 @@ func operationEvidenceWorkspace(t *testing.T) string {
 	if err := json.Unmarshal(websiteRaw, &rows); err != nil {
 		t.Fatalf("decode generated website data: %v", err)
 	}
-	github := make([]any, 0, 1)
+	connectorRows := make([]any, 0, 2)
 	for _, item := range rows {
 		row := item.(map[string]any)
-		if row["slug"] == "github" {
-			github = append(github, row)
+		if row["slug"] == "github" || row["slug"] == "asana" {
+			connectorRows = append(connectorRows, row)
 		}
 	}
-	writeOperationEvidenceJSON(t, filepath.Join(root, "website", "data", "connectors.generated.json"), map[string]any{"rows": github})
+	writeOperationEvidenceJSON(t, filepath.Join(root, "website", "data", "connectors.generated.json"), map[string]any{"rows": connectorRows})
 	return root
 }
 
