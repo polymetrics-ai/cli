@@ -497,7 +497,7 @@ func sourceProjectionApplyNonExecutableMutationDispositions(bundle engine.Bundle
 // operations remain ordinary executable coverage, including delete and reverse
 // ETL actions; the write-disabled declaration is never a safety suppression.
 func sourceProjectionApplyWriteDisabledMutationArtifacts(bundle engine.Bundle, result *sourceImportResult) int {
-	if result == nil || bundle.Metadata.Name == "" || bundle.Metadata.Capabilities.Write {
+	if result == nil || !sourceProjectionExplicitWriteDisabled(bundle) {
 		return 0
 	}
 
@@ -582,10 +582,14 @@ func sourceProjectionValidateWriteDisabledMutationArtifact(bundle engine.Bundle,
 	if disposition == nil || disposition.Reason != sourceWriteDisabledMutationArtifactReason {
 		return nil
 	}
-	if bundle.Metadata.Name == "" || bundle.Metadata.Capabilities.Write {
+	if !sourceProjectionExplicitWriteDisabled(bundle) {
 		return errors.New("automatic write-disabled mutation artifact requires connector metadata capabilities.write=false")
 	}
 	return nil
+}
+
+func sourceProjectionExplicitWriteDisabled(bundle engine.Bundle) bool {
+	return bundle.Metadata.Name != "" && bundle.Metadata.Capabilities.WriteDeclared && !bundle.Metadata.Capabilities.Write
 }
 
 func sourceProjectionHasReadOnlyDisposition(operation sourceOperationDescriptor) bool {
@@ -2973,6 +2977,9 @@ func sourceProjectionExecutionSurface(bundleDir, connector string) (engine.Bundl
 			var value engine.Metadata
 			if err := json.Unmarshal(raw, &value); err != nil {
 				return err
+			}
+			if !value.Capabilities.WriteDeclared {
+				return errors.New("metadata capabilities.write must be explicitly declared")
 			}
 			bundle.Metadata = value
 			return nil

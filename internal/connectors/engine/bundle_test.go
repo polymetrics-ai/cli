@@ -173,6 +173,9 @@ func TestBundleLoadHappyPathFullBundle(t *testing.T) {
 	if b.Metadata.Name != "acme" {
 		t.Fatalf("Metadata.Name = %q", b.Metadata.Name)
 	}
+	if !b.Metadata.Capabilities.WriteDeclared || b.Metadata.Capabilities.Write {
+		t.Fatalf("metadata capabilities write declaration = %+v, want explicit write=false", b.Metadata.Capabilities)
+	}
 	if b.Spec == nil {
 		t.Fatalf("Spec not compiled")
 	}

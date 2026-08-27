@@ -1227,21 +1227,11 @@ func TestSourceImportCommandRejectsOmittedWriteCapabilityBeforeArtifactAdmission
 	outPath := filepath.Join(sourcesDir, "alpha-operation-descriptor.json")
 	args := []string{"source-import", "alpha", "--defs", defsRoot, "--out", outPath}
 	var stdout, stderr bytes.Buffer
-	if exit := runSourceImportWithFetcher(args, &stdout, &stderr, fixtureSourceImportFetcher(t)); exit != 1 || !strings.Contains(stderr.String(), "no complete executable action") {
-		t.Fatalf("source-import missing capabilities.write exit = %d stderr = %s, want executable coverage failure", exit, stderr.String())
+	if exit := runSourceImportWithFetcher(args, &stdout, &stderr, fixtureSourceImportFetcher(t)); exit != 1 || !strings.Contains(stderr.String(), "capabilities.write must be explicitly declared") {
+		t.Fatalf("source-import missing capabilities.write exit = %d stderr = %s, want explicit write declaration refusal", exit, stderr.String())
 	}
-	raw, err := os.ReadFile(outPath)
-	if err != nil {
-		t.Fatalf("read rejected source descriptor: %v", err)
-	}
-	var descriptor sourceImportDescriptorDocument
-	if err := decodeSourceStrictJSON(raw, &descriptor); err != nil {
-		t.Fatalf("decode rejected source descriptor: %v", err)
-	}
-	for _, operation := range descriptor.Operations {
-		if sourceProjectionOperationMutates(operation) && operation.Runtime.NonExecutableMutation != nil {
-			t.Fatalf("omitted capabilities.write emitted automatic artifact: %#v", operation.Runtime)
-		}
+	if _, err := os.Stat(outPath); !os.IsNotExist(err) {
+		t.Fatalf("source-import with omitted capabilities.write wrote descriptor: %v", err)
 	}
 }
 

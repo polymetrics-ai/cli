@@ -2189,7 +2189,7 @@ func TestSourceProjectionWriteDisabledLockedSourcesRetainMutationArtifacts(t *te
 				Name: tc.connector,
 				Metadata: engine.Metadata{
 					Name:         tc.connector,
-					Capabilities: engine.Capabilities{Read: true, Write: false},
+					Capabilities: engine.Capabilities{Read: true, Write: false, WriteDeclared: true},
 				},
 				CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
 					Path:         "projects list",
@@ -2318,7 +2318,7 @@ func TestSourceProjectionIssue4329SourceLocksRetainMutationInventoryAndReadSurfa
 				t.Fatalf("source-lock selection = mutations:%d read:%#v mutation:%#v", len(allMutations.Operations), read, selectedMutation)
 			}
 
-			writeDisabled := engine.Bundle{Name: tc.connector, Metadata: engine.Metadata{Name: tc.connector, Capabilities: engine.Capabilities{Read: true, Write: false}}}
+			writeDisabled := engine.Bundle{Name: tc.connector, Metadata: engine.Metadata{Name: tc.connector, Capabilities: engine.Capabilities{Read: true, Write: false, WriteDeclared: true}}}
 			if got := sourceProjectionApplyWriteDisabledMutationArtifacts(writeDisabled, &allMutations); got != tc.expectedMutates {
 				t.Fatalf("retained mutation artifacts = %d, want %d", got, tc.expectedMutates)
 			}
@@ -2349,7 +2349,7 @@ func TestSourceProjectionWriteDisabledMutationArtifactsPreserveExecutableDeletes
 	operation := sourceCitedMutationTestOperation("sentry", "deleteOrganizationDashboard", "DELETE", "/api/0/dashboards/current/")
 	bundle := engine.Bundle{
 		Name:     "sentry",
-		Metadata: engine.Metadata{Name: "sentry", Capabilities: engine.Capabilities{Read: true, Write: false}},
+		Metadata: engine.Metadata{Name: "sentry", Capabilities: engine.Capabilities{Read: true, Write: false, WriteDeclared: true}},
 		Writes: []engine.WriteAction{{
 			Name: "delete_dashboard", Kind: "delete", Method: "DELETE",
 			Path:         "/api/0/dashboards/current/",
@@ -2456,7 +2456,7 @@ func TestSourceProjectionWriteDisabledMutationArtifactsPreserveSourceLockedExecu
 			tc.command.APISurface = []engine.CLISurfaceEndpointRef{{Method: operation.Method, Path: operation.Path}}
 			bundle := engine.Bundle{
 				Name:       tc.connector,
-				Metadata:   engine.Metadata{Name: tc.connector, Capabilities: engine.Capabilities{Read: true, Write: false}},
+				Metadata:   engine.Metadata{Name: tc.connector, Capabilities: engine.Capabilities{Read: true, Write: false, WriteDeclared: true}},
 				Writes:     []engine.WriteAction{tc.action},
 				CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{tc.command}},
 			}
@@ -2501,6 +2501,7 @@ func TestSourceProjectionWriteCapableBundlesDoNotAutoDeferMutations(t *testing.T
 
 	writeDisabled := bundle
 	writeDisabled.Metadata.Capabilities.Write = false
+	writeDisabled.Metadata.Capabilities.WriteDeclared = true
 	if got := sourceProjectionApplyWriteDisabledMutationArtifacts(writeDisabled, &result); got != 1 {
 		t.Fatalf("automatic mutation artifact count = %d, want 1 for explicitly write-disabled bundle", got)
 	}
@@ -2530,9 +2531,10 @@ func TestSourceProjectionAutomaticMutationArtifactRejectsOmittedWriteDeclaration
 	bundleDir := t.TempDir()
 	writeProjectionFixture(t, filepath.Join(bundleDir, "metadata.json"), string(metadata))
 	surface, err := sourceProjectionExecutionSurface(bundleDir, "sentry")
-	if err != nil {
-		t.Fatalf("load adversarial Sentry metadata: %v", err)
+	if err == nil || !strings.Contains(err.Error(), "capabilities.write must be explicitly declared") {
+		t.Fatalf("load adversarial Sentry metadata error = %v, want explicit write declaration refusal", err)
 	}
+	surface = engine.Bundle{Name: "sentry", Metadata: engine.Metadata{Name: "sentry", Capabilities: engine.Capabilities{Read: true}}}
 
 	lockRaw, err := os.ReadFile(filepath.Join("testdata", "issue4329", "sentry-operation-source-lock.json"))
 	if err != nil {
@@ -2584,7 +2586,7 @@ func TestSourceProjectionWriteDisabledMutationArtifactsRequireProviderCitation(t
 	operation.Source = sourceImportSource{}
 	bundle := engine.Bundle{
 		Name:     "sentry",
-		Metadata: engine.Metadata{Name: "sentry", Capabilities: engine.Capabilities{Read: true, Write: false}},
+		Metadata: engine.Metadata{Name: "sentry", Capabilities: engine.Capabilities{Read: true, Write: false, WriteDeclared: true}},
 	}
 	result := sourceImportResult{Operations: []sourceOperationDescriptor{operation}}
 	if got := sourceProjectionApplyWriteDisabledMutationArtifacts(bundle, &result); got != 0 {
@@ -2601,7 +2603,7 @@ func TestSourceProjectionWriteDisabledMutationArtifactsRetainGraphQLMutations(t 
 	operation.GraphQL = &sourceGraphQLOperationDescriptor{Root: "Mutation", Name: "resolveIssue"}
 	bundle := engine.Bundle{
 		Name:     "sentry",
-		Metadata: engine.Metadata{Name: "sentry", Capabilities: engine.Capabilities{Read: true, Write: false}},
+		Metadata: engine.Metadata{Name: "sentry", Capabilities: engine.Capabilities{Read: true, Write: false, WriteDeclared: true}},
 	}
 	result := sourceImportResult{Operations: []sourceOperationDescriptor{operation}}
 	if got := sourceProjectionApplyWriteDisabledMutationArtifacts(bundle, &result); got != 1 {

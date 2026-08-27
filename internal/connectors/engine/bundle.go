@@ -3,6 +3,7 @@
 package engine
 
 import (
+	"bytes"
 	"context"
 	"encoding/base64"
 	"encoding/json"
@@ -97,6 +98,50 @@ type Capabilities struct {
 	Query         bool `json:"query"`
 	CDC           bool `json:"cdc"`
 	DynamicSchema bool `json:"dynamic_schema"`
+
+	// WriteDeclared keeps an omitted JSON member distinct from an explicit
+	// false. An automatic source-cited mutation artifact is an opt-out that
+	// must never be inferred from Go's false zero value.
+	WriteDeclared bool `json:"-"`
+}
+
+// UnmarshalJSON preserves whether metadata.json.capabilities explicitly
+// declared write. The other capability members retain their existing optional
+// semantics; only write carries a source-executable-coverage opt-out.
+func (c *Capabilities) UnmarshalJSON(raw []byte) error {
+	type capabilitiesDocument struct {
+		Check         bool  `json:"check"`
+		Read          bool  `json:"read"`
+		Write         *bool `json:"write"`
+		Query         bool  `json:"query"`
+		CDC           bool  `json:"cdc"`
+		DynamicSchema bool  `json:"dynamic_schema"`
+	}
+	var document capabilitiesDocument
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(&document); err != nil {
+		return err
+	}
+	var extra any
+	if err := decoder.Decode(&extra); err != io.EOF {
+		if err == nil {
+			return fmt.Errorf("invalid JSON: multiple top-level values")
+		}
+		return err
+	}
+	*c = Capabilities{
+		Check:         document.Check,
+		Read:          document.Read,
+		Query:         document.Query,
+		CDC:           document.CDC,
+		DynamicSchema: document.DynamicSchema,
+		WriteDeclared: document.Write != nil,
+	}
+	if document.Write != nil {
+		c.Write = *document.Write
+	}
+	return nil
 }
 
 // BatchSpec mirrors metadata.json.batch.
