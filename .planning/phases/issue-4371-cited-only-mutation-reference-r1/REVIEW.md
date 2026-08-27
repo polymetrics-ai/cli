@@ -35,5 +35,20 @@ review role.
   same callers, so the repair remains a shared importer/projection invariant.
 - No user-controlled transport, secret, generic HTTP write/body, provider I/O,
   action, command, or credential path was introduced.
-- Fresh exact-head independent review remains required after the final evidence
-  commit and before any merge consideration.
+- Fresh exact-head independent review was completed before any merge
+  consideration; its immutable target and result follow.
+
+## Independent Codex exact-head audit
+
+- Audited head: `8ce9632aac9ebfccb7ce1db127e73b982bc4d8c6` against
+  `origin/main`.
+- Result: no High, Medium, or Low finding; no merge blocker from the audit.
+- The separate fresh-context reviewer confirmed that the two explicit paths
+  reject after citation validation and before mutation, the automatic path
+  skips the closed descriptor, and the Salesloft/Copper matrix preserves sole
+  gap, bytes, source ID, provider operation ID, method, and path.
+- It reran focused source-projection/source-reference checks plus
+  `TestRunSourceBoundReadMissingFoundationRefusesBeforeDispatch`; all passed.
+  It also confirmed `git diff --check` and a clean worktree.
+- This documentation record follows the audited head and contains no
+  implementation, test, generated, connector, or executable-surface change.
