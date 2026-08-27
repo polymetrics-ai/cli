@@ -1,0 +1,967 @@
+{
+  "commands": [
+    {
+      "path": "add data table column apply",
+      "summary": "Plan and execute the add data table column reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_data_table_column",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.columns.yml",
+      "source_cli_path": "POST /api/v1/data-tables/{dataTableId}/columns",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/data-tables/{dataTableId}/columns"
+        }
+      ],
+      "flags": [
+        {
+          "name": "data_table_id",
+          "type": "string",
+          "summary": "Required data table id record field.",
+          "maps_to": "record.data_table_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n add data table column apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "add project users apply",
+      "summary": "Plan and execute the add project users reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_project_users",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.projectId.users.yml",
+      "source_cli_path": "POST /api/v1/projects/{projectId}/users",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/projects/{projectId}/users"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "string",
+          "summary": "Required project id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        },
+        {
+          "name": "relations",
+          "type": "json",
+          "summary": "Required relations record field.",
+          "maps_to": "record.relations",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n add project users apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "change project user role apply",
+      "summary": "Plan and execute the change project user role reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "change_project_user_role",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.projectId.users.userId.yml",
+      "source_cli_path": "PATCH /api/v1/projects/{projectId}/users/{userId}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/projects/{projectId}/users/{userId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "string",
+          "summary": "Required project id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        },
+        {
+          "name": "project_user_id",
+          "type": "string",
+          "summary": "Required project user id record field.",
+          "maps_to": "record.project_user_id",
+          "required": true
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "summary": "Required role record field.",
+          "maps_to": "record.role",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n change project user role apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create data table apply",
+      "summary": "Plan and execute the create data table reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_data_table",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.yml",
+      "source_cli_path": "POST /api/v1/data-tables",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/data-tables"
+        }
+      ],
+      "flags": [
+        {
+          "name": "columns",
+          "type": "json",
+          "summary": "Required columns record field.",
+          "maps_to": "record.columns",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n create data table apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create project apply",
+      "summary": "Plan and execute the create project reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_project",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.yml",
+      "source_cli_path": "POST /api/v1/projects",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/projects"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n create project apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create tag apply",
+      "summary": "Plan and execute the create tag reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_tag",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/tags/spec/paths/tags.yml",
+      "source_cli_path": "POST /api/v1/tags",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/tags"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n create tag apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create variable apply",
+      "summary": "Plan and execute the create variable reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_variable",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/variables/spec/paths/variables.yml",
+      "source_cli_path": "POST /api/v1/variables",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/variables"
+        }
+      ],
+      "flags": [
+        {
+          "name": "key",
+          "type": "string",
+          "summary": "Required key record field.",
+          "maps_to": "record.key",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Required value record field.",
+          "maps_to": "record.value",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n create variable apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create workflow apply",
+      "summary": "Plan and execute the create workflow reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_workflow",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.yml",
+      "source_cli_path": "POST /api/v1/workflows",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/workflows"
+        }
+      ],
+      "flags": [
+        {
+          "name": "connections",
+          "type": "json",
+          "summary": "Required connections record field.",
+          "maps_to": "record.connections",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "nodes",
+          "type": "json",
+          "summary": "Required nodes record field.",
+          "maps_to": "record.nodes",
+          "required": true
+        },
+        {
+          "name": "settings",
+          "type": "json",
+          "summary": "Required settings record field.",
+          "maps_to": "record.settings",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n create workflow apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "deactivate workflow apply",
+      "summary": "Plan and execute the deactivate workflow reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "deactivate_workflow",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.deactivate.yml",
+      "source_cli_path": "POST /api/v1/workflows/{id}/deactivate",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/workflows/{id}/deactivate"
+        }
+      ],
+      "flags": [
+        {
+          "name": "workflow_id",
+          "type": "string",
+          "summary": "Required workflow id record field.",
+          "maps_to": "record.workflow_id",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n deactivate workflow apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "generate audit apply",
+      "summary": "Plan and execute the generate audit reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "generate_audit",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/audit/spec/paths/audit.yml",
+      "source_cli_path": "POST /api/v1/audit",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/audit"
+        }
+      ],
+      "flags": [],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n generate audit apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "insert data table rows apply",
+      "summary": "Plan and execute the insert data table rows reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "insert_data_table_rows",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.yml",
+      "source_cli_path": "POST /api/v1/data-tables/{dataTableId}/rows",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/data-tables/{dataTableId}/rows"
+        }
+      ],
+      "flags": [
+        {
+          "name": "data",
+          "type": "json",
+          "summary": "Required data record field.",
+          "maps_to": "record.data",
+          "required": true
+        },
+        {
+          "name": "data_table_id",
+          "type": "string",
+          "summary": "Required data table id record field.",
+          "maps_to": "record.data_table_id",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n insert data table rows apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "publish workflow apply",
+      "summary": "Plan and execute the publish workflow reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "publish_workflow",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.activate.yml",
+      "source_cli_path": "POST /api/v1/workflows/{id}/activate",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/workflows/{id}/activate"
+        }
+      ],
+      "flags": [
+        {
+          "name": "workflow_id",
+          "type": "string",
+          "summary": "Required workflow id record field.",
+          "maps_to": "record.workflow_id",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n publish workflow apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "pull source control apply",
+      "summary": "Plan and execute the pull source control reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "pull_source_control",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/source-control/spec/paths/sourceControl.yml",
+      "source_cli_path": "POST /api/v1/source-control/pull",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/source-control/pull"
+        }
+      ],
+      "flags": [],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n pull source control apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "retry execution apply",
+      "summary": "Plan and execute the retry execution reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "retry_execution",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.id.retry.yml",
+      "source_cli_path": "POST /api/v1/executions/{id}/retry",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/executions/{id}/retry"
+        }
+      ],
+      "flags": [
+        {
+          "name": "execution_id",
+          "type": "string",
+          "summary": "Required execution id record field.",
+          "maps_to": "record.execution_id",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n retry execution apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "stop execution apply",
+      "summary": "Plan and execute the stop execution reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "stop_execution",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.id.stop.yml",
+      "source_cli_path": "POST /api/v1/executions/{id}/stop",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/executions/{id}/stop"
+        }
+      ],
+      "flags": [
+        {
+          "name": "execution_id",
+          "type": "string",
+          "summary": "Required execution id record field.",
+          "maps_to": "record.execution_id",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n stop execution apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "stop executions apply",
+      "summary": "Plan and execute the stop executions reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "stop_executions",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/executions/spec/paths/executions.stop.yml",
+      "source_cli_path": "POST /api/v1/executions/stop",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/executions/stop"
+        }
+      ],
+      "flags": [
+        {
+          "name": "status",
+          "type": "json",
+          "summary": "Required status record field.",
+          "maps_to": "record.status",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n stop executions apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "test credential apply",
+      "summary": "Plan and execute the test credential reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "test_credential",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.id.test.yml",
+      "source_cli_path": "POST /api/v1/credentials/{id}/test",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/credentials/{id}/test"
+        }
+      ],
+      "flags": [
+        {
+          "name": "credential_id",
+          "type": "string",
+          "summary": "Required credential id record field.",
+          "maps_to": "record.credential_id",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n test credential apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "transfer credential apply",
+      "summary": "Plan and execute the transfer credential reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "transfer_credential",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/credentials/spec/paths/credentials.id.transfer.yml",
+      "source_cli_path": "PUT /api/v1/credentials/{id}/transfer",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/credentials/{id}/transfer"
+        }
+      ],
+      "flags": [
+        {
+          "name": "credential_id",
+          "type": "string",
+          "summary": "Required credential id record field.",
+          "maps_to": "record.credential_id",
+          "required": true
+        },
+        {
+          "name": "destinationProjectId",
+          "type": "string",
+          "summary": "Required destinationProjectId record field.",
+          "maps_to": "record.destinationProjectId",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n transfer credential apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update data table apply",
+      "summary": "Plan and execute the update data table reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_data_table",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.yml",
+      "source_cli_path": "PATCH /api/v1/data-tables/{dataTableId}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/data-tables/{dataTableId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "data_table_id",
+          "type": "string",
+          "summary": "Required data table id record field.",
+          "maps_to": "record.data_table_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n update data table apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update data table column apply",
+      "summary": "Plan and execute the update data table column reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_data_table_column",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.columns.columnId.yml",
+      "source_cli_path": "PATCH /api/v1/data-tables/{dataTableId}/columns/{columnId}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/data-tables/{dataTableId}/columns/{columnId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "data_table_column_id",
+          "type": "string",
+          "summary": "Required data table column id record field.",
+          "maps_to": "record.data_table_column_id",
+          "required": true
+        },
+        {
+          "name": "data_table_id",
+          "type": "string",
+          "summary": "Required data table id record field.",
+          "maps_to": "record.data_table_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n update data table column apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update data table rows apply",
+      "summary": "Plan and execute the update data table rows reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_data_table_rows",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.update.yml",
+      "source_cli_path": "PATCH /api/v1/data-tables/{dataTableId}/rows/update",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/data-tables/{dataTableId}/rows/update"
+        }
+      ],
+      "flags": [
+        {
+          "name": "data",
+          "type": "json",
+          "summary": "Required data record field.",
+          "maps_to": "record.data",
+          "required": true
+        },
+        {
+          "name": "data_table_id",
+          "type": "string",
+          "summary": "Required data table id record field.",
+          "maps_to": "record.data_table_id",
+          "required": true
+        },
+        {
+          "name": "filter",
+          "type": "json",
+          "summary": "Required filter record field.",
+          "maps_to": "record.filter",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n update data table rows apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update project apply",
+      "summary": "Plan and execute the update project reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_project",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/projects/spec/paths/projects.projectId.yml",
+      "source_cli_path": "PUT /api/v1/projects/{projectId}",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/projects/{projectId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "project_id",
+          "type": "string",
+          "summary": "Required project id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n update project apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update tag apply",
+      "summary": "Plan and execute the update tag reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_tag",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/tags/spec/paths/tags.id.yml",
+      "source_cli_path": "PUT /api/v1/tags/{id}",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/tags/{id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "tag_id",
+          "type": "string",
+          "summary": "Required tag id record field.",
+          "maps_to": "record.tag_id",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n update tag apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update variable apply",
+      "summary": "Plan and execute the update variable reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_variable",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/variables/spec/paths/variables.id.yml",
+      "source_cli_path": "PUT /api/v1/variables/{id}",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/variables/{id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "key",
+          "type": "string",
+          "summary": "Required key record field.",
+          "maps_to": "record.key",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Required value record field.",
+          "maps_to": "record.value",
+          "required": true
+        },
+        {
+          "name": "variable_id",
+          "type": "string",
+          "summary": "Required variable id record field.",
+          "maps_to": "record.variable_id",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n update variable apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update workflow apply",
+      "summary": "Plan and execute the update workflow reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_workflow",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.yml",
+      "source_cli_path": "PUT /api/v1/workflows/{id}",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/workflows/{id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "connections",
+          "type": "json",
+          "summary": "Required connections record field.",
+          "maps_to": "record.connections",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "nodes",
+          "type": "json",
+          "summary": "Required nodes record field.",
+          "maps_to": "record.nodes",
+          "required": true
+        },
+        {
+          "name": "settings",
+          "type": "json",
+          "summary": "Required settings record field.",
+          "maps_to": "record.settings",
+          "required": true
+        },
+        {
+          "name": "workflow_id",
+          "type": "string",
+          "summary": "Required workflow id record field.",
+          "maps_to": "record.workflow_id",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n update workflow apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "upsert data table row apply",
+      "summary": "Plan and execute the upsert data table row reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upsert_data_table_row",
+      "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.upsert.yml",
+      "source_cli_path": "POST /api/v1/data-tables/{dataTableId}/rows/upsert",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/data-tables/{dataTableId}/rows/upsert"
+        }
+      ],
+      "flags": [
+        {
+          "name": "data",
+          "type": "json",
+          "summary": "Required data record field.",
+          "maps_to": "record.data",
+          "required": true
+        },
+        {
+          "name": "data_table_id",
+          "type": "string",
+          "summary": "Required data table id record field.",
+          "maps_to": "record.data_table_id",
+          "required": true
+        },
+        {
+          "name": "filter",
+          "type": "json",
+          "summary": "Required filter record field.",
+          "maps_to": "record.filter",
+          "required": true
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm n8n upsert data table row apply --plan <plan-name>"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add data table column apply",
+        "add project users apply",
+        "change project user role apply",
+        "create data table apply",
+        "create project apply",
+        "create tag apply",
+        "create variable apply",
+        "create workflow apply",
+        "deactivate workflow apply",
+        "generate audit apply",
+        "insert data table rows apply",
+        "publish workflow apply",
+        "pull source control apply",
+        "retry execution apply",
+        "stop execution apply",
+        "stop executions apply",
+        "test credential apply",
+        "transfer credential apply",
+        "update data table apply",
+        "update data table column apply",
+        "update data table rows apply",
+        "update project apply",
+        "update tag apply",
+        "update variable apply",
+        "update workflow apply",
+        "upsert data table row apply"
+      ]
+    }
+  ],
+  "tagline": "Run n8n's declared streams and reverse-ETL actions.",
+  "usage": "pm n8n <command> [flags]"
+}

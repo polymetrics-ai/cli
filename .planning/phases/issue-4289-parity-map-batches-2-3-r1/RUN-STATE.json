@@ -1,0 +1,36 @@
+{
+  "issue": 4289,
+  "branch": "fm/cli-map-batch23-repair-r1",
+  "publish_branch": "fm/cli-map-batch23-r1",
+  "base": "fm/cli-reverse-etl-destination-r1",
+  "state": "captain-foundation-gap-ledger-complete-paused-on-common-foundations",
+  "lifecycle": {
+    "mode": "inline-manual-gsd-fallback",
+    "commands_reviewed": [
+      "discuss-phase",
+      "plan-phase --tdd",
+      "execute-phase",
+      "verify-work",
+      "code-review"
+    ]
+  },
+  "batches": {
+    "batch_2": ["grafana", "trello", "slack", "n8n", "google-calendar", "gmail", "twilio", "amazon-sqs", "elasticsearch"],
+    "batch_3": ["gong", "google-ads", "facebook-marketing", "linkedin-ads", "aircall", "xero", "paypal-transaction", "gocardless", "amazon-seller-partner", "miro"]
+  },
+  "evidence": {
+    "map_integrity": "green: 19 connectors / 5127 documented operations (PayPal complete-corpus and root-count repair)",
+    "connectorgen_validate": "green: 552 connectors / 0 findings",
+    "surface_sync": "green: 552 connectors / 0 field changes",
+    "captain_foundation_gap_ledger": "red hold: 7 open deduplicated gaps; 5127 source-locked operation rows have explicit source URL/revision/hash, surface, owner, status, and closure verification; batch and portfolio rollups are not merge-ready"
+  },
+  "verification": {
+    "targeted_conformance": "green",
+    "runtime_preflight": "green",
+    "connector_boundary": "green: clean / 292 files / 552 connectors",
+    "repository_gates": "source-map, connectorgen validate, surface-sync, targeted conformance/runtime preflight, internal/cli, build, vet, generated checks, and connector-boundary green after source-lock remediation",
+    "source_lock_remediation": "all 19 locks carry root counts.total, nested per-kind/method counts, operations_found, old/new api_surface report, and complete confidence basis; PayPal maps all 13 official OpenAPI documents and provider inventories are no longer bounded by the prior api_surface",
+    "reconciliation": "red: seven-surface execution remains held on direct operation/source/destination work, but typed-write command coverage is now exact: 621 actions = 534 implemented commands + 82 explicitly partial scalar-union commands + 5 declaration-pending provenance holds; App dispatch and multi-action selection remain foundation-held",
+    "captain_premerge_gate": "red by design: verify-seven-surfaces exits 1 while the generated website-row, per-operation fixture/conformance, typed-destination dispatch/multiplicity, structured-body, binary-transfer, and scalar-union gaps remain open; no affected operation is merge-ready"
+  }
+}

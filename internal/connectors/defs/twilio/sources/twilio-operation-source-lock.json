@@ -1,0 +1,1815 @@
+{
+  "schema_version": 3,
+  "connector": "twilio",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "retrieval": "schema-v2 source-lock migration retaining hash-pinned provider artifacts",
+    "openapi": [
+      "3.0.1"
+    ],
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    },
+    "source_documents": [
+      {
+        "id": "source",
+        "kind": "openapi",
+        "artifact": {
+          "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+          "sha256": "6b6ffccef14cd55fd6d2fd38c3fde68585e1937eead4c099a92c5efe696b882c",
+          "bytes": 1877530,
+          "openapi": "3.0.1"
+        },
+        "published_source": {
+          "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+          "capture_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+          "sha256": "6b6ffccef14cd55fd6d2fd38c3fde68585e1937eead4c099a92c5efe696b882c",
+          "bytes": 1877530,
+          "adapter": "legacy-v2-source-lock-migration-v1"
+        },
+        "operations": [
+          {
+            "id": "twilio.rest.CreateAccount",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts.json",
+            "operation_id": "CreateAccount",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListAccount",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts.json",
+            "operation_id": "ListAccount",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts.json\"].get"
+          },
+          {
+            "id": "twilio.rest.FetchAccount",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{Sid}.json",
+            "operation_id": "FetchAccount",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateAccount",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{Sid}.json",
+            "operation_id": "UpdateAccount",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.CreateAddress",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Addresses.json",
+            "operation_id": "CreateAddress",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Addresses.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListAddress",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Addresses.json",
+            "operation_id": "ListAddress",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Addresses.json\"].get"
+          },
+          {
+            "id": "twilio.rest.DeleteAddress",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/Addresses/{Sid}.json",
+            "operation_id": "DeleteAddress",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Addresses/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.FetchAddress",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Addresses/{Sid}.json",
+            "operation_id": "FetchAddress",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Addresses/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateAddress",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Addresses/{Sid}.json",
+            "operation_id": "UpdateAddress",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Addresses/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.CreateApplication",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Applications.json",
+            "operation_id": "CreateApplication",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Applications.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListApplication",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Applications.json",
+            "operation_id": "ListApplication",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Applications.json\"].get"
+          },
+          {
+            "id": "twilio.rest.DeleteApplication",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/Applications/{Sid}.json",
+            "operation_id": "DeleteApplication",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Applications/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.FetchApplication",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Applications/{Sid}.json",
+            "operation_id": "FetchApplication",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Applications/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateApplication",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Applications/{Sid}.json",
+            "operation_id": "UpdateApplication",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Applications/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.FetchAuthorizedConnectApp",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/AuthorizedConnectApps/{ConnectAppSid}.json",
+            "operation_id": "FetchAuthorizedConnectApp",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/AuthorizedConnectApps/{ConnectAppSid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListAuthorizedConnectApp",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/AuthorizedConnectApps.json",
+            "operation_id": "ListAuthorizedConnectApp",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/AuthorizedConnectApps.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListAvailablePhoneNumberCountry",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/AvailablePhoneNumbers.json",
+            "operation_id": "ListAvailablePhoneNumberCountry",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers.json\"].get"
+          },
+          {
+            "id": "twilio.rest.FetchAvailablePhoneNumberCountry",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}.json",
+            "operation_id": "FetchAvailablePhoneNumberCountry",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListAvailablePhoneNumberLocal",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/Local.json",
+            "operation_id": "ListAvailablePhoneNumberLocal",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/Local.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListAvailablePhoneNumberMachineToMachine",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/MachineToMachine.json",
+            "operation_id": "ListAvailablePhoneNumberMachineToMachine",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/MachineToMachine.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListAvailablePhoneNumberMobile",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/Mobile.json",
+            "operation_id": "ListAvailablePhoneNumberMobile",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/Mobile.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListAvailablePhoneNumberNational",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/National.json",
+            "operation_id": "ListAvailablePhoneNumberNational",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/National.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListAvailablePhoneNumberSharedCost",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/SharedCost.json",
+            "operation_id": "ListAvailablePhoneNumberSharedCost",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/SharedCost.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListAvailablePhoneNumberTollFree",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/TollFree.json",
+            "operation_id": "ListAvailablePhoneNumberTollFree",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/TollFree.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListAvailablePhoneNumberVoip",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/Voip.json",
+            "operation_id": "ListAvailablePhoneNumberVoip",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/AvailablePhoneNumbers/{CountryCode}/Voip.json\"].get"
+          },
+          {
+            "id": "twilio.rest.FetchBalance",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Balance.json",
+            "operation_id": "FetchBalance",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Balance.json\"].get"
+          },
+          {
+            "id": "twilio.rest.CreateCall",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Calls.json",
+            "operation_id": "CreateCall",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListCall",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Calls.json",
+            "operation_id": "ListCall",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls.json\"].get"
+          },
+          {
+            "id": "twilio.rest.DeleteCall",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/Calls/{Sid}.json",
+            "operation_id": "DeleteCall",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.FetchCall",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Calls/{Sid}.json",
+            "operation_id": "FetchCall",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateCall",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Calls/{Sid}.json",
+            "operation_id": "UpdateCall",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListCallEvent",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Events.json",
+            "operation_id": "ListCallEvent",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Events.json\"].get"
+          },
+          {
+            "id": "twilio.rest.FetchCallNotification",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Notifications/{Sid}.json",
+            "operation_id": "FetchCallNotification",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Notifications/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListCallNotification",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Notifications.json",
+            "operation_id": "ListCallNotification",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Notifications.json\"].get"
+          },
+          {
+            "id": "twilio.rest.CreateCallRecording",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Recordings.json",
+            "operation_id": "CreateCallRecording",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListCallRecording",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Recordings.json",
+            "operation_id": "ListCallRecording",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateCallRecording",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json",
+            "operation_id": "UpdateCallRecording",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.FetchCallRecording",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json",
+            "operation_id": "FetchCallRecording",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.DeleteCallRecording",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json",
+            "operation_id": "DeleteCallRecording",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.FetchConference",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Conferences/{Sid}.json",
+            "operation_id": "FetchConference",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Conferences/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateConference",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Conferences/{Sid}.json",
+            "operation_id": "UpdateConference",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Conferences/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListConference",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Conferences.json",
+            "operation_id": "ListConference",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Conferences.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListConferenceRecording",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings.json",
+            "operation_id": "ListConferenceRecording",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateConferenceRecording",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json",
+            "operation_id": "UpdateConferenceRecording",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.FetchConferenceRecording",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json",
+            "operation_id": "FetchConferenceRecording",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.DeleteConferenceRecording",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json",
+            "operation_id": "DeleteConferenceRecording",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.FetchConnectApp",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/ConnectApps/{Sid}.json",
+            "operation_id": "FetchConnectApp",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/ConnectApps/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateConnectApp",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/ConnectApps/{Sid}.json",
+            "operation_id": "UpdateConnectApp",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/ConnectApps/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.DeleteConnectApp",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/ConnectApps/{Sid}.json",
+            "operation_id": "DeleteConnectApp",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/ConnectApps/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.ListConnectApp",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/ConnectApps.json",
+            "operation_id": "ListConnectApp",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/ConnectApps.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListDependentPhoneNumber",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Addresses/{AddressSid}/DependentPhoneNumbers.json",
+            "operation_id": "ListDependentPhoneNumber",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Addresses/{AddressSid}/DependentPhoneNumbers.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateIncomingPhoneNumber",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json",
+            "operation_id": "UpdateIncomingPhoneNumber",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.FetchIncomingPhoneNumber",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json",
+            "operation_id": "FetchIncomingPhoneNumber",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.DeleteIncomingPhoneNumber",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json",
+            "operation_id": "DeleteIncomingPhoneNumber",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.ListIncomingPhoneNumber",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers.json",
+            "operation_id": "ListIncomingPhoneNumber",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers.json\"].get"
+          },
+          {
+            "id": "twilio.rest.CreateIncomingPhoneNumber",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers.json",
+            "operation_id": "CreateIncomingPhoneNumber",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers.json\"].post"
+          },
+          {
+            "id": "twilio.rest.FetchIncomingPhoneNumberAssignedAddOn",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{Sid}.json",
+            "operation_id": "FetchIncomingPhoneNumberAssignedAddOn",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.DeleteIncomingPhoneNumberAssignedAddOn",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{Sid}.json",
+            "operation_id": "DeleteIncomingPhoneNumberAssignedAddOn",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.ListIncomingPhoneNumberAssignedAddOn",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns.json",
+            "operation_id": "ListIncomingPhoneNumberAssignedAddOn",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns.json\"].get"
+          },
+          {
+            "id": "twilio.rest.CreateIncomingPhoneNumberAssignedAddOn",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns.json",
+            "operation_id": "CreateIncomingPhoneNumberAssignedAddOn",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns.json\"].post"
+          },
+          {
+            "id": "twilio.rest.FetchIncomingPhoneNumberAssignedAddOnExtension",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{AssignedAddOnSid}/Extensions/{Sid}.json",
+            "operation_id": "FetchIncomingPhoneNumberAssignedAddOnExtension",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{AssignedAddOnSid}/Extensions/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListIncomingPhoneNumberAssignedAddOnExtension",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{AssignedAddOnSid}/Extensions.json",
+            "operation_id": "ListIncomingPhoneNumberAssignedAddOnExtension",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{AssignedAddOnSid}/Extensions.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListIncomingPhoneNumberLocal",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/Local.json",
+            "operation_id": "ListIncomingPhoneNumberLocal",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/Local.json\"].get"
+          },
+          {
+            "id": "twilio.rest.CreateIncomingPhoneNumberLocal",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/Local.json",
+            "operation_id": "CreateIncomingPhoneNumberLocal",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/Local.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListIncomingPhoneNumberMobile",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/Mobile.json",
+            "operation_id": "ListIncomingPhoneNumberMobile",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/Mobile.json\"].get"
+          },
+          {
+            "id": "twilio.rest.CreateIncomingPhoneNumberMobile",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/Mobile.json",
+            "operation_id": "CreateIncomingPhoneNumberMobile",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/Mobile.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListIncomingPhoneNumberTollFree",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/TollFree.json",
+            "operation_id": "ListIncomingPhoneNumberTollFree",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/TollFree.json\"].get"
+          },
+          {
+            "id": "twilio.rest.CreateIncomingPhoneNumberTollFree",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/TollFree.json",
+            "operation_id": "CreateIncomingPhoneNumberTollFree",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers/TollFree.json\"].post"
+          },
+          {
+            "id": "twilio.rest.FetchKey",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Keys/{Sid}.json",
+            "operation_id": "FetchKey",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Keys/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateKey",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Keys/{Sid}.json",
+            "operation_id": "UpdateKey",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Keys/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.DeleteKey",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/Keys/{Sid}.json",
+            "operation_id": "DeleteKey",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Keys/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.ListKey",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Keys.json",
+            "operation_id": "ListKey",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Keys.json\"].get"
+          },
+          {
+            "id": "twilio.rest.CreateNewKey",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Keys.json",
+            "operation_id": "CreateNewKey",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Keys.json\"].post"
+          },
+          {
+            "id": "twilio.rest.DeleteMedia",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/Messages/{MessageSid}/Media/{Sid}.json",
+            "operation_id": "DeleteMedia",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Messages/{MessageSid}/Media/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.FetchMedia",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Messages/{MessageSid}/Media/{Sid}.json",
+            "operation_id": "FetchMedia",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Messages/{MessageSid}/Media/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListMedia",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Messages/{MessageSid}/Media.json",
+            "operation_id": "ListMedia",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Messages/{MessageSid}/Media.json\"].get"
+          },
+          {
+            "id": "twilio.rest.FetchMember",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Queues/{QueueSid}/Members/{CallSid}.json",
+            "operation_id": "FetchMember",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Queues/{QueueSid}/Members/{CallSid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateMember",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Queues/{QueueSid}/Members/{CallSid}.json",
+            "operation_id": "UpdateMember",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Queues/{QueueSid}/Members/{CallSid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListMember",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Queues/{QueueSid}/Members.json",
+            "operation_id": "ListMember",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Queues/{QueueSid}/Members.json\"].get"
+          },
+          {
+            "id": "twilio.rest.CreateMessage",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Messages.json",
+            "operation_id": "CreateMessage",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Messages.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListMessage",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Messages.json",
+            "operation_id": "ListMessage",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Messages.json\"].get"
+          },
+          {
+            "id": "twilio.rest.DeleteMessage",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/Messages/{Sid}.json",
+            "operation_id": "DeleteMessage",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Messages/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.FetchMessage",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Messages/{Sid}.json",
+            "operation_id": "FetchMessage",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Messages/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateMessage",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Messages/{Sid}.json",
+            "operation_id": "UpdateMessage",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Messages/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.CreateMessageFeedback",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Messages/{MessageSid}/Feedback.json",
+            "operation_id": "CreateMessageFeedback",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Messages/{MessageSid}/Feedback.json\"].post"
+          },
+          {
+            "id": "twilio.rest.CreateNewSigningKey",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/SigningKeys.json",
+            "operation_id": "CreateNewSigningKey",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SigningKeys.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListSigningKey",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SigningKeys.json",
+            "operation_id": "ListSigningKey",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SigningKeys.json\"].get"
+          },
+          {
+            "id": "twilio.rest.FetchNotification",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Notifications/{Sid}.json",
+            "operation_id": "FetchNotification",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Notifications/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListNotification",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Notifications.json",
+            "operation_id": "ListNotification",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Notifications.json\"].get"
+          },
+          {
+            "id": "twilio.rest.FetchOutgoingCallerId",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json",
+            "operation_id": "FetchOutgoingCallerId",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateOutgoingCallerId",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json",
+            "operation_id": "UpdateOutgoingCallerId",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.DeleteOutgoingCallerId",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json",
+            "operation_id": "DeleteOutgoingCallerId",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.ListOutgoingCallerId",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/OutgoingCallerIds.json",
+            "operation_id": "ListOutgoingCallerId",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds.json\"].get"
+          },
+          {
+            "id": "twilio.rest.CreateValidationRequest",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/OutgoingCallerIds.json",
+            "operation_id": "CreateValidationRequest",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/OutgoingCallerIds.json\"].post"
+          },
+          {
+            "id": "twilio.rest.FetchParticipant",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json",
+            "operation_id": "FetchParticipant",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateParticipant",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json",
+            "operation_id": "UpdateParticipant",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.DeleteParticipant",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json",
+            "operation_id": "DeleteParticipant",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.CreateParticipant",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants.json",
+            "operation_id": "CreateParticipant",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListParticipant",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants.json",
+            "operation_id": "ListParticipant",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants.json\"].get"
+          },
+          {
+            "id": "twilio.rest.CreatePayments",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Payments.json",
+            "operation_id": "CreatePayments",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Payments.json\"].post"
+          },
+          {
+            "id": "twilio.rest.UpdatePayments",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Payments/{Sid}.json",
+            "operation_id": "UpdatePayments",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Payments/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.FetchQueue",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Queues/{Sid}.json",
+            "operation_id": "FetchQueue",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Queues/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateQueue",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Queues/{Sid}.json",
+            "operation_id": "UpdateQueue",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Queues/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.DeleteQueue",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/Queues/{Sid}.json",
+            "operation_id": "DeleteQueue",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Queues/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.ListQueue",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Queues.json",
+            "operation_id": "ListQueue",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Queues.json\"].get"
+          },
+          {
+            "id": "twilio.rest.CreateQueue",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Queues.json",
+            "operation_id": "CreateQueue",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Queues.json\"].post"
+          },
+          {
+            "id": "twilio.rest.CreateRealtimeTranscription",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Transcriptions.json",
+            "operation_id": "CreateRealtimeTranscription",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Transcriptions.json\"].post"
+          },
+          {
+            "id": "twilio.rest.UpdateRealtimeTranscription",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Transcriptions/{Sid}.json",
+            "operation_id": "UpdateRealtimeTranscription",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Transcriptions/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.FetchRecording",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Recordings/{Sid}.json",
+            "operation_id": "FetchRecording",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Recordings/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.DeleteRecording",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/Recordings/{Sid}.json",
+            "operation_id": "DeleteRecording",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Recordings/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.ListRecording",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Recordings.json",
+            "operation_id": "ListRecording",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Recordings.json\"].get"
+          },
+          {
+            "id": "twilio.rest.FetchRecordingAddOnResult",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{Sid}.json",
+            "operation_id": "FetchRecordingAddOnResult",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.DeleteRecordingAddOnResult",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{Sid}.json",
+            "operation_id": "DeleteRecordingAddOnResult",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.ListRecordingAddOnResult",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults.json",
+            "operation_id": "ListRecordingAddOnResult",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults.json\"].get"
+          },
+          {
+            "id": "twilio.rest.FetchRecordingAddOnResultPayload",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{Sid}.json",
+            "operation_id": "FetchRecordingAddOnResultPayload",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.DeleteRecordingAddOnResultPayload",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{Sid}.json",
+            "operation_id": "DeleteRecordingAddOnResultPayload",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.ListRecordingAddOnResultPayload",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads.json",
+            "operation_id": "ListRecordingAddOnResultPayload",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads.json\"].get"
+          },
+          {
+            "id": "twilio.rest.FetchRecordingAddOnResultPayloadData",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{PayloadSid}/Data.json",
+            "operation_id": "FetchRecordingAddOnResultPayloadData",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{PayloadSid}/Data.json\"].get"
+          },
+          {
+            "id": "twilio.rest.FetchRecordingTranscription",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions/{Sid}.json",
+            "operation_id": "FetchRecordingTranscription",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.DeleteRecordingTranscription",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions/{Sid}.json",
+            "operation_id": "DeleteRecordingTranscription",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.ListRecordingTranscription",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions.json",
+            "operation_id": "ListRecordingTranscription",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions.json\"].get"
+          },
+          {
+            "id": "twilio.rest.FetchShortCode",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SMS/ShortCodes/{Sid}.json",
+            "operation_id": "FetchShortCode",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SMS/ShortCodes/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateShortCode",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/SMS/ShortCodes/{Sid}.json",
+            "operation_id": "UpdateShortCode",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SMS/ShortCodes/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListShortCode",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SMS/ShortCodes.json",
+            "operation_id": "ListShortCode",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SMS/ShortCodes.json\"].get"
+          },
+          {
+            "id": "twilio.rest.FetchSigningKey",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SigningKeys/{Sid}.json",
+            "operation_id": "FetchSigningKey",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SigningKeys/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateSigningKey",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/SigningKeys/{Sid}.json",
+            "operation_id": "UpdateSigningKey",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SigningKeys/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.DeleteSigningKey",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/SigningKeys/{Sid}.json",
+            "operation_id": "DeleteSigningKey",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SigningKeys/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.CreateSipAuthCallsCredentialListMapping",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings.json",
+            "operation_id": "CreateSipAuthCallsCredentialListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListSipAuthCallsCredentialListMapping",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings.json",
+            "operation_id": "ListSipAuthCallsCredentialListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings.json\"].get"
+          },
+          {
+            "id": "twilio.rest.FetchSipAuthCallsCredentialListMapping",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings/{Sid}.json",
+            "operation_id": "FetchSipAuthCallsCredentialListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.DeleteSipAuthCallsCredentialListMapping",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings/{Sid}.json",
+            "operation_id": "DeleteSipAuthCallsCredentialListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.CreateSipAuthCallsIpAccessControlListMapping",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings.json",
+            "operation_id": "CreateSipAuthCallsIpAccessControlListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListSipAuthCallsIpAccessControlListMapping",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings.json",
+            "operation_id": "ListSipAuthCallsIpAccessControlListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings.json\"].get"
+          },
+          {
+            "id": "twilio.rest.FetchSipAuthCallsIpAccessControlListMapping",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings/{Sid}.json",
+            "operation_id": "FetchSipAuthCallsIpAccessControlListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.DeleteSipAuthCallsIpAccessControlListMapping",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings/{Sid}.json",
+            "operation_id": "DeleteSipAuthCallsIpAccessControlListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.CreateSipAuthRegistrationsCredentialListMapping",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings.json",
+            "operation_id": "CreateSipAuthRegistrationsCredentialListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListSipAuthRegistrationsCredentialListMapping",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings.json",
+            "operation_id": "ListSipAuthRegistrationsCredentialListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings.json\"].get"
+          },
+          {
+            "id": "twilio.rest.FetchSipAuthRegistrationsCredentialListMapping",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings/{Sid}.json",
+            "operation_id": "FetchSipAuthRegistrationsCredentialListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.DeleteSipAuthRegistrationsCredentialListMapping",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings/{Sid}.json",
+            "operation_id": "DeleteSipAuthRegistrationsCredentialListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.ListSipCredential",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials.json",
+            "operation_id": "ListSipCredential",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials.json\"].get"
+          },
+          {
+            "id": "twilio.rest.CreateSipCredential",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials.json",
+            "operation_id": "CreateSipCredential",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials.json\"].post"
+          },
+          {
+            "id": "twilio.rest.FetchSipCredential",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json",
+            "operation_id": "FetchSipCredential",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateSipCredential",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json",
+            "operation_id": "UpdateSipCredential",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.DeleteSipCredential",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json",
+            "operation_id": "DeleteSipCredential",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.ListSipCredentialList",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/CredentialLists.json",
+            "operation_id": "ListSipCredentialList",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists.json\"].get"
+          },
+          {
+            "id": "twilio.rest.CreateSipCredentialList",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/SIP/CredentialLists.json",
+            "operation_id": "CreateSipCredentialList",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists.json\"].post"
+          },
+          {
+            "id": "twilio.rest.FetchSipCredentialList",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json",
+            "operation_id": "FetchSipCredentialList",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateSipCredentialList",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json",
+            "operation_id": "UpdateSipCredentialList",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.DeleteSipCredentialList",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json",
+            "operation_id": "DeleteSipCredentialList",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.CreateSipCredentialListMapping",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings.json",
+            "operation_id": "CreateSipCredentialListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListSipCredentialListMapping",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings.json",
+            "operation_id": "ListSipCredentialListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings.json\"].get"
+          },
+          {
+            "id": "twilio.rest.FetchSipCredentialListMapping",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings/{Sid}.json",
+            "operation_id": "FetchSipCredentialListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.DeleteSipCredentialListMapping",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings/{Sid}.json",
+            "operation_id": "DeleteSipCredentialListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.ListSipDomain",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/Domains.json",
+            "operation_id": "ListSipDomain",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains.json\"].get"
+          },
+          {
+            "id": "twilio.rest.CreateSipDomain",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/SIP/Domains.json",
+            "operation_id": "CreateSipDomain",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains.json\"].post"
+          },
+          {
+            "id": "twilio.rest.FetchSipDomain",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{Sid}.json",
+            "operation_id": "FetchSipDomain",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateSipDomain",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{Sid}.json",
+            "operation_id": "UpdateSipDomain",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.DeleteSipDomain",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{Sid}.json",
+            "operation_id": "DeleteSipDomain",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.ListSipIpAccessControlList",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists.json",
+            "operation_id": "ListSipIpAccessControlList",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists.json\"].get"
+          },
+          {
+            "id": "twilio.rest.CreateSipIpAccessControlList",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists.json",
+            "operation_id": "CreateSipIpAccessControlList",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists.json\"].post"
+          },
+          {
+            "id": "twilio.rest.FetchSipIpAccessControlList",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json",
+            "operation_id": "FetchSipIpAccessControlList",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateSipIpAccessControlList",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json",
+            "operation_id": "UpdateSipIpAccessControlList",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.DeleteSipIpAccessControlList",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json",
+            "operation_id": "DeleteSipIpAccessControlList",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.FetchSipIpAccessControlListMapping",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings/{Sid}.json",
+            "operation_id": "FetchSipIpAccessControlListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.DeleteSipIpAccessControlListMapping",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings/{Sid}.json",
+            "operation_id": "DeleteSipIpAccessControlListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.CreateSipIpAccessControlListMapping",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings.json",
+            "operation_id": "CreateSipIpAccessControlListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListSipIpAccessControlListMapping",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings.json",
+            "operation_id": "ListSipIpAccessControlListMapping",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListSipIpAddress",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses.json",
+            "operation_id": "ListSipIpAddress",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses.json\"].get"
+          },
+          {
+            "id": "twilio.rest.CreateSipIpAddress",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses.json",
+            "operation_id": "CreateSipIpAddress",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses.json\"].post"
+          },
+          {
+            "id": "twilio.rest.FetchSipIpAddress",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json",
+            "operation_id": "FetchSipIpAddress",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateSipIpAddress",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json",
+            "operation_id": "UpdateSipIpAddress",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.DeleteSipIpAddress",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json",
+            "operation_id": "DeleteSipIpAddress",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.CreateSiprec",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Siprec.json",
+            "operation_id": "CreateSiprec",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Siprec.json\"].post"
+          },
+          {
+            "id": "twilio.rest.UpdateSiprec",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Siprec/{Sid}.json",
+            "operation_id": "UpdateSiprec",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Siprec/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.CreateStream",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Streams.json",
+            "operation_id": "CreateStream",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Streams.json\"].post"
+          },
+          {
+            "id": "twilio.rest.UpdateStream",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Streams/{Sid}.json",
+            "operation_id": "UpdateStream",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/Streams/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.CreateToken",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Tokens.json",
+            "operation_id": "CreateToken",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Tokens.json\"].post"
+          },
+          {
+            "id": "twilio.rest.FetchTranscription",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Transcriptions/{Sid}.json",
+            "operation_id": "FetchTranscription",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Transcriptions/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.DeleteTranscription",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/Transcriptions/{Sid}.json",
+            "operation_id": "DeleteTranscription",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Transcriptions/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.ListTranscription",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Transcriptions.json",
+            "operation_id": "ListTranscription",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Transcriptions.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListUsageRecord",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Usage/Records.json",
+            "operation_id": "ListUsageRecord",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Usage/Records.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListUsageRecordAllTime",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Usage/Records/AllTime.json",
+            "operation_id": "ListUsageRecordAllTime",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Usage/Records/AllTime.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListUsageRecordDaily",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Usage/Records/Daily.json",
+            "operation_id": "ListUsageRecordDaily",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Usage/Records/Daily.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListUsageRecordLastMonth",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Usage/Records/LastMonth.json",
+            "operation_id": "ListUsageRecordLastMonth",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Usage/Records/LastMonth.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListUsageRecordMonthly",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Usage/Records/Monthly.json",
+            "operation_id": "ListUsageRecordMonthly",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Usage/Records/Monthly.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListUsageRecordThisMonth",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Usage/Records/ThisMonth.json",
+            "operation_id": "ListUsageRecordThisMonth",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Usage/Records/ThisMonth.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListUsageRecordToday",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Usage/Records/Today.json",
+            "operation_id": "ListUsageRecordToday",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Usage/Records/Today.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListUsageRecordYearly",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Usage/Records/Yearly.json",
+            "operation_id": "ListUsageRecordYearly",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Usage/Records/Yearly.json\"].get"
+          },
+          {
+            "id": "twilio.rest.ListUsageRecordYesterday",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Usage/Records/Yesterday.json",
+            "operation_id": "ListUsageRecordYesterday",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Usage/Records/Yesterday.json\"].get"
+          },
+          {
+            "id": "twilio.rest.FetchUsageTrigger",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json",
+            "operation_id": "FetchUsageTrigger",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json\"].get"
+          },
+          {
+            "id": "twilio.rest.UpdateUsageTrigger",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json",
+            "operation_id": "UpdateUsageTrigger",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json\"].post"
+          },
+          {
+            "id": "twilio.rest.DeleteUsageTrigger",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json",
+            "operation_id": "DeleteUsageTrigger",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json\"].delete"
+          },
+          {
+            "id": "twilio.rest.CreateUsageTrigger",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Usage/Triggers.json",
+            "operation_id": "CreateUsageTrigger",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Usage/Triggers.json\"].post"
+          },
+          {
+            "id": "twilio.rest.ListUsageTrigger",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/Accounts/{AccountSid}/Usage/Triggers.json",
+            "operation_id": "ListUsageTrigger",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Usage/Triggers.json\"].get"
+          },
+          {
+            "id": "twilio.rest.CreateUserDefinedMessage",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessages.json",
+            "operation_id": "CreateUserDefinedMessage",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessages.json\"].post"
+          },
+          {
+            "id": "twilio.rest.CreateUserDefinedMessageSubscription",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessageSubscriptions.json",
+            "operation_id": "CreateUserDefinedMessageSubscription",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessageSubscriptions.json\"].post"
+          },
+          {
+            "id": "twilio.rest.DeleteUserDefinedMessageSubscription",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessageSubscriptions/{Sid}.json",
+            "operation_id": "DeleteUserDefinedMessageSubscription",
+            "deprecated": false,
+            "source_location": "paths[\"/2010-04-01/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessageSubscriptions/{Sid}.json\"].delete"
+          }
+        ]
+      }
+    ]
+  },
+  "counts": {
+    "rest": 197,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 197
+  }
+}

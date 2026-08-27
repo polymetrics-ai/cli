@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "issue": 4289,
+  "connector": "grafana",
+  "source": {
+    "operation_id": "getAccessControlStatus",
+    "method": "GET",
+    "path": "/api/access-control/status",
+    "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
+    "artifact_sha256": "8d54e6ceb1aeef72ef8fe31213eed910d82d264b0d8328b7e53670ce4c88b46c"
+  },
+  "command": {
+    "path": "access control status get",
+    "intent": "direct_read",
+    "availability": "implemented"
+  },
+  "binary": {
+    "sha256": "ee49da13309479b53bc01a44c40c632d1313c7006b16a90d14a352dc8835888a",
+    "build_command": "go build -o <isolated-proof>/pm ./cmd/pm",
+    "project_setup": "pm init --root <isolated-project>",
+    "invocation": "pm grafana access control status get",
+    "exit_code": 1,
+    "stdout_bytes": 0,
+    "stderr": "error: missing --credential"
+  },
+  "help_checks": [
+    "pm help grafana",
+    "pm grafana",
+    "pm grafana access control status get --help"
+  ],
+  "provider_live_certification": "pending; no provider credential or request was used"
+}

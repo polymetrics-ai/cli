@@ -1,0 +1,43 @@
+{
+  "issue": 4289,
+  "connector": "elasticsearch",
+  "source": {
+    "lock": "internal/connectors/defs/elasticsearch/sources/elasticsearch-operation-source-lock.json",
+    "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+    "sha256": "aace81c4c46fa503895ea524d30313856597975f67115fc9cde9c61c7f76b952",
+    "bytes": 6458837,
+    "operations": [
+      "elasticsearch.rest.cat-help",
+      "elasticsearch.rest.dangling-indices-list-dangling-indices",
+      "elasticsearch.rest.esql-list-queries",
+      "elasticsearch.rest.get-script-context",
+      "elasticsearch.rest.get-script-languages"
+    ]
+  },
+  "binary": {
+    "path": ".fm-elasticsearch-administrative-proof.bOkpcO/pm",
+    "sha256": "bd0ab22bd59db4b964977815e89c2f9057daaa26f336e8604c312cdd3a1fa7d2",
+    "build_command": "go build -o .fm-elasticsearch-administrative-proof.bOkpcO/pm ./cmd/pm"
+  },
+  "proof": {
+    "credential_configuration": "none; each command ran from its own project initialized with pm init --root <project> --json",
+    "provider_requests": 0,
+    "expected_stderr": "error: missing --credential",
+    "commands": [
+      {"path": "cat help get", "exit_code": 1, "stdout_bytes": 0, "stderr": "error: missing --credential"},
+      {"path": "dangling indices list", "exit_code": 1, "stdout_bytes": 0, "stderr": "error: missing --credential"},
+      {"path": "esql queries list", "exit_code": 1, "stdout_bytes": 0, "stderr": "error: missing --credential"},
+      {"path": "script contexts list", "exit_code": 1, "stdout_bytes": 0, "stderr": "error: missing --credential"},
+      {"path": "script languages list", "exit_code": 1, "stdout_bytes": 0, "stderr": "error: missing --credential"}
+    ],
+    "help_checks": [
+      "pm help elasticsearch",
+      "pm elasticsearch",
+      "pm elasticsearch cat help get --help",
+      "pm elasticsearch dangling indices list --help",
+      "pm elasticsearch esql queries list --help",
+      "pm elasticsearch script contexts list --help",
+      "pm elasticsearch script languages list --help"
+    ]
+  }
+}

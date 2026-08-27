@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "gocardless",
+  "artifacts": [
+    {
+      "sha256": "620576bb129f3131f4660e3bfd3bd83a78b4224f3008a9ecc8eb7666fd2fb043",
+      "bytes": 2698693,
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "retrieved_at": "2026-08-24T12:03:07Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

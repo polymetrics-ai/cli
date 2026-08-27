@@ -1,0 +1,26 @@
+{
+  "issue": 4289,
+  "connector": "elasticsearch",
+  "source": {
+    "lock": "internal/connectors/defs/elasticsearch/sources/elasticsearch-operation-source-lock.json",
+    "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+    "sha256": "aace81c4c46fa503895ea524d30313856597975f67115fc9cde9c61c7f76b952",
+    "bytes": 6458837,
+    "operations": ["elasticsearch.rest.ssl-certificates", "elasticsearch.rest.transform-get-node-stats"]
+  },
+  "binary": {
+    "path": ".fm-elasticsearch-ssl-transform-proof.8SVNar/pm",
+    "sha256": "340c18b62373d3814473a490a2e5d32ffec8045db73f519f4fbec50619d9d8d7",
+    "build_command": "go build -o .fm-elasticsearch-ssl-transform-proof.8SVNar/pm ./cmd/pm"
+  },
+  "proof": {
+    "credential_configuration": "none; each command ran from its own project initialized with pm init --root <project> --json",
+    "provider_requests": 0,
+    "expected_stderr": "error: missing --credential",
+    "commands": [
+      {"path": "ssl certificates list", "exit_code": 1, "stdout_bytes": 0, "stderr": "error: missing --credential"},
+      {"path": "transform node stats get", "exit_code": 1, "stdout_bytes": 0, "stderr": "error: missing --credential"}
+    ],
+    "help_checks": ["pm help elasticsearch", "pm elasticsearch", "pm elasticsearch ssl certificates list --help", "pm elasticsearch transform node stats get --help"]
+  }
+}

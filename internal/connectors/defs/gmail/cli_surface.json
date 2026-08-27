@@ -779,32 +779,68 @@
     },
     {
       "path": "drafts create",
-      "summary": "creates a new unsent draft, visible to the mailbox owner",
+      "summary": "Plan and execute the create draft reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "create_draft",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+      "source_cli_path": "POST /users/{userId}/drafts",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/drafts"
+        }
+      ],
+      "flags": [
+        {
+          "name": "message",
+          "type": "json",
+          "summary": "Required message record field.",
+          "maps_to": "record.message",
+          "required": true
+        }
+      ],
       "risk": "creates a new unsent draft, visible to the mailbox owner",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [],
-      "notes": "Required field with no scalar leaf; use the typed reverse-ETL record path for the full object. Connector command execution is metadata-only for complex object/array records."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gmail create draft apply --plan <plan-name>"
+      ]
     },
     {
       "path": "drafts update",
-      "summary": "replaces the entire content of an existing draft",
+      "summary": "Plan and execute the update draft reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "update_draft",
-      "risk": "replaces the entire content of an existing draft",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+      "source_cli_path": "PUT /users/{userId}/drafts/{id}",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{userId}/drafts/{id}"
+        }
+      ],
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "id value",
-          "maps_to": "record.id"
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "message",
+          "type": "json",
+          "summary": "Required message record field.",
+          "maps_to": "record.message",
+          "required": true
         }
       ],
-      "notes": "Required field with no scalar leaf; use the typed reverse-ETL record path for the full object. Connector command execution is metadata-only for complex object/array records."
+      "risk": "replaces the entire content of an existing draft",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gmail update draft apply --plan <plan-name>"
+      ]
     },
     {
       "path": "drafts send",
@@ -916,14 +952,32 @@
     },
     {
       "path": "settings filters create",
-      "summary": "creates a mail filter that automatically acts on future incoming messages matching its criteria (may auto-forward mail externally)",
+      "summary": "Plan and execute the create filter reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "create_filter",
+      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+      "source_cli_path": "POST /users/{userId}/settings/filters",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/settings/filters"
+        }
+      ],
+      "flags": [
+        {
+          "name": "criteria",
+          "type": "json",
+          "summary": "Required criteria record field.",
+          "maps_to": "record.criteria",
+          "required": true
+        }
+      ],
       "risk": "creates a mail filter that automatically acts on future incoming messages matching its criteria (may auto-forward mail externally)",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [],
-      "notes": "Required field with no scalar leaf; use the typed reverse-ETL record path for the full object. Connector command execution is metadata-only for complex object/array records."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gmail create filter apply --plan <plan-name>"
+      ]
     },
     {
       "path": "settings filters delete",

@@ -1,0 +1,3370 @@
+{
+  "schema_version": 3,
+  "connector": "amazon-seller-partner",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "retrieval": "schema-v2 source-lock migration retaining hash-pinned provider artifacts",
+    "openapi": [],
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "all provider-published Selling Partner OpenAPI model documents under models/ Inventory basis: parsed from the pinned provider machine-readable source artifact"
+    },
+    "source_documents": [
+      {
+        "id": "source",
+        "kind": "bundle",
+        "artifact": {
+          "source_url": "https://codeload.github.com/amzn/selling-partner-api-models/tar.gz/refs/heads/main",
+          "sha256": "924a416722b10a967708a94bbe49bc7f7d92f799922c5d2704313166b646b3d0",
+          "bytes": 1732664
+        },
+        "published_source": {
+          "source_url": "https://codeload.github.com/amzn/selling-partner-api-models/tar.gz/refs/heads/main",
+          "capture_url": "https://codeload.github.com/amzn/selling-partner-api-models/tar.gz/refs/heads/main",
+          "sha256": "924a416722b10a967708a94bbe49bc7f7d92f799922c5d2704313166b646b3d0",
+          "bytes": 1732664,
+          "adapter": "legacy-v2-source-lock-migration-v1"
+        },
+        "operations": [
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/awd/2024-05-09/inboundOrders",
+            "operation_id": "createInbound",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/inboundOrders\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/awd/2024-05-09/inboundOrders/{orderId}",
+            "operation_id": "getInbound",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/inboundOrders/{orderId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.3",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/awd/2024-05-09/inboundOrders/{orderId}",
+            "operation_id": "updateInbound",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/inboundOrders/{orderId}\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.4",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/awd/2024-05-09/inboundOrders/{orderId}/cancellation",
+            "operation_id": "cancelInbound",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/inboundOrders/{orderId}/cancellation\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.5",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/awd/2024-05-09/inboundOrders/{orderId}/confirmation",
+            "operation_id": "confirmInbound",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/inboundOrders/{orderId}/confirmation\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/awd/2024-05-09/inboundShipments/{shipmentId}",
+            "operation_id": "getInboundShipment",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/inboundShipments/{shipmentId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.7",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/awd/2024-05-09/inboundShipments/{shipmentId}/labels",
+            "operation_id": "getInboundShipmentLabels",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/inboundShipments/{shipmentId}/labels\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/awd/2024-05-09/inboundShipments/{shipmentId}/labelPageTypes",
+            "operation_id": "getLabelPageTypes",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/inboundShipments/{shipmentId}/labelPageTypes\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.9",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/awd/2024-05-09/inboundShipments/{shipmentId}/transport",
+            "operation_id": "updateInboundShipmentTransportDetails",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/inboundShipments/{shipmentId}/transport\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.10",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/awd/2024-05-09/inboundEligibility",
+            "operation_id": "checkInboundEligibility",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/inboundEligibility\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.11",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/awd/2024-05-09/inboundShipments",
+            "operation_id": "listInboundShipments",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/inboundShipments\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.12",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/awd/2024-05-09/inventory",
+            "operation_id": "listInventory",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/inventory\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.13",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/awd/2024-05-09/outboundOrders",
+            "operation_id": "listOutbounds",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/outboundOrders\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.14",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/awd/2024-05-09/outboundOrders",
+            "operation_id": "createOutbound",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/outboundOrders\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.15",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/awd/2024-05-09/outboundOrders/{orderId}",
+            "operation_id": "getOutbound",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/outboundOrders/{orderId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.16",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/awd/2024-05-09/outboundOrders/{orderId}",
+            "operation_id": "updateOutbound",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/outboundOrders/{orderId}\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.17",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/awd/2024-05-09/outboundOrders/{orderId}/confirmation",
+            "operation_id": "confirmOutbound",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/outboundOrders/{orderId}/confirmation\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.18",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/awd/2024-05-09/replenishmentOrders",
+            "operation_id": "listReplenishmentOrders",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/replenishmentOrders\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.19",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/awd/2024-05-09/replenishmentOrders",
+            "operation_id": "createReplenishmentOrder",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/replenishmentOrders\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.20",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/awd/2024-05-09/replenishmentOrders/{orderId}",
+            "operation_id": "getReplenishmentOrder",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/replenishmentOrders/{orderId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.amazon.warehousing.and.distribution.model.awd.2024.05.09.json.21",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/awd/2024-05-09/replenishmentOrders/{orderId}/confirmation",
+            "operation_id": "confirmReplenishmentOrder",
+            "deprecated": false,
+            "source_location": "models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json:paths[\"/awd/2024-05-09/replenishmentOrders/{orderId}/confirmation\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.aplus.content.api.model.aplusContent.2020.11.01.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/aplus/2020-11-01/contentDocuments",
+            "operation_id": "searchContentDocuments",
+            "deprecated": false,
+            "source_location": "models/aplus-content-api-model/aplusContent_2020-11-01.json:paths[\"/aplus/2020-11-01/contentDocuments\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.aplus.content.api.model.aplusContent.2020.11.01.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/aplus/2020-11-01/contentDocuments",
+            "operation_id": "createContentDocument",
+            "deprecated": false,
+            "source_location": "models/aplus-content-api-model/aplusContent_2020-11-01.json:paths[\"/aplus/2020-11-01/contentDocuments\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.aplus.content.api.model.aplusContent.2020.11.01.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}",
+            "operation_id": "getContentDocument",
+            "deprecated": false,
+            "source_location": "models/aplus-content-api-model/aplusContent_2020-11-01.json:paths[\"/aplus/2020-11-01/contentDocuments/{contentReferenceKey}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.aplus.content.api.model.aplusContent.2020.11.01.json.4",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}",
+            "operation_id": "updateContentDocument",
+            "deprecated": false,
+            "source_location": "models/aplus-content-api-model/aplusContent_2020-11-01.json:paths[\"/aplus/2020-11-01/contentDocuments/{contentReferenceKey}\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.aplus.content.api.model.aplusContent.2020.11.01.json.5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}/asins",
+            "operation_id": "listContentDocumentAsinRelations",
+            "deprecated": false,
+            "source_location": "models/aplus-content-api-model/aplusContent_2020-11-01.json:paths[\"/aplus/2020-11-01/contentDocuments/{contentReferenceKey}/asins\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.aplus.content.api.model.aplusContent.2020.11.01.json.6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}/asins",
+            "operation_id": "postContentDocumentAsinRelations",
+            "deprecated": false,
+            "source_location": "models/aplus-content-api-model/aplusContent_2020-11-01.json:paths[\"/aplus/2020-11-01/contentDocuments/{contentReferenceKey}/asins\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.aplus.content.api.model.aplusContent.2020.11.01.json.7",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/aplus/2020-11-01/contentAsinValidations",
+            "operation_id": "validateContentDocumentAsinRelations",
+            "deprecated": false,
+            "source_location": "models/aplus-content-api-model/aplusContent_2020-11-01.json:paths[\"/aplus/2020-11-01/contentAsinValidations\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.aplus.content.api.model.aplusContent.2020.11.01.json.8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/aplus/2020-11-01/contentPublishRecords",
+            "operation_id": "searchContentPublishRecords",
+            "deprecated": false,
+            "source_location": "models/aplus-content-api-model/aplusContent_2020-11-01.json:paths[\"/aplus/2020-11-01/contentPublishRecords\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.aplus.content.api.model.aplusContent.2020.11.01.json.9",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}/approvalSubmissions",
+            "operation_id": "postContentDocumentApprovalSubmission",
+            "deprecated": false,
+            "source_location": "models/aplus-content-api-model/aplusContent_2020-11-01.json:paths[\"/aplus/2020-11-01/contentDocuments/{contentReferenceKey}/approvalSubmissions\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.aplus.content.api.model.aplusContent.2020.11.01.json.10",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/aplus/2020-11-01/contentDocuments/{contentReferenceKey}/suspendSubmissions",
+            "operation_id": "postContentDocumentSuspendSubmission",
+            "deprecated": false,
+            "source_location": "models/aplus-content-api-model/aplusContent_2020-11-01.json:paths[\"/aplus/2020-11-01/contentDocuments/{contentReferenceKey}/suspendSubmissions\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.application.integrations.api.model.appIntegrations.2024.04.01.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/appIntegrations/2024-04-01/notifications",
+            "operation_id": "createNotification",
+            "deprecated": false,
+            "source_location": "models/application-integrations-api-model/appIntegrations-2024-04-01.json:paths[\"/appIntegrations/2024-04-01/notifications\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.application.integrations.api.model.appIntegrations.2024.04.01.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/appIntegrations/2024-04-01/notifications/deletion",
+            "operation_id": "deleteNotifications",
+            "deprecated": false,
+            "source_location": "models/application-integrations-api-model/appIntegrations-2024-04-01.json:paths[\"/appIntegrations/2024-04-01/notifications/deletion\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.application.integrations.api.model.appIntegrations.2024.04.01.json.3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/appIntegrations/2024-04-01/notifications/{notificationId}/feedback",
+            "operation_id": "recordActionFeedback",
+            "deprecated": false,
+            "source_location": "models/application-integrations-api-model/appIntegrations-2024-04-01.json:paths[\"/appIntegrations/2024-04-01/notifications/{notificationId}/feedback\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.application.management.api.model.application.2023.11.30.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/applications/2023-11-30/clientSecret",
+            "operation_id": "rotateApplicationClientSecret",
+            "deprecated": false,
+            "source_location": "models/application-management-api-model/application_2023-11-30.json:paths[\"/applications/2023-11-30/clientSecret\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.catalog.items.api.model.catalogItemsV0.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/catalog/v0/categories",
+            "operation_id": "listCatalogCategories",
+            "deprecated": false,
+            "source_location": "models/catalog-items-api-model/catalogItemsV0.json:paths[\"/catalog/v0/categories\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.catalog.items.api.model.catalogItems.2020.12.01.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/catalog/2020-12-01/items",
+            "operation_id": "searchCatalogItems",
+            "deprecated": false,
+            "source_location": "models/catalog-items-api-model/catalogItems_2020-12-01.json:paths[\"/catalog/2020-12-01/items\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.catalog.items.api.model.catalogItems.2020.12.01.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/catalog/2020-12-01/items/{asin}",
+            "operation_id": "getCatalogItem",
+            "deprecated": false,
+            "source_location": "models/catalog-items-api-model/catalogItems_2020-12-01.json:paths[\"/catalog/2020-12-01/items/{asin}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.catalog.items.api.model.catalogItems.2022.04.01.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/catalog/2022-04-01/items",
+            "operation_id": "searchCatalogItems",
+            "deprecated": false,
+            "source_location": "models/catalog-items-api-model/catalogItems_2022-04-01.json:paths[\"/catalog/2022-04-01/items\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.catalog.items.api.model.catalogItems.2022.04.01.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/catalog/2022-04-01/items/{asin}",
+            "operation_id": "getCatalogItem",
+            "deprecated": false,
+            "source_location": "models/catalog-items-api-model/catalogItems_2022-04-01.json:paths[\"/catalog/2022-04-01/items/{asin}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.customer.feedback.api.model.customerFeedback.2024.06.01.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/customerFeedback/2024-06-01/items/{asin}/reviews/topics",
+            "operation_id": "getItemReviewTopics",
+            "deprecated": false,
+            "source_location": "models/customer-feedback-api-model/customerFeedback_2024-06-01.json:paths[\"/customerFeedback/2024-06-01/items/{asin}/reviews/topics\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.customer.feedback.api.model.customerFeedback.2024.06.01.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/customerFeedback/2024-06-01/items/{asin}/browseNode",
+            "operation_id": "getItemBrowseNode",
+            "deprecated": false,
+            "source_location": "models/customer-feedback-api-model/customerFeedback_2024-06-01.json:paths[\"/customerFeedback/2024-06-01/items/{asin}/browseNode\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.customer.feedback.api.model.customerFeedback.2024.06.01.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/customerFeedback/2024-06-01/browseNodes/{browseNodeId}/reviews/topics",
+            "operation_id": "getBrowseNodeReviewTopics",
+            "deprecated": false,
+            "source_location": "models/customer-feedback-api-model/customerFeedback_2024-06-01.json:paths[\"/customerFeedback/2024-06-01/browseNodes/{browseNodeId}/reviews/topics\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.customer.feedback.api.model.customerFeedback.2024.06.01.json.4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/customerFeedback/2024-06-01/items/{asin}/reviews/trends",
+            "operation_id": "getItemReviewTrends",
+            "deprecated": false,
+            "source_location": "models/customer-feedback-api-model/customerFeedback_2024-06-01.json:paths[\"/customerFeedback/2024-06-01/items/{asin}/reviews/trends\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.customer.feedback.api.model.customerFeedback.2024.06.01.json.5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/customerFeedback/2024-06-01/browseNodes/{browseNodeId}/reviews/trends",
+            "operation_id": "getBrowseNodeReviewTrends",
+            "deprecated": false,
+            "source_location": "models/customer-feedback-api-model/customerFeedback_2024-06-01.json:paths[\"/customerFeedback/2024-06-01/browseNodes/{browseNodeId}/reviews/trends\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.customer.feedback.api.model.customerFeedback.2024.06.01.json.6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/customerFeedback/2024-06-01/browseNodes/{browseNodeId}/returns/topics",
+            "operation_id": "getBrowseNodeReturnTopics",
+            "deprecated": false,
+            "source_location": "models/customer-feedback-api-model/customerFeedback_2024-06-01.json:paths[\"/customerFeedback/2024-06-01/browseNodes/{browseNodeId}/returns/topics\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.customer.feedback.api.model.customerFeedback.2024.06.01.json.7",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/customerFeedback/2024-06-01/browseNodes/{browseNodeId}/returns/trends",
+            "operation_id": "getBrowseNodeReturnTrends",
+            "deprecated": false,
+            "source_location": "models/customer-feedback-api-model/customerFeedback_2024-06-01.json:paths[\"/customerFeedback/2024-06-01/browseNodes/{browseNodeId}/returns/trends\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.data.kiosk.api.model.dataKiosk.2023.11.15.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/dataKiosk/2023-11-15/queries",
+            "operation_id": "getQueries",
+            "deprecated": false,
+            "source_location": "models/data-kiosk-api-model/dataKiosk_2023-11-15.json:paths[\"/dataKiosk/2023-11-15/queries\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.data.kiosk.api.model.dataKiosk.2023.11.15.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/dataKiosk/2023-11-15/queries",
+            "operation_id": "createQuery",
+            "deprecated": false,
+            "source_location": "models/data-kiosk-api-model/dataKiosk_2023-11-15.json:paths[\"/dataKiosk/2023-11-15/queries\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.data.kiosk.api.model.dataKiosk.2023.11.15.json.3",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/dataKiosk/2023-11-15/queries/{queryId}",
+            "operation_id": "cancelQuery",
+            "deprecated": false,
+            "source_location": "models/data-kiosk-api-model/dataKiosk_2023-11-15.json:paths[\"/dataKiosk/2023-11-15/queries/{queryId}\"].delete"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.data.kiosk.api.model.dataKiosk.2023.11.15.json.4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/dataKiosk/2023-11-15/queries/{queryId}",
+            "operation_id": "getQuery",
+            "deprecated": false,
+            "source_location": "models/data-kiosk-api-model/dataKiosk_2023-11-15.json:paths[\"/dataKiosk/2023-11-15/queries/{queryId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.data.kiosk.api.model.dataKiosk.2023.11.15.json.5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/dataKiosk/2023-11-15/documents/{documentId}",
+            "operation_id": "getDocument",
+            "deprecated": false,
+            "source_location": "models/data-kiosk-api-model/dataKiosk_2023-11-15.json:paths[\"/dataKiosk/2023-11-15/documents/{documentId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.delivery.by.amazon.deliveryShipmentInvoiceV2022.07.01.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/delivery/2022-07-01/invoice",
+            "operation_id": "submitInvoice",
+            "deprecated": false,
+            "source_location": "models/delivery-by-amazon/deliveryShipmentInvoiceV2022-07-01.json:paths[\"/delivery/2022-07-01/invoice\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.delivery.by.amazon.deliveryShipmentInvoiceV2022.07.01.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/delivery/2022-07-01/invoice/status",
+            "operation_id": "getInvoiceStatus",
+            "deprecated": false,
+            "source_location": "models/delivery-by-amazon/deliveryShipmentInvoiceV2022-07-01.json:paths[\"/delivery/2022-07-01/invoice/status\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.easy.ship.model.easyShip.2022.03.23.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/easyShip/2022-03-23/timeSlot",
+            "operation_id": "listHandoverSlots",
+            "deprecated": false,
+            "source_location": "models/easy-ship-model/easyShip_2022-03-23.json:paths[\"/easyShip/2022-03-23/timeSlot\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.easy.ship.model.easyShip.2022.03.23.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/easyShip/2022-03-23/package",
+            "operation_id": "getScheduledPackage",
+            "deprecated": false,
+            "source_location": "models/easy-ship-model/easyShip_2022-03-23.json:paths[\"/easyShip/2022-03-23/package\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.easy.ship.model.easyShip.2022.03.23.json.3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/easyShip/2022-03-23/package",
+            "operation_id": "createScheduledPackage",
+            "deprecated": false,
+            "source_location": "models/easy-ship-model/easyShip_2022-03-23.json:paths[\"/easyShip/2022-03-23/package\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.easy.ship.model.easyShip.2022.03.23.json.4",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/easyShip/2022-03-23/package",
+            "operation_id": "updateScheduledPackages",
+            "deprecated": false,
+            "source_location": "models/easy-ship-model/easyShip_2022-03-23.json:paths[\"/easyShip/2022-03-23/package\"].patch"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.easy.ship.model.easyShip.2022.03.23.json.5",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/easyShip/2022-03-23/packages/bulk",
+            "operation_id": "createScheduledPackageBulk",
+            "deprecated": false,
+            "source_location": "models/easy-ship-model/easyShip_2022-03-23.json:paths[\"/easyShip/2022-03-23/packages/bulk\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.external.fulfillment.externalFulfillmentInventory.2024.09.11.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/externalFulfillment/inventory/2024-09-11/inventories",
+            "operation_id": "batchInventory",
+            "deprecated": false,
+            "source_location": "models/external-fulfillment/externalFulfillmentInventory_2024-09-11.json:paths[\"/externalFulfillment/inventory/2024-09-11/inventories\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.external.fulfillment.externalFulfillmentReturns.2024.09.11.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/externalFulfillment/2024-09-11/returns",
+            "operation_id": "listReturns",
+            "deprecated": false,
+            "source_location": "models/external-fulfillment/externalFulfillmentReturns_2024-09-11.json:paths[\"/externalFulfillment/2024-09-11/returns\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.external.fulfillment.externalFulfillmentReturns.2024.09.11.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/externalFulfillment/2024-09-11/returns/{returnId}",
+            "operation_id": "getReturn",
+            "deprecated": false,
+            "source_location": "models/external-fulfillment/externalFulfillmentReturns_2024-09-11.json:paths[\"/externalFulfillment/2024-09-11/returns/{returnId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.external.fulfillment.externalFulfillmentShipments.2024.09.11.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/externalFulfillment/2024-09-11/shipments",
+            "operation_id": "getShipments",
+            "deprecated": false,
+            "source_location": "models/external-fulfillment/externalFulfillmentShipments_2024-09-11.json:paths[\"/externalFulfillment/2024-09-11/shipments\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.external.fulfillment.externalFulfillmentShipments.2024.09.11.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}",
+            "operation_id": "getShipment",
+            "deprecated": false,
+            "source_location": "models/external-fulfillment/externalFulfillmentShipments_2024-09-11.json:paths[\"/externalFulfillment/2024-09-11/shipments/{shipmentId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.external.fulfillment.externalFulfillmentShipments.2024.09.11.json.3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}",
+            "operation_id": "processShipment",
+            "deprecated": false,
+            "source_location": "models/external-fulfillment/externalFulfillmentShipments_2024-09-11.json:paths[\"/externalFulfillment/2024-09-11/shipments/{shipmentId}\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.external.fulfillment.externalFulfillmentShipments.2024.09.11.json.4",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/packages",
+            "operation_id": "createPackages",
+            "deprecated": false,
+            "source_location": "models/external-fulfillment/externalFulfillmentShipments_2024-09-11.json:paths[\"/externalFulfillment/2024-09-11/shipments/{shipmentId}/packages\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.external.fulfillment.externalFulfillmentShipments.2024.09.11.json.5",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/packages/{packageId}",
+            "operation_id": "updatePackage",
+            "deprecated": false,
+            "source_location": "models/external-fulfillment/externalFulfillmentShipments_2024-09-11.json:paths[\"/externalFulfillment/2024-09-11/shipments/{shipmentId}/packages/{packageId}\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.external.fulfillment.externalFulfillmentShipments.2024.09.11.json.6",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/packages/{packageId}",
+            "operation_id": "updatePackageStatus",
+            "deprecated": false,
+            "source_location": "models/external-fulfillment/externalFulfillmentShipments_2024-09-11.json:paths[\"/externalFulfillment/2024-09-11/shipments/{shipmentId}/packages/{packageId}\"].patch"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.external.fulfillment.externalFulfillmentShipments.2024.09.11.json.7",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/shippingOptions",
+            "operation_id": "retrieveShippingOptions",
+            "deprecated": false,
+            "source_location": "models/external-fulfillment/externalFulfillmentShipments_2024-09-11.json:paths[\"/externalFulfillment/2024-09-11/shipments/{shipmentId}/shippingOptions\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.external.fulfillment.externalFulfillmentShipments.2024.09.11.json.8",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/invoice",
+            "operation_id": "generateInvoice",
+            "deprecated": false,
+            "source_location": "models/external-fulfillment/externalFulfillmentShipments_2024-09-11.json:paths[\"/externalFulfillment/2024-09-11/shipments/{shipmentId}/invoice\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.external.fulfillment.externalFulfillmentShipments.2024.09.11.json.9",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/invoice",
+            "operation_id": "retrieveInvoice",
+            "deprecated": false,
+            "source_location": "models/external-fulfillment/externalFulfillmentShipments_2024-09-11.json:paths[\"/externalFulfillment/2024-09-11/shipments/{shipmentId}/invoice\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.external.fulfillment.externalFulfillmentShipments.2024.09.11.json.10",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/shipLabels",
+            "operation_id": "generateShipLabels",
+            "deprecated": false,
+            "source_location": "models/external-fulfillment/externalFulfillmentShipments_2024-09-11.json:paths[\"/externalFulfillment/2024-09-11/shipments/{shipmentId}/shipLabels\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fba.inbound.eligibility.api.model.fbaInbound.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fba/inbound/v1/eligibility/itemPreview",
+            "operation_id": "getItemEligibilityPreview",
+            "deprecated": false,
+            "source_location": "models/fba-inbound-eligibility-api-model/fbaInbound.json:paths[\"/fba/inbound/v1/eligibility/itemPreview\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fba.inventory.api.model.fbaInventory.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fba/inventory/v1/summaries",
+            "operation_id": "getInventorySummaries",
+            "deprecated": false,
+            "source_location": "models/fba-inventory-api-model/fbaInventory.json:paths[\"/fba/inventory/v1/summaries\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fba.inventory.api.model.fbaInventory.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/fba/inventory/v1/items",
+            "operation_id": "createInventoryItem",
+            "deprecated": false,
+            "source_location": "models/fba-inventory-api-model/fbaInventory.json:paths[\"/fba/inventory/v1/items\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fba.inventory.api.model.fbaInventory.json.3",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/fba/inventory/v1/items/{sellerSku}",
+            "operation_id": "deleteInventoryItem",
+            "deprecated": false,
+            "source_location": "models/fba-inventory-api-model/fbaInventory.json:paths[\"/fba/inventory/v1/items/{sellerSku}\"].delete"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fba.inventory.api.model.fbaInventory.json.4",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/fba/inventory/v1/items/inventory",
+            "operation_id": "addInventory",
+            "deprecated": false,
+            "source_location": "models/fba-inventory-api-model/fbaInventory.json:paths[\"/fba/inventory/v1/items/inventory\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.feeds.api.model.feeds.2021.06.30.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/feeds/2021-06-30/feeds",
+            "operation_id": "getFeeds",
+            "deprecated": false,
+            "source_location": "models/feeds-api-model/feeds_2021-06-30.json:paths[\"/feeds/2021-06-30/feeds\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.feeds.api.model.feeds.2021.06.30.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/feeds/2021-06-30/feeds",
+            "operation_id": "createFeed",
+            "deprecated": false,
+            "source_location": "models/feeds-api-model/feeds_2021-06-30.json:paths[\"/feeds/2021-06-30/feeds\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.feeds.api.model.feeds.2021.06.30.json.3",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/feeds/2021-06-30/feeds/{feedId}",
+            "operation_id": "cancelFeed",
+            "deprecated": false,
+            "source_location": "models/feeds-api-model/feeds_2021-06-30.json:paths[\"/feeds/2021-06-30/feeds/{feedId}\"].delete"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.feeds.api.model.feeds.2021.06.30.json.4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/feeds/2021-06-30/feeds/{feedId}",
+            "operation_id": "getFeed",
+            "deprecated": false,
+            "source_location": "models/feeds-api-model/feeds_2021-06-30.json:paths[\"/feeds/2021-06-30/feeds/{feedId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.feeds.api.model.feeds.2021.06.30.json.5",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/feeds/2021-06-30/documents",
+            "operation_id": "createFeedDocument",
+            "deprecated": false,
+            "source_location": "models/feeds-api-model/feeds_2021-06-30.json:paths[\"/feeds/2021-06-30/documents\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.feeds.api.model.feeds.2021.06.30.json.6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/feeds/2021-06-30/documents/{feedDocumentId}",
+            "operation_id": "getFeedDocument",
+            "deprecated": false,
+            "source_location": "models/feeds-api-model/feeds_2021-06-30.json:paths[\"/feeds/2021-06-30/documents/{feedDocumentId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.finances.api.model.financesInvoices.2026.06.25.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/invoices/2026-06-25/invoices",
+            "operation_id": "getInvoiceHeaders",
+            "deprecated": false,
+            "source_location": "models/finances-api-model/financesInvoices_2026-06-25.json:paths[\"/finances/invoices/2026-06-25/invoices\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.finances.api.model.financesInvoices.2026.06.25.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/invoices/2026-06-25/invoices/{invoiceIdentifier}",
+            "operation_id": "getInvoice",
+            "deprecated": false,
+            "source_location": "models/finances-api-model/financesInvoices_2026-06-25.json:paths[\"/finances/invoices/2026-06-25/invoices/{invoiceIdentifier}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.finances.api.model.financesV0.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/v0/financialEventGroups",
+            "operation_id": "listFinancialEventGroups",
+            "deprecated": false,
+            "source_location": "models/finances-api-model/financesV0.json:paths[\"/finances/v0/financialEventGroups\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.finances.api.model.financesV0.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/v0/financialEventGroups/{eventGroupId}/financialEvents",
+            "operation_id": "listFinancialEventsByGroupId",
+            "deprecated": false,
+            "source_location": "models/finances-api-model/financesV0.json:paths[\"/finances/v0/financialEventGroups/{eventGroupId}/financialEvents\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.finances.api.model.financesV0.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/v0/orders/{orderId}/financialEvents",
+            "operation_id": "listFinancialEventsByOrderId",
+            "deprecated": false,
+            "source_location": "models/finances-api-model/financesV0.json:paths[\"/finances/v0/orders/{orderId}/financialEvents\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.finances.api.model.financesV0.json.4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/v0/financialEvents",
+            "operation_id": "listFinancialEvents",
+            "deprecated": false,
+            "source_location": "models/finances-api-model/financesV0.json:paths[\"/finances/v0/financialEvents\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.finances.api.model.finances.2024.06.19.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/2024-06-19/transactions",
+            "operation_id": "listTransactions",
+            "deprecated": false,
+            "source_location": "models/finances-api-model/finances_2024-06-19.json:paths[\"/finances/2024-06-19/transactions\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.finances.api.model.finances.2024.06.19.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/2024-06-19/balances",
+            "operation_id": "listBalances",
+            "deprecated": false,
+            "source_location": "models/finances-api-model/finances_2024-06-19.json:paths[\"/finances/2024-06-19/balances\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.finances.api.model.finances.2024.06.19.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/2024-06-19/summary",
+            "operation_id": "listSummary",
+            "deprecated": false,
+            "source_location": "models/finances-api-model/finances_2024-06-19.json:paths[\"/finances/2024-06-19/summary\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.finances.api.model.transfers.2024.06.01.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/finances/transfers/2024-06-01/payouts",
+            "operation_id": "initiatePayout",
+            "deprecated": false,
+            "source_location": "models/finances-api-model/transfers_2024-06-01.json:paths[\"/finances/transfers/2024-06-01/payouts\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.finances.api.model.transfers.2024.06.01.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/transfers/2024-06-01/payouts",
+            "operation_id": "listPayouts",
+            "deprecated": false,
+            "source_location": "models/finances-api-model/transfers_2024-06-01.json:paths[\"/finances/transfers/2024-06-01/payouts\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.finances.api.model.transfers.2024.06.01.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/transfers/2024-06-01/paymentMethods",
+            "operation_id": "getPaymentMethods",
+            "deprecated": false,
+            "source_location": "models/finances-api-model/transfers_2024-06-01.json:paths[\"/finances/transfers/2024-06-01/paymentMethods\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.finances.api.model.transfers.2024.06.01.json.4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/transfers/2024-06-01/payouts/expected",
+            "operation_id": "listExpectedPayouts",
+            "deprecated": false,
+            "source_location": "models/finances-api-model/transfers_2024-06-01.json:paths[\"/finances/transfers/2024-06-01/payouts/expected\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInboundV0.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fba/inbound/v0/prepInstructions",
+            "operation_id": "getPrepInstructions",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInboundV0.json:paths[\"/fba/inbound/v0/prepInstructions\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInboundV0.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fba/inbound/v0/shipments/{shipmentId}/labels",
+            "operation_id": "getLabels",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInboundV0.json:paths[\"/fba/inbound/v0/shipments/{shipmentId}/labels\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInboundV0.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fba/inbound/v0/shipments/{shipmentId}/billOfLading",
+            "operation_id": "getBillOfLading",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInboundV0.json:paths[\"/fba/inbound/v0/shipments/{shipmentId}/billOfLading\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInboundV0.json.4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fba/inbound/v0/shipments",
+            "operation_id": "getShipments",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInboundV0.json:paths[\"/fba/inbound/v0/shipments\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInboundV0.json.5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fba/inbound/v0/shipments/{shipmentId}/items",
+            "operation_id": "getShipmentItemsByShipmentId",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInboundV0.json:paths[\"/fba/inbound/v0/shipments/{shipmentId}/items\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInboundV0.json.6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fba/inbound/v0/shipmentItems",
+            "operation_id": "getShipmentItems",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInboundV0.json:paths[\"/fba/inbound/v0/shipmentItems\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/inboundPlans",
+            "operation_id": "listInboundPlans",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/inbound/fba/2024-03-20/inboundPlans",
+            "operation_id": "createInboundPlan",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}",
+            "operation_id": "getInboundPlan",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/boxes",
+            "operation_id": "listInboundPlanBoxes",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/boxes\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.5",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/cancellation",
+            "operation_id": "cancelInboundPlan",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/cancellation\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/items",
+            "operation_id": "listInboundPlanItems",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/items\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.7",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/name",
+            "operation_id": "updateInboundPlanName",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/name\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingGroups/{packingGroupId}/boxes",
+            "operation_id": "listPackingGroupBoxes",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingGroups/{packingGroupId}/boxes\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.9",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingGroups/{packingGroupId}/items",
+            "operation_id": "listPackingGroupItems",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingGroups/{packingGroupId}/items\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.10",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingInformation",
+            "operation_id": "setPackingInformation",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingInformation\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.11",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions",
+            "operation_id": "listPackingOptions",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.12",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions",
+            "operation_id": "generatePackingOptions",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.13",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions/{packingOptionId}/confirmation",
+            "operation_id": "confirmPackingOption",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions/{packingOptionId}/confirmation\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.14",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/pallets",
+            "operation_id": "listInboundPlanPallets",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/pallets\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.15",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions",
+            "operation_id": "listPlacementOptions",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.16",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions",
+            "operation_id": "generatePlacementOptions",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.17",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions/{placementOptionId}/confirmation",
+            "operation_id": "confirmPlacementOption",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions/{placementOptionId}/confirmation\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.18",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}",
+            "operation_id": "getShipment",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.19",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/boxes",
+            "operation_id": "listShipmentBoxes",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/boxes\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.20",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews",
+            "operation_id": "listShipmentContentUpdatePreviews",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.21",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews",
+            "operation_id": "generateShipmentContentUpdatePreviews",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.22",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews/{contentUpdatePreviewId}",
+            "operation_id": "getShipmentContentUpdatePreview",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews/{contentUpdatePreviewId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.23",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews/{contentUpdatePreviewId}/confirmation",
+            "operation_id": "confirmShipmentContentUpdatePreview",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/contentUpdatePreviews/{contentUpdatePreviewId}/confirmation\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.24",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryChallanDocument",
+            "operation_id": "getDeliveryChallanDocument",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryChallanDocument\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.25",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions",
+            "operation_id": "listDeliveryWindowOptions",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.26",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions",
+            "operation_id": "generateDeliveryWindowOptions",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.27",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions/{deliveryWindowOptionId}/confirmation",
+            "operation_id": "confirmDeliveryWindowOptions",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions/{deliveryWindowOptionId}/confirmation\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.28",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/items",
+            "operation_id": "listShipmentItems",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/items\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.29",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/name",
+            "operation_id": "updateShipmentName",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/name\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.30",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/pallets",
+            "operation_id": "listShipmentPallets",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/pallets\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.31",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentCancellation",
+            "operation_id": "cancelSelfShipAppointment",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentCancellation\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.32",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots",
+            "operation_id": "getSelfShipAppointmentSlots",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.33",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots",
+            "operation_id": "generateSelfShipAppointmentSlots",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.34",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots/{slotId}/schedule",
+            "operation_id": "scheduleSelfShipAppointment",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots/{slotId}/schedule\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.35",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/sourceAddress",
+            "operation_id": "updateShipmentSourceAddress",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/sourceAddress\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.36",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/trackingDetails",
+            "operation_id": "updateShipmentTrackingDetails",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/trackingDetails\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.37",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions",
+            "operation_id": "listTransportationOptions",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.38",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions",
+            "operation_id": "generateTransportationOptions",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.39",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions/confirmation",
+            "operation_id": "confirmTransportationOptions",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions/confirmation\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.40",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/items/compliance",
+            "operation_id": "listItemComplianceDetails",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/items/compliance\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.41",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/inbound/fba/2024-03-20/items/compliance",
+            "operation_id": "updateItemComplianceDetails",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/items/compliance\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.42",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/inbound/fba/2024-03-20/items/labels",
+            "operation_id": "createMarketplaceItemLabels",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/items/labels\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.43",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/items/prepDetails",
+            "operation_id": "listPrepDetails",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/items/prepDetails\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.44",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/inbound/fba/2024-03-20/items/prepDetails",
+            "operation_id": "setPrepDetails",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/items/prepDetails\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.inbound.api.model.fulfillmentInbound.2024.03.20.json.45",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inbound/fba/2024-03-20/operations/{operationId}",
+            "operation_id": "getInboundOperationStatus",
+            "deprecated": false,
+            "source_location": "models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json:paths[\"/inbound/fba/2024-03-20/operations/{operationId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2020.07.01.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/fba/outbound/2020-07-01/fulfillmentOrders/preview",
+            "operation_id": "getFulfillmentPreview",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json:paths[\"/fba/outbound/2020-07-01/fulfillmentOrders/preview\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2020.07.01.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/fba/outbound/2020-07-01/deliveryOffers",
+            "operation_id": "deliveryOffers",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json:paths[\"/fba/outbound/2020-07-01/deliveryOffers\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2020.07.01.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fba/outbound/2020-07-01/fulfillmentOrders",
+            "operation_id": "listAllFulfillmentOrders",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json:paths[\"/fba/outbound/2020-07-01/fulfillmentOrders\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2020.07.01.json.4",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/fba/outbound/2020-07-01/fulfillmentOrders",
+            "operation_id": "createFulfillmentOrder",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json:paths[\"/fba/outbound/2020-07-01/fulfillmentOrders\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2020.07.01.json.5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fba/outbound/2020-07-01/tracking",
+            "operation_id": "getPackageTrackingDetails",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json:paths[\"/fba/outbound/2020-07-01/tracking\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2020.07.01.json.6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fba/outbound/2020-07-01/returnReasonCodes",
+            "operation_id": "listReturnReasonCodes",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json:paths[\"/fba/outbound/2020-07-01/returnReasonCodes\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2020.07.01.json.7",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/return",
+            "operation_id": "createFulfillmentReturn",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json:paths[\"/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/return\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2020.07.01.json.8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}",
+            "operation_id": "getFulfillmentOrder",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json:paths[\"/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2020.07.01.json.9",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}",
+            "operation_id": "updateFulfillmentOrder",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json:paths[\"/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2020.07.01.json.10",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/cancel",
+            "operation_id": "cancelFulfillmentOrder",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json:paths[\"/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/cancel\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2020.07.01.json.11",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/status",
+            "operation_id": "submitFulfillmentOrderStatusUpdate",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json:paths[\"/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/status\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2020.07.01.json.12",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fba/outbound/2020-07-01/features",
+            "operation_id": "getFeatures",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json:paths[\"/fba/outbound/2020-07-01/features\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2020.07.01.json.13",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fba/outbound/2020-07-01/features/inventory/{featureName}",
+            "operation_id": "getFeatureInventory",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json:paths[\"/fba/outbound/2020-07-01/features/inventory/{featureName}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2020.07.01.json.14",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fba/outbound/2020-07-01/features/inventory/{featureName}/{sellerSku}",
+            "operation_id": "getFeatureSKU",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json:paths[\"/fba/outbound/2020-07-01/features/inventory/{featureName}/{sellerSku}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2026.07.04.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/fulfillment/outbound/2026-07-04/previews",
+            "operation_id": "getOrderPreview",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json:paths[\"/fulfillment/outbound/2026-07-04/previews\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2026.07.04.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/fulfillment/outbound/2026-07-04/offers",
+            "operation_id": "getOffers",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json:paths[\"/fulfillment/outbound/2026-07-04/offers\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2026.07.04.json.3",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/fulfillment/outbound/2026-07-04/orders/{orderId}/cancel",
+            "operation_id": "cancelOrder",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json:paths[\"/fulfillment/outbound/2026-07-04/orders/{orderId}/cancel\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2026.07.04.json.4",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/fulfillment/outbound/2026-07-04/orders/{orderId}/status",
+            "operation_id": "updateOrderStatus",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json:paths[\"/fulfillment/outbound/2026-07-04/orders/{orderId}/status\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2026.07.04.json.5",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/fulfillment/outbound/2026-07-04/orders/{orderId}/packages/{packageId}",
+            "operation_id": "updatePackage",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json:paths[\"/fulfillment/outbound/2026-07-04/orders/{orderId}/packages/{packageId}\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2026.07.04.json.6",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/fulfillment/outbound/2026-07-04/orders/{orderId}",
+            "operation_id": "updateOrder",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json:paths[\"/fulfillment/outbound/2026-07-04/orders/{orderId}\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2026.07.04.json.7",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fulfillment/outbound/2026-07-04/orders/{orderId}",
+            "operation_id": "getOrder",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json:paths[\"/fulfillment/outbound/2026-07-04/orders/{orderId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2026.07.04.json.8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fulfillment/outbound/2026-07-04/orders",
+            "operation_id": "listOrders",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json:paths[\"/fulfillment/outbound/2026-07-04/orders\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.fulfillment.outbound.api.model.fulfillmentOutbound.2026.07.04.json.9",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/fulfillment/outbound/2026-07-04/orders",
+            "operation_id": "createOrder",
+            "deprecated": false,
+            "source_location": "models/fulfillment-outbound-api-model/fulfillmentOutbound_2026-07-04.json:paths[\"/fulfillment/outbound/2026-07-04/orders\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.invoices.api.model.InvoicesApiModel.2024.06.19.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tax/invoices/2024-06-19/attributes",
+            "operation_id": "getInvoicesAttributes",
+            "deprecated": false,
+            "source_location": "models/invoices-api-model/InvoicesApiModel_2024-06-19.json:paths[\"/tax/invoices/2024-06-19/attributes\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.invoices.api.model.InvoicesApiModel.2024.06.19.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tax/invoices/2024-06-19/documents/{invoicesDocumentId}",
+            "operation_id": "getInvoicesDocument",
+            "deprecated": false,
+            "source_location": "models/invoices-api-model/InvoicesApiModel_2024-06-19.json:paths[\"/tax/invoices/2024-06-19/documents/{invoicesDocumentId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.invoices.api.model.InvoicesApiModel.2024.06.19.json.3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/tax/invoices/2024-06-19/exports",
+            "operation_id": "createInvoicesExport",
+            "deprecated": false,
+            "source_location": "models/invoices-api-model/InvoicesApiModel_2024-06-19.json:paths[\"/tax/invoices/2024-06-19/exports\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.invoices.api.model.InvoicesApiModel.2024.06.19.json.4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tax/invoices/2024-06-19/exports",
+            "operation_id": "getInvoicesExports",
+            "deprecated": false,
+            "source_location": "models/invoices-api-model/InvoicesApiModel_2024-06-19.json:paths[\"/tax/invoices/2024-06-19/exports\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.invoices.api.model.InvoicesApiModel.2024.06.19.json.5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tax/invoices/2024-06-19/exports/{exportId}",
+            "operation_id": "getInvoicesExport",
+            "deprecated": false,
+            "source_location": "models/invoices-api-model/InvoicesApiModel_2024-06-19.json:paths[\"/tax/invoices/2024-06-19/exports/{exportId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.invoices.api.model.InvoicesApiModel.2024.06.19.json.6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/tax/invoices/2024-06-19/governmentInvoiceRequests",
+            "operation_id": "createGovernmentInvoice",
+            "deprecated": false,
+            "source_location": "models/invoices-api-model/InvoicesApiModel_2024-06-19.json:paths[\"/tax/invoices/2024-06-19/governmentInvoiceRequests\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.invoices.api.model.InvoicesApiModel.2024.06.19.json.7",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tax/invoices/2024-06-19/governmentInvoiceRequests",
+            "operation_id": "getGovernmentInvoiceStatus",
+            "deprecated": false,
+            "source_location": "models/invoices-api-model/InvoicesApiModel_2024-06-19.json:paths[\"/tax/invoices/2024-06-19/governmentInvoiceRequests\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.invoices.api.model.InvoicesApiModel.2024.06.19.json.8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tax/invoices/2024-06-19/governmentInvoiceRequests/{shipmentId}",
+            "operation_id": "getGovernmentInvoiceDocument",
+            "deprecated": false,
+            "source_location": "models/invoices-api-model/InvoicesApiModel_2024-06-19.json:paths[\"/tax/invoices/2024-06-19/governmentInvoiceRequests/{shipmentId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.invoices.api.model.InvoicesApiModel.2024.06.19.json.9",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tax/invoices/2024-06-19/invoices",
+            "operation_id": "getInvoices",
+            "deprecated": false,
+            "source_location": "models/invoices-api-model/InvoicesApiModel_2024-06-19.json:paths[\"/tax/invoices/2024-06-19/invoices\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.invoices.api.model.InvoicesApiModel.2024.06.19.json.10",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tax/invoices/2024-06-19/invoices/{invoiceId}",
+            "operation_id": "getInvoice",
+            "deprecated": false,
+            "source_location": "models/invoices-api-model/InvoicesApiModel_2024-06-19.json:paths[\"/tax/invoices/2024-06-19/invoices/{invoiceId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.listings.items.api.model.listingsItems.2020.09.01.json.1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/listings/2020-09-01/items/{sellerId}/{sku}",
+            "operation_id": "deleteListingsItem",
+            "deprecated": false,
+            "source_location": "models/listings-items-api-model/listingsItems_2020-09-01.json:paths[\"/listings/2020-09-01/items/{sellerId}/{sku}\"].delete"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.listings.items.api.model.listingsItems.2020.09.01.json.2",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/listings/2020-09-01/items/{sellerId}/{sku}",
+            "operation_id": "patchListingsItem",
+            "deprecated": false,
+            "source_location": "models/listings-items-api-model/listingsItems_2020-09-01.json:paths[\"/listings/2020-09-01/items/{sellerId}/{sku}\"].patch"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.listings.items.api.model.listingsItems.2020.09.01.json.3",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/listings/2020-09-01/items/{sellerId}/{sku}",
+            "operation_id": "putListingsItem",
+            "deprecated": false,
+            "source_location": "models/listings-items-api-model/listingsItems_2020-09-01.json:paths[\"/listings/2020-09-01/items/{sellerId}/{sku}\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.listings.items.api.model.listingsItems.2021.08.01.json.1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/listings/2021-08-01/items/{sellerId}/{sku}",
+            "operation_id": "deleteListingsItem",
+            "deprecated": false,
+            "source_location": "models/listings-items-api-model/listingsItems_2021-08-01.json:paths[\"/listings/2021-08-01/items/{sellerId}/{sku}\"].delete"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.listings.items.api.model.listingsItems.2021.08.01.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/listings/2021-08-01/items/{sellerId}/{sku}",
+            "operation_id": "getListingsItem",
+            "deprecated": false,
+            "source_location": "models/listings-items-api-model/listingsItems_2021-08-01.json:paths[\"/listings/2021-08-01/items/{sellerId}/{sku}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.listings.items.api.model.listingsItems.2021.08.01.json.3",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/listings/2021-08-01/items/{sellerId}/{sku}",
+            "operation_id": "patchListingsItem",
+            "deprecated": false,
+            "source_location": "models/listings-items-api-model/listingsItems_2021-08-01.json:paths[\"/listings/2021-08-01/items/{sellerId}/{sku}\"].patch"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.listings.items.api.model.listingsItems.2021.08.01.json.4",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/listings/2021-08-01/items/{sellerId}/{sku}",
+            "operation_id": "putListingsItem",
+            "deprecated": false,
+            "source_location": "models/listings-items-api-model/listingsItems_2021-08-01.json:paths[\"/listings/2021-08-01/items/{sellerId}/{sku}\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.listings.items.api.model.listingsItems.2021.08.01.json.5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/listings/2021-08-01/items/{sellerId}",
+            "operation_id": "searchListingsItems",
+            "deprecated": false,
+            "source_location": "models/listings-items-api-model/listingsItems_2021-08-01.json:paths[\"/listings/2021-08-01/items/{sellerId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.listings.restrictions.api.model.listingsRestrictions.2021.08.01.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/listings/2021-08-01/restrictions",
+            "operation_id": "getListingsRestrictions",
+            "deprecated": false,
+            "source_location": "models/listings-restrictions-api-model/listingsRestrictions_2021-08-01.json:paths[\"/listings/2021-08-01/restrictions\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.merchant.fulfillment.api.model.merchantFulfillmentV0.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/mfn/v0/eligibleShippingServices",
+            "operation_id": "getEligibleShipmentServices",
+            "deprecated": false,
+            "source_location": "models/merchant-fulfillment-api-model/merchantFulfillmentV0.json:paths[\"/mfn/v0/eligibleShippingServices\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.merchant.fulfillment.api.model.merchantFulfillmentV0.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/mfn/v0/shipments/{shipmentId}",
+            "operation_id": "getShipment",
+            "deprecated": false,
+            "source_location": "models/merchant-fulfillment-api-model/merchantFulfillmentV0.json:paths[\"/mfn/v0/shipments/{shipmentId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.merchant.fulfillment.api.model.merchantFulfillmentV0.json.3",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/mfn/v0/shipments/{shipmentId}",
+            "operation_id": "cancelShipment",
+            "deprecated": false,
+            "source_location": "models/merchant-fulfillment-api-model/merchantFulfillmentV0.json:paths[\"/mfn/v0/shipments/{shipmentId}\"].delete"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.merchant.fulfillment.api.model.merchantFulfillmentV0.json.4",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/mfn/v0/shipments",
+            "operation_id": "createShipment",
+            "deprecated": false,
+            "source_location": "models/merchant-fulfillment-api-model/merchantFulfillmentV0.json:paths[\"/mfn/v0/shipments\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.merchant.fulfillment.api.model.merchantFulfillmentV0.json.5",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/mfn/v0/additionalSellerInputs",
+            "operation_id": "getAdditionalSellerInputs",
+            "deprecated": false,
+            "source_location": "models/merchant-fulfillment-api-model/merchantFulfillmentV0.json:paths[\"/mfn/v0/additionalSellerInputs\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.messaging.api.model.messaging.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/messaging/v1/orders/{amazonOrderId}",
+            "operation_id": "getMessagingActionsForOrder",
+            "deprecated": false,
+            "source_location": "models/messaging-api-model/messaging.json:paths[\"/messaging/v1/orders/{amazonOrderId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.messaging.api.model.messaging.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/messaging/v1/orders/{amazonOrderId}/messages/confirmCustomizationDetails",
+            "operation_id": "confirmCustomizationDetails",
+            "deprecated": false,
+            "source_location": "models/messaging-api-model/messaging.json:paths[\"/messaging/v1/orders/{amazonOrderId}/messages/confirmCustomizationDetails\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.messaging.api.model.messaging.json.3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/messaging/v1/orders/{amazonOrderId}/messages/confirmDeliveryDetails",
+            "operation_id": "createConfirmDeliveryDetails",
+            "deprecated": false,
+            "source_location": "models/messaging-api-model/messaging.json:paths[\"/messaging/v1/orders/{amazonOrderId}/messages/confirmDeliveryDetails\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.messaging.api.model.messaging.json.4",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/messaging/v1/orders/{amazonOrderId}/messages/legalDisclosure",
+            "operation_id": "createLegalDisclosure",
+            "deprecated": false,
+            "source_location": "models/messaging-api-model/messaging.json:paths[\"/messaging/v1/orders/{amazonOrderId}/messages/legalDisclosure\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.messaging.api.model.messaging.json.5",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/messaging/v1/orders/{amazonOrderId}/messages/confirmOrderDetails",
+            "operation_id": "createConfirmOrderDetails",
+            "deprecated": false,
+            "source_location": "models/messaging-api-model/messaging.json:paths[\"/messaging/v1/orders/{amazonOrderId}/messages/confirmOrderDetails\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.messaging.api.model.messaging.json.6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/messaging/v1/orders/{amazonOrderId}/messages/confirmServiceDetails",
+            "operation_id": "createConfirmServiceDetails",
+            "deprecated": false,
+            "source_location": "models/messaging-api-model/messaging.json:paths[\"/messaging/v1/orders/{amazonOrderId}/messages/confirmServiceDetails\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.messaging.api.model.messaging.json.7",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/messaging/v1/orders/{amazonOrderId}/messages/warranty",
+            "operation_id": "CreateWarranty",
+            "deprecated": false,
+            "source_location": "models/messaging-api-model/messaging.json:paths[\"/messaging/v1/orders/{amazonOrderId}/messages/warranty\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.messaging.api.model.messaging.json.8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/messaging/v1/orders/{amazonOrderId}/attributes",
+            "operation_id": "GetAttributes",
+            "deprecated": false,
+            "source_location": "models/messaging-api-model/messaging.json:paths[\"/messaging/v1/orders/{amazonOrderId}/attributes\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.messaging.api.model.messaging.json.9",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/messaging/v1/orders/{amazonOrderId}/messages/digitalAccessKey",
+            "operation_id": "createDigitalAccessKey",
+            "deprecated": false,
+            "source_location": "models/messaging-api-model/messaging.json:paths[\"/messaging/v1/orders/{amazonOrderId}/messages/digitalAccessKey\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.messaging.api.model.messaging.json.10",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/messaging/v1/orders/{amazonOrderId}/messages/unexpectedProblem",
+            "operation_id": "createUnexpectedProblem",
+            "deprecated": false,
+            "source_location": "models/messaging-api-model/messaging.json:paths[\"/messaging/v1/orders/{amazonOrderId}/messages/unexpectedProblem\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.messaging.api.model.messaging.json.11",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/messaging/v1/orders/{amazonOrderId}/messages/invoice",
+            "operation_id": "sendInvoice",
+            "deprecated": false,
+            "source_location": "models/messaging-api-model/messaging.json:paths[\"/messaging/v1/orders/{amazonOrderId}/messages/invoice\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.notifications.api.model.notifications.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/notifications/v1/subscriptions",
+            "operation_id": "getSubscriptions",
+            "deprecated": false,
+            "source_location": "models/notifications-api-model/notifications.json:paths[\"/notifications/v1/subscriptions\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.notifications.api.model.notifications.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/notifications/v1/subscriptions/{notificationType}",
+            "operation_id": "getSubscription",
+            "deprecated": false,
+            "source_location": "models/notifications-api-model/notifications.json:paths[\"/notifications/v1/subscriptions/{notificationType}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.notifications.api.model.notifications.json.3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/notifications/v1/subscriptions/{notificationType}",
+            "operation_id": "createSubscription",
+            "deprecated": false,
+            "source_location": "models/notifications-api-model/notifications.json:paths[\"/notifications/v1/subscriptions/{notificationType}\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.notifications.api.model.notifications.json.4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/notifications/v1/subscriptions/{notificationType}/{subscriptionId}",
+            "operation_id": "getSubscriptionById",
+            "deprecated": false,
+            "source_location": "models/notifications-api-model/notifications.json:paths[\"/notifications/v1/subscriptions/{notificationType}/{subscriptionId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.notifications.api.model.notifications.json.5",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/notifications/v1/subscriptions/{notificationType}/{subscriptionId}",
+            "operation_id": "deleteSubscriptionById",
+            "deprecated": false,
+            "source_location": "models/notifications-api-model/notifications.json:paths[\"/notifications/v1/subscriptions/{notificationType}/{subscriptionId}\"].delete"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.notifications.api.model.notifications.json.6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/notifications/v1/subscriptions/{notificationType}/testNotification",
+            "operation_id": "sendTestNotification",
+            "deprecated": false,
+            "source_location": "models/notifications-api-model/notifications.json:paths[\"/notifications/v1/subscriptions/{notificationType}/testNotification\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.notifications.api.model.notifications.json.7",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/notifications/v1/destinations",
+            "operation_id": "getDestinations",
+            "deprecated": false,
+            "source_location": "models/notifications-api-model/notifications.json:paths[\"/notifications/v1/destinations\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.notifications.api.model.notifications.json.8",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/notifications/v1/destinations",
+            "operation_id": "createDestination",
+            "deprecated": false,
+            "source_location": "models/notifications-api-model/notifications.json:paths[\"/notifications/v1/destinations\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.notifications.api.model.notifications.json.9",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/notifications/v1/destinations/{destinationId}",
+            "operation_id": "getDestination",
+            "deprecated": false,
+            "source_location": "models/notifications-api-model/notifications.json:paths[\"/notifications/v1/destinations/{destinationId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.notifications.api.model.notifications.json.10",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/notifications/v1/destinations/{destinationId}",
+            "operation_id": "deleteDestination",
+            "deprecated": false,
+            "source_location": "models/notifications-api-model/notifications.json:paths[\"/notifications/v1/destinations/{destinationId}\"].delete"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.orders.api.model.ordersV0.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/orders/v0/orders",
+            "operation_id": "getOrders",
+            "deprecated": true,
+            "source_location": "models/orders-api-model/ordersV0.json:paths[\"/orders/v0/orders\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.orders.api.model.ordersV0.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/orders/v0/orders/{orderId}",
+            "operation_id": "getOrder",
+            "deprecated": true,
+            "source_location": "models/orders-api-model/ordersV0.json:paths[\"/orders/v0/orders/{orderId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.orders.api.model.ordersV0.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/orders/v0/orders/{orderId}/buyerInfo",
+            "operation_id": "getOrderBuyerInfo",
+            "deprecated": true,
+            "source_location": "models/orders-api-model/ordersV0.json:paths[\"/orders/v0/orders/{orderId}/buyerInfo\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.orders.api.model.ordersV0.json.4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/orders/v0/orders/{orderId}/address",
+            "operation_id": "getOrderAddress",
+            "deprecated": true,
+            "source_location": "models/orders-api-model/ordersV0.json:paths[\"/orders/v0/orders/{orderId}/address\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.orders.api.model.ordersV0.json.5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/orders/v0/orders/{orderId}/orderItems",
+            "operation_id": "getOrderItems",
+            "deprecated": true,
+            "source_location": "models/orders-api-model/ordersV0.json:paths[\"/orders/v0/orders/{orderId}/orderItems\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.orders.api.model.ordersV0.json.6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/orders/v0/orders/{orderId}/orderItems/buyerInfo",
+            "operation_id": "getOrderItemsBuyerInfo",
+            "deprecated": true,
+            "source_location": "models/orders-api-model/ordersV0.json:paths[\"/orders/v0/orders/{orderId}/orderItems/buyerInfo\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.orders.api.model.ordersV0.json.7",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/orders/v0/orders/{orderId}/shipment",
+            "operation_id": "updateShipmentStatus",
+            "deprecated": false,
+            "source_location": "models/orders-api-model/ordersV0.json:paths[\"/orders/v0/orders/{orderId}/shipment\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.orders.api.model.ordersV0.json.8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/orders/v0/orders/{orderId}/regulatedInfo",
+            "operation_id": "getOrderRegulatedInfo",
+            "deprecated": false,
+            "source_location": "models/orders-api-model/ordersV0.json:paths[\"/orders/v0/orders/{orderId}/regulatedInfo\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.orders.api.model.ordersV0.json.9",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/orders/v0/orders/{orderId}/regulatedInfo",
+            "operation_id": "updateVerificationStatus",
+            "deprecated": false,
+            "source_location": "models/orders-api-model/ordersV0.json:paths[\"/orders/v0/orders/{orderId}/regulatedInfo\"].patch"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.orders.api.model.ordersV0.json.10",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/orders/v0/orders/{orderId}/shipmentConfirmation",
+            "operation_id": "confirmShipment",
+            "deprecated": false,
+            "source_location": "models/orders-api-model/ordersV0.json:paths[\"/orders/v0/orders/{orderId}/shipmentConfirmation\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.orders.api.model.orders.2026.01.01.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/orders/2026-01-01/orders",
+            "operation_id": "searchOrders",
+            "deprecated": false,
+            "source_location": "models/orders-api-model/orders_2026-01-01.json:paths[\"/orders/2026-01-01/orders\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.orders.api.model.orders.2026.01.01.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/orders/2026-01-01/orders/{orderId}",
+            "operation_id": "getOrder",
+            "deprecated": false,
+            "source_location": "models/orders-api-model/orders_2026-01-01.json:paths[\"/orders/2026-01-01/orders/{orderId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.product.fees.api.model.productFeesV0.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/products/fees/v0/listings/{SellerSKU}/feesEstimate",
+            "operation_id": "getMyFeesEstimateForSKU",
+            "deprecated": false,
+            "source_location": "models/product-fees-api-model/productFeesV0.json:paths[\"/products/fees/v0/listings/{SellerSKU}/feesEstimate\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.product.fees.api.model.productFeesV0.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/products/fees/v0/items/{Asin}/feesEstimate",
+            "operation_id": "getMyFeesEstimateForASIN",
+            "deprecated": false,
+            "source_location": "models/product-fees-api-model/productFeesV0.json:paths[\"/products/fees/v0/items/{Asin}/feesEstimate\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.product.fees.api.model.productFeesV0.json.3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/products/fees/v0/feesEstimate",
+            "operation_id": "getMyFeesEstimates",
+            "deprecated": false,
+            "source_location": "models/product-fees-api-model/productFeesV0.json:paths[\"/products/fees/v0/feesEstimate\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.product.pricing.api.model.productPricingV0.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/products/pricing/v0/price",
+            "operation_id": "getPricing",
+            "deprecated": false,
+            "source_location": "models/product-pricing-api-model/productPricingV0.json:paths[\"/products/pricing/v0/price\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.product.pricing.api.model.productPricingV0.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/products/pricing/v0/competitivePrice",
+            "operation_id": "getCompetitivePricing",
+            "deprecated": false,
+            "source_location": "models/product-pricing-api-model/productPricingV0.json:paths[\"/products/pricing/v0/competitivePrice\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.product.pricing.api.model.productPricingV0.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/products/pricing/v0/listings/{SellerSKU}/offers",
+            "operation_id": "getListingOffers",
+            "deprecated": false,
+            "source_location": "models/product-pricing-api-model/productPricingV0.json:paths[\"/products/pricing/v0/listings/{SellerSKU}/offers\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.product.pricing.api.model.productPricingV0.json.4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/products/pricing/v0/items/{Asin}/offers",
+            "operation_id": "getItemOffers",
+            "deprecated": false,
+            "source_location": "models/product-pricing-api-model/productPricingV0.json:paths[\"/products/pricing/v0/items/{Asin}/offers\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.product.pricing.api.model.productPricingV0.json.5",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/batches/products/pricing/v0/itemOffers",
+            "operation_id": "getItemOffersBatch",
+            "deprecated": false,
+            "source_location": "models/product-pricing-api-model/productPricingV0.json:paths[\"/batches/products/pricing/v0/itemOffers\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.product.pricing.api.model.productPricingV0.json.6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/batches/products/pricing/v0/listingOffers",
+            "operation_id": "getListingOffersBatch",
+            "deprecated": false,
+            "source_location": "models/product-pricing-api-model/productPricingV0.json:paths[\"/batches/products/pricing/v0/listingOffers\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.product.pricing.api.model.productPricing.2022.05.01.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/batches/products/pricing/2022-05-01/offer/featuredOfferExpectedPrice",
+            "operation_id": "getFeaturedOfferExpectedPriceBatch",
+            "deprecated": false,
+            "source_location": "models/product-pricing-api-model/productPricing_2022-05-01.json:paths[\"/batches/products/pricing/2022-05-01/offer/featuredOfferExpectedPrice\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.product.pricing.api.model.productPricing.2022.05.01.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/batches/products/pricing/2022-05-01/items/competitiveSummary",
+            "operation_id": "getCompetitiveSummary",
+            "deprecated": false,
+            "source_location": "models/product-pricing-api-model/productPricing_2022-05-01.json:paths[\"/batches/products/pricing/2022-05-01/items/competitiveSummary\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.product.type.definitions.api.model.definitionsProductTypes.2020.09.01.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/definitions/2020-09-01/productTypes",
+            "operation_id": "searchDefinitionsProductTypes",
+            "deprecated": false,
+            "source_location": "models/product-type-definitions-api-model/definitionsProductTypes_2020-09-01.json:paths[\"/definitions/2020-09-01/productTypes\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.product.type.definitions.api.model.definitionsProductTypes.2020.09.01.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/definitions/2020-09-01/productTypes/{productType}",
+            "operation_id": "getDefinitionsProductType",
+            "deprecated": false,
+            "source_location": "models/product-type-definitions-api-model/definitionsProductTypes_2020-09-01.json:paths[\"/definitions/2020-09-01/productTypes/{productType}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.replenishment.api.model.replenishment.2022.11.07.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/replenishment/2022-11-07/sellingPartners/metrics/search",
+            "operation_id": "getSellingPartnerMetrics",
+            "deprecated": false,
+            "source_location": "models/replenishment-api-model/replenishment-2022-11-07.json:paths[\"/replenishment/2022-11-07/sellingPartners/metrics/search\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.replenishment.api.model.replenishment.2022.11.07.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/replenishment/2022-11-07/offers/metrics/search",
+            "operation_id": "listOfferMetrics",
+            "deprecated": false,
+            "source_location": "models/replenishment-api-model/replenishment-2022-11-07.json:paths[\"/replenishment/2022-11-07/offers/metrics/search\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.replenishment.api.model.replenishment.2022.11.07.json.3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/replenishment/2022-11-07/offers/search",
+            "operation_id": "listOffers",
+            "deprecated": false,
+            "source_location": "models/replenishment-api-model/replenishment-2022-11-07.json:paths[\"/replenishment/2022-11-07/offers/search\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.reports.api.model.reports.2021.06.30.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/reports/2021-06-30/reports",
+            "operation_id": "getReports",
+            "deprecated": false,
+            "source_location": "models/reports-api-model/reports_2021-06-30.json:paths[\"/reports/2021-06-30/reports\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.reports.api.model.reports.2021.06.30.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/reports/2021-06-30/reports",
+            "operation_id": "createReport",
+            "deprecated": false,
+            "source_location": "models/reports-api-model/reports_2021-06-30.json:paths[\"/reports/2021-06-30/reports\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.reports.api.model.reports.2021.06.30.json.3",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/reports/2021-06-30/reports/{reportId}",
+            "operation_id": "cancelReport",
+            "deprecated": false,
+            "source_location": "models/reports-api-model/reports_2021-06-30.json:paths[\"/reports/2021-06-30/reports/{reportId}\"].delete"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.reports.api.model.reports.2021.06.30.json.4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/reports/2021-06-30/reports/{reportId}",
+            "operation_id": "getReport",
+            "deprecated": false,
+            "source_location": "models/reports-api-model/reports_2021-06-30.json:paths[\"/reports/2021-06-30/reports/{reportId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.reports.api.model.reports.2021.06.30.json.5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/reports/2021-06-30/schedules",
+            "operation_id": "getReportSchedules",
+            "deprecated": false,
+            "source_location": "models/reports-api-model/reports_2021-06-30.json:paths[\"/reports/2021-06-30/schedules\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.reports.api.model.reports.2021.06.30.json.6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/reports/2021-06-30/schedules",
+            "operation_id": "createReportSchedule",
+            "deprecated": false,
+            "source_location": "models/reports-api-model/reports_2021-06-30.json:paths[\"/reports/2021-06-30/schedules\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.reports.api.model.reports.2021.06.30.json.7",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/reports/2021-06-30/schedules/{reportScheduleId}",
+            "operation_id": "cancelReportSchedule",
+            "deprecated": false,
+            "source_location": "models/reports-api-model/reports_2021-06-30.json:paths[\"/reports/2021-06-30/schedules/{reportScheduleId}\"].delete"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.reports.api.model.reports.2021.06.30.json.8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/reports/2021-06-30/schedules/{reportScheduleId}",
+            "operation_id": "getReportSchedule",
+            "deprecated": false,
+            "source_location": "models/reports-api-model/reports_2021-06-30.json:paths[\"/reports/2021-06-30/schedules/{reportScheduleId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.reports.api.model.reports.2021.06.30.json.9",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/reports/2021-06-30/documents/{reportDocumentId}",
+            "operation_id": "getReportDocument",
+            "deprecated": false,
+            "source_location": "models/reports-api-model/reports_2021-06-30.json:paths[\"/reports/2021-06-30/documents/{reportDocumentId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.sales.api.model.sales.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/sales/v1/orderMetrics",
+            "operation_id": "getOrderMetrics",
+            "deprecated": false,
+            "source_location": "models/sales-api-model/sales.json:paths[\"/sales/v1/orderMetrics\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.seller.wallet.api.model.sellerWallet.2024.03.01.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/transfers/wallet/2024-03-01/accounts",
+            "operation_id": "listAccounts",
+            "deprecated": false,
+            "source_location": "models/seller-wallet-api-model/sellerWallet_2024-03-01.json:paths[\"/finances/transfers/wallet/2024-03-01/accounts\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.seller.wallet.api.model.sellerWallet.2024.03.01.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/transfers/wallet/2024-03-01/accounts/{accountId}",
+            "operation_id": "getAccount",
+            "deprecated": false,
+            "source_location": "models/seller-wallet-api-model/sellerWallet_2024-03-01.json:paths[\"/finances/transfers/wallet/2024-03-01/accounts/{accountId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.seller.wallet.api.model.sellerWallet.2024.03.01.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/transfers/wallet/2024-03-01/accounts/{accountId}/balance",
+            "operation_id": "listAccountBalances",
+            "deprecated": false,
+            "source_location": "models/seller-wallet-api-model/sellerWallet_2024-03-01.json:paths[\"/finances/transfers/wallet/2024-03-01/accounts/{accountId}/balance\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.seller.wallet.api.model.sellerWallet.2024.03.01.json.4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/transfers/wallet/2024-03-01/transferPreview",
+            "operation_id": "getTransferPreview",
+            "deprecated": false,
+            "source_location": "models/seller-wallet-api-model/sellerWallet_2024-03-01.json:paths[\"/finances/transfers/wallet/2024-03-01/transferPreview\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.seller.wallet.api.model.sellerWallet.2024.03.01.json.5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/transfers/wallet/2024-03-01/transactions",
+            "operation_id": "listAccountTransactions",
+            "deprecated": false,
+            "source_location": "models/seller-wallet-api-model/sellerWallet_2024-03-01.json:paths[\"/finances/transfers/wallet/2024-03-01/transactions\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.seller.wallet.api.model.sellerWallet.2024.03.01.json.6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/finances/transfers/wallet/2024-03-01/transactions",
+            "operation_id": "createTransaction",
+            "deprecated": false,
+            "source_location": "models/seller-wallet-api-model/sellerWallet_2024-03-01.json:paths[\"/finances/transfers/wallet/2024-03-01/transactions\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.seller.wallet.api.model.sellerWallet.2024.03.01.json.7",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/transfers/wallet/2024-03-01/transactions/{transactionId}",
+            "operation_id": "getTransaction",
+            "deprecated": false,
+            "source_location": "models/seller-wallet-api-model/sellerWallet_2024-03-01.json:paths[\"/finances/transfers/wallet/2024-03-01/transactions/{transactionId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.seller.wallet.api.model.sellerWallet.2024.03.01.json.8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/transfers/wallet/2024-03-01/transferSchedules",
+            "operation_id": "listTransferSchedules",
+            "deprecated": false,
+            "source_location": "models/seller-wallet-api-model/sellerWallet_2024-03-01.json:paths[\"/finances/transfers/wallet/2024-03-01/transferSchedules\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.seller.wallet.api.model.sellerWallet.2024.03.01.json.9",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/finances/transfers/wallet/2024-03-01/transferSchedules",
+            "operation_id": "createTransferSchedule",
+            "deprecated": false,
+            "source_location": "models/seller-wallet-api-model/sellerWallet_2024-03-01.json:paths[\"/finances/transfers/wallet/2024-03-01/transferSchedules\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.seller.wallet.api.model.sellerWallet.2024.03.01.json.10",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/finances/transfers/wallet/2024-03-01/transferSchedules",
+            "operation_id": "updateTransferSchedule",
+            "deprecated": false,
+            "source_location": "models/seller-wallet-api-model/sellerWallet_2024-03-01.json:paths[\"/finances/transfers/wallet/2024-03-01/transferSchedules\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.seller.wallet.api.model.sellerWallet.2024.03.01.json.11",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/finances/transfers/wallet/2024-03-01/transferSchedules/{transferScheduleId}",
+            "operation_id": "getTransferSchedule",
+            "deprecated": false,
+            "source_location": "models/seller-wallet-api-model/sellerWallet_2024-03-01.json:paths[\"/finances/transfers/wallet/2024-03-01/transferSchedules/{transferScheduleId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.seller.wallet.api.model.sellerWallet.2024.03.01.json.12",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/finances/transfers/wallet/2024-03-01/transferSchedules/{transferScheduleId}",
+            "operation_id": "deleteScheduleTransaction",
+            "deprecated": false,
+            "source_location": "models/seller-wallet-api-model/sellerWallet_2024-03-01.json:paths[\"/finances/transfers/wallet/2024-03-01/transferSchedules/{transferScheduleId}\"].delete"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.sellers.api.model.sellers.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/sellers/v1/marketplaceParticipations",
+            "operation_id": "getMarketplaceParticipations",
+            "deprecated": false,
+            "source_location": "models/sellers-api-model/sellers.json:paths[\"/sellers/v1/marketplaceParticipations\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.sellers.api.model.sellers.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/sellers/v1/account",
+            "operation_id": "getAccount",
+            "deprecated": false,
+            "source_location": "models/sellers-api-model/sellers.json:paths[\"/sellers/v1/account\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.services.api.model.services.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/service/v1/serviceJobs/{serviceJobId}",
+            "operation_id": "getServiceJobByServiceJobId",
+            "deprecated": false,
+            "source_location": "models/services-api-model/services.json:paths[\"/service/v1/serviceJobs/{serviceJobId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.services.api.model.services.json.2",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/service/v1/serviceJobs/{serviceJobId}/cancellations",
+            "operation_id": "cancelServiceJobByServiceJobId",
+            "deprecated": false,
+            "source_location": "models/services-api-model/services.json:paths[\"/service/v1/serviceJobs/{serviceJobId}/cancellations\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.services.api.model.services.json.3",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/service/v1/serviceJobs/{serviceJobId}/completions",
+            "operation_id": "completeServiceJobByServiceJobId",
+            "deprecated": false,
+            "source_location": "models/services-api-model/services.json:paths[\"/service/v1/serviceJobs/{serviceJobId}/completions\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.services.api.model.services.json.4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/service/v1/serviceJobs",
+            "operation_id": "getServiceJobs",
+            "deprecated": false,
+            "source_location": "models/services-api-model/services.json:paths[\"/service/v1/serviceJobs\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.services.api.model.services.json.5",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/service/v1/serviceJobs/{serviceJobId}/appointments",
+            "operation_id": "addAppointmentForServiceJobByServiceJobId",
+            "deprecated": false,
+            "source_location": "models/services-api-model/services.json:paths[\"/service/v1/serviceJobs/{serviceJobId}/appointments\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.services.api.model.services.json.6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}",
+            "operation_id": "rescheduleAppointmentForServiceJobByServiceJobId",
+            "deprecated": false,
+            "source_location": "models/services-api-model/services.json:paths[\"/service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.services.api.model.services.json.7",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}/resources",
+            "operation_id": "assignAppointmentResources",
+            "deprecated": false,
+            "source_location": "models/services-api-model/services.json:paths[\"/service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}/resources\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.services.api.model.services.json.8",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}/fulfillment",
+            "operation_id": "setAppointmentFulfillmentData",
+            "deprecated": false,
+            "source_location": "models/services-api-model/services.json:paths[\"/service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}/fulfillment\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.services.api.model.services.json.9",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/service/v1/serviceResources/{resourceId}/capacity/range",
+            "operation_id": "getRangeSlotCapacity",
+            "deprecated": false,
+            "source_location": "models/services-api-model/services.json:paths[\"/service/v1/serviceResources/{resourceId}/capacity/range\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.services.api.model.services.json.10",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/service/v1/serviceResources/{resourceId}/capacity/fixed",
+            "operation_id": "getFixedSlotCapacity",
+            "deprecated": false,
+            "source_location": "models/services-api-model/services.json:paths[\"/service/v1/serviceResources/{resourceId}/capacity/fixed\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.services.api.model.services.json.11",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/service/v1/serviceResources/{resourceId}/schedules",
+            "operation_id": "updateSchedule",
+            "deprecated": false,
+            "source_location": "models/services-api-model/services.json:paths[\"/service/v1/serviceResources/{resourceId}/schedules\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.services.api.model.services.json.12",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/service/v1/reservation",
+            "operation_id": "createReservation",
+            "deprecated": false,
+            "source_location": "models/services-api-model/services.json:paths[\"/service/v1/reservation\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.services.api.model.services.json.13",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/service/v1/reservation/{reservationId}",
+            "operation_id": "updateReservation",
+            "deprecated": false,
+            "source_location": "models/services-api-model/services.json:paths[\"/service/v1/reservation/{reservationId}\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.services.api.model.services.json.14",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/service/v1/reservation/{reservationId}",
+            "operation_id": "cancelReservation",
+            "deprecated": false,
+            "source_location": "models/services-api-model/services.json:paths[\"/service/v1/reservation/{reservationId}\"].delete"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.services.api.model.services.json.15",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/service/v1/serviceJobs/{serviceJobId}/appointmentSlots",
+            "operation_id": "getAppointmmentSlotsByJobId",
+            "deprecated": false,
+            "source_location": "models/services-api-model/services.json:paths[\"/service/v1/serviceJobs/{serviceJobId}/appointmentSlots\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.services.api.model.services.json.16",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/service/v1/appointmentSlots",
+            "operation_id": "getAppointmentSlots",
+            "deprecated": false,
+            "source_location": "models/services-api-model/services.json:paths[\"/service/v1/appointmentSlots\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.services.api.model.services.json.17",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/service/v1/documents",
+            "operation_id": "createServiceDocumentUploadDestination",
+            "deprecated": false,
+            "source_location": "models/services-api-model/services.json:paths[\"/service/v1/documents\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipment.invoicing.api.model.shipmentInvoicingV0.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fba/outbound/brazil/v0/shipments/{shipmentId}",
+            "operation_id": "getShipmentDetails",
+            "deprecated": false,
+            "source_location": "models/shipment-invoicing-api-model/shipmentInvoicingV0.json:paths[\"/fba/outbound/brazil/v0/shipments/{shipmentId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipment.invoicing.api.model.shipmentInvoicingV0.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/fba/outbound/brazil/v0/shipments/{shipmentId}/invoice",
+            "operation_id": "submitInvoice",
+            "deprecated": false,
+            "source_location": "models/shipment-invoicing-api-model/shipmentInvoicingV0.json:paths[\"/fba/outbound/brazil/v0/shipments/{shipmentId}/invoice\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipment.invoicing.api.model.shipmentInvoicingV0.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/fba/outbound/brazil/v0/shipments/{shipmentId}/invoice/status",
+            "operation_id": "getInvoiceStatus",
+            "deprecated": false,
+            "source_location": "models/shipment-invoicing-api-model/shipmentInvoicingV0.json:paths[\"/fba/outbound/brazil/v0/shipments/{shipmentId}/invoice/status\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shipping.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/shipping/v1/shipments",
+            "operation_id": "createShipment",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shipping.json:paths[\"/shipping/v1/shipments\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shipping.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/shipping/v1/shipments/{shipmentId}",
+            "operation_id": "getShipment",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shipping.json:paths[\"/shipping/v1/shipments/{shipmentId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shipping.json.3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/shipping/v1/shipments/{shipmentId}/cancel",
+            "operation_id": "cancelShipment",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shipping.json:paths[\"/shipping/v1/shipments/{shipmentId}/cancel\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shipping.json.4",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/shipping/v1/shipments/{shipmentId}/purchaseLabels",
+            "operation_id": "purchaseLabels",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shipping.json:paths[\"/shipping/v1/shipments/{shipmentId}/purchaseLabels\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shipping.json.5",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/shipping/v1/shipments/{shipmentId}/containers/{trackingId}/label",
+            "operation_id": "retrieveShippingLabel",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shipping.json:paths[\"/shipping/v1/shipments/{shipmentId}/containers/{trackingId}/label\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shipping.json.6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/shipping/v1/purchaseShipment",
+            "operation_id": "purchaseShipment",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shipping.json:paths[\"/shipping/v1/purchaseShipment\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shipping.json.7",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/shipping/v1/rates",
+            "operation_id": "getRates",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shipping.json:paths[\"/shipping/v1/rates\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shipping.json.8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/shipping/v1/account",
+            "operation_id": "getAccount",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shipping.json:paths[\"/shipping/v1/account\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shipping.json.9",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/shipping/v1/tracking/{trackingId}",
+            "operation_id": "getTrackingInformation",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shipping.json:paths[\"/shipping/v1/tracking/{trackingId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/shipping/v2/shipments/rates",
+            "operation_id": "getRates",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/shipments/rates\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/shipping/v2/shipments/directPurchase",
+            "operation_id": "directPurchaseShipment",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/shipments/directPurchase\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/shipping/v2/shipments",
+            "operation_id": "purchaseShipment",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/shipments\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.4",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/shipping/v2/oneClickShipment",
+            "operation_id": "oneClickShipment",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/oneClickShipment\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/shipping/v2/tracking",
+            "operation_id": "getTracking",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/tracking\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/shipping/v2/shipments/{shipmentId}/documents",
+            "operation_id": "getShipmentDocuments",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/shipments/{shipmentId}/documents\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.7",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/shipping/v2/shipments/{shipmentId}/cancel",
+            "operation_id": "cancelShipment",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/shipments/{shipmentId}/cancel\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/shipping/v2/shipments/additionalInputs/schema",
+            "operation_id": "getAdditionalInputs",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/shipments/additionalInputs/schema\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.9",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/shipping/v2/carrierAccountFormInputs",
+            "operation_id": "getCarrierAccountFormInputs",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/carrierAccountFormInputs\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.10",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/shipping/v2/carrierAccounts",
+            "operation_id": "getCarrierAccounts",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/carrierAccounts\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.11",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/shipping/v2/carrierAccounts/{carrierId}",
+            "operation_id": "linkCarrierAccount",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/carrierAccounts/{carrierId}\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.12",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/shipping/v2/carrierAccounts/{carrierId}",
+            "operation_id": "linkCarrierAccount",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/carrierAccounts/{carrierId}\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.13",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/shipping/v2/carrierAccounts/{carrierId}/unlink",
+            "operation_id": "unlinkCarrierAccount",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/carrierAccounts/{carrierId}/unlink\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.14",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/shipping/v2/collectionForms",
+            "operation_id": "generateCollectionForm",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/collectionForms\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.15",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/shipping/v2/collectionForms/history",
+            "operation_id": "getCollectionFormHistory",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/collectionForms/history\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.16",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/shipping/v2/unmanifestedShipments",
+            "operation_id": "getUnmanifestedShipments",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/unmanifestedShipments\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.17",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/shipping/v2/collectionForms/{collectionFormId}",
+            "operation_id": "getCollectionForm",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/collectionForms/{collectionFormId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.18",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/shipping/v2/accessPoints",
+            "operation_id": "getAccessPoints",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/accessPoints\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.19",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/shipping/v2/ndrFeedback",
+            "operation_id": "submitNdrFeedback",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/ndrFeedback\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.shipping.api.model.shippingV2.json.20",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/shipping/v2/claims",
+            "operation_id": "createClaim",
+            "deprecated": false,
+            "source_location": "models/shipping-api-model/shippingV2.json:paths[\"/shipping/v2/claims\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.solicitations.api.model.solicitations.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/solicitations/v1/orders/{amazonOrderId}",
+            "operation_id": "getSolicitationActionsForOrder",
+            "deprecated": false,
+            "source_location": "models/solicitations-api-model/solicitations.json:paths[\"/solicitations/v1/orders/{amazonOrderId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.solicitations.api.model.solicitations.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/solicitations/v1/orders/{amazonOrderId}/solicitations/productReviewAndSellerFeedback",
+            "operation_id": "createProductReviewAndSellerFeedbackSolicitation",
+            "deprecated": false,
+            "source_location": "models/solicitations-api-model/solicitations.json:paths[\"/solicitations/v1/orders/{amazonOrderId}/solicitations/productReviewAndSellerFeedback\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.supply.sources.api.model.supplySources.2020.07.01.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/supplySources/2020-07-01/supplySources",
+            "operation_id": "getSupplySources",
+            "deprecated": false,
+            "source_location": "models/supply-sources-api-model/supplySources_2020-07-01.json:paths[\"/supplySources/2020-07-01/supplySources\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.supply.sources.api.model.supplySources.2020.07.01.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/supplySources/2020-07-01/supplySources",
+            "operation_id": "createSupplySource",
+            "deprecated": false,
+            "source_location": "models/supply-sources-api-model/supplySources_2020-07-01.json:paths[\"/supplySources/2020-07-01/supplySources\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.supply.sources.api.model.supplySources.2020.07.01.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/supplySources/2020-07-01/supplySources/{supplySourceId}",
+            "operation_id": "getSupplySource",
+            "deprecated": false,
+            "source_location": "models/supply-sources-api-model/supplySources_2020-07-01.json:paths[\"/supplySources/2020-07-01/supplySources/{supplySourceId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.supply.sources.api.model.supplySources.2020.07.01.json.4",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/supplySources/2020-07-01/supplySources/{supplySourceId}",
+            "operation_id": "updateSupplySource",
+            "deprecated": false,
+            "source_location": "models/supply-sources-api-model/supplySources_2020-07-01.json:paths[\"/supplySources/2020-07-01/supplySources/{supplySourceId}\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.supply.sources.api.model.supplySources.2020.07.01.json.5",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/supplySources/2020-07-01/supplySources/{supplySourceId}",
+            "operation_id": "archiveSupplySource",
+            "deprecated": false,
+            "source_location": "models/supply-sources-api-model/supplySources_2020-07-01.json:paths[\"/supplySources/2020-07-01/supplySources/{supplySourceId}\"].delete"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.supply.sources.api.model.supplySources.2020.07.01.json.6",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/supplySources/2020-07-01/supplySources/{supplySourceId}/status",
+            "operation_id": "updateSupplySourceStatus",
+            "deprecated": false,
+            "source_location": "models/supply-sources-api-model/supplySources_2020-07-01.json:paths[\"/supplySources/2020-07-01/supplySources/{supplySourceId}/status\"].put"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.tokens.api.model.tokens.2021.03.01.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/tokens/2021-03-01/restrictedDataToken",
+            "operation_id": "createRestrictedDataToken",
+            "deprecated": false,
+            "source_location": "models/tokens-api-model/tokens_2021-03-01.json:paths[\"/tokens/2021-03-01/restrictedDataToken\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.tracking.api.model.tracking.2026.01.30.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tracking/2026-01-30/shipments/track",
+            "operation_id": "getShipmentTracking",
+            "deprecated": false,
+            "source_location": "models/tracking-api-model/tracking_2026-01-30.json:paths[\"/tracking/2026-01-30/shipments/track\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.uploads.api.model.uploads.2020.11.01.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/uploads/2020-11-01/uploadDestinations/{resource}",
+            "operation_id": "createUploadDestinationForResource",
+            "deprecated": false,
+            "source_location": "models/uploads-api-model/uploads_2020-11-01.json:paths[\"/uploads/2020-11-01/uploadDestinations/{resource}\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vehicles.api.model.vehicles.2024.11.01.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/catalog/2024-11-01/automotive/vehicles",
+            "operation_id": "getVehicles",
+            "deprecated": false,
+            "source_location": "models/vehicles-api-model/vehicles_2024-11-01.json:paths[\"/catalog/2024-11-01/automotive/vehicles\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.inventory.api.model.vendorDirectFulfillmentInventoryV1.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/vendor/directFulfillment/inventory/v1/warehouses/{warehouseId}/items",
+            "operation_id": "submitInventoryUpdate",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-inventory-api-model/vendorDirectFulfillmentInventoryV1.json:paths[\"/vendor/directFulfillment/inventory/v1/warehouses/{warehouseId}/items\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.orders.api.model.vendorDirectFulfillmentOrdersV1.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/directFulfillment/orders/v1/purchaseOrders",
+            "operation_id": "getOrders",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-orders-api-model/vendorDirectFulfillmentOrdersV1.json:paths[\"/vendor/directFulfillment/orders/v1/purchaseOrders\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.orders.api.model.vendorDirectFulfillmentOrdersV1.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/directFulfillment/orders/v1/purchaseOrders/{purchaseOrderNumber}",
+            "operation_id": "getOrder",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-orders-api-model/vendorDirectFulfillmentOrdersV1.json:paths[\"/vendor/directFulfillment/orders/v1/purchaseOrders/{purchaseOrderNumber}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.orders.api.model.vendorDirectFulfillmentOrdersV1.json.3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/vendor/directFulfillment/orders/v1/acknowledgements",
+            "operation_id": "submitAcknowledgement",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-orders-api-model/vendorDirectFulfillmentOrdersV1.json:paths[\"/vendor/directFulfillment/orders/v1/acknowledgements\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.orders.api.model.vendorDirectFulfillmentOrders.2021.12.28.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/directFulfillment/orders/2021-12-28/purchaseOrders",
+            "operation_id": "getOrders",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-orders-api-model/vendorDirectFulfillmentOrders_2021-12-28.json:paths[\"/vendor/directFulfillment/orders/2021-12-28/purchaseOrders\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.orders.api.model.vendorDirectFulfillmentOrders.2021.12.28.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/directFulfillment/orders/2021-12-28/purchaseOrders/{purchaseOrderNumber}",
+            "operation_id": "getOrder",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-orders-api-model/vendorDirectFulfillmentOrders_2021-12-28.json:paths[\"/vendor/directFulfillment/orders/2021-12-28/purchaseOrders/{purchaseOrderNumber}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.orders.api.model.vendorDirectFulfillmentOrders.2021.12.28.json.3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/vendor/directFulfillment/orders/2021-12-28/acknowledgements",
+            "operation_id": "submitAcknowledgement",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-orders-api-model/vendorDirectFulfillmentOrders_2021-12-28.json:paths[\"/vendor/directFulfillment/orders/2021-12-28/acknowledgements\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.payments.api.model.vendorDirectFulfillmentPaymentsV1.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/vendor/directFulfillment/payments/v1/invoices",
+            "operation_id": "submitInvoice",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-payments-api-model/vendorDirectFulfillmentPaymentsV1.json:paths[\"/vendor/directFulfillment/payments/v1/invoices\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.sandbox.test.data.api.model.vendorDirectFulfillmentSandboxData.2021.10.28.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/vendor/directFulfillment/sandbox/2021-10-28/orders",
+            "operation_id": "generateOrderScenarios",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-sandbox-test-data-api-model/vendorDirectFulfillmentSandboxData_2021-10-28.json:paths[\"/vendor/directFulfillment/sandbox/2021-10-28/orders\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.sandbox.test.data.api.model.vendorDirectFulfillmentSandboxData.2021.10.28.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/directFulfillment/sandbox/2021-10-28/transactions/{transactionId}",
+            "operation_id": "getOrderScenarios",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-sandbox-test-data-api-model/vendorDirectFulfillmentSandboxData_2021-10-28.json:paths[\"/vendor/directFulfillment/sandbox/2021-10-28/transactions/{transactionId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShippingV1.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/directFulfillment/shipping/v1/shippingLabels",
+            "operation_id": "getShippingLabels",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShippingV1.json:paths[\"/vendor/directFulfillment/shipping/v1/shippingLabels\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShippingV1.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/vendor/directFulfillment/shipping/v1/shippingLabels",
+            "operation_id": "submitShippingLabelRequest",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShippingV1.json:paths[\"/vendor/directFulfillment/shipping/v1/shippingLabels\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShippingV1.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/directFulfillment/shipping/v1/shippingLabels/{purchaseOrderNumber}",
+            "operation_id": "getShippingLabel",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShippingV1.json:paths[\"/vendor/directFulfillment/shipping/v1/shippingLabels/{purchaseOrderNumber}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShippingV1.json.4",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/vendor/directFulfillment/shipping/v1/shipmentConfirmations",
+            "operation_id": "submitShipmentConfirmations",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShippingV1.json:paths[\"/vendor/directFulfillment/shipping/v1/shipmentConfirmations\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShippingV1.json.5",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/vendor/directFulfillment/shipping/v1/shipmentStatusUpdates",
+            "operation_id": "submitShipmentStatusUpdates",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShippingV1.json:paths[\"/vendor/directFulfillment/shipping/v1/shipmentStatusUpdates\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShippingV1.json.6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/directFulfillment/shipping/v1/customerInvoices",
+            "operation_id": "getCustomerInvoices",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShippingV1.json:paths[\"/vendor/directFulfillment/shipping/v1/customerInvoices\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShippingV1.json.7",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/directFulfillment/shipping/v1/customerInvoices/{purchaseOrderNumber}",
+            "operation_id": "getCustomerInvoice",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShippingV1.json:paths[\"/vendor/directFulfillment/shipping/v1/customerInvoices/{purchaseOrderNumber}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShippingV1.json.8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/directFulfillment/shipping/v1/packingSlips",
+            "operation_id": "getPackingSlips",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShippingV1.json:paths[\"/vendor/directFulfillment/shipping/v1/packingSlips\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShippingV1.json.9",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/directFulfillment/shipping/v1/packingSlips/{purchaseOrderNumber}",
+            "operation_id": "getPackingSlip",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShippingV1.json:paths[\"/vendor/directFulfillment/shipping/v1/packingSlips/{purchaseOrderNumber}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShipping.2021.12.28.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/directFulfillment/shipping/2021-12-28/shippingLabels",
+            "operation_id": "getShippingLabels",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShipping_2021-12-28.json:paths[\"/vendor/directFulfillment/shipping/2021-12-28/shippingLabels\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShipping.2021.12.28.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/vendor/directFulfillment/shipping/2021-12-28/shippingLabels",
+            "operation_id": "submitShippingLabelRequest",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShipping_2021-12-28.json:paths[\"/vendor/directFulfillment/shipping/2021-12-28/shippingLabels\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShipping.2021.12.28.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/directFulfillment/shipping/2021-12-28/shippingLabels/{purchaseOrderNumber}",
+            "operation_id": "getShippingLabel",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShipping_2021-12-28.json:paths[\"/vendor/directFulfillment/shipping/2021-12-28/shippingLabels/{purchaseOrderNumber}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShipping.2021.12.28.json.4",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/vendor/directFulfillment/shipping/2021-12-28/shippingLabels/{purchaseOrderNumber}",
+            "operation_id": "createShippingLabels",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShipping_2021-12-28.json:paths[\"/vendor/directFulfillment/shipping/2021-12-28/shippingLabels/{purchaseOrderNumber}\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShipping.2021.12.28.json.5",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/vendor/directFulfillment/shipping/2021-12-28/shipmentConfirmations",
+            "operation_id": "submitShipmentConfirmations",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShipping_2021-12-28.json:paths[\"/vendor/directFulfillment/shipping/2021-12-28/shipmentConfirmations\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShipping.2021.12.28.json.6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/vendor/directFulfillment/shipping/2021-12-28/shipmentStatusUpdates",
+            "operation_id": "submitShipmentStatusUpdates",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShipping_2021-12-28.json:paths[\"/vendor/directFulfillment/shipping/2021-12-28/shipmentStatusUpdates\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShipping.2021.12.28.json.7",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/directFulfillment/shipping/2021-12-28/customerInvoices",
+            "operation_id": "getCustomerInvoices",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShipping_2021-12-28.json:paths[\"/vendor/directFulfillment/shipping/2021-12-28/customerInvoices\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShipping.2021.12.28.json.8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/directFulfillment/shipping/2021-12-28/customerInvoices/{purchaseOrderNumber}",
+            "operation_id": "getCustomerInvoice",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShipping_2021-12-28.json:paths[\"/vendor/directFulfillment/shipping/2021-12-28/customerInvoices/{purchaseOrderNumber}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShipping.2021.12.28.json.9",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/directFulfillment/shipping/2021-12-28/packingSlips",
+            "operation_id": "getPackingSlips",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShipping_2021-12-28.json:paths[\"/vendor/directFulfillment/shipping/2021-12-28/packingSlips\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShipping.2021.12.28.json.10",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/directFulfillment/shipping/2021-12-28/packingSlips/{purchaseOrderNumber}",
+            "operation_id": "getPackingSlip",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShipping_2021-12-28.json:paths[\"/vendor/directFulfillment/shipping/2021-12-28/packingSlips/{purchaseOrderNumber}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.shipping.api.model.vendorDirectFulfillmentShipping.2021.12.28.json.11",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/vendor/directFulfillment/shipping/2021-12-28/containerLabel",
+            "operation_id": "createContainerLabel",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShipping_2021-12-28.json:paths[\"/vendor/directFulfillment/shipping/2021-12-28/containerLabel\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.transactions.api.model.vendorDirectFulfillmentTransactionsV1.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/directFulfillment/transactions/v1/transactions/{transactionId}",
+            "operation_id": "getTransactionStatus",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-transactions-api-model/vendorDirectFulfillmentTransactionsV1.json:paths[\"/vendor/directFulfillment/transactions/v1/transactions/{transactionId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.direct.fulfillment.transactions.api.model.vendorDirectFulfillmentTransactions.2021.12.28.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/directFulfillment/transactions/2021-12-28/transactions/{transactionId}",
+            "operation_id": "getTransactionStatus",
+            "deprecated": false,
+            "source_location": "models/vendor-direct-fulfillment-transactions-api-model/vendorDirectFulfillmentTransactions_2021-12-28.json:paths[\"/vendor/directFulfillment/transactions/2021-12-28/transactions/{transactionId}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.invoices.api.model.vendorInvoices.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/vendor/payments/v1/invoices",
+            "operation_id": "submitInvoices",
+            "deprecated": false,
+            "source_location": "models/vendor-invoices-api-model/vendorInvoices.json:paths[\"/vendor/payments/v1/invoices\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.orders.api.model.vendorOrders.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/orders/v1/purchaseOrders",
+            "operation_id": "getPurchaseOrders",
+            "deprecated": false,
+            "source_location": "models/vendor-orders-api-model/vendorOrders.json:paths[\"/vendor/orders/v1/purchaseOrders\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.orders.api.model.vendorOrders.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/orders/v1/purchaseOrders/{purchaseOrderNumber}",
+            "operation_id": "getPurchaseOrder",
+            "deprecated": false,
+            "source_location": "models/vendor-orders-api-model/vendorOrders.json:paths[\"/vendor/orders/v1/purchaseOrders/{purchaseOrderNumber}\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.orders.api.model.vendorOrders.json.3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/vendor/orders/v1/acknowledgements",
+            "operation_id": "submitAcknowledgement",
+            "deprecated": false,
+            "source_location": "models/vendor-orders-api-model/vendorOrders.json:paths[\"/vendor/orders/v1/acknowledgements\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.orders.api.model.vendorOrders.json.4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/orders/v1/purchaseOrdersStatus",
+            "operation_id": "getPurchaseOrdersStatus",
+            "deprecated": false,
+            "source_location": "models/vendor-orders-api-model/vendorOrders.json:paths[\"/vendor/orders/v1/purchaseOrdersStatus\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.shipments.api.model.vendorShipments.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/vendor/shipping/v1/shipmentConfirmations",
+            "operation_id": "SubmitShipmentConfirmations",
+            "deprecated": false,
+            "source_location": "models/vendor-shipments-api-model/vendorShipments.json:paths[\"/vendor/shipping/v1/shipmentConfirmations\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.shipments.api.model.vendorShipments.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/vendor/shipping/v1/shipments",
+            "operation_id": "SubmitShipments",
+            "deprecated": false,
+            "source_location": "models/vendor-shipments-api-model/vendorShipments.json:paths[\"/vendor/shipping/v1/shipments\"].post"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.shipments.api.model.vendorShipments.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/shipping/v1/shipments",
+            "operation_id": "GetShipmentDetails",
+            "deprecated": false,
+            "source_location": "models/vendor-shipments-api-model/vendorShipments.json:paths[\"/vendor/shipping/v1/shipments\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.shipments.api.model.vendorShipments.json.4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/shipping/v1/transportLabels",
+            "operation_id": "GetShipmentLabels",
+            "deprecated": false,
+            "source_location": "models/vendor-shipments-api-model/vendorShipments.json:paths[\"/vendor/shipping/v1/transportLabels\"].get"
+          },
+          {
+            "id": "amazon-seller-partner.rest.models.vendor.transaction.status.api.model.vendorTransactionStatus.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/vendor/transactions/v1/transactions/{transactionId}",
+            "operation_id": "getTransaction",
+            "deprecated": false,
+            "source_location": "models/vendor-transaction-status-api-model/vendorTransactionStatus.json:paths[\"/vendor/transactions/v1/transactions/{transactionId}\"].get"
+          }
+        ],
+        "content_type": "application/x-gzip"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 370,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 370
+  }
+}

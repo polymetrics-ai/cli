@@ -5,6 +5,17 @@ API using OAuth 2.0 client-credentials auth.
 
 Readable streams: `transactions`, `balances`, `products`, `disputes`.
 
+Bounded direct reads:
+
+- `pm paypal-transaction invoicing connections list --credential <name> --json`
+- `pm paypal-transaction webhooks lookup list --credential <name> --json`
+- `pm paypal-transaction webhooks event-types list --credential <name> --json`
+- `pm paypal-transaction web-profiles list --credential <name> --json`
+
+These operations correspond to the pinned PayPal OpenAPI routes with no
+path-item or operation parameters. Each JSON response is capped at 1 MiB and
+uses the connector's redacted JSON output policy.
+
 This connector is read-only; no write actions are declared.
 
 Service API documentation: https://developer.paypal.com/api/rest/.

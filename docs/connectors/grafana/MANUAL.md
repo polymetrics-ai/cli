@@ -55,6 +55,23 @@ SECURITY
   read risk: external Grafana instance API read of dashboards, folders, data sources, org users, and alert rules
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Read Grafana's declared streams and bounded REST resources.
+  Usage: pm grafana <command> [flags]
+  Source CLI: Grafana HTTP API (https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json)
+  Global flags:
+    --credential (string): Named Grafana credential; secrets are loaded from the credential store.
+    --json (boolean): Emit machine-readable JSON output.
+    --max-bytes (integer): Clamp direct-read response size; this operation is capped at 1 MiB.
+  Grafana access-control direct reads
+  Grafana health and alerting-provisioning direct reads
+  Other Commands
+    access control status get - Get Grafana fine-grained access-control status. [intent=direct_read availability=implemented operation=grafana.access_control.status.get]; approval: none; risk: bounded read; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+    health get - Get Grafana server health. [intent=direct_read availability=implemented operation=grafana.health.get]; approval: none; risk: bounded read; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+    alerting provisioning mute timings list - List Grafana provisioned mute timings. [intent=direct_read availability=implemented operation=grafana.alerting.provisioning.mute_timings.list]; approval: none; risk: bounded read; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+    alerting provisioning policy get - Get Grafana provisioned notification policy tree. [intent=direct_read availability=implemented operation=grafana.alerting.provisioning.policy.get]; approval: none; risk: bounded read; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+    alerting provisioning templates list - List Grafana provisioned notification template groups. [intent=direct_read availability=implemented operation=grafana.alerting.provisioning.templates.list]; approval: none; risk: bounded read; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect grafana

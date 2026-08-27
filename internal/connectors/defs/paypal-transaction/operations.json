@@ -1,0 +1,68 @@
+{
+  "operations": [
+    {
+      "id": "paypal-transaction.invoicing.connections.get",
+      "kind": "rest_read",
+      "summary": "List PayPal invoicing accounting-sync merchant connections.",
+      "description": "Bounded direct read of the PayPal Invoicing accounting-sync merchant connection collection. The pinned OpenAPI operation has no path-item or operation parameters.",
+      "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/invoicing/accounting-sync/merchant/connections",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "paypal-transaction.webhooks.lookup.list",
+      "kind": "rest_read",
+      "summary": "List PayPal webhook lookups.",
+      "description": "Bounded direct read of the PayPal webhook lookup collection. The pinned OpenAPI operation has no path-item or operation parameters.",
+      "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/notifications/webhooks-lookup",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "paypal-transaction.webhooks.event-types.list",
+      "kind": "rest_read",
+      "summary": "List PayPal webhook event types.",
+      "description": "Bounded direct read of the PayPal webhook event-type collection. The pinned OpenAPI operation has no path-item or operation parameters.",
+      "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/notifications/webhooks-event-types",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "paypal-transaction.web-profiles.list",
+      "kind": "rest_read",
+      "summary": "List PayPal payment-experience web profiles.",
+      "description": "Bounded direct read of the PayPal payment-experience web-profile collection. The pinned OpenAPI operation has no path-item or operation parameters.",
+      "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payment-experience_web_experience_profiles_v1.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/payment-experience/web-profiles",
+        "max_bytes": 1048576
+      }
+    }
+  ]
+}

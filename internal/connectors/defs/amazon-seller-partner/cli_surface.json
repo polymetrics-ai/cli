@@ -1,0 +1,2745 @@
+{
+  "commands": [
+    {
+      "path": "add appointment for service job by service job id apply",
+      "summary": "Plan and execute the add appointment for service job by service job id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_appointment_for_service_job_by_service_job_id",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/services-api-model/services.json",
+      "source_cli_path": "POST /service/v1/serviceJobs/{serviceJobId}/appointments",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/service/v1/serviceJobs/{serviceJobId}/appointments"
+        }
+      ],
+      "flags": [
+        {
+          "name": "service_job_id",
+          "type": "string",
+          "summary": "Required service job id record field.",
+          "maps_to": "record.service_job_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /service/v1/serviceJobs/{serviceJobId}/appointments against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner add appointment for service job by service job id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "add inventory apply",
+      "summary": "Plan and execute the add inventory reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_inventory",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fba-inventory-api-model/fbaInventory.json",
+      "source_cli_path": "POST /fba/inventory/v1/items/inventory",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/fba/inventory/v1/items/inventory"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /fba/inventory/v1/items/inventory against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner add inventory apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "archive supply source apply",
+      "summary": "Plan and execute the archive supply source reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "archive_supply_source",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/supply-sources-api-model/supplySources_2020-07-01.json",
+      "source_cli_path": "DELETE /supplySources/2020-07-01/supplySources/{supplySourceId}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/supplySources/2020-07-01/supplySources/{supplySourceId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "supply_source_id",
+          "type": "string",
+          "summary": "Required supply source id record field.",
+          "maps_to": "record.supply_source_id",
+          "required": true
+        }
+      ],
+      "risk": "DELETE /supplySources/2020-07-01/supplySources/{supplySourceId} against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner archive supply source apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "assign appointment resources apply",
+      "summary": "Plan and execute the assign appointment resources reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "assign_appointment_resources",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/services-api-model/services.json",
+      "source_cli_path": "PUT /service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}/resources",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}/resources"
+        }
+      ],
+      "flags": [
+        {
+          "name": "appointment_id",
+          "type": "string",
+          "summary": "Required appointment id record field.",
+          "maps_to": "record.appointment_id",
+          "required": true
+        },
+        {
+          "name": "service_job_id",
+          "type": "string",
+          "summary": "Required service job id record field.",
+          "maps_to": "record.service_job_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}/resources against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner assign appointment resources apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "batch inventory apply",
+      "summary": "Plan and execute the batch inventory reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "batch_inventory",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/external-fulfillment/externalFulfillmentInventory_2024-09-11.json",
+      "source_cli_path": "POST /externalFulfillment/inventory/2024-09-11/inventories",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/externalFulfillment/inventory/2024-09-11/inventories"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /externalFulfillment/inventory/2024-09-11/inventories against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner batch inventory apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "cancel feed apply",
+      "summary": "Plan and execute the cancel feed reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_feed",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/feeds-api-model/feeds_2021-06-30.json",
+      "source_cli_path": "DELETE /feeds/2021-06-30/feeds/{feedId}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/feeds/2021-06-30/feeds/{feedId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "feed_id",
+          "type": "string",
+          "summary": "Required feed id record field.",
+          "maps_to": "record.feed_id",
+          "required": true
+        }
+      ],
+      "risk": "DELETE /feeds/2021-06-30/feeds/{feedId} against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner cancel feed apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "cancel fulfillment order apply",
+      "summary": "Plan and execute the cancel fulfillment order reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_fulfillment_order",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json",
+      "source_cli_path": "PUT /fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/cancel",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/cancel"
+        }
+      ],
+      "flags": [
+        {
+          "name": "seller_fulfillment_order_id",
+          "type": "string",
+          "summary": "Required seller fulfillment order id record field.",
+          "maps_to": "record.seller_fulfillment_order_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/cancel against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner cancel fulfillment order apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "cancel inbound apply",
+      "summary": "Plan and execute the cancel inbound reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_inbound",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json",
+      "source_cli_path": "POST /awd/2024-05-09/inboundOrders/{orderId}/cancellation",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/awd/2024-05-09/inboundOrders/{orderId}/cancellation"
+        }
+      ],
+      "flags": [
+        {
+          "name": "order_id",
+          "type": "string",
+          "summary": "Required order id record field.",
+          "maps_to": "record.order_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /awd/2024-05-09/inboundOrders/{orderId}/cancellation against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner cancel inbound apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "cancel inbound plan apply",
+      "summary": "Plan and execute the cancel inbound plan reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_inbound_plan",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json",
+      "source_cli_path": "PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/cancellation",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/cancellation"
+        }
+      ],
+      "flags": [
+        {
+          "name": "inbound_plan_id",
+          "type": "string",
+          "summary": "Required inbound plan id record field.",
+          "maps_to": "record.inbound_plan_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/cancellation against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner cancel inbound plan apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "cancel query apply",
+      "summary": "Plan and execute the cancel query reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_query",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/data-kiosk-api-model/dataKiosk_2023-11-15.json",
+      "source_cli_path": "DELETE /dataKiosk/2023-11-15/queries/{queryId}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/dataKiosk/2023-11-15/queries/{queryId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "query_id",
+          "type": "string",
+          "summary": "Required query id record field.",
+          "maps_to": "record.query_id",
+          "required": true
+        }
+      ],
+      "risk": "DELETE /dataKiosk/2023-11-15/queries/{queryId} against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner cancel query apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "cancel report apply",
+      "summary": "Plan and execute the cancel report reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_report",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/reports-api-model/reports_2021-06-30.json",
+      "source_cli_path": "DELETE /reports/2021-06-30/reports/{reportId}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/reports/2021-06-30/reports/{reportId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "report_id",
+          "type": "string",
+          "summary": "Required report id record field.",
+          "maps_to": "record.report_id",
+          "required": true
+        }
+      ],
+      "risk": "DELETE /reports/2021-06-30/reports/{reportId} against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner cancel report apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "cancel report schedule apply",
+      "summary": "Plan and execute the cancel report schedule reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_report_schedule",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/reports-api-model/reports_2021-06-30.json",
+      "source_cli_path": "DELETE /reports/2021-06-30/schedules/{reportScheduleId}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/reports/2021-06-30/schedules/{reportScheduleId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "report_schedule_id",
+          "type": "string",
+          "summary": "Required report schedule id record field.",
+          "maps_to": "record.report_schedule_id",
+          "required": true
+        }
+      ],
+      "risk": "DELETE /reports/2021-06-30/schedules/{reportScheduleId} against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner cancel report schedule apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "cancel self ship appointment apply",
+      "summary": "Plan and execute the cancel self ship appointment reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_self_ship_appointment",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json",
+      "source_cli_path": "PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentCancellation",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentCancellation"
+        }
+      ],
+      "flags": [
+        {
+          "name": "inbound_plan_id",
+          "type": "string",
+          "summary": "Required inbound plan id record field.",
+          "maps_to": "record.inbound_plan_id",
+          "required": true
+        },
+        {
+          "name": "shipment_id",
+          "type": "string",
+          "summary": "Required shipment id record field.",
+          "maps_to": "record.shipment_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentCancellation against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner cancel self ship appointment apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "cancel shipment apply",
+      "summary": "Plan and execute the cancel shipment reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_shipment",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/merchant-fulfillment-api-model/merchantFulfillmentV0.json",
+      "source_cli_path": "DELETE /mfn/v0/shipments/{shipmentId}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/mfn/v0/shipments/{shipmentId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "shipment_id",
+          "type": "string",
+          "summary": "Required shipment id record field.",
+          "maps_to": "record.shipment_id",
+          "required": true
+        }
+      ],
+      "risk": "DELETE /mfn/v0/shipments/{shipmentId} against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner cancel shipment apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "cancel shipment post shipping v1 shipments shipment id cancel apply",
+      "summary": "Plan and execute the cancel shipment post shipping v1 shipments shipment id cancel reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_shipment_post_shipping_v1_shipments_shipment_id_cancel",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/shipping-api-model/shipping.json",
+      "source_cli_path": "POST /shipping/v1/shipments/{shipmentId}/cancel",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/shipping/v1/shipments/{shipmentId}/cancel"
+        }
+      ],
+      "flags": [
+        {
+          "name": "shipment_id",
+          "type": "string",
+          "summary": "Required shipment id record field.",
+          "maps_to": "record.shipment_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /shipping/v1/shipments/{shipmentId}/cancel against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner cancel shipment post shipping v1 shipments shipment id cancel apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "cancel shipment put shipping v2 shipments shipment id cancel apply",
+      "summary": "Plan and execute the cancel shipment put shipping v2 shipments shipment id cancel reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_shipment_put_shipping_v2_shipments_shipment_id_cancel",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/shipping-api-model/shippingV2.json",
+      "source_cli_path": "PUT /shipping/v2/shipments/{shipmentId}/cancel",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/shipping/v2/shipments/{shipmentId}/cancel"
+        }
+      ],
+      "flags": [
+        {
+          "name": "shipment_id",
+          "type": "string",
+          "summary": "Required shipment id record field.",
+          "maps_to": "record.shipment_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /shipping/v2/shipments/{shipmentId}/cancel against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner cancel shipment put shipping v2 shipments shipment id cancel apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "complete service job by service job id apply",
+      "summary": "Plan and execute the complete service job by service job id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "complete_service_job_by_service_job_id",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/services-api-model/services.json",
+      "source_cli_path": "PUT /service/v1/serviceJobs/{serviceJobId}/completions",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/service/v1/serviceJobs/{serviceJobId}/completions"
+        }
+      ],
+      "flags": [
+        {
+          "name": "service_job_id",
+          "type": "string",
+          "summary": "Required service job id record field.",
+          "maps_to": "record.service_job_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /service/v1/serviceJobs/{serviceJobId}/completions against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner complete service job by service job id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "confirm delivery window options apply",
+      "summary": "Plan and execute the confirm delivery window options reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "confirm_delivery_window_options",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json",
+      "source_cli_path": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions/{deliveryWindowOptionId}/confirmation",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions/{deliveryWindowOptionId}/confirmation"
+        }
+      ],
+      "flags": [
+        {
+          "name": "delivery_window_option_id",
+          "type": "string",
+          "summary": "Required delivery window option id record field.",
+          "maps_to": "record.delivery_window_option_id",
+          "required": true
+        },
+        {
+          "name": "inbound_plan_id",
+          "type": "string",
+          "summary": "Required inbound plan id record field.",
+          "maps_to": "record.inbound_plan_id",
+          "required": true
+        },
+        {
+          "name": "shipment_id",
+          "type": "string",
+          "summary": "Required shipment id record field.",
+          "maps_to": "record.shipment_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions/{deliveryWindowOptionId}/confirmation against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner confirm delivery window options apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "confirm inbound apply",
+      "summary": "Plan and execute the confirm inbound reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "confirm_inbound",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json",
+      "source_cli_path": "POST /awd/2024-05-09/inboundOrders/{orderId}/confirmation",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/awd/2024-05-09/inboundOrders/{orderId}/confirmation"
+        }
+      ],
+      "flags": [
+        {
+          "name": "order_id",
+          "type": "string",
+          "summary": "Required order id record field.",
+          "maps_to": "record.order_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /awd/2024-05-09/inboundOrders/{orderId}/confirmation against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner confirm inbound apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "confirm outbound apply",
+      "summary": "Plan and execute the confirm outbound reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "confirm_outbound",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json",
+      "source_cli_path": "POST /awd/2024-05-09/outboundOrders/{orderId}/confirmation",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/awd/2024-05-09/outboundOrders/{orderId}/confirmation"
+        }
+      ],
+      "flags": [
+        {
+          "name": "order_id",
+          "type": "string",
+          "summary": "Required order id record field.",
+          "maps_to": "record.order_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /awd/2024-05-09/outboundOrders/{orderId}/confirmation against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner confirm outbound apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "confirm packing option apply",
+      "summary": "Plan and execute the confirm packing option reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "confirm_packing_option",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json",
+      "source_cli_path": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions/{packingOptionId}/confirmation",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions/{packingOptionId}/confirmation"
+        }
+      ],
+      "flags": [
+        {
+          "name": "inbound_plan_id",
+          "type": "string",
+          "summary": "Required inbound plan id record field.",
+          "maps_to": "record.inbound_plan_id",
+          "required": true
+        },
+        {
+          "name": "packing_option_id",
+          "type": "string",
+          "summary": "Required packing option id record field.",
+          "maps_to": "record.packing_option_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions/{packingOptionId}/confirmation against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner confirm packing option apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "confirm placement option apply",
+      "summary": "Plan and execute the confirm placement option reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "confirm_placement_option",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json",
+      "source_cli_path": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions/{placementOptionId}/confirmation",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions/{placementOptionId}/confirmation"
+        }
+      ],
+      "flags": [
+        {
+          "name": "inbound_plan_id",
+          "type": "string",
+          "summary": "Required inbound plan id record field.",
+          "maps_to": "record.inbound_plan_id",
+          "required": true
+        },
+        {
+          "name": "placement_option_id",
+          "type": "string",
+          "summary": "Required placement option id record field.",
+          "maps_to": "record.placement_option_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions/{placementOptionId}/confirmation against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner confirm placement option apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "confirm replenishment order apply",
+      "summary": "Plan and execute the confirm replenishment order reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "confirm_replenishment_order",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json",
+      "source_cli_path": "POST /awd/2024-05-09/replenishmentOrders/{orderId}/confirmation",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/awd/2024-05-09/replenishmentOrders/{orderId}/confirmation"
+        }
+      ],
+      "flags": [
+        {
+          "name": "order_id",
+          "type": "string",
+          "summary": "Required order id record field.",
+          "maps_to": "record.order_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /awd/2024-05-09/replenishmentOrders/{orderId}/confirmation against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner confirm replenishment order apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "confirm shipment apply",
+      "summary": "Plan and execute the confirm shipment reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "confirm_shipment",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/orders-api-model/ordersV0.json",
+      "source_cli_path": "POST /orders/v0/orders/{orderId}/shipmentConfirmation",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orders/v0/orders/{orderId}/shipmentConfirmation"
+        }
+      ],
+      "flags": [
+        {
+          "name": "order_id",
+          "type": "string",
+          "summary": "Required order id record field.",
+          "maps_to": "record.order_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /orders/v0/orders/{orderId}/shipmentConfirmation against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner confirm shipment apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "confirm transportation options apply",
+      "summary": "Plan and execute the confirm transportation options reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "confirm_transportation_options",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json",
+      "source_cli_path": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions/confirmation",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions/confirmation"
+        }
+      ],
+      "flags": [
+        {
+          "name": "inbound_plan_id",
+          "type": "string",
+          "summary": "Required inbound plan id record field.",
+          "maps_to": "record.inbound_plan_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions/confirmation against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner confirm transportation options apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create claim apply",
+      "summary": "Plan and execute the create claim reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_claim",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/shipping-api-model/shippingV2.json",
+      "source_cli_path": "POST /shipping/v2/claims",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/shipping/v2/claims"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /shipping/v2/claims against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create claim apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create destination apply",
+      "summary": "Plan and execute the create destination reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_destination",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/notifications-api-model/notifications.json",
+      "source_cli_path": "POST /notifications/v1/destinations",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/notifications/v1/destinations"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /notifications/v1/destinations against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create destination apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create feed apply",
+      "summary": "Plan and execute the create feed reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_feed",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/feeds-api-model/feeds_2021-06-30.json",
+      "source_cli_path": "POST /feeds/2021-06-30/feeds",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/feeds/2021-06-30/feeds"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /feeds/2021-06-30/feeds against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create feed apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create fulfillment order apply",
+      "summary": "Plan and execute the create fulfillment order reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_fulfillment_order",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json",
+      "source_cli_path": "POST /fba/outbound/2020-07-01/fulfillmentOrders",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/fba/outbound/2020-07-01/fulfillmentOrders"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /fba/outbound/2020-07-01/fulfillmentOrders against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create fulfillment order apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create fulfillment return apply",
+      "summary": "Plan and execute the create fulfillment return reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_fulfillment_return",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json",
+      "source_cli_path": "PUT /fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/return",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/return"
+        }
+      ],
+      "flags": [
+        {
+          "name": "seller_fulfillment_order_id",
+          "type": "string",
+          "summary": "Required seller fulfillment order id record field.",
+          "maps_to": "record.seller_fulfillment_order_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/return against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create fulfillment return apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create inbound apply",
+      "summary": "Plan and execute the create inbound reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_inbound",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json",
+      "source_cli_path": "POST /awd/2024-05-09/inboundOrders",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/awd/2024-05-09/inboundOrders"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /awd/2024-05-09/inboundOrders against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create inbound apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create inbound plan apply",
+      "summary": "Plan and execute the create inbound plan reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_inbound_plan",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json",
+      "source_cli_path": "POST /inbound/fba/2024-03-20/inboundPlans",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inbound/fba/2024-03-20/inboundPlans"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create inbound plan apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create inventory item apply",
+      "summary": "Plan and execute the create inventory item reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_inventory_item",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fba-inventory-api-model/fbaInventory.json",
+      "source_cli_path": "POST /fba/inventory/v1/items",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/fba/inventory/v1/items"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /fba/inventory/v1/items against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create inventory item apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create notification apply",
+      "summary": "Plan and execute the create notification reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_notification",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/application-integrations-api-model/appIntegrations-2024-04-01.json",
+      "source_cli_path": "POST /appIntegrations/2024-04-01/notifications",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/appIntegrations/2024-04-01/notifications"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /appIntegrations/2024-04-01/notifications against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create notification apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create outbound apply",
+      "summary": "Plan and execute the create outbound reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_outbound",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json",
+      "source_cli_path": "POST /awd/2024-05-09/outboundOrders",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/awd/2024-05-09/outboundOrders"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /awd/2024-05-09/outboundOrders against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create outbound apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create packages apply",
+      "summary": "Plan and execute the create packages reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_packages",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/external-fulfillment/externalFulfillmentShipments_2024-09-11.json",
+      "source_cli_path": "POST /externalFulfillment/2024-09-11/shipments/{shipmentId}/packages",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/packages"
+        }
+      ],
+      "flags": [
+        {
+          "name": "shipment_id",
+          "type": "string",
+          "summary": "Required shipment id record field.",
+          "maps_to": "record.shipment_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /externalFulfillment/2024-09-11/shipments/{shipmentId}/packages against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create packages apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create query apply",
+      "summary": "Plan and execute the create query reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_query",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/data-kiosk-api-model/dataKiosk_2023-11-15.json",
+      "source_cli_path": "POST /dataKiosk/2023-11-15/queries",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/dataKiosk/2023-11-15/queries"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /dataKiosk/2023-11-15/queries against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create query apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create replenishment order apply",
+      "summary": "Plan and execute the create replenishment order reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_replenishment_order",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json",
+      "source_cli_path": "POST /awd/2024-05-09/replenishmentOrders",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/awd/2024-05-09/replenishmentOrders"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /awd/2024-05-09/replenishmentOrders against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create replenishment order apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create report apply",
+      "summary": "Plan and execute the create report reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_report",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/reports-api-model/reports_2021-06-30.json",
+      "source_cli_path": "POST /reports/2021-06-30/reports",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/reports/2021-06-30/reports"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /reports/2021-06-30/reports against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create report apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create report schedule apply",
+      "summary": "Plan and execute the create report schedule reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_report_schedule",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/reports-api-model/reports_2021-06-30.json",
+      "source_cli_path": "POST /reports/2021-06-30/schedules",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/reports/2021-06-30/schedules"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /reports/2021-06-30/schedules against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create report schedule apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create scheduled package apply",
+      "summary": "Plan and execute the create scheduled package reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_scheduled_package",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/easy-ship-model/easyShip_2022-03-23.json",
+      "source_cli_path": "POST /easyShip/2022-03-23/package",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/easyShip/2022-03-23/package"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /easyShip/2022-03-23/package against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create scheduled package apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create scheduled package bulk apply",
+      "summary": "Plan and execute the create scheduled package bulk reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_scheduled_package_bulk",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/easy-ship-model/easyShip_2022-03-23.json",
+      "source_cli_path": "POST /easyShip/2022-03-23/packages/bulk",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/easyShip/2022-03-23/packages/bulk"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /easyShip/2022-03-23/packages/bulk against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create scheduled package bulk apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create shipment apply",
+      "summary": "Plan and execute the create shipment reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_shipment",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/merchant-fulfillment-api-model/merchantFulfillmentV0.json",
+      "source_cli_path": "POST /mfn/v0/shipments",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/mfn/v0/shipments"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /mfn/v0/shipments against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create shipment apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create shipment post shipping v1 shipments apply",
+      "summary": "Plan and execute the create shipment post shipping v1 shipments reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_shipment_post_shipping_v1_shipments",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/shipping-api-model/shipping.json",
+      "source_cli_path": "POST /shipping/v1/shipments",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/shipping/v1/shipments"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /shipping/v1/shipments against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create shipment post shipping v1 shipments apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create subscription apply",
+      "summary": "Plan and execute the create subscription reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_subscription",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/notifications-api-model/notifications.json",
+      "source_cli_path": "POST /notifications/v1/subscriptions/{notificationType}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/notifications/v1/subscriptions/{notificationType}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "notification_type",
+          "type": "string",
+          "summary": "Required notification type record field.",
+          "maps_to": "record.notification_type",
+          "required": true
+        }
+      ],
+      "risk": "POST /notifications/v1/subscriptions/{notificationType} against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create subscription apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create supply source apply",
+      "summary": "Plan and execute the create supply source reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_supply_source",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/supply-sources-api-model/supplySources_2020-07-01.json",
+      "source_cli_path": "POST /supplySources/2020-07-01/supplySources",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/supplySources/2020-07-01/supplySources"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /supplySources/2020-07-01/supplySources against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner create supply source apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete destination apply",
+      "summary": "Plan and execute the delete destination reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_destination",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/notifications-api-model/notifications.json",
+      "source_cli_path": "DELETE /notifications/v1/destinations/{destinationId}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/notifications/v1/destinations/{destinationId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "destination_id",
+          "type": "string",
+          "summary": "Required destination id record field.",
+          "maps_to": "record.destination_id",
+          "required": true
+        }
+      ],
+      "risk": "DELETE /notifications/v1/destinations/{destinationId} against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner delete destination apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete notifications apply",
+      "summary": "Plan and execute the delete notifications reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_notifications",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/application-integrations-api-model/appIntegrations-2024-04-01.json",
+      "source_cli_path": "POST /appIntegrations/2024-04-01/notifications/deletion",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/appIntegrations/2024-04-01/notifications/deletion"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /appIntegrations/2024-04-01/notifications/deletion against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner delete notifications apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete subscription by id apply",
+      "summary": "Plan and execute the delete subscription by id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_subscription_by_id",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/notifications-api-model/notifications.json",
+      "source_cli_path": "DELETE /notifications/v1/subscriptions/{notificationType}/{subscriptionId}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/notifications/v1/subscriptions/{notificationType}/{subscriptionId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "notification_type",
+          "type": "string",
+          "summary": "Required notification type record field.",
+          "maps_to": "record.notification_type",
+          "required": true
+        },
+        {
+          "name": "subscription_id",
+          "type": "string",
+          "summary": "Required subscription id record field.",
+          "maps_to": "record.subscription_id",
+          "required": true
+        }
+      ],
+      "risk": "DELETE /notifications/v1/subscriptions/{notificationType}/{subscriptionId} against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner delete subscription by id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delivery offers apply",
+      "summary": "Plan and execute the delivery offers reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delivery_offers",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json",
+      "source_cli_path": "POST /fba/outbound/2020-07-01/deliveryOffers",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/fba/outbound/2020-07-01/deliveryOffers"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /fba/outbound/2020-07-01/deliveryOffers against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner delivery offers apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "direct purchase shipment apply",
+      "summary": "Plan and execute the direct purchase shipment reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "direct_purchase_shipment",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/shipping-api-model/shippingV2.json",
+      "source_cli_path": "POST /shipping/v2/shipments/directPurchase",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/shipping/v2/shipments/directPurchase"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /shipping/v2/shipments/directPurchase against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner direct purchase shipment apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "generate collection form apply",
+      "summary": "Plan and execute the generate collection form reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "generate_collection_form",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/shipping-api-model/shippingV2.json",
+      "source_cli_path": "POST /shipping/v2/collectionForms",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/shipping/v2/collectionForms"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /shipping/v2/collectionForms against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner generate collection form apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "generate delivery window options apply",
+      "summary": "Plan and execute the generate delivery window options reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "generate_delivery_window_options",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json",
+      "source_cli_path": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions"
+        }
+      ],
+      "flags": [
+        {
+          "name": "inbound_plan_id",
+          "type": "string",
+          "summary": "Required inbound plan id record field.",
+          "maps_to": "record.inbound_plan_id",
+          "required": true
+        },
+        {
+          "name": "shipment_id",
+          "type": "string",
+          "summary": "Required shipment id record field.",
+          "maps_to": "record.shipment_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/deliveryWindowOptions against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner generate delivery window options apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "generate order scenarios apply",
+      "summary": "Plan and execute the generate order scenarios reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "generate_order_scenarios",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/vendor-direct-fulfillment-sandbox-test-data-api-model/vendorDirectFulfillmentSandboxData_2021-10-28.json",
+      "source_cli_path": "POST /vendor/directFulfillment/sandbox/2021-10-28/orders",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/vendor/directFulfillment/sandbox/2021-10-28/orders"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /vendor/directFulfillment/sandbox/2021-10-28/orders against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner generate order scenarios apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "generate packing options apply",
+      "summary": "Plan and execute the generate packing options reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "generate_packing_options",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json",
+      "source_cli_path": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions"
+        }
+      ],
+      "flags": [
+        {
+          "name": "inbound_plan_id",
+          "type": "string",
+          "summary": "Required inbound plan id record field.",
+          "maps_to": "record.inbound_plan_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingOptions against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner generate packing options apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "generate placement options apply",
+      "summary": "Plan and execute the generate placement options reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "generate_placement_options",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json",
+      "source_cli_path": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions"
+        }
+      ],
+      "flags": [
+        {
+          "name": "inbound_plan_id",
+          "type": "string",
+          "summary": "Required inbound plan id record field.",
+          "maps_to": "record.inbound_plan_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/placementOptions against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner generate placement options apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "generate transportation options apply",
+      "summary": "Plan and execute the generate transportation options reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "generate_transportation_options",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json",
+      "source_cli_path": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions"
+        }
+      ],
+      "flags": [
+        {
+          "name": "inbound_plan_id",
+          "type": "string",
+          "summary": "Required inbound plan id record field.",
+          "maps_to": "record.inbound_plan_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/transportationOptions against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner generate transportation options apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "initiate payout apply",
+      "summary": "Plan and execute the initiate payout reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "initiate_payout",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/finances-api-model/transfers_2024-06-01.json",
+      "source_cli_path": "POST /finances/transfers/2024-06-01/payouts",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/finances/transfers/2024-06-01/payouts"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /finances/transfers/2024-06-01/payouts against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner initiate payout apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "link carrier account apply",
+      "summary": "Plan and execute the link carrier account reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "link_carrier_account",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/shipping-api-model/shippingV2.json",
+      "source_cli_path": "POST /shipping/v2/carrierAccounts/{carrierId}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/shipping/v2/carrierAccounts/{carrierId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "carrier_id",
+          "type": "string",
+          "summary": "Required carrier id record field.",
+          "maps_to": "record.carrier_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /shipping/v2/carrierAccounts/{carrierId} against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner link carrier account apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "link carrier account put shipping v2 carrier accounts carrier id apply",
+      "summary": "Plan and execute the link carrier account put shipping v2 carrier accounts carrier id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "link_carrier_account_put_shipping_v2_carrier_accounts_carrier_id",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/shipping-api-model/shippingV2.json",
+      "source_cli_path": "PUT /shipping/v2/carrierAccounts/{carrierId}",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/shipping/v2/carrierAccounts/{carrierId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "carrier_id",
+          "type": "string",
+          "summary": "Required carrier id record field.",
+          "maps_to": "record.carrier_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /shipping/v2/carrierAccounts/{carrierId} against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner link carrier account put shipping v2 carrier accounts carrier id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "one click shipment apply",
+      "summary": "Plan and execute the one click shipment reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "one_click_shipment",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/shipping-api-model/shippingV2.json",
+      "source_cli_path": "POST /shipping/v2/oneClickShipment",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/shipping/v2/oneClickShipment"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /shipping/v2/oneClickShipment against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner one click shipment apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "purchase shipment apply",
+      "summary": "Plan and execute the purchase shipment reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "purchase_shipment",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/shipping-api-model/shipping.json",
+      "source_cli_path": "POST /shipping/v1/purchaseShipment",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/shipping/v1/purchaseShipment"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /shipping/v1/purchaseShipment against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner purchase shipment apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "purchase shipment post shipping v2 shipments apply",
+      "summary": "Plan and execute the purchase shipment post shipping v2 shipments reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "purchase_shipment_post_shipping_v2_shipments",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/shipping-api-model/shippingV2.json",
+      "source_cli_path": "POST /shipping/v2/shipments",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/shipping/v2/shipments"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /shipping/v2/shipments against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner purchase shipment post shipping v2 shipments apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "record action feedback apply",
+      "summary": "Plan and execute the record action feedback reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "record_action_feedback",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/application-integrations-api-model/appIntegrations-2024-04-01.json",
+      "source_cli_path": "POST /appIntegrations/2024-04-01/notifications/{notificationId}/feedback",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/appIntegrations/2024-04-01/notifications/{notificationId}/feedback"
+        }
+      ],
+      "flags": [
+        {
+          "name": "notification_id",
+          "type": "string",
+          "summary": "Required notification id record field.",
+          "maps_to": "record.notification_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /appIntegrations/2024-04-01/notifications/{notificationId}/feedback against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner record action feedback apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "reschedule appointment for service job by service job id apply",
+      "summary": "Plan and execute the reschedule appointment for service job by service job id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "reschedule_appointment_for_service_job_by_service_job_id",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/services-api-model/services.json",
+      "source_cli_path": "POST /service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "appointment_id",
+          "type": "string",
+          "summary": "Required appointment id record field.",
+          "maps_to": "record.appointment_id",
+          "required": true
+        },
+        {
+          "name": "service_job_id",
+          "type": "string",
+          "summary": "Required service job id record field.",
+          "maps_to": "record.service_job_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId} against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner reschedule appointment for service job by service job id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "schedule self ship appointment apply",
+      "summary": "Plan and execute the schedule self ship appointment reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "schedule_self_ship_appointment",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json",
+      "source_cli_path": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots/{slotId}/schedule",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots/{slotId}/schedule"
+        }
+      ],
+      "flags": [
+        {
+          "name": "inbound_plan_id",
+          "type": "string",
+          "summary": "Required inbound plan id record field.",
+          "maps_to": "record.inbound_plan_id",
+          "required": true
+        },
+        {
+          "name": "shipment_id",
+          "type": "string",
+          "summary": "Required shipment id record field.",
+          "maps_to": "record.shipment_id",
+          "required": true
+        },
+        {
+          "name": "slot_id",
+          "type": "string",
+          "summary": "Required slot id record field.",
+          "maps_to": "record.slot_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/selfShipAppointmentSlots/{slotId}/schedule against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner schedule self ship appointment apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "send test notification apply",
+      "summary": "Plan and execute the send test notification reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "send_test_notification",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/notifications-api-model/notifications.json",
+      "source_cli_path": "POST /notifications/v1/subscriptions/{notificationType}/testNotification",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/notifications/v1/subscriptions/{notificationType}/testNotification"
+        }
+      ],
+      "flags": [
+        {
+          "name": "notification_type",
+          "type": "string",
+          "summary": "Required notification type record field.",
+          "maps_to": "record.notification_type",
+          "required": true
+        }
+      ],
+      "risk": "POST /notifications/v1/subscriptions/{notificationType}/testNotification against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner send test notification apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "set appointment fulfillment data apply",
+      "summary": "Plan and execute the set appointment fulfillment data reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "set_appointment_fulfillment_data",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/services-api-model/services.json",
+      "source_cli_path": "PUT /service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}/fulfillment",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}/fulfillment"
+        }
+      ],
+      "flags": [
+        {
+          "name": "appointment_id",
+          "type": "string",
+          "summary": "Required appointment id record field.",
+          "maps_to": "record.appointment_id",
+          "required": true
+        },
+        {
+          "name": "service_job_id",
+          "type": "string",
+          "summary": "Required service job id record field.",
+          "maps_to": "record.service_job_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /service/v1/serviceJobs/{serviceJobId}/appointments/{appointmentId}/fulfillment against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner set appointment fulfillment data apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "set packing information apply",
+      "summary": "Plan and execute the set packing information reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "set_packing_information",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json",
+      "source_cli_path": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingInformation",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingInformation"
+        }
+      ],
+      "flags": [
+        {
+          "name": "inbound_plan_id",
+          "type": "string",
+          "summary": "Required inbound plan id record field.",
+          "maps_to": "record.inbound_plan_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/packingInformation against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner set packing information apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "set prep details apply",
+      "summary": "Plan and execute the set prep details reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "set_prep_details",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json",
+      "source_cli_path": "POST /inbound/fba/2024-03-20/items/prepDetails",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inbound/fba/2024-03-20/items/prepDetails"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /inbound/fba/2024-03-20/items/prepDetails against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner set prep details apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "submit acknowledgement apply",
+      "summary": "Plan and execute the submit acknowledgement reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "submit_acknowledgement",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/vendor-direct-fulfillment-orders-api-model/vendorDirectFulfillmentOrders_2021-12-28.json",
+      "source_cli_path": "POST /vendor/directFulfillment/orders/2021-12-28/acknowledgements",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/vendor/directFulfillment/orders/2021-12-28/acknowledgements"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /vendor/directFulfillment/orders/2021-12-28/acknowledgements against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner submit acknowledgement apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "submit acknowledgement post vendor direct fulfillment orders v1 acknowledgements apply",
+      "summary": "Plan and execute the submit acknowledgement post vendor direct fulfillment orders v1 acknowledgements reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "submit_acknowledgement_post_vendor_direct_fulfillment_orders_v1_acknowledgements",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/vendor-direct-fulfillment-orders-api-model/vendorDirectFulfillmentOrdersV1.json",
+      "source_cli_path": "POST /vendor/directFulfillment/orders/v1/acknowledgements",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/vendor/directFulfillment/orders/v1/acknowledgements"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /vendor/directFulfillment/orders/v1/acknowledgements against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner submit acknowledgement post vendor direct fulfillment orders v1 acknowledgements apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "submit acknowledgement post vendor orders v1 acknowledgements apply",
+      "summary": "Plan and execute the submit acknowledgement post vendor orders v1 acknowledgements reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "submit_acknowledgement_post_vendor_orders_v1_acknowledgements",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/vendor-orders-api-model/vendorOrders.json",
+      "source_cli_path": "POST /vendor/orders/v1/acknowledgements",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/vendor/orders/v1/acknowledgements"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /vendor/orders/v1/acknowledgements against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner submit acknowledgement post vendor orders v1 acknowledgements apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "submit fulfillment order status update apply",
+      "summary": "Plan and execute the submit fulfillment order status update reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "submit_fulfillment_order_status_update",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json",
+      "source_cli_path": "PUT /fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/status",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/status"
+        }
+      ],
+      "flags": [
+        {
+          "name": "seller_fulfillment_order_id",
+          "type": "string",
+          "summary": "Required seller fulfillment order id record field.",
+          "maps_to": "record.seller_fulfillment_order_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}/status against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner submit fulfillment order status update apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "submit inventory update apply",
+      "summary": "Plan and execute the submit inventory update reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "submit_inventory_update",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/vendor-direct-fulfillment-inventory-api-model/vendorDirectFulfillmentInventoryV1.json",
+      "source_cli_path": "POST /vendor/directFulfillment/inventory/v1/warehouses/{warehouseId}/items",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/vendor/directFulfillment/inventory/v1/warehouses/{warehouseId}/items"
+        }
+      ],
+      "flags": [
+        {
+          "name": "warehouse_id",
+          "type": "string",
+          "summary": "Required warehouse id record field.",
+          "maps_to": "record.warehouse_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /vendor/directFulfillment/inventory/v1/warehouses/{warehouseId}/items against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner submit inventory update apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "submit ndr feedback apply",
+      "summary": "Plan and execute the submit ndr feedback reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "submit_ndr_feedback",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/shipping-api-model/shippingV2.json",
+      "source_cli_path": "POST /shipping/v2/ndrFeedback",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/shipping/v2/ndrFeedback"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /shipping/v2/ndrFeedback against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner submit ndr feedback apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "submit shipment confirmations apply",
+      "summary": "Plan and execute the submit shipment confirmations reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "submit_shipment_confirmations",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShipping_2021-12-28.json",
+      "source_cli_path": "POST /vendor/directFulfillment/shipping/2021-12-28/shipmentConfirmations",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/vendor/directFulfillment/shipping/2021-12-28/shipmentConfirmations"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /vendor/directFulfillment/shipping/2021-12-28/shipmentConfirmations against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner submit shipment confirmations apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "submit shipment confirmations post vendor direct fulfillment shipping v1 shipment confirmations apply",
+      "summary": "Plan and execute the submit shipment confirmations post vendor direct fulfillment shipping v1 shipment confirmations reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "submit_shipment_confirmations_post_vendor_direct_fulfillment_shipping_v1_shipment_confirmations",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShippingV1.json",
+      "source_cli_path": "POST /vendor/directFulfillment/shipping/v1/shipmentConfirmations",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/vendor/directFulfillment/shipping/v1/shipmentConfirmations"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /vendor/directFulfillment/shipping/v1/shipmentConfirmations against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner submit shipment confirmations post vendor direct fulfillment shipping v1 shipment confirmations apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "submit shipment confirmations post vendor shipping v1 shipment confirmations apply",
+      "summary": "Plan and execute the submit shipment confirmations post vendor shipping v1 shipment confirmations reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "submit_shipment_confirmations_post_vendor_shipping_v1_shipment_confirmations",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/vendor-shipments-api-model/vendorShipments.json",
+      "source_cli_path": "POST /vendor/shipping/v1/shipmentConfirmations",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/vendor/shipping/v1/shipmentConfirmations"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /vendor/shipping/v1/shipmentConfirmations against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner submit shipment confirmations post vendor shipping v1 shipment confirmations apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "submit shipment status updates apply",
+      "summary": "Plan and execute the submit shipment status updates reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "submit_shipment_status_updates",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShipping_2021-12-28.json",
+      "source_cli_path": "POST /vendor/directFulfillment/shipping/2021-12-28/shipmentStatusUpdates",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/vendor/directFulfillment/shipping/2021-12-28/shipmentStatusUpdates"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /vendor/directFulfillment/shipping/2021-12-28/shipmentStatusUpdates against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner submit shipment status updates apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "submit shipment status updates post vendor direct fulfillment shipping v1 shipment status updates apply",
+      "summary": "Plan and execute the submit shipment status updates post vendor direct fulfillment shipping v1 shipment status updates reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "submit_shipment_status_updates_post_vendor_direct_fulfillment_shipping_v1_shipment_status_updates",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/vendor-direct-fulfillment-shipping-api-model/vendorDirectFulfillmentShippingV1.json",
+      "source_cli_path": "POST /vendor/directFulfillment/shipping/v1/shipmentStatusUpdates",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/vendor/directFulfillment/shipping/v1/shipmentStatusUpdates"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /vendor/directFulfillment/shipping/v1/shipmentStatusUpdates against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner submit shipment status updates post vendor direct fulfillment shipping v1 shipment status updates apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "submit shipments apply",
+      "summary": "Plan and execute the submit shipments reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "submit_shipments",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/vendor-shipments-api-model/vendorShipments.json",
+      "source_cli_path": "POST /vendor/shipping/v1/shipments",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/vendor/shipping/v1/shipments"
+        }
+      ],
+      "flags": [],
+      "risk": "POST /vendor/shipping/v1/shipments against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner submit shipments apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "unlink carrier account apply",
+      "summary": "Plan and execute the unlink carrier account reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "unlink_carrier_account",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/shipping-api-model/shippingV2.json",
+      "source_cli_path": "PUT /shipping/v2/carrierAccounts/{carrierId}/unlink",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/shipping/v2/carrierAccounts/{carrierId}/unlink"
+        }
+      ],
+      "flags": [
+        {
+          "name": "carrier_id",
+          "type": "string",
+          "summary": "Required carrier id record field.",
+          "maps_to": "record.carrier_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /shipping/v2/carrierAccounts/{carrierId}/unlink against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner unlink carrier account apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update fulfillment order apply",
+      "summary": "Plan and execute the update fulfillment order reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_fulfillment_order",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-outbound-api-model/fulfillmentOutbound_2020-07-01.json",
+      "source_cli_path": "PUT /fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "seller_fulfillment_order_id",
+          "type": "string",
+          "summary": "Required seller fulfillment order id record field.",
+          "maps_to": "record.seller_fulfillment_order_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /fba/outbound/2020-07-01/fulfillmentOrders/{sellerFulfillmentOrderId} against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner update fulfillment order apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update inbound apply",
+      "summary": "Plan and execute the update inbound reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_inbound",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json",
+      "source_cli_path": "PUT /awd/2024-05-09/inboundOrders/{orderId}",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/awd/2024-05-09/inboundOrders/{orderId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "order_id",
+          "type": "string",
+          "summary": "Required order id record field.",
+          "maps_to": "record.order_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /awd/2024-05-09/inboundOrders/{orderId} against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner update inbound apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update inbound plan name apply",
+      "summary": "Plan and execute the update inbound plan name reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_inbound_plan_name",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json",
+      "source_cli_path": "PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/name",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/name"
+        }
+      ],
+      "flags": [
+        {
+          "name": "inbound_plan_id",
+          "type": "string",
+          "summary": "Required inbound plan id record field.",
+          "maps_to": "record.inbound_plan_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/name against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner update inbound plan name apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update inbound shipment transport details apply",
+      "summary": "Plan and execute the update inbound shipment transport details reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_inbound_shipment_transport_details",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json",
+      "source_cli_path": "PUT /awd/2024-05-09/inboundShipments/{shipmentId}/transport",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/awd/2024-05-09/inboundShipments/{shipmentId}/transport"
+        }
+      ],
+      "flags": [
+        {
+          "name": "shipment_id",
+          "type": "string",
+          "summary": "Required shipment id record field.",
+          "maps_to": "record.shipment_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /awd/2024-05-09/inboundShipments/{shipmentId}/transport against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner update inbound shipment transport details apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update outbound apply",
+      "summary": "Plan and execute the update outbound reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_outbound",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/amazon-warehousing-and-distribution-model/awd_2024-05-09.json",
+      "source_cli_path": "PUT /awd/2024-05-09/outboundOrders/{orderId}",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/awd/2024-05-09/outboundOrders/{orderId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "order_id",
+          "type": "string",
+          "summary": "Required order id record field.",
+          "maps_to": "record.order_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /awd/2024-05-09/outboundOrders/{orderId} against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner update outbound apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update package apply",
+      "summary": "Plan and execute the update package reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_package",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/external-fulfillment/externalFulfillmentShipments_2024-09-11.json",
+      "source_cli_path": "PUT /externalFulfillment/2024-09-11/shipments/{shipmentId}/packages/{packageId}",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/packages/{packageId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "package_id",
+          "type": "string",
+          "summary": "Required package id record field.",
+          "maps_to": "record.package_id",
+          "required": true
+        },
+        {
+          "name": "shipment_id",
+          "type": "string",
+          "summary": "Required shipment id record field.",
+          "maps_to": "record.shipment_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /externalFulfillment/2024-09-11/shipments/{shipmentId}/packages/{packageId} against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner update package apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update package status apply",
+      "summary": "Plan and execute the update package status reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_package_status",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/external-fulfillment/externalFulfillmentShipments_2024-09-11.json",
+      "source_cli_path": "PATCH /externalFulfillment/2024-09-11/shipments/{shipmentId}/packages/{packageId}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/externalFulfillment/2024-09-11/shipments/{shipmentId}/packages/{packageId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "package_id",
+          "type": "string",
+          "summary": "Required package id record field.",
+          "maps_to": "record.package_id",
+          "required": true
+        },
+        {
+          "name": "shipment_id",
+          "type": "string",
+          "summary": "Required shipment id record field.",
+          "maps_to": "record.shipment_id",
+          "required": true
+        }
+      ],
+      "risk": "PATCH /externalFulfillment/2024-09-11/shipments/{shipmentId}/packages/{packageId} against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner update package status apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update scheduled packages apply",
+      "summary": "Plan and execute the update scheduled packages reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_scheduled_packages",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/easy-ship-model/easyShip_2022-03-23.json",
+      "source_cli_path": "PATCH /easyShip/2022-03-23/package",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/easyShip/2022-03-23/package"
+        }
+      ],
+      "flags": [],
+      "risk": "PATCH /easyShip/2022-03-23/package against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner update scheduled packages apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update shipment name apply",
+      "summary": "Plan and execute the update shipment name reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_shipment_name",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json",
+      "source_cli_path": "PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/name",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/name"
+        }
+      ],
+      "flags": [
+        {
+          "name": "inbound_plan_id",
+          "type": "string",
+          "summary": "Required inbound plan id record field.",
+          "maps_to": "record.inbound_plan_id",
+          "required": true
+        },
+        {
+          "name": "shipment_id",
+          "type": "string",
+          "summary": "Required shipment id record field.",
+          "maps_to": "record.shipment_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/name against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner update shipment name apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update shipment source address apply",
+      "summary": "Plan and execute the update shipment source address reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_shipment_source_address",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json",
+      "source_cli_path": "PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/sourceAddress",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/sourceAddress"
+        }
+      ],
+      "flags": [
+        {
+          "name": "inbound_plan_id",
+          "type": "string",
+          "summary": "Required inbound plan id record field.",
+          "maps_to": "record.inbound_plan_id",
+          "required": true
+        },
+        {
+          "name": "shipment_id",
+          "type": "string",
+          "summary": "Required shipment id record field.",
+          "maps_to": "record.shipment_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/sourceAddress against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner update shipment source address apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update shipment status apply",
+      "summary": "Plan and execute the update shipment status reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_shipment_status",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/orders-api-model/ordersV0.json",
+      "source_cli_path": "POST /orders/v0/orders/{orderId}/shipment",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orders/v0/orders/{orderId}/shipment"
+        }
+      ],
+      "flags": [
+        {
+          "name": "order_id",
+          "type": "string",
+          "summary": "Required order id record field.",
+          "maps_to": "record.order_id",
+          "required": true
+        }
+      ],
+      "risk": "POST /orders/v0/orders/{orderId}/shipment against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner update shipment status apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update shipment tracking details apply",
+      "summary": "Plan and execute the update shipment tracking details reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_shipment_tracking_details",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/fulfillment-inbound-api-model/fulfillmentInbound_2024-03-20.json",
+      "source_cli_path": "PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/trackingDetails",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/trackingDetails"
+        }
+      ],
+      "flags": [
+        {
+          "name": "inbound_plan_id",
+          "type": "string",
+          "summary": "Required inbound plan id record field.",
+          "maps_to": "record.inbound_plan_id",
+          "required": true
+        },
+        {
+          "name": "shipment_id",
+          "type": "string",
+          "summary": "Required shipment id record field.",
+          "maps_to": "record.shipment_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /inbound/fba/2024-03-20/inboundPlans/{inboundPlanId}/shipments/{shipmentId}/trackingDetails against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner update shipment tracking details apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update supply source apply",
+      "summary": "Plan and execute the update supply source reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_supply_source",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/supply-sources-api-model/supplySources_2020-07-01.json",
+      "source_cli_path": "PUT /supplySources/2020-07-01/supplySources/{supplySourceId}",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/supplySources/2020-07-01/supplySources/{supplySourceId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "supply_source_id",
+          "type": "string",
+          "summary": "Required supply source id record field.",
+          "maps_to": "record.supply_source_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /supplySources/2020-07-01/supplySources/{supplySourceId} against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner update supply source apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update supply source status apply",
+      "summary": "Plan and execute the update supply source status reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_supply_source_status",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/supply-sources-api-model/supplySources_2020-07-01.json",
+      "source_cli_path": "PUT /supplySources/2020-07-01/supplySources/{supplySourceId}/status",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/supplySources/2020-07-01/supplySources/{supplySourceId}/status"
+        }
+      ],
+      "flags": [
+        {
+          "name": "supply_source_id",
+          "type": "string",
+          "summary": "Required supply source id record field.",
+          "maps_to": "record.supply_source_id",
+          "required": true
+        }
+      ],
+      "risk": "PUT /supplySources/2020-07-01/supplySources/{supplySourceId}/status against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner update supply source status apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update verification status apply",
+      "summary": "Plan and execute the update verification status reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_verification_status",
+      "source_url": "https://raw.githubusercontent.com/amzn/selling-partner-api-models/main/models/orders-api-model/ordersV0.json",
+      "source_cli_path": "PATCH /orders/v0/orders/{orderId}/regulatedInfo",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/orders/v0/orders/{orderId}/regulatedInfo"
+        }
+      ],
+      "flags": [
+        {
+          "name": "order_id",
+          "type": "string",
+          "summary": "Required order id record field.",
+          "maps_to": "record.order_id",
+          "required": true
+        }
+      ],
+      "risk": "PATCH /orders/v0/orders/{orderId}/regulatedInfo against the live SP-API account",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm amazon-seller-partner update verification status apply --plan <plan-name>"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add appointment for service job by service job id apply",
+        "add inventory apply",
+        "archive supply source apply",
+        "assign appointment resources apply",
+        "batch inventory apply",
+        "cancel feed apply",
+        "cancel fulfillment order apply",
+        "cancel inbound apply",
+        "cancel inbound plan apply",
+        "cancel query apply",
+        "cancel report apply",
+        "cancel report schedule apply",
+        "cancel self ship appointment apply",
+        "cancel shipment apply",
+        "cancel shipment post shipping v1 shipments shipment id cancel apply",
+        "cancel shipment put shipping v2 shipments shipment id cancel apply",
+        "complete service job by service job id apply",
+        "confirm delivery window options apply",
+        "confirm inbound apply",
+        "confirm outbound apply",
+        "confirm packing option apply",
+        "confirm placement option apply",
+        "confirm replenishment order apply",
+        "confirm shipment apply",
+        "confirm transportation options apply",
+        "create claim apply",
+        "create destination apply",
+        "create feed apply",
+        "create fulfillment order apply",
+        "create fulfillment return apply",
+        "create inbound apply",
+        "create inbound plan apply",
+        "create inventory item apply",
+        "create notification apply",
+        "create outbound apply",
+        "create packages apply",
+        "create query apply",
+        "create replenishment order apply",
+        "create report apply",
+        "create report schedule apply",
+        "create scheduled package apply",
+        "create scheduled package bulk apply",
+        "create shipment apply",
+        "create shipment post shipping v1 shipments apply",
+        "create subscription apply",
+        "create supply source apply",
+        "delete destination apply",
+        "delete notifications apply",
+        "delete subscription by id apply",
+        "delivery offers apply",
+        "direct purchase shipment apply",
+        "generate collection form apply",
+        "generate delivery window options apply",
+        "generate order scenarios apply",
+        "generate packing options apply",
+        "generate placement options apply",
+        "generate transportation options apply",
+        "initiate payout apply",
+        "link carrier account apply",
+        "link carrier account put shipping v2 carrier accounts carrier id apply",
+        "one click shipment apply",
+        "purchase shipment apply",
+        "purchase shipment post shipping v2 shipments apply",
+        "record action feedback apply",
+        "reschedule appointment for service job by service job id apply",
+        "schedule self ship appointment apply",
+        "send test notification apply",
+        "set appointment fulfillment data apply",
+        "set packing information apply",
+        "set prep details apply",
+        "submit acknowledgement apply",
+        "submit acknowledgement post vendor direct fulfillment orders v1 acknowledgements apply",
+        "submit acknowledgement post vendor orders v1 acknowledgements apply",
+        "submit fulfillment order status update apply",
+        "submit inventory update apply",
+        "submit ndr feedback apply",
+        "submit shipment confirmations apply",
+        "submit shipment confirmations post vendor direct fulfillment shipping v1 shipment confirmations apply",
+        "submit shipment confirmations post vendor shipping v1 shipment confirmations apply",
+        "submit shipment status updates apply",
+        "submit shipment status updates post vendor direct fulfillment shipping v1 shipment status updates apply",
+        "submit shipments apply",
+        "unlink carrier account apply",
+        "update fulfillment order apply",
+        "update inbound apply",
+        "update inbound plan name apply",
+        "update inbound shipment transport details apply",
+        "update outbound apply",
+        "update package apply",
+        "update package status apply",
+        "update scheduled packages apply",
+        "update shipment name apply",
+        "update shipment source address apply",
+        "update shipment status apply",
+        "update shipment tracking details apply",
+        "update supply source apply",
+        "update supply source status apply",
+        "update verification status apply"
+      ]
+    }
+  ],
+  "tagline": "Run Amazon Seller Partner's declared streams and reverse-ETL actions.",
+  "usage": "pm amazon-seller-partner <command> [flags]"
+}

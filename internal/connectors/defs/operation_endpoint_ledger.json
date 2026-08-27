@@ -1097,7 +1097,140 @@
   "ebay-finance": [],
   "ebay-fulfillment": [],
   "elasticemail": [],
-  "elasticsearch": [],
+  "elasticsearch": [
+    {
+      "method": "GET",
+      "path": "/",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_remote/info",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_ilm/status",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_license/basic_status",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_license/trial_status",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_cat",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_dangling",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_query/queries",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_script_context",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_script_language",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_lifecycle/stats",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_inference/_region_policy",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_ingest/geoip/stats",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_ingest/processor/grok",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_migration/system_features",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_ml/info",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_security/_authenticate",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_security/privilege/_builtin",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_security/stats",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_security/user/_privileges",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_ssl/certificates",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_transform/_node_stats",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    }
+  ],
   "emailoctopus": [],
   "employment-hero": [],
   "encharge": [],
@@ -3325,7 +3458,38 @@
       "max_bytes": 1048576
     }
   ],
-  "grafana": [],
+  "grafana": [
+    {
+      "method": "GET",
+      "path": "/api/access-control/status",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/health",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/provisioning/mute-timings",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/provisioning/policies",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/provisioning/templates",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    }
+  ],
   "granola": [],
   "greenhouse": [],
   "gridly": [],
@@ -11484,7 +11648,32 @@
   "partnerize": [],
   "partnerstack": [],
   "payfit": [],
-  "paypal-transaction": [],
+  "paypal-transaction": [
+    {
+      "method": "GET",
+      "path": "/v1/notifications/webhooks-event-types",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/notifications/webhooks-lookup",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/payment-experience/web-profiles",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoicing/accounting-sync/merchant/connections",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    }
+  ],
   "paystack": [],
   "pendo": [],
   "pennylane": [],

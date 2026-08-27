@@ -1852,6 +1852,208 @@
           "type": "json"
         }
       ]
+    },
+    {
+      "path": "move manager link customer manager links apply",
+      "summary": "Plan and execute the move manager link customer manager links reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "move_manager_link_customer_manager_links",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "source_cli_path": "POST /v22/customers/{customer_id}/customerManagerLinks:moveManagerLink",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v22/customers/{customer_id}/customerManagerLinks:moveManagerLink"
+        }
+      ],
+      "flags": [],
+      "risk": "Executes Google Ads API v22 method customers.customerManagerLinks.moveManagerLink against the configured customer. Review provider-side effects before approval.",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm google-ads move manager link customer manager links apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "remove data links apply",
+      "summary": "Plan and execute the remove data links reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_data_links",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "source_cli_path": "POST /v22/customers/{customer_id}/dataLinks:remove",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v22/customers/{customer_id}/dataLinks:remove"
+        }
+      ],
+      "flags": [
+        {
+          "name": "resourceName",
+          "type": "string",
+          "summary": "Required resourceName record field.",
+          "maps_to": "record.resourceName",
+          "required": true
+        }
+      ],
+      "risk": "Executes Google Ads API v22 method customers.dataLinks.remove against the configured customer. Review provider-side effects before approval.",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm google-ads remove data links apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update data links apply",
+      "summary": "Plan and execute the update data links reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_data_links",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "source_cli_path": "POST /v22/customers/{customer_id}/dataLinks:update",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v22/customers/{customer_id}/dataLinks:update"
+        }
+      ],
+      "flags": [
+        {
+          "name": "resourceName",
+          "type": "string",
+          "summary": "Required resourceName record field.",
+          "maps_to": "record.resourceName",
+          "required": true
+        }
+      ],
+      "risk": "Executes Google Ads API v22 method customers.dataLinks.update against the configured customer. Review provider-side effects before approval.",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm google-ads update data links apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "remove product link invitations apply",
+      "summary": "Plan and execute the remove product link invitations reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_product_link_invitations",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "source_cli_path": "POST /v22/customers/{customer_id}/productLinkInvitations:remove",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v22/customers/{customer_id}/productLinkInvitations:remove"
+        }
+      ],
+      "flags": [
+        {
+          "name": "resourceName",
+          "type": "string",
+          "summary": "Required resourceName record field.",
+          "maps_to": "record.resourceName",
+          "required": true
+        }
+      ],
+      "risk": "Executes Google Ads API v22 method customers.productLinkInvitations.remove against the configured customer. Review provider-side effects before approval.",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm google-ads remove product link invitations apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update product link invitations apply",
+      "summary": "Plan and execute the update product link invitations reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_product_link_invitations",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "source_cli_path": "POST /v22/customers/{customer_id}/productLinkInvitations:update",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v22/customers/{customer_id}/productLinkInvitations:update"
+        }
+      ],
+      "flags": [
+        {
+          "name": "resourceName",
+          "type": "string",
+          "summary": "Required resourceName record field.",
+          "maps_to": "record.resourceName",
+          "required": true
+        }
+      ],
+      "risk": "Executes Google Ads API v22 method customers.productLinkInvitations.update against the configured customer. Review provider-side effects before approval.",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm google-ads update product link invitations apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "remove product links apply",
+      "summary": "Plan and execute the remove product links reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_product_links",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "source_cli_path": "POST /v22/customers/{customer_id}/productLinks:remove",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v22/customers/{customer_id}/productLinks:remove"
+        }
+      ],
+      "flags": [
+        {
+          "name": "resourceName",
+          "type": "string",
+          "summary": "Required resourceName record field.",
+          "maps_to": "record.resourceName",
+          "required": true
+        }
+      ],
+      "risk": "Executes Google Ads API v22 method customers.productLinks.remove against the configured customer. Review provider-side effects before approval.",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm google-ads remove product links apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "start identity verification customers apply",
+      "summary": "Plan and execute the start identity verification customers reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "start_identity_verification_customers",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "source_cli_path": "POST /v22/customers/{customer_id}:startIdentityVerification",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v22/customers/{customer_id}:startIdentityVerification"
+        }
+      ],
+      "flags": [],
+      "risk": "Executes Google Ads API v22 method customers.startIdentityVerification against the configured customer. Review provider-side effects before approval.",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm google-ads start identity verification customers apply --plan <plan-name>"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "move manager link customer manager links apply",
+        "remove data links apply",
+        "update data links apply",
+        "remove product link invitations apply",
+        "update product link invitations apply",
+        "remove product links apply",
+        "start identity verification customers apply"
+      ]
     }
   ]
 }

@@ -1,0 +1,37 @@
+{
+  "issue": 4289,
+  "connector": "elasticsearch",
+  "source": {
+    "lock": "internal/connectors/defs/elasticsearch/sources/elasticsearch-operation-source-lock.json",
+    "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+    "sha256": "aace81c4c46fa503895ea524d30313856597975f67115fc9cde9c61c7f76b952",
+    "bytes": 6458837,
+    "operations": [
+      "elasticsearch.rest.indices-get-data-lifecycle-stats",
+      "elasticsearch.rest.inference-get-region-policy",
+      "elasticsearch.rest.ingest-geo-ip-stats",
+      "elasticsearch.rest.ingest-processor-grok",
+      "elasticsearch.rest.migration-get-feature-upgrade-status"
+    ]
+  },
+  "binary": {
+    "path": ".fm-elasticsearch-platform-proof.PIrzX2/pm",
+    "sha256": "8814997bdb65f93ce3b30db9dcd193bc04bd2907c28d75f74107c6f762fe3d4b",
+    "build_command": "go build -o .fm-elasticsearch-platform-proof.PIrzX2/pm ./cmd/pm"
+  },
+  "proof": {
+    "credential_configuration": "none; each command ran from its own project initialized with pm init --root <project> --json",
+    "provider_requests": 0,
+    "expected_stderr": "error: missing --credential",
+    "commands": [
+      {"path": "lifecycle stats get", "exit_code": 1, "stdout_bytes": 0, "stderr": "error: missing --credential"},
+      {"path": "inference region policy get", "exit_code": 1, "stdout_bytes": 0, "stderr": "error: missing --credential"},
+      {"path": "ingest geoip stats get", "exit_code": 1, "stdout_bytes": 0, "stderr": "error: missing --credential"},
+      {"path": "ingest processor grok get", "exit_code": 1, "stdout_bytes": 0, "stderr": "error: missing --credential"},
+      {"path": "migration system features get", "exit_code": 1, "stdout_bytes": 0, "stderr": "error: missing --credential"}
+    ],
+    "help_checks": [
+      "pm help elasticsearch", "pm elasticsearch", "pm elasticsearch lifecycle stats get --help", "pm elasticsearch inference region policy get --help", "pm elasticsearch ingest geoip stats get --help", "pm elasticsearch ingest processor grok get --help", "pm elasticsearch migration system features get --help"
+    ]
+  }
+}

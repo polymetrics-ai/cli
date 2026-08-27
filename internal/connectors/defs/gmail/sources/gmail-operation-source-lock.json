@@ -1,0 +1,831 @@
+{
+  "schema_version": 3,
+  "connector": "gmail",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "retrieval": "schema-v2 source-lock migration retaining hash-pinned provider artifacts",
+    "openapi": [],
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    },
+    "source_documents": [
+      {
+        "id": "source",
+        "kind": "rendered_reference",
+        "artifact": {
+          "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+          "sha256": "c94e2fd9199aa674bf7f49656e1bad1bd362dde9ff47bc90879079ff6e344d6a",
+          "bytes": 217687,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+          "capture_url": "https://gmail.googleapis.com/$discovery/rest",
+          "sha256": "c94e2fd9199aa674bf7f49656e1bad1bd362dde9ff47bc90879079ff6e344d6a",
+          "bytes": 217687,
+          "adapter": "legacy-v2-source-lock-migration-v1"
+        },
+        "operations": [
+          {
+            "id": "gmail.rest.gmail.users.getProfile",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/profile",
+            "operation_id": "gmail.users.getProfile",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.getProfile\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.watch",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/watch",
+            "operation_id": "gmail.users.watch",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.watch\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.stop",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/stop",
+            "operation_id": "gmail.users.stop",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.stop\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.messages.untrash",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/messages/{id}/untrash",
+            "operation_id": "gmail.users.messages.untrash",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.messages.untrash\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.messages.batchModify",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/messages/batchModify",
+            "operation_id": "gmail.users.messages.batchModify",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.messages.batchModify\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.messages.send",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/messages/send",
+            "operation_id": "gmail.users.messages.send",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.messages.send\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.messages.trash",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/messages/{id}/trash",
+            "operation_id": "gmail.users.messages.trash",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.messages.trash\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.messages.import",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/messages/import",
+            "operation_id": "gmail.users.messages.import",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.messages.import\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.messages.get",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/messages/{id}",
+            "operation_id": "gmail.users.messages.get",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.messages.get\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.messages.modify",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/messages/{id}/modify",
+            "operation_id": "gmail.users.messages.modify",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.messages.modify\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.messages.batchDelete",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/messages/batchDelete",
+            "operation_id": "gmail.users.messages.batchDelete",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.messages.batchDelete\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.messages.delete",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/users/{userId}/messages/{id}",
+            "operation_id": "gmail.users.messages.delete",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.messages.delete\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.messages.insert",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/messages",
+            "operation_id": "gmail.users.messages.insert",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.messages.insert\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.messages.list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/messages",
+            "operation_id": "gmail.users.messages.list",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.messages.list\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.messages.attachments.get",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/messages/{messageId}/attachments/{id}",
+            "operation_id": "gmail.users.messages.attachments.get",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.messages.attachments.get\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.labels.create",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/labels",
+            "operation_id": "gmail.users.labels.create",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.labels.create\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.labels.update",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/users/{userId}/labels/{id}",
+            "operation_id": "gmail.users.labels.update",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.labels.update\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.labels.delete",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/users/{userId}/labels/{id}",
+            "operation_id": "gmail.users.labels.delete",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.labels.delete\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.labels.patch",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/users/{userId}/labels/{id}",
+            "operation_id": "gmail.users.labels.patch",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.labels.patch\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.labels.get",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/labels/{id}",
+            "operation_id": "gmail.users.labels.get",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.labels.get\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.labels.list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/labels",
+            "operation_id": "gmail.users.labels.list",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.labels.list\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.drafts.send",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/drafts/send",
+            "operation_id": "gmail.users.drafts.send",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.drafts.send\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.drafts.get",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/drafts/{id}",
+            "operation_id": "gmail.users.drafts.get",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.drafts.get\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.drafts.list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/drafts",
+            "operation_id": "gmail.users.drafts.list",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.drafts.list\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.drafts.delete",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/users/{userId}/drafts/{id}",
+            "operation_id": "gmail.users.drafts.delete",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.drafts.delete\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.drafts.create",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/drafts",
+            "operation_id": "gmail.users.drafts.create",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.drafts.create\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.drafts.update",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/users/{userId}/drafts/{id}",
+            "operation_id": "gmail.users.drafts.update",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.drafts.update\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.history.list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/history",
+            "operation_id": "gmail.users.history.list",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.history.list\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.threads.untrash",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/threads/{id}/untrash",
+            "operation_id": "gmail.users.threads.untrash",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.threads.untrash\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.threads.modify",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/threads/{id}/modify",
+            "operation_id": "gmail.users.threads.modify",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.threads.modify\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.threads.trash",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/threads/{id}/trash",
+            "operation_id": "gmail.users.threads.trash",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.threads.trash\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.threads.delete",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/users/{userId}/threads/{id}",
+            "operation_id": "gmail.users.threads.delete",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.threads.delete\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.threads.get",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/threads/{id}",
+            "operation_id": "gmail.users.threads.get",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.threads.get\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.threads.list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/threads",
+            "operation_id": "gmail.users.threads.list",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.threads.list\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.updateImap",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/users/{userId}/settings/imap",
+            "operation_id": "gmail.users.settings.updateImap",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.updateImap\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.getPop",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/settings/pop",
+            "operation_id": "gmail.users.settings.getPop",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.getPop\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.getImap",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/settings/imap",
+            "operation_id": "gmail.users.settings.getImap",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.getImap\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.getVacation",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/settings/vacation",
+            "operation_id": "gmail.users.settings.getVacation",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.getVacation\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.updateVacation",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/users/{userId}/settings/vacation",
+            "operation_id": "gmail.users.settings.updateVacation",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.updateVacation\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.updatePop",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/users/{userId}/settings/pop",
+            "operation_id": "gmail.users.settings.updatePop",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.updatePop\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.updateAutoForwarding",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/users/{userId}/settings/autoForwarding",
+            "operation_id": "gmail.users.settings.updateAutoForwarding",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.updateAutoForwarding\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.updateLanguage",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/users/{userId}/settings/language",
+            "operation_id": "gmail.users.settings.updateLanguage",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.updateLanguage\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.getAutoForwarding",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/settings/autoForwarding",
+            "operation_id": "gmail.users.settings.getAutoForwarding",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.getAutoForwarding\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.getLanguage",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/settings/language",
+            "operation_id": "gmail.users.settings.getLanguage",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.getLanguage\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.sendAs.create",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/settings/sendAs",
+            "operation_id": "gmail.users.settings.sendAs.create",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.sendAs.create\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.sendAs.update",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/users/{userId}/settings/sendAs/{sendAsEmail}",
+            "operation_id": "gmail.users.settings.sendAs.update",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.sendAs.update\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.sendAs.list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/settings/sendAs",
+            "operation_id": "gmail.users.settings.sendAs.list",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.sendAs.list\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.sendAs.get",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/settings/sendAs/{sendAsEmail}",
+            "operation_id": "gmail.users.settings.sendAs.get",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.sendAs.get\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.sendAs.patch",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/users/{userId}/settings/sendAs/{sendAsEmail}",
+            "operation_id": "gmail.users.settings.sendAs.patch",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.sendAs.patch\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.sendAs.delete",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/users/{userId}/settings/sendAs/{sendAsEmail}",
+            "operation_id": "gmail.users.settings.sendAs.delete",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.sendAs.delete\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.sendAs.verify",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/verify",
+            "operation_id": "gmail.users.settings.sendAs.verify",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.sendAs.verify\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.sendAs.smimeInfo.setDefault",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}/setDefault",
+            "operation_id": "gmail.users.settings.sendAs.smimeInfo.setDefault",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.sendAs.smimeInfo.setDefault\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.sendAs.smimeInfo.list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo",
+            "operation_id": "gmail.users.settings.sendAs.smimeInfo.list",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.sendAs.smimeInfo.list\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.sendAs.smimeInfo.get",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}",
+            "operation_id": "gmail.users.settings.sendAs.smimeInfo.get",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.sendAs.smimeInfo.get\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.sendAs.smimeInfo.insert",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo",
+            "operation_id": "gmail.users.settings.sendAs.smimeInfo.insert",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.sendAs.smimeInfo.insert\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.sendAs.smimeInfo.delete",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}",
+            "operation_id": "gmail.users.settings.sendAs.smimeInfo.delete",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.sendAs.smimeInfo.delete\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.filters.list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/settings/filters",
+            "operation_id": "gmail.users.settings.filters.list",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.filters.list\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.filters.get",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/settings/filters/{id}",
+            "operation_id": "gmail.users.settings.filters.get",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.filters.get\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.filters.delete",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/users/{userId}/settings/filters/{id}",
+            "operation_id": "gmail.users.settings.filters.delete",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.filters.delete\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.filters.create",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/settings/filters",
+            "operation_id": "gmail.users.settings.filters.create",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.filters.create\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.cse.identities.delete",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/users/{userId}/settings/cse/identities/{cseEmailAddress}",
+            "operation_id": "gmail.users.settings.cse.identities.delete",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.cse.identities.delete\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.cse.identities.patch",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/users/{userId}/settings/cse/identities/{emailAddress}",
+            "operation_id": "gmail.users.settings.cse.identities.patch",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.cse.identities.patch\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.cse.identities.get",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/settings/cse/identities/{cseEmailAddress}",
+            "operation_id": "gmail.users.settings.cse.identities.get",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.cse.identities.get\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.cse.identities.list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/settings/cse/identities",
+            "operation_id": "gmail.users.settings.cse.identities.list",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.cse.identities.list\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.cse.identities.create",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/settings/cse/identities",
+            "operation_id": "gmail.users.settings.cse.identities.create",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.cse.identities.create\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.cse.keypairs.disable",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}:disable",
+            "operation_id": "gmail.users.settings.cse.keypairs.disable",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.cse.keypairs.disable\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.cse.keypairs.get",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}",
+            "operation_id": "gmail.users.settings.cse.keypairs.get",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.cse.keypairs.get\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.cse.keypairs.list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/settings/cse/keypairs",
+            "operation_id": "gmail.users.settings.cse.keypairs.list",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.cse.keypairs.list\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.cse.keypairs.create",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/settings/cse/keypairs",
+            "operation_id": "gmail.users.settings.cse.keypairs.create",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.cse.keypairs.create\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.cse.keypairs.enable",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}:enable",
+            "operation_id": "gmail.users.settings.cse.keypairs.enable",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.cse.keypairs.enable\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.cse.keypairs.obliterate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}:obliterate",
+            "operation_id": "gmail.users.settings.cse.keypairs.obliterate",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.cse.keypairs.obliterate\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.delegates.list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/settings/delegates",
+            "operation_id": "gmail.users.settings.delegates.list",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.delegates.list\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.delegates.get",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/settings/delegates/{delegateEmail}",
+            "operation_id": "gmail.users.settings.delegates.get",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.delegates.get\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.delegates.delete",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/users/{userId}/settings/delegates/{delegateEmail}",
+            "operation_id": "gmail.users.settings.delegates.delete",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.delegates.delete\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.delegates.create",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/settings/delegates",
+            "operation_id": "gmail.users.settings.delegates.create",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.delegates.create\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.forwardingAddresses.delete",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/users/{userId}/settings/forwardingAddresses/{forwardingEmail}",
+            "operation_id": "gmail.users.settings.forwardingAddresses.delete",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.forwardingAddresses.delete\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.forwardingAddresses.list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/settings/forwardingAddresses",
+            "operation_id": "gmail.users.settings.forwardingAddresses.list",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.forwardingAddresses.list\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.forwardingAddresses.get",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{userId}/settings/forwardingAddresses/{forwardingEmail}",
+            "operation_id": "gmail.users.settings.forwardingAddresses.get",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.forwardingAddresses.get\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          },
+          {
+            "id": "gmail.rest.gmail.users.settings.forwardingAddresses.create",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{userId}/settings/forwardingAddresses",
+            "operation_id": "gmail.users.settings.forwardingAddresses.create",
+            "deprecated": false,
+            "source_location": "discovery method \"gmail.users.settings.forwardingAddresses.create\"",
+            "citation_url": "https://gmail.googleapis.com/$discovery/rest?version=v1"
+          }
+        ],
+        "content_type": "application/json"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 79,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 79
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "commands": [
+    {
+      "path": "create ad set apply",
+      "summary": "Plan and execute the create ad set reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_ad_set",
+      "source_url": "https://raw.githubusercontent.com/facebook/facebook-business-sdk-codegen/main/api_specs/specs/AdAccount.json",
+      "source_cli_path": "POST /{ad_account_id}/adsets",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{ad_account_id}/adsets"
+        }
+      ],
+      "flags": [
+        {
+          "name": "billing_event",
+          "type": "string",
+          "summary": "Required billing event record field.",
+          "maps_to": "record.billing_event",
+          "required": true
+        },
+        {
+          "name": "campaign_id",
+          "type": "string",
+          "summary": "Required campaign id record field.",
+          "maps_to": "record.campaign_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "optimization_goal",
+          "type": "string",
+          "summary": "Required optimization goal record field.",
+          "maps_to": "record.optimization_goal",
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Required status record field.",
+          "maps_to": "record.status",
+          "required": true
+        },
+        {
+          "name": "targeting",
+          "type": "json",
+          "summary": "Required targeting record field.",
+          "maps_to": "record.targeting",
+          "required": true
+        }
+      ],
+      "risk": "external mutation on a live Facebook ad account; creates an ad set that can incur ad spend once ads are attached; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm facebook-marketing create ad set apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create campaign apply",
+      "summary": "Plan and execute the create campaign reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_campaign",
+      "source_url": "https://raw.githubusercontent.com/facebook/facebook-business-sdk-codegen/main/api_specs/specs/AdAccount.json",
+      "source_cli_path": "POST /{ad_account_id}/campaigns",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{ad_account_id}/campaigns"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "objective",
+          "type": "string",
+          "summary": "Required objective record field.",
+          "maps_to": "record.objective",
+          "required": true
+        },
+        {
+          "name": "special_ad_categories",
+          "type": "string_array",
+          "summary": "Required special ad categories record field.",
+          "maps_to": "record.special_ad_categories",
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Required status record field.",
+          "maps_to": "record.status",
+          "required": true
+        }
+      ],
+      "risk": "external mutation on a live Facebook ad account; creates a campaign that can incur ad spend once ads are attached; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm facebook-marketing create campaign apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update campaign apply",
+      "summary": "Plan and execute the update campaign reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_campaign",
+      "source_url": "https://raw.githubusercontent.com/facebook/facebook-business-sdk-codegen/main/api_specs/specs/Campaign.json",
+      "source_cli_path": "POST /{campaign_id}",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{campaign_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "external mutation on a live Facebook ad account (e.g. pausing/resuming spend); approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm facebook-marketing update campaign apply --plan <plan-name>"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "create ad set apply",
+        "create campaign apply",
+        "update campaign apply"
+      ]
+    }
+  ],
+  "tagline": "Run Facebook Marketing's declared streams and reverse-ETL actions.",
+  "usage": "pm facebook-marketing <command> [flags]"
+}

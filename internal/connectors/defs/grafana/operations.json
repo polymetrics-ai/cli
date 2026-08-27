@@ -1,0 +1,84 @@
+{
+  "operations": [
+    {
+      "id": "grafana.access_control.status.get",
+      "kind": "rest_read",
+      "summary": "Get Grafana fine-grained access-control status.",
+      "description": "Bounded direct read of the source-pinned getAccessControlStatus operation. The provider declares no path-item or operation parameters and returns a JSON status response.",
+      "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/api/access-control/status",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "grafana.health.get",
+      "kind": "rest_read",
+      "summary": "Get Grafana server health.",
+      "description": "Bounded direct read of the source-pinned getHealth operation. The provider declares no path-item or operation parameters and returns a JSON health response.",
+      "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/api/health",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "grafana.alerting.provisioning.mute_timings.list",
+      "kind": "rest_read",
+      "summary": "List Grafana provisioned mute timings.",
+      "description": "Bounded direct read of the source-pinned RouteGetMuteTimings operation. The provider declares no path-item or operation parameters and returns a JSON mute-timing collection.",
+      "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/provisioning/mute-timings",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "grafana.alerting.provisioning.policy.get",
+      "kind": "rest_read",
+      "summary": "Get Grafana provisioned notification policy tree.",
+      "description": "Bounded direct read of the source-pinned RouteGetPolicyTree operation. The provider declares no path-item or operation parameters and returns a JSON policy tree.",
+      "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/provisioning/policies",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "grafana.alerting.provisioning.templates.list",
+      "kind": "rest_read",
+      "summary": "List Grafana provisioned notification template groups.",
+      "description": "Bounded direct read of the source-pinned RouteGetTemplates operation. The provider declares no path-item or operation parameters and returns a JSON notification-template collection.",
+      "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/provisioning/templates",
+        "max_bytes": 1048576
+      }
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "connector": "paypal-transaction",
+  "built_binary": "/tmp/cli-map-batch23-paypal-pm",
+  "project_root": "/tmp/cli-map-batch23-paypal-project.ZLyUmL",
+  "initialization": "pm init --root <isolated-project> --json",
+  "expected_stderr": "error: missing --credential",
+  "passed": 4,
+  "commands": [
+    {
+      "command": "pm paypal-transaction invoicing connections list --json",
+      "status": 1,
+      "stdout": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"missing --credential\"\n  },\n  \"kind\": \"Error\"\n}\n",
+      "stderr": "error: missing --credential\n",
+      "exact_missing_credential": true
+    },
+    {
+      "command": "pm paypal-transaction webhooks lookup list --json",
+      "status": 1,
+      "stdout": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"missing --credential\"\n  },\n  \"kind\": \"Error\"\n}\n",
+      "stderr": "error: missing --credential\n",
+      "exact_missing_credential": true
+    },
+    {
+      "command": "pm paypal-transaction webhooks event-types list --json",
+      "status": 1,
+      "stdout": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"missing --credential\"\n  },\n  \"kind\": \"Error\"\n}\n",
+      "stderr": "error: missing --credential\n",
+      "exact_missing_credential": true
+    },
+    {
+      "command": "pm paypal-transaction web-profiles list --json",
+      "status": 1,
+      "stdout": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"internal\",\n    \"code\": \"internal_error\",\n    \"message\": \"missing --credential\"\n  },\n  \"kind\": \"Error\"\n}\n",
+      "stderr": "error: missing --credential\n",
+      "exact_missing_credential": true
+    }
+  ]
+}

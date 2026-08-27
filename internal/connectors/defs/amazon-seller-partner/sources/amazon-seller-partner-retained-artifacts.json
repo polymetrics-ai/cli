@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "amazon-seller-partner",
+  "artifacts": [
+    {
+      "sha256": "78d987a3ca47ed6a64b35d7654e556e8a02755bd38f0b8fb65011a79472ff4ef",
+      "bytes": 1732666,
+      "source_url": "https://codeload.github.com/amzn/selling-partner-api-models/tar.gz/refs/heads/main",
+      "retrieved_at": "2026-08-24T12:03:07Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

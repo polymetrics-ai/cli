@@ -1,0 +1,1171 @@
+{
+  "schema_version": 2,
+  "foundation_dispatch": "pending latest fm/cli-reverse-etl-destination-r1",
+  "captain_premerge_gate": {
+    "status": "incomplete",
+    "required_evidence": {
+      "provider_operations": 5127,
+      "source_trace": {
+        "pinned": 5127,
+        "missing": 0,
+        "version_not_published": 4885
+      },
+      "canonical_mapping": {
+        "mapped": 5127,
+        "missing": 0
+      },
+      "primary_runtime_reachability": {
+        "declaration-pending": 5055,
+        "implemented": 72
+      },
+      "generated_cli_command": {
+        "declaration-pending": 4410,
+        "implemented": 678,
+        "partial": 39
+      },
+      "website_row": {
+        "declaration-pending": 5127
+      },
+      "fixture_conformance": {
+        "connector-level-only": 5127
+      }
+    },
+    "foundation_gaps": {
+      "status": "not-merge-ready-open-foundation-gaps",
+      "open_gap_ids": [
+        "generic-typed-destination-app-dispatch",
+        "declarative-typed-destination-action-multiplicity",
+        "declaration-bound-rest-structured-body-cli",
+        "declaration-bound-bounded-binary-transfer",
+        "generated-provider-operation-website-row",
+        "source-operation-fixture-conformance-binding",
+        "declaration-bound-scalar-union-cli"
+      ],
+      "unique_affected_provider_operations": 5127
+    },
+    "zero_silent_omissions": {
+      "status": "proved",
+      "provider_operations": 5127,
+      "operation_records": 5127
+    },
+    "hold": "Website operation rows, source-operation fixture bindings, complete primary-surface reachability, and current typed-destination foundations are required before this gate can pass."
+  },
+  "connectors": [
+    {
+      "connector": "grafana",
+      "source_operations": 314,
+      "represented": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 5,
+        "direct_write": 0,
+        "etl": 0
+      },
+      "missing": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 134,
+        "direct_write": 171,
+        "etl": 4
+      },
+      "reverse_etl": {
+        "declaration": "not-applicable",
+        "provider_evidence": "No connector-owned typed write action exists in writes.json.",
+        "eligible_actions": 0,
+        "source_input_bindings_pending": 0,
+        "installed_command_actions": 0,
+        "implemented_installed_command_actions": 0,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 5,
+      "captain_premerge_gate": {
+        "provider_operations": 314,
+        "source_trace": {
+          "pinned": 314,
+          "missing": 0,
+          "version_not_published": 314
+        },
+        "canonical_mapping": {
+          "mapped": 314,
+          "missing": 0
+        },
+        "primary_runtime_reachability": {
+          "declaration-pending": 309,
+          "implemented": 5
+        },
+        "generated_cli_command": {
+          "declaration-pending": 309,
+          "implemented": 5
+        },
+        "website_row": {
+          "declaration-pending": 314
+        },
+        "fixture_conformance": {
+          "connector-level-only": 314
+        }
+      }
+    },
+    {
+      "connector": "trello",
+      "source_operations": 261,
+      "represented": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0
+      },
+      "missing": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 126,
+        "direct_write": 133,
+        "etl": 2
+      },
+      "reverse_etl": {
+        "declaration": "not-applicable",
+        "provider_evidence": "No connector-owned typed write action exists in writes.json.",
+        "eligible_actions": 0,
+        "source_input_bindings_pending": 0,
+        "installed_command_actions": 0,
+        "implemented_installed_command_actions": 0,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 0,
+      "captain_premerge_gate": {
+        "provider_operations": 261,
+        "source_trace": {
+          "pinned": 261,
+          "missing": 0,
+          "version_not_published": 261
+        },
+        "canonical_mapping": {
+          "mapped": 261,
+          "missing": 0
+        },
+        "primary_runtime_reachability": {
+          "declaration-pending": 261
+        },
+        "generated_cli_command": {
+          "declaration-pending": 261
+        },
+        "website_row": {
+          "declaration-pending": 261
+        },
+        "fixture_conformance": {
+          "connector-level-only": 261
+        }
+      }
+    },
+    {
+      "connector": "slack",
+      "source_operations": 174,
+      "represented": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0
+      },
+      "missing": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 76,
+        "direct_write": 94,
+        "etl": 4
+      },
+      "reverse_etl": {
+        "declaration": "not-applicable",
+        "provider_evidence": "No connector-owned typed write action exists in writes.json.",
+        "eligible_actions": 0,
+        "source_input_bindings_pending": 0,
+        "installed_command_actions": 0,
+        "implemented_installed_command_actions": 0,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 0,
+      "captain_premerge_gate": {
+        "provider_operations": 174,
+        "source_trace": {
+          "pinned": 174,
+          "missing": 0,
+          "version_not_published": 174
+        },
+        "canonical_mapping": {
+          "mapped": 174,
+          "missing": 0
+        },
+        "primary_runtime_reachability": {
+          "declaration-pending": 174
+        },
+        "generated_cli_command": {
+          "declaration-pending": 174
+        },
+        "website_row": {
+          "declaration-pending": 174
+        },
+        "fixture_conformance": {
+          "connector-level-only": 174
+        }
+      }
+    },
+    {
+      "connector": "n8n",
+      "source_operations": 100,
+      "represented": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0
+      },
+      "missing": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 17,
+        "direct_write": 66,
+        "etl": 17
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "eligible_actions": 29,
+        "bound_actions": 0,
+        "missing_actions": 29,
+        "source_input_bindings_pending": 29,
+        "installed_command_actions": 26,
+        "implemented_installed_command_actions": 26,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 3,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
+      },
+      "executable_commands": 26,
+      "captain_premerge_gate": {
+        "provider_operations": 100,
+        "source_trace": {
+          "pinned": 100,
+          "missing": 0,
+          "version_not_published": 100
+        },
+        "canonical_mapping": {
+          "mapped": 100,
+          "missing": 0
+        },
+        "primary_runtime_reachability": {
+          "declaration-pending": 100
+        },
+        "generated_cli_command": {
+          "implemented": 26,
+          "declaration-pending": 74
+        },
+        "website_row": {
+          "declaration-pending": 100
+        },
+        "fixture_conformance": {
+          "connector-level-only": 100
+        }
+      }
+    },
+    {
+      "connector": "google-calendar",
+      "source_operations": 38,
+      "represented": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 1,
+        "direct_write": 0,
+        "etl": 0
+      },
+      "missing": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 0,
+        "direct_write": 26,
+        "etl": 11
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "eligible_actions": 26,
+        "bound_actions": 0,
+        "missing_actions": 26,
+        "source_input_bindings_pending": 26,
+        "installed_command_actions": 26,
+        "implemented_installed_command_actions": 26,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
+      },
+      "executable_commands": 38,
+      "captain_premerge_gate": {
+        "provider_operations": 38,
+        "source_trace": {
+          "pinned": 38,
+          "missing": 0,
+          "version_not_published": 38
+        },
+        "canonical_mapping": {
+          "mapped": 38,
+          "missing": 0
+        },
+        "primary_runtime_reachability": {
+          "declaration-pending": 37,
+          "implemented": 1
+        },
+        "generated_cli_command": {
+          "implemented": 38
+        },
+        "website_row": {
+          "declaration-pending": 38
+        },
+        "fixture_conformance": {
+          "connector-level-only": 38
+        }
+      }
+    },
+    {
+      "connector": "gmail",
+      "source_operations": 79,
+      "represented": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0
+      },
+      "missing": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 20,
+        "direct_write": 49,
+        "etl": 10
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "eligible_actions": 40,
+        "bound_actions": 0,
+        "missing_actions": 40,
+        "source_input_bindings_pending": 40,
+        "installed_command_actions": 40,
+        "implemented_installed_command_actions": 40,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
+      },
+      "executable_commands": 65,
+      "captain_premerge_gate": {
+        "provider_operations": 79,
+        "source_trace": {
+          "pinned": 79,
+          "missing": 0,
+          "version_not_published": 0
+        },
+        "canonical_mapping": {
+          "mapped": 79,
+          "missing": 0
+        },
+        "primary_runtime_reachability": {
+          "declaration-pending": 79
+        },
+        "generated_cli_command": {
+          "declaration-pending": 60,
+          "implemented": 18,
+          "partial": 1
+        },
+        "website_row": {
+          "declaration-pending": 79
+        },
+        "fixture_conformance": {
+          "connector-level-only": 79
+        }
+      }
+    },
+    {
+      "connector": "twilio",
+      "source_operations": 197,
+      "represented": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0
+      },
+      "missing": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 0,
+        "direct_write": 94,
+        "etl": 103
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "eligible_actions": 94,
+        "bound_actions": 0,
+        "missing_actions": 94,
+        "source_input_bindings_pending": 94,
+        "installed_command_actions": 94,
+        "implemented_installed_command_actions": 60,
+        "partial_installed_command_actions": 34,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
+      },
+      "executable_commands": 60,
+      "captain_premerge_gate": {
+        "provider_operations": 197,
+        "source_trace": {
+          "pinned": 197,
+          "missing": 0,
+          "version_not_published": 197
+        },
+        "canonical_mapping": {
+          "mapped": 197,
+          "missing": 0
+        },
+        "primary_runtime_reachability": {
+          "declaration-pending": 197
+        },
+        "generated_cli_command": {
+          "implemented": 60,
+          "declaration-pending": 103,
+          "partial": 34
+        },
+        "website_row": {
+          "declaration-pending": 197
+        },
+        "fixture_conformance": {
+          "connector-level-only": 197
+        }
+      }
+    },
+    {
+      "connector": "amazon-sqs",
+      "source_operations": 23,
+      "represented": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 6,
+        "direct_write": 0,
+        "etl": 0
+      },
+      "missing": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 0,
+        "direct_write": 16,
+        "etl": 1
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "eligible_actions": 16,
+        "bound_actions": 0,
+        "missing_actions": 16,
+        "source_input_bindings_pending": 16,
+        "installed_command_actions": 16,
+        "implemented_installed_command_actions": 16,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
+      },
+      "executable_commands": 23,
+      "captain_premerge_gate": {
+        "provider_operations": 23,
+        "source_trace": {
+          "pinned": 23,
+          "missing": 0,
+          "version_not_published": 23
+        },
+        "canonical_mapping": {
+          "mapped": 23,
+          "missing": 0
+        },
+        "primary_runtime_reachability": {
+          "declaration-pending": 17,
+          "implemented": 6
+        },
+        "generated_cli_command": {
+          "declaration-pending": 17,
+          "implemented": 6
+        },
+        "website_row": {
+          "declaration-pending": 23
+        },
+        "fixture_conformance": {
+          "connector-level-only": 23
+        }
+      }
+    },
+    {
+      "connector": "elasticsearch",
+      "source_operations": 845,
+      "represented": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 22,
+        "direct_write": 0,
+        "etl": 0
+      },
+      "missing": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 339,
+        "direct_write": 482,
+        "etl": 2
+      },
+      "reverse_etl": {
+        "declaration": "not-applicable",
+        "provider_evidence": "No connector-owned typed write action exists in writes.json.",
+        "eligible_actions": 0,
+        "source_input_bindings_pending": 0,
+        "installed_command_actions": 0,
+        "implemented_installed_command_actions": 0,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 22,
+      "captain_premerge_gate": {
+        "provider_operations": 845,
+        "source_trace": {
+          "pinned": 845,
+          "missing": 0,
+          "version_not_published": 845
+        },
+        "canonical_mapping": {
+          "mapped": 845,
+          "missing": 0
+        },
+        "primary_runtime_reachability": {
+          "declaration-pending": 823,
+          "implemented": 22
+        },
+        "generated_cli_command": {
+          "declaration-pending": 823,
+          "implemented": 22
+        },
+        "website_row": {
+          "declaration-pending": 845
+        },
+        "fixture_conformance": {
+          "connector-level-only": 845
+        }
+      }
+    },
+    {
+      "connector": "gong",
+      "source_operations": 69,
+      "represented": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 13,
+        "direct_write": 0,
+        "etl": 0
+      },
+      "missing": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 17,
+        "direct_write": 27,
+        "etl": 12
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "eligible_actions": 27,
+        "bound_actions": 0,
+        "missing_actions": 27,
+        "source_input_bindings_pending": 27,
+        "installed_command_actions": 27,
+        "implemented_installed_command_actions": 27,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
+      },
+      "executable_commands": 69,
+      "captain_premerge_gate": {
+        "provider_operations": 69,
+        "source_trace": {
+          "pinned": 69,
+          "missing": 0,
+          "version_not_published": 69
+        },
+        "canonical_mapping": {
+          "mapped": 69,
+          "missing": 0
+        },
+        "primary_runtime_reachability": {
+          "declaration-pending": 56,
+          "implemented": 13
+        },
+        "generated_cli_command": {
+          "implemented": 66,
+          "declaration-pending": 3
+        },
+        "website_row": {
+          "declaration-pending": 69
+        },
+        "fixture_conformance": {
+          "connector-level-only": 69
+        }
+      }
+    },
+    {
+      "connector": "google-ads",
+      "source_operations": 163,
+      "represented": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 21,
+        "direct_write": 0,
+        "etl": 0
+      },
+      "missing": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 7,
+        "direct_write": 134,
+        "etl": 1
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "eligible_actions": 104,
+        "bound_actions": 0,
+        "missing_actions": 104,
+        "source_input_bindings_pending": 104,
+        "installed_command_actions": 7,
+        "implemented_installed_command_actions": 7,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 97,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
+      },
+      "executable_commands": 40,
+      "captain_premerge_gate": {
+        "provider_operations": 163,
+        "source_trace": {
+          "pinned": 163,
+          "missing": 0,
+          "version_not_published": 0
+        },
+        "canonical_mapping": {
+          "mapped": 163,
+          "missing": 0
+        },
+        "primary_runtime_reachability": {
+          "declaration-pending": 142,
+          "implemented": 21
+        },
+        "generated_cli_command": {
+          "implemented": 40,
+          "declaration-pending": 123
+        },
+        "website_row": {
+          "declaration-pending": 163
+        },
+        "fixture_conformance": {
+          "connector-level-only": 163
+        }
+      }
+    },
+    {
+      "connector": "facebook-marketing",
+      "source_operations": 1445,
+      "represented": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0
+      },
+      "missing": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 941,
+        "direct_write": 498,
+        "etl": 6
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "eligible_actions": 3,
+        "bound_actions": 0,
+        "missing_actions": 3,
+        "source_input_bindings_pending": 3,
+        "installed_command_actions": 3,
+        "implemented_installed_command_actions": 3,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
+      },
+      "executable_commands": 3,
+      "captain_premerge_gate": {
+        "provider_operations": 1445,
+        "source_trace": {
+          "pinned": 1445,
+          "missing": 0,
+          "version_not_published": 1445
+        },
+        "canonical_mapping": {
+          "mapped": 1445,
+          "missing": 0
+        },
+        "primary_runtime_reachability": {
+          "declaration-pending": 1445
+        },
+        "generated_cli_command": {
+          "declaration-pending": 1442,
+          "implemented": 3
+        },
+        "website_row": {
+          "declaration-pending": 1445
+        },
+        "fixture_conformance": {
+          "connector-level-only": 1445
+        }
+      }
+    },
+    {
+      "connector": "linkedin-ads",
+      "source_operations": 272,
+      "represented": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0
+      },
+      "missing": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 139,
+        "direct_write": 131,
+        "etl": 2
+      },
+      "reverse_etl": {
+        "declaration": "not-applicable",
+        "provider_evidence": "No connector-owned typed write action exists in writes.json.",
+        "eligible_actions": 0,
+        "source_input_bindings_pending": 0,
+        "installed_command_actions": 0,
+        "implemented_installed_command_actions": 0,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 0,
+      "captain_premerge_gate": {
+        "provider_operations": 272,
+        "source_trace": {
+          "pinned": 272,
+          "missing": 0,
+          "version_not_published": 272
+        },
+        "canonical_mapping": {
+          "mapped": 272,
+          "missing": 0
+        },
+        "primary_runtime_reachability": {
+          "declaration-pending": 272
+        },
+        "generated_cli_command": {
+          "declaration-pending": 272
+        },
+        "website_row": {
+          "declaration-pending": 272
+        },
+        "fixture_conformance": {
+          "connector-level-only": 272
+        }
+      }
+    },
+    {
+      "connector": "aircall",
+      "source_operations": 93,
+      "represented": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0
+      },
+      "missing": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 33,
+        "direct_write": 53,
+        "etl": 7
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "eligible_actions": 20,
+        "bound_actions": 0,
+        "missing_actions": 20,
+        "source_input_bindings_pending": 20,
+        "installed_command_actions": 19,
+        "implemented_installed_command_actions": 19,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 1,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
+      },
+      "executable_commands": 19,
+      "captain_premerge_gate": {
+        "provider_operations": 93,
+        "source_trace": {
+          "pinned": 93,
+          "missing": 0,
+          "version_not_published": 93
+        },
+        "canonical_mapping": {
+          "mapped": 93,
+          "missing": 0
+        },
+        "primary_runtime_reachability": {
+          "declaration-pending": 93
+        },
+        "generated_cli_command": {
+          "declaration-pending": 74,
+          "implemented": 19
+        },
+        "website_row": {
+          "declaration-pending": 93
+        },
+        "fixture_conformance": {
+          "connector-level-only": 93
+        }
+      }
+    },
+    {
+      "connector": "xero",
+      "source_operations": 235,
+      "represented": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0
+      },
+      "missing": {
+        "binary_download": 26,
+        "binary_upload": 22,
+        "direct_read": 0,
+        "direct_write": 87,
+        "etl": 100
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "eligible_actions": 87,
+        "bound_actions": 0,
+        "missing_actions": 87,
+        "source_input_bindings_pending": 87,
+        "installed_command_actions": 87,
+        "implemented_installed_command_actions": 84,
+        "partial_installed_command_actions": 3,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
+      },
+      "executable_commands": 107,
+      "captain_premerge_gate": {
+        "provider_operations": 235,
+        "source_trace": {
+          "pinned": 235,
+          "missing": 0,
+          "version_not_published": 235
+        },
+        "canonical_mapping": {
+          "mapped": 235,
+          "missing": 0
+        },
+        "primary_runtime_reachability": {
+          "declaration-pending": 235
+        },
+        "generated_cli_command": {
+          "declaration-pending": 137,
+          "implemented": 95,
+          "partial": 3
+        },
+        "website_row": {
+          "declaration-pending": 235
+        },
+        "fixture_conformance": {
+          "connector-level-only": 235
+        }
+      }
+    },
+    {
+      "connector": "paypal-transaction",
+      "source_operations": 115,
+      "represented": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 4,
+        "direct_write": 0,
+        "etl": 0
+      },
+      "missing": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 30,
+        "direct_write": 77,
+        "etl": 4
+      },
+      "reverse_etl": {
+        "declaration": "not-applicable",
+        "provider_evidence": "No connector-owned typed write action exists in writes.json.",
+        "eligible_actions": 0,
+        "source_input_bindings_pending": 0,
+        "installed_command_actions": 0,
+        "implemented_installed_command_actions": 0,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
+        "application_dispatch": "not-applicable"
+      },
+      "executable_commands": 4,
+      "captain_premerge_gate": {
+        "provider_operations": 115,
+        "source_trace": {
+          "pinned": 115,
+          "missing": 0,
+          "version_not_published": 115
+        },
+        "canonical_mapping": {
+          "mapped": 115,
+          "missing": 0
+        },
+        "primary_runtime_reachability": {
+          "declaration-pending": 111,
+          "implemented": 4
+        },
+        "generated_cli_command": {
+          "declaration-pending": 111,
+          "implemented": 4
+        },
+        "website_row": {
+          "declaration-pending": 115
+        },
+        "fixture_conformance": {
+          "connector-level-only": 115
+        }
+      }
+    },
+    {
+      "connector": "gocardless",
+      "source_operations": 137,
+      "represented": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0
+      },
+      "missing": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 0,
+        "direct_write": 75,
+        "etl": 62
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "eligible_actions": 76,
+        "bound_actions": 0,
+        "missing_actions": 76,
+        "source_input_bindings_pending": 76,
+        "installed_command_actions": 75,
+        "implemented_installed_command_actions": 74,
+        "partial_installed_command_actions": 1,
+        "missing_installed_command_actions": 1,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
+      },
+      "executable_commands": 74,
+      "captain_premerge_gate": {
+        "provider_operations": 137,
+        "source_trace": {
+          "pinned": 137,
+          "missing": 0,
+          "version_not_published": 137
+        },
+        "canonical_mapping": {
+          "mapped": 137,
+          "missing": 0
+        },
+        "primary_runtime_reachability": {
+          "declaration-pending": 137
+        },
+        "generated_cli_command": {
+          "declaration-pending": 62,
+          "partial": 1,
+          "implemented": 74
+        },
+        "website_row": {
+          "declaration-pending": 137
+        },
+        "fixture_conformance": {
+          "connector-level-only": 137
+        }
+      }
+    },
+    {
+      "connector": "amazon-seller-partner",
+      "source_operations": 370,
+      "represented": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0
+      },
+      "missing": {
+        "binary_download": 40,
+        "binary_upload": 0,
+        "direct_read": 20,
+        "direct_write": 163,
+        "etl": 147
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "eligible_actions": 98,
+        "bound_actions": 0,
+        "missing_actions": 98,
+        "source_input_bindings_pending": 98,
+        "installed_command_actions": 98,
+        "implemented_installed_command_actions": 98,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
+      },
+      "executable_commands": 98,
+      "captain_premerge_gate": {
+        "provider_operations": 370,
+        "source_trace": {
+          "pinned": 370,
+          "missing": 0,
+          "version_not_published": 370
+        },
+        "canonical_mapping": {
+          "mapped": 370,
+          "missing": 0
+        },
+        "primary_runtime_reachability": {
+          "declaration-pending": 370
+        },
+        "generated_cli_command": {
+          "implemented": 98,
+          "declaration-pending": 272
+        },
+        "website_row": {
+          "declaration-pending": 370
+        },
+        "fixture_conformance": {
+          "connector-level-only": 370
+        }
+      }
+    },
+    {
+      "connector": "miro",
+      "source_operations": 197,
+      "represented": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 0,
+        "direct_write": 0,
+        "etl": 0
+      },
+      "missing": {
+        "binary_download": 0,
+        "binary_upload": 0,
+        "direct_read": 1,
+        "direct_write": 112,
+        "etl": 84
+      },
+      "reverse_etl": {
+        "declaration": "missing",
+        "eligible_actions": 98,
+        "bound_actions": 0,
+        "missing_actions": 98,
+        "source_input_bindings_pending": 98,
+        "installed_command_actions": 98,
+        "implemented_installed_command_actions": 98,
+        "partial_installed_command_actions": 0,
+        "missing_installed_command_actions": 0,
+        "duplicate_installed_command_actions": 0,
+        "orphan_installed_command_actions": 0,
+        "application_dispatch": "foundation-pending",
+        "action_selection": "foundation-pending"
+      },
+      "executable_commands": 98,
+      "captain_premerge_gate": {
+        "provider_operations": 197,
+        "source_trace": {
+          "pinned": 197,
+          "missing": 0,
+          "version_not_published": 197
+        },
+        "canonical_mapping": {
+          "mapped": 197,
+          "missing": 0
+        },
+        "primary_runtime_reachability": {
+          "declaration-pending": 197
+        },
+        "generated_cli_command": {
+          "declaration-pending": 93,
+          "implemented": 104
+        },
+        "website_row": {
+          "declaration-pending": 197
+        },
+        "fixture_conformance": {
+          "connector-level-only": 197
+        }
+      }
+    }
+  ]
+}

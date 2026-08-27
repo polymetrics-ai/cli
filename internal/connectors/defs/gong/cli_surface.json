@@ -960,595 +960,878 @@
     },
     {
       "path": "calls create",
-      "summary": "sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
+      "summary": "Plan and execute the add call reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "add_call",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "POST /v2/calls",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/calls"
+        }
+      ],
       "flags": [
         {
           "name": "actualStart",
           "type": "string",
-          "summary": "The actual date and time when the call started in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC);",
-          "maps_to": "record.actualStart"
+          "summary": "Required actualStart record field.",
+          "maps_to": "record.actualStart",
+          "required": true
         },
         {
           "name": "clientUniqueId",
           "type": "string",
-          "summary": "A call's unique identifier in the PBX or the recording system. Gong uses this identifier to prevent repeated attempts to upload the same recording.",
-          "maps_to": "record.clientUniqueId"
+          "summary": "Required clientUniqueId record field.",
+          "maps_to": "record.clientUniqueId",
+          "required": true
         },
         {
           "name": "direction",
           "type": "string",
-          "summary": "Whether the call is inbound (someone called the company), outbound (a rep dialed someone outside the company), or a conference call.",
-          "maps_to": "record.direction"
+          "summary": "Required direction record field.",
+          "maps_to": "record.direction",
+          "required": true
         },
         {
           "name": "parties",
-          "type": "string",
-          "summary": "A list of the call's participants. A party must be provided for the primaryUser.",
-          "maps_to": "record.parties"
+          "type": "json",
+          "summary": "Required parties record field.",
+          "maps_to": "record.parties",
+          "required": true
         },
         {
           "name": "primaryUser",
           "type": "string",
-          "summary": "The Gong internal user ID of the team member who hosted the call.",
-          "maps_to": "record.primaryUser"
+          "summary": "Required primaryUser record field.",
+          "maps_to": "record.primaryUser",
+          "required": true
         }
       ],
       "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong add call apply --plan <plan-name>"
+      ]
     },
     {
       "path": "permissions profile create",
-      "summary": "administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
+      "summary": "Plan and execute the create permission profile reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "create_permission_profile",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "POST /v2/permission-profile",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/permission-profile"
+        }
+      ],
       "flags": [
         {
           "name": "workspaceId",
           "type": "string",
-          "summary": "workspaceId value",
-          "maps_to": "record.workspaceId"
+          "summary": "Required workspaceId record field.",
+          "maps_to": "record.workspaceId",
+          "required": true
         }
       ],
       "risk": "high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong create permission profile apply --plan <plan-name>"
+      ]
     },
     {
       "path": "permissions profile update",
-      "summary": "administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
+      "summary": "Plan and execute the update permission profile reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "update_permission_profile",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "PUT /v2/permission-profile",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/permission-profile"
+        }
+      ],
       "flags": [
         {
           "name": "profileId",
           "type": "string",
-          "summary": "profileId value",
-          "maps_to": "record.profileId"
+          "summary": "Required profileId record field.",
+          "maps_to": "record.profileId",
+          "required": true
         }
       ],
       "risk": "high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong update permission profile apply --plan <plan-name>"
+      ]
     },
     {
       "path": "meetings update",
-      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "summary": "Plan and execute the update meeting reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "update_meeting",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "PUT /v2/meetings/{meetingId}",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/meetings/{meetingId}"
+        }
+      ],
       "flags": [
         {
           "name": "endTime",
           "type": "string",
-          "summary": "The meeting end time in ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC).",
-          "maps_to": "record.endTime"
+          "summary": "Required endTime record field.",
+          "maps_to": "record.endTime",
+          "required": true
         },
         {
           "name": "invitees",
-          "type": "string",
-          "summary": "A list of email addresses of invitees to the event (not including the organizer).",
-          "maps_to": "record.invitees"
+          "type": "json",
+          "summary": "Required invitees record field.",
+          "maps_to": "record.invitees",
+          "required": true
         },
         {
           "name": "meetingId",
           "type": "string",
-          "summary": "meetingId value",
-          "maps_to": "record.meetingId"
+          "summary": "Required meetingId record field.",
+          "maps_to": "record.meetingId",
+          "required": true
         },
         {
           "name": "organizerEmail",
           "type": "string",
-          "summary": "The email address of the user who created the meeting.",
-          "maps_to": "record.organizerEmail"
+          "summary": "Required organizerEmail record field.",
+          "maps_to": "record.organizerEmail",
+          "required": true
         },
         {
           "name": "startTime",
           "type": "string",
-          "summary": "The meeting start time in ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC).",
-          "maps_to": "record.startTime"
+          "summary": "Required startTime record field.",
+          "maps_to": "record.startTime",
+          "required": true
         }
       ],
       "risk": "medium: mutates Gong API state; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong update meeting apply --plan <plan-name>"
+      ]
     },
     {
       "path": "meetings delete",
-      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "summary": "Plan and execute the delete meeting reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "delete_meeting",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "DELETE /v2/meetings/{meetingId}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/meetings/{meetingId}"
+        }
+      ],
       "flags": [
         {
           "name": "meetingId",
           "type": "string",
-          "summary": "meetingId value",
-          "maps_to": "record.meetingId"
+          "summary": "Required meetingId record field.",
+          "maps_to": "record.meetingId",
+          "required": true
         }
       ],
       "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong delete meeting apply --plan <plan-name>"
+      ]
     },
     {
       "path": "engagement content-viewed",
-      "summary": "sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
+      "summary": "Plan and execute the content viewed reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "content_viewed",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "PUT /v2/customer-engagement/content/viewed",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customer-engagement/content/viewed"
+        }
+      ],
       "flags": [
         {
           "name": "contentId",
           "type": "string",
-          "summary": "The id of the content that was viewed in the reporting system.",
-          "maps_to": "record.contentId"
+          "summary": "Required contentId record field.",
+          "maps_to": "record.contentId",
+          "required": true
         },
         {
           "name": "contentTitle",
           "type": "string",
-          "summary": "Human readable title of the content.",
-          "maps_to": "record.contentTitle"
+          "summary": "Required contentTitle record field.",
+          "maps_to": "record.contentTitle",
+          "required": true
         },
         {
           "name": "contentUrl",
           "type": "string",
-          "summary": "The url of the content that was viewed in the reporting system. This is the url that is was accessed by the viewer.",
-          "maps_to": "record.contentUrl"
+          "summary": "Required contentUrl record field.",
+          "maps_to": "record.contentUrl",
+          "required": true
         },
         {
           "name": "eventTimestamp",
           "type": "string",
-          "summary": "The date and time when the event happened in the ISO-8601 format (e.g., '2021-08-01T02:30:00+05:00' or '2021-08-01T08:00:00Z', where Z stands for UTC);",
-          "maps_to": "record.eventTimestamp"
+          "summary": "Required eventTimestamp record field.",
+          "maps_to": "record.eventTimestamp",
+          "required": true
         },
         {
           "name": "reportingSystem",
           "type": "string",
-          "summary": "The unique identifier of the reporting system. It is the same value in all events originating from the same system.",
-          "maps_to": "record.reportingSystem"
+          "summary": "Required reportingSystem record field.",
+          "maps_to": "record.reportingSystem",
+          "required": true
         }
       ],
       "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong content viewed apply --plan <plan-name>"
+      ]
     },
     {
       "path": "engagement content-shared",
-      "summary": "sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
+      "summary": "Plan and execute the content shared reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "content_shared",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "PUT /v2/customer-engagement/content/shared",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customer-engagement/content/shared"
+        }
+      ],
       "flags": [
         {
           "name": "contentId",
           "type": "string",
-          "summary": "The id of the content that was shared in the reporting system.",
-          "maps_to": "record.contentId"
+          "summary": "Required contentId record field.",
+          "maps_to": "record.contentId",
+          "required": true
         },
         {
           "name": "contentTitle",
           "type": "string",
-          "summary": "Human readable title of the content.",
-          "maps_to": "record.contentTitle"
+          "summary": "Required contentTitle record field.",
+          "maps_to": "record.contentTitle",
+          "required": true
         },
         {
           "name": "contentUrl",
           "type": "string",
-          "summary": "The url of the content that was shared in the reporting system. This is the url that is was accessed by the viewer.",
-          "maps_to": "record.contentUrl"
+          "summary": "Required contentUrl record field.",
+          "maps_to": "record.contentUrl",
+          "required": true
         },
         {
           "name": "eventTimestamp",
           "type": "string",
-          "summary": "The date and time when the event happened in the ISO-8601 format (e.g., '2021-08-01T02:30:00+05:00' or '2021-08-01T08:00:00Z', where Z stands for UTC);",
-          "maps_to": "record.eventTimestamp"
+          "summary": "Required eventTimestamp record field.",
+          "maps_to": "record.eventTimestamp",
+          "required": true
         },
         {
           "name": "reportingSystem",
           "type": "string",
-          "summary": "The unique identifier of the reporting system. It is the same value in all events originating from the same system.",
-          "maps_to": "record.reportingSystem"
+          "summary": "Required reportingSystem record field.",
+          "maps_to": "record.reportingSystem",
+          "required": true
         }
       ],
       "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong content shared apply --plan <plan-name>"
+      ]
     },
     {
       "path": "engagement custom-action",
-      "summary": "sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
+      "summary": "Plan and execute the custom action reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "custom_action",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "PUT /v2/customer-engagement/action",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customer-engagement/action"
+        }
+      ],
       "flags": [
         {
           "name": "eventTimestamp",
           "type": "string",
-          "summary": "The date and time when the event happened in the ISO-8601 format (e.g., '2021-08-01T02:30:00+05:00' or '2021-08-01T08:00:00Z', where Z stands for UTC);",
-          "maps_to": "record.eventTimestamp"
+          "summary": "Required eventTimestamp record field.",
+          "maps_to": "record.eventTimestamp",
+          "required": true
         },
         {
           "name": "reportingSystem",
           "type": "string",
-          "summary": "The unique identifier of the reporting system. It is the same value in all events originating from the same system.",
-          "maps_to": "record.reportingSystem"
+          "summary": "Required reportingSystem record field.",
+          "maps_to": "record.reportingSystem",
+          "required": true
         }
       ],
       "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong custom action apply --plan <plan-name>"
+      ]
     },
     {
       "path": "crm integrations register",
-      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "summary": "Plan and execute the register crm integration reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "register_crm_integration",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "PUT /v2/crm/integrations",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/crm/integrations"
+        }
+      ],
       "flags": [
         {
           "name": "name",
           "type": "string",
-          "summary": "The name of the integration",
-          "maps_to": "record.name"
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
         },
         {
           "name": "ownerEmail",
           "type": "string",
-          "summary": "Email address of the person responsible for the integration",
-          "maps_to": "record.ownerEmail"
+          "summary": "Required ownerEmail record field.",
+          "maps_to": "record.ownerEmail",
+          "required": true
         }
       ],
       "risk": "medium: mutates Gong API state; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong register crm integration apply --plan <plan-name>"
+      ]
     },
     {
       "path": "crm integrations delete",
-      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "summary": "Plan and execute the delete crm integration reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "delete_crm_integration",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "DELETE /v2/crm/integrations",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/crm/integrations"
+        }
+      ],
       "flags": [
         {
           "name": "clientRequestId",
           "type": "string",
-          "summary": "clientRequestId value",
-          "maps_to": "record.clientRequestId"
+          "summary": "Required clientRequestId record field.",
+          "maps_to": "record.clientRequestId",
+          "required": true
         },
         {
           "name": "integrationId",
           "type": "string",
-          "summary": "integrationId value",
-          "maps_to": "record.integrationId"
+          "summary": "Required integrationId record field.",
+          "maps_to": "record.integrationId",
+          "required": true
         }
       ],
       "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong delete crm integration apply --plan <plan-name>"
+      ]
     },
     {
       "path": "calls users-access add",
-      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "summary": "Plan and execute the add calls users access reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "add_calls_users_access",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "PUT /v2/calls/users-access",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/calls/users-access"
+        }
+      ],
       "flags": [],
       "risk": "medium: mutates Gong API state; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong add calls users access apply --plan <plan-name>"
+      ]
     },
     {
       "path": "calls users-access delete",
-      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "summary": "Plan and execute the delete calls users access reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "delete_calls_users_access",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "DELETE /v2/calls/users-access",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/calls/users-access"
+        }
+      ],
       "flags": [],
       "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong delete calls users access apply --plan <plan-name>"
+      ]
     },
     {
       "path": "meetings create",
-      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "summary": "Plan and execute the create meeting reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "create_meeting",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "POST /v2/meetings",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/meetings"
+        }
+      ],
       "flags": [
         {
           "name": "endTime",
           "type": "string",
-          "summary": "The meeting end time in ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC).",
-          "maps_to": "record.endTime"
+          "summary": "Required endTime record field.",
+          "maps_to": "record.endTime",
+          "required": true
         },
         {
           "name": "invitees",
-          "type": "string",
-          "summary": "A list of email addresses of invitees to the event (not including the organizer).",
-          "maps_to": "record.invitees"
+          "type": "json",
+          "summary": "Required invitees record field.",
+          "maps_to": "record.invitees",
+          "required": true
         },
         {
           "name": "organizerEmail",
           "type": "string",
-          "summary": "The email address of the user creating the meeting, the Gong consent page link will be used according to the settings of this user.",
-          "maps_to": "record.organizerEmail"
+          "summary": "Required organizerEmail record field.",
+          "maps_to": "record.organizerEmail",
+          "required": true
         },
         {
           "name": "startTime",
           "type": "string",
-          "summary": "The meeting start time in ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC).",
-          "maps_to": "record.startTime"
+          "summary": "Required startTime record field.",
+          "maps_to": "record.startTime",
+          "required": true
         }
       ],
       "risk": "medium: mutates Gong API state; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong create meeting apply --plan <plan-name>"
+      ]
     },
     {
       "path": "integration-settings update",
-      "summary": "administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
+      "summary": "Plan and execute the integration settings reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "integration_settings",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "POST /v2/integration-settings",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/integration-settings"
+        }
+      ],
       "flags": [
         {
           "name": "integrationTypeSettings",
-          "type": "string",
-          "summary": "Set a list of dynamic origins for a company",
-          "maps_to": "record.integrationTypeSettings"
+          "type": "json",
+          "summary": "Required integrationTypeSettings record field.",
+          "maps_to": "record.integrationTypeSettings",
+          "required": true
         }
       ],
       "risk": "high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong integration settings apply --plan <plan-name>"
+      ]
     },
     {
       "path": "flows prospects unassign-by-instance",
-      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "summary": "Plan and execute the unassign flows by instance id reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "unassign_flows_by_instance_id",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "POST /v2/flows/prospects/unassign-flows-by-instance-id",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/flows/prospects/unassign-flows-by-instance-id"
+        }
+      ],
       "flags": [
         {
           "name": "flowInstanceIds",
           "type": "string_array",
-          "summary": "The unique identifiers of the flows that prospects should be removed from.",
-          "maps_to": "record.flowInstanceIds"
+          "summary": "Required flowInstanceIds record field.",
+          "maps_to": "record.flowInstanceIds",
+          "required": true
         }
       ],
       "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong unassign flows by instance id apply --plan <plan-name>"
+      ]
     },
     {
       "path": "flows prospects unassign-by-crm",
-      "summary": "removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "summary": "Plan and execute the unassign flows by crm id reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "unassign_flows_by_crm_id",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "POST /v2/flows/prospects/unassign-flows-by-crm-id",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/flows/prospects/unassign-flows-by-crm-id"
+        }
+      ],
       "flags": [
         {
           "name": "crmProspectId",
           "type": "string",
-          "summary": "The CRM ID of the prospect to unassign.",
-          "maps_to": "record.crmProspectId"
+          "summary": "Required crmProspectId record field.",
+          "maps_to": "record.crmProspectId",
+          "required": true
         }
       ],
       "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong unassign flows by crm id apply --plan <plan-name>"
+      ]
     },
     {
       "path": "flows prospects bulk-assign",
-      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "summary": "Plan and execute the submit flow prospects bulk assignment reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "submit_flow_prospects_bulk_assignment",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "POST /v2/flows/prospects/bulk-assignments",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/flows/prospects/bulk-assignments"
+        }
+      ],
       "flags": [
         {
           "name": "flowId",
           "type": "string",
-          "summary": "The Flow ID to assign the prospects to.",
-          "maps_to": "record.flowId"
+          "summary": "Required flowId record field.",
+          "maps_to": "record.flowId",
+          "required": true
         },
         {
           "name": "flowInstanceOwnerEmail",
           "type": "string",
-          "summary": "The email of the Gong user who will own the flow instance.",
-          "maps_to": "record.flowInstanceOwnerEmail"
+          "summary": "Required flowInstanceOwnerEmail record field.",
+          "maps_to": "record.flowInstanceOwnerEmail",
+          "required": true
         },
         {
           "name": "prospects",
-          "type": "string",
-          "summary": "The prospects that should be assigned to the flow.",
-          "maps_to": "record.prospects"
+          "type": "json",
+          "summary": "Required prospects record field.",
+          "maps_to": "record.prospects",
+          "required": true
         }
       ],
       "risk": "medium: mutates Gong API state; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong submit flow prospects bulk assignment apply --plan <plan-name>"
+      ]
     },
     {
       "path": "flows prospects assign",
-      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "summary": "Plan and execute the assign prospects reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "assign_prospects",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "POST /v2/flows/prospects/assign",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/flows/prospects/assign"
+        }
+      ],
       "flags": [
         {
           "name": "crmProspectsIds",
           "type": "string_array",
-          "summary": "The CRM IDs of the contact or lead that should be assigned to a flow.",
-          "maps_to": "record.crmProspectsIds"
+          "summary": "Required crmProspectsIds record field.",
+          "maps_to": "record.crmProspectsIds",
+          "required": true
         },
         {
           "name": "flowId",
           "type": "string",
-          "summary": "The Engage Flow ID to assign the contacts to.",
-          "maps_to": "record.flowId"
+          "summary": "Required flowId record field.",
+          "maps_to": "record.flowId",
+          "required": true
         },
         {
           "name": "flowInstanceOwnerEmail",
           "type": "string",
-          "summary": "The email of the Gong user who owns the flow to-dos.",
-          "maps_to": "record.flowInstanceOwnerEmail"
+          "summary": "Required flowInstanceOwnerEmail record field.",
+          "maps_to": "record.flowInstanceOwnerEmail",
+          "required": true
         }
       ],
       "risk": "medium: mutates Gong API state; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong assign prospects apply --plan <plan-name>"
+      ]
     },
     {
       "path": "flows prospects assign-cool-off-override",
-      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "summary": "Plan and execute the assign prospects cool off override reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "assign_prospects_cool_off_override",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "POST /v2/flows/prospects/assign/cool-off-override",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/flows/prospects/assign/cool-off-override"
+        }
+      ],
       "flags": [
         {
           "name": "crmProspectsIds",
           "type": "string_array",
-          "summary": "The CRM IDs of the contact or lead that should be assigned to a flow.",
-          "maps_to": "record.crmProspectsIds"
+          "summary": "Required crmProspectsIds record field.",
+          "maps_to": "record.crmProspectsIds",
+          "required": true
         },
         {
           "name": "flowId",
           "type": "string",
-          "summary": "The Engage Flow ID to assign the contacts to.",
-          "maps_to": "record.flowId"
+          "summary": "Required flowId record field.",
+          "maps_to": "record.flowId",
+          "required": true
         },
         {
           "name": "flowInstanceOwnerEmail",
           "type": "string",
-          "summary": "The email of the Gong user who owns the flow to-dos.",
-          "maps_to": "record.flowInstanceOwnerEmail"
+          "summary": "Required flowInstanceOwnerEmail record field.",
+          "maps_to": "record.flowInstanceOwnerEmail",
+          "required": true
         }
       ],
       "risk": "medium: mutates Gong API state; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong assign prospects cool off override apply --plan <plan-name>"
+      ]
     },
     {
       "path": "digital-interaction create",
-      "summary": "sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
+      "summary": "Plan and execute the add digital interaction reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "add_digital_interaction",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "POST /v2/digital-interaction",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/digital-interaction"
+        }
+      ],
       "flags": [
         {
           "name": "content",
-          "type": "string",
-          "summary": "The content the person looked at",
-          "maps_to": "record.content"
+          "type": "json",
+          "summary": "Required content record field.",
+          "maps_to": "record.content",
+          "required": true
         },
         {
           "name": "eventId",
           "type": "string",
-          "summary": "The provider's unique identifier for the event used for deduplication",
-          "maps_to": "record.eventId"
+          "summary": "Required eventId record field.",
+          "maps_to": "record.eventId",
+          "required": true
         },
         {
           "name": "eventType",
           "type": "string",
-          "summary": "The type of the event, explaining the content and action performed. Values may be partner-aligned, for example, \"link clicked\", \"page viewed\"",
-          "maps_to": "record.eventType"
+          "summary": "Required eventType record field.",
+          "maps_to": "record.eventType",
+          "required": true
         },
         {
           "name": "timestamp",
           "type": "string",
-          "summary": "The date and time of the event in ISO 8601 format",
-          "maps_to": "record.timestamp"
+          "summary": "Required timestamp record field.",
+          "maps_to": "record.timestamp",
+          "required": true
         }
       ],
       "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong add digital interaction apply --plan <plan-name>"
+      ]
     },
     {
       "path": "privacy erase-phone",
-      "summary": "destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation",
+      "summary": "Plan and execute the purge phone number reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "purge_phone_number",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "POST /v2/data-privacy/erase-data-for-phone-number",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/data-privacy/erase-data-for-phone-number"
+        }
+      ],
       "flags": [
         {
           "name": "phoneNumber",
           "type": "string",
-          "summary": "phoneNumber value",
-          "maps_to": "record.phoneNumber"
+          "summary": "Required phoneNumber record field.",
+          "maps_to": "record.phoneNumber",
+          "required": true
         }
       ],
       "risk": "critical: destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong purge phone number apply --plan <plan-name>"
+      ]
     },
     {
       "path": "privacy erase-email",
-      "summary": "destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation",
+      "summary": "Plan and execute the purge email address reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "purge_email_address",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "POST /v2/data-privacy/erase-data-for-email-address",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/data-privacy/erase-data-for-email-address"
+        }
+      ],
       "flags": [
         {
           "name": "emailAddress",
           "type": "string",
-          "summary": "emailAddress value",
-          "maps_to": "record.emailAddress"
+          "summary": "Required emailAddress record field.",
+          "maps_to": "record.emailAddress",
+          "required": true
         }
       ],
       "risk": "critical: destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong purge email address apply --plan <plan-name>"
+      ]
     },
     {
       "path": "tasks update",
-      "summary": "mutates Gong API state; requires reverse ETL approval",
+      "summary": "Plan and execute the update task reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "update_task",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "PATCH /v2/tasks/{taskId}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/tasks/{taskId}"
+        }
+      ],
       "flags": [
         {
           "name": "taskId",
           "type": "string",
-          "summary": "taskId value",
-          "maps_to": "record.taskId"
+          "summary": "Required taskId record field.",
+          "maps_to": "record.taskId",
+          "required": true
         },
         {
           "name": "userId",
           "type": "string",
-          "summary": "The id of the Gong user who owns the task",
-          "maps_to": "record.userId"
+          "summary": "Required userId record field.",
+          "maps_to": "record.userId",
+          "required": true
         }
       ],
       "risk": "medium: mutates Gong API state; requires reverse ETL approval",
-      "approval": "Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.",
-      "notes": "No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json."
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong update task apply --plan <plan-name>"
+      ]
     },
     {
       "path": "calls extensive",
@@ -2324,13 +2607,32 @@
     },
     {
       "path": "crm upload-entity-schema",
-      "summary": "Upload Object Schema (/v2/crm/entity-schema)",
+      "summary": "Plan and execute the upload crm entity schema reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "partial",
-      "risk": "high: uploads CRM entity schema as a top-level JSON array; no raw CLI body is exposed",
-      "approval": "reverse ETL plan -> preview -> approval -> execute; destructive confirmation required",
-      "notes": "Write action supports schema-gated top-level array bodies for table/reverse-ETL mappings; provider-style raw JSON CLI flags remain intentionally unavailable.",
-      "write": "upload_crm_entity_schema"
+      "availability": "implemented",
+      "write": "upload_crm_entity_schema",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "source_cli_path": "POST /v2/crm/entity-schema",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/crm/entity-schema"
+        }
+      ],
+      "flags": [
+        {
+          "name": "selected_fields",
+          "type": "json",
+          "summary": "Required selected fields record field.",
+          "maps_to": "record.selected_fields",
+          "required": true
+        }
+      ],
+      "risk": "high: uploads CRM entity schema as a bounded top-level JSON array; use only reviewed table mappings and reverse ETL approval",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm gong upload crm entity schema apply --plan <plan-name>"
+      ]
     },
     {
       "path": "targets list",

@@ -1,0 +1,2620 @@
+{
+  "commands": [
+    {
+      "path": "create account apply",
+      "summary": "Plan and execute the create account reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_account",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts.json"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Twilio account resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio create account apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create address apply",
+      "summary": "Show the exact create address action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_address",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Addresses.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Addresses.json"
+        }
+      ],
+      "risk": "creates Twilio address resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous City: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create address apply --json"
+      ]
+    },
+    {
+      "path": "create application apply",
+      "summary": "Plan and execute the create application reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_application",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Applications.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Applications.json"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Twilio application resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio create application apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create call apply",
+      "summary": "Show the exact create call action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_call",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Calls.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Calls.json"
+        }
+      ],
+      "risk": "creates Twilio call resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous From: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create call apply --json"
+      ]
+    },
+    {
+      "path": "create call recording apply",
+      "summary": "Plan and execute the create call recording reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_call_recording",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Calls/{CallSid}/Recordings.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Recordings.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "call_sid",
+          "type": "string",
+          "summary": "Required call sid record field.",
+          "maps_to": "record.call_sid",
+          "required": true
+        }
+      ],
+      "risk": "creates Twilio call recording resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio create call recording apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create incoming phone number apply",
+      "summary": "Plan and execute the create incoming phone number reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_incoming_phone_number",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/IncomingPhoneNumbers.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers.json"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Twilio incoming phone number resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio create incoming phone number apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create incoming phone number assigned add on apply",
+      "summary": "Show the exact create incoming phone number assigned add on action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_incoming_phone_number_assigned_add_on",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns.json"
+        }
+      ],
+      "risk": "creates Twilio incoming phone number assigned add on resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous InstalledAddOnSid: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create incoming phone number assigned add on apply --json"
+      ]
+    },
+    {
+      "path": "create incoming phone number local apply",
+      "summary": "Show the exact create incoming phone number local action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_incoming_phone_number_local",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/IncomingPhoneNumbers/Local.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/Local.json"
+        }
+      ],
+      "risk": "creates Twilio incoming phone number local resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous PhoneNumber: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create incoming phone number local apply --json"
+      ]
+    },
+    {
+      "path": "create incoming phone number mobile apply",
+      "summary": "Show the exact create incoming phone number mobile action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_incoming_phone_number_mobile",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/IncomingPhoneNumbers/Mobile.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/Mobile.json"
+        }
+      ],
+      "risk": "creates Twilio incoming phone number mobile resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous PhoneNumber: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create incoming phone number mobile apply --json"
+      ]
+    },
+    {
+      "path": "create incoming phone number toll free apply",
+      "summary": "Show the exact create incoming phone number toll free action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_incoming_phone_number_toll_free",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/IncomingPhoneNumbers/TollFree.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/TollFree.json"
+        }
+      ],
+      "risk": "creates Twilio incoming phone number toll free resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous PhoneNumber: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create incoming phone number toll free apply --json"
+      ]
+    },
+    {
+      "path": "create key apply",
+      "summary": "Plan and execute the create key reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_key",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Keys.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Keys.json"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Twilio key resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio create key apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create message apply",
+      "summary": "Show the exact create message action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_message",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Messages.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Messages.json"
+        }
+      ],
+      "risk": "creates Twilio message resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous To: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create message apply --json"
+      ]
+    },
+    {
+      "path": "create message feedback apply",
+      "summary": "Plan and execute the create message feedback reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_message_feedback",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Messages/{MessageSid}/Feedback.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Messages/{MessageSid}/Feedback.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "message_sid",
+          "type": "string",
+          "summary": "Required message sid record field.",
+          "maps_to": "record.message_sid",
+          "required": true
+        }
+      ],
+      "risk": "creates Twilio message feedback resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio create message feedback apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create outgoing caller id validation request apply",
+      "summary": "Show the exact create outgoing caller id validation request action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_outgoing_caller_id_validation_request",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/OutgoingCallerIds.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/OutgoingCallerIds.json"
+        }
+      ],
+      "risk": "creates Twilio validation request resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous PhoneNumber: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create outgoing caller id validation request apply --json"
+      ]
+    },
+    {
+      "path": "create participant apply",
+      "summary": "Show the exact create participant action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_participant",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants.json"
+        }
+      ],
+      "risk": "creates Twilio participant resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous From: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create participant apply --json"
+      ]
+    },
+    {
+      "path": "create payments apply",
+      "summary": "Show the exact create payments action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_payments",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Calls/{CallSid}/Payments.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Payments.json"
+        }
+      ],
+      "risk": "creates Twilio payments resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous IdempotencyKey: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create payments apply --json"
+      ]
+    },
+    {
+      "path": "create queue apply",
+      "summary": "Show the exact create queue action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_queue",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Queues.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Queues.json"
+        }
+      ],
+      "risk": "creates Twilio queue resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous FriendlyName: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create queue apply --json"
+      ]
+    },
+    {
+      "path": "create realtime transcription apply",
+      "summary": "Plan and execute the create realtime transcription reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_realtime_transcription",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Calls/{CallSid}/Transcriptions.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Transcriptions.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "call_sid",
+          "type": "string",
+          "summary": "Required call sid record field.",
+          "maps_to": "record.call_sid",
+          "required": true
+        }
+      ],
+      "risk": "creates Twilio realtime transcription resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio create realtime transcription apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create signing key apply",
+      "summary": "Plan and execute the create signing key reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_signing_key",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/SigningKeys.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/SigningKeys.json"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Twilio signing key resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio create signing key apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create sip auth calls credential list mapping apply",
+      "summary": "Show the exact create sip auth calls credential list mapping action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_sip_auth_calls_credential_list_mapping",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings.json"
+        }
+      ],
+      "risk": "creates Twilio sip auth calls credential list mapping resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous CredentialListSid: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create sip auth calls credential list mapping apply --json"
+      ]
+    },
+    {
+      "path": "create sip auth calls ip access control list mapping apply",
+      "summary": "Show the exact create sip auth calls ip access control list mapping action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_sip_auth_calls_ip_access_control_list_mapping",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings.json"
+        }
+      ],
+      "risk": "creates Twilio sip auth calls ip access control list mapping resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous IpAccessControlListSid: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create sip auth calls ip access control list mapping apply --json"
+      ]
+    },
+    {
+      "path": "create sip auth registrations credential list mapping apply",
+      "summary": "Show the exact create sip auth registrations credential list mapping action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_sip_auth_registrations_credential_list_mapping",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings.json"
+        }
+      ],
+      "risk": "creates Twilio sip auth registrations credential list mapping resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous CredentialListSid: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create sip auth registrations credential list mapping apply --json"
+      ]
+    },
+    {
+      "path": "create sip credential apply",
+      "summary": "Show the exact create sip credential action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_sip_credential",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials.json"
+        }
+      ],
+      "risk": "creates Twilio sip credential resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous Password: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create sip credential apply --json"
+      ]
+    },
+    {
+      "path": "create sip credential list apply",
+      "summary": "Show the exact create sip credential list action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_sip_credential_list",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/SIP/CredentialLists.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/SIP/CredentialLists.json"
+        }
+      ],
+      "risk": "creates Twilio sip credential list resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous FriendlyName: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create sip credential list apply --json"
+      ]
+    },
+    {
+      "path": "create sip credential list mapping apply",
+      "summary": "Show the exact create sip credential list mapping action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_sip_credential_list_mapping",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings.json"
+        }
+      ],
+      "risk": "creates Twilio sip credential list mapping resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous CredentialListSid: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create sip credential list mapping apply --json"
+      ]
+    },
+    {
+      "path": "create sip domain apply",
+      "summary": "Show the exact create sip domain action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_sip_domain",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/SIP/Domains.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/SIP/Domains.json"
+        }
+      ],
+      "risk": "creates Twilio sip domain resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous DomainName: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create sip domain apply --json"
+      ]
+    },
+    {
+      "path": "create sip ip access control list apply",
+      "summary": "Show the exact create sip ip access control list action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_sip_ip_access_control_list",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/SIP/IpAccessControlLists.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists.json"
+        }
+      ],
+      "risk": "creates Twilio sip ip access control list resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous FriendlyName: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create sip ip access control list apply --json"
+      ]
+    },
+    {
+      "path": "create sip ip access control list mapping apply",
+      "summary": "Show the exact create sip ip access control list mapping action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_sip_ip_access_control_list_mapping",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings.json"
+        }
+      ],
+      "risk": "creates Twilio sip ip access control list mapping resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous IpAccessControlListSid: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create sip ip access control list mapping apply --json"
+      ]
+    },
+    {
+      "path": "create sip ip address apply",
+      "summary": "Show the exact create sip ip address action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_sip_ip_address",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses.json"
+        }
+      ],
+      "risk": "creates Twilio sip ip address resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous FriendlyName: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create sip ip address apply --json"
+      ]
+    },
+    {
+      "path": "create siprec apply",
+      "summary": "Plan and execute the create siprec reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_siprec",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Calls/{CallSid}/Siprec.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Siprec.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "call_sid",
+          "type": "string",
+          "summary": "Required call sid record field.",
+          "maps_to": "record.call_sid",
+          "required": true
+        }
+      ],
+      "risk": "creates Twilio siprec resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio create siprec apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create stream apply",
+      "summary": "Show the exact create stream action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_stream",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Calls/{CallSid}/Streams.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Streams.json"
+        }
+      ],
+      "risk": "creates Twilio stream resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous Url: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create stream apply --json"
+      ]
+    },
+    {
+      "path": "create token apply",
+      "summary": "Plan and execute the create token reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_token",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Tokens.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Tokens.json"
+        }
+      ],
+      "flags": [],
+      "risk": "creates Twilio token resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio create token apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create usage trigger apply",
+      "summary": "Show the exact create usage trigger action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_usage_trigger",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Usage/Triggers.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Usage/Triggers.json"
+        }
+      ],
+      "risk": "creates Twilio usage trigger resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous CallbackUrl: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create usage trigger apply --json"
+      ]
+    },
+    {
+      "path": "create user defined message apply",
+      "summary": "Show the exact create user defined message action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_user_defined_message",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessages.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessages.json"
+        }
+      ],
+      "risk": "creates Twilio user defined message resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous Content: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create user defined message apply --json"
+      ]
+    },
+    {
+      "path": "create user defined message subscription apply",
+      "summary": "Show the exact create user defined message subscription action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_user_defined_message_subscription",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessageSubscriptions.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessageSubscriptions.json"
+        }
+      ],
+      "risk": "creates Twilio user defined message subscription resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous Callback: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio create user defined message subscription apply --json"
+      ]
+    },
+    {
+      "path": "delete address apply",
+      "summary": "Plan and execute the delete address reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_address",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/Addresses/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/Addresses/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio address resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete address apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete application apply",
+      "summary": "Plan and execute the delete application reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_application",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/Applications/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/Applications/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio application resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete application apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete call apply",
+      "summary": "Plan and execute the delete call reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_call",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/Calls/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/Calls/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio call resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete call apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete call recording apply",
+      "summary": "Plan and execute the delete call recording reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_call_recording",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "call_sid",
+          "type": "string",
+          "summary": "Required call sid record field.",
+          "maps_to": "record.call_sid",
+          "required": true
+        },
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio call recording resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete call recording apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete conference recording apply",
+      "summary": "Plan and execute the delete conference recording reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_conference_recording",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "conference_sid",
+          "type": "string",
+          "summary": "Required conference sid record field.",
+          "maps_to": "record.conference_sid",
+          "required": true
+        },
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio conference recording resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete conference recording apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete connect app apply",
+      "summary": "Plan and execute the delete connect app reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_connect_app",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/ConnectApps/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/ConnectApps/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio connect app resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete connect app apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete incoming phone number apply",
+      "summary": "Plan and execute the delete incoming phone number reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_incoming_phone_number",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio incoming phone number resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete incoming phone number apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete incoming phone number assigned add on apply",
+      "summary": "Plan and execute the delete incoming phone number assigned add on reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_incoming_phone_number_assigned_add_on",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{ResourceSid}/AssignedAddOns/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "resource_sid",
+          "type": "string",
+          "summary": "Required resource sid record field.",
+          "maps_to": "record.resource_sid",
+          "required": true
+        },
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio incoming phone number assigned add on resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete incoming phone number assigned add on apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete key apply",
+      "summary": "Plan and execute the delete key reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_key",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/Keys/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/Keys/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio key resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete key apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete media apply",
+      "summary": "Plan and execute the delete media reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_media",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/Messages/{MessageSid}/Media/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/Messages/{MessageSid}/Media/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "message_sid",
+          "type": "string",
+          "summary": "Required message sid record field.",
+          "maps_to": "record.message_sid",
+          "required": true
+        },
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio media resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete media apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete message apply",
+      "summary": "Plan and execute the delete message reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_message",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/Messages/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/Messages/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio message resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete message apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete outgoing caller id apply",
+      "summary": "Plan and execute the delete outgoing caller id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_outgoing_caller_id",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio outgoing caller id resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete outgoing caller id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete participant apply",
+      "summary": "Plan and execute the delete participant reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_participant",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "call_sid",
+          "type": "string",
+          "summary": "Required call sid record field.",
+          "maps_to": "record.call_sid",
+          "required": true
+        },
+        {
+          "name": "conference_sid",
+          "type": "string",
+          "summary": "Required conference sid record field.",
+          "maps_to": "record.conference_sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio participant resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete participant apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete queue apply",
+      "summary": "Plan and execute the delete queue reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_queue",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/Queues/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/Queues/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio queue resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete queue apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete recording add on result apply",
+      "summary": "Plan and execute the delete recording add on result reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_recording_add_on_result",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "reference_sid",
+          "type": "string",
+          "summary": "Required reference sid record field.",
+          "maps_to": "record.reference_sid",
+          "required": true
+        },
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio recording add on result resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete recording add on result apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete recording add on result payload apply",
+      "summary": "Plan and execute the delete recording add on result payload reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_recording_add_on_result_payload",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/Recordings/{ReferenceSid}/AddOnResults/{AddOnResultSid}/Payloads/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "add_on_result_sid",
+          "type": "string",
+          "summary": "Required add on result sid record field.",
+          "maps_to": "record.add_on_result_sid",
+          "required": true
+        },
+        {
+          "name": "reference_sid",
+          "type": "string",
+          "summary": "Required reference sid record field.",
+          "maps_to": "record.reference_sid",
+          "required": true
+        },
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio recording add on result payload resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete recording add on result payload apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete recording apply",
+      "summary": "Plan and execute the delete recording reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_recording",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/Recordings/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/Recordings/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio recording resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete recording apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete recording transcription apply",
+      "summary": "Plan and execute the delete recording transcription reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_recording_transcription",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/Recordings/{RecordingSid}/Transcriptions/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "recording_sid",
+          "type": "string",
+          "summary": "Required recording sid record field.",
+          "maps_to": "record.recording_sid",
+          "required": true
+        },
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio recording transcription resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete recording transcription apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete signing key apply",
+      "summary": "Plan and execute the delete signing key reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_signing_key",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/SigningKeys/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/SigningKeys/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio signing key resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete signing key apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete sip auth calls credential list mapping apply",
+      "summary": "Plan and execute the delete sip auth calls credential list mapping reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_sip_auth_calls_credential_list_mapping",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/CredentialListMappings/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "domain_sid",
+          "type": "string",
+          "summary": "Required domain sid record field.",
+          "maps_to": "record.domain_sid",
+          "required": true
+        },
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio sip auth calls credential list mapping resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete sip auth calls credential list mapping apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete sip auth calls ip access control list mapping apply",
+      "summary": "Plan and execute the delete sip auth calls ip access control list mapping reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_sip_auth_calls_ip_access_control_list_mapping",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Calls/IpAccessControlListMappings/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "domain_sid",
+          "type": "string",
+          "summary": "Required domain sid record field.",
+          "maps_to": "record.domain_sid",
+          "required": true
+        },
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio sip auth calls ip access control list mapping resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete sip auth calls ip access control list mapping apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete sip auth registrations credential list mapping apply",
+      "summary": "Plan and execute the delete sip auth registrations credential list mapping reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_sip_auth_registrations_credential_list_mapping",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/Auth/Registrations/CredentialListMappings/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "domain_sid",
+          "type": "string",
+          "summary": "Required domain sid record field.",
+          "maps_to": "record.domain_sid",
+          "required": true
+        },
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio sip auth registrations credential list mapping resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete sip auth registrations credential list mapping apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete sip credential apply",
+      "summary": "Plan and execute the delete sip credential reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_sip_credential",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "credential_list_sid",
+          "type": "string",
+          "summary": "Required credential list sid record field.",
+          "maps_to": "record.credential_list_sid",
+          "required": true
+        },
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio sip credential resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete sip credential apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete sip credential list apply",
+      "summary": "Plan and execute the delete sip credential list reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_sip_credential_list",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio sip credential list resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete sip credential list apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete sip credential list mapping apply",
+      "summary": "Plan and execute the delete sip credential list mapping reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_sip_credential_list_mapping",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/CredentialListMappings/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "domain_sid",
+          "type": "string",
+          "summary": "Required domain sid record field.",
+          "maps_to": "record.domain_sid",
+          "required": true
+        },
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio sip credential list mapping resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete sip credential list mapping apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete sip domain apply",
+      "summary": "Plan and execute the delete sip domain reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_sip_domain",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/SIP/Domains/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/SIP/Domains/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio sip domain resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete sip domain apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete sip ip access control list apply",
+      "summary": "Plan and execute the delete sip ip access control list reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_sip_ip_access_control_list",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio sip ip access control list resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete sip ip access control list apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete sip ip access control list mapping apply",
+      "summary": "Plan and execute the delete sip ip access control list mapping reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_sip_ip_access_control_list_mapping",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/SIP/Domains/{DomainSid}/IpAccessControlListMappings/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "domain_sid",
+          "type": "string",
+          "summary": "Required domain sid record field.",
+          "maps_to": "record.domain_sid",
+          "required": true
+        },
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio sip ip access control list mapping resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete sip ip access control list mapping apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete sip ip address apply",
+      "summary": "Plan and execute the delete sip ip address reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_sip_ip_address",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "ip_access_control_list_sid",
+          "type": "string",
+          "summary": "Required ip access control list sid record field.",
+          "maps_to": "record.ip_access_control_list_sid",
+          "required": true
+        },
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio sip ip address resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete sip ip address apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete transcription apply",
+      "summary": "Plan and execute the delete transcription reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_transcription",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/Transcriptions/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/Transcriptions/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio transcription resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete transcription apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete usage trigger apply",
+      "summary": "Plan and execute the delete usage trigger reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_usage_trigger",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/Usage/Triggers/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio usage trigger resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete usage trigger apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete user defined message subscription apply",
+      "summary": "Plan and execute the delete user defined message subscription reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user_defined_message_subscription",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "DELETE /Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessageSubscriptions/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Accounts/{AccountSid}/Calls/{CallSid}/UserDefinedMessageSubscriptions/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "call_sid",
+          "type": "string",
+          "summary": "Required call sid record field.",
+          "maps_to": "record.call_sid",
+          "required": true
+        },
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "deletes Twilio user defined message subscription resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio delete user defined message subscription apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update account apply",
+      "summary": "Plan and execute the update account reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_account",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "mutates Twilio account resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio update account apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update address apply",
+      "summary": "Plan and execute the update address reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_address",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Addresses/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Addresses/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "mutates Twilio address resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio update address apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update application apply",
+      "summary": "Plan and execute the update application reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_application",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Applications/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Applications/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "mutates Twilio application resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio update application apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update call apply",
+      "summary": "Plan and execute the update call reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_call",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Calls/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Calls/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "mutates Twilio call resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio update call apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update call recording apply",
+      "summary": "Show the exact update call recording action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_call_recording",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Recordings/{Sid}.json"
+        }
+      ],
+      "risk": "mutates Twilio call recording resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous Status: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio update call recording apply --json"
+      ]
+    },
+    {
+      "path": "update conference apply",
+      "summary": "Plan and execute the update conference reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_conference",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Conferences/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Conferences/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "mutates Twilio conference resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio update conference apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update conference recording apply",
+      "summary": "Show the exact update conference recording action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_conference_recording",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Recordings/{Sid}.json"
+        }
+      ],
+      "risk": "mutates Twilio conference recording resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous Status: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio update conference recording apply --json"
+      ]
+    },
+    {
+      "path": "update connect app apply",
+      "summary": "Plan and execute the update connect app reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_connect_app",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/ConnectApps/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/ConnectApps/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "mutates Twilio connect app resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio update connect app apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update incoming phone number apply",
+      "summary": "Plan and execute the update incoming phone number reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_incoming_phone_number",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/IncomingPhoneNumbers/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "mutates Twilio incoming phone number resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio update incoming phone number apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update key apply",
+      "summary": "Plan and execute the update key reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_key",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Keys/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Keys/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "mutates Twilio key resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio update key apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update member apply",
+      "summary": "Show the exact update member action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_member",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Queues/{QueueSid}/Members/{CallSid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Queues/{QueueSid}/Members/{CallSid}.json"
+        }
+      ],
+      "risk": "mutates Twilio member resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous Url: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio update member apply --json"
+      ]
+    },
+    {
+      "path": "update message apply",
+      "summary": "Plan and execute the update message reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_message",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Messages/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Messages/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "mutates Twilio message resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio update message apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update outgoing caller id apply",
+      "summary": "Plan and execute the update outgoing caller id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_outgoing_caller_id",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/OutgoingCallerIds/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "mutates Twilio outgoing caller id resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio update outgoing caller id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update participant apply",
+      "summary": "Plan and execute the update participant reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_participant",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "call_sid",
+          "type": "string",
+          "summary": "Required call sid record field.",
+          "maps_to": "record.call_sid",
+          "required": true
+        },
+        {
+          "name": "conference_sid",
+          "type": "string",
+          "summary": "Required conference sid record field.",
+          "maps_to": "record.conference_sid",
+          "required": true
+        }
+      ],
+      "risk": "mutates Twilio participant resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio update participant apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update payments apply",
+      "summary": "Show the exact update payments action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_payments",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Calls/{CallSid}/Payments/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Payments/{Sid}.json"
+        }
+      ],
+      "risk": "mutates Twilio payments resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous IdempotencyKey: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio update payments apply --json"
+      ]
+    },
+    {
+      "path": "update queue apply",
+      "summary": "Plan and execute the update queue reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_queue",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Queues/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Queues/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "mutates Twilio queue resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio update queue apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update realtime transcription apply",
+      "summary": "Show the exact update realtime transcription action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_realtime_transcription",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Calls/{CallSid}/Transcriptions/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Transcriptions/{Sid}.json"
+        }
+      ],
+      "risk": "mutates Twilio realtime transcription resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous Status: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio update realtime transcription apply --json"
+      ]
+    },
+    {
+      "path": "update short code apply",
+      "summary": "Plan and execute the update short code reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_short_code",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/SMS/ShortCodes/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/SMS/ShortCodes/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "mutates Twilio short code resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio update short code apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update signing key apply",
+      "summary": "Plan and execute the update signing key reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_signing_key",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/SigningKeys/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/SigningKeys/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "mutates Twilio signing key resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio update signing key apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update sip credential apply",
+      "summary": "Plan and execute the update sip credential reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_sip_credential",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{CredentialListSid}/Credentials/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "credential_list_sid",
+          "type": "string",
+          "summary": "Required credential list sid record field.",
+          "maps_to": "record.credential_list_sid",
+          "required": true
+        },
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "mutates Twilio sip credential resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio update sip credential apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update sip credential list apply",
+      "summary": "Show the exact update sip credential list action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_sip_credential_list",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/SIP/CredentialLists/{Sid}.json"
+        }
+      ],
+      "risk": "mutates Twilio sip credential list resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous FriendlyName: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio update sip credential list apply --json"
+      ]
+    },
+    {
+      "path": "update sip domain apply",
+      "summary": "Plan and execute the update sip domain reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_sip_domain",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/SIP/Domains/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/SIP/Domains/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "mutates Twilio sip domain resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio update sip domain apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update sip ip access control list apply",
+      "summary": "Show the exact update sip ip access control list action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_sip_ip_access_control_list",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{Sid}.json"
+        }
+      ],
+      "risk": "mutates Twilio sip ip access control list resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous FriendlyName: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio update sip ip access control list apply --json"
+      ]
+    },
+    {
+      "path": "update sip ip address apply",
+      "summary": "Plan and execute the update sip ip address reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_sip_ip_address",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/SIP/IpAccessControlLists/{IpAccessControlListSid}/IpAddresses/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "ip_access_control_list_sid",
+          "type": "string",
+          "summary": "Required ip access control list sid record field.",
+          "maps_to": "record.ip_access_control_list_sid",
+          "required": true
+        },
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "mutates Twilio sip ip address resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio update sip ip address apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update siprec apply",
+      "summary": "Show the exact update siprec action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_siprec",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Calls/{CallSid}/Siprec/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Siprec/{Sid}.json"
+        }
+      ],
+      "risk": "mutates Twilio siprec resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous Status: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio update siprec apply --json"
+      ]
+    },
+    {
+      "path": "update stream apply",
+      "summary": "Show the exact update stream action and its declaration-bound typed-input hold.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_stream",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Calls/{CallSid}/Streams/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Calls/{CallSid}/Streams/{Sid}.json"
+        }
+      ],
+      "risk": "mutates Twilio stream resources in the connected account; approval required",
+      "approval": "Partial command: ambiguous Status: string,null. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
+      "examples": [
+        "pm twilio update stream apply --json"
+      ]
+    },
+    {
+      "path": "update usage trigger apply",
+      "summary": "Plan and execute the update usage trigger reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_usage_trigger",
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "source_cli_path": "POST /Accounts/{AccountSid}/Usage/Triggers/{Sid}.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountSid}/Usage/Triggers/{Sid}.json"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sid",
+          "type": "string",
+          "summary": "Required sid record field.",
+          "maps_to": "record.sid",
+          "required": true
+        }
+      ],
+      "risk": "mutates Twilio usage trigger resources in the connected account; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm twilio update usage trigger apply --plan <plan-name>"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "create account apply",
+        "create address apply",
+        "create application apply",
+        "create call apply",
+        "create call recording apply",
+        "create incoming phone number apply",
+        "create incoming phone number assigned add on apply",
+        "create incoming phone number local apply",
+        "create incoming phone number mobile apply",
+        "create incoming phone number toll free apply",
+        "create key apply",
+        "create message apply",
+        "create message feedback apply",
+        "create outgoing caller id validation request apply",
+        "create participant apply",
+        "create payments apply",
+        "create queue apply",
+        "create realtime transcription apply",
+        "create signing key apply",
+        "create sip auth calls credential list mapping apply",
+        "create sip auth calls ip access control list mapping apply",
+        "create sip auth registrations credential list mapping apply",
+        "create sip credential apply",
+        "create sip credential list apply",
+        "create sip credential list mapping apply",
+        "create sip domain apply",
+        "create sip ip access control list apply",
+        "create sip ip access control list mapping apply",
+        "create sip ip address apply",
+        "create siprec apply",
+        "create stream apply",
+        "create token apply",
+        "create usage trigger apply",
+        "create user defined message apply",
+        "create user defined message subscription apply",
+        "delete address apply",
+        "delete application apply",
+        "delete call apply",
+        "delete call recording apply",
+        "delete conference recording apply",
+        "delete connect app apply",
+        "delete incoming phone number apply",
+        "delete incoming phone number assigned add on apply",
+        "delete key apply",
+        "delete media apply",
+        "delete message apply",
+        "delete outgoing caller id apply",
+        "delete participant apply",
+        "delete queue apply",
+        "delete recording add on result apply",
+        "delete recording add on result payload apply",
+        "delete recording apply",
+        "delete recording transcription apply",
+        "delete signing key apply",
+        "delete sip auth calls credential list mapping apply",
+        "delete sip auth calls ip access control list mapping apply",
+        "delete sip auth registrations credential list mapping apply",
+        "delete sip credential apply",
+        "delete sip credential list apply",
+        "delete sip credential list mapping apply",
+        "delete sip domain apply",
+        "delete sip ip access control list apply",
+        "delete sip ip access control list mapping apply",
+        "delete sip ip address apply",
+        "delete transcription apply",
+        "delete usage trigger apply",
+        "delete user defined message subscription apply",
+        "update account apply",
+        "update address apply",
+        "update application apply",
+        "update call apply",
+        "update call recording apply",
+        "update conference apply",
+        "update conference recording apply",
+        "update connect app apply",
+        "update incoming phone number apply",
+        "update key apply",
+        "update member apply",
+        "update message apply",
+        "update outgoing caller id apply",
+        "update participant apply",
+        "update payments apply",
+        "update queue apply",
+        "update realtime transcription apply",
+        "update short code apply",
+        "update signing key apply",
+        "update sip credential apply",
+        "update sip credential list apply",
+        "update sip domain apply",
+        "update sip ip access control list apply",
+        "update sip ip address apply",
+        "update siprec apply",
+        "update stream apply",
+        "update usage trigger apply"
+      ]
+    }
+  ],
+  "tagline": "Run Twilio's declared streams and reverse-ETL actions.",
+  "usage": "pm twilio <command> [flags]"
+}

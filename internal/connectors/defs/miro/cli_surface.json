@@ -1,0 +1,3874 @@
+{
+  "commands": [
+    {
+      "path": "create boards apply",
+      "summary": "Plan and execute the create boards reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_boards",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/boards",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/boards"
+        }
+      ],
+      "flags": [],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create boards apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create boards board id app cards apply",
+      "summary": "Plan and execute the create boards board id app cards reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_boards_board_id_app_cards",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/boards/{board_id}/app_cards",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/boards/{board_id}/app_cards"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create boards board id app cards apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create boards board id cards apply",
+      "summary": "Plan and execute the create boards board id cards reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_boards_board_id_cards",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/boards/{board_id}/cards",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/boards/{board_id}/cards"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create boards board id cards apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create boards board id connectors apply",
+      "summary": "Plan and execute the create boards board id connectors reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_boards_board_id_connectors",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/boards/{board_id}/connectors",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/boards/{board_id}/connectors"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "endItem",
+          "type": "json",
+          "summary": "Required endItem record field.",
+          "maps_to": "record.endItem",
+          "required": true
+        },
+        {
+          "name": "startItem",
+          "type": "json",
+          "summary": "Required startItem record field.",
+          "maps_to": "record.startItem",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create boards board id connectors apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create boards board id docs apply",
+      "summary": "Plan and execute the create boards board id docs reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_boards_board_id_docs",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/boards/{board_id}/docs",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/boards/{board_id}/docs"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "data",
+          "type": "json",
+          "summary": "Required data record field.",
+          "maps_to": "record.data",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create boards board id docs apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create boards board id documents apply",
+      "summary": "Plan and execute the create boards board id documents reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_boards_board_id_documents",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/boards/{board_id}/documents"
+        },
+        {
+          "method": "POST",
+          "path": "/v2/boards/{board_id}/documents"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "data",
+          "type": "json",
+          "summary": "Required data record field.",
+          "maps_to": "record.data",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create boards board id documents apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create boards board id embeds apply",
+      "summary": "Plan and execute the create boards board id embeds reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_boards_board_id_embeds",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/boards/{board_id}/embeds",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/boards/{board_id}/embeds"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "data",
+          "type": "json",
+          "summary": "Required data record field.",
+          "maps_to": "record.data",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create boards board id embeds apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create boards board id frames apply",
+      "summary": "Plan and execute the create boards board id frames reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_boards_board_id_frames",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/boards/{board_id}/frames",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/boards/{board_id}/frames"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "data",
+          "type": "json",
+          "summary": "Required data record field.",
+          "maps_to": "record.data",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create boards board id frames apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create boards board id groups apply",
+      "summary": "Plan and execute the create boards board id groups reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_boards_board_id_groups",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/boards/{board_id}/groups",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/boards/{board_id}/groups"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create boards board id groups apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create boards board id images apply",
+      "summary": "Plan and execute the create boards board id images reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_boards_board_id_images",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/boards/{board_id}/images"
+        },
+        {
+          "method": "POST",
+          "path": "/v2/boards/{board_id}/images"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "data",
+          "type": "json",
+          "summary": "Required data record field.",
+          "maps_to": "record.data",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create boards board id images apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create boards board id members apply",
+      "summary": "Plan and execute the create boards board id members reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_boards_board_id_members",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/boards/{board_id}/members",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/boards/{board_id}/members"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "emails",
+          "type": "string_array",
+          "summary": "Required emails record field.",
+          "maps_to": "record.emails",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create boards board id members apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create boards board id shapes apply",
+      "summary": "Plan and execute the create boards board id shapes reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_boards_board_id_shapes",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/boards/{board_id}/shapes",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/boards/{board_id}/shapes"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create boards board id shapes apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create boards board id sticky notes apply",
+      "summary": "Plan and execute the create boards board id sticky notes reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_boards_board_id_sticky_notes",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/boards/{board_id}/sticky_notes",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/boards/{board_id}/sticky_notes"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create boards board id sticky notes apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create boards board id tags apply",
+      "summary": "Plan and execute the create boards board id tags reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_boards_board_id_tags",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/boards/{board_id}/tags",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/boards/{board_id}/tags"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create boards board id tags apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create boards board id texts apply",
+      "summary": "Plan and execute the create boards board id texts reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_boards_board_id_texts",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/boards/{board_id}/texts",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/boards/{board_id}/texts"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "data",
+          "type": "json",
+          "summary": "Required data record field.",
+          "maps_to": "record.data",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create boards board id texts apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create experimental boards board id code widgets apply",
+      "summary": "Plan and execute the create experimental boards board id code widgets reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_experimental_boards_board_id_code_widgets",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2-experimental/boards/{board_id}/code_widgets",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2-experimental/boards/{board_id}/code_widgets"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create experimental boards board id code widgets apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create experimental boards board id mindmap nodes apply",
+      "summary": "Plan and execute the create experimental boards board id mindmap nodes reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_experimental_boards_board_id_mindmap_nodes",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2-experimental/boards/{board_id}/mindmap_nodes",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2-experimental/boards/{board_id}/mindmap_nodes"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "data",
+          "type": "json",
+          "summary": "Required data record field.",
+          "maps_to": "record.data",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create experimental boards board id mindmap nodes apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create experimental boards board id shapes apply",
+      "summary": "Plan and execute the create experimental boards board id shapes reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_experimental_boards_board_id_shapes",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2-experimental/boards/{board_id}/shapes",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2-experimental/boards/{board_id}/shapes"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create experimental boards board id shapes apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create orgs org id boards board id groups apply",
+      "summary": "Plan and execute the create orgs org id boards board id groups reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_orgs_org_id_boards_board_id_groups",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/orgs/{org_id}/boards/{board_id}/groups",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orgs/{org_id}/boards/{board_id}/groups"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "summary": "Required role record field.",
+          "maps_to": "record.role",
+          "required": true
+        },
+        {
+          "name": "userGroupIds",
+          "type": "string_array",
+          "summary": "Required userGroupIds record field.",
+          "maps_to": "record.userGroupIds",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create orgs org id boards board id groups apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create orgs org id boards export jobs job id tasks task id export link apply",
+      "summary": "Plan and execute the create orgs org id boards export jobs job id tasks task id export link reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_orgs_org_id_boards_export_jobs_job_id_tasks_task_id_export_link",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/orgs/{org_id}/boards/export/jobs/{job_id}/tasks/{task_id}/export-link",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orgs/{org_id}/boards/export/jobs/{job_id}/tasks/{task_id}/export-link"
+        }
+      ],
+      "flags": [
+        {
+          "name": "job_id",
+          "type": "string",
+          "summary": "Required job id record field.",
+          "maps_to": "record.job_id",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "task_id",
+          "type": "string",
+          "summary": "Required task id record field.",
+          "maps_to": "record.task_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create orgs org id boards export jobs job id tasks task id export link apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create orgs org id cases apply",
+      "summary": "Plan and execute the create orgs org id cases reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_orgs_org_id_cases",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/orgs/{org_id}/cases",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orgs/{org_id}/cases"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create orgs org id cases apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create orgs org id cases case id legal holds apply",
+      "summary": "Plan and execute the create orgs org id cases case id legal holds reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_orgs_org_id_cases_case_id_legal_holds",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/orgs/{org_id}/cases/{case_id}/legal-holds",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orgs/{org_id}/cases/{case_id}/legal-holds"
+        }
+      ],
+      "flags": [
+        {
+          "name": "case_id",
+          "type": "string",
+          "summary": "Required case id record field.",
+          "maps_to": "record.case_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "scope",
+          "type": "json",
+          "summary": "Required scope record field.",
+          "maps_to": "record.scope",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create orgs org id cases case id legal holds apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create orgs org id groups apply",
+      "summary": "Plan and execute the create orgs org id groups reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_orgs_org_id_groups",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/orgs/{org_id}/groups",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orgs/{org_id}/groups"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create orgs org id groups apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create orgs org id groups group id members apply",
+      "summary": "Plan and execute the create orgs org id groups group id members reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_orgs_org_id_groups_group_id_members",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/orgs/{org_id}/groups/{group_id}/members",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orgs/{org_id}/groups/{group_id}/members"
+        }
+      ],
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "group_id",
+          "type": "string",
+          "summary": "Required group id record field.",
+          "maps_to": "record.group_id",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create orgs org id groups group id members apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create orgs org id projects project id groups apply",
+      "summary": "Plan and execute the create orgs org id projects project id groups reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_orgs_org_id_projects_project_id_groups",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/orgs/{org_id}/projects/{project_id}/groups",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orgs/{org_id}/projects/{project_id}/groups"
+        }
+      ],
+      "flags": [
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "project_id",
+          "type": "string",
+          "summary": "Required project id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "summary": "Required role record field.",
+          "maps_to": "record.role",
+          "required": true
+        },
+        {
+          "name": "userGroupIds",
+          "type": "string_array",
+          "summary": "Required userGroupIds record field.",
+          "maps_to": "record.userGroupIds",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create orgs org id projects project id groups apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create orgs org id teams apply",
+      "summary": "Plan and execute the create orgs org id teams reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_orgs_org_id_teams",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/orgs/{org_id}/teams",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orgs/{org_id}/teams"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create orgs org id teams apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create orgs org id teams team id boards board id data classification apply",
+      "summary": "Plan and execute the create orgs org id teams team id boards board id data classification reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_orgs_org_id_teams_team_id_boards_board_id_data_classification",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/orgs/{org_id}/teams/{team_id}/boards/{board_id}/data-classification",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orgs/{org_id}/teams/{team_id}/boards/{board_id}/data-classification"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "team_id",
+          "type": "string",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create orgs org id teams team id boards board id data classification apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create orgs org id teams team id groups apply",
+      "summary": "Plan and execute the create orgs org id teams team id groups reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_orgs_org_id_teams_team_id_groups",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/orgs/{org_id}/teams/{team_id}/groups",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orgs/{org_id}/teams/{team_id}/groups"
+        }
+      ],
+      "flags": [
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "summary": "Required role record field.",
+          "maps_to": "record.role",
+          "required": true
+        },
+        {
+          "name": "team_id",
+          "type": "string",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        },
+        {
+          "name": "userGroupId",
+          "type": "string",
+          "summary": "Required userGroupId record field.",
+          "maps_to": "record.userGroupId",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create orgs org id teams team id groups apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create orgs org id teams team id members apply",
+      "summary": "Plan and execute the create orgs org id teams team id members reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_orgs_org_id_teams_team_id_members",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/orgs/{org_id}/teams/{team_id}/members",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orgs/{org_id}/teams/{team_id}/members"
+        }
+      ],
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "team_id",
+          "type": "string",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create orgs org id teams team id members apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create orgs org id teams team id projects apply",
+      "summary": "Plan and execute the create orgs org id teams team id projects reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_orgs_org_id_teams_team_id_projects",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/orgs/{org_id}/teams/{team_id}/projects",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orgs/{org_id}/teams/{team_id}/projects"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "team_id",
+          "type": "string",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create orgs org id teams team id projects apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create orgs org id teams team id projects project id members apply",
+      "summary": "Plan and execute the create orgs org id teams team id projects project id members reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_orgs_org_id_teams_team_id_projects_project_id_members",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/members",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/members"
+        }
+      ],
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "project_id",
+          "type": "string",
+          "summary": "Required project id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "summary": "Required role record field.",
+          "maps_to": "record.role",
+          "required": true
+        },
+        {
+          "name": "team_id",
+          "type": "string",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create orgs org id teams team id projects project id members apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "create users apply",
+      "summary": "Plan and execute the create users reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_users",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "POST /Users",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Users"
+        }
+      ],
+      "flags": [
+        {
+          "name": "userName",
+          "type": "string",
+          "summary": "Required userName record field.",
+          "maps_to": "record.userName",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro create users apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete boards board id app cards item id apply",
+      "summary": "Plan and execute the delete boards board id app cards item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_boards_board_id_app_cards_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/boards/{board_id}/app_cards/{item_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/boards/{board_id}/app_cards/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete boards board id app cards item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete boards board id apply",
+      "summary": "Plan and execute the delete boards board id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_boards_board_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/boards/{board_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/boards/{board_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete boards board id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete boards board id cards item id apply",
+      "summary": "Plan and execute the delete boards board id cards item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_boards_board_id_cards_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/boards/{board_id}/cards/{item_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/boards/{board_id}/cards/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete boards board id cards item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete boards board id connectors connector id apply",
+      "summary": "Plan and execute the delete boards board id connectors connector id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_boards_board_id_connectors_connector_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/boards/{board_id}/connectors/{connector_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/boards/{board_id}/connectors/{connector_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "connector_id",
+          "type": "string",
+          "summary": "Required connector id record field.",
+          "maps_to": "record.connector_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete boards board id connectors connector id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete boards board id docs item id apply",
+      "summary": "Plan and execute the delete boards board id docs item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_boards_board_id_docs_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/boards/{board_id}/docs/{item_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/boards/{board_id}/docs/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete boards board id docs item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete boards board id documents item id apply",
+      "summary": "Plan and execute the delete boards board id documents item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_boards_board_id_documents_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/boards/{board_id}/documents/{item_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/boards/{board_id}/documents/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete boards board id documents item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete boards board id embeds item id apply",
+      "summary": "Plan and execute the delete boards board id embeds item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_boards_board_id_embeds_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/boards/{board_id}/embeds/{item_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/boards/{board_id}/embeds/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete boards board id embeds item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete boards board id frames item id apply",
+      "summary": "Plan and execute the delete boards board id frames item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_boards_board_id_frames_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/boards/{board_id}/frames/{item_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/boards/{board_id}/frames/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete boards board id frames item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete boards board id groups group id apply",
+      "summary": "Plan and execute the delete boards board id groups group id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_boards_board_id_groups_group_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/boards/{board_id}/groups/{group_id}"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v2/boards/{board_id}/groups/{group_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "group_id",
+          "type": "string",
+          "summary": "Required group id record field.",
+          "maps_to": "record.group_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete boards board id groups group id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete boards board id images item id apply",
+      "summary": "Plan and execute the delete boards board id images item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_boards_board_id_images_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/boards/{board_id}/images/{item_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/boards/{board_id}/images/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete boards board id images item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete boards board id items item id apply",
+      "summary": "Plan and execute the delete boards board id items item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_boards_board_id_items_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/boards/{board_id}/items/{item_id}"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v2/boards/{board_id}/items/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete boards board id items item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete boards board id members board member id apply",
+      "summary": "Plan and execute the delete boards board id members board member id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_boards_board_id_members_board_member_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/boards/{board_id}/members/{board_member_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/boards/{board_id}/members/{board_member_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "board_member_id",
+          "type": "string",
+          "summary": "Required board member id record field.",
+          "maps_to": "record.board_member_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete boards board id members board member id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete boards board id shapes item id apply",
+      "summary": "Plan and execute the delete boards board id shapes item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_boards_board_id_shapes_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/boards/{board_id}/shapes/{item_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/boards/{board_id}/shapes/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete boards board id shapes item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete boards board id sticky notes item id apply",
+      "summary": "Plan and execute the delete boards board id sticky notes item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_boards_board_id_sticky_notes_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/boards/{board_id}/sticky_notes/{item_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/boards/{board_id}/sticky_notes/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete boards board id sticky notes item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete boards board id tags tag id apply",
+      "summary": "Plan and execute the delete boards board id tags tag id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_boards_board_id_tags_tag_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/boards/{board_id}/tags/{tag_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/boards/{board_id}/tags/{tag_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "tag_id",
+          "type": "string",
+          "summary": "Required tag id record field.",
+          "maps_to": "record.tag_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete boards board id tags tag id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete boards board id texts item id apply",
+      "summary": "Plan and execute the delete boards board id texts item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_boards_board_id_texts_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/boards/{board_id}/texts/{item_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/boards/{board_id}/texts/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete boards board id texts item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete experimental boards board id code widgets item id apply",
+      "summary": "Plan and execute the delete experimental boards board id code widgets item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_experimental_boards_board_id_code_widgets_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2-experimental/boards/{board_id}/code_widgets/{item_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2-experimental/boards/{board_id}/code_widgets/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete experimental boards board id code widgets item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete experimental boards board id items item id apply",
+      "summary": "Plan and execute the delete experimental boards board id items item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_experimental_boards_board_id_items_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2-experimental/boards/{board_id}/items/{item_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2-experimental/boards/{board_id}/items/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete experimental boards board id items item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete experimental boards board id mindmap nodes item id apply",
+      "summary": "Plan and execute the delete experimental boards board id mindmap nodes item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_experimental_boards_board_id_mindmap_nodes_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2-experimental/boards/{board_id}/mindmap_nodes/{item_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2-experimental/boards/{board_id}/mindmap_nodes/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete experimental boards board id mindmap nodes item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete experimental boards board id shapes item id apply",
+      "summary": "Plan and execute the delete experimental boards board id shapes item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_experimental_boards_board_id_shapes_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2-experimental/boards/{board_id}/shapes/{item_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2-experimental/boards/{board_id}/shapes/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete experimental boards board id shapes item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete orgs org id boards board id groups group id apply",
+      "summary": "Plan and execute the delete orgs org id boards board id groups group id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_orgs_org_id_boards_board_id_groups_group_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/orgs/{org_id}/boards/{board_id}/groups/{group_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_id}/boards/{board_id}/groups/{group_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "group_id",
+          "type": "string",
+          "summary": "Required group id record field.",
+          "maps_to": "record.group_id",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete orgs org id boards board id groups group id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete orgs org id cases case id apply",
+      "summary": "Plan and execute the delete orgs org id cases case id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_orgs_org_id_cases_case_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/orgs/{org_id}/cases/{case_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_id}/cases/{case_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "case_id",
+          "type": "string",
+          "summary": "Required case id record field.",
+          "maps_to": "record.case_id",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete orgs org id cases case id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete orgs org id cases case id legal holds legal hold id apply",
+      "summary": "Plan and execute the delete orgs org id cases case id legal holds legal hold id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_orgs_org_id_cases_case_id_legal_holds_legal_hold_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/orgs/{org_id}/cases/{case_id}/legal-holds/{legal_hold_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_id}/cases/{case_id}/legal-holds/{legal_hold_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "case_id",
+          "type": "string",
+          "summary": "Required case id record field.",
+          "maps_to": "record.case_id",
+          "required": true
+        },
+        {
+          "name": "legal_hold_id",
+          "type": "string",
+          "summary": "Required legal hold id record field.",
+          "maps_to": "record.legal_hold_id",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete orgs org id cases case id legal holds legal hold id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete orgs org id groups group id apply",
+      "summary": "Plan and execute the delete orgs org id groups group id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_orgs_org_id_groups_group_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/orgs/{org_id}/groups/{group_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_id}/groups/{group_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "group_id",
+          "type": "string",
+          "summary": "Required group id record field.",
+          "maps_to": "record.group_id",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete orgs org id groups group id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete orgs org id groups group id members member id apply",
+      "summary": "Plan and execute the delete orgs org id groups group id members member id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_orgs_org_id_groups_group_id_members_member_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/orgs/{org_id}/groups/{group_id}/members/{member_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_id}/groups/{group_id}/members/{member_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "group_id",
+          "type": "string",
+          "summary": "Required group id record field.",
+          "maps_to": "record.group_id",
+          "required": true
+        },
+        {
+          "name": "member_id",
+          "type": "string",
+          "summary": "Required member id record field.",
+          "maps_to": "record.member_id",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete orgs org id groups group id members member id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete orgs org id projects project id groups group id apply",
+      "summary": "Plan and execute the delete orgs org id projects project id groups group id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_orgs_org_id_projects_project_id_groups_group_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/orgs/{org_id}/projects/{project_id}/groups/{group_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_id}/projects/{project_id}/groups/{group_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "group_id",
+          "type": "string",
+          "summary": "Required group id record field.",
+          "maps_to": "record.group_id",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "project_id",
+          "type": "string",
+          "summary": "Required project id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete orgs org id projects project id groups group id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete orgs org id teams team id apply",
+      "summary": "Plan and execute the delete orgs org id teams team id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_orgs_org_id_teams_team_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/orgs/{org_id}/teams/{team_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_id}/teams/{team_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "team_id",
+          "type": "string",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete orgs org id teams team id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete orgs org id teams team id groups group id apply",
+      "summary": "Plan and execute the delete orgs org id teams team id groups group id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_orgs_org_id_teams_team_id_groups_group_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/orgs/{org_id}/teams/{team_id}/groups/{group_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_id}/teams/{team_id}/groups/{group_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "group_id",
+          "type": "string",
+          "summary": "Required group id record field.",
+          "maps_to": "record.group_id",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "team_id",
+          "type": "string",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete orgs org id teams team id groups group id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete orgs org id teams team id members member id apply",
+      "summary": "Plan and execute the delete orgs org id teams team id members member id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_orgs_org_id_teams_team_id_members_member_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/orgs/{org_id}/teams/{team_id}/members/{member_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_id}/teams/{team_id}/members/{member_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "member_id",
+          "type": "string",
+          "summary": "Required member id record field.",
+          "maps_to": "record.member_id",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "team_id",
+          "type": "string",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete orgs org id teams team id members member id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete orgs org id teams team id projects project id apply",
+      "summary": "Plan and execute the delete orgs org id teams team id projects project id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_orgs_org_id_teams_team_id_projects_project_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "project_id",
+          "type": "string",
+          "summary": "Required project id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        },
+        {
+          "name": "team_id",
+          "type": "string",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete orgs org id teams team id projects project id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete orgs org id teams team id projects project id members member id apply",
+      "summary": "Plan and execute the delete orgs org id teams team id projects project id members member id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_orgs_org_id_teams_team_id_projects_project_id_members_member_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/members/{member_id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/members/{member_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "member_id",
+          "type": "string",
+          "summary": "Required member id record field.",
+          "maps_to": "record.member_id",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "project_id",
+          "type": "string",
+          "summary": "Required project id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        },
+        {
+          "name": "team_id",
+          "type": "string",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete orgs org id teams team id projects project id members member id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "delete users id apply",
+      "summary": "Plan and execute the delete users id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_users_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "DELETE /Users/{id}",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/Users/{id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "high: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro delete users id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update boards board id app cards item id apply",
+      "summary": "Plan and execute the update boards board id app cards item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_boards_board_id_app_cards_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/boards/{board_id}/app_cards/{item_id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/boards/{board_id}/app_cards/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update boards board id app cards item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update boards board id apply",
+      "summary": "Plan and execute the update boards board id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_boards_board_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/boards/{board_id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/boards/{board_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update boards board id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update boards board id cards item id apply",
+      "summary": "Plan and execute the update boards board id cards item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_boards_board_id_cards_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/boards/{board_id}/cards/{item_id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/boards/{board_id}/cards/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update boards board id cards item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update boards board id connectors connector id apply",
+      "summary": "Plan and execute the update boards board id connectors connector id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_boards_board_id_connectors_connector_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/boards/{board_id}/connectors/{connector_id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/boards/{board_id}/connectors/{connector_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "connector_id",
+          "type": "string",
+          "summary": "Required connector id record field.",
+          "maps_to": "record.connector_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update boards board id connectors connector id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update boards board id documents item id apply",
+      "summary": "Plan and execute the update boards board id documents item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_boards_board_id_documents_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/boards/{board_id}/documents/{item_id}"
+        },
+        {
+          "method": "PATCH",
+          "path": "/v2/boards/{board_id}/documents/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update boards board id documents item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update boards board id embeds item id apply",
+      "summary": "Plan and execute the update boards board id embeds item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_boards_board_id_embeds_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/boards/{board_id}/embeds/{item_id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/boards/{board_id}/embeds/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update boards board id embeds item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update boards board id frames item id apply",
+      "summary": "Plan and execute the update boards board id frames item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_boards_board_id_frames_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/boards/{board_id}/frames/{item_id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/boards/{board_id}/frames/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update boards board id frames item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update boards board id groups group id apply",
+      "summary": "Plan and execute the update boards board id groups group id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_boards_board_id_groups_group_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PUT /v2/boards/{board_id}/groups/{group_id}",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/boards/{board_id}/groups/{group_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "group_id",
+          "type": "string",
+          "summary": "Required group id record field.",
+          "maps_to": "record.group_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update boards board id groups group id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update boards board id images item id apply",
+      "summary": "Plan and execute the update boards board id images item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_boards_board_id_images_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/boards/{board_id}/images/{item_id}"
+        },
+        {
+          "method": "PATCH",
+          "path": "/v2/boards/{board_id}/images/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update boards board id images item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update boards board id items item id apply",
+      "summary": "Plan and execute the update boards board id items item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_boards_board_id_items_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/boards/{board_id}/items/{item_id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/boards/{board_id}/items/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update boards board id items item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update boards board id members board member id apply",
+      "summary": "Plan and execute the update boards board id members board member id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_boards_board_id_members_board_member_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/boards/{board_id}/members/{board_member_id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/boards/{board_id}/members/{board_member_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "board_member_id",
+          "type": "string",
+          "summary": "Required board member id record field.",
+          "maps_to": "record.board_member_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update boards board id members board member id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update boards board id shapes item id apply",
+      "summary": "Plan and execute the update boards board id shapes item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_boards_board_id_shapes_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/boards/{board_id}/shapes/{item_id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/boards/{board_id}/shapes/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update boards board id shapes item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update boards board id sticky notes item id apply",
+      "summary": "Plan and execute the update boards board id sticky notes item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_boards_board_id_sticky_notes_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/boards/{board_id}/sticky_notes/{item_id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/boards/{board_id}/sticky_notes/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update boards board id sticky notes item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update boards board id tags tag id apply",
+      "summary": "Plan and execute the update boards board id tags tag id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_boards_board_id_tags_tag_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/boards/{board_id}/tags/{tag_id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/boards/{board_id}/tags/{tag_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "tag_id",
+          "type": "string",
+          "summary": "Required tag id record field.",
+          "maps_to": "record.tag_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update boards board id tags tag id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update boards board id texts item id apply",
+      "summary": "Plan and execute the update boards board id texts item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_boards_board_id_texts_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/boards/{board_id}/texts/{item_id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/boards/{board_id}/texts/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update boards board id texts item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update experimental boards board id code widgets item id apply",
+      "summary": "Plan and execute the update experimental boards board id code widgets item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_experimental_boards_board_id_code_widgets_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2-experimental/boards/{board_id}/code_widgets/{item_id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2-experimental/boards/{board_id}/code_widgets/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update experimental boards board id code widgets item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update experimental boards board id code widgets item id position apply",
+      "summary": "Plan and execute the update experimental boards board id code widgets item id position reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_experimental_boards_board_id_code_widgets_item_id_position",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2-experimental/boards/{board_id}/code_widgets/{item_id}/position",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2-experimental/boards/{board_id}/code_widgets/{item_id}/position"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update experimental boards board id code widgets item id position apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update experimental boards board id shapes item id apply",
+      "summary": "Plan and execute the update experimental boards board id shapes item id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_experimental_boards_board_id_shapes_item_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2-experimental/boards/{board_id}/shapes/{item_id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2-experimental/boards/{board_id}/shapes/{item_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "board_id",
+          "type": "string",
+          "summary": "Required board id record field.",
+          "maps_to": "record.board_id",
+          "required": true
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update experimental boards board id shapes item id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update groups id apply",
+      "summary": "Plan and execute the update groups id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_groups_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /Groups/{id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/Groups/{id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "Operations",
+          "type": "json",
+          "summary": "Required Operations record field.",
+          "maps_to": "record.Operations",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "schemas",
+          "type": "string_array",
+          "summary": "Required schemas record field.",
+          "maps_to": "record.schemas",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update groups id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update orgs org id boards export jobs job id status apply",
+      "summary": "Plan and execute the update orgs org id boards export jobs job id status reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_orgs_org_id_boards_export_jobs_job_id_status",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PUT /v2/orgs/{org_id}/boards/export/jobs/{job_id}/status",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/orgs/{org_id}/boards/export/jobs/{job_id}/status"
+        }
+      ],
+      "flags": [
+        {
+          "name": "job_id",
+          "type": "string",
+          "summary": "Required job id record field.",
+          "maps_to": "record.job_id",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Required status record field.",
+          "maps_to": "record.status",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update orgs org id boards export jobs job id status apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update orgs org id cases case id apply",
+      "summary": "Plan and execute the update orgs org id cases case id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_orgs_org_id_cases_case_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PUT /v2/orgs/{org_id}/cases/{case_id}",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/orgs/{org_id}/cases/{case_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "case_id",
+          "type": "string",
+          "summary": "Required case id record field.",
+          "maps_to": "record.case_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update orgs org id cases case id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update orgs org id cases case id legal holds legal hold id apply",
+      "summary": "Plan and execute the update orgs org id cases case id legal holds legal hold id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_orgs_org_id_cases_case_id_legal_holds_legal_hold_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PUT /v2/orgs/{org_id}/cases/{case_id}/legal-holds/{legal_hold_id}",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/orgs/{org_id}/cases/{case_id}/legal-holds/{legal_hold_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "case_id",
+          "type": "string",
+          "summary": "Required case id record field.",
+          "maps_to": "record.case_id",
+          "required": true
+        },
+        {
+          "name": "legal_hold_id",
+          "type": "string",
+          "summary": "Required legal hold id record field.",
+          "maps_to": "record.legal_hold_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "scope",
+          "type": "json",
+          "summary": "Required scope record field.",
+          "maps_to": "record.scope",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update orgs org id cases case id legal holds legal hold id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update orgs org id groups group id apply",
+      "summary": "Plan and execute the update orgs org id groups group id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_orgs_org_id_groups_group_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/orgs/{org_id}/groups/{group_id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/orgs/{org_id}/groups/{group_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "group_id",
+          "type": "string",
+          "summary": "Required group id record field.",
+          "maps_to": "record.group_id",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update orgs org id groups group id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update orgs org id groups group id members apply",
+      "summary": "Plan and execute the update orgs org id groups group id members reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_orgs_org_id_groups_group_id_members",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/orgs/{org_id}/groups/{group_id}/members",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/orgs/{org_id}/groups/{group_id}/members"
+        }
+      ],
+      "flags": [
+        {
+          "name": "group_id",
+          "type": "string",
+          "summary": "Required group id record field.",
+          "maps_to": "record.group_id",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update orgs org id groups group id members apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update orgs org id teams team id apply",
+      "summary": "Plan and execute the update orgs org id teams team id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_orgs_org_id_teams_team_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/orgs/{org_id}/teams/{team_id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/orgs/{org_id}/teams/{team_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "team_id",
+          "type": "string",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update orgs org id teams team id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update orgs org id teams team id data classification apply",
+      "summary": "Plan and execute the update orgs org id teams team id data classification reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_orgs_org_id_teams_team_id_data_classification",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/orgs/{org_id}/teams/{team_id}/data-classification",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/orgs/{org_id}/teams/{team_id}/data-classification"
+        }
+      ],
+      "flags": [
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "team_id",
+          "type": "string",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update orgs org id teams team id data classification apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update orgs org id teams team id data classification settings apply",
+      "summary": "Plan and execute the update orgs org id teams team id data classification settings reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_orgs_org_id_teams_team_id_data_classification_settings",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/orgs/{org_id}/teams/{team_id}/data-classification-settings",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/orgs/{org_id}/teams/{team_id}/data-classification-settings"
+        }
+      ],
+      "flags": [
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "team_id",
+          "type": "string",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update orgs org id teams team id data classification settings apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update orgs org id teams team id members member id apply",
+      "summary": "Plan and execute the update orgs org id teams team id members member id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_orgs_org_id_teams_team_id_members_member_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/orgs/{org_id}/teams/{team_id}/members/{member_id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/orgs/{org_id}/teams/{team_id}/members/{member_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "member_id",
+          "type": "string",
+          "summary": "Required member id record field.",
+          "maps_to": "record.member_id",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "team_id",
+          "type": "string",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update orgs org id teams team id members member id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update orgs org id teams team id projects project id apply",
+      "summary": "Plan and execute the update orgs org id teams team id projects project id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_orgs_org_id_teams_team_id_projects_project_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "project_id",
+          "type": "string",
+          "summary": "Required project id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        },
+        {
+          "name": "team_id",
+          "type": "string",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update orgs org id teams team id projects project id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update orgs org id teams team id projects project id members member id apply",
+      "summary": "Plan and execute the update orgs org id teams team id projects project id members member id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_orgs_org_id_teams_team_id_projects_project_id_members_member_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/members/{member_id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/members/{member_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "member_id",
+          "type": "string",
+          "summary": "Required member id record field.",
+          "maps_to": "record.member_id",
+          "required": true
+        },
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "project_id",
+          "type": "string",
+          "summary": "Required project id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        },
+        {
+          "name": "team_id",
+          "type": "string",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update orgs org id teams team id projects project id members member id apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update orgs org id teams team id projects project id settings apply",
+      "summary": "Plan and execute the update orgs org id teams team id projects project id settings reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_orgs_org_id_teams_team_id_projects_project_id_settings",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/settings",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/orgs/{org_id}/teams/{team_id}/projects/{project_id}/settings"
+        }
+      ],
+      "flags": [
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "project_id",
+          "type": "string",
+          "summary": "Required project id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        },
+        {
+          "name": "team_id",
+          "type": "string",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update orgs org id teams team id projects project id settings apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update orgs org id teams team id settings apply",
+      "summary": "Plan and execute the update orgs org id teams team id settings reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_orgs_org_id_teams_team_id_settings",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /v2/orgs/{org_id}/teams/{team_id}/settings",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/orgs/{org_id}/teams/{team_id}/settings"
+        }
+      ],
+      "flags": [
+        {
+          "name": "org_id",
+          "type": "string",
+          "summary": "Required org id record field.",
+          "maps_to": "record.org_id",
+          "required": true
+        },
+        {
+          "name": "team_id",
+          "type": "string",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update orgs org id teams team id settings apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update users id 2 apply",
+      "summary": "Plan and execute the update users id 2 reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_users_id_2",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PATCH /Users/{id}",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/Users/{id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "Operations",
+          "type": "json",
+          "summary": "Required Operations record field.",
+          "maps_to": "record.Operations",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "schemas",
+          "type": "string_array",
+          "summary": "Required schemas record field.",
+          "maps_to": "record.schemas",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update users id 2 apply --plan <plan-name>"
+      ]
+    },
+    {
+      "path": "update users id apply",
+      "summary": "Plan and execute the update users id reverse-ETL action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_users_id",
+      "source_url": "https://raw.githubusercontent.com/miroapp/api-clients/main/packages/generator/spec.json",
+      "source_cli_path": "PUT /Users/{id}",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Users/{id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "medium: external Miro API mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "examples": [
+        "pm miro update users id apply --plan <plan-name>"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "create boards apply",
+        "create boards board id app cards apply",
+        "create boards board id cards apply",
+        "create boards board id connectors apply",
+        "create boards board id docs apply",
+        "create boards board id documents apply",
+        "create boards board id embeds apply",
+        "create boards board id frames apply",
+        "create boards board id groups apply",
+        "create boards board id images apply",
+        "create boards board id members apply",
+        "create boards board id shapes apply",
+        "create boards board id sticky notes apply",
+        "create boards board id tags apply",
+        "create boards board id texts apply",
+        "create experimental boards board id code widgets apply",
+        "create experimental boards board id mindmap nodes apply",
+        "create experimental boards board id shapes apply",
+        "create orgs org id boards board id groups apply",
+        "create orgs org id boards export jobs job id tasks task id export link apply",
+        "create orgs org id cases apply",
+        "create orgs org id cases case id legal holds apply",
+        "create orgs org id groups apply",
+        "create orgs org id groups group id members apply",
+        "create orgs org id projects project id groups apply",
+        "create orgs org id teams apply",
+        "create orgs org id teams team id boards board id data classification apply",
+        "create orgs org id teams team id groups apply",
+        "create orgs org id teams team id members apply",
+        "create orgs org id teams team id projects apply",
+        "create orgs org id teams team id projects project id members apply",
+        "create users apply",
+        "delete boards board id app cards item id apply",
+        "delete boards board id apply",
+        "delete boards board id cards item id apply",
+        "delete boards board id connectors connector id apply",
+        "delete boards board id docs item id apply",
+        "delete boards board id documents item id apply",
+        "delete boards board id embeds item id apply",
+        "delete boards board id frames item id apply",
+        "delete boards board id groups group id apply",
+        "delete boards board id images item id apply",
+        "delete boards board id items item id apply",
+        "delete boards board id members board member id apply",
+        "delete boards board id shapes item id apply",
+        "delete boards board id sticky notes item id apply",
+        "delete boards board id tags tag id apply",
+        "delete boards board id texts item id apply",
+        "delete experimental boards board id code widgets item id apply",
+        "delete experimental boards board id items item id apply",
+        "delete experimental boards board id mindmap nodes item id apply",
+        "delete experimental boards board id shapes item id apply",
+        "delete orgs org id boards board id groups group id apply",
+        "delete orgs org id cases case id apply",
+        "delete orgs org id cases case id legal holds legal hold id apply",
+        "delete orgs org id groups group id apply",
+        "delete orgs org id groups group id members member id apply",
+        "delete orgs org id projects project id groups group id apply",
+        "delete orgs org id teams team id apply",
+        "delete orgs org id teams team id groups group id apply",
+        "delete orgs org id teams team id members member id apply",
+        "delete orgs org id teams team id projects project id apply",
+        "delete orgs org id teams team id projects project id members member id apply",
+        "delete users id apply",
+        "update boards board id app cards item id apply",
+        "update boards board id apply",
+        "update boards board id cards item id apply",
+        "update boards board id connectors connector id apply",
+        "update boards board id documents item id apply",
+        "update boards board id embeds item id apply",
+        "update boards board id frames item id apply",
+        "update boards board id groups group id apply",
+        "update boards board id images item id apply",
+        "update boards board id items item id apply",
+        "update boards board id members board member id apply",
+        "update boards board id shapes item id apply",
+        "update boards board id sticky notes item id apply",
+        "update boards board id tags tag id apply",
+        "update boards board id texts item id apply",
+        "update experimental boards board id code widgets item id apply",
+        "update experimental boards board id code widgets item id position apply",
+        "update experimental boards board id shapes item id apply",
+        "update groups id apply",
+        "update orgs org id boards export jobs job id status apply",
+        "update orgs org id cases case id apply",
+        "update orgs org id cases case id legal holds legal hold id apply",
+        "update orgs org id groups group id apply",
+        "update orgs org id groups group id members apply",
+        "update orgs org id teams team id apply",
+        "update orgs org id teams team id data classification apply",
+        "update orgs org id teams team id data classification settings apply",
+        "update orgs org id teams team id members member id apply",
+        "update orgs org id teams team id projects project id apply",
+        "update orgs org id teams team id projects project id members member id apply",
+        "update orgs org id teams team id projects project id settings apply",
+        "update orgs org id teams team id settings apply",
+        "update users id 2 apply",
+        "update users id apply"
+      ]
+    }
+  ],
+  "tagline": "Run Miro's declared streams and reverse-ETL actions.",
+  "usage": "pm miro <command> [flags]"
+}

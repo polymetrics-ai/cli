@@ -1,0 +1,90 @@
+{
+  "api_version": "polymetrics.ai/v1",
+  "kind": "ConnectorBoundaryReport",
+  "outcome": "clean",
+  "repo_root": "/Users/karthiksivadas/.treehouse/cli-83d592/46/cli",
+  "mode": "whole_tree",
+  "checked_files": 292,
+  "connectors_loaded": 552,
+  "findings": [],
+  "warnings": [],
+  "exceptions": [
+    {
+      "id": "bahmni-guide-examples",
+      "rule": "docs_example",
+      "connector": "bahmni",
+      "path": "internal/connectors/guide.go",
+      "match": "bahmni",
+      "matches": 4,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/535",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    },
+    {
+      "id": "github-certification-matrix-allowlist",
+      "rule": "connector_literal",
+      "connector": "github",
+      "path": "cmd/connectorgen/certificationallowlist.go",
+      "match": "github",
+      "matches": 1,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/4015",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    },
+    {
+      "id": "github-cli-connector-docs-catalog-validation",
+      "rule": "docs_example",
+      "connector": "github",
+      "path": "internal/cli/connector_docs.go",
+      "match": "github",
+      "matches": 2,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/67",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    },
+    {
+      "id": "github-cli-docs-help-examples",
+      "rule": "docs_example",
+      "connector": "github",
+      "path": "internal/cli/docs.go",
+      "match": "github",
+      "matches": 4,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/67",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    },
+    {
+      "id": "github-cli-skills-examples",
+      "rule": "docs_example",
+      "connector": "github",
+      "path": "internal/cli/skills.go",
+      "match": "github",
+      "matches": 5,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/67",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    },
+    {
+      "id": "github-guide-examples-and-links",
+      "rule": "docs_example",
+      "connector": "github",
+      "path": "internal/connectors/guide.go",
+      "match": "github",
+      "matches": 34,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/67",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    },
+    {
+      "id": "github-operation-secret-encryption-kind",
+      "rule": "provider_policy",
+      "connector": "github",
+      "path": "internal/connectors/engine/bundle.go",
+      "match": "github_secret_encryption",
+      "matches": 1,
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/65",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30"
+    }
+  ]
+}

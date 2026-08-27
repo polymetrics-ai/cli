@@ -1,0 +1,2675 @@
+{
+  "schema_version": 1,
+  "mode": "check",
+  "connectors": [
+    {
+      "connector": "n8n",
+      "existing": [
+        {
+          "action": "create_workflow",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_workflow",
+          "availability": "implemented"
+        },
+        {
+          "action": "publish_workflow",
+          "availability": "implemented"
+        },
+        {
+          "action": "deactivate_workflow",
+          "availability": "implemented"
+        },
+        {
+          "action": "retry_execution",
+          "availability": "implemented"
+        },
+        {
+          "action": "stop_execution",
+          "availability": "implemented"
+        },
+        {
+          "action": "stop_executions",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_tag",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_tag",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_variable",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_variable",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_project",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_project",
+          "availability": "implemented"
+        },
+        {
+          "action": "add_project_users",
+          "availability": "implemented"
+        },
+        {
+          "action": "change_project_user_role",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_data_table",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_data_table",
+          "availability": "implemented"
+        },
+        {
+          "action": "insert_data_table_rows",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_data_table_rows",
+          "availability": "implemented"
+        },
+        {
+          "action": "upsert_data_table_row",
+          "availability": "implemented"
+        },
+        {
+          "action": "add_data_table_column",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_data_table_column",
+          "availability": "implemented"
+        },
+        {
+          "action": "test_credential",
+          "availability": "implemented"
+        },
+        {
+          "action": "transfer_credential",
+          "availability": "implemented"
+        },
+        {
+          "action": "pull_source_control",
+          "availability": "implemented"
+        },
+        {
+          "action": "generate_audit",
+          "availability": "implemented"
+        }
+      ],
+      "generated": [],
+      "source_binding_pending": [
+        "archive_workflow",
+        "unarchive_workflow",
+        "transfer_workflow"
+      ],
+      "partial": [],
+      "command_coverage": {
+        "actions": 29,
+        "implemented": 26,
+        "partial": 0,
+        "missing": 3
+      }
+    },
+    {
+      "connector": "google-calendar",
+      "existing": [
+        {
+          "action": "delete_acl_rule",
+          "availability": "implemented"
+        },
+        {
+          "action": "insert_acl_rule",
+          "availability": "implemented"
+        },
+        {
+          "action": "patch_acl_rule",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_acl_rule",
+          "availability": "implemented"
+        },
+        {
+          "action": "watch_acl",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_calendar_list_entry",
+          "availability": "implemented"
+        },
+        {
+          "action": "insert_calendar_list_entry",
+          "availability": "implemented"
+        },
+        {
+          "action": "patch_calendar_list_entry",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_calendar_list_entry",
+          "availability": "implemented"
+        },
+        {
+          "action": "watch_calendar_list",
+          "availability": "implemented"
+        },
+        {
+          "action": "clear_calendar",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_calendar",
+          "availability": "implemented"
+        },
+        {
+          "action": "insert_calendar",
+          "availability": "implemented"
+        },
+        {
+          "action": "patch_calendar",
+          "availability": "implemented"
+        },
+        {
+          "action": "transfer_calendar_ownership",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_calendar",
+          "availability": "implemented"
+        },
+        {
+          "action": "stop_channel",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_event",
+          "availability": "implemented"
+        },
+        {
+          "action": "import_event",
+          "availability": "implemented"
+        },
+        {
+          "action": "insert_event",
+          "availability": "implemented"
+        },
+        {
+          "action": "move_event",
+          "availability": "implemented"
+        },
+        {
+          "action": "patch_event",
+          "availability": "implemented"
+        },
+        {
+          "action": "quick_add_event",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_event",
+          "availability": "implemented"
+        },
+        {
+          "action": "watch_events",
+          "availability": "implemented"
+        },
+        {
+          "action": "watch_settings",
+          "availability": "implemented"
+        }
+      ],
+      "generated": [],
+      "source_binding_pending": [],
+      "partial": [],
+      "command_coverage": {
+        "actions": 26,
+        "implemented": 26,
+        "partial": 0,
+        "missing": 0
+      }
+    },
+    {
+      "connector": "gmail",
+      "existing": [
+        {
+          "action": "send_message",
+          "availability": "implemented"
+        },
+        {
+          "action": "insert_message",
+          "availability": "implemented"
+        },
+        {
+          "action": "import_message",
+          "availability": "implemented"
+        },
+        {
+          "action": "modify_message",
+          "availability": "implemented"
+        },
+        {
+          "action": "trash_message",
+          "availability": "implemented"
+        },
+        {
+          "action": "untrash_message",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_message",
+          "availability": "implemented"
+        },
+        {
+          "action": "modify_thread",
+          "availability": "implemented"
+        },
+        {
+          "action": "trash_thread",
+          "availability": "implemented"
+        },
+        {
+          "action": "untrash_thread",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_thread",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_draft",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_draft",
+          "availability": "implemented"
+        },
+        {
+          "action": "send_draft",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_draft",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_label",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_label",
+          "availability": "implemented"
+        },
+        {
+          "action": "patch_label",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_label",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_filter",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_filter",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_send_as",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_send_as",
+          "availability": "implemented"
+        },
+        {
+          "action": "patch_send_as",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_send_as",
+          "availability": "implemented"
+        },
+        {
+          "action": "verify_send_as",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_delegate",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_delegate",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_forwarding_address",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_forwarding_address",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_auto_forwarding",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_vacation",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_language",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_imap",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_pop",
+          "availability": "implemented"
+        },
+        {
+          "action": "insert_smime_info",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_smime_info",
+          "availability": "implemented"
+        },
+        {
+          "action": "set_default_smime_info",
+          "availability": "implemented"
+        },
+        {
+          "action": "watch_mailbox",
+          "availability": "implemented"
+        },
+        {
+          "action": "stop_mailbox_watch",
+          "availability": "implemented"
+        }
+      ],
+      "generated": [],
+      "source_binding_pending": [],
+      "partial": [],
+      "command_coverage": {
+        "actions": 40,
+        "implemented": 40,
+        "partial": 0,
+        "missing": 0
+      }
+    },
+    {
+      "connector": "twilio",
+      "existing": [
+        {
+          "action": "create_account",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_address",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_address",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_application",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_application",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_application",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_call_recording",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_call_recording",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_siprec",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_realtime_transcription",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_user_defined_message_subscription",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_call",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_call",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_participant",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_participant",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_conference_recording",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_conference",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_connect_app",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_connect_app",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_incoming_phone_number",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_incoming_phone_number_assigned_add_on",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_incoming_phone_number",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_incoming_phone_number",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_key",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_key",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_key",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_message_feedback",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_media",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_message",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_message",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_outgoing_caller_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_outgoing_caller_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_queue",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_queue",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_recording_transcription",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_recording_add_on_result_payload",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_recording_add_on_result",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_recording",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_signing_key",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_signing_key",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_signing_key",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_sip_credential",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_sip_credential",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_sip_credential_list",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_sip_auth_calls_credential_list_mapping",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_sip_auth_calls_ip_access_control_list_mapping",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_sip_auth_registrations_credential_list_mapping",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_sip_credential_list_mapping",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_sip_ip_access_control_list_mapping",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_sip_domain",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_sip_domain",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_sip_ip_address",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_sip_ip_address",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_sip_ip_access_control_list",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_short_code",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_token",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_transcription",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_usage_trigger",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_usage_trigger",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_account",
+          "availability": "implemented"
+        }
+      ],
+      "generated": [],
+      "source_binding_pending": [],
+      "partial": [
+        {
+          "action": "create_address",
+          "reason": "ambiguous City: string,null"
+        },
+        {
+          "action": "create_call",
+          "reason": "ambiguous From: string,null"
+        },
+        {
+          "action": "create_payments",
+          "reason": "ambiguous IdempotencyKey: string,null"
+        },
+        {
+          "action": "update_payments",
+          "reason": "ambiguous IdempotencyKey: string,null"
+        },
+        {
+          "action": "update_call_recording",
+          "reason": "ambiguous Status: string,null"
+        },
+        {
+          "action": "update_siprec",
+          "reason": "ambiguous Status: string,null"
+        },
+        {
+          "action": "create_stream",
+          "reason": "ambiguous Url: string,null"
+        },
+        {
+          "action": "update_stream",
+          "reason": "ambiguous Status: string,null"
+        },
+        {
+          "action": "update_realtime_transcription",
+          "reason": "ambiguous Status: string,null"
+        },
+        {
+          "action": "create_user_defined_message",
+          "reason": "ambiguous Content: string,null"
+        },
+        {
+          "action": "create_user_defined_message_subscription",
+          "reason": "ambiguous Callback: string,null"
+        },
+        {
+          "action": "create_participant",
+          "reason": "ambiguous From: string,null"
+        },
+        {
+          "action": "update_conference_recording",
+          "reason": "ambiguous Status: string,null"
+        },
+        {
+          "action": "create_incoming_phone_number_assigned_add_on",
+          "reason": "ambiguous InstalledAddOnSid: string,null"
+        },
+        {
+          "action": "create_incoming_phone_number_local",
+          "reason": "ambiguous PhoneNumber: string,null"
+        },
+        {
+          "action": "create_incoming_phone_number_mobile",
+          "reason": "ambiguous PhoneNumber: string,null"
+        },
+        {
+          "action": "create_incoming_phone_number_toll_free",
+          "reason": "ambiguous PhoneNumber: string,null"
+        },
+        {
+          "action": "create_message",
+          "reason": "ambiguous To: string,null"
+        },
+        {
+          "action": "create_outgoing_caller_id_validation_request",
+          "reason": "ambiguous PhoneNumber: string,null"
+        },
+        {
+          "action": "create_queue",
+          "reason": "ambiguous FriendlyName: string,null"
+        },
+        {
+          "action": "update_member",
+          "reason": "ambiguous Url: string,null"
+        },
+        {
+          "action": "create_sip_credential_list",
+          "reason": "ambiguous FriendlyName: string,null"
+        },
+        {
+          "action": "create_sip_credential",
+          "reason": "ambiguous Password: string,null"
+        },
+        {
+          "action": "update_sip_credential_list",
+          "reason": "ambiguous FriendlyName: string,null"
+        },
+        {
+          "action": "create_sip_domain",
+          "reason": "ambiguous DomainName: string,null"
+        },
+        {
+          "action": "create_sip_auth_calls_credential_list_mapping",
+          "reason": "ambiguous CredentialListSid: string,null"
+        },
+        {
+          "action": "create_sip_auth_calls_ip_access_control_list_mapping",
+          "reason": "ambiguous IpAccessControlListSid: string,null"
+        },
+        {
+          "action": "create_sip_auth_registrations_credential_list_mapping",
+          "reason": "ambiguous CredentialListSid: string,null"
+        },
+        {
+          "action": "create_sip_credential_list_mapping",
+          "reason": "ambiguous CredentialListSid: string,null"
+        },
+        {
+          "action": "create_sip_ip_access_control_list_mapping",
+          "reason": "ambiguous IpAccessControlListSid: string,null"
+        },
+        {
+          "action": "create_sip_ip_access_control_list",
+          "reason": "ambiguous FriendlyName: string,null"
+        },
+        {
+          "action": "create_sip_ip_address",
+          "reason": "ambiguous FriendlyName: string,null"
+        },
+        {
+          "action": "update_sip_ip_access_control_list",
+          "reason": "ambiguous FriendlyName: string,null"
+        },
+        {
+          "action": "create_usage_trigger",
+          "reason": "ambiguous CallbackUrl: string,null"
+        }
+      ],
+      "command_coverage": {
+        "actions": 94,
+        "implemented": 60,
+        "partial": 34,
+        "missing": 0
+      }
+    },
+    {
+      "connector": "amazon-sqs",
+      "existing": [
+        {
+          "action": "add_permission",
+          "availability": "implemented"
+        },
+        {
+          "action": "cancel_message_move_task",
+          "availability": "implemented"
+        },
+        {
+          "action": "change_message_visibility",
+          "availability": "implemented"
+        },
+        {
+          "action": "change_message_visibility_batch",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_queue",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_message",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_message_batch",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_queue",
+          "availability": "implemented"
+        },
+        {
+          "action": "purge_queue",
+          "availability": "implemented"
+        },
+        {
+          "action": "remove_permission",
+          "availability": "implemented"
+        },
+        {
+          "action": "send_message",
+          "availability": "implemented"
+        },
+        {
+          "action": "send_message_batch",
+          "availability": "implemented"
+        },
+        {
+          "action": "set_queue_attributes",
+          "availability": "implemented"
+        },
+        {
+          "action": "start_message_move_task",
+          "availability": "implemented"
+        },
+        {
+          "action": "tag_queue",
+          "availability": "implemented"
+        },
+        {
+          "action": "untag_queue",
+          "availability": "implemented"
+        }
+      ],
+      "generated": [],
+      "source_binding_pending": [],
+      "partial": [],
+      "command_coverage": {
+        "actions": 16,
+        "implemented": 16,
+        "partial": 0,
+        "missing": 0
+      }
+    },
+    {
+      "connector": "gong",
+      "existing": [
+        {
+          "action": "add_call",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_permission_profile",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_permission_profile",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_meeting",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_meeting",
+          "availability": "implemented"
+        },
+        {
+          "action": "content_viewed",
+          "availability": "implemented"
+        },
+        {
+          "action": "content_shared",
+          "availability": "implemented"
+        },
+        {
+          "action": "custom_action",
+          "availability": "implemented"
+        },
+        {
+          "action": "register_crm_integration",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_crm_integration",
+          "availability": "implemented"
+        },
+        {
+          "action": "add_calls_users_access",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_calls_users_access",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_meeting",
+          "availability": "implemented"
+        },
+        {
+          "action": "integration_settings",
+          "availability": "implemented"
+        },
+        {
+          "action": "unassign_flows_by_instance_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "unassign_flows_by_crm_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "submit_flow_prospects_bulk_assignment",
+          "availability": "implemented"
+        },
+        {
+          "action": "assign_prospects",
+          "availability": "implemented"
+        },
+        {
+          "action": "assign_prospects_cool_off_override",
+          "availability": "implemented"
+        },
+        {
+          "action": "add_digital_interaction",
+          "availability": "implemented"
+        },
+        {
+          "action": "purge_phone_number",
+          "availability": "implemented"
+        },
+        {
+          "action": "purge_email_address",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_task",
+          "availability": "implemented"
+        },
+        {
+          "action": "upload_call_media",
+          "availability": "implemented"
+        },
+        {
+          "action": "upload_crm_entities",
+          "availability": "implemented"
+        },
+        {
+          "action": "upload_crm_entity_schema",
+          "availability": "implemented"
+        },
+        {
+          "action": "upload_target_assignments",
+          "availability": "implemented"
+        }
+      ],
+      "generated": [],
+      "source_binding_pending": [],
+      "partial": [],
+      "command_coverage": {
+        "actions": 27,
+        "implemented": 27,
+        "partial": 0,
+        "missing": 0
+      }
+    },
+    {
+      "connector": "google-ads",
+      "existing": [
+        {
+          "action": "move_manager_link_customer_manager_links",
+          "availability": "implemented"
+        },
+        {
+          "action": "remove_data_links",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_data_links",
+          "availability": "implemented"
+        },
+        {
+          "action": "remove_product_link_invitations",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_product_link_invitations",
+          "availability": "implemented"
+        },
+        {
+          "action": "remove_product_links",
+          "availability": "implemented"
+        },
+        {
+          "action": "start_identity_verification_customers",
+          "availability": "implemented"
+        }
+      ],
+      "generated": [],
+      "source_binding_pending": [],
+      "partial": [],
+      "command_coverage": {
+        "actions": 7,
+        "implemented": 7,
+        "partial": 0,
+        "missing": 0
+      }
+    },
+    {
+      "connector": "facebook-marketing",
+      "existing": [
+        {
+          "action": "create_campaign",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_campaign",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_ad_set",
+          "availability": "implemented"
+        }
+      ],
+      "generated": [],
+      "source_binding_pending": [],
+      "partial": [],
+      "command_coverage": {
+        "actions": 3,
+        "implemented": 3,
+        "partial": 0,
+        "missing": 0
+      }
+    },
+    {
+      "connector": "aircall",
+      "existing": [
+        {
+          "action": "create_user",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_user",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_user",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_team",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_team",
+          "availability": "implemented"
+        },
+        {
+          "action": "add_user_to_team",
+          "availability": "implemented"
+        },
+        {
+          "action": "remove_user_from_team",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_contact",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_contact",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_tag",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_tag",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_tag",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_webhook",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_webhook",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_webhook",
+          "availability": "implemented"
+        },
+        {
+          "action": "archive_call",
+          "availability": "implemented"
+        },
+        {
+          "action": "unarchive_call",
+          "availability": "implemented"
+        },
+        {
+          "action": "comment_call",
+          "availability": "implemented"
+        },
+        {
+          "action": "tag_call",
+          "availability": "implemented"
+        }
+      ],
+      "generated": [],
+      "source_binding_pending": [
+        "update_contact"
+      ],
+      "partial": [],
+      "command_coverage": {
+        "actions": 20,
+        "implemented": 19,
+        "partial": 0,
+        "missing": 1
+      }
+    },
+    {
+      "connector": "xero",
+      "existing": [
+        {
+          "action": "create_account",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_account",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_account",
+          "availability": "implemented"
+        },
+        {
+          "action": "upsert_bank_transactions",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_bank_transactions",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_bank_transaction",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_bank_transaction_history_record",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_bank_transfer",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_bank_transfers",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_bank_transfer",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_bank_transfer_history_record",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_batch_payment",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_batch_payment_history_record",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_branding_theme_payment_services",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_contact_group",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_contact_group",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_contact_group_contacts",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_contact_group_contacts",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_contact_group_contact",
+          "availability": "implemented"
+        },
+        {
+          "action": "upsert_contacts",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_contacts",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_contact",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_contact_history",
+          "availability": "implemented"
+        },
+        {
+          "action": "upsert_credit_notes",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_credit_notes",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_credit_note",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_credit_note_allocation",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_credit_note_allocations",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_credit_note_history",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_currency",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_expense_claims",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_expense_claim",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_expense_claim_history",
+          "availability": "implemented"
+        },
+        {
+          "action": "upsert_invoices",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_invoices",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_invoice",
+          "availability": "implemented"
+        },
+        {
+          "action": "email_invoice",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_invoice_history",
+          "availability": "implemented"
+        },
+        {
+          "action": "upsert_items",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_items",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_item",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_item",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_item_history",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_linked_transaction",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_linked_transaction",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_linked_transaction",
+          "availability": "implemented"
+        },
+        {
+          "action": "upsert_manual_journals",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_manual_journals",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_manual_journal",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_manual_journal_history_record",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_overpayment_allocations",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_overpayment_allocations",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_overpayment_history",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_payment",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_payments",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_payment_history",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_payment_service",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_prepayment_allocations",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_prepayment_allocations",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_prepayment_history",
+          "availability": "implemented"
+        },
+        {
+          "action": "upsert_purchase_orders",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_purchase_orders",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_purchase_order",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_purchase_order_history",
+          "availability": "implemented"
+        },
+        {
+          "action": "upsert_quotes",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_quotes",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_quote",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_quote_history",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_receipt",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_receipt",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_receipt_history",
+          "availability": "implemented"
+        },
+        {
+          "action": "upsert_repeating_invoices",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_repeating_invoices",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_repeating_invoice",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_repeating_invoice_history",
+          "availability": "implemented"
+        },
+        {
+          "action": "setup_organisation",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_tax_rate",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_tax_rates",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_tracking_category",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_tracking_category",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_tracking_category",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_tracking_options",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_tracking_options",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_tracking_options",
+          "availability": "implemented"
+        }
+      ],
+      "generated": [],
+      "source_binding_pending": [],
+      "partial": [
+        {
+          "action": "delete_batch_payment",
+          "reason": "ambiguous BatchPaymentID: string,null"
+        },
+        {
+          "action": "delete_batch_payment_by_url_param",
+          "reason": "ambiguous Status: string,null"
+        },
+        {
+          "action": "delete_payment",
+          "reason": "ambiguous Status: string,null"
+        }
+      ],
+      "command_coverage": {
+        "actions": 87,
+        "implemented": 84,
+        "partial": 3,
+        "missing": 0
+      }
+    },
+    {
+      "connector": "gocardless",
+      "existing": [
+        {
+          "action": "create_a_bank_authorisation",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_billing_request",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_billing_request_flow",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_billing_request_template",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_billing_request_with_actions",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_bank_account_holder_verification",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_block",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_blocks_by_reference",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_creditor",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_creditor_bank_account",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_customer",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_customer_bank_account",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_with_dates",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_logo_associated_with_a_creditor",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_mandate",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_new_mandate_import",
+          "availability": "implemented"
+        },
+        {
+          "action": "add_a_mandate_import_entry",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_an_outbound_payment",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_withdrawal_outbound_payment",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_an_outbound_payment_import",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_payer_authorisation",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_payer_theme_associated_with_a_creditor",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_payment",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_redirect_flow",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_refund",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_scheme_identifier",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_subscription",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_verification_detail",
+          "availability": "implemented"
+        },
+        {
+          "action": "perform_a_bank_details_lookup",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_a_mandate_pdf",
+          "availability": "implemented"
+        }
+      ],
+      "generated": [],
+      "source_binding_pending": [
+        "create_a_customer_bank_account_token"
+      ],
+      "partial": [
+        {
+          "action": "collect_customer_details",
+          "reason": "ambiguous billing_request_id: string,integer"
+        },
+        {
+          "action": "collect_bank_account_details",
+          "reason": "ambiguous billing_request_id: string,integer"
+        },
+        {
+          "action": "confirm_the_payer_details",
+          "reason": "ambiguous billing_request_id: string,integer"
+        },
+        {
+          "action": "fulfil_a_billing_request",
+          "reason": "ambiguous billing_request_id: string,integer"
+        },
+        {
+          "action": "cancel_a_billing_request",
+          "reason": "ambiguous billing_request_id: string,integer"
+        },
+        {
+          "action": "notify_the_customer",
+          "reason": "ambiguous billing_request_id: string,integer"
+        },
+        {
+          "action": "trigger_fallback",
+          "reason": "ambiguous billing_request_id: string,integer"
+        },
+        {
+          "action": "change_currency",
+          "reason": "ambiguous billing_request_id: string,integer"
+        },
+        {
+          "action": "select_institution_for_a_billing_request",
+          "reason": "ambiguous billing_request_id: string,integer"
+        },
+        {
+          "action": "initialise_a_billing_request_flow",
+          "reason": "ambiguous billing_request_flow_id: string,integer"
+        },
+        {
+          "action": "update_a_billing_request_template",
+          "reason": "ambiguous billing_request_template_id: string,integer"
+        },
+        {
+          "action": "disable_a_block",
+          "reason": "ambiguous block_id: string,integer"
+        },
+        {
+          "action": "enable_a_block",
+          "reason": "ambiguous block_id: string,integer"
+        },
+        {
+          "action": "update_a_creditor",
+          "reason": "ambiguous creditor_id: string,integer"
+        },
+        {
+          "action": "disable_a_creditor_bank_account",
+          "reason": "ambiguous creditor_bank_account_id: string,integer"
+        },
+        {
+          "action": "update_a_customer",
+          "reason": "ambiguous customer_id: string,integer"
+        },
+        {
+          "action": "remove_a_customer",
+          "reason": "ambiguous customer_id: string,integer"
+        },
+        {
+          "action": "update_a_customer_bank_account",
+          "reason": "ambiguous customer_bank_account_id: string,integer"
+        },
+        {
+          "action": "disable_a_customer_bank_account",
+          "reason": "ambiguous customer_bank_account_id: string,integer"
+        },
+        {
+          "action": "handle_a_notification",
+          "reason": "ambiguous customer_notification_id: string,integer"
+        },
+        {
+          "action": "update_an_instalment_schedule",
+          "reason": "ambiguous instalment_schedule_id: string,integer"
+        },
+        {
+          "action": "cancel_an_instalment_schedule",
+          "reason": "ambiguous instalment_schedule_id: string,integer"
+        },
+        {
+          "action": "update_a_mandate",
+          "reason": "ambiguous mandate_id: string,integer"
+        },
+        {
+          "action": "cancel_a_mandate",
+          "reason": "ambiguous mandate_id: string,integer"
+        },
+        {
+          "action": "reinstate_a_mandate",
+          "reason": "ambiguous mandate_id: string,integer"
+        },
+        {
+          "action": "submit_a_mandate_import",
+          "reason": "ambiguous mandate_import_id: string,integer"
+        },
+        {
+          "action": "cancel_a_mandate_import",
+          "reason": "ambiguous mandate_import_id: string,integer"
+        },
+        {
+          "action": "cancel_an_outbound_payment",
+          "reason": "ambiguous outbound_payment_id: string,integer"
+        },
+        {
+          "action": "approve_an_outbound_payment",
+          "reason": "ambiguous outbound_payment_id: string,integer"
+        },
+        {
+          "action": "update_an_outbound_payment",
+          "reason": "ambiguous outbound_payment_id: string,integer"
+        },
+        {
+          "action": "update_a_payer_authorisation",
+          "reason": "ambiguous payer_authorisation_id: string,integer"
+        },
+        {
+          "action": "submit_a_payer_authorisation",
+          "reason": "ambiguous payer_authorisation_id: string,integer"
+        },
+        {
+          "action": "confirm_a_payer_authorisation",
+          "reason": "ambiguous payer_authorisation_id: string,integer"
+        },
+        {
+          "action": "update_a_payment",
+          "reason": "ambiguous payment_id: string,integer"
+        },
+        {
+          "action": "cancel_a_payment",
+          "reason": "ambiguous payment_id: string,integer"
+        },
+        {
+          "action": "retry_a_payment",
+          "reason": "ambiguous payment_id: string,integer"
+        },
+        {
+          "action": "update_a_payout",
+          "reason": "ambiguous payout_id: string,integer"
+        },
+        {
+          "action": "complete_a_redirect_flow",
+          "reason": "ambiguous redirect_flow_id: string,integer"
+        },
+        {
+          "action": "update_a_refund",
+          "reason": "ambiguous refund_id: string,integer"
+        },
+        {
+          "action": "simulate_a_scenario",
+          "reason": "ambiguous scenario: string,integer"
+        },
+        {
+          "action": "update_a_subscription",
+          "reason": "ambiguous subscription_id: string,integer"
+        },
+        {
+          "action": "pause_a_subscription",
+          "reason": "ambiguous subscription_id: string,integer"
+        },
+        {
+          "action": "resume_a_subscription",
+          "reason": "ambiguous subscription_id: string,integer"
+        },
+        {
+          "action": "cancel_a_subscription",
+          "reason": "ambiguous subscription_id: string,integer"
+        },
+        {
+          "action": "retry_a_webhook",
+          "reason": "ambiguous webhook_id: string,integer"
+        }
+      ],
+      "command_coverage": {
+        "actions": 76,
+        "implemented": 30,
+        "partial": 45,
+        "missing": 1
+      }
+    },
+    {
+      "connector": "amazon-seller-partner",
+      "existing": [
+        {
+          "action": "record_action_feedback",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_notifications",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_notification",
+          "availability": "implemented"
+        },
+        {
+          "action": "cancel_inbound",
+          "availability": "implemented"
+        },
+        {
+          "action": "confirm_inbound",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_inbound",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_inbound",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_inbound_shipment_transport_details",
+          "availability": "implemented"
+        },
+        {
+          "action": "confirm_outbound",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_outbound",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_outbound",
+          "availability": "implemented"
+        },
+        {
+          "action": "confirm_replenishment_order",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_replenishment_order",
+          "availability": "implemented"
+        },
+        {
+          "action": "cancel_query",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_query",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_scheduled_packages",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_scheduled_package",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_scheduled_package_bulk",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_package_status",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_package",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_packages",
+          "availability": "implemented"
+        },
+        {
+          "action": "batch_inventory",
+          "availability": "implemented"
+        },
+        {
+          "action": "add_inventory",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_inventory_item",
+          "availability": "implemented"
+        },
+        {
+          "action": "delivery_offers",
+          "availability": "implemented"
+        },
+        {
+          "action": "cancel_fulfillment_order",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_fulfillment_return",
+          "availability": "implemented"
+        },
+        {
+          "action": "submit_fulfillment_order_status_update",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_fulfillment_order",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_fulfillment_order",
+          "availability": "implemented"
+        },
+        {
+          "action": "cancel_feed",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_feed",
+          "availability": "implemented"
+        },
+        {
+          "action": "initiate_payout",
+          "availability": "implemented"
+        },
+        {
+          "action": "cancel_inbound_plan",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_inbound_plan_name",
+          "availability": "implemented"
+        },
+        {
+          "action": "set_packing_information",
+          "availability": "implemented"
+        },
+        {
+          "action": "confirm_packing_option",
+          "availability": "implemented"
+        },
+        {
+          "action": "generate_packing_options",
+          "availability": "implemented"
+        },
+        {
+          "action": "confirm_placement_option",
+          "availability": "implemented"
+        },
+        {
+          "action": "generate_placement_options",
+          "availability": "implemented"
+        },
+        {
+          "action": "confirm_delivery_window_options",
+          "availability": "implemented"
+        },
+        {
+          "action": "generate_delivery_window_options",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_shipment_name",
+          "availability": "implemented"
+        },
+        {
+          "action": "cancel_self_ship_appointment",
+          "availability": "implemented"
+        },
+        {
+          "action": "schedule_self_ship_appointment",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_shipment_source_address",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_shipment_tracking_details",
+          "availability": "implemented"
+        },
+        {
+          "action": "confirm_transportation_options",
+          "availability": "implemented"
+        },
+        {
+          "action": "generate_transportation_options",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_inbound_plan",
+          "availability": "implemented"
+        },
+        {
+          "action": "set_prep_details",
+          "availability": "implemented"
+        },
+        {
+          "action": "cancel_shipment",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_shipment",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_destination",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_destination",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_subscription_by_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "send_test_notification",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_subscription",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_verification_status",
+          "availability": "implemented"
+        },
+        {
+          "action": "confirm_shipment",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_shipment_status",
+          "availability": "implemented"
+        },
+        {
+          "action": "cancel_report",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_report",
+          "availability": "implemented"
+        },
+        {
+          "action": "cancel_report_schedule",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_report_schedule",
+          "availability": "implemented"
+        },
+        {
+          "action": "set_appointment_fulfillment_data",
+          "availability": "implemented"
+        },
+        {
+          "action": "assign_appointment_resources",
+          "availability": "implemented"
+        },
+        {
+          "action": "reschedule_appointment_for_service_job_by_service_job_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "add_appointment_for_service_job_by_service_job_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "complete_service_job_by_service_job_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "purchase_shipment",
+          "availability": "implemented"
+        },
+        {
+          "action": "cancel_shipment_post_shipping_v1_shipments_shipment_id_cancel",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_shipment_post_shipping_v1_shipments",
+          "availability": "implemented"
+        },
+        {
+          "action": "unlink_carrier_account",
+          "availability": "implemented"
+        },
+        {
+          "action": "link_carrier_account",
+          "availability": "implemented"
+        },
+        {
+          "action": "link_carrier_account_put_shipping_v2_carrier_accounts_carrier_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_claim",
+          "availability": "implemented"
+        },
+        {
+          "action": "generate_collection_form",
+          "availability": "implemented"
+        },
+        {
+          "action": "submit_ndr_feedback",
+          "availability": "implemented"
+        },
+        {
+          "action": "one_click_shipment",
+          "availability": "implemented"
+        },
+        {
+          "action": "cancel_shipment_put_shipping_v2_shipments_shipment_id_cancel",
+          "availability": "implemented"
+        },
+        {
+          "action": "direct_purchase_shipment",
+          "availability": "implemented"
+        },
+        {
+          "action": "purchase_shipment_post_shipping_v2_shipments",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_supply_source_status",
+          "availability": "implemented"
+        },
+        {
+          "action": "archive_supply_source",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_supply_source",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_supply_source",
+          "availability": "implemented"
+        },
+        {
+          "action": "submit_inventory_update",
+          "availability": "implemented"
+        },
+        {
+          "action": "submit_acknowledgement",
+          "availability": "implemented"
+        },
+        {
+          "action": "submit_acknowledgement_post_vendor_direct_fulfillment_orders_v1_acknowledgements",
+          "availability": "implemented"
+        },
+        {
+          "action": "generate_order_scenarios",
+          "availability": "implemented"
+        },
+        {
+          "action": "submit_shipment_confirmations",
+          "availability": "implemented"
+        },
+        {
+          "action": "submit_shipment_status_updates",
+          "availability": "implemented"
+        },
+        {
+          "action": "submit_shipment_confirmations_post_vendor_direct_fulfillment_shipping_v1_shipment_confirmations",
+          "availability": "implemented"
+        },
+        {
+          "action": "submit_shipment_status_updates_post_vendor_direct_fulfillment_shipping_v1_shipment_status_updates",
+          "availability": "implemented"
+        },
+        {
+          "action": "submit_acknowledgement_post_vendor_orders_v1_acknowledgements",
+          "availability": "implemented"
+        },
+        {
+          "action": "submit_shipment_confirmations_post_vendor_shipping_v1_shipment_confirmations",
+          "availability": "implemented"
+        },
+        {
+          "action": "submit_shipments",
+          "availability": "implemented"
+        }
+      ],
+      "generated": [],
+      "source_binding_pending": [],
+      "partial": [],
+      "command_coverage": {
+        "actions": 98,
+        "implemented": 98,
+        "partial": 0,
+        "missing": 0
+      }
+    },
+    {
+      "connector": "miro",
+      "existing": [
+        {
+          "action": "update_orgs_org_id_teams_team_id_data_classification",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_orgs_org_id_teams_team_id_data_classification_settings",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_orgs_org_id_teams_team_id_boards_board_id_data_classification",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_boards_board_id_docs",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_boards_board_id_docs_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_orgs_org_id_cases",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_orgs_org_id_cases_case_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_orgs_org_id_cases_case_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_orgs_org_id_cases_case_id_legal_holds",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_orgs_org_id_cases_case_id_legal_holds_legal_hold_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_orgs_org_id_cases_case_id_legal_holds_legal_hold_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_orgs_org_id_boards_export_jobs_job_id_status",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_orgs_org_id_boards_export_jobs_job_id_tasks_task_id_export_link",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_users",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_users_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_users_id_2",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_users_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_groups_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_boards",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_boards_board_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_boards_board_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_boards_board_id_app_cards",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_boards_board_id_app_cards_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_boards_board_id_app_cards_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_boards_board_id_cards",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_boards_board_id_cards_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_boards_board_id_cards_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_boards_board_id_connectors",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_boards_board_id_connectors_connector_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_boards_board_id_connectors_connector_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_boards_board_id_documents",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_boards_board_id_documents_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_boards_board_id_documents_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_boards_board_id_embeds",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_boards_board_id_embeds_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_boards_board_id_embeds_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_boards_board_id_images",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_boards_board_id_images_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_boards_board_id_images_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_boards_board_id_items_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_boards_board_id_items_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_boards_board_id_members",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_boards_board_id_members_board_member_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_boards_board_id_members_board_member_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_boards_board_id_shapes",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_boards_board_id_shapes_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_boards_board_id_shapes_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_boards_board_id_sticky_notes",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_boards_board_id_sticky_notes_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_boards_board_id_sticky_notes_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_boards_board_id_texts",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_boards_board_id_texts_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_boards_board_id_texts_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_boards_board_id_frames",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_boards_board_id_frames_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_boards_board_id_frames_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_experimental_boards_board_id_mindmap_nodes_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_experimental_boards_board_id_mindmap_nodes",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_experimental_boards_board_id_items_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_experimental_boards_board_id_shapes",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_experimental_boards_board_id_shapes_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_experimental_boards_board_id_shapes_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_experimental_boards_board_id_code_widgets",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_experimental_boards_board_id_code_widgets_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_experimental_boards_board_id_code_widgets_item_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_experimental_boards_board_id_code_widgets_item_id_position",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_boards_board_id_groups",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_boards_board_id_groups_group_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_boards_board_id_groups_group_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_boards_board_id_tags",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_boards_board_id_tags_tag_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_boards_board_id_tags_tag_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_orgs_org_id_teams_team_id_projects",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_orgs_org_id_teams_team_id_projects_project_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_orgs_org_id_teams_team_id_projects_project_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_orgs_org_id_teams_team_id_projects_project_id_settings",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_orgs_org_id_teams_team_id_projects_project_id_members",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_orgs_org_id_teams_team_id_projects_project_id_members_member_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_orgs_org_id_teams_team_id_projects_project_id_members_member_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_orgs_org_id_teams",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_orgs_org_id_teams_team_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_orgs_org_id_teams_team_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_orgs_org_id_teams_team_id_members",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_orgs_org_id_teams_team_id_members_member_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_orgs_org_id_teams_team_id_members_member_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_orgs_org_id_teams_team_id_settings",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_orgs_org_id_groups",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_orgs_org_id_groups_group_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_orgs_org_id_groups_group_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_orgs_org_id_groups_group_id_members",
+          "availability": "implemented"
+        },
+        {
+          "action": "update_orgs_org_id_groups_group_id_members",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_orgs_org_id_groups_group_id_members_member_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_orgs_org_id_teams_team_id_groups",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_orgs_org_id_teams_team_id_groups_group_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_orgs_org_id_boards_board_id_groups",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_orgs_org_id_boards_board_id_groups_group_id",
+          "availability": "implemented"
+        },
+        {
+          "action": "create_orgs_org_id_projects_project_id_groups",
+          "availability": "implemented"
+        },
+        {
+          "action": "delete_orgs_org_id_projects_project_id_groups_group_id",
+          "availability": "implemented"
+        }
+      ],
+      "generated": [],
+      "source_binding_pending": [],
+      "partial": [],
+      "command_coverage": {
+        "actions": 98,
+        "implemented": 98,
+        "partial": 0,
+        "missing": 0
+      }
+    }
+  ],
+  "totals": {
+    "existing": 534,
+    "generated": 0,
+    "source_binding_pending": 5,
+    "partial": 82
+  },
+  "command_coverage": {
+    "actions": 621,
+    "implemented": 534,
+    "partial": 82,
+    "missing": 5
+  }
+}

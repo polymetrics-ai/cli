@@ -1,0 +1,270 @@
+{
+  "schema_version": 3,
+  "connector": "amazon-sqs",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "retrieval": "schema-v2 source-lock migration retaining hash-pinned provider artifacts",
+    "openapi": [],
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    },
+    "source_documents": [
+      {
+        "id": "source",
+        "kind": "rendered_reference",
+        "artifact": {
+          "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+          "sha256": "282d08c85a2003ab91ed400a81339fe81952e446ae40a599877705903e870c0f",
+          "bytes": 157139
+        },
+        "published_source": {
+          "source_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+          "capture_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json",
+          "sha256": "282d08c85a2003ab91ed400a81339fe81952e446ae40a599877705903e870c0f",
+          "bytes": 157139,
+          "adapter": "legacy-v2-source-lock-migration-v1"
+        },
+        "operations": [
+          {
+            "id": "amazon-sqs.rest.AddPermission",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.AddPermission",
+            "operation_id": "AddPermission",
+            "deprecated": false,
+            "source_location": "operations[\"AddPermission\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.CancelMessageMoveTask",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.CancelMessageMoveTask",
+            "operation_id": "CancelMessageMoveTask",
+            "deprecated": false,
+            "source_location": "operations[\"CancelMessageMoveTask\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.ChangeMessageVisibility",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.ChangeMessageVisibility",
+            "operation_id": "ChangeMessageVisibility",
+            "deprecated": false,
+            "source_location": "operations[\"ChangeMessageVisibility\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.ChangeMessageVisibilityBatch",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.ChangeMessageVisibilityBatch",
+            "operation_id": "ChangeMessageVisibilityBatch",
+            "deprecated": false,
+            "source_location": "operations[\"ChangeMessageVisibilityBatch\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.CreateQueue",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.CreateQueue",
+            "operation_id": "CreateQueue",
+            "deprecated": false,
+            "source_location": "operations[\"CreateQueue\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.DeleteMessage",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.DeleteMessage",
+            "operation_id": "DeleteMessage",
+            "deprecated": false,
+            "source_location": "operations[\"DeleteMessage\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.DeleteMessageBatch",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.DeleteMessageBatch",
+            "operation_id": "DeleteMessageBatch",
+            "deprecated": false,
+            "source_location": "operations[\"DeleteMessageBatch\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.DeleteQueue",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.DeleteQueue",
+            "operation_id": "DeleteQueue",
+            "deprecated": false,
+            "source_location": "operations[\"DeleteQueue\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.GetQueueAttributes",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.GetQueueAttributes",
+            "operation_id": "GetQueueAttributes",
+            "deprecated": false,
+            "source_location": "operations[\"GetQueueAttributes\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.GetQueueUrl",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.GetQueueUrl",
+            "operation_id": "GetQueueUrl",
+            "deprecated": false,
+            "source_location": "operations[\"GetQueueUrl\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.ListDeadLetterSourceQueues",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.ListDeadLetterSourceQueues",
+            "operation_id": "ListDeadLetterSourceQueues",
+            "deprecated": false,
+            "source_location": "operations[\"ListDeadLetterSourceQueues\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.ListMessageMoveTasks",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.ListMessageMoveTasks",
+            "operation_id": "ListMessageMoveTasks",
+            "deprecated": false,
+            "source_location": "operations[\"ListMessageMoveTasks\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.ListQueueTags",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.ListQueueTags",
+            "operation_id": "ListQueueTags",
+            "deprecated": false,
+            "source_location": "operations[\"ListQueueTags\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.ListQueues",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.ListQueues",
+            "operation_id": "ListQueues",
+            "deprecated": false,
+            "source_location": "operations[\"ListQueues\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.PurgeQueue",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.PurgeQueue",
+            "operation_id": "PurgeQueue",
+            "deprecated": false,
+            "source_location": "operations[\"PurgeQueue\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.ReceiveMessage",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.ReceiveMessage",
+            "operation_id": "ReceiveMessage",
+            "deprecated": false,
+            "source_location": "operations[\"ReceiveMessage\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.RemovePermission",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.RemovePermission",
+            "operation_id": "RemovePermission",
+            "deprecated": false,
+            "source_location": "operations[\"RemovePermission\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.SendMessage",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.SendMessage",
+            "operation_id": "SendMessage",
+            "deprecated": false,
+            "source_location": "operations[\"SendMessage\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.SendMessageBatch",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.SendMessageBatch",
+            "operation_id": "SendMessageBatch",
+            "deprecated": false,
+            "source_location": "operations[\"SendMessageBatch\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.SetQueueAttributes",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.SetQueueAttributes",
+            "operation_id": "SetQueueAttributes",
+            "deprecated": false,
+            "source_location": "operations[\"SetQueueAttributes\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.StartMessageMoveTask",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.StartMessageMoveTask",
+            "operation_id": "StartMessageMoveTask",
+            "deprecated": false,
+            "source_location": "operations[\"StartMessageMoveTask\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.TagQueue",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.TagQueue",
+            "operation_id": "TagQueue",
+            "deprecated": false,
+            "source_location": "operations[\"TagQueue\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          },
+          {
+            "id": "amazon-sqs.rest.UntagQueue",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "SQS.UntagQueue",
+            "operation_id": "UntagQueue",
+            "deprecated": false,
+            "source_location": "operations[\"UntagQueue\"]",
+            "citation_url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/sqs/2012-11-05/service-2.json"
+          }
+        ],
+        "content_type": "application/json"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 23,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 23
+  }
+}

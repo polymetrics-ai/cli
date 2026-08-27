@@ -1,0 +1,1075 @@
+{
+  "schema_version": 3,
+  "connector": "paypal-transaction",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "retrieval": "schema-v2 source-lock migration retaining hash-pinned provider artifacts",
+    "openapi": [],
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "all provider-published PayPal REST OpenAPI documents under openapi/ in the official paypal-rest-api-specifications repository Inventory basis: parsed from every provider-published PayPal REST OpenAPI document under openapi/ in the official specifications repository"
+    },
+    "source_documents": [
+      {
+        "id": "source",
+        "kind": "bundle",
+        "artifact": {
+          "source_url": "https://codeload.github.com/paypal/paypal-rest-api-specifications/tar.gz/refs/heads/main",
+          "sha256": "dda4b70942c2b45281d7d3330c2fb203d6e0097e84aeacc012d28d6581b5e1bf",
+          "bytes": 421176
+        },
+        "published_source": {
+          "source_url": "https://codeload.github.com/paypal/paypal-rest-api-specifications/tar.gz/refs/heads/main",
+          "capture_url": "https://codeload.github.com/paypal/paypal-rest-api-specifications/tar.gz/refs/heads/main",
+          "sha256": "dda4b70942c2b45281d7d3330c2fb203d6e0097e84aeacc012d28d6581b5e1bf",
+          "bytes": 421176,
+          "adapter": "legacy-v2-source-lock-migration-v1"
+        },
+        "operations": [
+          {
+            "id": "paypal-transaction.rest.openapi.billing.subscriptions.v1.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/billing/plans",
+            "operation_id": "plans.create",
+            "deprecated": false,
+            "source_location": "openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/plans\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.billing.subscriptions.v1.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/billing/plans",
+            "operation_id": "plans.list",
+            "deprecated": false,
+            "source_location": "openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/plans\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.billing.subscriptions.v1.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/billing/plans/{id}",
+            "operation_id": "plans.get",
+            "deprecated": false,
+            "source_location": "openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/plans/{id}\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.billing.subscriptions.v1.json.4",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/v1/billing/plans/{id}",
+            "operation_id": "plans.patch",
+            "deprecated": false,
+            "source_location": "openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/plans/{id}\"].patch"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.billing.subscriptions.v1.json.5",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/billing/plans/{id}/activate",
+            "operation_id": "plans.activate",
+            "deprecated": false,
+            "source_location": "openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/plans/{id}/activate\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.billing.subscriptions.v1.json.6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/billing/plans/{id}/deactivate",
+            "operation_id": "plans.deactivate",
+            "deprecated": false,
+            "source_location": "openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/plans/{id}/deactivate\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.billing.subscriptions.v1.json.7",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/billing/plans/{id}/update-pricing-schemes",
+            "operation_id": "plans.update-pricing-schemes",
+            "deprecated": false,
+            "source_location": "openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/plans/{id}/update-pricing-schemes\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.billing.subscriptions.v1.json.8",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/billing/subscriptions",
+            "operation_id": "subscriptions.create",
+            "deprecated": false,
+            "source_location": "openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/subscriptions\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.billing.subscriptions.v1.json.9",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/billing/subscriptions/{id}",
+            "operation_id": "subscriptions.get",
+            "deprecated": false,
+            "source_location": "openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/subscriptions/{id}\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.billing.subscriptions.v1.json.10",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/v1/billing/subscriptions/{id}",
+            "operation_id": "subscriptions.patch",
+            "deprecated": false,
+            "source_location": "openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/subscriptions/{id}\"].patch"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.billing.subscriptions.v1.json.11",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/billing/subscriptions/{id}/revise",
+            "operation_id": "subscriptions.revise",
+            "deprecated": false,
+            "source_location": "openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/subscriptions/{id}/revise\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.billing.subscriptions.v1.json.12",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/billing/subscriptions/{id}/suspend",
+            "operation_id": "subscriptions.suspend",
+            "deprecated": false,
+            "source_location": "openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/subscriptions/{id}/suspend\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.billing.subscriptions.v1.json.13",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/billing/subscriptions/{id}/cancel",
+            "operation_id": "subscriptions.cancel",
+            "deprecated": false,
+            "source_location": "openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/subscriptions/{id}/cancel\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.billing.subscriptions.v1.json.14",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/billing/subscriptions/{id}/activate",
+            "operation_id": "subscriptions.activate",
+            "deprecated": false,
+            "source_location": "openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/subscriptions/{id}/activate\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.billing.subscriptions.v1.json.15",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/billing/subscriptions/{id}/capture",
+            "operation_id": "subscriptions.capture",
+            "deprecated": false,
+            "source_location": "openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/subscriptions/{id}/capture\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.billing.subscriptions.v1.json.16",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/billing/subscriptions/{id}/transactions",
+            "operation_id": "subscriptions.transactions",
+            "deprecated": false,
+            "source_location": "openapi/billing_subscriptions_v1.json:paths[\"/v1/billing/subscriptions/{id}/transactions\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.catalogs.products.v1.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/catalogs/products",
+            "operation_id": "products.create",
+            "deprecated": false,
+            "source_location": "openapi/catalogs_products_v1.json:paths[\"/v1/catalogs/products\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.catalogs.products.v1.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/catalogs/products",
+            "operation_id": "products.list",
+            "deprecated": false,
+            "source_location": "openapi/catalogs_products_v1.json:paths[\"/v1/catalogs/products\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.catalogs.products.v1.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/catalogs/products/{product_id}",
+            "operation_id": "products.get",
+            "deprecated": false,
+            "source_location": "openapi/catalogs_products_v1.json:paths[\"/v1/catalogs/products/{product_id}\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.catalogs.products.v1.json.4",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/v1/catalogs/products/{product_id}",
+            "operation_id": "products.patch",
+            "deprecated": false,
+            "source_location": "openapi/catalogs_products_v1.json:paths[\"/v1/catalogs/products/{product_id}\"].patch"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.checkout.orders.v2.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/checkout/orders",
+            "operation_id": "orders.create",
+            "deprecated": false,
+            "source_location": "openapi/checkout_orders_v2.json:paths[\"/v2/checkout/orders\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.checkout.orders.v2.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/checkout/orders/{id}",
+            "operation_id": "orders.get",
+            "deprecated": false,
+            "source_location": "openapi/checkout_orders_v2.json:paths[\"/v2/checkout/orders/{id}\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.checkout.orders.v2.json.3",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/v2/checkout/orders/{id}",
+            "operation_id": "orders.patch",
+            "deprecated": false,
+            "source_location": "openapi/checkout_orders_v2.json:paths[\"/v2/checkout/orders/{id}\"].patch"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.checkout.orders.v2.json.4",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/checkout/orders/{id}/confirm-payment-source",
+            "operation_id": "orders.confirm",
+            "deprecated": false,
+            "source_location": "openapi/checkout_orders_v2.json:paths[\"/v2/checkout/orders/{id}/confirm-payment-source\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.checkout.orders.v2.json.5",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/checkout/orders/{id}/authorize",
+            "operation_id": "orders.authorize",
+            "deprecated": false,
+            "source_location": "openapi/checkout_orders_v2.json:paths[\"/v2/checkout/orders/{id}/authorize\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.checkout.orders.v2.json.6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/checkout/orders/{id}/capture",
+            "operation_id": "orders.capture",
+            "deprecated": false,
+            "source_location": "openapi/checkout_orders_v2.json:paths[\"/v2/checkout/orders/{id}/capture\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.checkout.orders.v2.json.7",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/checkout/orders/{id}/track",
+            "operation_id": "orders.track.create",
+            "deprecated": false,
+            "source_location": "openapi/checkout_orders_v2.json:paths[\"/v2/checkout/orders/{id}/track\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.checkout.orders.v2.json.8",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/v2/checkout/orders/{id}/trackers/{tracker_id}",
+            "operation_id": "orders.trackers.patch",
+            "deprecated": false,
+            "source_location": "openapi/checkout_orders_v2.json:paths[\"/v2/checkout/orders/{id}/trackers/{tracker_id}\"].patch"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.checkout.orders.v2.json.9",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/checkout/orders/order-update-callback",
+            "operation_id": "server.callback",
+            "deprecated": false,
+            "source_location": "openapi/checkout_orders_v2.json:paths[\"/v2/checkout/orders/order-update-callback\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.customer.disputes.v1.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/customer/disputes",
+            "operation_id": "disputes.list",
+            "deprecated": false,
+            "source_location": "openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.customer.disputes.v1.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/customer/disputes/{id}",
+            "operation_id": "disputes.get",
+            "deprecated": false,
+            "source_location": "openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.customer.disputes.v1.json.3",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/v1/customer/disputes/{id}",
+            "operation_id": "disputes.patch",
+            "deprecated": false,
+            "source_location": "openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}\"].patch"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.customer.disputes.v1.json.4",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/customer/disputes/{id}/provide-evidence",
+            "operation_id": "disputes.provide-evidence",
+            "deprecated": false,
+            "source_location": "openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/provide-evidence\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.customer.disputes.v1.json.5",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/customer/disputes/{id}/appeal",
+            "operation_id": "disputes.appeal",
+            "deprecated": false,
+            "source_location": "openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/appeal\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.customer.disputes.v1.json.6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/customer/disputes/{id}/accept-claim",
+            "operation_id": "disputes.accept-claim",
+            "deprecated": false,
+            "source_location": "openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/accept-claim\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.customer.disputes.v1.json.7",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/customer/disputes/{id}/adjudicate",
+            "operation_id": "disputes.adjudicate",
+            "deprecated": false,
+            "source_location": "openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/adjudicate\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.customer.disputes.v1.json.8",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/customer/disputes/{id}/require-evidence",
+            "operation_id": "disputes.require-evidence",
+            "deprecated": false,
+            "source_location": "openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/require-evidence\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.customer.disputes.v1.json.9",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/customer/disputes/{id}/escalate",
+            "operation_id": "disputes.escalate",
+            "deprecated": false,
+            "source_location": "openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/escalate\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.customer.disputes.v1.json.10",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/customer/disputes/{id}/send-message",
+            "operation_id": "disputes.send-message",
+            "deprecated": false,
+            "source_location": "openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/send-message\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.customer.disputes.v1.json.11",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/customer/disputes/{id}/make-offer",
+            "operation_id": "disputes.make-offer",
+            "deprecated": false,
+            "source_location": "openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/make-offer\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.customer.disputes.v1.json.12",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/customer/disputes/{id}/accept-offer",
+            "operation_id": "disputes.accept-offer",
+            "deprecated": false,
+            "source_location": "openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/accept-offer\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.customer.disputes.v1.json.13",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/customer/disputes/{id}/deny-offer",
+            "operation_id": "disputes.deny-offer",
+            "deprecated": false,
+            "source_location": "openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/deny-offer\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.customer.disputes.v1.json.14",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/customer/disputes/{id}/acknowledge-return-item",
+            "operation_id": "disputes.acknowledge-return-item",
+            "deprecated": false,
+            "source_location": "openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/acknowledge-return-item\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.customer.disputes.v1.json.15",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/customer/disputes/{id}/provide-supporting-info",
+            "operation_id": "disputes.provide-supporting-info",
+            "deprecated": false,
+            "source_location": "openapi/customer_disputes_v1.json:paths[\"/v1/customer/disputes/{id}/provide-supporting-info\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.customer.partner.referrals.v2.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/customer/partner-referrals",
+            "operation_id": "partner-referrals.create",
+            "deprecated": false,
+            "source_location": "openapi/customer_partner_referrals_v2.json:paths[\"/v2/customer/partner-referrals\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.customer.partner.referrals.v2.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/customer/partner-referrals/{partner_referral_id}",
+            "operation_id": "partner-referrals.read",
+            "deprecated": false,
+            "source_location": "openapi/customer_partner_referrals_v2.json:paths[\"/v2/customer/partner-referrals/{partner_referral_id}\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/invoicing/invoices",
+            "operation_id": "invoices.create",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/invoicing/invoices",
+            "operation_id": "invoices.list",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/invoicing/invoices/{invoice_id}/send",
+            "operation_id": "invoices.send",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}/send\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.4",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/invoicing/invoices/{invoice_id}/remind",
+            "operation_id": "invoices.remind",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}/remind\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.5",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/invoicing/invoices/{invoice_id}/cancel",
+            "operation_id": "invoices.cancel",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}/cancel\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/invoicing/invoices/{invoice_id}/payments",
+            "operation_id": "invoices.payments",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}/payments\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.7",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/invoicing/invoices/{invoice_id}/payments/{transaction_id}",
+            "operation_id": "invoices.payments-delete",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}/payments/{transaction_id}\"].delete"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.8",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/invoicing/invoices/{invoice_id}/refunds",
+            "operation_id": "invoices.refunds",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}/refunds\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.9",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/invoicing/invoices/{invoice_id}/refunds/{transaction_id}",
+            "operation_id": "invoices.refunds-delete",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}/refunds/{transaction_id}\"].delete"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.10",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/invoicing/invoices/{invoice_id}/generate-qr-code",
+            "operation_id": "invoices.generate-qr-code",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}/generate-qr-code\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.11",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/invoicing/generate-next-invoice-number",
+            "operation_id": "invoicing.generate-next-invoice-number",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/generate-next-invoice-number\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.12",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/invoicing/invoices/{invoice_id}",
+            "operation_id": "invoices.get",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.13",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/invoicing/invoices/{invoice_id}",
+            "operation_id": "invoices.update",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}\"].put"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.14",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/invoicing/invoices/{invoice_id}",
+            "operation_id": "invoices.delete",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/invoices/{invoice_id}\"].delete"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.15",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/invoicing/search-invoices",
+            "operation_id": "invoices.search-invoices",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/search-invoices\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.16",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/invoicing/templates",
+            "operation_id": "templates.list",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/templates\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.17",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/invoicing/templates",
+            "operation_id": "templates.create",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/templates\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.18",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/invoicing/templates/{template_id}",
+            "operation_id": "templates.get",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/templates/{template_id}\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.19",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/invoicing/templates/{template_id}",
+            "operation_id": "templates.update",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/templates/{template_id}\"].put"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.20",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/invoicing/templates/{template_id}",
+            "operation_id": "templates.delete",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/templates/{template_id}\"].delete"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.21",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/invoicing/accounting-sync/merchant/connections",
+            "operation_id": "connections.get",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/accounting-sync/merchant/connections\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.invoicing.v2.json.22",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/invoicing/accounting-sync/invoices/{id}/connections",
+            "operation_id": "invoice_connection_details.get",
+            "deprecated": false,
+            "source_location": "openapi/invoicing_v2.json:paths[\"/v2/invoicing/accounting-sync/invoices/{id}/connections\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.notifications.webhooks.v1.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/notifications/webhooks",
+            "operation_id": "webhooks.post",
+            "deprecated": false,
+            "source_location": "openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.notifications.webhooks.v1.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/notifications/webhooks",
+            "operation_id": "webhooks.list",
+            "deprecated": false,
+            "source_location": "openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.notifications.webhooks.v1.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/notifications/webhooks/{webhook_id}",
+            "operation_id": "webhooks.get",
+            "deprecated": false,
+            "source_location": "openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks/{webhook_id}\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.notifications.webhooks.v1.json.4",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/v1/notifications/webhooks/{webhook_id}",
+            "operation_id": "webhooks.update",
+            "deprecated": false,
+            "source_location": "openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks/{webhook_id}\"].patch"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.notifications.webhooks.v1.json.5",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/notifications/webhooks/{webhook_id}",
+            "operation_id": "webhooks.delete",
+            "deprecated": false,
+            "source_location": "openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks/{webhook_id}\"].delete"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.notifications.webhooks.v1.json.6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/notifications/webhooks/{webhook_id}/event-types",
+            "operation_id": "event-types.list",
+            "deprecated": false,
+            "source_location": "openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks/{webhook_id}/event-types\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.notifications.webhooks.v1.json.7",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/notifications/webhooks-lookup",
+            "operation_id": "webhooks-lookup.post",
+            "deprecated": false,
+            "source_location": "openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-lookup\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.notifications.webhooks.v1.json.8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/notifications/webhooks-lookup",
+            "operation_id": "webhooks-lookup.list",
+            "deprecated": false,
+            "source_location": "openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-lookup\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.notifications.webhooks.v1.json.9",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/notifications/webhooks-lookup/{webhook_lookup_id}",
+            "operation_id": "webhooks-lookup.get",
+            "deprecated": false,
+            "source_location": "openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-lookup/{webhook_lookup_id}\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.notifications.webhooks.v1.json.10",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/notifications/webhooks-lookup/{webhook_lookup_id}",
+            "operation_id": "webhooks-lookup.delete",
+            "deprecated": false,
+            "source_location": "openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-lookup/{webhook_lookup_id}\"].delete"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.notifications.webhooks.v1.json.11",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/notifications/verify-webhook-signature",
+            "operation_id": "verify-webhook-signature.post",
+            "deprecated": false,
+            "source_location": "openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/verify-webhook-signature\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.notifications.webhooks.v1.json.12",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/notifications/webhooks-event-types",
+            "operation_id": "webhooks-event-types.list",
+            "deprecated": false,
+            "source_location": "openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-event-types\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.notifications.webhooks.v1.json.13",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/notifications/webhooks-events",
+            "operation_id": "webhooks-events.list",
+            "deprecated": false,
+            "source_location": "openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-events\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.notifications.webhooks.v1.json.14",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/notifications/webhooks-events/{event_id}",
+            "operation_id": "webhooks-events.get",
+            "deprecated": false,
+            "source_location": "openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-events/{event_id}\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.notifications.webhooks.v1.json.15",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/notifications/webhooks-events/{event_id}/resend",
+            "operation_id": "webhooks-events.resend",
+            "deprecated": false,
+            "source_location": "openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-events/{event_id}/resend\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.notifications.webhooks.v1.json.16",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/notifications/simulate-event",
+            "operation_id": "simulate-event.post",
+            "deprecated": false,
+            "source_location": "openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/simulate-event\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.payment.experience.web.experience.profiles.v1.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/payment-experience/web-profiles",
+            "operation_id": "web-profile.create",
+            "deprecated": false,
+            "source_location": "openapi/payment-experience_web_experience_profiles_v1.json:paths[\"/v1/payment-experience/web-profiles\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.payment.experience.web.experience.profiles.v1.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/payment-experience/web-profiles",
+            "operation_id": "web-profile.get-list",
+            "deprecated": false,
+            "source_location": "openapi/payment-experience_web_experience_profiles_v1.json:paths[\"/v1/payment-experience/web-profiles\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.payment.experience.web.experience.profiles.v1.json.3",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/payment-experience/web-profiles/{id}",
+            "operation_id": "web-profile.update",
+            "deprecated": false,
+            "source_location": "openapi/payment-experience_web_experience_profiles_v1.json:paths[\"/v1/payment-experience/web-profiles/{id}\"].put"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.payment.experience.web.experience.profiles.v1.json.4",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/v1/payment-experience/web-profiles/{id}",
+            "operation_id": "web-profile.partial-update",
+            "deprecated": false,
+            "source_location": "openapi/payment-experience_web_experience_profiles_v1.json:paths[\"/v1/payment-experience/web-profiles/{id}\"].patch"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.payment.experience.web.experience.profiles.v1.json.5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/payment-experience/web-profiles/{id}",
+            "operation_id": "web-profile.get",
+            "deprecated": false,
+            "source_location": "openapi/payment-experience_web_experience_profiles_v1.json:paths[\"/v1/payment-experience/web-profiles/{id}\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.payment.experience.web.experience.profiles.v1.json.6",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/payment-experience/web-profiles/{id}",
+            "operation_id": "web-profile.delete",
+            "deprecated": false,
+            "source_location": "openapi/payment-experience_web_experience_profiles_v1.json:paths[\"/v1/payment-experience/web-profiles/{id}\"].delete"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.payments.payment.v2.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/payments/authorizations/{authorization_id}",
+            "operation_id": "authorizations.get",
+            "deprecated": false,
+            "source_location": "openapi/payments_payment_v2.json:paths[\"/v2/payments/authorizations/{authorization_id}\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.payments.payment.v2.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/payments/authorizations/{authorization_id}/capture",
+            "operation_id": "authorizations.capture",
+            "deprecated": false,
+            "source_location": "openapi/payments_payment_v2.json:paths[\"/v2/payments/authorizations/{authorization_id}/capture\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.payments.payment.v2.json.3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/payments/authorizations/{authorization_id}/reauthorize",
+            "operation_id": "authorizations.reauthorize",
+            "deprecated": false,
+            "source_location": "openapi/payments_payment_v2.json:paths[\"/v2/payments/authorizations/{authorization_id}/reauthorize\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.payments.payment.v2.json.4",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/payments/authorizations/{authorization_id}/void",
+            "operation_id": "authorizations.void",
+            "deprecated": false,
+            "source_location": "openapi/payments_payment_v2.json:paths[\"/v2/payments/authorizations/{authorization_id}/void\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.payments.payment.v2.json.5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/payments/captures/{capture_id}",
+            "operation_id": "captures.get",
+            "deprecated": false,
+            "source_location": "openapi/payments_payment_v2.json:paths[\"/v2/payments/captures/{capture_id}\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.payments.payment.v2.json.6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/payments/captures/{capture_id}/refund",
+            "operation_id": "captures.refund",
+            "deprecated": false,
+            "source_location": "openapi/payments_payment_v2.json:paths[\"/v2/payments/captures/{capture_id}/refund\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.payments.payment.v2.json.7",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/payments/find-eligible-methods",
+            "operation_id": "find.eligible.methods",
+            "deprecated": false,
+            "source_location": "openapi/payments_payment_v2.json:paths[\"/v2/payments/find-eligible-methods\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.payments.payment.v2.json.8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/payments/refunds/{refund_id}",
+            "operation_id": "refunds.get",
+            "deprecated": false,
+            "source_location": "openapi/payments_payment_v2.json:paths[\"/v2/payments/refunds/{refund_id}\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.payments.payouts.batch.v1.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/payments/payouts",
+            "operation_id": "payouts.post",
+            "deprecated": false,
+            "source_location": "openapi/payments_payouts_batch_v1.json:paths[\"/v1/payments/payouts\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.payments.payouts.batch.v1.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/payments/payouts/{id}",
+            "operation_id": "payouts.get",
+            "deprecated": false,
+            "source_location": "openapi/payments_payouts_batch_v1.json:paths[\"/v1/payments/payouts/{id}\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.payments.payouts.batch.v1.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/payments/payouts-item/{payout_item_id}",
+            "operation_id": "payouts-item.get",
+            "deprecated": false,
+            "source_location": "openapi/payments_payouts_batch_v1.json:paths[\"/v1/payments/payouts-item/{payout_item_id}\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.payments.payouts.batch.v1.json.4",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/payments/payouts-item/{payout_item_id}/cancel",
+            "operation_id": "payouts-item.cancel",
+            "deprecated": false,
+            "source_location": "openapi/payments_payouts_batch_v1.json:paths[\"/v1/payments/payouts-item/{payout_item_id}/cancel\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.reporting.transactions.v1.json.1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/reporting/transactions",
+            "operation_id": "search.get",
+            "deprecated": false,
+            "source_location": "openapi/reporting_transactions_v1.json:paths[\"/v1/reporting/transactions\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.reporting.transactions.v1.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/reporting/balances",
+            "operation_id": "balances.get",
+            "deprecated": false,
+            "source_location": "openapi/reporting_transactions_v1.json:paths[\"/v1/reporting/balances\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.shipping.shipment.tracking.v1.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/shipping/trackers-batch",
+            "operation_id": "trackers-batch.post",
+            "deprecated": false,
+            "source_location": "openapi/shipping_shipment_tracking_v1.json:paths[\"/v1/shipping/trackers-batch\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.shipping.shipment.tracking.v1.json.2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/shipping/trackers",
+            "operation_id": "trackers.post",
+            "deprecated": false,
+            "source_location": "openapi/shipping_shipment_tracking_v1.json:paths[\"/v1/shipping/trackers\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.shipping.shipment.tracking.v1.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/shipping/trackers",
+            "operation_id": "trackers-batch.get",
+            "deprecated": false,
+            "source_location": "openapi/shipping_shipment_tracking_v1.json:paths[\"/v1/shipping/trackers\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.shipping.shipment.tracking.v1.json.4",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/shipping/trackers/{id}",
+            "operation_id": "trackers.put",
+            "deprecated": false,
+            "source_location": "openapi/shipping_shipment_tracking_v1.json:paths[\"/v1/shipping/trackers/{id}\"].put"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.shipping.shipment.tracking.v1.json.5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/shipping/trackers/{id}",
+            "operation_id": "trackers.get",
+            "deprecated": false,
+            "source_location": "openapi/shipping_shipment_tracking_v1.json:paths[\"/v1/shipping/trackers/{id}\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.vault.payment.tokens.v3.json.1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v3/vault/payment-tokens",
+            "operation_id": "payment-tokens.create",
+            "deprecated": false,
+            "source_location": "openapi/vault_payment_tokens_v3.json:paths[\"/v3/vault/payment-tokens\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.vault.payment.tokens.v3.json.2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v3/vault/payment-tokens",
+            "operation_id": "customer.payment-tokens.get",
+            "deprecated": false,
+            "source_location": "openapi/vault_payment_tokens_v3.json:paths[\"/v3/vault/payment-tokens\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.vault.payment.tokens.v3.json.3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v3/vault/payment-tokens/{id}",
+            "operation_id": "payment-tokens.get",
+            "deprecated": false,
+            "source_location": "openapi/vault_payment_tokens_v3.json:paths[\"/v3/vault/payment-tokens/{id}\"].get"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.vault.payment.tokens.v3.json.4",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v3/vault/payment-tokens/{id}",
+            "operation_id": "payment-tokens.delete",
+            "deprecated": false,
+            "source_location": "openapi/vault_payment_tokens_v3.json:paths[\"/v3/vault/payment-tokens/{id}\"].delete"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.vault.payment.tokens.v3.json.5",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v3/vault/setup-tokens",
+            "operation_id": "setup-tokens.create",
+            "deprecated": false,
+            "source_location": "openapi/vault_payment_tokens_v3.json:paths[\"/v3/vault/setup-tokens\"].post"
+          },
+          {
+            "id": "paypal-transaction.rest.openapi.vault.payment.tokens.v3.json.6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v3/vault/setup-tokens/{id}",
+            "operation_id": "setup-tokens.get",
+            "deprecated": false,
+            "source_location": "openapi/vault_payment_tokens_v3.json:paths[\"/v3/vault/setup-tokens/{id}\"].get"
+          }
+        ],
+        "content_type": "application/x-gzip"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 115,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 115
+  }
+}

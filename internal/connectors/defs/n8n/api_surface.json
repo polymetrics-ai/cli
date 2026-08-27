@@ -35,9 +35,14 @@
     {
       "method": "DELETE",
       "path": "/api/v1/workflows/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Deletes a workflow from the n8n instance; destructive administrative lifecycle actions are not exposed as reverse-ETL writes."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes a workflow from the n8n instance; destructive administrative lifecycle actions are not exposed as reverse-ETL writes.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+        "notes": "legacy_exclusion=destructive_admin; converted for the source-locked parity ledger"
       }
     },
     {
@@ -92,9 +97,14 @@
     {
       "method": "PUT",
       "path": "/api/v1/workflows/{id}/tags",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Blocked by n8n ENGINE_GAP in docs/migration/quarantine.json: this endpoint requires a root JSON array body, but writes.json can only construct object bodies from record fields."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Blocked by n8n ENGINE_GAP in docs/migration/quarantine.json: this endpoint requires a root JSON array body, but writes.json can only construct object bodies from record fields.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -114,9 +124,14 @@
     {
       "method": "DELETE",
       "path": "/api/v1/executions/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Deletes execution history from the n8n instance; destructive administrative deletes are not exposed as reverse-ETL writes."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes execution history from the n8n instance; destructive administrative deletes are not exposed as reverse-ETL writes.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+        "notes": "legacy_exclusion=destructive_admin; converted for the source-locked parity ledger"
       }
     },
     {
@@ -150,9 +165,14 @@
     {
       "method": "PUT",
       "path": "/api/v1/executions/{id}/tags",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Blocked by n8n ENGINE_GAP in docs/migration/quarantine.json: this endpoint requires a root JSON array body, but writes.json can only construct object bodies from record fields."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Blocked by n8n ENGINE_GAP in docs/migration/quarantine.json: this endpoint requires a root JSON array body, but writes.json can only construct object bodies from record fields.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -165,9 +185,14 @@
     {
       "method": "POST",
       "path": "/api/v1/users",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "Creates/invites n8n users and requires instance user administration; the request body is also a root array, which the current write dialect cannot construct."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Creates/invites n8n users and requires instance user administration; the request body is also a root array, which the current write dialect cannot construct.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+        "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -180,17 +205,27 @@
     {
       "method": "DELETE",
       "path": "/api/v1/users/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Deletes an n8n user account; destructive user-administration actions are not exposed as reverse-ETL writes."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes an n8n user account; destructive user-administration actions are not exposed as reverse-ETL writes.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+        "notes": "legacy_exclusion=destructive_admin; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "PATCH",
       "path": "/api/v1/users/{id}/role",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "Changes a user global role and requires elevated instance administration."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Changes a user global role and requires elevated instance administration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+        "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -224,9 +259,14 @@
     {
       "method": "DELETE",
       "path": "/api/v1/tags/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Deletes a tag from the n8n instance; destructive deletes are not exposed as reverse-ETL writes."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes a tag from the n8n instance; destructive deletes are not exposed as reverse-ETL writes.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+        "notes": "legacy_exclusion=destructive_admin; converted for the source-locked parity ledger"
       }
     },
     {
@@ -253,9 +293,14 @@
     {
       "method": "DELETE",
       "path": "/api/v1/variables/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Deletes an n8n variable; destructive deletes are not exposed as reverse-ETL writes."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes an n8n variable; destructive deletes are not exposed as reverse-ETL writes.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+        "notes": "legacy_exclusion=destructive_admin; converted for the source-locked parity ledger"
       }
     },
     {
@@ -282,9 +327,14 @@
     {
       "method": "DELETE",
       "path": "/api/v1/projects/{projectId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Deletes an n8n project; destructive project-administration deletes are not exposed as reverse-ETL writes."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes an n8n project; destructive project-administration deletes are not exposed as reverse-ETL writes.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+        "notes": "legacy_exclusion=destructive_admin; converted for the source-locked parity ledger"
       }
     },
     {
@@ -304,9 +354,14 @@
     {
       "method": "DELETE",
       "path": "/api/v1/projects/{projectId}/users/{userId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Removes a user from a project; destructive membership removals are not exposed as reverse-ETL writes."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Removes a user from a project; destructive membership removals are not exposed as reverse-ETL writes.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+        "notes": "legacy_exclusion=destructive_admin; converted for the source-locked parity ledger"
       }
     },
     {
@@ -340,9 +395,14 @@
     {
       "method": "DELETE",
       "path": "/api/v1/data-tables/{dataTableId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Deletes a data table; destructive table deletes are not exposed as reverse-ETL writes."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes a data table; destructive table deletes are not exposed as reverse-ETL writes.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+        "notes": "legacy_exclusion=destructive_admin; converted for the source-locked parity ledger"
       }
     },
     {
@@ -383,9 +443,14 @@
     {
       "method": "DELETE",
       "path": "/api/v1/data-tables/{dataTableId}/rows/delete",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Blocked by n8n ENGINE_GAP in docs/migration/quarantine.json: this DELETE operation carries filter/returnData/dryRun as query parameters, but writes.json has no query field."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Blocked by n8n ENGINE_GAP in docs/migration/quarantine.json: this DELETE operation carries filter/returnData/dryRun as query parameters, but writes.json has no query field.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -405,9 +470,14 @@
     {
       "method": "DELETE",
       "path": "/api/v1/data-tables/{dataTableId}/columns/{columnId}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Deletes a data table column; destructive schema deletes are not exposed as reverse-ETL writes."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes a data table column; destructive schema deletes are not exposed as reverse-ETL writes.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+        "notes": "legacy_exclusion=destructive_admin; converted for the source-locked parity ledger"
       }
     },
     {
@@ -427,9 +497,14 @@
     {
       "method": "POST",
       "path": "/api/v1/credentials",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "Creates credentials with write-only secret data; connector rules prohibit requesting or storing secret values in write records."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Creates credentials with write-only secret data; connector rules prohibit requesting or storing secret values in write records.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+        "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -442,17 +517,27 @@
     {
       "method": "DELETE",
       "path": "/api/v1/credentials/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Deletes a credential from the n8n instance; destructive credential deletes are not exposed as reverse-ETL writes."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes a credential from the n8n instance; destructive credential deletes are not exposed as reverse-ETL writes.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+        "notes": "legacy_exclusion=destructive_admin; converted for the source-locked parity ledger"
       }
     },
     {
       "method": "PATCH",
       "path": "/api/v1/credentials/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "Updates credentials and can carry write-only secret data; connector rules prohibit requesting or storing secret values in write records."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Updates credentials and can carry write-only secret data; connector rules prohibit requesting or storing secret values in write records.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/openapi.yml",
+        "notes": "legacy_exclusion=requires_elevated_scope; converted for the source-locked parity ledger"
       }
     },
     {
@@ -489,6 +574,540 @@
       "covered_by": {
         "write": "generate_audit"
       }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings/ldap",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/ldap/spec/paths/settings.ldap.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.get-/api/v1/settings/ldap; source_location=paths[\"/settings/ldap\"] (./handlers/ldap/spec/paths/settings.ldap.yml).get"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/settings/ldap",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/ldap/spec/paths/settings.ldap.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.put-/api/v1/settings/ldap; source_location=paths[\"/settings/ldap\"] (./handlers/ldap/spec/paths/settings.ldap.yml).put"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings/ldap/sync",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/ldap/spec/paths/settings.ldap.sync.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.get-/api/v1/settings/ldap/sync; source_location=paths[\"/settings/ldap/sync\"] (./handlers/ldap/spec/paths/settings.ldap.sync.yml).get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/settings/ldap/sync",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/ldap/spec/paths/settings.ldap.sync.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.post-/api/v1/settings/ldap/sync; source_location=paths[\"/settings/ldap/sync\"] (./handlers/ldap/spec/paths/settings.ldap.sync.yml).post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings/security-policy",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/security-policy/spec/paths/security-policy.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.get-/api/v1/settings/security-policy; source_location=paths[\"/settings/security-policy\"] (./handlers/security-policy/spec/paths/security-policy.yml).get"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/settings/security-policy",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/security-policy/spec/paths/security-policy.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.put-/api/v1/settings/security-policy; source_location=paths[\"/settings/security-policy\"] (./handlers/security-policy/spec/paths/security-policy.yml).put"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings/otel",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/otel/spec/paths/settings.otel.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.get-/api/v1/settings/otel; source_location=paths[\"/settings/otel\"] (./handlers/otel/spec/paths/settings.otel.yml).get"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/settings/otel",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/otel/spec/paths/settings.otel.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.put-/api/v1/settings/otel; source_location=paths[\"/settings/otel\"] (./handlers/otel/spec/paths/settings.otel.yml).put"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/settings/otel/test-trace",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/otel/spec/paths/settings.otel.test-trace.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.post-/api/v1/settings/otel/test-trace; source_location=paths[\"/settings/otel/test-trace\"] (./handlers/otel/spec/paths/settings.otel.test-trace.yml).post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings/sso/oidc",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/sso-oidc/spec/paths/settings.sso.oidc.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.get-/api/v1/settings/sso/oidc; source_location=paths[\"/settings/sso/oidc\"] (./handlers/sso-oidc/spec/paths/settings.sso.oidc.yml).get"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/settings/sso/oidc",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/sso-oidc/spec/paths/settings.sso.oidc.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.put-/api/v1/settings/sso/oidc; source_location=paths[\"/settings/sso/oidc\"] (./handlers/sso-oidc/spec/paths/settings.sso.oidc.yml).put"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings/sso/saml",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/sso-saml/spec/paths/settings.sso.saml.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.get-/api/v1/settings/sso/saml; source_location=paths[\"/settings/sso/saml\"] (./handlers/sso-saml/spec/paths/settings.sso.saml.yml).get"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/settings/sso/saml",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/sso-saml/spec/paths/settings.sso.saml.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.put-/api/v1/settings/sso/saml; source_location=paths[\"/settings/sso/saml\"] (./handlers/sso-saml/spec/paths/settings.sso.saml.yml).put"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/{id}/publish",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.publish.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.post-/api/v1/workflows/{id}/publish; source_location=paths[\"/workflows/{id}/publish\"] (./handlers/workflows/spec/paths/workflows.id.publish.yml).post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/{id}/unpublish",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.unpublish.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.post-/api/v1/workflows/{id}/unpublish; source_location=paths[\"/workflows/{id}/unpublish\"] (./handlers/workflows/spec/paths/workflows.id.unpublish.yml).post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/{id}/test-runs",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/evaluations/spec/paths/workflows.id.test-runs.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.get-/api/v1/workflows/{id}/test-runs; source_location=paths[\"/workflows/{id}/test-runs\"] (./handlers/evaluations/spec/paths/workflows.id.test-runs.yml).get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/{id}/test-runs",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/evaluations/spec/paths/workflows.id.test-runs.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.post-/api/v1/workflows/{id}/test-runs; source_location=paths[\"/workflows/{id}/test-runs\"] (./handlers/evaluations/spec/paths/workflows.id.test-runs.yml).post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/{id}/test-runs/{runId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/evaluations/spec/paths/workflows.id.test-runs.runId.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.get-/api/v1/workflows/{id}/test-runs/{runId}; source_location=paths[\"/workflows/{id}/test-runs/{runId}\"] (./handlers/evaluations/spec/paths/workflows.id.test-runs.runId.yml).get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workflows/{id}/test-runs/{runId}/cancel",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/evaluations/spec/paths/workflows.id.test-runs.runId.cancel.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.post-/api/v1/workflows/{id}/test-runs/{runId}/cancel; source_location=paths[\"/workflows/{id}/test-runs/{runId}/cancel\"] (./handlers/evaluations/spec/paths/workflows.id.test-runs.runId.cancel.yml).post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workflows/{id}/test-runs/{runId}/test-cases",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/evaluations/spec/paths/workflows.id.test-runs.runId.test-cases.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.get-/api/v1/workflows/{id}/test-runs/{runId}/test-cases; source_location=paths[\"/workflows/{id}/test-runs/{runId}/test-cases\"] (./handlers/evaluations/spec/paths/workflows.id.test-runs.runId.test-cases.yml).get"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/data-tables/{dataTableId}/rows/clear",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/data-tables/spec/paths/data-tables.dataTableId.rows.clear.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.clear-data-table-rows; source_location=paths[\"/data-tables/{dataTableId}/rows/clear\"] (./handlers/data-tables/spec/paths/data-tables.dataTableId.rows.clear.yml).delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/community-packages",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/community-packages/spec/paths/community-packages.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.post-/api/v1/community-packages; source_location=paths[\"/community-packages\"] (./handlers/community-packages/spec/paths/community-packages.yml).post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/community-packages",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/community-packages/spec/paths/community-packages.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.get-/api/v1/community-packages; source_location=paths[\"/community-packages\"] (./handlers/community-packages/spec/paths/community-packages.yml).get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/community-packages/{name}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/community-packages/spec/paths/community-packages.packageName.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.patch-/api/v1/community-packages/{name}; source_location=paths[\"/community-packages/{name}\"] (./handlers/community-packages/spec/paths/community-packages.packageName.yml).patch"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/community-packages/{name}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/community-packages/spec/paths/community-packages.packageName.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.delete-/api/v1/community-packages/{name}; source_location=paths[\"/community-packages/{name}\"] (./handlers/community-packages/spec/paths/community-packages.packageName.yml).delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/discover",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/discover/spec/paths/discover.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.get-/api/v1/discover; source_location=paths[\"/discover\"] (./handlers/discover/spec/paths/discover.yml).get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/insights/summary",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/insights/spec/paths/insights.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.get-/api/v1/insights/summary; source_location=paths[\"/insights/summary\"] (./handlers/insights/spec/paths/insights.yml).get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/projects/{projectId}/folders",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/folders/spec/paths/folders.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.post-/api/v1/projects/{projectId}/folders; source_location=paths[\"/projects/{projectId}/folders\"] (./handlers/folders/spec/paths/folders.yml).post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/projects/{projectId}/folders",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/folders/spec/paths/folders.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.get-/api/v1/projects/{projectId}/folders; source_location=paths[\"/projects/{projectId}/folders\"] (./handlers/folders/spec/paths/folders.yml).get"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/projects/{projectId}/folders/{folderId}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/folders/spec/paths/folders.folderId.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.delete-/api/v1/projects/{projectId}/folders/{folderId}; source_location=paths[\"/projects/{projectId}/folders/{folderId}\"] (./handlers/folders/spec/paths/folders.folderId.yml).delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/projects/{projectId}/folders/{folderId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/folders/spec/paths/folders.folderId.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.get-/api/v1/projects/{projectId}/folders/{folderId}; source_location=paths[\"/projects/{projectId}/folders/{folderId}\"] (./handlers/folders/spec/paths/folders.folderId.yml).get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/projects/{projectId}/folders/{folderId}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/folders/spec/paths/folders.folderId.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.patch-/api/v1/projects/{projectId}/folders/{folderId}; source_location=paths[\"/projects/{projectId}/folders/{folderId}\"] (./handlers/folders/spec/paths/folders.folderId.yml).patch"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/n8n-packages/export",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/n8n-packages/spec/paths/n8n-packages.export.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.post-/api/v1/n8n-packages/export; source_location=paths[\"/n8n-packages/export\"] (./handlers/n8n-packages/spec/paths/n8n-packages.export.yml).post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/n8n-packages/import",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/n8n-packages/spec/paths/n8n-packages.import.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.post-/api/v1/n8n-packages/import; source_location=paths[\"/n8n-packages/import\"] (./handlers/n8n-packages/spec/paths/n8n-packages.import.yml).post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings/log-streaming/event-types",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/event-types.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.get-/api/v1/settings/log-streaming/event-types; source_location=paths[\"/settings/log-streaming/event-types\"] (./handlers/log-streaming/spec/paths/event-types.yml).get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings/log-streaming/destinations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/destinations.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.get-/api/v1/settings/log-streaming/destinations; source_location=paths[\"/settings/log-streaming/destinations\"] (./handlers/log-streaming/spec/paths/destinations.yml).get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/settings/log-streaming/destinations",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/destinations.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.post-/api/v1/settings/log-streaming/destinations; source_location=paths[\"/settings/log-streaming/destinations\"] (./handlers/log-streaming/spec/paths/destinations.yml).post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/settings/log-streaming/destinations/{id}/test",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/destinations.id.test.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.post-/api/v1/settings/log-streaming/destinations/{id}/test; source_location=paths[\"/settings/log-streaming/destinations/{id}/test\"] (./handlers/log-streaming/spec/paths/destinations.id.test.yml).post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/settings/log-streaming/destinations/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/destinations.id.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.get-/api/v1/settings/log-streaming/destinations/{id}; source_location=paths[\"/settings/log-streaming/destinations/{id}\"] (./handlers/log-streaming/spec/paths/destinations.id.yml).get"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/settings/log-streaming/destinations/{id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/destinations.id.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.put-/api/v1/settings/log-streaming/destinations/{id}; source_location=paths[\"/settings/log-streaming/destinations/{id}\"] (./handlers/log-streaming/spec/paths/destinations.id.yml).put"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/settings/log-streaming/destinations/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/log-streaming/spec/paths/destinations.id.yml",
+        "notes": "classification=declaration-pending; source_id=n8n.rest.delete-/api/v1/settings/log-streaming/destinations/{id}; source_location=paths[\"/settings/log-streaming/destinations/{id}\"] (./handlers/log-streaming/spec/paths/destinations.id.yml).delete"
+      }
     }
-  ]
+  ],
+  "operation_ledger_version": 1
 }

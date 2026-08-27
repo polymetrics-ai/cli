@@ -1,0 +1,2391 @@
+{
+  "schema_version": 3,
+  "connector": "trello",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "retrieval": "schema-v2 source-lock migration retaining hash-pinned provider artifacts",
+    "openapi": [
+      "3.0.0"
+    ],
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    },
+    "source_documents": [
+      {
+        "id": "source",
+        "kind": "openapi",
+        "artifact": {
+          "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+          "sha256": "b50fca38c5ea62025f9778482f89f11ae3da0dd983d31ba49401c4422e450b19",
+          "bytes": 261671,
+          "openapi": "3.0.0"
+        },
+        "published_source": {
+          "source_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+          "capture_url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+          "sha256": "b50fca38c5ea62025f9778482f89f11ae3da0dd983d31ba49401c4422e450b19",
+          "bytes": 261671,
+          "adapter": "legacy-v2-source-lock-migration-v1"
+        },
+        "operations": [
+          {
+            "id": "trello.rest.get-actions-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/actions/{id}",
+            "operation_id": "get-actions-id",
+            "deprecated": false,
+            "source_location": "paths[\"/actions/{id}\"].get"
+          },
+          {
+            "id": "trello.rest.put-actions-id",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/actions/{id}",
+            "operation_id": "put-actions-id",
+            "deprecated": false,
+            "source_location": "paths[\"/actions/{id}\"].put"
+          },
+          {
+            "id": "trello.rest.delete-actions-id",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/actions/{id}",
+            "operation_id": "delete-actions-id",
+            "deprecated": false,
+            "source_location": "paths[\"/actions/{id}\"].delete"
+          },
+          {
+            "id": "trello.rest.get-actions-id-field",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/actions/{id}/{field}",
+            "operation_id": "get-actions-id-field",
+            "deprecated": false,
+            "source_location": "paths[\"/actions/{id}/{field}\"].get"
+          },
+          {
+            "id": "trello.rest.get-actions-id-board",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/actions/{id}/board",
+            "operation_id": "get-actions-id-board",
+            "deprecated": false,
+            "source_location": "paths[\"/actions/{id}/board\"].get"
+          },
+          {
+            "id": "trello.rest.get-actions-id-card",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/actions/{id}/card",
+            "operation_id": "get-actions-id-card",
+            "deprecated": false,
+            "source_location": "paths[\"/actions/{id}/card\"].get"
+          },
+          {
+            "id": "trello.rest.get-actions-id-list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/actions/{id}/list",
+            "operation_id": "get-actions-id-list",
+            "deprecated": false,
+            "source_location": "paths[\"/actions/{id}/list\"].get"
+          },
+          {
+            "id": "trello.rest.get-actions-id-member",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/actions/{id}/member",
+            "operation_id": "get-actions-id-member",
+            "deprecated": false,
+            "source_location": "paths[\"/actions/{id}/member\"].get"
+          },
+          {
+            "id": "trello.rest.get-actions-id-membercreator",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/actions/{id}/memberCreator",
+            "operation_id": "get-actions-id-membercreator",
+            "deprecated": false,
+            "source_location": "paths[\"/actions/{id}/memberCreator\"].get"
+          },
+          {
+            "id": "trello.rest.get-actions-id-organization",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/actions/{id}/organization",
+            "operation_id": "get-actions-id-organization",
+            "deprecated": false,
+            "source_location": "paths[\"/actions/{id}/organization\"].get"
+          },
+          {
+            "id": "trello.rest.put-actions-id-text",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/actions/{id}/text",
+            "operation_id": "put-actions-id-text",
+            "deprecated": false,
+            "source_location": "paths[\"/actions/{id}/text\"].put"
+          },
+          {
+            "id": "trello.rest.get-actions-idaction-reactions",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/actions/{idAction}/reactions",
+            "operation_id": "get-actions-idaction-reactions",
+            "deprecated": false,
+            "source_location": "paths[\"/actions/{idAction}/reactions\"].get"
+          },
+          {
+            "id": "trello.rest.post-actions-idaction-reactions",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/actions/{idAction}/reactions",
+            "operation_id": "post-actions-idaction-reactions",
+            "deprecated": false,
+            "source_location": "paths[\"/actions/{idAction}/reactions\"].post"
+          },
+          {
+            "id": "trello.rest.get-actions-idaction-reactions-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/actions/{idAction}/reactions/{id}",
+            "operation_id": "get-actions-idaction-reactions-id",
+            "deprecated": false,
+            "source_location": "paths[\"/actions/{idAction}/reactions/{id}\"].get"
+          },
+          {
+            "id": "trello.rest.delete-actions-idaction-reactions-id",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/actions/{idAction}/reactions/{id}",
+            "operation_id": "delete-actions-idaction-reactions-id",
+            "deprecated": false,
+            "source_location": "paths[\"/actions/{idAction}/reactions/{id}\"].delete"
+          },
+          {
+            "id": "trello.rest.get-actions-idaction-reactionsummary",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/actions/{idAction}/reactionsSummary",
+            "operation_id": "get-actions-idaction-reactionsummary",
+            "deprecated": false,
+            "source_location": "paths[\"/actions/{idAction}/reactionsSummary\"].get"
+          },
+          {
+            "id": "trello.rest.applications-key-compliance",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/applications/{key}/compliance",
+            "operation_id": "applications-key-compliance",
+            "deprecated": false,
+            "source_location": "paths[\"/applications/{key}/compliance\"].get"
+          },
+          {
+            "id": "trello.rest.get-batch",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/batch",
+            "operation_id": "get-batch",
+            "deprecated": false,
+            "source_location": "paths[\"/batch\"].get"
+          },
+          {
+            "id": "trello.rest.get-boards-id-memberships",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/boards/{id}/memberships",
+            "operation_id": "get-boards-id-memberships",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/memberships\"].get"
+          },
+          {
+            "id": "trello.rest.get-boards-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/boards/{id}",
+            "operation_id": "get-boards-id",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}\"].get"
+          },
+          {
+            "id": "trello.rest.put-boards-id",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/boards/{id}",
+            "operation_id": "put-boards-id",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}\"].put"
+          },
+          {
+            "id": "trello.rest.delete-boards-id",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/boards/{id}",
+            "operation_id": "delete-boards-id",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}\"].delete"
+          },
+          {
+            "id": "trello.rest.get-boards-id-field",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/boards/{id}/{field}",
+            "operation_id": "get-boards-id-field",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/{field}\"].get"
+          },
+          {
+            "id": "trello.rest.get-boards-id-actions",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/boards/{boardId}/actions",
+            "operation_id": "get-boards-id-actions",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{boardId}/actions\"].get"
+          },
+          {
+            "id": "trello.rest.get-boards-id-boardstars",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/boards/{boardId}/boardStars",
+            "operation_id": "get-boards-id-boardstars",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{boardId}/boardStars\"].get"
+          },
+          {
+            "id": "trello.rest.boards-id-checklists",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/boards/{id}/checklists",
+            "operation_id": "boards-id-checklists",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/checklists\"].get"
+          },
+          {
+            "id": "trello.rest.get-boards-id-cards",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/boards/{id}/cards",
+            "operation_id": "get-boards-id-cards",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/cards\"].get"
+          },
+          {
+            "id": "trello.rest.get-boards-id-cards-filter",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/boards/{id}/cards/{filter}",
+            "operation_id": "get-boards-id-cards-filter",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/cards/{filter}\"].get"
+          },
+          {
+            "id": "trello.rest.get-boards-id-customfields",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/boards/{id}/customFields",
+            "operation_id": "get-boards-id-customfields",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/customFields\"].get"
+          },
+          {
+            "id": "trello.rest.get-boards-id-labels",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/boards/{id}/labels",
+            "operation_id": "get-boards-id-labels",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/labels\"].get"
+          },
+          {
+            "id": "trello.rest.post-boards-id-labels",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/boards/{id}/labels",
+            "operation_id": "post-boards-id-labels",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/labels\"].post"
+          },
+          {
+            "id": "trello.rest.get-boards-id-lists",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/boards/{id}/lists",
+            "operation_id": "get-boards-id-lists",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/lists\"].get"
+          },
+          {
+            "id": "trello.rest.post-boards-id-lists",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/boards/{id}/lists",
+            "operation_id": "post-boards-id-lists",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/lists\"].post"
+          },
+          {
+            "id": "trello.rest.get-boards-id-lists-filter",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/boards/{id}/lists/{filter}",
+            "operation_id": "get-boards-id-lists-filter",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/lists/{filter}\"].get"
+          },
+          {
+            "id": "trello.rest.get-boards-id-members",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/boards/{id}/members",
+            "operation_id": "get-boards-id-members",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/members\"].get"
+          },
+          {
+            "id": "trello.rest.put-boards-id-members",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/boards/{id}/members",
+            "operation_id": "put-boards-id-members",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/members\"].put"
+          },
+          {
+            "id": "trello.rest.put-boards-id-members-idmember",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/boards/{id}/members/{idMember}",
+            "operation_id": "put-boards-id-members-idmember",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/members/{idMember}\"].put"
+          },
+          {
+            "id": "trello.rest.boardsidmembersidmember",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/boards/{id}/members/{idMember}",
+            "operation_id": "boardsidmembersidmember",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/members/{idMember}\"].delete"
+          },
+          {
+            "id": "trello.rest.put-boards-id-memberships-idmembership",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/boards/{id}/memberships/{idMembership}",
+            "operation_id": "put-boards-id-memberships-idmembership",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/memberships/{idMembership}\"].put"
+          },
+          {
+            "id": "trello.rest.put-boards-id-myprefs-emailposition",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/boards/{id}/myPrefs/emailPosition",
+            "operation_id": "put-boards-id-myprefs-emailposition",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/myPrefs/emailPosition\"].put"
+          },
+          {
+            "id": "trello.rest.put-boards-id-myprefs-idemaillist",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/boards/{id}/myPrefs/idEmailList",
+            "operation_id": "put-boards-id-myprefs-idemaillist",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/myPrefs/idEmailList\"].put"
+          },
+          {
+            "id": "trello.rest.put-boards-id-myPrefs-showsidebar",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/boards/{id}/myPrefs/showSidebar",
+            "operation_id": "put-boards-id-myPrefs-showsidebar",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/myPrefs/showSidebar\"].put"
+          },
+          {
+            "id": "trello.rest.put-boards-id-myPrefs-showsidebaractivity",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/boards/{id}/myPrefs/showSidebarActivity",
+            "operation_id": "put-boards-id-myPrefs-showsidebaractivity",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/myPrefs/showSidebarActivity\"].put"
+          },
+          {
+            "id": "trello.rest.put-boards-id-myPrefs-showsidebarboardactions",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/boards/{id}/myPrefs/showSidebarBoardActions",
+            "operation_id": "put-boards-id-myPrefs-showsidebarboardactions",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/myPrefs/showSidebarBoardActions\"].put"
+          },
+          {
+            "id": "trello.rest.put-boards-id-myPrefs-showsidebarmembers",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/boards/{id}/myPrefs/showSidebarMembers",
+            "operation_id": "put-boards-id-myPrefs-showsidebarmembers",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/myPrefs/showSidebarMembers\"].put"
+          },
+          {
+            "id": "trello.rest.post-boards",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/boards/",
+            "operation_id": "post-boards",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/\"].post"
+          },
+          {
+            "id": "trello.rest.post-boards-id-calendarkey-generate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/boards/{id}/calendarKey/generate",
+            "operation_id": "post-boards-id-calendarkey-generate",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/calendarKey/generate\"].post"
+          },
+          {
+            "id": "trello.rest.post-boards-id-emailkey-generate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/boards/{id}/emailKey/generate",
+            "operation_id": "post-boards-id-emailkey-generate",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/emailKey/generate\"].post"
+          },
+          {
+            "id": "trello.rest.post-boards-id-idtags",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/boards/{id}/idTags",
+            "operation_id": "post-boards-id-idtags",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/idTags\"].post"
+          },
+          {
+            "id": "trello.rest.post-boards-id-markedasviewed",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/boards/{id}/markedAsViewed",
+            "operation_id": "post-boards-id-markedasviewed",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/markedAsViewed\"].post"
+          },
+          {
+            "id": "trello.rest.get-boards-id-boardplugins",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/boards/{id}/boardPlugins",
+            "operation_id": "get-boards-id-boardplugins",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/boardPlugins\"].get"
+          },
+          {
+            "id": "trello.rest.post-boards-id-boardplugins",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/boards/{id}/boardPlugins",
+            "operation_id": "post-boards-id-boardplugins",
+            "deprecated": true,
+            "source_location": "paths[\"/boards/{id}/boardPlugins\"].post"
+          },
+          {
+            "id": "trello.rest.delete-boards-id-boardplugins",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/boards/{id}/boardPlugins/{idPlugin}",
+            "operation_id": "delete-boards-id-boardplugins",
+            "deprecated": true,
+            "source_location": "paths[\"/boards/{id}/boardPlugins/{idPlugin}\"].delete"
+          },
+          {
+            "id": "trello.rest.get-board-id-plugins",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/boards/{id}/plugins",
+            "operation_id": "get-board-id-plugins",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/plugins\"].get"
+          },
+          {
+            "id": "trello.rest.post-boards-id-exports",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/boards/{id}/exports",
+            "operation_id": "post-boards-id-exports",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/exports\"].post"
+          },
+          {
+            "id": "trello.rest.get-boards-id-exports-idexport",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/boards/{id}/exports/{idExport}",
+            "operation_id": "get-boards-id-exports-idexport",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/exports/{idExport}\"].get"
+          },
+          {
+            "id": "trello.rest.delete-boards-id-exports-idexport",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/boards/{id}/exports/{idExport}",
+            "operation_id": "delete-boards-id-exports-idexport",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/exports/{idExport}\"].delete"
+          },
+          {
+            "id": "trello.rest.get-boards-id-exports-idexport-download",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/boards/{id}/exports/{idExport}/download",
+            "operation_id": "get-boards-id-exports-idexport-download",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/exports/{idExport}/download\"].get"
+          },
+          {
+            "id": "trello.rest.get-boards-id-exports-mostrecent",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/boards/{id}/exports/mostRecent",
+            "operation_id": "get-boards-id-exports-mostrecent",
+            "deprecated": false,
+            "source_location": "paths[\"/boards/{id}/exports/mostRecent\"].get"
+          },
+          {
+            "id": "trello.rest.post-cards",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/cards",
+            "operation_id": "post-cards",
+            "deprecated": false,
+            "source_location": "paths[\"/cards\"].post"
+          },
+          {
+            "id": "trello.rest.get-cards-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/cards/{id}",
+            "operation_id": "get-cards-id",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}\"].get"
+          },
+          {
+            "id": "trello.rest.put-cards-id",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/cards/{id}",
+            "operation_id": "put-cards-id",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}\"].put"
+          },
+          {
+            "id": "trello.rest.delete-cards-id",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/cards/{id}",
+            "operation_id": "delete-cards-id",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}\"].delete"
+          },
+          {
+            "id": "trello.rest.get-cards-id-field",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/cards/{id}/{field}",
+            "operation_id": "get-cards-id-field",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/{field}\"].get"
+          },
+          {
+            "id": "trello.rest.get-cards-id-actions",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/cards/{id}/actions",
+            "operation_id": "get-cards-id-actions",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/actions\"].get"
+          },
+          {
+            "id": "trello.rest.get-cards-id-attachments",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/cards/{id}/attachments",
+            "operation_id": "get-cards-id-attachments",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/attachments\"].get"
+          },
+          {
+            "id": "trello.rest.post-cards-id-attachments",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/cards/{id}/attachments",
+            "operation_id": "post-cards-id-attachments",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/attachments\"].post"
+          },
+          {
+            "id": "trello.rest.get-cards-id-attachments-idattachment",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/cards/{id}/attachments/{idAttachment}",
+            "operation_id": "get-cards-id-attachments-idattachment",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/attachments/{idAttachment}\"].get"
+          },
+          {
+            "id": "trello.rest.deleted-cards-id-attachments-idattachment",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/cards/{id}/attachments/{idAttachment}",
+            "operation_id": "deleted-cards-id-attachments-idattachment",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/attachments/{idAttachment}\"].delete"
+          },
+          {
+            "id": "trello.rest.get-cards-id-board",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/cards/{id}/board",
+            "operation_id": "get-cards-id-board",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/board\"].get"
+          },
+          {
+            "id": "trello.rest.get-cards-id-checkitemstates",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/cards/{id}/checkItemStates",
+            "operation_id": "get-cards-id-checkitemstates",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/checkItemStates\"].get"
+          },
+          {
+            "id": "trello.rest.get-cards-id-checklists",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/cards/{id}/checklists",
+            "operation_id": "get-cards-id-checklists",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/checklists\"].get"
+          },
+          {
+            "id": "trello.rest.post-cards-id-checklists",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/cards/{id}/checklists",
+            "operation_id": "post-cards-id-checklists",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/checklists\"].post"
+          },
+          {
+            "id": "trello.rest.get-cards-id-checkitem-idcheckitem",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/cards/{id}/checkItem/{idCheckItem}",
+            "operation_id": "get-cards-id-checkitem-idcheckitem",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/checkItem/{idCheckItem}\"].get"
+          },
+          {
+            "id": "trello.rest.put-cards-id-checkitem-idcheckitem",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/cards/{id}/checkItem/{idCheckItem}",
+            "operation_id": "put-cards-id-checkitem-idcheckitem",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/checkItem/{idCheckItem}\"].put"
+          },
+          {
+            "id": "trello.rest.delete-cards-id-checkitem-idcheckitem",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/cards/{id}/checkItem/{idCheckItem}",
+            "operation_id": "delete-cards-id-checkitem-idcheckitem",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/checkItem/{idCheckItem}\"].delete"
+          },
+          {
+            "id": "trello.rest.get-cards-id-list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/cards/{id}/list",
+            "operation_id": "get-cards-id-list",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/list\"].get"
+          },
+          {
+            "id": "trello.rest.get-cards-id-members",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/cards/{id}/members",
+            "operation_id": "get-cards-id-members",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/members\"].get"
+          },
+          {
+            "id": "trello.rest.get-cards-id-membersvoted",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/cards/{id}/membersVoted",
+            "operation_id": "get-cards-id-membersvoted",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/membersVoted\"].get"
+          },
+          {
+            "id": "trello.rest.cardsidmembersvoted-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/cards/{id}/membersVoted",
+            "operation_id": "cardsidmembersvoted-1",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/membersVoted\"].post"
+          },
+          {
+            "id": "trello.rest.get-cards-id-plugindata",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/cards/{id}/pluginData",
+            "operation_id": "get-cards-id-plugindata",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/pluginData\"].get"
+          },
+          {
+            "id": "trello.rest.get-cards-id-stickers",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/cards/{id}/stickers",
+            "operation_id": "get-cards-id-stickers",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/stickers\"].get"
+          },
+          {
+            "id": "trello.rest.post-cards-id-stickers",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/cards/{id}/stickers",
+            "operation_id": "post-cards-id-stickers",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/stickers\"].post"
+          },
+          {
+            "id": "trello.rest.get-cards-id-stickers-idsticker",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/cards/{id}/stickers/{idSticker}",
+            "operation_id": "get-cards-id-stickers-idsticker",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/stickers/{idSticker}\"].get"
+          },
+          {
+            "id": "trello.rest.delete-cards-id-stickers-idsticker",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/cards/{id}/stickers/{idSticker}",
+            "operation_id": "delete-cards-id-stickers-idsticker",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/stickers/{idSticker}\"].delete"
+          },
+          {
+            "id": "trello.rest.put-cards-id-stickers-idsticker",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/cards/{id}/stickers/{idSticker}",
+            "operation_id": "put-cards-id-stickers-idsticker",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/stickers/{idSticker}\"].put"
+          },
+          {
+            "id": "trello.rest.put-cards-id-actions-idaction-comments",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/cards/{id}/actions/{idAction}/comments",
+            "operation_id": "put-cards-id-actions-idaction-comments",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/actions/{idAction}/comments\"].put"
+          },
+          {
+            "id": "trello.rest.delete-cards-id-actions-id-comments",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/cards/{id}/actions/{idAction}/comments",
+            "operation_id": "delete-cards-id-actions-id-comments",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/actions/{idAction}/comments\"].delete"
+          },
+          {
+            "id": "trello.rest.put-cards-idcard-customfield-idcustomfield-item",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/cards/{idCard}/customField/{idCustomField}/item",
+            "operation_id": "put-cards-idcard-customfield-idcustomfield-item",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{idCard}/customField/{idCustomField}/item\"].put"
+          },
+          {
+            "id": "trello.rest.put-cards-idcard-customfields",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/cards/{idCard}/customFields",
+            "operation_id": "put-cards-idcard-customfields",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{idCard}/customFields\"].put"
+          },
+          {
+            "id": "trello.rest.get-cards-id-customfielditems",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/cards/{id}/customFieldItems",
+            "operation_id": "get-cards-id-customfielditems",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/customFieldItems\"].get"
+          },
+          {
+            "id": "trello.rest.post-cards-id-actions-comments",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/cards/{id}/actions/comments",
+            "operation_id": "post-cards-id-actions-comments",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/actions/comments\"].post"
+          },
+          {
+            "id": "trello.rest.post-cards-id-idlabels",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/cards/{id}/idLabels",
+            "operation_id": "post-cards-id-idlabels",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/idLabels\"].post"
+          },
+          {
+            "id": "trello.rest.post-cards-id-idmembers",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/cards/{id}/idMembers",
+            "operation_id": "post-cards-id-idmembers",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/idMembers\"].post"
+          },
+          {
+            "id": "trello.rest.post-cards-id-labels",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/cards/{id}/labels",
+            "operation_id": "post-cards-id-labels",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/labels\"].post"
+          },
+          {
+            "id": "trello.rest.post-cards-id-markassociatednotificationsread",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/cards/{id}/markAssociatedNotificationsRead",
+            "operation_id": "post-cards-id-markassociatednotificationsread",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/markAssociatedNotificationsRead\"].post"
+          },
+          {
+            "id": "trello.rest.delete-cards-id-idlabels-idlabel",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/cards/{id}/idLabels/{idLabel}",
+            "operation_id": "delete-cards-id-idlabels-idlabel",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/idLabels/{idLabel}\"].delete"
+          },
+          {
+            "id": "trello.rest.delete-id-idmembers-idmember",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/cards/{id}/idMembers/{idMember}",
+            "operation_id": "delete-id-idmembers-idmember",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/idMembers/{idMember}\"].delete"
+          },
+          {
+            "id": "trello.rest.delete-cards-id-membersvoted-idmember",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/cards/{id}/membersVoted/{idMember}",
+            "operation_id": "delete-cards-id-membersvoted-idmember",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/membersVoted/{idMember}\"].delete"
+          },
+          {
+            "id": "trello.rest.put-cards-idcard-checklist-idchecklist-checkitem-idcheckitem",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/cards/{idCard}/checklist/{idChecklist}/checkItem/{idCheckItem}",
+            "operation_id": "put-cards-idcard-checklist-idchecklist-checkitem-idcheckitem",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{idCard}/checklist/{idChecklist}/checkItem/{idCheckItem}\"].put"
+          },
+          {
+            "id": "trello.rest.delete-cards-id-checklists-idchecklist",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/cards/{id}/checklists/{idChecklist}",
+            "operation_id": "delete-cards-id-checklists-idchecklist",
+            "deprecated": false,
+            "source_location": "paths[\"/cards/{id}/checklists/{idChecklist}\"].delete"
+          },
+          {
+            "id": "trello.rest.post-checklists",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/checklists",
+            "operation_id": "post-checklists",
+            "deprecated": false,
+            "source_location": "paths[\"/checklists\"].post"
+          },
+          {
+            "id": "trello.rest.get-checklists-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/checklists/{id}",
+            "operation_id": "get-checklists-id",
+            "deprecated": false,
+            "source_location": "paths[\"/checklists/{id}\"].get"
+          },
+          {
+            "id": "trello.rest.put-checlists-id",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/checklists/{id}",
+            "operation_id": "put-checlists-id",
+            "deprecated": false,
+            "source_location": "paths[\"/checklists/{id}\"].put"
+          },
+          {
+            "id": "trello.rest.delete-checklists-id",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/checklists/{id}",
+            "operation_id": "delete-checklists-id",
+            "deprecated": false,
+            "source_location": "paths[\"/checklists/{id}\"].delete"
+          },
+          {
+            "id": "trello.rest.get-checklists-id-field",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/checklists/{id}/{field}",
+            "operation_id": "get-checklists-id-field",
+            "deprecated": false,
+            "source_location": "paths[\"/checklists/{id}/{field}\"].get"
+          },
+          {
+            "id": "trello.rest.put-checklists-id-field",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/checklists/{id}/{field}",
+            "operation_id": "put-checklists-id-field",
+            "deprecated": false,
+            "source_location": "paths[\"/checklists/{id}/{field}\"].put"
+          },
+          {
+            "id": "trello.rest.get-checklists-id-board",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/checklists/{id}/board",
+            "operation_id": "get-checklists-id-board",
+            "deprecated": false,
+            "source_location": "paths[\"/checklists/{id}/board\"].get"
+          },
+          {
+            "id": "trello.rest.get-checklists-id-cards",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/checklists/{id}/cards",
+            "operation_id": "get-checklists-id-cards",
+            "deprecated": false,
+            "source_location": "paths[\"/checklists/{id}/cards\"].get"
+          },
+          {
+            "id": "trello.rest.get-checklists-id-checkitems",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/checklists/{id}/checkItems",
+            "operation_id": "get-checklists-id-checkitems",
+            "deprecated": false,
+            "source_location": "paths[\"/checklists/{id}/checkItems\"].get"
+          },
+          {
+            "id": "trello.rest.post-checklists-id-checkitems",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/checklists/{id}/checkItems",
+            "operation_id": "post-checklists-id-checkitems",
+            "deprecated": false,
+            "source_location": "paths[\"/checklists/{id}/checkItems\"].post"
+          },
+          {
+            "id": "trello.rest.get-checklists-id-checkitems-idcheckitem",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/checklists/{id}/checkItems/{idCheckItem}",
+            "operation_id": "get-checklists-id-checkitems-idcheckitem",
+            "deprecated": false,
+            "source_location": "paths[\"/checklists/{id}/checkItems/{idCheckItem}\"].get"
+          },
+          {
+            "id": "trello.rest.delete-checklists-id-checkitems-idcheckitem",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/checklists/{id}/checkItems/{idCheckItem}",
+            "operation_id": "delete-checklists-id-checkitems-idcheckitem",
+            "deprecated": false,
+            "source_location": "paths[\"/checklists/{id}/checkItems/{idCheckItem}\"].delete"
+          },
+          {
+            "id": "trello.rest.post-customfields",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/customFields",
+            "operation_id": "post-customfields",
+            "deprecated": false,
+            "source_location": "paths[\"/customFields\"].post"
+          },
+          {
+            "id": "trello.rest.get-customfields-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/customFields/{id}",
+            "operation_id": "get-customfields-id",
+            "deprecated": false,
+            "source_location": "paths[\"/customFields/{id}\"].get"
+          },
+          {
+            "id": "trello.rest.put-customfields-id",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/customFields/{id}",
+            "operation_id": "put-customfields-id",
+            "deprecated": false,
+            "source_location": "paths[\"/customFields/{id}\"].put"
+          },
+          {
+            "id": "trello.rest.delete-customfields-id",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/customFields/{id}",
+            "operation_id": "delete-customfields-id",
+            "deprecated": false,
+            "source_location": "paths[\"/customFields/{id}\"].delete"
+          },
+          {
+            "id": "trello.rest.get-customfields-id-options",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/customFields/{id}/options",
+            "operation_id": "get-customfields-id-options",
+            "deprecated": false,
+            "source_location": "paths[\"/customFields/{id}/options\"].post"
+          },
+          {
+            "id": "trello.rest.post-customfields-id-options",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/customFields/{id}/options",
+            "operation_id": "post-customfields-id-options",
+            "deprecated": false,
+            "source_location": "paths[\"/customFields/{id}/options\"].get"
+          },
+          {
+            "id": "trello.rest.get-customfields-options-idcustomfieldoption",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/customFields/{id}/options/{idCustomFieldOption}",
+            "operation_id": "get-customfields-options-idcustomfieldoption",
+            "deprecated": false,
+            "source_location": "paths[\"/customFields/{id}/options/{idCustomFieldOption}\"].get"
+          },
+          {
+            "id": "trello.rest.delete-customfields-options-idcustomfieldoption",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/customFields/{id}/options/{idCustomFieldOption}",
+            "operation_id": "delete-customfields-options-idcustomfieldoption",
+            "deprecated": false,
+            "source_location": "paths[\"/customFields/{id}/options/{idCustomFieldOption}\"].delete"
+          },
+          {
+            "id": "trello.rest.emoji",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/emoji",
+            "operation_id": "emoji",
+            "deprecated": false,
+            "source_location": "paths[\"/emoji\"].get"
+          },
+          {
+            "id": "trello.rest.get-enterprises-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/enterprises/{id}",
+            "operation_id": "get-enterprises-id",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}\"].get"
+          },
+          {
+            "id": "trello.rest.get-enterprises-id-auditlog",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/enterprises/{id}/auditlog",
+            "operation_id": "get-enterprises-id-auditlog",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}/auditlog\"].get"
+          },
+          {
+            "id": "trello.rest.get-enterprises-id-admins",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/enterprises/{id}/admins",
+            "operation_id": "get-enterprises-id-admins",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}/admins\"].get"
+          },
+          {
+            "id": "trello.rest.get-enterprises-id-signupurl",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/enterprises/{id}/signupUrl",
+            "operation_id": "get-enterprises-id-signupurl",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}/signupUrl\"].get"
+          },
+          {
+            "id": "trello.rest.get-users-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/enterprises/{id}/members/query",
+            "operation_id": "get-users-id",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}/members/query\"].get"
+          },
+          {
+            "id": "trello.rest.get-enterprises-id-members",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/enterprises/{id}/members",
+            "operation_id": "get-enterprises-id-members",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}/members\"].get"
+          },
+          {
+            "id": "trello.rest.get-enterprises-id-members-idmember",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/enterprises/{id}/members/{idMember}",
+            "operation_id": "get-enterprises-id-members-idmember",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}/members/{idMember}\"].get"
+          },
+          {
+            "id": "trello.rest.get-enterprises-id-transferrable-organization-idOrganization",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/enterprises/{id}/transferrable/organization/{idOrganization}",
+            "operation_id": "get-enterprises-id-transferrable-organization-idOrganization",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}/transferrable/organization/{idOrganization}\"].get"
+          },
+          {
+            "id": "trello.rest.get-enterprises-id-transferrable-bulk-idOrganizations",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/enterprises/{id}/transferrable/bulk/{idOrganizations}",
+            "operation_id": "get-enterprises-id-transferrable-bulk-idOrganizations",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}/transferrable/bulk/{idOrganizations}\"].get"
+          },
+          {
+            "id": "trello.rest.put-enterprises-id-enterpriseJoinRequest-bulk",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/enterprises/${id}/enterpriseJoinRequest/bulk",
+            "operation_id": "put-enterprises-id-enterpriseJoinRequest-bulk",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/${id}/enterpriseJoinRequest/bulk\"].put"
+          },
+          {
+            "id": "trello.rest.get-enterprises-id-claimableOrganizations",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/enterprises/{id}/claimableOrganizations",
+            "operation_id": "get-enterprises-id-claimableOrganizations",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}/claimableOrganizations\"].get"
+          },
+          {
+            "id": "trello.rest.get-enterprises-id-pendingOrganizations",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/enterprises/{id}/pendingOrganizations",
+            "operation_id": "get-enterprises-id-pendingOrganizations",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}/pendingOrganizations\"].get"
+          },
+          {
+            "id": "trello.rest.post-enterprises-id-tokens",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/enterprises/{id}/tokens",
+            "operation_id": "post-enterprises-id-tokens",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}/tokens\"].post"
+          },
+          {
+            "id": "trello.rest.get-enterprises-id-organizations",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/enterprises/{id}/organizations",
+            "operation_id": "get-enterprises-id-organizations",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}/organizations\"].get"
+          },
+          {
+            "id": "trello.rest.put-enterprises-id-organizations",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/enterprises/{id}/organizations",
+            "operation_id": "put-enterprises-id-organizations",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}/organizations\"].put"
+          },
+          {
+            "id": "trello.rest.put-enterprises-id-members-idmember-licensed",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/enterprises/{id}/members/{idMember}/licensed",
+            "operation_id": "put-enterprises-id-members-idmember-licensed",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}/members/{idMember}/licensed\"].put"
+          },
+          {
+            "id": "trello.rest.enterprises-id-members-idMember-deactivated",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/enterprises/{id}/members/{idMember}/deactivated",
+            "operation_id": "enterprises-id-members-idMember-deactivated",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}/members/{idMember}/deactivated\"].put"
+          },
+          {
+            "id": "trello.rest.put-enterprises-id-admins-idmember",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/enterprises/{id}/admins/{idMember}",
+            "operation_id": "put-enterprises-id-admins-idmember",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}/admins/{idMember}\"].put"
+          },
+          {
+            "id": "trello.rest.enterprises-id-organizations-idmember",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/enterprises/{id}/admins/{idMember}",
+            "operation_id": "enterprises-id-organizations-idmember",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}/admins/{idMember}\"].delete"
+          },
+          {
+            "id": "trello.rest.delete-enterprises-id-organizations-idorg",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/enterprises/{id}/organizations/{idOrg}",
+            "operation_id": "delete-enterprises-id-organizations-idorg",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}/organizations/{idOrg}\"].delete"
+          },
+          {
+            "id": "trello.rest.get-enterprises-id-organizations-bulk-idOrganizations",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/enterprises/{id}/organizations/bulk/{idOrganizations}",
+            "operation_id": "get-enterprises-id-organizations-bulk-idOrganizations",
+            "deprecated": false,
+            "source_location": "paths[\"/enterprises/{id}/organizations/bulk/{idOrganizations}\"].get"
+          },
+          {
+            "id": "trello.rest.get-labels-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/labels/{id}",
+            "operation_id": "get-labels-id",
+            "deprecated": false,
+            "source_location": "paths[\"/labels/{id}\"].get"
+          },
+          {
+            "id": "trello.rest.put-labels-id",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/labels/{id}",
+            "operation_id": "put-labels-id",
+            "deprecated": false,
+            "source_location": "paths[\"/labels/{id}\"].put"
+          },
+          {
+            "id": "trello.rest.delete-labels-id",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/labels/{id}",
+            "operation_id": "delete-labels-id",
+            "deprecated": false,
+            "source_location": "paths[\"/labels/{id}\"].delete"
+          },
+          {
+            "id": "trello.rest.put-labels-id-field",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/labels/{id}/{field}",
+            "operation_id": "put-labels-id-field",
+            "deprecated": false,
+            "source_location": "paths[\"/labels/{id}/{field}\"].put"
+          },
+          {
+            "id": "trello.rest.post-labels",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/labels",
+            "operation_id": "post-labels",
+            "deprecated": false,
+            "source_location": "paths[\"/labels\"].post"
+          },
+          {
+            "id": "trello.rest.get-lists-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/lists/{id}",
+            "operation_id": "get-lists-id",
+            "deprecated": false,
+            "source_location": "paths[\"/lists/{id}\"].get"
+          },
+          {
+            "id": "trello.rest.put-lists-id",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/lists/{id}",
+            "operation_id": "put-lists-id",
+            "deprecated": false,
+            "source_location": "paths[\"/lists/{id}\"].put"
+          },
+          {
+            "id": "trello.rest.post-lists",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/lists",
+            "operation_id": "post-lists",
+            "deprecated": false,
+            "source_location": "paths[\"/lists\"].post"
+          },
+          {
+            "id": "trello.rest.post-lists-id-archiveallcards",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/lists/{id}/archiveAllCards",
+            "operation_id": "post-lists-id-archiveallcards",
+            "deprecated": false,
+            "source_location": "paths[\"/lists/{id}/archiveAllCards\"].post"
+          },
+          {
+            "id": "trello.rest.post-lists-id-moveallcards",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/lists/{id}/moveAllCards",
+            "operation_id": "post-lists-id-moveallcards",
+            "deprecated": false,
+            "source_location": "paths[\"/lists/{id}/moveAllCards\"].post"
+          },
+          {
+            "id": "trello.rest.put-lists-id-closed",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/lists/{id}/closed",
+            "operation_id": "put-lists-id-closed",
+            "deprecated": false,
+            "source_location": "paths[\"/lists/{id}/closed\"].put"
+          },
+          {
+            "id": "trello.rest.put-id-idboard",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/lists/{id}/idBoard",
+            "operation_id": "put-id-idboard",
+            "deprecated": false,
+            "source_location": "paths[\"/lists/{id}/idBoard\"].put"
+          },
+          {
+            "id": "trello.rest.put-lists-id-field",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/lists/{id}/{field}",
+            "operation_id": "put-lists-id-field",
+            "deprecated": false,
+            "source_location": "paths[\"/lists/{id}/{field}\"].put"
+          },
+          {
+            "id": "trello.rest.get-lists-id-actions",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/lists/{id}/actions",
+            "operation_id": "get-lists-id-actions",
+            "deprecated": false,
+            "source_location": "paths[\"/lists/{id}/actions\"].get"
+          },
+          {
+            "id": "trello.rest.get-lists-id-board",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/lists/{id}/board",
+            "operation_id": "get-lists-id-board",
+            "deprecated": false,
+            "source_location": "paths[\"/lists/{id}/board\"].get"
+          },
+          {
+            "id": "trello.rest.get-lists-id-cards",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/lists/{id}/cards",
+            "operation_id": "get-lists-id-cards",
+            "deprecated": false,
+            "source_location": "paths[\"/lists/{id}/cards\"].get"
+          },
+          {
+            "id": "trello.rest.get-members=id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}",
+            "operation_id": "get-members=id",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}\"].get"
+          },
+          {
+            "id": "trello.rest.put-members-id",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/members/{id}",
+            "operation_id": "put-members-id",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}\"].put"
+          },
+          {
+            "id": "trello.rest.get-members-id-field",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/{field}",
+            "operation_id": "get-members-id-field",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/{field}\"].get"
+          },
+          {
+            "id": "trello.rest.get-members-id-actions",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/actions",
+            "operation_id": "get-members-id-actions",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/actions\"].get"
+          },
+          {
+            "id": "trello.rest.get-members-id-boardbackgrounds",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/boardBackgrounds",
+            "operation_id": "get-members-id-boardbackgrounds",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/boardBackgrounds\"].get"
+          },
+          {
+            "id": "trello.rest.post-members-id-boardbackgrounds-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/members/{id}/boardBackgrounds",
+            "operation_id": "post-members-id-boardbackgrounds-1",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/boardBackgrounds\"].post"
+          },
+          {
+            "id": "trello.rest.get-members-id-boardbackgrounds-idbackground",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/boardBackgrounds/{idBackground}",
+            "operation_id": "get-members-id-boardbackgrounds-idbackground",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/boardBackgrounds/{idBackground}\"].get"
+          },
+          {
+            "id": "trello.rest.put-members-id-boardbackgrounds-idbackground",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/members/{id}/boardBackgrounds/{idBackground}",
+            "operation_id": "put-members-id-boardbackgrounds-idbackground",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/boardBackgrounds/{idBackground}\"].put"
+          },
+          {
+            "id": "trello.rest.delete-members-id-boardbackgrounds-idbackground",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/members/{id}/boardBackgrounds/{idBackground}",
+            "operation_id": "delete-members-id-boardbackgrounds-idbackground",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/boardBackgrounds/{idBackground}\"].delete"
+          },
+          {
+            "id": "trello.rest.get-members-id-boardstars",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/boardStars",
+            "operation_id": "get-members-id-boardstars",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/boardStars\"].get"
+          },
+          {
+            "id": "trello.rest.post-members-id-boardstars",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/members/{id}/boardStars",
+            "operation_id": "post-members-id-boardstars",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/boardStars\"].post"
+          },
+          {
+            "id": "trello.rest.get-members-id-boardstars-idstar",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/boardStars/{idStar}",
+            "operation_id": "get-members-id-boardstars-idstar",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/boardStars/{idStar}\"].get"
+          },
+          {
+            "id": "trello.rest.put-members-id-boardstars-idstar",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/members/{id}/boardStars/{idStar}",
+            "operation_id": "put-members-id-boardstars-idstar",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/boardStars/{idStar}\"].put"
+          },
+          {
+            "id": "trello.rest.delete-members-id-boardstars-idstar",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/members/{id}/boardStars/{idStar}",
+            "operation_id": "delete-members-id-boardstars-idstar",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/boardStars/{idStar}\"].delete"
+          },
+          {
+            "id": "trello.rest.get-members-id-boards",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/boards",
+            "operation_id": "get-members-id-boards",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/boards\"].get"
+          },
+          {
+            "id": "trello.rest.get-members-id-boardsinvited",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/boardsInvited",
+            "operation_id": "get-members-id-boardsinvited",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/boardsInvited\"].get"
+          },
+          {
+            "id": "trello.rest.get-members-id-cards",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/cards",
+            "operation_id": "get-members-id-cards",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/cards\"].get"
+          },
+          {
+            "id": "trello.rest.get-members-id-customboardbackgrounds",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/customBoardBackgrounds",
+            "operation_id": "get-members-id-customboardbackgrounds",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/customBoardBackgrounds\"].get"
+          },
+          {
+            "id": "trello.rest.membersidcustomboardbackgrounds-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/members/{id}/customBoardBackgrounds",
+            "operation_id": "membersidcustomboardbackgrounds-1",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/customBoardBackgrounds\"].post"
+          },
+          {
+            "id": "trello.rest.get-members-id-customboardbackgrounds-idbackground",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/customBoardBackgrounds/{idBackground}",
+            "operation_id": "get-members-id-customboardbackgrounds-idbackground",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/customBoardBackgrounds/{idBackground}\"].get"
+          },
+          {
+            "id": "trello.rest.put-members-id-customboardbackgrounds-idbackground",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/members/{id}/customBoardBackgrounds/{idBackground}",
+            "operation_id": "put-members-id-customboardbackgrounds-idbackground",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/customBoardBackgrounds/{idBackground}\"].put"
+          },
+          {
+            "id": "trello.rest.delete-members-id-customboardbackgrounds-idbackground",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/members/{id}/customBoardBackgrounds/{idBackground}",
+            "operation_id": "delete-members-id-customboardbackgrounds-idbackground",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/customBoardBackgrounds/{idBackground}\"].delete"
+          },
+          {
+            "id": "trello.rest.get-members-id-customemoji",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/customEmoji",
+            "operation_id": "get-members-id-customemoji",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/customEmoji\"].get"
+          },
+          {
+            "id": "trello.rest.post-members-id-customemoji",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/members/{id}/customEmoji",
+            "operation_id": "post-members-id-customemoji",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/customEmoji\"].post"
+          },
+          {
+            "id": "trello.rest.membersidcustomemojiidemoji",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/customEmoji/{idEmoji}",
+            "operation_id": "membersidcustomemojiidemoji",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/customEmoji/{idEmoji}\"].get"
+          },
+          {
+            "id": "trello.rest.get-members-id-customstickers",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/customStickers",
+            "operation_id": "get-members-id-customstickers",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/customStickers\"].get"
+          },
+          {
+            "id": "trello.rest.post-members-id-customstickers",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/members/{id}/customStickers",
+            "operation_id": "post-members-id-customstickers",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/customStickers\"].post"
+          },
+          {
+            "id": "trello.rest.get-members-id-customstickers-idsticker",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/customStickers/{idSticker}",
+            "operation_id": "get-members-id-customstickers-idsticker",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/customStickers/{idSticker}\"].get"
+          },
+          {
+            "id": "trello.rest.delete-members-id-customstickers-idsticker",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/members/{id}/customStickers/{idSticker}",
+            "operation_id": "delete-members-id-customstickers-idsticker",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/customStickers/{idSticker}\"].delete"
+          },
+          {
+            "id": "trello.rest.get-members-id-notifications",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/notifications",
+            "operation_id": "get-members-id-notifications",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/notifications\"].get"
+          },
+          {
+            "id": "trello.rest.get-members-id-organizations",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/organizations",
+            "operation_id": "get-members-id-organizations",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/organizations\"].get"
+          },
+          {
+            "id": "trello.rest.get-members-id-organizationsinvited",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/organizationsInvited",
+            "operation_id": "get-members-id-organizationsinvited",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/organizationsInvited\"].get"
+          },
+          {
+            "id": "trello.rest.get-members-id-savedsearches",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/savedSearches",
+            "operation_id": "get-members-id-savedsearches",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/savedSearches\"].get"
+          },
+          {
+            "id": "trello.rest.post-members-id-savedsearches",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/members/{id}/savedSearches",
+            "operation_id": "post-members-id-savedsearches",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/savedSearches\"].post"
+          },
+          {
+            "id": "trello.rest.get-members-id-savedsearches-idsearch",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/savedSearches/{idSearch}",
+            "operation_id": "get-members-id-savedsearches-idsearch",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/savedSearches/{idSearch}\"].get"
+          },
+          {
+            "id": "trello.rest.put-members-id-savedsearches-idsearch",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/members/{id}/savedSearches/{idSearch}",
+            "operation_id": "put-members-id-savedsearches-idsearch",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/savedSearches/{idSearch}\"].put"
+          },
+          {
+            "id": "trello.rest.delete-members-id-savedsearches-idsearch",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/members/{id}/savedSearches/{idSearch}",
+            "operation_id": "delete-members-id-savedsearches-idsearch",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/savedSearches/{idSearch}\"].delete"
+          },
+          {
+            "id": "trello.rest.get-members-id-tokens",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/tokens",
+            "operation_id": "get-members-id-tokens",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/tokens\"].get"
+          },
+          {
+            "id": "trello.rest.membersidavatar",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/members/{id}/avatar",
+            "operation_id": "membersidavatar",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/avatar\"].post"
+          },
+          {
+            "id": "trello.rest.post-members-id-onetimemessagesdismissed",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/members/{id}/oneTimeMessagesDismissed",
+            "operation_id": "post-members-id-onetimemessagesdismissed",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/oneTimeMessagesDismissed\"].post"
+          },
+          {
+            "id": "trello.rest.get-members-id-notificationChannelSettings",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/notificationsChannelSettings",
+            "operation_id": "get-members-id-notificationChannelSettings",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/notificationsChannelSettings\"].get"
+          },
+          {
+            "id": "trello.rest.put-members-id-notificationChannelSettings-channel-blockedKeys",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/members/{id}/notificationsChannelSettings",
+            "operation_id": "put-members-id-notificationChannelSettings-channel-blockedKeys",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/notificationsChannelSettings\"].put"
+          },
+          {
+            "id": "trello.rest.get-members-id-notificationChannelSettings-channel",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/members/{id}/notificationsChannelSettings/{channel}",
+            "operation_id": "get-members-id-notificationChannelSettings-channel",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/notificationsChannelSettings/{channel}\"].get"
+          },
+          {
+            "id": "trello.rest.put-members-id-notificationChannelSettings-channel-blockedKeys",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/members/{id}/notificationsChannelSettings/{channel}",
+            "operation_id": "put-members-id-notificationChannelSettings-channel-blockedKeys",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/notificationsChannelSettings/{channel}\"].put"
+          },
+          {
+            "id": "trello.rest.put-members-id-notificationChannelSettings-channel-blockedKeys",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/members/{id}/notificationsChannelSettings/{channel}/{blockedKeys}",
+            "operation_id": "put-members-id-notificationChannelSettings-channel-blockedKeys",
+            "deprecated": false,
+            "source_location": "paths[\"/members/{id}/notificationsChannelSettings/{channel}/{blockedKeys}\"].put"
+          },
+          {
+            "id": "trello.rest.get-notifications-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/notifications/{id}",
+            "operation_id": "get-notifications-id",
+            "deprecated": false,
+            "source_location": "paths[\"/notifications/{id}\"].get"
+          },
+          {
+            "id": "trello.rest.put-notifications-id",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/notifications/{id}",
+            "operation_id": "put-notifications-id",
+            "deprecated": false,
+            "source_location": "paths[\"/notifications/{id}\"].put"
+          },
+          {
+            "id": "trello.rest.get-notifications-id-field",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/notifications/{id}/{field}",
+            "operation_id": "get-notifications-id-field",
+            "deprecated": false,
+            "source_location": "paths[\"/notifications/{id}/{field}\"].get"
+          },
+          {
+            "id": "trello.rest.post-notifications-all-read",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/notifications/all/read",
+            "operation_id": "post-notifications-all-read",
+            "deprecated": false,
+            "source_location": "paths[\"/notifications/all/read\"].post"
+          },
+          {
+            "id": "trello.rest.put-notifications-id-unread",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/notifications/{id}/unread",
+            "operation_id": "put-notifications-id-unread",
+            "deprecated": false,
+            "source_location": "paths[\"/notifications/{id}/unread\"].put"
+          },
+          {
+            "id": "trello.rest.get-notifications-id-board",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/notifications/{id}/board",
+            "operation_id": "get-notifications-id-board",
+            "deprecated": false,
+            "source_location": "paths[\"/notifications/{id}/board\"].get"
+          },
+          {
+            "id": "trello.rest.get-notifications-id-card",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/notifications/{id}/card",
+            "operation_id": "get-notifications-id-card",
+            "deprecated": false,
+            "source_location": "paths[\"/notifications/{id}/card\"].get"
+          },
+          {
+            "id": "trello.rest.get-notifications-id-list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/notifications/{id}/list",
+            "operation_id": "get-notifications-id-list",
+            "deprecated": false,
+            "source_location": "paths[\"/notifications/{id}/list\"].get"
+          },
+          {
+            "id": "trello.rest.notificationsidmember",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/notifications/{id}/member",
+            "operation_id": "notificationsidmember",
+            "deprecated": false,
+            "source_location": "paths[\"/notifications/{id}/member\"].get"
+          },
+          {
+            "id": "trello.rest.get-notifications-id-membercreator",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/notifications/{id}/memberCreator",
+            "operation_id": "get-notifications-id-membercreator",
+            "deprecated": false,
+            "source_location": "paths[\"/notifications/{id}/memberCreator\"].get"
+          },
+          {
+            "id": "trello.rest.get-notifications-id-organization",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/notifications/{id}/organization",
+            "operation_id": "get-notifications-id-organization",
+            "deprecated": false,
+            "source_location": "paths[\"/notifications/{id}/organization\"].get"
+          },
+          {
+            "id": "trello.rest.post-organizations",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/organizations",
+            "operation_id": "post-organizations",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations\"].post"
+          },
+          {
+            "id": "trello.rest.get-organizations-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/organizations/{id}",
+            "operation_id": "get-organizations-id",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}\"].get"
+          },
+          {
+            "id": "trello.rest.put-organizations-id",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/organizations/{id}",
+            "operation_id": "put-organizations-id",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}\"].put"
+          },
+          {
+            "id": "trello.rest.delete-organizations-id",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/organizations/{id}",
+            "operation_id": "delete-organizations-id",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}\"].delete"
+          },
+          {
+            "id": "trello.rest.get-organizations-id-field",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/organizations/{id}/{field}",
+            "operation_id": "get-organizations-id-field",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/{field}\"].get"
+          },
+          {
+            "id": "trello.rest.get-organizations-id-actions",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/organizations/{id}/actions",
+            "operation_id": "get-organizations-id-actions",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/actions\"].get"
+          },
+          {
+            "id": "trello.rest.get-organizations-id-boards",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/organizations/{id}/boards",
+            "operation_id": "get-organizations-id-boards",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/boards\"].get"
+          },
+          {
+            "id": "trello.rest.post-organizations-id-exports",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/organizations/{id}/exports",
+            "operation_id": "post-organizations-id-exports",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/exports\"].post"
+          },
+          {
+            "id": "trello.rest.get-organizations-id-exports",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/organizations/{id}/exports",
+            "operation_id": "get-organizations-id-exports",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/exports\"].get"
+          },
+          {
+            "id": "trello.rest.get-organizations-id-members",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/organizations/{id}/members",
+            "operation_id": "get-organizations-id-members",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/members\"].get"
+          },
+          {
+            "id": "trello.rest.put-organizations-id-members",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/organizations/{id}/members",
+            "operation_id": "put-organizations-id-members",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/members\"].put"
+          },
+          {
+            "id": "trello.rest.get-organizations-id-memberships",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/organizations/{id}/memberships",
+            "operation_id": "get-organizations-id-memberships",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/memberships\"].get"
+          },
+          {
+            "id": "trello.rest.get-organizations-id-memberships-idmembership",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/organizations/{id}/memberships/{idMembership}",
+            "operation_id": "get-organizations-id-memberships-idmembership",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/memberships/{idMembership}\"].get"
+          },
+          {
+            "id": "trello.rest.get-organizations-id-plugindata",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/organizations/{id}/pluginData",
+            "operation_id": "get-organizations-id-plugindata",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/pluginData\"].get"
+          },
+          {
+            "id": "trello.rest.get-organizations-id-tags",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/organizations/{id}/tags",
+            "operation_id": "get-organizations-id-tags",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/tags\"].get"
+          },
+          {
+            "id": "trello.rest.post-organizations-id-tags",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/organizations/{id}/tags",
+            "operation_id": "post-organizations-id-tags",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/tags\"].post"
+          },
+          {
+            "id": "trello.rest.put-organizations-id-members-idmember",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/organizations/{id}/members/{idMember}",
+            "operation_id": "put-organizations-id-members-idmember",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/members/{idMember}\"].put"
+          },
+          {
+            "id": "trello.rest.delete-organizations-id-members",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/organizations/{id}/members/{idMember}",
+            "operation_id": "delete-organizations-id-members",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/members/{idMember}\"].delete"
+          },
+          {
+            "id": "trello.rest.put-organizations-id-members-idmember-deactivated",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/organizations/{id}/members/{idMember}/deactivated",
+            "operation_id": "put-organizations-id-members-idmember-deactivated",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/members/{idMember}/deactivated\"].put"
+          },
+          {
+            "id": "trello.rest.post-organizations-id-logo",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/organizations/{id}/logo",
+            "operation_id": "post-organizations-id-logo",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/logo\"].post"
+          },
+          {
+            "id": "trello.rest.delete-organizations-id-logo",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/organizations/{id}/logo",
+            "operation_id": "delete-organizations-id-logo",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/logo\"].delete"
+          },
+          {
+            "id": "trello.rest.organizations-id-members-idmember-all",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/organizations/{id}/members/{idMember}/all",
+            "operation_id": "organizations-id-members-idmember-all",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/members/{idMember}/all\"].delete"
+          },
+          {
+            "id": "trello.rest.delete-organizations-id-prefs-associateddomain",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/organizations/{id}/prefs/associatedDomain",
+            "operation_id": "delete-organizations-id-prefs-associateddomain",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/prefs/associatedDomain\"].delete"
+          },
+          {
+            "id": "trello.rest.delete-organizations-id-prefs-orginviterestrict",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/organizations/{id}/prefs/orgInviteRestrict",
+            "operation_id": "delete-organizations-id-prefs-orginviterestrict",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/prefs/orgInviteRestrict\"].delete"
+          },
+          {
+            "id": "trello.rest.delete-organizations-id-tags-idtag",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/organizations/{id}/tags/{idTag}",
+            "operation_id": "delete-organizations-id-tags-idtag",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/tags/{idTag}\"].delete"
+          },
+          {
+            "id": "trello.rest.get-organizations-id-newbillableguests-idboard",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/organizations/{id}/newBillableGuests/{idBoard}",
+            "operation_id": "get-organizations-id-newbillableguests-idboard",
+            "deprecated": false,
+            "source_location": "paths[\"/organizations/{id}/newBillableGuests/{idBoard}\"].get"
+          },
+          {
+            "id": "trello.rest.get-plugins-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/plugins/{id}/",
+            "operation_id": "get-plugins-id",
+            "deprecated": false,
+            "source_location": "paths[\"/plugins/{id}/\"].get"
+          },
+          {
+            "id": "trello.rest.put-plugins-id",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/plugins/{id}/",
+            "operation_id": "put-plugins-id",
+            "deprecated": false,
+            "source_location": "paths[\"/plugins/{id}/\"].put"
+          },
+          {
+            "id": "trello.rest.post-plugins-idplugin-listing",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/plugins/{idPlugin}/listing",
+            "operation_id": "post-plugins-idplugin-listing",
+            "deprecated": false,
+            "source_location": "paths[\"/plugins/{idPlugin}/listing\"].post"
+          },
+          {
+            "id": "trello.rest.get-plugins-id-compliance-memberprivacy",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/plugins/{id}/compliance/memberPrivacy",
+            "operation_id": "get-plugins-id-compliance-memberprivacy",
+            "deprecated": false,
+            "source_location": "paths[\"/plugins/{id}/compliance/memberPrivacy\"].get"
+          },
+          {
+            "id": "trello.rest.put-plugins-idplugin-listings-idlisting",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/plugins/{idPlugin}/listings/{idListing}",
+            "operation_id": "put-plugins-idplugin-listings-idlisting",
+            "deprecated": false,
+            "source_location": "paths[\"/plugins/{idPlugin}/listings/{idListing}\"].put"
+          },
+          {
+            "id": "trello.rest.get-search",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/search",
+            "operation_id": "get-search",
+            "deprecated": false,
+            "source_location": "paths[\"/search\"].get"
+          },
+          {
+            "id": "trello.rest.get-search-members",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/search/members/",
+            "operation_id": "get-search-members",
+            "deprecated": false,
+            "source_location": "paths[\"/search/members/\"].get"
+          },
+          {
+            "id": "trello.rest.get-tokens-token",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tokens/{token}",
+            "operation_id": "get-tokens-token",
+            "deprecated": false,
+            "source_location": "paths[\"/tokens/{token}\"].get"
+          },
+          {
+            "id": "trello.rest.get-tokens-token-member",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tokens/{token}/member",
+            "operation_id": "get-tokens-token-member",
+            "deprecated": false,
+            "source_location": "paths[\"/tokens/{token}/member\"].get"
+          },
+          {
+            "id": "trello.rest.get-tokens-token-webhooks",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tokens/{token}/webhooks",
+            "operation_id": "get-tokens-token-webhooks",
+            "deprecated": false,
+            "source_location": "paths[\"/tokens/{token}/webhooks\"].get"
+          },
+          {
+            "id": "trello.rest.post-tokens-token-webhooks",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/tokens/{token}/webhooks",
+            "operation_id": "post-tokens-token-webhooks",
+            "deprecated": false,
+            "source_location": "paths[\"/tokens/{token}/webhooks\"].post"
+          },
+          {
+            "id": "trello.rest.get-tokens-token-webhooks-idwebhook",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tokens/{token}/webhooks/{idWebhook}",
+            "operation_id": "get-tokens-token-webhooks-idwebhook",
+            "deprecated": false,
+            "source_location": "paths[\"/tokens/{token}/webhooks/{idWebhook}\"].get"
+          },
+          {
+            "id": "trello.rest.delete-tokens-token-webhooks-idwebhook",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/tokens/{token}/webhooks/{idWebhook}",
+            "operation_id": "delete-tokens-token-webhooks-idwebhook",
+            "deprecated": false,
+            "source_location": "paths[\"/tokens/{token}/webhooks/{idWebhook}\"].delete"
+          },
+          {
+            "id": "trello.rest.tokenstokenwebhooks-1",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/tokens/{token}/webhooks/{idWebhook}",
+            "operation_id": "tokenstokenwebhooks-1",
+            "deprecated": false,
+            "source_location": "paths[\"/tokens/{token}/webhooks/{idWebhook}\"].put"
+          },
+          {
+            "id": "trello.rest.delete-token",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/tokens/{token}/",
+            "operation_id": "delete-token",
+            "deprecated": false,
+            "source_location": "paths[\"/tokens/{token}/\"].delete"
+          },
+          {
+            "id": "trello.rest.post-webhooks",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/webhooks/",
+            "operation_id": "post-webhooks",
+            "deprecated": false,
+            "source_location": "paths[\"/webhooks/\"].post"
+          },
+          {
+            "id": "trello.rest.get-webhooks-id",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/webhooks/{id}",
+            "operation_id": "get-webhooks-id",
+            "deprecated": false,
+            "source_location": "paths[\"/webhooks/{id}\"].get"
+          },
+          {
+            "id": "trello.rest.put-webhooks-id",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/webhooks/{id}",
+            "operation_id": "put-webhooks-id",
+            "deprecated": false,
+            "source_location": "paths[\"/webhooks/{id}\"].put"
+          },
+          {
+            "id": "trello.rest.delete-webhooks-id",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/webhooks/{id}",
+            "operation_id": "delete-webhooks-id",
+            "deprecated": false,
+            "source_location": "paths[\"/webhooks/{id}\"].delete"
+          },
+          {
+            "id": "trello.rest.webhooksidfield",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/webhooks/{id}/{field}",
+            "operation_id": "webhooksidfield",
+            "deprecated": false,
+            "source_location": "paths[\"/webhooks/{id}/{field}\"].get"
+          }
+        ]
+      }
+    ]
+  },
+  "counts": {
+    "rest": 261,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 261
+  }
+}

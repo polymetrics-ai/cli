@@ -1,0 +1,2324 @@
+{
+  "schema_version": 1,
+  "connector": "google-calendar",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/google-calendar-operation-source-lock.json",
+    "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+    "source_sha256": "55537f18631fa45e5458c46b0c9a6f9cc288f38a8f4657ebc2bca87b0874be49",
+    "source_bytes": 169810,
+    "operations_found": 38,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    }
+  },
+  "summary": {
+    "api_surface_rows": 38,
+    "exact_source_rows": 38,
+    "operations_found": 38,
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    },
+    "enabled_operations": 27,
+    "enabled_percent": 71.05,
+    "disabled_operations": 11,
+    "documented_deletes": 4,
+    "enabled_deletes": 4,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 1
+      },
+      {
+        "key": "direct_write",
+        "count": 26
+      },
+      {
+        "key": "etl",
+        "count": 11
+      },
+      {
+        "key": "reverse_etl",
+        "count": 0
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "stream_bindings": 11,
+    "writes_actions": 26,
+    "terminal_commands": 27,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-app-dispatch",
+      "declarative-typed-destination-action-multiplicity"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-app-dispatch",
+        "count": 26,
+        "scope": "destination_transport"
+      },
+      {
+        "id": "declarative-typed-destination-action-multiplicity",
+        "count": 26,
+        "scope": "destination_action_selection"
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 11
+      }
+    ],
+    "reverse_etl_eligibility": {
+      "state": "foundation-gap",
+      "typed_direct_write_operations": 26,
+      "typed_write_actions": 26,
+      "foundation_gap": {
+        "id": "generic-typed-destination-app-dispatch",
+        "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+        "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+      },
+      "action_dispositions": [
+        {
+          "action": "delete_acl_rule",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.acl.delete"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "insert_acl_rule",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.acl.insert"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "patch_acl_rule",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.acl.patch"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "update_acl_rule",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.acl.update"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "watch_acl",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.acl.watch"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "delete_calendar_list_entry",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.calendarList.delete"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "insert_calendar_list_entry",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.calendarList.insert"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "patch_calendar_list_entry",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.calendarList.patch"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "update_calendar_list_entry",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.calendarList.update"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "watch_calendar_list",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.calendarList.watch"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "clear_calendar",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.calendars.clear"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "delete_calendar",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.calendars.delete"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "insert_calendar",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.calendars.insert"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "patch_calendar",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.calendars.patch"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "transfer_calendar_ownership",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.calendars.transferOwnership"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "update_calendar",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.calendars.update"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "stop_channel",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.channels.stop"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "delete_event",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.events.delete"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "import_event",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.events.import"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "insert_event",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.events.insert"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "move_event",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.events.move"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "patch_event",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.events.patch"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "quick_add_event",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.events.quickAdd"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "update_event",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.events.update"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "watch_events",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.events.watch"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        },
+        {
+          "action": "watch_settings",
+          "semantic_eligibility": "eligible",
+          "destination_binding": {
+            "state": "foundation-gap",
+            "foundation_gap": {
+              "id": "declarative-typed-destination-action-multiplicity",
+              "evidence": "internal/connectors/sync_transport.go:388-415 rejects duplicate apply strategies and requires one strategy for every mode; ApplyStrategyFor at :471-480 resolves that single action. A connection therefore cannot select every eligible action with distinct schemas and input mappings.",
+              "minimal_change": "extend the closed destination contract to select one exact declaration-owned action and its exact input_fields binding per approved route, without accepting a caller-supplied operation, method, URL, or body"
+            }
+          },
+          "closed_destination_action_shape": "representable",
+          "provider_operation_binding": {
+            "state": "source-bound",
+            "source_ids": [
+              "google-calendar.rest.calendar.settings.watch"
+            ]
+          },
+          "source_input_binding": {
+            "state": "declaration-pending",
+            "detail": "No exact connector-owned stream-to-required-action-field mapping has been evidenced for this action. The action remains semantically eligible; safety, scope, and destructive behavior are execution controls, not exclusions.",
+            "minimal_change": "After a compatible source stream and its field schema are evidenced, declare the exact input_fields mapping for this named action; do not synthesize source fields or an open record passthrough."
+          }
+        }
+      ]
+    },
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286)",
+      "source_transport": {
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-google-calendar",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "destination_transport": {
+        "state": "gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-app-dispatch",
+          "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+          "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+        }
+      }
+    },
+    "declaration_pending_ids": [
+      "sync-transport-source-definition-google-calendar"
+    ],
+    "declaration_pending": [
+      {
+        "id": "sync-transport-source-definition-google-calendar",
+        "count": 11
+      }
+    ]
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/calendar/v3/colors",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/calendar/v3/colors",
+        "covered_by": {
+          "stream": "colors"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.colors.get",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.colors.get\"",
+        "operation_id": "calendar.colors.get",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-google-calendar",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/colors.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/colors."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-google-calendar",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}/instances",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}/instances",
+        "covered_by": {
+          "stream": "event_instances"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.events.instances",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.events.instances\"",
+        "operation_id": "calendar.events.instances",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-google-calendar",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/calendars/{calendarId}/events/{eventId}/instances.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/calendars/{calendarId}/events/{eventId}/instances."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-google-calendar",
+        "contract": null
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
+        "covered_by": {
+          "write": "patch_event"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.events.patch",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.events.patch\"",
+        "operation_id": "calendar.events.patch",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "patch_event"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
+        "covered_by": {
+          "write": "delete_event"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.events.delete",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.events.delete\"",
+        "operation_id": "calendar.events.delete",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "delete_event"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/calendar/v3/calendars/{calendarId}/events/quickAdd",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/calendar/v3/calendars/{calendarId}/events/quickAdd",
+        "covered_by": {
+          "write": "quick_add_event"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.events.quickAdd",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.events.quickAdd\"",
+        "operation_id": "calendar.events.quickAdd",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "quick_add_event"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/calendar/v3/calendars/{calendarId}/events",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/calendar/v3/calendars/{calendarId}/events",
+        "covered_by": {
+          "write": "insert_event"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.events.insert",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.events.insert\"",
+        "operation_id": "calendar.events.insert",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "insert_event"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
+        "covered_by": {
+          "stream": "event"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.events.get",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.events.get\"",
+        "operation_id": "calendar.events.get",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-google-calendar",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/calendars/{calendarId}/events/{eventId}.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/calendars/{calendarId}/events/{eventId}."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-google-calendar",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}/move",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}/move",
+        "covered_by": {
+          "write": "move_event"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.events.move",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.events.move\"",
+        "operation_id": "calendar.events.move",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "move_event"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
+        "covered_by": {
+          "write": "update_event"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.events.update",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.events.update\"",
+        "operation_id": "calendar.events.update",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "update_event"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/calendar/v3/calendars/{calendarId}/events/watch",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/calendar/v3/calendars/{calendarId}/events/watch",
+        "covered_by": {
+          "write": "watch_events"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.events.watch",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.events.watch\"",
+        "operation_id": "calendar.events.watch",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "watch_events"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calendar/v3/calendars/{calendarId}/events",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/calendar/v3/calendars/{calendarId}/events",
+        "covered_by": {
+          "stream": "events"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.events.list",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.events.list\"",
+        "operation_id": "calendar.events.list",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-google-calendar",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/calendars/{calendarId}/events.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/calendars/{calendarId}/events."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-google-calendar",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/calendar/v3/calendars/{calendarId}/events/import",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/calendar/v3/calendars/{calendarId}/events/import",
+        "covered_by": {
+          "write": "import_event"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.events.import",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.events.import\"",
+        "operation_id": "calendar.events.import",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "import_event"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/calendar/v3/calendars/{calendarId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/calendar/v3/calendars/{calendarId}",
+        "covered_by": {
+          "write": "patch_calendar"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.calendars.patch",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.calendars.patch\"",
+        "operation_id": "calendar.calendars.patch",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "patch_calendar"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calendar/v3/calendars/{calendarId}",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/calendar/v3/calendars/{calendarId}",
+        "covered_by": {
+          "stream": "calendar"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.calendars.get",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.calendars.get\"",
+        "operation_id": "calendar.calendars.get",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-google-calendar",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/calendars/{calendarId}.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/calendars/{calendarId}."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-google-calendar",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/calendar/v3/calendars/{calendarId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/calendar/v3/calendars/{calendarId}",
+        "covered_by": {
+          "write": "update_calendar"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.calendars.update",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.calendars.update\"",
+        "operation_id": "calendar.calendars.update",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "update_calendar"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/calendar/v3/calendars/{calendarId}/transferOwnership",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/calendar/v3/calendars/{calendarId}/transferOwnership",
+        "covered_by": {
+          "write": "transfer_calendar_ownership"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.calendars.transferOwnership",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.calendars.transferOwnership\"",
+        "operation_id": "calendar.calendars.transferOwnership",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "transfer_calendar_ownership"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/calendar/v3/calendars",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/calendar/v3/calendars",
+        "covered_by": {
+          "write": "insert_calendar"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.calendars.insert",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.calendars.insert\"",
+        "operation_id": "calendar.calendars.insert",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "insert_calendar"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/calendar/v3/calendars/{calendarId}/clear",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/calendar/v3/calendars/{calendarId}/clear",
+        "covered_by": {
+          "write": "clear_calendar"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.calendars.clear",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.calendars.clear\"",
+        "operation_id": "calendar.calendars.clear",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "clear_calendar"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/calendar/v3/calendars/{calendarId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/calendar/v3/calendars/{calendarId}",
+        "covered_by": {
+          "write": "delete_calendar"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.calendars.delete",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.calendars.delete\"",
+        "operation_id": "calendar.calendars.delete",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "delete_calendar"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/calendar/v3/freeBusy",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "/calendar/v3/freeBusy",
+        "covered_by": {
+          "direct_read": "freebusy query"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.freebusy.query",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.freebusy.query\"",
+        "operation_id": "calendar.freebusy.query",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "direct_read": "freebusy query"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/calendar/v3/channels/stop",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/calendar/v3/channels/stop",
+        "covered_by": {
+          "write": "stop_channel"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.channels.stop",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.channels.stop\"",
+        "operation_id": "calendar.channels.stop",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "stop_channel"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/calendar/v3/users/me/settings/watch",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/calendar/v3/users/me/settings/watch",
+        "covered_by": {
+          "write": "watch_settings"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.settings.watch",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.settings.watch\"",
+        "operation_id": "calendar.settings.watch",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "watch_settings"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calendar/v3/users/me/settings",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/calendar/v3/users/me/settings",
+        "covered_by": {
+          "stream": "settings"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.settings.list",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.settings.list\"",
+        "operation_id": "calendar.settings.list",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-google-calendar",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/users/me/settings.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/users/me/settings."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-google-calendar",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calendar/v3/users/me/settings/{setting}",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/calendar/v3/users/me/settings/{setting}",
+        "covered_by": {
+          "stream": "setting"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.settings.get",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.settings.get\"",
+        "operation_id": "calendar.settings.get",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-google-calendar",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/users/me/settings/{setting}.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/users/me/settings/{setting}."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-google-calendar",
+        "contract": null
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
+        "covered_by": {
+          "write": "delete_acl_rule"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.acl.delete",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.acl.delete\"",
+        "operation_id": "calendar.acl.delete",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "delete_acl_rule"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calendar/v3/calendars/{calendarId}/acl",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/calendar/v3/calendars/{calendarId}/acl",
+        "covered_by": {
+          "stream": "acl"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.acl.list",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.acl.list\"",
+        "operation_id": "calendar.acl.list",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-google-calendar",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/calendars/{calendarId}/acl.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/calendars/{calendarId}/acl."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-google-calendar",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/calendar/v3/calendars/{calendarId}/acl",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/calendar/v3/calendars/{calendarId}/acl",
+        "covered_by": {
+          "write": "insert_acl_rule"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.acl.insert",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.acl.insert\"",
+        "operation_id": "calendar.acl.insert",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "insert_acl_rule"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
+        "covered_by": {
+          "write": "patch_acl_rule"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.acl.patch",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.acl.patch\"",
+        "operation_id": "calendar.acl.patch",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "patch_acl_rule"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/calendar/v3/calendars/{calendarId}/acl/watch",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/calendar/v3/calendars/{calendarId}/acl/watch",
+        "covered_by": {
+          "write": "watch_acl"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.acl.watch",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.acl.watch\"",
+        "operation_id": "calendar.acl.watch",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "watch_acl"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
+        "covered_by": {
+          "stream": "acl_rule"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.acl.get",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.acl.get\"",
+        "operation_id": "calendar.acl.get",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-google-calendar",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/calendars/{calendarId}/acl/{ruleId}.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/calendars/{calendarId}/acl/{ruleId}."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-google-calendar",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
+        "covered_by": {
+          "write": "update_acl_rule"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.acl.update",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.acl.update\"",
+        "operation_id": "calendar.acl.update",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "update_acl_rule"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/calendar/v3/users/me/calendarList/{calendarId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/calendar/v3/users/me/calendarList/{calendarId}",
+        "covered_by": {
+          "write": "delete_calendar_list_entry"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.calendarList.delete",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.calendarList.delete\"",
+        "operation_id": "calendar.calendarList.delete",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "delete_calendar_list_entry"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calendar/v3/users/me/calendarList",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/calendar/v3/users/me/calendarList",
+        "covered_by": {
+          "stream": "calendar_list"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.calendarList.list",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.calendarList.list\"",
+        "operation_id": "calendar.calendarList.list",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-google-calendar",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/users/me/calendarList.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/users/me/calendarList."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-google-calendar",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/calendar/v3/users/me/calendarList",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/calendar/v3/users/me/calendarList",
+        "covered_by": {
+          "write": "insert_calendar_list_entry"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.calendarList.insert",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.calendarList.insert\"",
+        "operation_id": "calendar.calendarList.insert",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "insert_calendar_list_entry"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calendar/v3/users/me/calendarList/{calendarId}",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/calendar/v3/users/me/calendarList/{calendarId}",
+        "covered_by": {
+          "stream": "calendar_list_entry"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.calendarList.get",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.calendarList.get\"",
+        "operation_id": "calendar.calendarList.get",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "sync-transport-source-definition-google-calendar",
+          "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/users/me/calendarList/{calendarId}.",
+          "minimal_change": "Add the connector-owned source transport declaration, exact executor, stream allowlist, delivery facts, and definition-owned conformance evidence; no generic engine change is required."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "docs/sync-transport-definition.md:1-30 declares the connector-owned ETL source requirements; internal/connectors/defs/google-calendar/sync_transport.json is absent for GET /calendar/v3/users/me/calendarList/{calendarId}."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending sync-transport-source-definition-google-calendar",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/calendar/v3/users/me/calendarList/{calendarId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/calendar/v3/users/me/calendarList/{calendarId}",
+        "covered_by": {
+          "write": "update_calendar_list_entry"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.calendarList.update",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.calendarList.update\"",
+        "operation_id": "calendar.calendarList.update",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "update_calendar_list_entry"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/calendar/v3/users/me/calendarList/{calendarId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/calendar/v3/users/me/calendarList/{calendarId}",
+        "covered_by": {
+          "write": "patch_calendar_list_entry"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.calendarList.patch",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.calendarList.patch\"",
+        "operation_id": "calendar.calendarList.patch",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "patch_calendar_list_entry"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/calendar/v3/users/me/calendarList/watch",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/calendar/v3/users/me/calendarList/watch",
+        "covered_by": {
+          "write": "watch_calendar_list"
+        },
+        "operation": null
+      },
+      "source": {
+        "source_lock": "sources/google-calendar-operation-source-lock.json",
+        "source_id": "google-calendar.rest.calendar.calendarList.watch",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+        "source_location": "discovery method \"calendar.calendarList.watch\"",
+        "operation_id": "calendar.calendarList.watch",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing connector-local binding",
+        "contract": {
+          "write": "watch_calendar_list"
+        },
+        "reverse_etl_eligibility": {
+          "state": "foundation-gap",
+          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
+          "foundation_gap": {
+            "id": "generic-typed-destination-app-dispatch",
+            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
+            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
+          }
+        }
+      }
+    }
+  ]
+}
