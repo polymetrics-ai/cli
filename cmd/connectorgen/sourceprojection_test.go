@@ -4064,6 +4064,40 @@ func TestSourceProjectionMutationDispositionInputRemainsFailClosed(t *testing.T)
 		t.Fatalf("absent mutation disposition changed byte-backed descriptor:\nbefore=%s\nafter=%s", before, after)
 	}
 
+	partialOperation := operation
+	partialOperation.Request.Body = &sourceRequestBodyDescriptor{Required: true, Schema: map[string]any{
+		"type": "object", "properties": map[string]any{"payload": map[string]any{"type": "object", "additionalProperties": true}},
+	}}
+	partialOperation.Runtime = sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{
+		Foundation: "cli-request-schema-foundation-r1",
+		Location:   "request body",
+		Reason:     "typed foundation is unavailable",
+	}}}
+	partialBundle := engine.Bundle{Name: "copper", Writes: []engine.WriteAction{{
+		Name: "create-person", Kind: "create", Method: "POST", Path: "/people", BodyType: "json",
+		RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false}`),
+	}}, CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+		Path: "people create", Intent: "reverse_etl", Availability: "implemented", Write: "create-person",
+	}}}}
+	partialValid := sourcePartialMutationCoverageDisposition{
+		Source: citation, Foundation: "cli-request-schema-foundation-r1", Reason: "provider mutation needs a typed foundation",
+	}
+	partialUnchanged := sourceImportResult{Operations: []sourceOperationDescriptor{partialOperation}}
+	partialBefore, err := marshalSourceImportResult(partialUnchanged)
+	if err != nil {
+		t.Fatalf("marshal absent partial disposition baseline: %v", err)
+	}
+	if err := sourceProjectionApplyPartialMutationCoverageDispositions(partialBundle, &partialUnchanged, nil); err != nil {
+		t.Fatalf("absent partial mutation disposition: %v", err)
+	}
+	partialAfter, err := marshalSourceImportResult(partialUnchanged)
+	if err != nil {
+		t.Fatalf("marshal absent partial disposition result: %v", err)
+	}
+	if !bytes.Equal(partialBefore, partialAfter) {
+		t.Fatalf("absent partial mutation disposition changed byte-backed descriptor:\nbefore=%s\nafter=%s", partialBefore, partialAfter)
+	}
+
 	for _, tt := range []struct {
 		name         string
 		dispositions []sourceNonExecutableMutationDisposition
@@ -4079,6 +4113,25 @@ func TestSourceProjectionMutationDispositionInputRemainsFailClosed(t *testing.T)
 			err := sourceProjectionApplyNonExecutableMutationDispositions(engine.Bundle{Name: "copper", CLISurface: &engine.CLISurface{}}, &result, tt.dispositions)
 			if err == nil || !strings.Contains(err.Error(), tt.want) {
 				t.Fatalf("%s mutation disposition error = %v, want %q", tt.name, err, tt.want)
+			}
+		})
+	}
+
+	for _, tt := range []struct {
+		name         string
+		dispositions []sourcePartialMutationCoverageDisposition
+		want         string
+	}{
+		{name: "duplicate", dispositions: []sourcePartialMutationCoverageDisposition{partialValid, partialValid}, want: "duplicate source operation"},
+		{name: "unknown", dispositions: []sourcePartialMutationCoverageDisposition{{Source: sourceOperationCitation{SourceID: "copper.rest.unknown", Method: "POST", Path: "/people"}, Foundation: partialValid.Foundation, Reason: partialValid.Reason}}, want: "unknown source operation"},
+		{name: "mismatched", dispositions: []sourcePartialMutationCoverageDisposition{{Source: sourceOperationCitation{SourceID: partialOperation.SourceID, Method: "PATCH", Path: partialOperation.Path}, Foundation: partialValid.Foundation, Reason: partialValid.Reason}}, want: "does not match provider source operation"},
+		{name: "non mutating", dispositions: []sourcePartialMutationCoverageDisposition{{Source: sourceOperationCitation{SourceID: partialOperation.SourceID, Method: "GET", Path: partialOperation.Path}, Foundation: partialValid.Foundation, Reason: partialValid.Reason}}, want: "not mutating"},
+	} {
+		t.Run("partial "+tt.name, func(t *testing.T) {
+			result := sourceImportResult{Operations: []sourceOperationDescriptor{partialOperation}}
+			err := sourceProjectionApplyPartialMutationCoverageDispositions(partialBundle, &result, tt.dispositions)
+			if err == nil || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("partial %s mutation disposition error = %v, want %q", tt.name, err, tt.want)
 			}
 		})
 	}
