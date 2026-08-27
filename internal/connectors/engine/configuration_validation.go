@@ -17,8 +17,8 @@ func (s *Schema) HasConfigurationConstraints() bool {
 	if s == nil || s.node == nil {
 		return false
 	}
-	for _, property := range s.node.properties {
-		if property.hasConfigurationConstraints() {
+	for key, property := range s.node.properties {
+		if key == "base_url" || property.hasConfigurationConstraints() {
 			return true
 		}
 	}
@@ -47,17 +47,21 @@ func (s *Schema) ValidateConfiguration(config map[string]string) error {
 
 	for _, key := range keys {
 		property, declared := s.node.properties[key]
-		if !declared || !property.hasConfigurationConstraints() {
+		if !declared || (key != "base_url" && !property.hasConfigurationConstraints()) {
 			continue
 		}
-		if err := property.validateConfigurationString(config[key], jsonPointerForKey(key)); err != nil {
+		if err := property.validateConfigurationString(key, config[key], jsonPointerForKey(key)); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func (n *schemaNode) validateConfigurationString(value, path string) error {
+func (n *schemaNode) validateConfigurationString(key, value, path string) error {
+	if key == "base_url" && !validConfigurationBaseURL(value) {
+		return configurationFailure("format_mismatch", `configuration value must use "uri" format`, path, fmt.Errorf("%s: base URL must be an absolute URI without user information or query", displayPath(path)))
+	}
+
 	if len(n.enum) > 0 {
 		matched := false
 		for _, want := range n.enum {
@@ -118,6 +122,15 @@ func matchesConfigurationFormat(value, format string) bool {
 	default:
 		return false
 	}
+}
+
+// validConfigurationBaseURL accepts only an absolute provider endpoint. A
+// base_url is declaration-owned endpoint metadata, so user information and
+// query components are refused before configuration can reach request assembly
+// or plaintext state.
+func validConfigurationBaseURL(value string) bool {
+	parsed, err := url.Parse(value)
+	return err == nil && parsed.IsAbs() && parsed.User == nil && parsed.RawQuery == ""
 }
 
 func isSupportedConfigurationFormat(format string) bool {

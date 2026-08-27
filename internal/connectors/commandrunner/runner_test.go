@@ -2823,9 +2823,14 @@ func TestBuildOperationDirectWriteCommandRejectsDuplicateQueryOccurrencesBeforeP
 
 func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *testing.T) {
 	batchable := false
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		calls++
+	}))
+	t.Cleanup(server.Close)
 	bundle := engine.Bundle{
 		Name: "acme",
-		HTTP: engine.HTTPBase{URL: "https://example.invalid"},
+		HTTP: engine.HTTPBase{URL: server.URL},
 		Operations: []engine.OperationSpec{{
 			ID:            "acme.workspaces.create_widget",
 			Kind:          "rest_write",
@@ -2870,7 +2875,8 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 								"required": ["id"],
 								"properties": {"id": {"type": "string"}}
 							}
-						}
+						},
+						"price": {"type": "number"}
 					}
 				}`),
 			},
@@ -2899,11 +2905,13 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 				{Name: "label", Type: "string", MapsTo: "body.label", Required: true},
 				{Name: "attributes", Type: "json", MapsTo: "body.attributes", Required: true},
 				{Name: "targets", Type: "json", MapsTo: "body.targets", Required: true},
+				{Name: "price", Type: "number", MapsTo: "body.price"},
 			},
 		}}},
 	}
+	connector := engine.New(bundle, nil)
 
-	command, err := BuildWriteCommand(context.Background(), engine.New(bundle, nil), Request{
+	command, err := BuildWriteCommand(context.Background(), connector, Request{
 		Path: []string{"widgets", "create"},
 		Flags: map[string][]string{
 			"workspace-id": {"workspace-1"},
@@ -2911,6 +2919,7 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 			"label":        {"fixture widget"},
 			"attributes":   {`{"owner":"owner-1","active":true}`},
 			"targets":      {`[{"id":"target-1"}]`},
+			"price":        {"12.5"},
 		},
 	})
 	if err != nil {
@@ -2930,6 +2939,9 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 	if !ok || len(targets) != 1 {
 		t.Fatalf("targets = %#v, want one declared array entry", command.Record["targets"])
 	}
+	if got, ok := command.Record["price"].(json.Number); !ok || got != json.Number("12.5") {
+		t.Fatalf("price = %#v, want exact finite JSON number", command.Record["price"])
+	}
 
 	baseFlags := map[string][]string{
 		"workspace-id": {"workspace-1"},
@@ -2937,11 +2949,13 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 		"label":        {"fixture widget"},
 		"attributes":   {`{"owner":"owner-1","active":true}`},
 		"targets":      {`[{"id":"target-1"}]`},
+		"price":        {"12.5"},
 	}
 	for _, tc := range []struct {
-		name    string
-		mutate  func(map[string][]string)
-		wantErr string
+		name      string
+		mutate    func(map[string][]string)
+		wantErr   string
+		forbidden string
 	}{
 		{
 			name: "path cannot be supplied by body",
@@ -2957,6 +2971,46 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 				flags["attributes"] = []string{`{"owner":`}
 			},
 			wantErr: "invalid JSON for --attributes",
+		},
+		{
+			name: "malformed JSON number",
+			mutate: func(flags map[string][]string) {
+				flags["attributes"] = []string{`{"owner":1malformed-number-canary,"active":true}`}
+			},
+			wantErr:   "invalid JSON for --attributes",
+			forbidden: "malformed-number-canary",
+		},
+		{
+			name: "invalid UTF-8 structured JSON",
+			mutate: func(flags map[string][]string) {
+				flags["attributes"] = []string{`{"owner":"invalid-utf8-canary` + string([]byte{0xff}) + `","active":true}`}
+			},
+			wantErr:   "structured JSON must be valid UTF-8",
+			forbidden: "invalid-utf8-canary",
+		},
+		{
+			name: "NaN number",
+			mutate: func(flags map[string][]string) {
+				flags["price"] = []string{"NaN"}
+			},
+			wantErr:   "want finite number",
+			forbidden: "NaN",
+		},
+		{
+			name: "positive infinity number",
+			mutate: func(flags map[string][]string) {
+				flags["price"] = []string{"+Inf"}
+			},
+			wantErr:   "want finite number",
+			forbidden: "+Inf",
+		},
+		{
+			name: "negative infinity number",
+			mutate: func(flags map[string][]string) {
+				flags["price"] = []string{"-Inf"}
+			},
+			wantErr:   "want finite number",
+			forbidden: "-Inf",
 		},
 		{
 			name: "structured body over flag limit",
@@ -2993,14 +3047,20 @@ func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *t
 				flags[name] = append([]string(nil), values...)
 			}
 			tc.mutate(flags)
-			_, err := BuildWriteCommand(context.Background(), engine.New(bundle, nil), Request{
+			_, err := BuildWriteCommand(context.Background(), connector, Request{
 				Path:  []string{"widgets", "create"},
 				Flags: flags,
 			})
 			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
 				t.Fatalf("BuildWriteCommand error = %v, want %q", err, tc.wantErr)
 			}
+			if tc.forbidden != "" && strings.Contains(err.Error(), tc.forbidden) {
+				t.Fatalf("BuildWriteCommand exposed rejected value: %v", err)
+			}
 		})
+	}
+	if calls != 0 {
+		t.Fatalf("invalid direct CLI input reached transport; calls = %d, want 0", calls)
 	}
 }
 

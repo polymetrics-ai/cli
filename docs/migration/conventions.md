@@ -402,8 +402,10 @@ not a full override by default.
   provider-source evidence, update its generated help/manual/website surfaces, and prove its own
   exact request and rejected-input cases. A direct-write `query.<name>` binding must match one
   exact source-imported `rest.parameters` query row; a provider-fixed `rest.query` value cannot be
-  caller-bound or overridden, and each source-required query parameter must be fixed or mapped to
-  a required command flag.
+  caller-bound or overridden. Each source-required query parameter must be fixed, mapped to a
+  required command flag, or supplied by declaration-owned `api_key_query` authentication on every
+  selectable auth path. An auth-owned query parameter has no caller flag; a conditional-only auth
+  rule has a non-supplying no-match branch and is rejected for a required parameter.
 - **Write-query optionality is source-locked too**: a legacy `writes.json` action may use the
   existing object-form `query` entry with `"template":"{{ record.field }}"` and
   `"omit_when_absent": true` to omit that one parameter when the record does not contain the

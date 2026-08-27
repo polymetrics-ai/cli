@@ -73,6 +73,101 @@ func TestSchemaValidateConfigurationAppliesDeclaredConstraintsOnly(t *testing.T)
 	}
 }
 
+func TestSchemaValidateConfigurationRejectsCredentialBearingBaseURL(t *testing.T) {
+	sch, err := CompileSchema(json.RawMessage(`{
+		"type": "object",
+		"properties": {
+			"base_url": {"type": "string", "format": "uri"}
+		}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema() error = %v", err)
+	}
+
+	tests := []struct {
+		name      string
+		baseURL   string
+		wantError string
+	}{
+		{
+			name:      "rejects URL user info",
+			baseURL:   "https://user:pass@api.provider.example/v2",
+			wantError: `/base_url: configuration value must use "uri" format`,
+		},
+		{
+			name:      "rejects query component",
+			baseURL:   "https://api.provider.example/v2?token=placeholder",
+			wantError: `/base_url: configuration value must use "uri" format`,
+		},
+		{
+			name:    "accepts ordinary endpoint",
+			baseURL: "https://api.provider.example/v2",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := sch.ValidateConfiguration(map[string]string{"base_url": tt.baseURL})
+			if tt.wantError == "" {
+				if err != nil {
+					t.Fatalf("ValidateConfiguration() error = %v", err)
+				}
+				return
+			}
+			if err == nil {
+				t.Fatal("ValidateConfiguration() error = nil, want credential-bearing URL rejection")
+			}
+			if !strings.Contains(err.Error(), tt.wantError) {
+				t.Fatalf("ValidateConfiguration() error = %q, want %q", err, tt.wantError)
+			}
+			if strings.Contains(err.Error(), tt.baseURL) {
+				t.Fatalf("ValidateConfiguration() error leaked rejected URL")
+			}
+		})
+	}
+}
+
+func TestSchemaValidateConfigurationRejectsCredentialBearingBaseURLWithoutDeclaredURIFormat(t *testing.T) {
+	sch, err := CompileSchema(json.RawMessage(`{
+		"type": "object",
+		"properties": {
+			"base_url": {"type": "string"}
+		}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema() error = %v", err)
+	}
+	if !sch.HasConfigurationConstraints() {
+		t.Fatal("HasConfigurationConstraints() = false, want base_url safety constraint")
+	}
+
+	for _, tt := range []struct {
+		name      string
+		baseURL   string
+		wantError bool
+	}{
+		{name: "user info", baseURL: "https://user:pass@api.provider.example/v2", wantError: true},
+		{name: "query component", baseURL: "https://api.provider.example/v2?token=placeholder", wantError: true},
+		{name: "ordinary endpoint", baseURL: "https://api.provider.example/v2"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			err := sch.ValidateConfiguration(map[string]string{"base_url": tt.baseURL})
+			if !tt.wantError {
+				if err != nil {
+					t.Fatalf("ValidateConfiguration() error = %v", err)
+				}
+				return
+			}
+			if err == nil {
+				t.Fatal("ValidateConfiguration() error = nil, want credential-bearing URL rejection")
+			}
+			if strings.Contains(err.Error(), tt.baseURL) {
+				t.Fatal("ValidateConfiguration() error leaked rejected URL")
+			}
+		})
+	}
+}
+
 func TestSchemaWithoutConfigurationConstraintsIsNotAdvertised(t *testing.T) {
 	sch, err := CompileSchema(json.RawMessage(`{
 		"type": "object",

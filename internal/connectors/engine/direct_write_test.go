@@ -375,6 +375,49 @@ func TestOperationDirectWriteRetainsProviderReceiptWhenSecretStoreFails(t *testi
 	}
 }
 
+func TestOperationDirectWriteSecretSensitiveRESTHTTPErrorKeepsProviderProvenance(t *testing.T) {
+	const canary = "secret-sensitive-rest-provider-canary"
+	const responseBody = `{"credential":"` + canary + `"}`
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.Header().Set("X-Provider-Trace", "secret-sensitive-rest-error")
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte(responseBody))
+	}))
+	t.Cleanup(server.Close)
+	bundle := Bundle{Name: "acme", HTTP: HTTPBase{URL: server.URL}, Operations: []OperationSpec{{
+		ID: "acme.credentials.update", Kind: "rest_write", Summary: "Update credential", Risk: "high", Approval: "typed", OutputPolicy: directWritePolicySecretStored,
+		MutationClass: "update", SecretSensitive: true,
+		SensitivePolicy: &SensitivePolicySpec{InputMode: "env", ApprovalMode: "typed_confirmation", ResponseSecretField: "credential", ResponseSecretStoreKey: "updated_credential"},
+		REST:            &RESTOperationSpec{Method: http.MethodPost, Path: "/v2/credentials", MaxBytes: 1024},
+	}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/v2/credentials", Operation: &SurfaceOperation{Model: "write"}}}}}
+	req := connectors.OperationDirectWriteRequest{Operation: "acme.credentials.update", Config: connectors.RuntimeConfig{SecretStore: newRecordingSecretStore(), CredentialRevision: "fixture-credential-revision", ConfigurationDigest: "fixture-configuration-digest", WriteApprovalScope: connectors.WriteApprovalScopeFixture}}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	_, err = OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err == nil {
+		t.Fatal("OperationDirectWrite error = nil, want provider failure")
+	}
+	if strings.Contains(err.Error(), canary) {
+		t.Fatal("OperationDirectWrite leaked the secret-sensitive REST provider error")
+	}
+	var providerErr *connsdk.HTTPError
+	if !errors.As(err, &providerErr) {
+		t.Fatal("OperationDirectWrite did not retain REST provider response provenance")
+	}
+	if providerErr.Status != http.StatusBadRequest || providerErr.Header.Get("X-Provider-Trace") != "secret-sensitive-rest-error" || providerErr.Body != responseBody {
+		t.Fatal("OperationDirectWrite did not retain the exact REST provider response")
+	}
+	if calls != 1 {
+		t.Fatalf("provider error calls = %d, want exactly one approved request", calls)
+	}
+}
+
 func TestOperationDirectWriteRejectsSecretResponseWithoutEncryptedStoreBeforeIO(t *testing.T) {
 	requests := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { requests++ }))

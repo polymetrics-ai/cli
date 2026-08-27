@@ -7,7 +7,7 @@
 - Merges into: main
 - Delivery: Committed task branch with all local gates green; Firstmate owns the later no-mistakes, push, and one PR stage.
 - Working branch: fm/cli-rest-structured-body-r1
-- Task: Add a closed source-declaration-owned structured JSON request-body path shared by generated REST CLI commands and typed reverse-ETL actions. It must support declared nested object and array fields, preserve path/query/header separation and approval gates, fail closed before I/O, preserve existing body strategies, and document mechanical downstream composition without editing production connector definitions. Add the approved shared write-query slice: a missing `record.*` query value may be omitted only when that exact source-locked `QueryParam` declares `omit_when_absent`; required, undeclared, wrong-source, malformed, and explicit invalid values remain pre-I/O failures.
+- Task: Add a closed source-declaration-owned structured JSON request-body path shared by generated REST CLI commands and typed reverse-ETL actions. It must support declared nested object and array fields, preserve path/query/header separation and approval gates, fail closed before I/O, preserve existing body strategies, and document mechanical downstream composition without editing production connector definitions. Add the approved shared write-query slice: a missing `record.*` query value may be omitted only when that exact source-locked `QueryParam` declares `omit_when_absent`; required, undeclared, wrong-source, malformed, and explicit invalid values remain pre-I/O failures. The 2026-08-24 Firstmate-approved hardening slice rejects a `base_url` carrying URL user-info or any query component at credential configuration validation; it does not classify `base_url` non-secret, redesign credential storage, or redact caller-visible provider receipts.
 - Verification: Red/green engine, commandrunner, and installed-CLI tests; go vet; pm binary build; generator validation and surface sync; generated help/manual checks; completion-tracked connector boundary; make verify; and configured code review.
 
 ## Evidence Table
@@ -22,6 +22,7 @@
 | Generated command surfaces expose typed fields only. | live | Generated help/schema tests include declared field flags and omit raw-body/raw-json/template bypasses. |
 | Existing body strategies keep their behavior. | live | Existing scalar, form, SCIM, binary, and specialized GitHub focused tests remain green without changed expected outcomes. |
 | Downstream lanes can compose actions mechanically. | live | A connector authoring document names the declared-field mapping and shared executor contract; docs-check reads it. |
+| Credential-bearing endpoint URLs fail at configuration input. | live | A schema-declared `base_url` rejects user-info and query-bearing URI inputs via the existing shared configuration classification, while an ordinary provider endpoint still validates. |
 
 ## Foundation check
 
@@ -41,6 +42,8 @@
 4. Red: add generated help/schema and downstream-contract expectations. Green: synchronize generators/docs while keeping opaque raw-body inputs absent.
 5. Refactor: preserve scalar/form/SCIM/binary/GitHub behavior with their existing focused regression suites; remove duplication only after all tests pass.
 6. Red: a synthetic `WriteAction.Query` with `{{ record.optional }}` and `omit_when_absent:true` still rejects its missing record value. Green: add a write-only resolver boundary that omits that exact absence while retaining config, secret, incremental, required-record, wrong-source, malformed, and explicit-value behavior.
+7. Red: a declared GraphQL direct-write error whose provider receipt echoes a configured base-URL value persists that value into plaintext `state.json`. Green: confine the persisted error-path projection so that plaintext state excludes the configured secret while the returned provider error's status, headers, and body remain verbatim. Do not add a general response-redaction layer or change CLI output.
+8. **2026-08-24 authorized safety follow-up.** Red: configuration validation accepts a schema-declared `base_url` containing user-info or a query component. Green: reject both before use while accepting an ordinary endpoint. The guard applies even where a provider definition omitted `format: uri`: 29 current source-locked `base_url` fields have that omission, so a format-only check would leave an admission gap. Keep the pending `state-config-base-url-persistence` classification decision open; do not change receipt persistence, credential-storage shape, output, or provider declarations.
 
 ## CLI help/manual/website parity
 
@@ -56,6 +59,8 @@
 - Inline/manual fallback: issue #4305 is not in the stale roadmap and the task forbids role spawning.
 - Loaded skills: golang-how-to, golang-cli, golang-testing, golang-error-handling, golang-security, golang-safety, golang-design-patterns, golang-structs-interfaces, and golang-documentation.
 - CI remediation additionally used no-mistakes (active validation-step boundary only), golang-troubleshooting, golang-lint, and golang-continuous-integration; pipeline control remained with the outer executor.
+- 2026-08-24 persistence remediation: Firstmate confirmed that `state.json` is plaintext JSON while the credential vault alone is AES-GCM encrypted. The GSD adapter prompts were executed inline because this issue is outside the active roadmap and the canonical contract forbids role spawning. The bounded follow-up uses golang-how-to, golang-testing, golang-error-handling, golang-security, golang-safety, golang-design-patterns, and golang-structs-interfaces.
+- 2026-08-24 credential-bearing URL admission follow-up: Firstmate authorized only validation hardening after the provider scan found no source-locked secret-bearing `base_url`. The GSD `discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`, and `code-review` prompts were regenerated and executed inline; no compatible isolated GSD runtime is available and the single-worker contract prohibits role spawning. Loaded skills: golang-how-to, golang-testing, golang-error-handling, golang-security, golang-safety, golang-design-patterns, and golang-structs-interfaces.
 
 ## Commit checkpoints
 

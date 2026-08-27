@@ -39,26 +39,27 @@ const (
 )
 
 type preparedOperationDirectWrite struct {
-	op               OperationSpec
-	cfg              connectors.RuntimeConfig
-	baseURL          string
-	headers          map[string]string
-	operationHeaders http.Header
-	runtimeAuth      []AuthSpec
-	rateLimitAuth    []AuthSpec
-	identity         string
-	method           string
-	path             string
-	requestPath      string
-	query            url.Values
-	body             map[string]any
-	form             url.Values
-	format           string
-	contentType      string
-	policy           string
-	maxBytes         int
-	redactionValues  []string
-	prepared         PreparedWrite
+	op                   OperationSpec
+	cfg                  connectors.RuntimeConfig
+	baseURL              string
+	headers              map[string]string
+	operationHeaders     http.Header
+	runtimeAuth          []AuthSpec
+	rateLimitAuth        []AuthSpec
+	identity             string
+	method               string
+	path                 string
+	requestPath          string
+	query                url.Values
+	body                 map[string]any
+	form                 url.Values
+	format               string
+	contentType          string
+	policy               string
+	maxBytes             int
+	redactionValues      []string
+	sensitiveHTTPBinding bool
+	prepared             PreparedWrite
 }
 
 // sealRuntimeConfig copies every mutable request input a prepared write can
@@ -212,12 +213,18 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 				}
 			}
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-			message := operationDirectWriteErrorText(
-				err,
-				prepared.identity,
-				operationDirectWritePrintsProviderHTTPBody(prepared),
-				operationDirectWriteDiagnosticValues(prepared.redactionValues, prepared.cfg.Secrets, prepared.cfg.Config),
-			)
+			message := "provider returned an HTTP error"
+			if prepared.op.Kind == "graphql_mutation" {
+				message = "provider returned a GraphQL HTTP error"
+			}
+			if !prepared.sensitiveHTTPBinding || !operationDirectWriteErrorRequiresGenericDiagnostic(err) {
+				message = operationDirectWriteErrorText(
+					err,
+					prepared.identity,
+					operationDirectWritePrintsProviderHTTPBody(prepared),
+					operationDirectWriteDiagnosticValues(prepared.redactionValues, prepared.cfg.Secrets, prepared.cfg.Config),
+				)
+			}
 			if hint != "" {
 				message += ": " + hint
 			}
@@ -338,7 +345,7 @@ func operationDirectWriteDiagnosticValues(values []string, secrets, config map[s
 // GraphQL, secret, and explicitly redacted output contracts retain their
 // complete receipt only through the typed result/cause, never synthetic text.
 func operationDirectWritePrintsProviderHTTPBody(prepared preparedOperationDirectWrite) bool {
-	return prepared.op.Kind == "rest_write" && prepared.format != "multipart" && prepared.policy == directWritePolicyJSON
+	return prepared.op.Kind == "rest_write" && prepared.format != "multipart" && prepared.policy == directWritePolicyJSON && !prepared.sensitiveHTTPBinding
 }
 
 func operationDirectWriteErrorCause(err error, identity string) error {
@@ -418,6 +425,15 @@ func operationDirectWriteErrorMayExposeURL(err error) bool {
 	return strings.Contains(message, "http://") || strings.Contains(message, "https://")
 }
 
+// operationDirectWriteErrorRequiresGenericDiagnostic identifies transport
+// failures whose provider-controlled receipt or resolved URL can carry a
+// runtime-bound credential. Local pre-I/O validation errors remain useful
+// diagnostics and are redacted through operationDirectWriteErrorText instead.
+func operationDirectWriteErrorRequiresGenericDiagnostic(err error) bool {
+	var httpErr *connsdk.HTTPError
+	return errors.As(err, &httpErr) || operationDirectWriteErrorMayExposeURL(err)
+}
+
 func redactOperationDirectWriteErrorText(text string, redact bool, values []string) string {
 	if !redact && len(values) == 0 {
 		return text
@@ -425,9 +441,7 @@ func redactOperationDirectWriteErrorText(text string, redact bool, values []stri
 	return safety.RedactErrorText(redactWriteLiterals(text, values))
 }
 
-// operationRetainsSecretRuntimeContent identifies the closed secret-operation
-// path. Its diagnostic output is complete by policy; the declared secret store
-// protects the returned credential at rest rather than deleting runtime fields.
+// operationRetainsSecretRuntimeContent reports whether an operation handles secret-bearing runtime content.
 func operationRetainsSecretRuntimeContent(op OperationSpec) bool {
 	return op.SecretSensitive || strings.EqualFold(op.MutationClass, "secret")
 }
@@ -785,12 +799,46 @@ func validateOperationDirectWriteStaticBodyMapping(staticBody map[string]any, pa
 		}
 		if index == len(path.steps)-1 {
 			object, array := operationDirectWriteBodyNodeKinds(path.node)
+			if array {
+				if err := validateOperationDirectWriteStaticArrayContainer(next, path.node); err != nil {
+					return err
+				}
+			}
 			if object != array && (object || array) {
 				return nil
 			}
 			return fmt.Errorf("overlaps a fixed rest.body value")
 		}
 		current = next
+	}
+	return nil
+}
+
+// validateOperationDirectWriteStaticArrayContainer rejects the one array
+// shape a caller can never complete. A caller-provided array must include a
+// value for every fixed prefix index; scalar fixed items cannot be merged.
+// When that prefix is shorter than minItems, no declaration-bound caller value
+// can satisfy the array without overwriting a provider-owned value.
+func validateOperationDirectWriteStaticArrayContainer(value any, node map[string]any) error {
+	items, ok := value.([]any)
+	if !ok {
+		return fmt.Errorf("does not match its fixed rest.body structure")
+	}
+	minimum, err := structuredRESTBodyArrayMinItems(node)
+	if err != nil {
+		return err
+	}
+	if len(items) >= minimum {
+		return nil
+	}
+	for _, item := range items {
+		switch item.(type) {
+		case map[string]any, []any:
+			// Container items can merge with an empty caller fragment while
+			// preserving fixed descendants.
+		default:
+			return fmt.Errorf("cannot merge fixed rest.body container to satisfy declared minItems")
+		}
 	}
 	return nil
 }
@@ -1023,6 +1071,312 @@ func ResolveOperationDirectWriteBodyMappingValue(b Bundle, operation string, bod
 	}
 	value, found := operationDirectWriteBodyPathValue(body, resolved.steps)
 	return value, found, nil
+}
+
+func WithholdOperationDirectWriteBodyFields(b Bundle, operation string, body map[string]any, fields []string) (map[string]any, []string, error) {
+	_, root, out, err := operationDirectWriteCanonicalBodyPlanFragment(b, operation, body)
+	if err != nil {
+		return nil, nil, err
+	}
+	withheld := make([]string, 0, len(fields))
+	for _, rawField := range fields {
+		field := operationDirectWriteBodyRelativePath(rawField)
+		if field == "" {
+			continue
+		}
+		resolved, err := resolveOperationDirectWriteBodySchemaPath(root, field)
+		if err != nil {
+			return nil, nil, fmt.Errorf("operation %q sensitive body field %q: %w", operation, field, err)
+		}
+		_, removed, err := deleteOperationDirectWriteBodyPathValue(out, resolved.steps, field)
+		if err != nil {
+			return nil, nil, err
+		}
+		if removed {
+			withheld = append(withheld, field)
+		}
+	}
+	if len(withheld) == 0 {
+		return out, nil, nil
+	}
+	return out, withheld, nil
+}
+
+func RedactOperationDirectWriteBodyFields(b Bundle, operation string, body map[string]any, fields []string) (map[string]any, error) {
+	_, root, out, err := operationDirectWriteCanonicalBodyPlanFragment(b, operation, body)
+	if err != nil {
+		return nil, err
+	}
+	for _, rawField := range fields {
+		field := operationDirectWriteBodyRelativePath(rawField)
+		if field == "" {
+			continue
+		}
+		resolved, err := resolveOperationDirectWriteBodySchemaPath(root, field)
+		if err != nil {
+			return nil, fmt.Errorf("operation %q sensitive body field %q: %w", operation, field, err)
+		}
+		if _, found := operationDirectWriteBodyPathValue(out, resolved.steps); !found {
+			continue
+		}
+		updated, err := setOperationDirectWriteBodyPathValue(out, resolved.steps, "redacted", field)
+		if err != nil {
+			return nil, err
+		}
+		bodyMap, ok := updated.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("operation %q redacted body must be an object", operation)
+		}
+		out = bodyMap
+	}
+	return out, nil
+}
+
+func MergeOperationDirectWriteBodyFragments(b Bundle, operation string, base, overlay map[string]any) (map[string]any, error) {
+	_, root, err := operationDirectWriteStructuredBodyPlanRoot(b, operation)
+	if err != nil {
+		return nil, err
+	}
+	merged, err := mergeOperationDirectWriteBodyFragmentValue(root, base, true, overlay, true, "body")
+	if err != nil {
+		return nil, err
+	}
+	body, ok := merged.(map[string]any)
+	if !ok || body == nil {
+		return nil, fmt.Errorf("operation %q merged body must be an object", operation)
+	}
+	return body, nil
+}
+
+func OperationDirectWriteBodyPathContains(b Bundle, operation, parent, child string) (bool, error) {
+	_, root, err := operationDirectWriteStructuredBodyPlanRoot(b, operation)
+	if err != nil {
+		return false, err
+	}
+	parentPath, err := resolveOperationDirectWriteBodySchemaPath(root, operationDirectWriteBodyRelativePath(parent))
+	if err != nil {
+		return false, fmt.Errorf("operation %q body field %q: %w", operation, parent, err)
+	}
+	childPath, err := resolveOperationDirectWriteBodySchemaPath(root, operationDirectWriteBodyRelativePath(child))
+	if err != nil {
+		return false, fmt.Errorf("operation %q body field %q: %w", operation, child, err)
+	}
+	if len(parentPath.steps) > len(childPath.steps) {
+		return false, nil
+	}
+	for index, step := range parentPath.steps {
+		other := childPath.steps[index]
+		if step.array != other.array || step.key != other.key || step.index != other.index {
+			return false, nil
+		}
+	}
+	return true, nil
+}
+
+func operationDirectWriteStructuredBodyPlanRoot(b Bundle, operation string) (OperationSpec, map[string]any, error) {
+	op, _, err := operationDirectWriteSpec(b, operation)
+	if err != nil {
+		return OperationSpec{}, nil, err
+	}
+	if op.Kind != "rest_write" || !OperationDirectWriteHasStructuredRESTBody(op) {
+		return OperationSpec{}, nil, fmt.Errorf("operation %q does not expose a structured REST body", operation)
+	}
+	root, err := operationDirectWriteBodySchemaRoot(op)
+	if err != nil {
+		return OperationSpec{}, nil, err
+	}
+	return op, root, nil
+}
+
+func operationDirectWriteCanonicalBodyPlanFragment(b Bundle, operation string, body map[string]any) (OperationSpec, map[string]any, map[string]any, error) {
+	op, root, err := operationDirectWriteStructuredBodyPlanRoot(b, operation)
+	if err != nil {
+		return OperationSpec{}, nil, nil, err
+	}
+	compiled, err := compileStructuredRESTBodySchema(op)
+	if err != nil {
+		return OperationSpec{}, nil, nil, err
+	}
+	canonical, err := canonicalizeStructuredRESTBodyFragment(compiled, op, body, "body")
+	if err != nil {
+		return OperationSpec{}, nil, nil, err
+	}
+	return op, root, canonical, nil
+}
+
+func operationDirectWriteBodyRelativePath(path string) string {
+	return strings.TrimPrefix(strings.TrimSpace(path), "body.")
+}
+
+func deleteOperationDirectWriteBodyPathValue(current any, steps []operationDirectWriteBodyPathStep, path string) (any, bool, error) {
+	if len(steps) == 0 {
+		return current, false, nil
+	}
+	step := steps[0]
+	if step.array {
+		items, ok := current.([]any)
+		if !ok {
+			if current == nil {
+				return current, false, nil
+			}
+			return nil, false, fmt.Errorf("body field %q conflicts with existing non-array value", path)
+		}
+		if step.index < 0 || step.index >= len(items) || items[step.index] == nil {
+			return items, false, nil
+		}
+		if len(steps) == 1 {
+			items[step.index] = nil
+			return items, true, nil
+		}
+		updated, removed, err := deleteOperationDirectWriteBodyPathValue(items[step.index], steps[1:], path)
+		if err != nil {
+			return nil, false, err
+		}
+		if removed {
+			items[step.index] = updated
+		}
+		return items, removed, nil
+	}
+	object, ok := current.(map[string]any)
+	if !ok {
+		if current == nil {
+			return current, false, nil
+		}
+		return nil, false, fmt.Errorf("body field %q conflicts with existing non-object value", path)
+	}
+	value, found := object[step.key]
+	if !found || value == nil {
+		return object, false, nil
+	}
+	if len(steps) == 1 {
+		delete(object, step.key)
+		return object, true, nil
+	}
+	updated, removed, err := deleteOperationDirectWriteBodyPathValue(value, steps[1:], path)
+	if err != nil {
+		return nil, false, err
+	}
+	if removed {
+		object[step.key] = updated
+	}
+	return object, removed, nil
+}
+
+func mergeOperationDirectWriteBodyFragmentValue(node map[string]any, base any, hasBase bool, overlay any, hasOverlay bool, path string) (any, error) {
+	if !hasOverlay {
+		return cloneOperationDirectWriteBodyValue(base), nil
+	}
+	if !hasBase {
+		return cloneOperationDirectWriteBodyValue(overlay), nil
+	}
+	object, array := operationDirectWriteBodyNodeKinds(node)
+	if object && array {
+		return nil, fmt.Errorf("%s has an ambiguous declared schema", path)
+	}
+	if object {
+		baseObject, ok := operationDirectWriteBodyObject(base)
+		if !ok {
+			return nil, fmt.Errorf("%s conflicts with existing non-object value", path)
+		}
+		overlayObject, ok := operationDirectWriteBodyObject(overlay)
+		if !ok {
+			return nil, fmt.Errorf("%s conflicts with a non-object replacement", path)
+		}
+		properties, ok := node["properties"].(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("%s has no declared object properties", path)
+		}
+		merged := cloneOperationDirectWriteBodyMap(baseObject)
+		for _, name := range sortedMapKeys(overlayObject) {
+			child, ok := properties[name].(map[string]any)
+			if !ok {
+				return nil, fmt.Errorf("%s.%s is not declared", path, name)
+			}
+			baseValue, basePresent := merged[name]
+			value, err := mergeOperationDirectWriteBodyFragmentValue(child, baseValue, basePresent, overlayObject[name], true, path+"."+name)
+			if err != nil {
+				return nil, err
+			}
+			merged[name] = value
+		}
+		return merged, nil
+	}
+	if array {
+		baseItems, ok := arrayElements(base)
+		if !ok {
+			return nil, fmt.Errorf("%s conflicts with existing non-array value", path)
+		}
+		overlayItems, ok := arrayElements(overlay)
+		if !ok {
+			return nil, fmt.Errorf("%s conflicts with a non-array replacement", path)
+		}
+		length := len(baseItems)
+		if len(overlayItems) > length {
+			length = len(overlayItems)
+		}
+		merged := make([]any, length)
+		for index := 0; index < length; index++ {
+			basePresent := index < len(baseItems) && baseItems[index] != nil
+			overlayPresent := index < len(overlayItems)
+			if !overlayPresent {
+				if basePresent {
+					merged[index] = cloneOperationDirectWriteBodyValue(baseItems[index])
+				}
+				continue
+			}
+			item, err := operationDirectWriteBodyArrayItemSchema(node, index)
+			if err != nil {
+				return nil, err
+			}
+			var baseValue any
+			if basePresent {
+				baseValue = baseItems[index]
+			}
+			value, err := mergeOperationDirectWriteBodyFragmentValue(item, baseValue, basePresent, overlayItems[index], true, fmt.Sprintf("%s.%d", path, index))
+			if err != nil {
+				return nil, err
+			}
+			merged[index] = value
+		}
+		return merged, nil
+	}
+	return cloneOperationDirectWriteBodyValue(overlay), nil
+}
+
+func operationDirectWriteBodyObject(value any) (map[string]any, bool) {
+	switch typed := value.(type) {
+	case map[string]any:
+		return typed, true
+	case connectors.Record:
+		return map[string]any(typed), true
+	default:
+		return nil, false
+	}
+}
+
+func cloneOperationDirectWriteBodyMap(value map[string]any) map[string]any {
+	out := make(map[string]any, len(value))
+	for key, item := range value {
+		out[key] = cloneOperationDirectWriteBodyValue(item)
+	}
+	return out
+}
+
+func cloneOperationDirectWriteBodyValue(value any) any {
+	switch typed := value.(type) {
+	case map[string]any:
+		return cloneOperationDirectWriteBodyMap(typed)
+	case connectors.Record:
+		return cloneOperationDirectWriteBodyMap(map[string]any(typed))
+	case []any:
+		out := make([]any, len(typed))
+		for index, item := range typed {
+			out[index] = cloneOperationDirectWriteBodyValue(item)
+		}
+		return out
+	default:
+		return value
+	}
 }
 
 func operationDirectWriteBodyPathValue(body map[string]any, steps []operationDirectWriteBodyPathStep) (any, bool) {
@@ -1275,34 +1629,33 @@ func operationDirectWriteRedactFields(op OperationSpec) []string {
 	return append([]string(nil), op.SensitivePolicy.RedactFields...)
 }
 
-func operationDirectWriteRedactionValues(op OperationSpec, body map[string]any) []string {
+func operationDirectWriteRedactionValues(op OperationSpec, body map[string]any) ([]string, error) {
 	// A live secret operation retains complete runtime output for diagnosis;
 	// secrecy is provided by the encrypted credential store, not deletion from
 	// responses, errors, logs, previews, reports, or fixtures.
-	if op.SecretSensitive || strings.EqualFold(op.MutationClass, "secret") {
-		return nil
+	if operationRetainsSecretRuntimeContent(op) {
+		return nil, nil
 	}
 	if op.SensitivePolicy == nil || len(op.SensitivePolicy.RedactFields) == 0 {
-		return nil
+		return nil, nil
 	}
-	// Structured declarations may classify a scalar inside an array/object
-	// path (for example body.targets.0.token).  The legacy write-action path
-	// walker intentionally accepts only object paths, so use the same schema
-	// resolver that materializes this closed body.  Without this, an echoed
-	// declared request secret survives a failed provider receipt.
-	if OperationDirectWriteHasStructuredRESTBody(op) {
+	if op.Kind == "rest_write" && OperationDirectWriteHasStructuredRESTBody(op) {
 		root, err := operationDirectWriteBodySchemaRoot(op)
 		if err != nil {
-			return nil
+			return nil, err
 		}
 		seen := make(map[string]bool)
-		for _, field := range op.SensitivePolicy.RedactFields {
-			path := strings.TrimPrefix(strings.TrimSpace(field), "body.")
-			resolved, err := resolveOperationDirectWriteBodySchemaPath(root, path)
-			if err != nil {
+		for _, rawField := range op.SensitivePolicy.RedactFields {
+			field := operationDirectWriteBodyRelativePath(rawField)
+			if field == "" {
 				continue
 			}
-			if value, found := operationDirectWriteBodyPathValue(body, resolved.steps); found {
+			resolved, err := resolveOperationDirectWriteBodySchemaPath(root, field)
+			if err != nil {
+				return nil, fmt.Errorf("operation %q sensitive body field %q: %w", op.ID, field, err)
+			}
+			value, found := operationDirectWriteBodyPathValue(body, resolved.steps)
+			if found {
 				collectWriteRedactionValues(value, seen)
 			}
 		}
@@ -1311,13 +1664,13 @@ func operationDirectWriteRedactionValues(op OperationSpec, body map[string]any) 
 			values = append(values, value)
 		}
 		sortWriteRedactionLiterals(values)
-		return values
+		return values, nil
 	}
 	fields := make([]string, 0, len(op.SensitivePolicy.RedactFields))
 	for _, field := range op.SensitivePolicy.RedactFields {
 		fields = append(fields, strings.TrimPrefix(strings.TrimSpace(field), "body."))
 	}
-	return writeActionRedactionValues(WriteAction{RedactFields: fields}, connectors.Record(body))
+	return writeActionRedactionValues(WriteAction{RedactFields: fields}, connectors.Record(body)), nil
 }
 
 // operationDirectWritePayloadFileFields keeps multipart file identity
@@ -1367,6 +1720,77 @@ func operationDirectWritePayloadFileMaxBytes(op OperationSpec) map[string]int64 
 		}
 	}
 	return maxBytes
+}
+
+func operationDirectWriteHasSensitiveHTTPBinding(cfg connectors.RuntimeConfig, httpBase HTTPBase, headers map[string]string) (bool, error) {
+	spec, found, err := selectedOperationDirectWriteAuthSpec(cfg, httpBase.Auth)
+	if err != nil {
+		return false, err
+	}
+	if found && !strings.EqualFold(strings.TrimSpace(spec.Mode), "none") {
+		return true, nil
+	}
+	baseURLReferencesRuntimeValues, err := operationDirectWriteBaseURLTemplateReferencesRuntimeValues(httpBase.URL)
+	if err != nil {
+		return false, err
+	}
+	if baseURLReferencesRuntimeValues {
+		return true, nil
+	}
+	return operationDirectWriteHeaderTemplatesReferenceRuntimeValues(headers)
+}
+
+func operationDirectWriteBaseURLTemplateReferencesRuntimeValues(template string) (bool, error) {
+	tokens, err := parseWriteQueryTemplate(template)
+	if err != nil {
+		return false, err
+	}
+	for _, token := range tokens {
+		if token.expression == "" {
+			continue
+		}
+		ref := strings.TrimSpace(strings.Split(token.expression, "|")[0])
+		if operationDirectWriteReferenceIsRuntimeSensitive(ref) {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+func operationDirectWriteHeaderTemplatesReferenceRuntimeValues(headers map[string]string) (bool, error) {
+	names := make([]string, 0, len(headers))
+	for name := range headers {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		tokens, err := parseWriteQueryTemplate(headers[name])
+		if err != nil {
+			return false, err
+		}
+		for _, token := range tokens {
+			if token.expression == "" {
+				continue
+			}
+			if operationDirectWriteHeaderExpressionReferencesRuntimeValues(token.expression) {
+				return true, nil
+			}
+		}
+	}
+	return false, nil
+}
+
+func operationDirectWriteHeaderExpressionReferencesRuntimeValues(expr string) bool {
+	if _, coalesced, err := coalesceRecordPathsExpression(expr); coalesced || err != nil {
+		return false
+	}
+	ref := strings.TrimSpace(strings.Split(expr, "|")[0])
+	return operationDirectWriteReferenceIsRuntimeSensitive(ref)
+}
+
+func operationDirectWriteReferenceIsRuntimeSensitive(ref string) bool {
+	parts := strings.Split(strings.TrimSpace(ref), ".")
+	return len(parts) == 2 && (parts[0] == "config" || parts[0] == "secrets")
 }
 
 func bindOperationDirectWriteHTTPMutations(cfg connectors.RuntimeConfig, httpBase HTTPBase, headers, query map[string]string) (map[string]string, map[string]string, []AuthSpec, []AuthSpec, error) {
@@ -1460,6 +1884,36 @@ func bindOperationDirectWriteHTTPMutations(cfg connectors.RuntimeConfig, httpBas
 	}
 }
 
+// bindOperationDirectWriteDeclaredHTTP resolves the declaration-owned headers
+// only after its declaration-owned query and authentication values are bound.
+// This keeps the prepared request, approval digest, and transmitted request on
+// the same closed set of values, including a header that references an
+// auth-owned query parameter.
+func bindOperationDirectWriteDeclaredHTTP(cfg connectors.RuntimeConfig, httpBase HTTPBase, spec *Schema, query map[string]string) (map[string]string, map[string]string, []AuthSpec, []AuthSpec, error) {
+	runtimeHeaders, boundQuery, runtimeAuth, rateLimitAuth, err := bindOperationDirectWriteHTTPMutations(cfg, httpBase, nil, query)
+	if err != nil {
+		return nil, nil, nil, nil, err
+	}
+	declaredHeaders, err := resolveDirectWriteHeadersWithVars(httpBase.Headers, spec, requestVars(cfg, nil, "", boundQuery))
+	if err != nil {
+		return nil, nil, nil, nil, err
+	}
+	if declaredHeaders == nil {
+		declaredHeaders = make(map[string]string, len(runtimeHeaders))
+	}
+	names := make([]string, 0, len(runtimeHeaders))
+	for name := range runtimeHeaders {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		if err := bindOperationDirectWriteHeader(declaredHeaders, name, runtimeHeaders[name], "declared HTTP mutation"); err != nil {
+			return nil, nil, nil, nil, err
+		}
+	}
+	return declaredHeaders, boundQuery, runtimeAuth, rateLimitAuth, nil
+}
+
 func selectedOperationDirectWriteAuthSpec(cfg connectors.RuntimeConfig, specs []AuthSpec) (AuthSpec, bool, error) {
 	for _, spec := range specs {
 		matched, err := authSpecMatches(spec, authVars(cfg))
@@ -1539,10 +1993,6 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	}
 	cfg := materializeConfigDefaults(b, sealRuntimeConfig(req.Config))
 	identity := operationDirectWriteIdentity(b, op, method)
-	headers, err := resolveDirectWriteHeaders(b.HTTP.Headers, cfg, b.Spec)
-	if err != nil {
-		return preparedOperationDirectWrite{}, fmt.Errorf("%s: resolve declared headers: %w", identity, err)
-	}
 	resolvedPath, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, req.PathParams)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
@@ -1558,9 +2008,13 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	if err := requireOperationQueryGroups(op, queryMap); err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
-	headers, queryMap, runtimeAuth, rateLimitAuth, err := bindOperationDirectWriteHTTPMutations(cfg, b.HTTP, headers, queryMap)
+	headers, queryMap, runtimeAuth, rateLimitAuth, err := bindOperationDirectWriteDeclaredHTTP(cfg, b.HTTP, b.Spec, queryMap)
 	if err != nil {
 		return preparedOperationDirectWrite{}, fmt.Errorf("%s: bind declared HTTP mutations: %w", identity, err)
+	}
+	sensitiveHTTPBinding, err := operationDirectWriteHasSensitiveHTTPBinding(cfg, b.HTTP, b.HTTP.Headers)
+	if err != nil {
+		return preparedOperationDirectWrite{}, fmt.Errorf("%s: inspect declared HTTP bindings: %w", identity, err)
 	}
 	query, err := directReadQuery(queryMap)
 	if err != nil {
@@ -1675,27 +2129,32 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 			HeaderValues: preparedHeaderValues,
 		}},
 	}
+	redactionValues, err := operationDirectWriteRedactionValues(op, body)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
 	return preparedOperationDirectWrite{
-		op:               op,
-		cfg:              cfg,
-		baseURL:          baseURL,
-		headers:          cloneResolvedHeaders(headers),
-		operationHeaders: cloneOperationHeaders(operationHeaders),
-		runtimeAuth:      runtimeAuth,
-		rateLimitAuth:    rateLimitAuth,
-		identity:         identity,
-		method:           method,
-		path:             resolvedPath,
-		requestPath:      requestPath,
-		query:            query,
-		body:             body,
-		form:             form,
-		format:           format,
-		contentType:      contentType,
-		policy:           policy,
-		maxBytes:         maxBytes,
-		redactionValues:  operationDirectWriteRedactionValues(op, body),
-		prepared:         prepared,
+		op:                   op,
+		cfg:                  cfg,
+		baseURL:              baseURL,
+		headers:              cloneResolvedHeaders(headers),
+		operationHeaders:     cloneOperationHeaders(operationHeaders),
+		runtimeAuth:          runtimeAuth,
+		rateLimitAuth:        rateLimitAuth,
+		identity:             identity,
+		method:               method,
+		path:                 resolvedPath,
+		requestPath:          requestPath,
+		query:                query,
+		body:                 body,
+		form:                 form,
+		format:               format,
+		contentType:          contentType,
+		policy:               policy,
+		maxBytes:             maxBytes,
+		redactionValues:      redactionValues,
+		sensitiveHTTPBinding: sensitiveHTTPBinding,
+		prepared:             prepared,
 	}, nil
 }
 
@@ -1715,13 +2174,13 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 	}
 	cfg := materializeConfigDefaults(b, sealRuntimeConfig(req.Config))
 	identity := operationDirectWriteIdentity(b, op, method)
-	headers, err := resolveDirectWriteHeaders(b.HTTP.Headers, cfg, b.Spec)
-	if err != nil {
-		return preparedOperationDirectWrite{}, fmt.Errorf("%s: resolve declared headers: %w", identity, err)
-	}
-	headers, queryMap, runtimeAuth, rateLimitAuth, err := bindOperationDirectWriteHTTPMutations(cfg, b.HTTP, headers, nil)
+	headers, queryMap, runtimeAuth, rateLimitAuth, err := bindOperationDirectWriteDeclaredHTTP(cfg, b.HTTP, b.Spec, nil)
 	if err != nil {
 		return preparedOperationDirectWrite{}, fmt.Errorf("%s: bind declared HTTP mutations: %w", identity, err)
+	}
+	sensitiveHTTPBinding, err := operationDirectWriteHasSensitiveHTTPBinding(cfg, b.HTTP, b.HTTP.Headers)
+	if err != nil {
+		return preparedOperationDirectWrite{}, fmt.Errorf("%s: inspect declared HTTP bindings: %w", identity, err)
 	}
 	query, err := directReadQuery(queryMap)
 	if err != nil {
@@ -1795,25 +2254,30 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 			Headers:     cloneResolvedHeaders(headers),
 		}},
 	}
+	redactionValues, err := operationDirectWriteRedactionValues(op, variables)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
 	return preparedOperationDirectWrite{
-		op:              op,
-		cfg:             cfg,
-		baseURL:         baseURL,
-		headers:         cloneResolvedHeaders(headers),
-		runtimeAuth:     runtimeAuth,
-		rateLimitAuth:   rateLimitAuth,
-		identity:        identity,
-		method:          method,
-		path:            op.GraphQL.Path,
-		requestPath:     requestPath,
-		query:           query,
-		body:            payload,
-		format:          "graphql",
-		contentType:     "application/json",
-		policy:          policy,
-		maxBytes:        maxBytes,
-		redactionValues: operationDirectWriteRedactionValues(op, variables),
-		prepared:        prepared,
+		op:                   op,
+		cfg:                  cfg,
+		baseURL:              baseURL,
+		headers:              cloneResolvedHeaders(headers),
+		runtimeAuth:          runtimeAuth,
+		rateLimitAuth:        rateLimitAuth,
+		identity:             identity,
+		method:               method,
+		path:                 op.GraphQL.Path,
+		requestPath:          requestPath,
+		query:                query,
+		body:                 payload,
+		format:               "graphql",
+		contentType:          "application/json",
+		policy:               policy,
+		maxBytes:             maxBytes,
+		redactionValues:      redactionValues,
+		sensitiveHTTPBinding: sensitiveHTTPBinding,
+		prepared:             prepared,
 	}, nil
 }
 
@@ -2165,6 +2629,9 @@ func operationDirectWriteQuery(op OperationSpec, requested map[string]string, au
 	for _, name := range parameterNames {
 		parameter := parameters[name]
 		if parameter.Required && strings.TrimSpace(query[name]) == "" {
+			if _, authOwned := authQueryParameters[name]; authOwned {
+				continue
+			}
 			return nil, fmt.Errorf("operation %q requires query parameter %q", op.ID, name)
 		}
 	}
@@ -2447,7 +2914,7 @@ func operationDirectWriteResponseDeclaresJSON(policy string, headers map[string]
 // credential store-bound before runtime construction and I/O. The response is
 // deliberately still returned intact: the runtime does not redact content.
 func validateOperationResponseSecretContract(op OperationSpec) error {
-	if !op.SecretSensitive && !strings.EqualFold(op.MutationClass, "secret") {
+	if !operationRetainsSecretRuntimeContent(op) {
 		return nil
 	}
 	if op.SensitivePolicy == nil {

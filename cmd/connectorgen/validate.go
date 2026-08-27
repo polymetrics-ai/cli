@@ -1154,7 +1154,7 @@ func checkCLISurfaceStructuredJSONFlags(b engine.Bundle, i int, cmd engine.CLICo
 		case cmd.Intent == "direct_write" && strings.TrimSpace(cmd.Operation) != "":
 			variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
 			operation, found := operations[cmd.Operation]
-			if ok && variable != "" && !strings.Contains(variable, ".") && found {
+			if ok && variable != "" && found {
 				if err := engine.ValidateOperationStructuredJSONBodyField(operation, variable); err == nil {
 					continue
 				} else {
@@ -1567,17 +1567,22 @@ func checkCLISurfaceDirectWriteOperationSafety(
 	} else if len(op.REST.BodySchema) > 0 {
 		findings = append(findings, checkCLISurfaceOperationBodyMappingsForIntent(b, i, cmd, op, "direct write")...)
 	}
-	findings = append(findings, checkCLISurfaceDirectWriteRequiredQueryMappings(b, i, cmd, op)...)
+	authQueryParameters, authQueryErr := engine.OperationDirectWriteAuthOwnedQueryParameters(op, b.HTTP.Auth)
+	if authQueryErr != nil {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q has invalid API key query ownership: %v", i, cmd.Path, op.ID, authQueryErr)})
+	} else {
+		findings = append(findings, checkCLISurfaceDirectWriteRequiredQueryMappings(b, i, cmd, op, authQueryParameters)...)
+	}
 	if len(cmd.APISurface) == 1 {
 		endpoint := cmd.APISurface[0]
-		if err := engine.PreflightOperationDirectWrite(b, cmd.Operation, endpoint.Method, endpoint.Path, cmd.OutputPolicy, queryFields...); err != nil {
+		if err := engine.PreflightOperationDirectWrite(b, cmd.Operation, endpoint.Method, endpoint.Path, cmd.OutputPolicy, queryFields...); err != nil && (authQueryErr == nil || err.Error() != authQueryErr.Error()) {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q is not executable: %v", i, cmd.Path, cmd.Operation, err)})
 		}
 	}
 	return findings
 }
 
-func checkCLISurfaceDirectWriteRequiredQueryMappings(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec) []Finding {
+func checkCLISurfaceDirectWriteRequiredQueryMappings(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec, authQueryParameters map[string]struct{}) []Finding {
 	if op.REST == nil {
 		return nil
 	}
@@ -1594,6 +1599,9 @@ func checkCLISurfaceDirectWriteRequiredQueryMappings(b engine.Bundle, i int, cmd
 		}
 		name := parameter.Name
 		if _, fixed := op.REST.Query[name]; fixed {
+			continue
+		}
+		if _, authOwned := authQueryParameters[name]; authOwned {
 			continue
 		}
 		flags := mapped[name]

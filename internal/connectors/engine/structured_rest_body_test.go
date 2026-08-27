@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -289,6 +290,182 @@ func TestOperationDirectWriteStructuredRESTBodyRejectsInvalidInputBeforeIO(t *te
 	}
 }
 
+func TestOperationDirectWriteStructuredRESTBodyRejectsMalformedScalarsBeforeIO(t *testing.T) {
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		calls++
+	}))
+	t.Cleanup(server.Close)
+
+	bundle := structuredRESTBodyBundle(server.URL)
+	rest := *bundle.Operations[0].REST
+	rest.BodySchema = json.RawMessage(`{
+		"type": "object",
+		"additionalProperties": false,
+		"required": ["label", "price", "details"],
+		"properties": {
+			"label": {"type": "string"},
+			"price": {"type": "number"},
+			"details": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": ["active"],
+				"properties": {"active": {"type": "boolean"}}
+			}
+		}
+	}`)
+	bundle.Operations[0].REST = &rest
+
+	valid := structuredRESTBodyRequest()
+	valid.Body = map[string]any{"label": "valid", "price": json.Number("-12.5e+3"), "details": map[string]any{"active": true}}
+	prepared, err := prepareOperationDirectWrite(context.Background(), bundle, valid, nil)
+	if err != nil {
+		t.Fatalf("prepareOperationDirectWrite valid number: %v", err)
+	}
+	if got, ok := prepared.body["price"].(json.Number); !ok || got != json.Number("-12.5e+3") {
+		t.Fatalf("canonical price = %#v, want exact valid JSON number", prepared.body["price"])
+	}
+
+	for _, literal := range []string{"", "-", "+1", "01", "1.", "1e", "1e+", "NaN", "Infinity", "malformed-number-canary"} {
+		request := valid
+		request.Body = map[string]any{"label": "valid", "price": json.Number(literal), "details": map[string]any{"active": true}}
+		_, err := OperationDirectWrite(context.Background(), bundle, request, nil)
+		if err == nil || !strings.Contains(err.Error(), "invalid JSON number") {
+			t.Fatalf("OperationDirectWrite malformed number error = %v, want invalid JSON number", err)
+		}
+		if literal == "malformed-number-canary" && strings.Contains(err.Error(), literal) {
+			t.Fatalf("OperationDirectWrite exposed malformed number: %v", err)
+		}
+	}
+
+	invalidUTF8 := "invalid-utf8-canary" + string([]byte{0xff})
+	request := valid
+	request.Body = map[string]any{"label": invalidUTF8, "price": json.Number("1"), "details": map[string]any{"active": true}}
+	_, err = OperationDirectWrite(context.Background(), bundle, request, nil)
+	if err == nil || !strings.Contains(err.Error(), "invalid UTF-8") {
+		t.Fatalf("OperationDirectWrite invalid UTF-8 error = %v, want rejection", err)
+	}
+	if strings.Contains(err.Error(), "invalid-utf8-canary") {
+		t.Fatalf("OperationDirectWrite exposed invalid UTF-8 value: %v", err)
+	}
+	if calls != 0 {
+		t.Fatalf("malformed scalar reached transport; calls = %d, want 0", calls)
+	}
+}
+
+func TestOperationDirectWriteRejectsMalformedScalarOnlyJSONBodiesBeforeIO(t *testing.T) {
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		calls++
+	}))
+	t.Cleanup(server.Close)
+
+	bundle := structuredRESTBodyBundle(server.URL)
+	rest := *bundle.Operations[0].REST
+	rest.BodySchema = json.RawMessage(`{
+		"type": "object",
+		"additionalProperties": false,
+		"required": ["label", "price"],
+		"properties": {
+			"label": {"type": "string"},
+			"price": {"type": "number"}
+		}
+	}`)
+	bundle.Operations[0].REST = &rest
+
+	for _, test := range []struct {
+		name  string
+		price any
+		want  float64
+	}{
+		{name: "float32", price: float32(12.5), want: 12.5},
+		{name: "float64", price: -42.25, want: -42.25},
+	} {
+		t.Run("finite "+test.name, func(t *testing.T) {
+			request := structuredRESTBodyRequest()
+			request.Body = map[string]any{"label": "valid", "price": test.price}
+			prepared, err := prepareOperationDirectWrite(context.Background(), bundle, request, nil)
+			if err != nil {
+				t.Fatalf("prepareOperationDirectWrite: %v", err)
+			}
+			if got, ok := prepared.body["price"].(float64); !ok || got != test.want {
+				t.Fatalf("canonical price = %#v, want %v", prepared.body["price"], test.want)
+			}
+		})
+	}
+
+	for _, test := range []struct {
+		name      string
+		body      map[string]any
+		want      string
+		forbidden string
+	}{
+		{
+			name:      "invalid number",
+			body:      map[string]any{"label": "valid", "price": json.Number("malformed-number-canary")},
+			want:      "invalid JSON number",
+			forbidden: "malformed-number-canary",
+		},
+		{
+			name:      "invalid UTF-8",
+			body:      map[string]any{"label": "invalid-utf8-canary" + string([]byte{0xff}), "price": json.Number("1")},
+			want:      "invalid UTF-8",
+			forbidden: "invalid-utf8-canary",
+		},
+		{
+			name:      "float64 NaN",
+			body:      map[string]any{"label": "valid", "price": math.NaN()},
+			want:      "does not permit non-finite numbers",
+			forbidden: "NaN",
+		},
+		{
+			name:      "float64 positive infinity",
+			body:      map[string]any{"label": "valid", "price": math.Inf(1)},
+			want:      "does not permit non-finite numbers",
+			forbidden: "+Inf",
+		},
+		{
+			name:      "float64 negative infinity",
+			body:      map[string]any{"label": "valid", "price": math.Inf(-1)},
+			want:      "does not permit non-finite numbers",
+			forbidden: "-Inf",
+		},
+		{
+			name:      "float32 NaN",
+			body:      map[string]any{"label": "valid", "price": float32(math.NaN())},
+			want:      "does not permit non-finite numbers",
+			forbidden: "NaN",
+		},
+		{
+			name:      "float32 positive infinity",
+			body:      map[string]any{"label": "valid", "price": float32(math.Inf(1))},
+			want:      "does not permit non-finite numbers",
+			forbidden: "+Inf",
+		},
+		{
+			name:      "float32 negative infinity",
+			body:      map[string]any{"label": "valid", "price": float32(math.Inf(-1))},
+			want:      "does not permit non-finite numbers",
+			forbidden: "-Inf",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			request := structuredRESTBodyRequest()
+			request.Body = test.body
+			_, err := OperationDirectWrite(context.Background(), bundle, request, nil)
+			if err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("OperationDirectWrite error = %v, want %q", err, test.want)
+			}
+			if strings.Contains(err.Error(), test.forbidden) {
+				t.Fatalf("OperationDirectWrite exposed malformed scalar: %v", err)
+			}
+		})
+	}
+	if calls != 0 {
+		t.Fatalf("malformed scalar-only body reached transport; calls = %d, want 0", calls)
+	}
+}
+
 func TestOperationDirectWriteStructuredRESTBodyStopsAtDeclaredBoundsBeforeIO(t *testing.T) {
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
@@ -419,13 +596,18 @@ func TestOperationDirectWriteBindsStaticQueryAuthBeforeApproval(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		calls++
 		if got := r.URL.Query().Get("api_key"); got != token {
-			t.Errorf("api_key = %q, want preview-bound value", got)
+			t.Error("api_key did not match the preview-bound authentication value")
+		}
+		if got := r.Header.Get("X-Auth"); got != token {
+			t.Error("header did not use the preview-bound authentication query value")
 		}
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{"ok":true}`))
 	}))
 	t.Cleanup(server.Close)
 	bundle := structuredRESTBodyBundle(server.URL)
+	bundle.Operations[0].REST.Parameters = append(bundle.Operations[0].REST.Parameters, OperationParameter{Name: "api_key", In: "query", Type: "string", Required: true})
+	bundle.HTTP.Headers["X-Auth"] = "{{ query.api_key }}"
 	bundle.HTTP.Auth = []AuthSpec{{Mode: "api_key_query", Param: "api_key", Value: "{{ secrets.api_key }}"}}
 	request := structuredRESTBodyRequest()
 	request.Config.Secrets = map[string]string{"api_key": token}
@@ -440,6 +622,9 @@ func TestOperationDirectWriteBindsStaticQueryAuthBeforeApproval(t *testing.T) {
 	if got := prepared.query.Get("api_key"); got != token {
 		t.Fatalf("prepared api_key = %q, want exact bound value", got)
 	}
+	if got := prepared.prepared.Requests[0].Headers["X-Auth"]; got != token {
+		t.Fatal("prepared header did not bind the final authentication query value")
+	}
 	request.Approval = approvedEvidenceForPreview(t, preview)
 	request.PreviewDigest = preview.Digest
 	if _, err := OperationDirectWrite(context.Background(), bundle, request, nil); err != nil {
@@ -447,6 +632,333 @@ func TestOperationDirectWriteBindsStaticQueryAuthBeforeApproval(t *testing.T) {
 	}
 	if calls != 1 {
 		t.Fatalf("calls = %d, want one bound request", calls)
+	}
+	collision := structuredRESTBodyRequest()
+	collision.Config.Secrets = map[string]string{"api_key": token}
+	collision.Query["api_key"] = "caller-value"
+	if _, err := PreviewOperationDirectWrite(context.Background(), bundle, collision, nil); err == nil || !strings.Contains(err.Error(), "cannot be caller-bound") {
+		t.Fatal("caller API key query override did not fail before transport")
+	}
+	if calls != 1 {
+		t.Fatalf("caller API key collision reached provider; calls = %d", calls)
+	}
+}
+
+func TestOperationDirectWriteCredentialBoundHTTPErrorHidesEchoAndKeepsProviderResponse(t *testing.T) {
+	const credential = "credential-value-placeholder"
+	for _, test := range []struct {
+		name           string
+		configure      func(*Bundle)
+		configureInput func(*connectors.OperationDirectWriteRequest)
+		assertRequest  func(*testing.T, *http.Request)
+		hidesEcho      bool
+	}{
+		{
+			name: "declared secret header",
+			configure: func(bundle *Bundle) {
+				bundle.HTTP.Headers["X-API-Key"] = "{{ secrets.api_key }}"
+			},
+			configureInput: func(request *connectors.OperationDirectWriteRequest) {
+				request.Config.Secrets = map[string]string{"api_key": credential}
+			},
+			assertRequest: func(t *testing.T, request *http.Request) {
+				t.Helper()
+				if got := request.Header.Get("X-API-Key"); got != credential {
+					t.Fatalf("X-API-Key = %q, want exact bound credential", got)
+				}
+			},
+			hidesEcho: true,
+		},
+		{
+			name: "declared config header",
+			configure: func(bundle *Bundle) {
+				bundle.HTTP.Headers["X-API-Key"] = "{{ config.api_key }}"
+			},
+			configureInput: func(request *connectors.OperationDirectWriteRequest) {
+				request.Config.Config = map[string]string{"api_key": credential}
+			},
+			assertRequest: func(t *testing.T, request *http.Request) {
+				t.Helper()
+				if got := request.Header.Get("X-API-Key"); got != credential {
+					t.Fatalf("X-API-Key = %q, want exact bound credential", got)
+				}
+			},
+			hidesEcho: true,
+		},
+		{
+			name: "declared secret base URL",
+			configure: func(bundle *Bundle) {
+				bundle.HTTP.URL += "/{{ secrets.tenant }}"
+			},
+			configureInput: func(request *connectors.OperationDirectWriteRequest) {
+				request.Config.Secrets = map[string]string{"tenant": credential}
+			},
+			assertRequest: func(t *testing.T, request *http.Request) {
+				t.Helper()
+				if got := request.URL.Path; got != "/"+credential+"/workspaces/workspace-1/widgets" {
+					t.Fatalf("path = %q, want declared base URL segment", got)
+				}
+			},
+			hidesEcho: true,
+		},
+		{
+			name: "declared config base URL",
+			configure: func(bundle *Bundle) {
+				bundle.HTTP.URL += "/{{ config.tenant }}"
+			},
+			configureInput: func(request *connectors.OperationDirectWriteRequest) {
+				request.Config.Config = map[string]string{"tenant": credential}
+			},
+			assertRequest: func(t *testing.T, request *http.Request) {
+				t.Helper()
+				if got := request.URL.Path; got != "/"+credential+"/workspaces/workspace-1/widgets" {
+					t.Fatalf("path = %q, want declared base URL segment", got)
+				}
+			},
+			hidesEcho: true,
+		},
+		{
+			name: "API key query authentication",
+			configure: func(bundle *Bundle) {
+				rest := *bundle.Operations[0].REST
+				rest.Parameters = append(rest.Parameters, OperationParameter{Name: "api_key", In: "query", Type: "string", Required: true})
+				bundle.Operations[0].REST = &rest
+				bundle.HTTP.Auth = []AuthSpec{{Mode: "api_key_query", Param: "api_key", Value: "{{ secrets.api_key }}"}}
+			},
+			configureInput: func(request *connectors.OperationDirectWriteRequest) {
+				request.Config.Secrets = map[string]string{"api_key": credential}
+			},
+			assertRequest: func(t *testing.T, request *http.Request) {
+				t.Helper()
+				if got := request.URL.Query().Get("api_key"); got != credential {
+					t.Fatalf("api_key = %q, want exact bound credential", got)
+				}
+			},
+			hidesEcho: true,
+		},
+		{
+			name:           "ordinary operation keeps provider diagnostic",
+			configure:      func(*Bundle) {},
+			configureInput: func(*connectors.OperationDirectWriteRequest) {},
+			assertRequest:  func(*testing.T, *http.Request) {},
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			calls := 0
+			responseBody := "provider diagnostic " + credential
+			if !test.hidesEcho {
+				responseBody = "provider diagnostic safe-detail"
+			}
+			server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+				calls++
+				test.assertRequest(t, request)
+				writer.Header().Set("X-Provider-Trace", "credential-bound")
+				writer.WriteHeader(http.StatusBadRequest)
+				_, _ = writer.Write([]byte(responseBody))
+			}))
+			t.Cleanup(server.Close)
+			bundle := structuredRESTBodyBundle(server.URL)
+			test.configure(&bundle)
+			request := structuredRESTBodyRequest()
+			test.configureInput(&request)
+			preview, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+			if err != nil {
+				t.Fatalf("PreviewOperationDirectWrite: %v", err)
+			}
+			request.Approval = approvedEvidenceForPreview(t, preview)
+			request.PreviewDigest = preview.Digest
+			_, err = OperationDirectWrite(context.Background(), bundle, request, nil)
+			if err == nil {
+				t.Fatal("OperationDirectWrite error = nil, want provider error")
+			}
+			if test.hidesEcho {
+				if strings.Contains(err.Error(), credential) || !strings.Contains(err.Error(), "provider returned an HTTP error") {
+					t.Fatalf("credential-bound HTTP error = %v, want generic taint-safe diagnostic", err)
+				}
+			} else if !strings.Contains(err.Error(), responseBody) {
+				t.Fatalf("ordinary HTTP error = %v, want provider diagnostic", err)
+			}
+			var httpErr *connsdk.HTTPError
+			if !errors.As(err, &httpErr) {
+				t.Fatalf("OperationDirectWrite error = %T %v, want retained HTTP error", err, err)
+			}
+			if httpErr.Status != http.StatusBadRequest || httpErr.Header.Get("X-Provider-Trace") != "credential-bound" || httpErr.Body != responseBody {
+				t.Fatalf("provider response cause = %#v, want exact status, headers, and body", httpErr)
+			}
+			if calls != 1 {
+				t.Fatalf("calls = %d, want one provider request", calls)
+			}
+		})
+	}
+}
+
+func TestOperationDirectWritePlanTransformsCanonicalizeTypedStringArrays(t *testing.T) {
+	bundle := structuredRESTBodyBundle("https://example.invalid")
+	rest := *bundle.Operations[0].REST
+	rest.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"properties":{"tags":{"type":"array","maxItems":2,"items":{"type":"string"}}}
+	}`)
+	bundle.Operations[0].REST = &rest
+	body := map[string]any{"tags": []string{"typed-array-canary"}}
+
+	withheld, fields, err := WithholdOperationDirectWriteBodyFields(bundle, bundle.Operations[0].ID, body, []string{"body.tags.0"})
+	if err != nil {
+		t.Fatalf("WithholdOperationDirectWriteBodyFields: %v", err)
+	}
+	if !reflect.DeepEqual(fields, []string{"tags.0"}) {
+		t.Fatalf("withheld fields = %#v, want [tags.0]", fields)
+	}
+	withheldTags, ok := withheld["tags"].([]any)
+	if !ok || len(withheldTags) != 1 || withheldTags[0] != nil {
+		t.Fatalf("withheld typed array = %#v, want canonical array with withheld element", withheld["tags"])
+	}
+
+	redacted, err := RedactOperationDirectWriteBodyFields(bundle, bundle.Operations[0].ID, body, []string{"body.tags.0"})
+	if err != nil {
+		t.Fatalf("RedactOperationDirectWriteBodyFields: %v", err)
+	}
+	redactedTags, ok := redacted["tags"].([]any)
+	if !ok || !reflect.DeepEqual(redactedTags, []any{"redacted"}) {
+		t.Fatalf("redacted typed array = %#v, want canonical redacted array", redacted["tags"])
+	}
+}
+
+func TestPreflightOperationDirectWriteRejectsConditionalAPIKeyQueryOwnership(t *testing.T) {
+	bundle := structuredRESTBodyBundle("https://example.invalid")
+	rest := *bundle.Operations[0].REST
+	rest.Parameters = append(rest.Parameters, OperationParameter{Name: "api_key", In: "query", Type: "string", Required: true})
+	bundle.Operations[0].REST = &rest
+	bundle.HTTP.Auth = []AuthSpec{
+		{Mode: "api_key_query", Param: "api_key", Value: "key", When: "{{ config.auth_type == 'api' }}"},
+		{Mode: "bearer", Token: "token", When: "{{ config.auth_type == 'bearer' }}"},
+		{Mode: "none"},
+	}
+	operation := bundle.Operations[0]
+	if err := PreflightOperationDirectWrite(bundle, operation.ID, operation.REST.Method, operation.REST.Path, operation.OutputPolicy); err == nil || !strings.Contains(err.Error(), "conditionally supplied") {
+		t.Fatalf("conditional API key ownership error = %v, want declaration rejection", err)
+	}
+
+	bundle.HTTP.Auth = []AuthSpec{
+		{Mode: "api_key_query", Param: "api_key", Value: "first", When: "{{ config.auth_type == 'first' }}"},
+		{Mode: "api_key_query", Param: "api_key", Value: "second"},
+	}
+	if err := PreflightOperationDirectWrite(bundle, operation.ID, operation.REST.Method, operation.REST.Path, operation.OutputPolicy); err != nil {
+		t.Fatalf("all-auth-path API key ownership: %v", err)
+	}
+	if err := PreflightOperationDirectWrite(bundle, operation.ID, operation.REST.Method, operation.REST.Path, operation.OutputPolicy, "api_key"); err == nil || !strings.Contains(err.Error(), "owned") {
+		t.Fatalf("caller API key collision error = %v, want declaration rejection", err)
+	}
+
+	bundle.HTTP.Auth = []AuthSpec{{Mode: "api_key_query", Param: "api_key", Value: "key", When: "{{ config.auth_type == 'api' }}"}}
+	if err := PreflightOperationDirectWrite(bundle, operation.ID, operation.REST.Method, operation.REST.Path, operation.OutputPolicy); err == nil || !strings.Contains(err.Error(), "conditionally supplied") {
+		t.Fatalf("no-match API key ownership error = %v, want declaration rejection", err)
+	}
+}
+
+func TestOperationDirectWriteTypedPreflightRejectsConditionalAPIKeyQueryOwnershipBeforeIO(t *testing.T) {
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		calls++
+	}))
+	t.Cleanup(server.Close)
+	bundle := structuredRESTBodyBundle(server.URL)
+	rest := *bundle.Operations[0].REST
+	rest.Parameters = append(rest.Parameters, OperationParameter{Name: "api_key", In: "query", Type: "string", Required: true})
+	bundle.Operations[0].REST = &rest
+	bundle.HTTP.Auth = []AuthSpec{{Mode: "api_key_query", Param: "api_key", Value: "placeholder", When: "{{ config.auth_type == 'api' }}"}}
+	request := structuredRESTBodyRequest()
+
+	for _, test := range []struct {
+		name   string
+		invoke func() error
+	}{
+		{
+			name: "metadata",
+			invoke: func() error {
+				_, err := OperationDirectWriteMetadata(bundle, request.Operation)
+				return err
+			},
+		},
+		{
+			name: "preview",
+			invoke: func() error {
+				_, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+				return err
+			},
+		},
+		{
+			name: "execution",
+			invoke: func() error {
+				_, err := OperationDirectWrite(context.Background(), bundle, request, nil)
+				return err
+			},
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			if err := test.invoke(); err == nil || !strings.Contains(err.Error(), "conditionally supplied") {
+				t.Fatalf("typed direct-write preflight error = %v, want conditional ownership rejection", err)
+			}
+		})
+	}
+	if calls != 0 {
+		t.Fatalf("conditional typed direct-write declaration reached provider; calls = %d", calls)
+	}
+}
+
+func TestOperationDirectWriteRedactsNestedStructuredBodyValuesInSystemErrors(t *testing.T) {
+	const token = "nested-sensitive-canary"
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatal("decode request body")
+		}
+		targets, ok := body["targets"].([]any)
+		if !ok || len(targets) != 1 {
+			t.Error("provider did not receive the declared nested target")
+		} else if target, ok := targets[0].(map[string]any); !ok || target["token"] != token {
+			t.Error("provider did not receive the reconstituted nested token")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		_ = json.NewEncoder(w).Encode(map[string]string{"error": token})
+	}))
+	t.Cleanup(server.Close)
+	bundle := structuredRESTBodyBundle(server.URL)
+	bundle.Operations[0].REST.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["targets"],
+		"properties":{"targets":{"type":"array","minItems":1,"maxItems":1,"items":{"type":"object","additionalProperties":false,"required":["id","token"],"properties":{"id":{"type":"string"},"token":{"type":"string"}}}}}
+	}`)
+	bundle.Operations[0].SensitivePolicy = &SensitivePolicySpec{RedactFields: []string{"body.targets.0.token"}}
+	request := structuredRESTBodyRequest()
+	request.Body = map[string]any{"targets": []any{map[string]any{"id": "target-1", "token": token}}}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	request.Approval = approvedEvidenceForPreview(t, preview)
+	request.PreviewDigest = preview.Digest
+	_, err = OperationDirectWrite(context.Background(), bundle, request, nil)
+	if err == nil {
+		t.Fatal("OperationDirectWrite error = nil, want provider error")
+	}
+	if strings.Contains(err.Error(), token) {
+		t.Fatal("system-generated direct-write error leaked the nested sensitive value")
+	}
+	var httpErr *connsdk.HTTPError
+	if !errors.As(err, &httpErr) {
+		t.Fatal("provider response cause was not retained")
+	}
+	if !strings.Contains(httpErr.Body, token) {
+		t.Fatal("provider response cause lost the echoed provider body")
+	}
+	if calls != 1 {
+		t.Fatalf("calls = %d, want one provider request", calls)
 	}
 }
 
@@ -638,8 +1150,18 @@ func TestOperationDirectWriteErrorsDoNotExposeResolvedURLValues(t *testing.T) {
 	if strings.Contains(err.Error(), secret) {
 		t.Fatal("HTTP failure exposed a resolved secret")
 	}
-	if !strings.Contains(err.Error(), "provider failure detail") {
-		t.Fatalf("HTTP failure = %v, want provider response body", err)
+	if !strings.Contains(err.Error(), "provider returned an HTTP error") {
+		t.Fatalf("HTTP failure = %v, want taint-safe provider diagnostic", err)
+	}
+	if strings.Contains(err.Error(), "provider failure detail") {
+		t.Fatalf("HTTP failure = %v, must not expose provider text for a runtime-bound URL", err)
+	}
+	var providerErr *connsdk.HTTPError
+	if !errors.As(err, &providerErr) {
+		t.Fatalf("HTTP failure cause = %T, want HTTPError", err)
+	}
+	if providerErr.Body != "provider failure detail" {
+		t.Fatalf("HTTP failure cause body = %q, want retained provider response", providerErr.Body)
 	}
 }
 
@@ -665,7 +1187,7 @@ func TestOperationDirectWriteHTTPDiagnosticsRespectSensitiveBindings(t *testing.
 				request.Config.Secrets = map[string]string{"api_key": credential}
 			},
 			responseBody:  "provider diagnostic " + credential,
-			wantPrintable: "provider returned HTTP status 400",
+			wantPrintable: "provider returned an HTTP error",
 			forbid:        credential,
 		},
 	} {
@@ -1509,6 +2031,14 @@ func TestValidateOperationDirectWriteCLIFlagsRejectsSparseArrayProjection(t *tes
 	if err := ValidateOperationDirectWriteCLIFlags(op, sparse); err == nil || !strings.Contains(err.Error(), "sparse array index 2") {
 		t.Fatalf("sparse array projection error = %v, want declaration rejection", err)
 	}
+	optionalPrefix := []CLIFlag{
+		{Name: "first-target", Type: "string", MapsTo: "body.targets.0.id"},
+		{Name: "second-target", Type: "string", MapsTo: "body.targets.1.id", Required: true},
+	}
+	if err := ValidateOperationDirectWriteCLIFlags(op, optionalPrefix); err == nil || !strings.Contains(err.Error(), "sparse array index 1") {
+		t.Fatalf("optional-prefix array projection error = %v, want declaration rejection", err)
+	}
+
 	contiguous := []CLIFlag{
 		{Name: "first-target", Type: "string", MapsTo: "body.targets.0.id", Required: true},
 		{Name: "second-target", Type: "string", MapsTo: "body.targets.1.id", Required: true},
@@ -1516,6 +2046,39 @@ func TestValidateOperationDirectWriteCLIFlagsRejectsSparseArrayProjection(t *tes
 	}
 	if err := ValidateOperationDirectWriteCLIFlags(op, contiguous); err != nil {
 		t.Fatalf("contiguous array projection: %v", err)
+	}
+	contiguousBundle := structuredRESTBodyBundle("https://example.invalid")
+	contiguousBundle.Operations[0] = op
+	body, err := MaterializeOperationDirectWriteBodyMappings(contiguousBundle, op.ID, map[string]any{
+		"targets.0.id": "first",
+		"targets.1.id": "second",
+		"targets.2.id": "third",
+	})
+	if err != nil {
+		t.Fatalf("materialize contiguous array projection: %v", err)
+	}
+	targets, ok := body["targets"].([]any)
+	if !ok || len(targets) != 3 {
+		t.Fatalf("contiguous targets = %#v, want three items", body["targets"])
+	}
+
+	staticOp := op
+	staticREST := *op.REST
+	staticREST.Body = map[string]any{"targets": []any{map[string]any{}}}
+	staticOp.REST = &staticREST
+	static := []CLIFlag{{Name: "second-target", Type: "string", MapsTo: "body.targets.1.id", Required: true}}
+	if err := ValidateOperationDirectWriteCLIFlags(staticOp, static); err != nil {
+		t.Fatalf("static array projection: %v", err)
+	}
+	staticBundle := structuredRESTBodyBundle("https://example.invalid")
+	staticBundle.Operations[0] = staticOp
+	body, err = MaterializeOperationDirectWriteBodyMappings(staticBundle, staticOp.ID, map[string]any{"targets.1.id": "second"})
+	if err != nil {
+		t.Fatalf("materialize static array projection: %v", err)
+	}
+	targets, ok = body["targets"].([]any)
+	if !ok || len(targets) != 2 {
+		t.Fatalf("static targets = %#v, want fixed prefix and mapped item", body["targets"])
 	}
 }
 
@@ -1643,6 +2206,21 @@ func TestStructuredRESTBodyDeclarationSatisfiabilityAndStaticCoverage(t *testing
 	if !ok || payload["fixed"] != "provider" || payload["name"] != "caller" {
 		t.Fatalf("container static merge = %#v, want fixed provider data and caller field", materialized)
 	}
+
+	unmergeableArray := base
+	unmergeableArrayREST := *base.REST
+	unmergeableArrayREST.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["tags"],
+		"properties":{"tags":{"type":"array","minItems":2,"maxItems":2,"items":{"type":"string"}}}
+	}`)
+	unmergeableArrayREST.Body = map[string]any{"tags": []any{"provider"}}
+	unmergeableArray.REST = &unmergeableArrayREST
+	if err := ValidateOperationDirectWriteMappings(unmergeableArray, nil, []string{"tags"}); err == nil || !strings.Contains(err.Error(), "cannot merge fixed rest.body container") {
+		t.Fatalf("unmergeable static array container error = %v, want declaration rejection", err)
+	}
+
 	_, err = materializeStructuredRESTBody(merge, merge.REST.Body, map[string]any{"payload": map[string]any{"fixed": "caller", "name": "caller"}})
 	if err == nil || !strings.Contains(err.Error(), "cannot be caller-overridden") {
 		t.Fatalf("container static leaf collision = %v, want fixed-field rejection", err)
@@ -1914,6 +2492,8 @@ func TestOperationDirectWriteStrictHeadersAndProviderHeaders(t *testing.T) {
 	}{
 		{name: "reference tail", headers: map[string]string{"Authorization": "Bearer {{ secrets.token.extra }}"}},
 		{name: "unclosed expression", headers: map[string]string{"Authorization": "Bearer {{ secrets.token"}},
+		{name: "unbound query namespace", headers: map[string]string{"X-Trace": "{{ query.trace }}"}},
+		{name: "unbound record namespace", headers: map[string]string{"X-Trace": "{{ record.trace }}"}},
 		{name: "canonical duplicate", headers: map[string]string{"X-Mode": "one", "x-mode": "two"}},
 		{name: "invalid name", headers: map[string]string{"X Mode": "one"}},
 	} {
@@ -1931,6 +2511,45 @@ func TestOperationDirectWriteStrictHeadersAndProviderHeaders(t *testing.T) {
 			}
 		})
 	}
+
+	t.Run("declared query namespace is bound", func(t *testing.T) {
+		calls := 0
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			calls++
+			if got := r.Header.Get("X-Trace"); got != "trace-1" {
+				t.Errorf("X-Trace = %q, want trace-1", got)
+			}
+			_, _ = w.Write([]byte(`{"ok":true}`))
+		}))
+		t.Cleanup(server.Close)
+		bundle := structuredRESTBodyBundle(server.URL)
+		rest := *bundle.Operations[0].REST
+		rest.Parameters = append([]OperationParameter(nil), rest.Parameters...)
+		rest.Parameters = append(rest.Parameters, OperationParameter{Name: "trace", In: "query", Type: "string"})
+		bundle.Operations[0].REST = &rest
+		bundle.HTTP.Headers = map[string]string{"X-Trace": "{{ query.trace }}"}
+		request := structuredRESTBodyRequest()
+		request.Query["trace"] = "trace-1"
+		preview, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+		if err != nil {
+			t.Fatalf("PreviewOperationDirectWrite: %v", err)
+		}
+		prepared, err := prepareOperationDirectWrite(context.Background(), bundle, request, nil)
+		if err != nil {
+			t.Fatalf("prepareOperationDirectWrite: %v", err)
+		}
+		if got := prepared.prepared.Requests[0].Headers["X-Trace"]; got != "trace-1" {
+			t.Fatalf("prepared X-Trace = %q, want trace-1", got)
+		}
+		request.Approval = approvedEvidenceForPreview(t, preview)
+		request.PreviewDigest = preview.Digest
+		if _, err := OperationDirectWrite(context.Background(), bundle, request, nil); err != nil {
+			t.Fatalf("OperationDirectWrite: %v", err)
+		}
+		if calls != 1 {
+			t.Fatalf("calls = %d, want 1", calls)
+		}
+	})
 
 	t.Run("successful response retains headers", func(t *testing.T) {
 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
