@@ -39,7 +39,8 @@
   ```
 
 - [x] Full changed package: `go test -timeout 20m ./cmd/connectorgen -count=1`
-  — PASS in `227.505s`.
+  — PASS in `227.505s`; after the Salesloft/Copper matrix expansion, final
+  rebased coverage PASS in `263.947s`.
 - [x] Engine: `go test -timeout 20m ./internal/connectors/engine -count=1`
   — PASS in `17.505s`; rebase coverage PASS in `14.005s`.
 - [x] Commandrunner: `go test -timeout 20m
