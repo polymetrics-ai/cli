@@ -190,9 +190,14 @@ type sourceImportRESTOperation struct {
 
 type sourceImportREST struct {
 	sourceImportArtifact
-	Commit      string                      `json:"commit,omitempty"`
-	InfoVersion string                      `json:"info_version,omitempty"`
-	Operations  []sourceImportRESTOperation `json:"operations,omitempty"`
+	Commit      string `json:"commit,omitempty"`
+	InfoVersion string `json:"info_version,omitempty"`
+	// ReferenceDepthLimit is an optional source-lock-local cap for a retained
+	// OpenAPI dialect whose bounded reference traversal must remain
+	// operation-local. It can only narrow the importer invocation's limit; it
+	// never increases a caller's safety budget or changes artifact identity.
+	ReferenceDepthLimit int                         `json:"reference_depth_limit,omitempty"`
+	Operations          []sourceImportRESTOperation `json:"operations,omitempty"`
 	// These fields are internal projections of the separately decoded legacy
 	// cited-only contract. They must not widen ordinary v1/v2 byte-backed wire
 	// decoding.
@@ -902,6 +907,12 @@ func decodeSourceStrictJSON(raw []byte, target any) error {
 }
 
 func validateSourceImportLockInventory(lock sourceImportLock) error {
+	if lock.Rest.ReferenceDepthLimit < 0 {
+		return fmt.Errorf("source lock reference depth limit must be positive when declared")
+	}
+	if lock.Rest.ReferenceDepthLimit > 0 && lock.isLegacySourceReference() {
+		return fmt.Errorf("source-reference lock cannot declare a reference depth limit")
+	}
 	if lock.SchemaVersion == 3 {
 		return validateSourceImportV3LockInventory(lock)
 	}
@@ -1715,6 +1726,11 @@ func importSourceLockResultWithBudget(ctx context.Context, lock sourceImportLock
 	if err := validateSourceImportConnector(lock.Connector); err != nil {
 		return sourceImportResult{}, err
 	}
+	var err error
+	limits, err = sourceImportLimitsForLock(lock, limits)
+	if err != nil {
+		return sourceImportResult{}, err
+	}
 	if lock.SchemaVersion == 3 {
 		return importSourceLockResultV3(ctx, lock, fetcher, limits, budget)
 	}
@@ -1769,6 +1785,26 @@ func importSourceLockResultWithBudget(ctx context.Context, lock sourceImportLock
 		return sourceImportResult{}, err
 	}
 	return result, nil
+}
+
+// sourceImportLimitsForLock applies only a lock-declared *lower* reference
+// bound. The invocation still owns every resource, count, and structural
+// limit; a source lock cannot widen any of them. This lets a known provider
+// dialect preserve each source operation as a precise missing-foundation
+// descriptor instead of allowing one deep local chain to abort the document.
+func sourceImportLimitsForLock(lock sourceImportLock, limits sourceImportLimits) (sourceImportLimits, error) {
+	depth := lock.Rest.ReferenceDepthLimit
+	if depth == 0 {
+		return limits, nil
+	}
+	if depth < 0 {
+		return sourceImportLimits{}, fmt.Errorf("source lock reference depth limit must be positive when declared")
+	}
+	if depth > limits.MaxReferenceDepth {
+		return sourceImportLimits{}, fmt.Errorf("source lock reference depth limit %d exceeds importer limit %d", depth, limits.MaxReferenceDepth)
+	}
+	limits.MaxReferenceDepth = depth
+	return limits, nil
 }
 
 type sourceImportDocumentContext struct {
@@ -2937,6 +2973,7 @@ type sourceReferenceResolver struct {
 	inboundExpansion           sourceRetainedExpansionBudget
 	referenceExpansion         sourceRetainedExpansionBudget
 	schemaReferenceSiblingGaps []sourceContractGap
+	unreferencedDepthGaps      []sourceContractGap
 }
 
 const (
@@ -2951,10 +2988,54 @@ const (
 // bound. A source lock that permits source-contract gaps retains the affected
 // operation with its exact source citation; malformed and resource-exhausting
 // references remain terminal.
-type sourceReferenceDepthError struct{}
+type sourceReferenceDepthError struct {
+	Kind      sourceReferenceKind
+	Reference string
+}
 
-func (*sourceReferenceDepthError) Error() string {
-	return "reference depth limit exceeded"
+func (err *sourceReferenceDepthError) Error() string {
+	kind := string(err.Kind)
+	if kind == "" {
+		kind = "reference"
+	}
+	if kind != "reference" {
+		kind += " reference"
+	}
+	if err.Reference == "" {
+		return kind + " depth limit exceeded"
+	}
+	return fmt.Sprintf("%s depth limit exceeded at %q", kind, err.Reference)
+}
+
+// sourceResponseReferenceDepthError keeps a schema-reference chain that is
+// reached while projecting an HTTP response operation-local. The underlying
+// typed depth error is preserved for policy decisions, while the public
+// descriptor names the affected response contract rather than implying a
+// connector-wide schema failure.
+type sourceResponseReferenceDepthError struct {
+	Reference string
+	Cause     error
+}
+
+func (err *sourceResponseReferenceDepthError) Error() string {
+	if err.Reference == "" {
+		return "response reference depth limit exceeded"
+	}
+	return fmt.Sprintf("response reference depth limit exceeded at %q", err.Reference)
+}
+
+func (err *sourceResponseReferenceDepthError) Unwrap() error {
+	return err.Cause
+}
+
+// sourceSchemaDepthError keeps the structural schema traversal cap distinct
+// from byte/node resource exhaustion. A gap-enabled source lock may retain the
+// affected operation without pretending that its nested contract was resolved;
+// malformed shapes and actual resource limit errors remain terminal.
+type sourceSchemaDepthError struct{}
+
+func (*sourceSchemaDepthError) Error() string {
+	return "schema depth limit exceeded"
 }
 
 type sourceNormalizedReference struct {
@@ -3023,6 +3104,7 @@ const (
 )
 
 type sourceReferenceIndex struct {
+	root                        map[string]any
 	positions                   map[string]sourceReferenceKind
 	reachableOperationIDs       map[string]int
 	reachableOperationPositions map[string]int
@@ -3030,6 +3112,7 @@ type sourceReferenceIndex struct {
 	limits                      sourceImportLimits
 	positionBytes               int64
 	extensionBytes              int64
+	unreferencedDepthGaps       []sourceContractGap
 }
 
 func (index *sourceReferenceIndex) add(pointer string, kind sourceReferenceKind) error {
@@ -3271,6 +3354,7 @@ var sourceSchemaBearingKeywords = []string{
 
 func sourceBuildReferenceIndex(root map[string]any, form sourceDocumentForm, limits sourceImportLimits) (*sourceReferenceIndex, error) {
 	index := &sourceReferenceIndex{
+		root:                        root,
 		positions:                   map[string]sourceReferenceKind{},
 		reachableOperationIDs:       map[string]int{},
 		reachableOperationPositions: map[string]int{},
@@ -3849,10 +3933,21 @@ func sourceIndexSecurityScheme(index *sourceReferenceIndex, value any, pointer s
 }
 
 func sourceIndexSchema(index *sourceReferenceIndex, value any, pointer string, form sourceDocumentForm) error {
-	if _, err := sourceSchemaStructuralBytes(value, 0, index.limits); err != nil {
+	if err := index.add(pointer, sourceReferenceSchema); err != nil {
 		return err
 	}
-	if err := index.add(pointer, sourceReferenceSchema); err != nil {
+	if _, err := sourceSchemaStructuralBytes(value, 0, index.limits); err != nil {
+		if sourceOperationRetainableSchemaDepth(err, index.limits) && sourceSourceComponentPointer(pointer) {
+			if safetyErr := sourceValidateRetainedSchemaReferenceSafety(index, value, form); safetyErr != nil {
+				return safetyErr
+			}
+			index.unreferencedDepthGaps = append(index.unreferencedDepthGaps, sourceContractGapFor(
+				sourceDescriptorFoundation,
+				"source component "+sourceReferenceIndexPointer(pointer),
+				"source component has an incomplete bounded schema contract: "+err.Error(),
+			))
+			return nil
+		}
 		return err
 	}
 	if _, isBoolean := value.(bool); isBoolean {
@@ -3944,6 +4039,117 @@ func sourceIndexSchema(index *sourceReferenceIndex, value any, pointer string, f
 	return nil
 }
 
+// sourceValidateRetainedSchemaReferenceSafety traverses a component whose
+// descriptor is too deep to project, without treating the traversal bound as
+// permission to ignore malformed, dynamic, external, wrong-kind, or cyclic
+// references hidden below it. The scan never materializes a descriptor, but it
+// follows each local reference once for safety validation while enforcing the
+// existing node, byte, and reference-count budgets. The caller still records
+// the component as an incomplete source contract rather than inventing a
+// partial schema.
+func sourceValidateRetainedSchemaReferenceSafety(index *sourceReferenceIndex, value any, form sourceDocumentForm) error {
+	if index == nil || index.root == nil {
+		return fmt.Errorf("source reference grammar index is unavailable")
+	}
+	bytes, err := sourceStructuralBytes(value, 0, math.MaxInt, errors.New("schema safety traversal depth limit exceeded"), index.limits)
+	if err != nil {
+		return err
+	}
+	if bytes > sourceSchemaByteLimit(index.limits) {
+		return &sourceSchemaStructureLimitError{Scope: "object"}
+	}
+	resolver := sourceReferenceResolver{form: form}
+	references := 0
+	visitedReferences := map[string]bool{}
+	var walk func(any, map[string]bool) error
+	walk = func(current any, stack map[string]bool) error {
+		switch typed := current.(type) {
+		case map[string]any:
+			if err := sourceRejectDynamicSchemaKeywords(typed); err != nil {
+				return err
+			}
+			if err := sourceValidateSchemaForm(typed, form); err != nil {
+				return err
+			}
+			grammar := sourceSchemaGrammarFor(form)
+			for _, key := range sourceSchemaBearingKeywords {
+				if _, exists := typed[key]; exists && !grammar.handles(key) {
+					return fmt.Errorf("unsupported %s schema keyword %s", form.Family, key)
+				}
+			}
+			if rawReference, hasReference := typed["$ref"]; hasReference {
+				for key := range typed {
+					if !resolver.referenceSiblingAllowed(sourceReferenceSchema, key) {
+						return fmt.Errorf("ambiguous schema reference with sibling field %q", key)
+					}
+				}
+				reference, ok := rawReference.(string)
+				if !ok {
+					return fmt.Errorf("external reference %q is unsupported", rawReference)
+				}
+				normalized, err := sourceNormalizeLocalReference(reference)
+				if err != nil {
+					return err
+				}
+				references++
+				if references > index.limits.MaxReferences {
+					return fmt.Errorf("reference count limit exceeded")
+				}
+				if !sourceSchemaReferencePointer(normalized, form) {
+					return &sourceReferenceTargetKindError{Reference: normalized, Expected: sourceReferenceSchema, Actual: "non-schema"}
+				}
+				target, err := sourcePointer(index.root, normalized)
+				if err != nil {
+					return &sourceReferenceResolutionError{Reference: normalized, Kind: sourceReferenceSchema, Err: err}
+				}
+				if kind, indexed := index.positions[normalized]; indexed && kind != sourceReferenceSchema {
+					return &sourceReferenceTargetKindError{Reference: normalized, Expected: sourceReferenceSchema, Actual: string(kind)}
+				}
+				switch target.(type) {
+				case map[string]any, bool:
+				default:
+					return fmt.Errorf("schema reference does not resolve to a schema")
+				}
+				if stack[normalized] {
+					return fmt.Errorf("reference cycle at %q", normalized)
+				}
+				if !visitedReferences[normalized] {
+					visitedReferences[normalized] = true
+					next := make(map[string]bool, len(stack)+1)
+					for reference := range stack {
+						next[reference] = true
+					}
+					next[normalized] = true
+					if err := walk(target, next); err != nil {
+						return err
+					}
+				}
+			}
+			for _, child := range typed {
+				if err := walk(child, stack); err != nil {
+					return err
+				}
+			}
+		case []any:
+			for _, child := range typed {
+				if err := walk(child, stack); err != nil {
+					return err
+				}
+			}
+		}
+		return nil
+	}
+	return walk(value, nil)
+}
+
+func sourceSchemaReferencePointer(reference string, form sourceDocumentForm) bool {
+	prefix := "#/components/schemas/"
+	if form.isSwagger2() {
+		prefix = "#/definitions/"
+	}
+	return strings.HasPrefix(reference, prefix) && len(reference) > len(prefix)
+}
+
 func sourceReferenceObject(value any, label string) (map[string]any, error) {
 	object, ok := value.(map[string]any)
 	if !ok {
@@ -3990,6 +4196,7 @@ func sourcePrepareSourceDocument(doc map[string]any, form sourceDocumentForm, li
 	resolver.referenceTargets = map[string]sourceReferenceTargetCacheEntry{}
 	resolver.schemaCycles = preflight.schemaCycles
 	resolver.schemaReferenceSiblingGaps = preflight.schemaReferenceSiblingGaps
+	resolver.unreferencedDepthGaps = append(append([]sourceContractGap(nil), index.unreferencedDepthGaps...), preflight.unreferencedDepthGaps...)
 	resolver.references = 0
 	resolver.expansion = sourceSchemaExpansionBudget{}
 	resolver.responseExpansion = sourceResponseExpansionBudget{limit: sourceResolvedDescriptorLimit(limits)}
@@ -3998,6 +4205,11 @@ func sourcePrepareSourceDocument(doc map[string]any, form sourceDocumentForm, li
 	resolver.inboundExpansion = sourceRetainedExpansionBudget{limit: sourceResolvedDescriptorLimit(limits), label: "inbound event"}
 	resolver.referenceExpansion = sourceRetainedExpansionBudget{limit: sourceResolvedDescriptorLimit(limits), label: "reference target"}
 	return nil
+}
+
+func sourceSourceComponentPointer(pointer string) bool {
+	pointer = sourceReferenceIndexPointer(pointer)
+	return strings.HasPrefix(pointer, "#/components/") || strings.HasPrefix(pointer, "#/definitions/") || strings.HasPrefix(pointer, "#/parameters/") || strings.HasPrefix(pointer, "#/responses/") || strings.HasPrefix(pointer, "#/securityDefinitions/")
 }
 
 func (r *sourceReferenceResolver) reserveDiscoveredCounts(countBudget *sourceImportCountBudget) error {
@@ -4300,6 +4512,9 @@ func (r *sourceReferenceResolver) preflightResponses(value any) error {
 			continue
 		}
 		if _, err := r.resolveResponse(responses[status], nil, 0); err != nil {
+			if depth, retained := sourceResponseReferenceDepth(err); retained {
+				return fmt.Errorf("response %q: %w", status, depth)
+			}
 			if _, retained := sourceRetainedResponseSchemaReference(err); retained {
 				continue
 			}
@@ -4307,6 +4522,18 @@ func (r *sourceReferenceResolver) preflightResponses(value any) error {
 		}
 	}
 	return nil
+}
+
+func sourceResponseReferenceDepth(err error) (*sourceResponseReferenceDepthError, bool) {
+	var retained *sourceResponseReferenceDepthError
+	if errors.As(err, &retained) {
+		return retained, true
+	}
+	var depth *sourceReferenceDepthError
+	if errors.As(err, &depth) && (depth.Kind == sourceReferenceResponse || depth.Kind == sourceReferenceSchema) {
+		return &sourceResponseReferenceDepthError{Reference: depth.Reference, Cause: err}, true
+	}
+	return nil, false
 }
 
 func sourceRetainedResponseSchemaReference(err error) (string, bool) {
@@ -4494,6 +4721,7 @@ func (r *sourceReferenceResolver) preflightOpenAPIComponents(value any) error {
 		for _, name := range sortedSourceMapKeys(items) {
 			if err := entry.preflight(items[name]); err != nil {
 				if sourceOperationRetainableReferenceDepth(err, r.limits) {
+					r.unreferencedDepthGaps = append(r.unreferencedDepthGaps, sourceComponentDepthGap("components."+entry.name, name, err))
 					continue
 				}
 				return fmt.Errorf("components.%s[%q]: %w", entry.name, name, err)
@@ -4525,6 +4753,7 @@ func (r *sourceReferenceResolver) preflightSwaggerComponents(root map[string]any
 		for _, name := range sortedSourceMapKeys(items) {
 			if err := entry.preflight(items[name]); err != nil {
 				if sourceOperationRetainableReferenceDepth(err, r.limits) {
+					r.unreferencedDepthGaps = append(r.unreferencedDepthGaps, sourceComponentDepthGap(entry.name, name, err))
 					continue
 				}
 				return fmt.Errorf("%s[%q]: %w", entry.name, name, err)
@@ -4532,6 +4761,14 @@ func (r *sourceReferenceResolver) preflightSwaggerComponents(root map[string]any
 		}
 	}
 	return nil
+}
+
+func sourceComponentDepthGap(group, name string, cause error) sourceContractGap {
+	return sourceContractGapFor(
+		sourceDescriptorFoundation,
+		fmt.Sprintf("source component %s[%q]", group, name),
+		"source component has an incomplete bounded reference contract: "+cause.Error(),
+	)
 }
 
 func (r *sourceReferenceResolver) resolve(value any) (any, error) {
@@ -5288,7 +5525,7 @@ func (r *sourceReferenceResolver) responseEncodingExpansionBytes(value any, stac
 
 func (r *sourceReferenceResolver) responseSchemaExpansionBytes(value any, stack map[string]bool, depth int) (int64, error) {
 	if depth > r.limits.MaxReferenceDepth {
-		return 0, fmt.Errorf("schema depth limit exceeded")
+		return 0, &sourceSchemaDepthError{}
 	}
 	if _, err := sourceSchemaStructuralBytes(value, 0, r.limits); err != nil {
 		return 0, err
@@ -5358,7 +5595,7 @@ func (r *sourceReferenceResolver) responseSchemaObjectExpansionBytes(object map[
 				return 0, fmt.Errorf("schema %s must be an object", key)
 			}
 			return sourceMapExpandedBytes(children, func(_ string, child any) (int64, error) {
-				return r.responseSchemaExpansionBytes(child, stack, depth+1)
+				return r.responseSchemaExpansionBytes(child, stack, depth)
 			})
 		case grammar.dependencyChildren && key == "dependencies":
 			children, ok := value.(map[string]any)
@@ -5368,7 +5605,7 @@ func (r *sourceReferenceResolver) responseSchemaObjectExpansionBytes(object map[
 			return sourceMapExpandedBytes(children, func(name string, child any) (int64, error) {
 				switch child.(type) {
 				case map[string]any, bool:
-					return r.responseSchemaExpansionBytes(child, stack, depth+1)
+					return r.responseSchemaExpansionBytes(child, stack, depth)
 				case []any:
 					return sourceResponseStructuralBytes(child, r.limits)
 				default:
@@ -5381,14 +5618,14 @@ func (r *sourceReferenceResolver) responseSchemaObjectExpansionBytes(object map[
 					return sourceResponseStructuralBytes(booleanValue, r.limits)
 				}
 			}
-			return r.responseSchemaExpansionBytes(value, stack, depth+1)
+			return r.responseSchemaExpansionBytes(value, stack, depth)
 		case arrayChildren[key]:
 			items, ok := value.([]any)
 			if !ok {
 				return 0, fmt.Errorf("schema %s must be an array", key)
 			}
 			return sourceArrayExpandedBytes(items, func(item any) (int64, error) {
-				return r.responseSchemaExpansionBytes(item, stack, depth+1)
+				return r.responseSchemaExpansionBytes(item, stack, depth)
 			})
 		default:
 			return sourceResponseStructuralBytes(value, r.limits)
@@ -5748,7 +5985,16 @@ func (r *sourceReferenceResolver) resolveSecurityScheme(value any, stack map[str
 }
 
 func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool, depth int) (any, error) {
-	if depth == 0 && len(stack) == 0 {
+	return r.resolveSchemaAt(value, stack, depth, true)
+}
+
+// resolveSchemaAt carries reference depth independently from raw schema
+// nesting. A deeply nested inline schema is bounded by structural node/byte
+// accounting; only a chain of local $ref targets consumes the reference-depth
+// budget. This keeps a provider dialect from converting one deep schema into
+// a connector-wide reference refusal.
+func (r *sourceReferenceResolver) resolveSchemaAt(value any, stack map[string]bool, depth int, root bool) (any, error) {
+	if root && depth == 0 && len(stack) == 0 {
 		// Bound each retained root schema independently. Aggregate descriptor,
 		// response, media, and reference budgets already account for the encoded
 		// result; carrying this expansion counter across unrelated roots made a
@@ -5798,7 +6044,7 @@ func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool
 		return nil, err
 	}
 	if hasReference {
-		resolved, err := r.resolveSchema(target, next, depth+1)
+		resolved, err := r.resolveSchemaAt(target, next, depth+1, false)
 		if err != nil {
 			return nil, err
 		}
@@ -5857,7 +6103,7 @@ func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool
 			}
 			resolvedChildren := make(map[string]any, len(children))
 			for _, name := range sortedSourceMapKeys(children) {
-				resolved, err := r.resolveSchemaChild(children[name], stack, depth+1, fmt.Sprintf("schema %s[%q]", key, name))
+				resolved, err := r.resolveSchemaChild(children[name], stack, depth, fmt.Sprintf("schema %s[%q]", key, name))
 				if err != nil {
 					return nil, err
 				}
@@ -5880,7 +6126,7 @@ func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool
 				child := children[name]
 				switch child.(type) {
 				case map[string]any, bool:
-					resolved, err := r.resolveSchemaChild(child, stack, depth+1, fmt.Sprintf("schema dependencies[%q]", name))
+					resolved, err := r.resolveSchemaChild(child, stack, depth, fmt.Sprintf("schema dependencies[%q]", name))
 					if err != nil {
 						return nil, err
 					}
@@ -5911,7 +6157,7 @@ func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool
 					continue
 				}
 			}
-			resolved, err := r.resolveSchemaChild(raw, stack, depth+1, "schema field "+key)
+			resolved, err := r.resolveSchemaChild(raw, stack, depth, "schema field "+key)
 			if err != nil {
 				return nil, err
 			}
@@ -5929,7 +6175,7 @@ func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool
 			}
 			resolvedItems := make([]any, len(items))
 			for index, item := range items {
-				resolved, err := r.resolveSchemaChild(item, stack, depth+1, fmt.Sprintf("schema %s[%d]", key, index))
+				resolved, err := r.resolveSchemaChild(item, stack, depth, fmt.Sprintf("schema %s[%d]", key, index))
 				if err != nil {
 					return nil, err
 				}
@@ -5947,7 +6193,7 @@ func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool
 func (r *sourceReferenceResolver) resolveSchemaChild(value any, stack map[string]bool, depth int, label string) (any, error) {
 	switch value.(type) {
 	case map[string]any, bool:
-		return r.resolveSchema(value, stack, depth)
+		return r.resolveSchemaAt(value, stack, depth, false)
 	default:
 		return nil, fmt.Errorf("%s must be a schema object or boolean", label)
 	}
@@ -6006,7 +6252,14 @@ func (r *sourceReferenceResolver) reserveSchemaValue(value any, objectUsed *int6
 }
 
 func sourceSchemaStructuralBytes(value any, depth int, limits sourceImportLimits) (int64, error) {
-	return sourceStructuralBytes(value, depth, limits.MaxReferenceDepth, "schema depth limit exceeded", limits)
+	// Raw schema shape is independently bounded. A deliberately small
+	// reference-chain limit must not reject an otherwise finite inline schema
+	// before the resolver can retain the exact operation-local reference gap.
+	depthLimit := limits.MaxReferenceDepth
+	if depthLimit < defaultSourceImportReferenceDepth {
+		depthLimit = defaultSourceImportReferenceDepth
+	}
+	return sourceStructuralBytes(value, depth, depthLimit, &sourceSchemaDepthError{}, limits)
 }
 
 func sourceResponseStructuralBytes(value any, limits sourceImportLimits) (int64, error) {
@@ -6014,15 +6267,15 @@ func sourceResponseStructuralBytes(value any, limits sourceImportLimits) (int64,
 	if depthLimit < defaultSourceImportReferenceDepth {
 		depthLimit = defaultSourceImportReferenceDepth
 	}
-	return sourceStructuralBytes(value, 0, depthLimit, "response structural depth limit exceeded", limits)
+	return sourceStructuralBytes(value, 0, depthLimit, errors.New("response structural depth limit exceeded"), limits)
 }
 
-func sourceStructuralBytes(value any, depth, depthLimit int, depthError string, limits sourceImportLimits) (int64, error) {
+func sourceStructuralBytes(value any, depth, depthLimit int, depthError error, limits sourceImportLimits) (int64, error) {
 	nodes := 0
 	var walk func(any, int) (int64, error)
 	walk = func(current any, currentDepth int) (int64, error) {
 		if currentDepth > depthLimit {
-			return 0, fmt.Errorf("%s", depthError)
+			return 0, depthError
 		}
 		nodes++
 		if nodes > sourceSchemaNodeLimit(limits) {
@@ -6187,7 +6440,7 @@ func (r *sourceReferenceResolver) referenceTargetWithCount(object map[string]any
 		return nil, nil, nil, false, fmt.Errorf("reference cycle at %q", ref)
 	}
 	if depth >= r.limits.MaxReferenceDepth {
-		return nil, nil, nil, false, &sourceReferenceDepthError{}
+		return nil, nil, nil, false, &sourceReferenceDepthError{Kind: kind, Reference: ref}
 	}
 	target, err := r.localReferenceTarget(ref)
 	if err != nil {
@@ -6592,6 +6845,7 @@ func importSourceDocumentResult(documentContext sourceImportDocumentContext, doc
 		}
 		result.Gaps = append(result.Gaps, resolver.unreferencedSchemaCycleGaps(result.Operations)...)
 		result.Gaps = append(result.Gaps, resolver.unreferencedSchemaReferenceSiblingGaps(result.Operations)...)
+		result.Gaps = append(result.Gaps, resolver.unreferencedDepthGaps...)
 		result.Gaps = sourceSortedGaps(result.Gaps)
 		return result, nil
 	}
@@ -6702,6 +6956,7 @@ func importSourceDocumentResult(documentContext sourceImportDocumentContext, doc
 	}
 	result.Gaps = append(result.Gaps, resolver.unreferencedSchemaCycleGaps(result.Operations)...)
 	result.Gaps = append(result.Gaps, resolver.unreferencedSchemaReferenceSiblingGaps(result.Operations)...)
+	result.Gaps = append(result.Gaps, resolver.unreferencedDepthGaps...)
 	result.Gaps = sourceSortedGaps(result.Gaps)
 	return result, nil
 }
@@ -6711,6 +6966,20 @@ func sourceOperationRetainableReferenceDepth(err error, limits sourceImportLimit
 		return false
 	}
 	var depth *sourceReferenceDepthError
+	if errors.As(err, &depth) {
+		return true
+	}
+	if sourceOperationRetainableSchemaDepth(err, limits) {
+		return true
+	}
+	return false
+}
+
+func sourceOperationRetainableSchemaDepth(err error, limits sourceImportLimits) bool {
+	if !limits.AllowSourceContractGaps {
+		return false
+	}
+	var depth *sourceSchemaDepthError
 	return errors.As(err, &depth)
 }
 
@@ -6761,7 +7030,7 @@ func sourceIncompleteOperationDescriptor(documentContext sourceImportDocumentCon
 			Gaps: []sourceContractGap{sourceContractGapFor(
 				sourceDescriptorFoundation,
 				location,
-				fmt.Sprintf("source descriptor is incomplete because its bounded local reference traversal could not resolve the provider contract: %v", cause),
+				fmt.Sprintf("source descriptor is incomplete because bounded source traversal could not resolve the provider contract: %v", cause),
 			)},
 		},
 	}, nil
@@ -8446,6 +8715,9 @@ func sourceResponses(location string, operation, doc map[string]any, form source
 		}
 		resolved, err := resolver.resolveResponse(rawResponses[status], nil, 0)
 		if err != nil {
+			if depth, retained := sourceResponseReferenceDepth(err); retained {
+				return nil, nil, nil, fmt.Errorf("response %q: %w", status, depth)
+			}
 			if _, retained := sourceRetainedResponseSchemaReference(err); !retained {
 				return nil, nil, nil, err
 			}
