@@ -1,0 +1,31 @@
+{
+  "issue": 4354,
+  "phase": "issue-4354-schema-v3-source-projection-importer-r1",
+  "base": "main",
+  "branch": "feat/4354-schema-v3-source-projection",
+  "delivery": "direct-pr",
+  "status": "fresh_audit_admission_hardening_verified_normal_push_and_independent_exact_head_audit_pending",
+  "gsd": {
+    "mode": "inline-manual-fallback",
+    "commands_resolved": [
+      "discuss-phase",
+      "plan-phase --tdd",
+      "execute-phase",
+      "verify-work",
+      "code-review"
+    ]
+  },
+  "usable_surface_delta": 0,
+  "pull_request": {
+    "number": 4358,
+    "url": "https://github.com/polymetrics-ai/cli/pull/4358",
+    "base": "main",
+    "head": "feat/4354-schema-v3-source-projection",
+    "head_sha_at_creation": "cdaf4849eee5da74998dc097eb60d6ba7d81b7cd",
+    "repair_sha": "8ab4fa3b1",
+    "review_route": "claude_auto",
+    "review_status": "pending"
+  },
+  "constraint": "The candidate Outreach lock enumerates two provider documents but neither exact raw source artifact is retained in the candidate, current main, or local Git object store. Byte-backed import remains strict and cannot fetch, re-pin, or substitute derived bytes. The active slice adds an explicit declaration-only source-reference path that preserves canonical URLs and operation identities without claiming byte-backed import, credential validity, certification, or executability.",
+  "verify_repair": "Frozen audit F1/F2/F3 was repaired with CLI-path import-to-validate tests for legacy/v3 reference forms, v2 operation-evidence raw-field overlays (including null discriminator), and cross-source citation location binding. Current origin/main b9b2478b3b2451d632d28b9aa138a170ad835110 was merged normally at 449f18cdd. Fresh audit head 6a372ee216112d4a83c00d0d687a96dc438abf84 then required admission hardening: v2 skipped/dynamic absence now rejects all reference-only wire fields before return, and citation-only descriptors/surface-sync are lock-bound to the exact non-executable contract. Focused red/green, full cmd/connectorgen, engine/runner, vet/build, generator, docs, lint, smoke, boundary, and release gates are recorded in VERIFICATION.md. The normal pushed head still needs an independent exact-head Codex audit; do not merge."
+}
