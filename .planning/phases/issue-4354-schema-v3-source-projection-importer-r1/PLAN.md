@@ -3,7 +3,7 @@
 ## Task Delivery Header
 
 - Issue: Refs #4354 — feat(connectors): make Outreach full-surface pilot auditable
-- Base branch: main
+- Base branch: main (`origin/main` currently `b9b2478b3b2451d632d28b9aa138a170ad835110`)
 - Merges into: main
 - Delivery: Ordinary pull request open against `main`, with the final code SHA
   independently audited, normal non-force publication completed, and local
@@ -89,6 +89,38 @@ not supported by an executor as `missing_foundation`. It must distinguish that
 state from malformed source, absent source-contract detail
 (`source_contract_unavailable`), byte-backed provenance-digest mismatch,
 credential absence, and certification; none of those are a substitute reason.
+
+## Frozen independent-audit gap repair (2026-08-27)
+
+The independent re-audit rejected exact head
+`21480fcd9ce5701164bafb82666ffe5bbc3934c4`. This is one shared
+connectorgen repair wave, not an Outreach connector change. The canonical
+single-worker GSD fallback executes `discuss-phase` → `plan-phase --tdd` →
+`execute-phase` → `verify-work` → `code-review` inline; the adapter prompts
+were freshly resolved before this plan update.
+
+1. **F1 — source-import to validate parity.** Add an end-to-end red test for
+   both the retained legacy-v2 reference form and a true schema-v3
+   `source_reference` document. Factor one expected-provenance constructor
+   shared with the importer’s reference-form rules. A valid imported descriptor
+   must validate as schema v3; byte-backed legacy descriptors remain schema v2.
+2. **F2 — fail-closed operation-evidence reader.** Add a mutation matrix
+   against ordinary byte-backed v2 locks for every reference-only field,
+   including `source_kind: null`. Detect field *presence*, not merely decoded
+   non-empty values, then reject before the tolerant legacy projection. Preserve
+   the valid byte-backed v2 evidence reader.
+3. **F3 — exact source location binding.** Bind every legacy reference
+   operation to the primary document's declared location or its exact
+   supplement's declared location. A two-operation primary/supplemental URL
+   swap must fail even when all per-source counts still match.
+4. **Green and integration.** Run the end-to-end and adversarial tests; then
+   merge `origin/main` at `b9b2478b3b2451d632d28b9aa138a170ad835110` normally
+   without reset, stash, force, or discarded work. Re-run the scoped tests on
+   the merged tree before broader generator/engine/runner gates.
+5. **Truth boundaries.** Preserve all 259 Outreach rows as
+   `source_contract_unavailable` in all six lanes. Do not write an Outreach
+   lock/descriptor, fabricate a command/request contract, claim credentials or
+   certification, or increase usable surface (delta remains `0`).
 
 ## Independent-audit repair plan (2026-08-27)
 

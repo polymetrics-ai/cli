@@ -188,3 +188,26 @@ PASS
 - Reviewed source-reference digest flow: the digest remains copied citation
   provenance and never enters credential, certification, or execution
   admission logic.
+
+## Frozen independent-audit repair wave — planned red/green (2026-08-27)
+
+The fresh independent audit of head `21480fcd9ce5701164bafb82666ffe5bbc3934c4`
+identified three remaining, independently reachable contract failures. No
+production source file has been edited for this wave.
+
+| Finding | Red observable assertion | Green assertion | Refactor guard |
+| --- | --- | --- | --- |
+| F1 | `source-import` writes a descriptor that `validate` rejects for legacy-v2 reference and v3 `source_reference` locks. | Both CLI-path source-import → validate sequences succeed with the descriptor's actual v3 provenance preserved. | The shared helper cannot change byte-backed v1/v2 expected schemas or turn a citation into an executor/certification condition. |
+| F2 | A valid byte-backed v2 lock with a reference-only overlay (including a null discriminator) reaches operation evidence. | Every overlay is rejected before tolerant evidence projection; an untouched byte-backed v2 lock still produces its legacy row. | Inspect raw field presence and retain duplicate-member detection; do not silently discard or reinterpret unknown reference fields. |
+| F3 | Swapping one primary and one supplemental operation URL preserves counts yet passes legacy-reference admission. | Admission rejects the swap because each operation's exact source location belongs to its declared primary/supplemental document. | Preserve all declared source artifacts, counts, URLs, and no-fetch semantics; do not normalize or rewrite citations. |
+
+### Red — pending execution
+
+Add the regressions first and run the focused command. It must fail against
+the frozen head before implementation changes, naming F1/F2/F3 independently.
+
+### Green — pending execution
+
+After the smallest shared repair, repeat the focused command, merge current
+`origin/main` normally, then repeat it and record all generator/engine/runner
+gates in `VERIFICATION.md`.
