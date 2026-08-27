@@ -71,6 +71,12 @@
   is byte-identical `source_contract_unavailable`; each operation remains
   visible and merge-blocked without a new action, command, credential lookup,
   transport, record emission, or mutation.
+- The generalized Salesloft/Copper matrix covers explicit non-executable,
+  partial-coverage, and automatic write-disabled paths for each cohort. It
+  checks the closed sole gap and byte equality as well as unchanged `source_id`,
+  provider `operation_id`, method, and path. A Batch 8–10 report reproduced
+  nine independent pinned-local cases at the same shared `runSourceImport`
+  callers; no provider operation identity was rewritten here.
 - Usable-surface delta is **0**. There is no generated unavailable command in
   this change to invoke. The existing real commandrunner missing-foundation
   test proves structured refusal before dispatch; the registry preflight sweep

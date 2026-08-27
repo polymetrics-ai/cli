@@ -45,6 +45,15 @@ respective source identities begin `salesloft.rest.delete.V2AccountsId0` and
 `copper.rest.delete.V1EntityEntityIdRelated0`. This is read-only scope evidence
 for #4291, not a current-main output, source re-pin, or regeneration claim.
 
+The Batch 8–10 cross-lane report independently reproduced nine pinned-local
+reference/mutation failures through the same `runSourceImport` disposition
+calls. The generalized fixture matrix therefore exercises both named Batch 6–7
+cohorts through all three shared paths (non-executable, partial coverage, and
+automatic write-disabled), asserting closed bytes plus unchanged `source_id`,
+provider `operation_id`, method, and path. It uses the cohort documentation
+URLs above only because the retained lock/artifact inputs are absent here; it
+does not claim to regenerate either cohort.
+
 ## GSD execution mode
 
 The canonical single-worker contract forbids role spawning. The generated

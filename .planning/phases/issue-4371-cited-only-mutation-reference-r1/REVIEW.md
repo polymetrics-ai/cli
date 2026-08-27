@@ -29,6 +29,10 @@ review role.
   and retain the existing mutation-disposition path byte-for-byte.
 - The strict descriptor validator was not weakened; it still compares a
   cited-only descriptor with the lock-owned exact reference projection.
+- The generalized Salesloft/Copper fixture matrix exercises every changed
+  shared path and asserts source ID, provider operation ID, method, and path
+  are preserved. Batch 8–10 independently reproduced nine failures at these
+  same callers, so the repair remains a shared importer/projection invariant.
 - No user-controlled transport, secret, generic HTTP write/body, provider I/O,
   action, command, or credential path was introduced.
 - Fresh exact-head independent review remains required after the final evidence

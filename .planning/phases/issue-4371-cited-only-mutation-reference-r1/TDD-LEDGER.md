@@ -61,6 +61,14 @@ write-disabled pass leave a source-reference descriptor byte-identical, while
 normal complete-contract disposition behavior, source-citation admission, and
 existing GitHub projection bytes stay unchanged.
 
+The post-discovery generalized cohort matrix reran the same command with
+Salesloft and Copper fixtures for each path. It asserts both fixture
+identities remain exact (`source_id`, provider `operation_id`, method, and
+path), the closed state has only `source_contract_unavailable`, and the
+serialization is byte-identical after each refusal/skip. This generalizes the
+repair to the Batch 8–10 report without materializing or re-pinning a cohort
+source lock.
+
 ## Refactor
 
 The shared `sourceProjectionValidateCitedOnlyMutationDisposition` helper keeps

@@ -45,6 +45,11 @@ No provider source was fetched, no source lock was re-pinned, no credential was
 used, no action/command/transport was created, and no existing runnable command
 was downgraded. Usable CLI surface delta: **0**.
 
+The regression matrix names Salesloft and Copper and verifies all three shared
+disposition paths preserve their imported provider operation identities. It
+also covers the common seam reproduced by nine Batch 8–10 pinned-local cases,
+without treating those unavailable inputs as current-main generated output.
+
 The canonical GSD lifecycle was executed inline because the project contract
 forbids worker-role spawning: discussion and TDD plan, red/green/refactor
 implementation, verification, and code review prompts are recorded in the
