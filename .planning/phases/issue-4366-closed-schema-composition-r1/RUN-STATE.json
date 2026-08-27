@@ -1,0 +1,23 @@
+{
+  "issue": 4366,
+  "phase": "closed-schema-composition-foundation-r1",
+  "base": "main",
+  "branch": "fm/cli-closed-schema-composition-foundation-r1",
+  "lifecycle": {
+    "discuss_phase": "inline_manual_fallback_recorded",
+    "plan_phase_tdd": "complete",
+    "execute_phase": "pending",
+    "verify_work": "pending",
+    "code_review": "pending"
+  },
+  "red_green": {
+    "red": "pending",
+    "green": "pending",
+    "refactor": "pending"
+  },
+  "promotion": {
+    "credential_bound_runnable": null,
+    "missing_foundation": null,
+    "reconciled_rows": null
+  }
+}
