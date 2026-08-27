@@ -79,6 +79,16 @@ type sourceActionContract struct {
 // method/path union: semantic aliases remain narrow, while the broad action
 // proves the provider contract is reachable without double-counting aliases.
 func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult, check bool) (sourceProjectionStats, error) {
+	// A cited-only descriptor contributes source-to-declaration evidence, but it
+	// has no executable contract. Remove it before *any* projection transform:
+	// read reachability, command restoration/downgrade, and API-surface
+	// bookkeeping are declaration mutations just as much as write generation.
+	// Keeping this filter at the entry point makes a source reference incapable
+	// of turning unavailable contract detail into an execution gate.
+	result = sourceProjectionMaterializableResult(result)
+	if len(result.Operations) == 0 {
+		return sourceProjectionStats{}, nil
+	}
 	if err := validateSourceProjectionExecutionEnvelopes(result); err != nil {
 		return sourceProjectionStats{}, err
 	}
@@ -309,6 +319,18 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 		}
 	}
 	return stats, nil
+}
+
+func sourceProjectionMaterializableResult(result sourceImportResult) sourceImportResult {
+	filtered := result
+	filtered.Operations = make([]sourceOperationDescriptor, 0, len(result.Operations))
+	for _, operation := range result.Operations {
+		if sourceOperationHasFoundationGap(operation, sourceContractUnavailableFoundation) {
+			continue
+		}
+		filtered.Operations = append(filtered.Operations, operation)
+	}
+	return filtered
 }
 
 func validateSourceProjectionExecutionEnvelopes(result sourceImportResult) error {

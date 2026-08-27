@@ -89,3 +89,28 @@ not supported by an executor as `missing_foundation`. It must distinguish that
 state from malformed source, absent source-contract detail
 (`source_contract_unavailable`), byte-backed provenance-digest mismatch,
 credential absence, and certification; none of those are a substitute reason.
+
+## Independent-audit repair plan (2026-08-27)
+
+The independent audit of `2738c6a9ff7172c74bedbcede092a77f16a05ba2` found
+four correctness gaps. Treat them as one red/green wave:
+
+1. Filter `source_contract_unavailable` descriptors before **all** source
+   projection transforms, including blocked/reachable direct-read sets and
+   path-flag restoration. A GET citation must leave existing CLI and API
+   bytes untouched in write and check modes.
+2. Replace the two-operation Outreach approximation with an immutable,
+   byte-identical test fixture of the exact 259-row candidate lock. Exercise
+   its real operation IDs, 253/6 primary/supplemental identity split, and the
+   current-main Outreach API surface while producing no declaration changes.
+3. Restore closed v1/v2 byte-backed wire decoding. The legacy cited-only
+   discriminator receives its own wire type; every reference-only root, REST,
+   and operation field is rejected on ordinary legacy locks.
+4. Extract one closed reference-operation validator and apply it to both the
+   legacy adapter and v3 `source_reference` documents: REST protocol, uppercase
+   allow-listed HTTP method, normalized source ID/location, valid path, unique
+   route/identity, and prohibited citation-field mixtures.
+
+The repair remains declaration-only: no provider calls, no raw-byte rewrite,
+no source-lock admission into production Outreach definitions, no generic
+executor, and no executable command materialization.

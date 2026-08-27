@@ -22,6 +22,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode"
 	"unicode/utf8"
 
 	"gopkg.in/yaml.v3"
@@ -169,26 +170,32 @@ type sourceImportRenderedReferenceCitationBinding struct {
 }
 
 type sourceImportRESTOperation struct {
-	ID              string                                        `json:"id"`
-	Protocol        string                                        `json:"protocol"`
-	Method          string                                        `json:"method"`
-	Path            string                                        `json:"path"`
-	OperationID     string                                        `json:"operation_id"`
-	Deprecated      bool                                          `json:"deprecated"`
-	SourceLocation  string                                        `json:"source_location"`
-	SourceURL       string                                        `json:"source_url,omitempty"`
+	ID             string `json:"id"`
+	Protocol       string `json:"protocol"`
+	Method         string `json:"method"`
+	Path           string `json:"path"`
+	OperationID    string `json:"operation_id"`
+	Deprecated     bool   `json:"deprecated"`
+	SourceLocation string `json:"source_location"`
+	// SourceURL is populated only after decoding the separate legacy
+	// source-reference contract. Normal byte-backed and v3 operation wires must
+	// reject it rather than silently accepting reference-only provenance.
+	SourceURL       string                                        `json:"-"`
 	CitationURL     string                                        `json:"citation_url,omitempty"`
 	CitationBinding *sourceImportRenderedReferenceCitationBinding `json:"citation_binding,omitempty"`
 }
 
 type sourceImportREST struct {
 	sourceImportArtifact
-	Commit             string                          `json:"commit,omitempty"`
-	InfoVersion        string                          `json:"info_version,omitempty"`
-	SourceKind         string                          `json:"source_kind,omitempty"`
-	OperationCounts    map[string]int                  `json:"operation_counts,omitempty"`
-	Supplements        []sourceImportRESTSupplement    `json:"supplements,omitempty"`
-	Operations         []sourceImportRESTOperation     `json:"operations,omitempty"`
+	Commit      string                      `json:"commit,omitempty"`
+	InfoVersion string                      `json:"info_version,omitempty"`
+	Operations  []sourceImportRESTOperation `json:"operations,omitempty"`
+	// These fields are internal projections of the separately decoded legacy
+	// cited-only contract. They must not widen ordinary v1/v2 byte-backed wire
+	// decoding.
+	SourceKind         string                          `json:"-"`
+	OperationCounts    map[string]int                  `json:"-"`
+	Supplements        []sourceImportRESTSupplement    `json:"-"`
 	Retrieval          string                          `json:"-"`
 	OpenAPIVersions    []string                        `json:"-"`
 	CoverageConfidence *sourceImportCoverageConfidence `json:"-"`
@@ -203,6 +210,45 @@ type sourceImportRESTSupplement struct {
 	sourceImportArtifact
 	SourceLocation string `json:"source_location"`
 	OperationCount int    `json:"operation_count"`
+}
+
+// sourceImportLegacyReferenceRESTOperation is the closed legacy cited-only
+// wire contract. Byte-backed legacy operations deliberately have no per-row
+// source URL: their selected source is the retained REST artifact.
+type sourceImportLegacyReferenceRESTOperation struct {
+	ID             string `json:"id"`
+	Protocol       string `json:"protocol"`
+	Method         string `json:"method"`
+	Path           string `json:"path"`
+	OperationID    string `json:"operation_id"`
+	Deprecated     bool   `json:"deprecated"`
+	SourceLocation string `json:"source_location"`
+	SourceURL      string `json:"source_url"`
+}
+
+func (operation sourceImportLegacyReferenceRESTOperation) sourceOperation() sourceImportRESTOperation {
+	return sourceImportRESTOperation{
+		ID:             operation.ID,
+		Protocol:       operation.Protocol,
+		Method:         operation.Method,
+		Path:           operation.Path,
+		OperationID:    operation.OperationID,
+		Deprecated:     operation.Deprecated,
+		SourceLocation: operation.SourceLocation,
+	}
+}
+
+// sourceImportRESTLegacyReference is selected only by the schema-v2
+// source_kind discriminator. Keep it separate from sourceImportREST so every
+// reference-only field remains unknown to ordinary byte-backed v1/v2 locks.
+type sourceImportRESTLegacyReference struct {
+	sourceImportArtifact
+	Commit          string                                     `json:"commit,omitempty"`
+	InfoVersion     string                                     `json:"info_version,omitempty"`
+	SourceKind      string                                     `json:"source_kind"`
+	OperationCounts map[string]int                             `json:"operation_counts"`
+	Supplements     []sourceImportRESTSupplement               `json:"supplements"`
+	Operations      []sourceImportLegacyReferenceRESTOperation `json:"operations"`
 }
 
 // sourceImportPublishedSource records the provider document cited by an
@@ -348,22 +394,31 @@ type sourceImportLock struct {
 	Rest               sourceImportREST                `json:"rest"`
 	GraphQL            sourceImportGraphQL             `json:"graphql,omitempty"`
 	Counts             sourceImportCounts              `json:"counts,omitempty"`
-	OperationsFound    sourceImportCounts              `json:"operations_found,omitempty"`
-	CoverageConfidence *sourceImportCoverageConfidence `json:"coverage_confidence,omitempty"`
+	OperationsFound    sourceImportCounts              `json:"-"`
+	CoverageConfidence *sourceImportCoverageConfidence `json:"-"`
 }
 
 // sourceImportLockLegacy and sourceImportLockV3 keep strict wire decoding
 // versioned. In particular, a future schema must not inherit v2 semantics just
 // because its version number happens to be greater than two.
 type sourceImportLockLegacy struct {
+	SchemaVersion int                 `json:"schema_version"`
+	Connector     string              `json:"connector"`
+	CapturedAt    string              `json:"captured_at,omitempty"`
+	Rest          sourceImportREST    `json:"rest"`
+	GraphQL       sourceImportGraphQL `json:"graphql,omitempty"`
+	Counts        sourceImportCounts  `json:"counts,omitempty"`
+}
+
+type sourceImportLockLegacyReference struct {
 	SchemaVersion      int                             `json:"schema_version"`
 	Connector          string                          `json:"connector"`
 	CapturedAt         string                          `json:"captured_at,omitempty"`
-	Rest               sourceImportREST                `json:"rest"`
+	Rest               sourceImportRESTLegacyReference `json:"rest"`
 	GraphQL            sourceImportGraphQL             `json:"graphql,omitempty"`
 	Counts             sourceImportCounts              `json:"counts,omitempty"`
-	OperationsFound    sourceImportCounts              `json:"operations_found,omitempty"`
-	CoverageConfidence *sourceImportCoverageConfidence `json:"coverage_confidence,omitempty"`
+	OperationsFound    sourceImportCounts              `json:"operations_found"`
+	CoverageConfidence *sourceImportCoverageConfidence `json:"coverage_confidence"`
 }
 
 type sourceImportRESTV3 struct {
@@ -385,17 +440,35 @@ type sourceImportLockV3 struct {
 func (lock *sourceImportLock) UnmarshalJSON(raw []byte) error {
 	var header struct {
 		SchemaVersion int `json:"schema_version"`
+		Rest          struct {
+			SourceKind string `json:"source_kind"`
+		} `json:"rest"`
 	}
 	if err := json.Unmarshal(raw, &header); err != nil {
 		return err
 	}
 	switch header.SchemaVersion {
-	case 1, 2:
+	case 1:
 		var legacy sourceImportLockLegacy
 		if err := decodeSourceStrictJSON(raw, &legacy); err != nil {
 			return err
 		}
-		*lock = sourceImportLock(legacy)
+		*lock = sourceImportLockFromLegacy(legacy)
+		return nil
+	case 2:
+		if header.Rest.SourceKind == "" {
+			var legacy sourceImportLockLegacy
+			if err := decodeSourceStrictJSON(raw, &legacy); err != nil {
+				return err
+			}
+			*lock = sourceImportLockFromLegacy(legacy)
+			return nil
+		}
+		var reference sourceImportLockLegacyReference
+		if err := decodeSourceStrictJSON(raw, &reference); err != nil {
+			return err
+		}
+		*lock = sourceImportLockFromLegacyReference(reference)
 		return nil
 	case 3:
 		var v3 sourceImportLockV3
@@ -418,6 +491,44 @@ func (lock *sourceImportLock) UnmarshalJSON(raw []byte) error {
 		return nil
 	default:
 		return fmt.Errorf("source lock has unsupported schema version %d", header.SchemaVersion)
+	}
+}
+
+func sourceImportLockFromLegacy(legacy sourceImportLockLegacy) sourceImportLock {
+	return sourceImportLock{
+		SchemaVersion: legacy.SchemaVersion,
+		Connector:     legacy.Connector,
+		CapturedAt:    legacy.CapturedAt,
+		Rest:          legacy.Rest,
+		GraphQL:       legacy.GraphQL,
+		Counts:        legacy.Counts,
+	}
+}
+
+func sourceImportLockFromLegacyReference(reference sourceImportLockLegacyReference) sourceImportLock {
+	rest := sourceImportREST{
+		sourceImportArtifact: reference.Rest.sourceImportArtifact,
+		Commit:               reference.Rest.Commit,
+		InfoVersion:          reference.Rest.InfoVersion,
+		SourceKind:           reference.Rest.SourceKind,
+		OperationCounts:      reference.Rest.OperationCounts,
+		Supplements:          reference.Rest.Supplements,
+		Operations:           make([]sourceImportRESTOperation, 0, len(reference.Rest.Operations)),
+	}
+	for _, operation := range reference.Rest.Operations {
+		converted := operation.sourceOperation()
+		converted.SourceURL = operation.SourceURL
+		rest.Operations = append(rest.Operations, converted)
+	}
+	return sourceImportLock{
+		SchemaVersion:      reference.SchemaVersion,
+		Connector:          reference.Connector,
+		CapturedAt:         reference.CapturedAt,
+		Rest:               rest,
+		GraphQL:            reference.GraphQL,
+		Counts:             reference.Counts,
+		OperationsFound:    reference.OperationsFound,
+		CoverageConfidence: reference.CoverageConfidence,
 	}
 }
 
@@ -872,17 +983,11 @@ func validateSourceImportLegacySourceReferenceInventory(lock sourceImportLock) e
 	seenIDs := make(map[string]bool, len(lock.Rest.Operations))
 	seenRoutes := make(map[string]bool, len(lock.Rest.Operations))
 	for _, operation := range lock.Rest.Operations {
-		if operation.ID == "" || operation.ID != strings.TrimSpace(operation.ID) || operation.Protocol != "rest" || operation.Method == "" || operation.Method != strings.ToUpper(operation.Method) || operation.Path == "" || operation.SourceLocation == "" || operation.SourceURL == "" {
+		if err := validateSourceImportReferenceOperation(operation); err != nil {
+			return fmt.Errorf("source-reference lock operation %q: %w", operation.ID, err)
+		}
+		if operation.SourceURL == "" {
 			return fmt.Errorf("source-reference lock has incomplete REST operation identity")
-		}
-		if !sourceImportReferenceHTTPMethod(operation.Method) {
-			return fmt.Errorf("source-reference lock operation %q has unsupported HTTP method %q", operation.ID, operation.Method)
-		}
-		if err := validateSourceImportPath(operation.Path); err != nil {
-			return fmt.Errorf("source-reference lock operation %q has invalid path", operation.ID)
-		}
-		if !sourceImportReferenceText(operation.SourceLocation, 4096) {
-			return fmt.Errorf("source-reference lock operation %q has invalid source location", operation.ID)
 		}
 		if seenIDs[operation.ID] {
 			return fmt.Errorf("source-reference lock duplicates REST operation identity %q", operation.ID)
@@ -952,8 +1057,32 @@ func sourceImportReferenceHTTPMethod(value string) bool {
 	}
 }
 
+// validateSourceImportReferenceOperation closes the identity surface shared by
+// legacy cited-only inventories and schema-v3 source_reference documents. A
+// reference has no raw request contract to correct malformed identity later,
+// so its protocol, method, IDs, route, and source location must be canonical
+// at admission time.
+func validateSourceImportReferenceOperation(operation sourceImportRESTOperation) error {
+	if !sourceImportReferenceText(operation.ID, 1024) || operation.Protocol != "rest" || operation.Method == "" || operation.Method != strings.ToUpper(operation.Method) || operation.Path == "" || !sourceImportReferenceText(operation.SourceLocation, 4096) {
+		return fmt.Errorf("has incomplete or non-canonical REST operation identity")
+	}
+	if operation.OperationID != "" && !sourceImportReferenceText(operation.OperationID, 1024) {
+		return fmt.Errorf("has invalid provider operation ID")
+	}
+	if !sourceImportReferenceHTTPMethod(operation.Method) {
+		return fmt.Errorf("has unsupported HTTP method %q", operation.Method)
+	}
+	if err := validateSourceImportPath(operation.Path); err != nil {
+		return fmt.Errorf("has invalid path")
+	}
+	return nil
+}
+
 func sourceImportReferenceText(value string, limit int) bool {
-	return value != "" && value == strings.TrimSpace(value) && len(value) <= limit && !strings.ContainsAny(value, "\r\n\x00")
+	if value == "" || value != strings.TrimSpace(value) || len(value) > limit {
+		return false
+	}
+	return !strings.ContainsFunc(value, unicode.IsControl)
 }
 
 func validateSourceImportV3LockInventory(lock sourceImportLock) error {
@@ -1069,7 +1198,14 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 		}
 		for _, operation := range document.Operations {
 			restCount++
-			if operation.ID == "" || operation.Protocol != "rest" || operation.Method == "" || operation.Path == "" || operation.SourceLocation == "" {
+			if kind == sourceImportDocumentKindSourceReference {
+				if err := validateSourceImportReferenceOperation(operation); err != nil {
+					return fmt.Errorf("source lock v3 source-reference operation %q: %w", operation.ID, err)
+				}
+				if operation.CitationURL != "" || operation.CitationBinding != nil {
+					return fmt.Errorf("source lock v3 source-reference operation %q must inherit its document citation", operation.ID)
+				}
+			} else if operation.ID == "" || operation.Protocol != "rest" || operation.Method == "" || operation.Path == "" || operation.SourceLocation == "" {
 				return fmt.Errorf("source lock has incomplete v3 REST operation identity")
 			}
 			if seenOperations[operation.ID] {
@@ -1082,9 +1218,6 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 				if err := validateSourceImportRenderedReferenceCitation(operation, document); err != nil {
 					return fmt.Errorf("source lock v3 rendered-reference operation %q has invalid citation URL: %w", operation.ID, err)
 				}
-			}
-			if kind == sourceImportDocumentKindSourceReference && operation.SourceURL != "" {
-				return fmt.Errorf("source lock v3 source-reference operation %q must inherit its document citation", operation.ID)
 			}
 			route := strings.ToUpper(operation.Method) + "\x00" + operation.Path
 			if existing, exists := seenRoutes[route]; exists {

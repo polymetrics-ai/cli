@@ -102,3 +102,89 @@ PASS
 git diff --check
 PASS
 ```
+
+## Independent-audit repair wave — planned red/green
+
+2026-08-27 — independent audit report
+`cli-source-reference-projection-reaudit-codex-r1/report.md` rejected head
+`2738c6a9ff7172c74bedbcede092a77f16a05ba2` on four findings. Before changing
+production code, add and run tests that prove:
+
+- cited-only GET descriptors cannot downgrade an existing direct-read command
+  or replace its API-surface coverage;
+- the Outreach proof parses the exact 259-row lock with real source IDs,
+  source counts, and citations against the current-main bundle without
+  materializing declarations;
+- ordinary byte-backed schema-v1/v2 locks reject each reference-only field;
+  and
+- v3 cited-only operations reject malformed protocol, HTTP method, identity,
+  location, mixed citation fields, and duplicate routes/identities through the
+  same closed rules as legacy references.
+
+Green may only filter non-materializing reference descriptors, split the
+legacy decoder, and share the closed validator. It must not relax byte-backed
+identity verification, add provider I/O, create a command, or convert a hash
+into a credential/certification gate.
+
+### Red — 2026-08-27
+
+```text
+go test -timeout 20m ./cmd/connectorgen -run 'Test(SourceImportOutreachReferenceProjectsCitedOperationsWithoutFetching|SourceReferenceProjectionDoesNotDowngradeExistingDirectReadSurface|SourceImportLegacyByteBackedLocksRejectReferenceOnlyFields|SourceImportV3SourceReferenceRejectsClosedOperationIdentityViolations)$' -count=1
+FAIL
+```
+
+- The former Outreach proof yielded two descriptors, not 259, and used the
+  shortened source IDs.
+- A cited-only GET changed a matching implemented direct-read command
+  (`CLI:1`) before the operation-loop skip.
+- Every listed reference-only field was accepted by ordinary v1/v2 byte-backed
+  decoding (the v2 discriminator field instead reached a later reference
+  validation error).
+- V3 cited-only operations accepted lowercase/unsupported methods, untrimmed
+  IDs, control-bearing locations, and untrimmed provider operation IDs.
+
+This is the required red state for H1, H2, M3, and M4. No production file had
+been changed when it was observed.
+
+### Green — 2026-08-27
+
+```text
+go test -timeout 20m ./cmd/connectorgen -run 'Test(SourceImport(OutreachReferenceProjectsCitedOperationsWithoutFetching|V3SourceReferenceUsesTheSameClosedProjection|ReferenceDigestIsProvenanceNotAnExecutionGate|SourceReferenceRejectsUnsupportedAndUnsafeKinds|ReferenceEncodesEveryDeclaredLaneWithoutPromotion|LegacyByteBackedLocksRejectReferenceOnlyFields|V3SourceReferenceRejectsClosedOperationIdentityViolations|V3SourceReferenceRejectsDuplicateOperationIdentityAndRoute)|ExactOutreachReferenceProjectsAgainstCurrentMainBundle|RunSourceImportReferenceChecksWithoutRetainedArtifactOrSurfaceWrite|SourceReferenceProjectionDoesNotMaterializeAnExistingWriteOrCommand|SourceReferenceProjectionDoesNotDowngradeExistingDirectReadSurface)$' -count=1
+PASS
+
+git diff --check
+PASS
+```
+
+- `sourceProjectionMaterializableResult` now removes every
+  `source_contract_unavailable` descriptor before any read, CLI, API-surface,
+  flag, or write transform. The red direct-read GET now leaves all three
+  declaration files byte-identical in normal and `--check` modes.
+- The exact gzip-encoded candidate fixture decodes to 100124 bytes whose
+  SHA-256 is `f733248bfd484625b8f2bae3490b3211f7e158ab375d3c8de5ede83b1f369f89`.
+  It proves all 259 rows, 253 OpenAPI/6 custom-document citations, the two
+  real selected operation IDs, normal source-import write/check behavior, and
+  an unchanged checked-in Outreach canonical bundle.
+- A separate six-lane encoding unit keeps each classification visible while
+  every cited-only lane remains disabled. The real current-bundle evidence
+  proof confirms the `GET /api/v2/prospects` canonical mapping and the same
+  unavailable disposition without manufacturing a command.
+- The normal legacy decoder is again closed. Schema-v2 has a distinct
+  `source_kind` discriminator and strict cited-only wire type; reference-only
+  root, REST, and operation fields are rejected everywhere else.
+- One reference-operation validator now requires the REST protocol, an
+  uppercase allow-listed method, a valid route, canonical source ID/location,
+  no control code points, and a canonical optional provider operation ID. V3
+  reference rows also reject citation URL/binding mixtures.
+
+### Refactor / review — repair wave
+
+- Kept the provenance bytes in a compressed test constant with a runtime
+  SHA-256 assertion; no provider source or production connector file is
+  rewritten.
+- Reviewed the projection entry point for generic HTTP/command/shell/SQL
+  expansion: it only filters non-materializable descriptors and cannot create
+  a request or executor.
+- Reviewed source-reference digest flow: the digest remains copied citation
+  provenance and never enters credential, certification, or execution
+  admission logic.
