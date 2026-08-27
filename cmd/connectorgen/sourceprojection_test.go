@@ -3969,6 +3969,37 @@ func TestSourceProjectionCitedOnlyMutationDispositionsKeepReferenceClosed(t *tes
 	}
 }
 
+// TestSourceProjectionWriteDisabledMutationArtifactsKeepCitedOnlyReferenceClosed
+// covers the automatic disposition applied after the explicit disposition
+// files during source import. A write-disabled declaration does not give the
+// projector a request/response contract that the cited-only source lacks.
+func TestSourceProjectionWriteDisabledMutationArtifactsKeepCitedOnlyReferenceClosed(t *testing.T) {
+	t.Parallel()
+	lock, err := parseSourceImportLock(sourceImportV3SourceReferenceLock(t, "copper", "people", "https://docs.provider.example.test/copper/people", strings.Repeat("c", 64), 512, "POST", "/people"), "copper")
+	if err != nil {
+		t.Fatalf("parse cited-only write-disabled lock: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, nil, defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import cited-only write-disabled lock: %v", err)
+	}
+	before, err := marshalSourceImportResult(result)
+	if err != nil {
+		t.Fatalf("marshal cited-only write-disabled baseline: %v", err)
+	}
+	bundle := engine.Bundle{Name: "copper", Metadata: engine.Metadata{Name: "copper", Capabilities: engine.Capabilities{Read: true, Write: false, WriteDeclared: true}}}
+	if got := sourceProjectionApplyWriteDisabledMutationArtifacts(bundle, &result); got != 0 {
+		t.Fatalf("cited-only automatic mutation artifacts = %d, want 0", got)
+	}
+	after, err := marshalSourceImportResult(result)
+	if err != nil {
+		t.Fatalf("marshal cited-only write-disabled result: %v", err)
+	}
+	if !bytes.Equal(before, after) {
+		t.Fatalf("write-disabled artifact changed closed descriptor:\nbefore=%s\nafter=%s", before, after)
+	}
+}
+
 // TestSourceProjectionMutationDispositionInputRemainsFailClosed keeps the
 // normal byte-backed path strict while the cited-only guard above is added.
 func TestSourceProjectionMutationDispositionInputRemainsFailClosed(t *testing.T) {

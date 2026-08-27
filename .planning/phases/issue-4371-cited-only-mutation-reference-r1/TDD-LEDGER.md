@@ -31,10 +31,40 @@ implemented-action refusal, valid partial coverage with an existing typed
 foundation, existing GitHub projection byte stability, and the new absent,
 duplicate, unknown, mismatched, and non-mutating citation matrix.
 
+The adjacent write-disabled source-import transform was then checked because
+Salesloft and Copper both explicitly declare `capabilities.write=false`.
+Before its repair:
+
+```text
+go test -timeout 20m ./cmd/connectorgen -run 'TestSourceProjectionWriteDisabledMutationArtifactsKeepCitedOnlyReferenceClosed$' -count=1 -v
+```
+
+failed with `cited-only automatic mutation artifacts = 1, want 0`. This was
+the same forbidden extra-gap mutation reached after the two explicit
+disposition application paths.
+
 ## Green
 
-Pending implementation.
+2026-08-27 — the smallest shared repair adds a cited-only guard after normal
+citation validation and before either disposition can mutate a result. The
+automatic write-disabled artifact pass skips a
+`source_contract_unavailable` operation so the pre-existing sole foundation
+explanation remains closed.
+
+```text
+go test -timeout 20m ./cmd/connectorgen -run 'TestSourceProjection(CitedOnlyMutationDispositionsKeepReferenceClosed|WriteDisabledMutationArtifactsKeepCitedOnlyReferenceClosed|MutationDispositionInputRemainsFailClosed|SourceCitedNonExecutableMutationDispositionRejectsCompleteAction|SourceCitedPartialMutationCoveragePreservesImplementedIncompleteAction|SourceCitedMutationDispositionLeavesExistingProjectionByteIdentical|WriteDisabledMutationArtifactsRetainGraphQLMutations|WriteDisabledMutationArtifactsRequireProviderCitation)$' -count=1 -v
+PASS
+```
+
+The green assertions prove both explicit disposition kinds and the automatic
+write-disabled pass leave a source-reference descriptor byte-identical, while
+normal complete-contract disposition behavior, source-citation admission, and
+existing GitHub projection bytes stay unchanged.
 
 ## Refactor
 
-Pending green evidence.
+The shared `sourceProjectionValidateCitedOnlyMutationDisposition` helper keeps
+the two explicit paths identical without broadening the validator or accepted
+input. The write-disabled skip is intentionally local to the exact
+`source_contract_unavailable` gap; ordinary source-backed mutations retain the
+existing automatic artifact behavior.
