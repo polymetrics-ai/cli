@@ -1,0 +1,15 @@
+{
+  "issue": 4359,
+  "branch": "fm/cli-composite-provider-path-foundation-r1",
+  "base": "main",
+  "immutable_review_sha": "b9b2478b3b2451d632d28b9aa138a170ad835110",
+  "state": "discovery_frozen_pending_independent_audit",
+  "gsd": {
+    "mode": "inline_manual_fallback",
+    "resolved": ["discuss-phase", "plan-phase --tdd", "execute-phase", "verify-work", "code-review"]
+  },
+  "review": {
+    "claude_audit": "unavailable_in_environment",
+    "substitution": "fresh_context_codex_pending"
+  }
+}
