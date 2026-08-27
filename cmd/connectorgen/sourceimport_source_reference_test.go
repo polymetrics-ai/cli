@@ -282,6 +282,49 @@ func TestRunSourceImportReferenceChecksWithoutRetainedArtifactOrSurfaceWrite(t *
 	}
 }
 
+// TestSourceImportReferenceDescriptorsValidateThroughCLI exercises the real
+// source-import -> validate transition for both accepted reference wires. The
+// copied Outreach bundle is intentionally unchanged: source references are
+// evidence-only and must not create a command or rewrite an executor surface.
+func TestSourceImportReferenceDescriptorsValidateThroughCLI(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, tc := range []struct {
+		name string
+		lock func(*testing.T) []byte
+	}{
+		{name: "legacy-v2-reference", lock: sourceImportOutreachReferenceLock},
+		{name: "schema-v3-reference", lock: func(t *testing.T) []byte {
+			return sourceImportV3SourceReferenceLock(t, "outreach", "outreach-source", outreachOpenAPIURL, strings.Repeat("a", 64), 512, "GET", "/api/v2/prospects")
+		}},
+	} {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			defsDir := filepath.Join(t.TempDir(), "defs")
+			bundleDir := filepath.Join(defsDir, "outreach")
+			copyOperationEvidenceTree(t, filepath.Join(root, "internal", "connectors", "defs", "outreach"), bundleDir)
+			sourcesDir := filepath.Join(bundleDir, "sources")
+			if err := os.MkdirAll(sourcesDir, 0o755); err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(filepath.Join(sourcesDir, "outreach-operation-source-lock.json"), tc.lock(t), 0o644); err != nil {
+				t.Fatal(err)
+			}
+			output := filepath.Join(sourcesDir, "outreach-operation-descriptor.json")
+			var importStdout, importStderr bytes.Buffer
+			if code := runSourceImportWithFetcher([]string{"source-import", "outreach", "--defs", defsDir, "--out", output}, &importStdout, &importStderr, nil); code != 0 {
+				t.Fatalf("source-import exit=%d stdout=%q stderr=%q", code, importStdout.String(), importStderr.String())
+			}
+			var validateStdout, validateStderr bytes.Buffer
+			if code := run([]string{"validate", bundleDir}, &validateStdout, &validateStderr); code != 0 {
+				t.Fatalf("source-import descriptor did not validate: exit=%d stdout=%q stderr=%q", code, validateStdout.String(), validateStderr.String())
+			}
+		})
+	}
+}
+
 // TestExactOutreachReferenceProjectsAgainstCurrentMainBundle keeps the real
 // retained 259-row inventory separate from the synthetic six-lane encoding
 // unit test. It uses the checked-in Outreach bundle as the canonical mapping
@@ -501,6 +544,107 @@ func TestSourceImportLegacyByteBackedLocksRejectReferenceOnlyFields(t *testing.T
 				}
 			})
 		}
+	}
+}
+
+// TestOperationEvidenceLegacyByteBackedLocksRejectReferenceOnlyFields makes
+// the evidence reader obey the same closed wire boundary as source import.
+// Explicit JSON null is deliberately included: decoded zero values cannot be
+// used to hide a reference discriminator from a tolerant legacy reader.
+func TestOperationEvidenceLegacyByteBackedLocksRejectReferenceOnlyFields(t *testing.T) {
+	t.Parallel()
+	baselineRaw, err := json.Marshal(sourceImportLegacyByteBackedWireFixture(2))
+	if err != nil {
+		t.Fatal(err)
+	}
+	baselinePath := filepath.Join(t.TempDir(), "alpha-operation-source-lock.json")
+	if err := os.WriteFile(baselinePath, baselineRaw, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	input, err := readOperationEvidenceSourceLock(baselinePath, "alpha")
+	if err != nil || len(input.Operations) != 1 {
+		t.Fatalf("ordinary byte-backed v2 evidence input=%+v err=%v", input, err)
+	}
+	fields := []struct {
+		name   string
+		mutate func(map[string]any)
+	}{
+		{"root operations_found", func(lock map[string]any) {
+			lock["operations_found"] = map[string]any{"rest": 1, "graphql_query": 0, "graphql_mutation": 0, "total": 1}
+		}},
+		{"root coverage_confidence", func(lock map[string]any) {
+			lock["coverage_confidence"] = map[string]any{"level": "source_reference", "basis": "reference only"}
+		}},
+		{"rest operation_counts", func(lock map[string]any) {
+			lock["rest"].(map[string]any)["operation_counts"] = map[string]any{"GET": 1}
+		}},
+		{"rest supplements", func(lock map[string]any) {
+			lock["rest"].(map[string]any)["supplements"] = []any{}
+		}},
+		{"operation source_url", func(lock map[string]any) {
+			lock["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["source_url"] = "https://fixtures.polymetrics.invalid/alternate"
+		}},
+		{"null source_kind discriminator", func(lock map[string]any) {
+			lock["rest"].(map[string]any)["source_kind"] = nil
+		}},
+	}
+	for _, tc := range fields {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			lock := sourceImportLegacyByteBackedWireFixture(2)
+			tc.mutate(lock)
+			raw, err := json.Marshal(lock)
+			if err != nil {
+				t.Fatal(err)
+			}
+			path := filepath.Join(t.TempDir(), "alpha-operation-source-lock.json")
+			if err := os.WriteFile(path, raw, 0o644); err != nil {
+				t.Fatal(err)
+			}
+			if _, err := readOperationEvidenceSourceLock(path, "alpha"); err == nil {
+				t.Fatalf("operation evidence accepted byte-backed v2 lock with reference-only %s", tc.name)
+			}
+		})
+	}
+}
+
+// TestSourceImportLegacyReferenceRejectsCrossSourceCitationSwap proves that
+// source-count equality cannot substitute for each operation's document
+// location. The two selected rows retain every ID, route, URL and count; only
+// their primary/supplemental attribution is swapped.
+func TestSourceImportLegacyReferenceRejectsCrossSourceCitationSwap(t *testing.T) {
+	t.Parallel()
+	var lock map[string]any
+	if err := json.Unmarshal(sourceImportOutreachReferenceLock(t), &lock); err != nil {
+		t.Fatal(err)
+	}
+	rest := lock["rest"].(map[string]any)
+	primaryURL := rest["source_url"].(string)
+	supplementURL := rest["supplements"].([]any)[0].(map[string]any)["source_url"].(string)
+	var primary, supplement map[string]any
+	for _, entry := range rest["operations"].([]any) {
+		operation := entry.(map[string]any)
+		switch operation["source_url"] {
+		case primaryURL:
+			if primary == nil {
+				primary = operation
+			}
+		case supplementURL:
+			if supplement == nil {
+				supplement = operation
+			}
+		}
+	}
+	if primary == nil || supplement == nil {
+		t.Fatalf("Outreach fixture did not contain both primary and supplemental operations")
+	}
+	primary["source_url"], supplement["source_url"] = supplementURL, primaryURL
+	raw, err := json.Marshal(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := parseSourceImportLock(raw, "outreach"); err == nil {
+		t.Fatal("legacy source-reference admission accepted operations whose primary and supplemental citations were swapped")
 	}
 }
 

@@ -201,10 +201,25 @@ production source file has been edited for this wave.
 | F2 | A valid byte-backed v2 lock with a reference-only overlay (including a null discriminator) reaches operation evidence. | Every overlay is rejected before tolerant evidence projection; an untouched byte-backed v2 lock still produces its legacy row. | Inspect raw field presence and retain duplicate-member detection; do not silently discard or reinterpret unknown reference fields. |
 | F3 | Swapping one primary and one supplemental operation URL preserves counts yet passes legacy-reference admission. | Admission rejects the swap because each operation's exact source location belongs to its declared primary/supplemental document. | Preserve all declared source artifacts, counts, URLs, and no-fetch semantics; do not normalize or rewrite citations. |
 
-### Red — pending execution
+### Red — 2026-08-27
 
-Add the regressions first and run the focused command. It must fail against
-the frozen head before implementation changes, naming F1/F2/F3 independently.
+Before any production edit, the added regressions failed as required:
+
+```text
+go test -timeout 20m ./cmd/connectorgen \
+  -run 'Test(SourceImportReferenceDescriptorsValidateThroughCLI|OperationEvidenceLegacyByteBackedLocksRejectReferenceOnlyFields|SourceImportLegacyReferenceRejectsCrossSourceCitationSwap)$' \
+  -count=1 -v
+FAIL
+```
+
+- F1 legacy-v2 reference: `source descriptor schema_version = 3, want 2`.
+- F1 schema-v3 reference: `source descriptor provenance drift for
+  outreach.rest.outreach-source.get`.
+- F2: each of `operations_found`, `coverage_confidence`,
+  `rest.operation_counts`, `rest.supplements`, operation `source_url`, and
+  `rest.source_kind: null` was accepted by the operation-evidence reader.
+- F3: the two-operation primary/supplemental citation URL swap remained
+  admitted even though the source counts were unchanged.
 
 ### Green — pending execution
 
