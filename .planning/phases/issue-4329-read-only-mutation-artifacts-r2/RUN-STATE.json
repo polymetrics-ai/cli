@@ -1,8 +1,9 @@
 {
   "issue": 4329,
-  "state": "audit_m1_verified_pending_commit",
+  "state": "audit_m1_pushed_audit_ci_pending",
   "base": "main",
   "working_branch": "fix/4329-read-only-mutation-artifacts",
   "scope": "shared connectorgen source-import/projection/coverage behavior and issue evidence only",
-  "next": "commit the verified M1 repair and evidence, push a normal fast-forward update to PR #4357, confirm API base/head, then obtain a fresh independent Codex audit"
+  "head_before_delivery_record": "c9f8bf32acd0463584dd5945847134181178d437",
+  "next": "push this delivery-record checkpoint to PR #4357, verify its API head/base, then obtain a fresh independent Codex audit and wait for required CI"
 }

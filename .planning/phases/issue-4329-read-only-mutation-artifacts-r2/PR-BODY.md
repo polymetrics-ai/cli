@@ -51,6 +51,16 @@ write action, request schema, transport, partial command, or source-lock edit.
   source-import reject it. Sentry/Vercel full-lock and action/delete precedence
   coverage remains green; the certification-matrix guard proves the presence
   bit cannot become a false public capability.
+- Audit M1 commands: **RED** `GOFLAGS=-p=3 go test -count=1 -timeout 20m
+  ./cmd/connectorgen ./internal/connectors/engine -run
+  '^(TestBundleLoadRejectsMetadataCapabilitiesWithoutWrite|TestSourceProjectionAutomaticMutationArtifactRejectsOmittedWriteDeclaration|TestSourceImportCommandRejectsOmittedWriteCapabilityBeforeArtifactAdmission)$'`
+  failed before implementation; **GREEN** the identical command passed after
+  implementation. **PASS:** the focused Sentry/Vercel/citation/action suite
+  (1.142s), full `GOFLAGS=-p=3 go test -count=1 -timeout 20m
+  ./cmd/connectorgen` (229.037s), engine (9.800s), commandrunner (22.177s),
+  serial CLI (488.445s), `make connectorgen-certification-matrix`, lint,
+  runtime-preflight, docs, canon, smoke, `go vet`, `go build`, and
+  `git diff --check`.
 - PASS after current-main integration: focused full-lock acceptance (1.118s),
   full `cmd/connectorgen` (154.269s), engine (14.192s), commandrunner
   (24.871s), runtime-preflight (8.737s), and CLI (438.166s) suites;
