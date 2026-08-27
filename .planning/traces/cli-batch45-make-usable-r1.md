@@ -1075,3 +1075,28 @@ connectors**. This exhausts the currently source-cited, exact `GET` endpoint-to-
 intersection in all 20 target bundles. It does not promote a direct read or write lane, establish a
 transport, invent a provider operation, or turn any retained provenance into an execution contract
 without the existing connector stream that the binary proved reachable.
+
+### Provider-neutral source-retain lint repair
+
+The normal push required by this delivery reached `make lint` only after the full Go suite, build,
+connector docs, and smoke checks passed. Its sole finding was the unexported, unreferenced
+`sourceRetainFetchLockedArtifacts` compatibility wrapper in
+`cmd/connectorgen/sourceartifact.go`. The wrapper was left after the pre-existing shared
+source-retention path changed its caller to `sourceRetainFetchArtifacts`; it has no callers and
+only delegates to that replacement. This is independent of all 180 connector mappings, their
+source locks, and credential-boundary evidence. The operation-lock and legacy-parity retain tests
+already exercise the replacement through the command entry point.
+
+- **Red:** `make lint` reports `cmd/connectorgen/sourceartifact.go:277:6: func
+  sourceRetainFetchLockedArtifacts is unused (unused)` and blocks the normal push.
+- **Green condition:** remove only the dead unexported wrapper; retain the replacement and its
+  operation-lock/legacy-parity behavior unchanged. Run the focused source-retain tests, the scoped
+  lint target, source-operation evidence, connector surface checks, and a normal push. No source
+  URL, digest, artifact, connector definition, or credential proof is changed.
+
+**Green:** the wrapper was deleted without changing the replacement or its caller. `go test
+-timeout 20m ./cmd/connectorgen -run '^TestSourceRetain'` passed for operation-lock and
+legacy-parity retention; `make lint` returned `0 issues`; `go test -timeout 20m
+./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight`,
+`make connectorgen-operation-evidence`, and `make connectorgen-surface-sync` all passed. The
+normal push remains the final delivery check.
