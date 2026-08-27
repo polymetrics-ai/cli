@@ -2,13 +2,15 @@
 
 ## F1 source/local request-input closure checklist — 2026-08-27
 
-- [ ] Operation-only `query.rogue` red recorded; source-import check and
-  validate fail after repair.
-- [ ] Operation-plus-CLI `--rogue -> query.rogue` red recorded; source-import
-  check and validate fail after repair.
-- [ ] Header/body class closure, source paging placement, and valid Asana
+- [x] Operation-only `query.rogue` red recorded; source-import check and
+  validate reject it after repair.
+- [x] Operation-plus-CLI `--rogue -> query.rogue` red recorded; source-import
+  check and validate reject it after repair.
+- [x] Header/body class closure, source paging placement, and valid Asana
   optional-filter preservation have focused regressions.
-- [ ] Affected Go packages and full `cmd/connectorgen` pass.
+- [x] Affected Go packages and full `cmd/connectorgen` pass: generator
+  `212.521s`, engine `13.647s`, commandrunner `21.764s`, App `291.638s`, CLI
+  `532.727s`, and Asana definitions `5.150s`.
 - [ ] Source import, validate, surface sync, operation evidence, declaration
   admission, runtime preflight, canon, docs/website validation, and an actual
   fresh 212-command credential-boundary census pass.

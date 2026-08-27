@@ -1522,24 +1522,22 @@ func sourceProjectionSyncReadParameters(rest *orderedObject, source sourceOperat
 	parameters := arrayField(rest, "parameters")
 	_, declaredParameters := rest.get("parameters")
 	changed := !declaredParameters
-	pagingQuery := make(map[string]bool, len(source.Request.Query))
-	for _, parameter := range source.Request.Query {
-		if sourceProjectionProviderPagingParameter(parameter) {
-			pagingQuery[parameter.Name] = true
-		}
-	}
-	if len(pagingQuery) > 0 {
-		kept := parameters[:0]
-		for _, raw := range parameters {
-			parameter, ok := raw.(*orderedObject)
-			if ok && stringField(parameter, "in") == "query" && pagingQuery[stringField(parameter, "name")] {
-				changed = true
-				continue
-			}
+	kept := parameters[:0]
+	for _, raw := range parameters {
+		parameter, ok := raw.(*orderedObject)
+		if !ok {
 			kept = append(kept, raw)
+			continue
 		}
-		parameters = kept
+		location := stringField(parameter, "in")
+		name := stringField(parameter, "name")
+		if (location == "path" || location == "query" || location == "header") && !sourceProjectionReadParameterAdmitted(source, location, name) {
+			changed = true
+			continue
+		}
+		kept = append(kept, raw)
 	}
+	parameters = kept
 	for _, group := range []struct {
 		location   string
 		parameters []sourceParameterDescriptor
@@ -1548,7 +1546,7 @@ func sourceProjectionSyncReadParameters(rest *orderedObject, source sourceOperat
 		{location: "query", parameters: source.Request.Query},
 	} {
 		for _, sourceParameter := range group.parameters {
-			if group.location == "query" && pagingQuery[sourceParameter.Name] {
+			if group.location == "query" && sourceProjectionProviderPagingParameter(sourceParameter) {
 				continue
 			}
 			if !sourceScalarWireSchema(sourceParameter.Schema) {
@@ -1589,8 +1587,86 @@ func sourceProjectionSyncReadParameters(rest *orderedObject, source sourceOperat
 			}
 		}
 	}
+	if sourceProjectionSyncReadStaticQuery(rest, source) {
+		changed = true
+	}
+	if sourceProjectionSyncReadBody(rest, source) {
+		changed = true
+	}
 	if changed {
 		rest.set("parameters", parameters)
+	}
+	return changed
+}
+
+// sourceProjectionReadParameterAdmitted is the local-to-source half of the
+// source-bound read closure. A source descriptor is allowed to omit optional
+// caller filters from a bounded direct read, but a local request parameter
+// must never manufacture a path/query/header channel the retained provider
+// operation did not declare. Paging is deliberately excluded here: its only
+// admitted representation is the operation's closed pagination contract.
+func sourceProjectionReadParameterAdmitted(source sourceOperationDescriptor, location, name string) bool {
+	if name == "" {
+		return false
+	}
+	for _, group := range []struct {
+		location   string
+		parameters []sourceParameterDescriptor
+	}{
+		{location: "path", parameters: source.Request.Path},
+		{location: "query", parameters: source.Request.Query},
+		{location: "header", parameters: source.Request.Header},
+	} {
+		if location != group.location {
+			continue
+		}
+		for _, parameter := range group.parameters {
+			if parameter.Name != name {
+				continue
+			}
+			return location != "query" || !sourceProjectionProviderPagingParameter(parameter)
+		}
+	}
+	return false
+}
+
+func sourceProjectionSyncReadStaticQuery(rest *orderedObject, source sourceOperationDescriptor) bool {
+	raw, declared := rest.get("query")
+	if !declared {
+		return false
+	}
+	query, ok := raw.(*orderedObject)
+	if !ok {
+		return false
+	}
+	changed := false
+	for _, name := range append([]string(nil), query.keys...) {
+		if sourceProjectionReadParameterAdmitted(source, "query", name) {
+			continue
+		}
+		query.remove(name)
+		changed = true
+	}
+	if len(query.keys) == 0 {
+		return rest.remove("query") || changed
+	}
+	return changed
+}
+
+// A source-bound GET whose retained request has no body/media cannot gain a
+// declaration-owned body or content-type channel. If the source does declare
+// either class, materialization stops at its explicit shared-foundation gap
+// before reaching this direct-read projection.
+func sourceProjectionSyncReadBody(rest *orderedObject, source sourceOperationDescriptor) bool {
+	if source.Request.Body != nil || len(source.Request.Media) != 0 || source.Request.MediaType != "" {
+		return false
+	}
+	changed := rest.remove("body")
+	if rest.remove("body_schema") {
+		changed = true
+	}
+	if rest.remove("content_type") {
+		changed = true
 	}
 	return changed
 }
@@ -4186,6 +4262,10 @@ func validateSourceExecutableCoverage(bundle engine.Bundle, file string, descrip
 				}
 				continue
 			}
+			if violation := sourceProjectionReadInputClosure(bundle, operation); violation != "" {
+				findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source-bound request input absent from locked source contract: "+operation.SourceID+": "+violation))
+				continue
+			}
 			if !sourceRESTOperationIsReachable(bundle, operation) {
 				findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source operation has no reachable executable operation: "+operation.SourceID))
 			}
@@ -4552,6 +4632,149 @@ func sourceRESTOperationCoversSource(bundle engine.Bundle, operation *engine.RES
 	// fully typed required input look unreachable, which in turn downgraded an
 	// otherwise closed command on every generator pass.
 	return sourceRequiredCallerFieldsCovered(source, covered)
+}
+
+// sourceProjectionReadInputClosure is deliberately stricter than the
+// required-input coverage test above. Coverage answers whether the source's
+// required fields have a declaration-owned route. Closure also answers the
+// inverse question: whether a source-bound read has added an input that its
+// retained source never admitted. This keeps a local operation-only parameter
+// from becoming an unchecked provider request channel even when no CLI flag
+// exposes it.
+func sourceProjectionReadInputClosure(bundle engine.Bundle, source sourceOperationDescriptor) string {
+	for _, operation := range bundle.Operations {
+		if operation.SourceOperation == nil || operation.SourceOperation.ID != source.SourceID || operation.REST == nil {
+			continue
+		}
+		if violation := sourceProjectionRESTReadInputClosure(operation.REST, source); violation != "" {
+			return "operation " + operation.ID + " " + violation
+		}
+	}
+	if bundle.CLISurface == nil {
+		return ""
+	}
+	for _, command := range bundle.CLISurface.Commands {
+		if command.SourceOperation != source.SourceID {
+			continue
+		}
+		for _, flag := range command.Flags {
+			if violation := sourceProjectionReadFlagInputClosure(flag, source); violation != "" {
+				return "command " + command.Path + " " + violation
+			}
+		}
+	}
+	return ""
+}
+
+func sourceProjectionRESTReadInputClosure(rest *engine.RESTOperationSpec, source sourceOperationDescriptor) string {
+	for _, parameter := range rest.Parameters {
+		if sourceProjectionReadParameterAdmitted(source, parameter.In, parameter.Name) {
+			continue
+		}
+		return "parameter " + parameter.In + "." + parameter.Name
+	}
+	for _, parameter := range rest.PaginationParameters {
+		if sourceProjectionReadPaginationParameterAdmitted(source, parameter) {
+			continue
+		}
+		return "pagination parameter " + parameter.In + "." + parameter.Name
+	}
+	for name := range rest.Query {
+		if sourceProjectionReadParameterAdmitted(source, "query", name) {
+			continue
+		}
+		return "static query " + name
+	}
+	if violation := sourceProjectionReadBodyInputClosure(rest, source); violation != "" {
+		return violation
+	}
+	return ""
+}
+
+func sourceProjectionReadPaginationParameterAdmitted(source sourceOperationDescriptor, parameter engine.OperationParameter) bool {
+	if parameter.In != "query" || source.Pagination == nil {
+		return false
+	}
+	pagination, ok := source.Pagination.(map[string]any)
+	if !ok {
+		return false
+	}
+	for _, name := range sourceProjectionPaginationParameterNames(pagination) {
+		if name != parameter.Name {
+			continue
+		}
+		for _, sourceParameter := range source.Request.Query {
+			if sourceParameter.Name == name {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func sourceProjectionReadFlagInputClosure(flag engine.CLIFlag, source sourceOperationDescriptor) string {
+	mapping := strings.TrimSpace(flag.MapsTo)
+	for _, location := range []string{"path", "query", "header"} {
+		prefix := location + "."
+		if !strings.HasPrefix(mapping, prefix) {
+			continue
+		}
+		if sourceProjectionReadParameterAdmitted(source, location, strings.TrimPrefix(mapping, prefix)) {
+			return ""
+		}
+		return "flag --" + flag.Name + " mapping " + mapping
+	}
+	if strings.HasPrefix(mapping, "body") {
+		field := strings.TrimPrefix(strings.TrimPrefix(mapping, "body"), ".")
+		if sourceProjectionReadBodyFieldAdmitted(source, field) {
+			return ""
+		}
+		return "flag --" + flag.Name + " mapping " + mapping
+	}
+	return ""
+}
+
+func sourceProjectionReadBodyInputClosure(rest *engine.RESTOperationSpec, source sourceOperationDescriptor) string {
+	if source.Request.Body == nil {
+		if len(rest.Body) != 0 || len(rest.BodySchema) != 0 || rest.ContentType != "" {
+			return "body"
+		}
+		return ""
+	}
+	for name := range rest.Body {
+		if !sourceProjectionReadBodyFieldAdmitted(source, name) {
+			return "body." + name
+		}
+	}
+	if len(rest.BodySchema) == 0 {
+		return ""
+	}
+	var schema map[string]any
+	decoder := json.NewDecoder(bytes.NewReader(rest.BodySchema))
+	decoder.UseNumber()
+	if decoder.Decode(&schema) != nil {
+		return "body schema"
+	}
+	properties, _ := schema["properties"].(map[string]any)
+	for name := range properties {
+		if !sourceProjectionReadBodyFieldAdmitted(source, name) {
+			return "body schema." + name
+		}
+	}
+	return ""
+}
+
+func sourceProjectionReadBodyFieldAdmitted(source sourceOperationDescriptor, field string) bool {
+	if source.Request.Body == nil || field == "" {
+		return false
+	}
+	schema, ok := source.Request.Body.Schema.(map[string]any)
+	if !ok {
+		return false
+	}
+	properties, _ := schema["properties"].(map[string]any)
+	_, admitted := properties[field]
+	return admitted
 }
 
 func sourceBinaryOperationCoversSource(bundle engine.Bundle, operation *engine.BinaryOperationSpec, source sourceOperationDescriptor, flags []engine.CLIFlag) bool {

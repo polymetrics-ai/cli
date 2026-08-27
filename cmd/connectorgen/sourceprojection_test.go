@@ -574,8 +574,9 @@ func TestRetainedAsanaSourceImportRejectsReadProjectionDrift(t *testing.T) {
 	assertAsanaRetainedReadSourceContracts(t, filepath.Join(bundleDir, "sources", "asana-operation-descriptor.json"))
 
 	for _, change := range []struct {
-		name   string
-		mutate func(t *testing.T, bundleDir string)
+		name             string
+		wantInputClosure bool
+		mutate           func(t *testing.T, bundleDir string)
 	}{
 		{
 			name: "invented source identity",
@@ -625,6 +626,48 @@ func TestRetainedAsanaSourceImportRejectsReadProjectionDrift(t *testing.T) {
 			},
 		},
 		{
+			name:             "operation-only undeclared query input",
+			wantInputClosure: true,
+			mutate: func(t *testing.T, bundleDir string) {
+				mutateAsanaOperation(t, filepath.Join(bundleDir, "operations.json"), "get_access_requests", func(operation map[string]any) {
+					rest := operation["rest"].(map[string]any)
+					rest["parameters"] = append(rest["parameters"].([]any), map[string]any{"name": "rogue", "in": "query", "type": "string"})
+				})
+			},
+		},
+		{
+			name:             "operation and CLI undeclared query input",
+			wantInputClosure: true,
+			mutate: func(t *testing.T, bundleDir string) {
+				mutateAsanaOperation(t, filepath.Join(bundleDir, "operations.json"), "get_access_requests", func(operation map[string]any) {
+					rest := operation["rest"].(map[string]any)
+					rest["parameters"] = append(rest["parameters"].([]any), map[string]any{"name": "rogue", "in": "query", "type": "string"})
+				})
+				mutateAsanaCommand(t, filepath.Join(bundleDir, "cli_surface.json"), "access-requests get-access-requests", func(command map[string]any) {
+					command["flags"] = append(command["flags"].([]any), map[string]any{"name": "rogue", "type": "string", "maps_to": "query.rogue"})
+				})
+			},
+		},
+		{
+			name:             "operation-only undeclared header input",
+			wantInputClosure: true,
+			mutate: func(t *testing.T, bundleDir string) {
+				mutateAsanaOperation(t, filepath.Join(bundleDir, "operations.json"), "get_access_requests", func(operation map[string]any) {
+					rest := operation["rest"].(map[string]any)
+					rest["parameters"] = append(rest["parameters"].([]any), map[string]any{"name": "X-Rogue", "in": "header", "type": "string", "schema": map[string]any{"type": "string", "maxLength": 32}, "max_bytes": 32})
+				})
+			},
+		},
+		{
+			name:             "operation-only undeclared body input",
+			wantInputClosure: true,
+			mutate: func(t *testing.T, bundleDir string) {
+				mutateAsanaOperation(t, filepath.Join(bundleDir, "operations.json"), "get_access_requests", func(operation map[string]any) {
+					operation["rest"].(map[string]any)["body"] = map[string]any{"rogue": "fixture"}
+				})
+			},
+		},
+		{
 			name: "complete direct read marked planned",
 			mutate: func(t *testing.T, bundleDir string) {
 				mutateAsanaCommand(t, filepath.Join(bundleDir, "cli_surface.json"), "access-requests get-access-requests", func(command map[string]any) {
@@ -656,6 +699,85 @@ func TestRetainedAsanaSourceImportRejectsReadProjectionDrift(t *testing.T) {
 			stdout, stderr, exit := runAsanaSourceImport(t, defsDir, "--read-projection-only", "--check")
 			if exit != 1 || !strings.Contains(stderr, "derived bundle projection has drifted") {
 				t.Fatalf("retained source check exit=%d stdout=%q stderr=%q, want projection drift refusal", exit, stdout, stderr)
+			}
+			if change.wantInputClosure {
+				report, err := validateDir(os.DirFS(defsDir))
+				if err != nil {
+					t.Fatalf("validate retained altered Asana bundle: %v", err)
+				}
+				if !sourceProjectionFindingContains(report, "asana.rest.getAccessRequests", "request input absent from locked source contract") {
+					t.Fatalf("retained altered Asana validation findings = %+v, want source-bound request-input closure refusal", report.Findings)
+				}
+			}
+		})
+	}
+}
+
+func sourceProjectionFindingContains(report Report, sourceOperation, message string) bool {
+	for _, finding := range report.Findings {
+		if finding.Rule == ruleSourceProjection && strings.Contains(finding.Message, sourceOperation) && strings.Contains(finding.Message, message) {
+			return true
+		}
+	}
+	return false
+}
+
+func TestSourceProjectionReadInputClosureAdmitsOnlyRetainedRequestClasses(t *testing.T) {
+	source := sourceOperationDescriptor{
+		SourceID: "asana.rest.getAccessRequests",
+		Request: sourceRequestDescriptor{
+			Header: []sourceParameterDescriptor{{Name: "X-Request-ID", Schema: map[string]any{"type": "string"}}},
+			Body:   &sourceRequestBodyDescriptor{Schema: map[string]any{"type": "object", "properties": map[string]any{"filter": map[string]any{"type": "string"}}}},
+		},
+	}
+	newBundle := func(parameters []engine.OperationParameter, body map[string]any, flags []engine.CLIFlag) engine.Bundle {
+		return engine.Bundle{
+			Operations: []engine.OperationSpec{{
+				ID:              "get_access_requests",
+				SourceOperation: &engine.SourceOperationBinding{ID: source.SourceID, Method: "GET", Path: "/access_requests"},
+				REST:            &engine.RESTOperationSpec{Parameters: parameters, Body: body},
+			}},
+			CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{Path: "access-requests get-access-requests", SourceOperation: source.SourceID, Flags: flags}}},
+		}
+	}
+	for _, testCase := range []struct {
+		name   string
+		bundle engine.Bundle
+		want   string
+	}{
+		{
+			name: "retained header and body fields are admitted",
+			bundle: newBundle(
+				[]engine.OperationParameter{{Name: "X-Request-ID", In: "header"}},
+				map[string]any{"filter": "fixture"},
+				[]engine.CLIFlag{{Name: "header-x-request-id", MapsTo: "header.X-Request-ID"}, {Name: "filter", MapsTo: "body.filter"}},
+			),
+		},
+		{
+			name:   "undeclared header is refused",
+			bundle: newBundle([]engine.OperationParameter{{Name: "X-Rogue", In: "header"}}, nil, nil),
+			want:   "parameter header.X-Rogue",
+		},
+		{
+			name:   "undeclared body field is refused",
+			bundle: newBundle(nil, map[string]any{"rogue": "fixture"}, nil),
+			want:   "body.rogue",
+		},
+		{
+			name:   "CLI cannot manufacture an undeclared header",
+			bundle: newBundle(nil, nil, []engine.CLIFlag{{Name: "rogue", MapsTo: "header.X-Rogue"}}),
+			want:   "flag --rogue mapping header.X-Rogue",
+		},
+		{
+			name:   "CLI cannot manufacture an undeclared body field",
+			bundle: newBundle(nil, nil, []engine.CLIFlag{{Name: "rogue", MapsTo: "body.rogue"}}),
+			want:   "flag --rogue mapping body.rogue",
+		},
+	} {
+		testCase := testCase
+		t.Run(testCase.name, func(t *testing.T) {
+			if got := sourceProjectionReadInputClosure(testCase.bundle, source); !strings.Contains(got, testCase.want) {
+				t.Fatalf("source-bound request-input closure = %q, want %q", got, testCase.want)
 			}
 		})
 	}

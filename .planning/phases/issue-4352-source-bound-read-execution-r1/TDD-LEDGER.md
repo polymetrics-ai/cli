@@ -2,18 +2,20 @@
 
 ## F1 source/local request-input closure — 2026-08-27
 
-- **Planned red:** in a copied retained Asana bundle, append optional
+- **Red:** in a copied retained Asana bundle, append optional
   `query.rogue` to `get_access_requests`; then repeat with
   `--rogue -> query.rogue` on `access-requests get-access-requests`.
-  Before the repair, `source-import --read-projection-only --check` and
-  `validate` accept both altered inputs despite their absence from the pinned
-  descriptor.
-- **Green target:** source import derives the closed operation parameter set
+  At the audited head, the operation-only probe left `validate` with no
+  findings and the operation-plus-CLI probe left
+  `source-import --read-projection-only --check` at exit 0.
+- **Green:** source import derives the closed operation parameter set
   (removing the unknown local input), so check mode reports drift; validation
-  independently rejects each altered bundle. It must treat source paging as
-  declared pagination rather than a raw caller parameter and permit
-  header/body only where the source request declares those classes.
-- **Review target:** assert both source-to-local requiredness and
+  independently rejects each altered bundle. The retained-Asana test covers
+  operation-only and operation-plus-CLI query inputs plus unadmitted header
+  and body inputs; the request-class test admits only descriptor-declared
+  header/body fields. `go test -run` passed in `15.691s`, and the complete
+  `./cmd/connectorgen` package passed in `212.521s`.
+- **Review result:** assert both source-to-local requiredness and
   local-to-source closure; an unknown operation parameter must not become
   harmless merely because no CLI flag maps to it.
 
