@@ -2,6 +2,7 @@ package commandrunner
 
 import (
 	"encoding/json"
+	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -205,9 +206,7 @@ func TestGitHubDeclaredParityProviderContracts(t *testing.T) {
 			t.Fatalf("github write action %q is not declared", tt.name)
 		}
 		var schema struct {
-			Properties map[string]struct {
-				Type json.RawMessage `json:"type"`
-			} `json:"properties"`
+			Properties map[string]json.RawMessage `json:"properties"`
 		}
 		if err := json.Unmarshal(action.RecordSchema, &schema); err != nil {
 			t.Fatalf("decode github write action %q schema: %v", tt.name, err)
@@ -217,9 +216,9 @@ func TestGitHubDeclaredParityProviderContracts(t *testing.T) {
 			t.Errorf("github write action %q has no %q property", tt.name, tt.field)
 			continue
 		}
-		gotTypes, err := githubDeclaredSchemaTypes(property.Type)
+		gotTypes, err := githubDeclaredSchemaTypes(property)
 		if err != nil {
-			t.Errorf("github write action %q field %q has invalid type %s: %v", tt.name, tt.field, property.Type, err)
+			t.Errorf("github write action %q field %q has invalid schema %s: %v", tt.name, tt.field, property, err)
 			continue
 		}
 		if !reflect.DeepEqual(gotTypes, tt.types) {
@@ -262,6 +261,35 @@ func TestGitHubDeclaredParityProviderContracts(t *testing.T) {
 }
 
 func githubDeclaredSchemaTypes(raw json.RawMessage) ([]string, error) {
+	var schema struct {
+		Type  json.RawMessage   `json:"type"`
+		OneOf []json.RawMessage `json:"oneOf"`
+		AnyOf []json.RawMessage `json:"anyOf"`
+	}
+	if err := json.Unmarshal(raw, &schema); err != nil {
+		return nil, err
+	}
+	if len(schema.Type) > 0 {
+		return githubDeclaredSchemaTypeValues(schema.Type)
+	}
+	for _, alternatives := range [][]json.RawMessage{schema.OneOf, schema.AnyOf} {
+		if len(alternatives) == 0 {
+			continue
+		}
+		values := make([]string, 0, len(alternatives))
+		for _, alternative := range alternatives {
+			types, err := githubDeclaredSchemaTypes(alternative)
+			if err != nil {
+				return nil, err
+			}
+			values = append(values, types...)
+		}
+		return values, nil
+	}
+	return nil, fmt.Errorf("schema has neither type nor oneOf/anyOf alternatives")
+}
+
+func githubDeclaredSchemaTypeValues(raw json.RawMessage) ([]string, error) {
 	var single string
 	if err := json.Unmarshal(raw, &single); err == nil {
 		return []string{single}, nil

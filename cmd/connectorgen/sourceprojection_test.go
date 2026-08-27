@@ -2,9 +2,12 @@ package main
 
 import (
 	"bytes"
+	"compress/gzip"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"maps"
 	"os"
 	"path/filepath"
@@ -1918,6 +1921,49 @@ func TestSourceProjectionGapCompletesExistingClosedActionCLI(t *testing.T) {
 	}
 }
 
+func TestSourceProjectionDefersUnclosedCompositionWithoutMutatingExistingAction(t *testing.T) {
+	bundleDir := t.TempDir()
+	writesPath := filepath.Join(bundleDir, "writes.json")
+	cliPath := filepath.Join(bundleDir, "cli_surface.json")
+	writes := `{"schema_version":1,"actions":[{"name":"items","method":"POST","path":"/items/{{ record.owner }}","body_type":"none","record_schema":{"type":"object","additionalProperties":false,"properties":{"owner":{"type":"string"}}},"risk":"standard"}]}`
+	cli := `{"schema_version":1,"commands":[{"path":"items create","intent":"reverse_etl","availability":"implemented","write":"items","flags":[{"name":"owner","type":"string","maps_to":"record.owner","required":true}]}]}`
+	writeProjectionFixture(t, writesPath, writes)
+	writeProjectionFixture(t, cliPath, cli)
+
+	operation := sourceProjectionTestOperation()
+	operation.SourceID = "fixture.items.create"
+	operation.Source = sourceImportSource{URL: "https://provider.invalid/openapi.json", Location: `paths["/items/{owner}"].post`, Form: "openapi"}
+	operation.Request.Query = nil
+	operation.Request.Body.Schema = map[string]any{"oneOf": []any{
+		map[string]any{"type": "object", "properties": map[string]any{"name": map[string]any{"type": "string"}}},
+		map[string]any{"type": "array", "items": map[string]any{"type": "string"}},
+	}}
+	operation.Runtime = sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{
+		Foundation: "cli-request-schema-foundation-r1",
+		Location:   "request body",
+		Reason:     "source schema oneOf arm 0: composition object must explicitly set additionalProperties to false",
+	}}}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{operation}}
+
+	stats, err := projectSourceDescriptorToBundle(bundleDir, result, false)
+	if err != nil {
+		t.Fatalf("defer unclosed composition: %v", err)
+	}
+	if stats.Writes != 0 || stats.CLI != 0 || stats.Operations != 0 {
+		t.Fatalf("deferred composition projection stats = %+v, want no generated artifact mutation", stats)
+	}
+	if got := readProjectionFixture(t, writesPath); got != writes {
+		t.Fatalf("deferred composition mutated writes.json:\n%s", got)
+	}
+	if got := readProjectionFixture(t, cliPath); got != cli {
+		t.Fatalf("deferred composition mutated cli_surface.json:\n%s", got)
+	}
+	retained := result.Operations[0]
+	if retained.SourceID != "fixture.items.create" || retained.Source.URL != "https://provider.invalid/openapi.json" || retained.Source.Location != `paths["/items/{owner}"].post` || !sourceOperationHasFoundationGap(retained, "cli-request-schema-foundation-r1") {
+		t.Fatalf("deferred composition lost source-cited missing-foundation identity: %#v", retained)
+	}
+}
+
 func sourceProjectionActionRequired(t *testing.T, raw, name string) []string {
 	t.Helper()
 	var document struct {
@@ -2076,12 +2122,11 @@ func TestSourceProjectionGapKeepsNamedBoundedUnionFieldsReachable(t *testing.T) 
 	}
 }
 
-// TestSourceProjectionStringUnionKeepsTextCLIAndProviderArms protects the
-// ordinary command spelling for source contracts such as GitHub's issue title.
-// A source oneOf may retain several provider scalar arms, but one named,
-// bounded JSON flag must still admit the explicitly declared string arm as
-// regular CLI text rather than becoming a raw JSON/body escape hatch.
-func TestSourceProjectionStringUnionKeepsTextCLIAndProviderArms(t *testing.T) {
+// TestSourceProjectionStringFieldKeepsTextCLI covers the ordinary scalar
+// source-projection path. It deliberately contains no provider union: the old
+// synthetic scalar-union fixture had no retained provider evidence and is not
+// a provenance claim for this composition foundation.
+func TestSourceProjectionStringFieldKeepsTextCLI(t *testing.T) {
 	bundleDir := t.TempDir()
 	writesPath := filepath.Join(bundleDir, "writes.json")
 	cliPath := filepath.Join(bundleDir, "cli_surface.json")
@@ -2091,16 +2136,13 @@ func TestSourceProjectionStringUnionKeepsTextCLIAndProviderArms(t *testing.T) {
 		Connector: "alpha", SourceID: "items/create", Method: "post", Path: "/items",
 		Request: sourceRequestDescriptor{MediaType: "application/json", Body: &sourceRequestBodyDescriptor{Schema: map[string]any{
 			"type": "object", "additionalProperties": false, "required": []any{"title"},
-			"properties": map[string]any{"title": map[string]any{"oneOf": []any{map[string]any{"type": "integer"}, map[string]any{"type": "string"}}}},
-		}}},
-		Runtime: sourceRuntimeReachability{Gaps: []sourceContractGap{{
-			Foundation: "cli-request-schema-foundation-r1", Location: "request body.properties.title", Reason: "provider scalar oneOf is projected as one bounded named field",
+			"properties": map[string]any{"title": map[string]any{"type": "string", "maxLength": 12}},
 		}}},
 	}
 
 	stats, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{operation}}, false)
 	if err != nil {
-		t.Fatalf("project direct scalar union: %v", err)
+		t.Fatalf("project direct scalar: %v", err)
 	}
 	if stats.Writes != 1 || stats.CLI != 1 {
 		t.Fatalf("projection stats = %+v, want schema and bounded bare-string flag repair", stats)
@@ -2115,8 +2157,8 @@ func TestSourceProjectionStringUnionKeepsTextCLIAndProviderArms(t *testing.T) {
 	if err := json.Unmarshal([]byte(readProjectionFixture(t, writesPath)), &projected); err != nil {
 		t.Fatalf("decode projected write: %v", err)
 	}
-	if got := projected.Actions[0].RecordSchema.Properties["title"]["type"]; !reflect.DeepEqual(got, []any{"integer", "string"}) {
-		t.Fatalf("provider scalar union = %#v, want integer|string retained", got)
+	if got := projected.Actions[0].RecordSchema.Properties["title"]; !reflect.DeepEqual(got, map[string]any{"type": "string", "maxLength": float64(12)}) {
+		t.Fatalf("provider scalar field = %#v, want bounded string retained", got)
 	}
 	var surface struct {
 		Commands []struct {
@@ -2131,8 +2173,8 @@ func TestSourceProjectionStringUnionKeepsTextCLIAndProviderArms(t *testing.T) {
 	if err := json.Unmarshal([]byte(readProjectionFixture(t, cliPath)), &surface); err != nil {
 		t.Fatalf("decode projected CLI: %v", err)
 	}
-	if got := surface.Commands[0].Flags[0]; got.Name != "title" || got.Type != "json" || got.MaxBytes != sourceProjectionDefaultJSONBytes || !got.AllowBareString {
-		t.Fatalf("source string union flag = %+v, want bounded named JSON with bare text", got)
+	if got := surface.Commands[0].Flags[0]; got.Name != "title" || got.Type != "string" || got.MaxBytes != 48 || got.AllowBareString {
+		t.Fatalf("source string flag = %+v, want bounded text", got)
 	}
 }
 
@@ -2767,6 +2809,227 @@ func sourceProjectionTestOperation() sourceOperationDescriptor {
 			}},
 			MediaType: "application/json",
 		},
+	}
+}
+
+func TestSourceProjectionSchemaPreservesClosedComposition(t *testing.T) {
+	tests := []struct {
+		name    string
+		raw     map[string]any
+		wantKey string
+		wantErr string
+	}{
+		{
+			name: "nested nullable scalar union",
+			raw: map[string]any{"oneOf": []any{
+				map[string]any{"type": "string", "minLength": 1},
+				map[string]any{"type": "null"},
+			}},
+			wantKey: "oneOf",
+		},
+		{
+			name: "discriminated object alternatives retain named branches",
+			raw: map[string]any{"discriminator": map[string]any{"propertyName": "kind", "mapping": map[string]any{"circle": "#/components/schemas/Circle", "square": "#/components/schemas/Square"}}, "oneOf": []any{
+				map[string]any{"type": "object", "additionalProperties": false, "required": []any{"kind", "radius"}, "properties": map[string]any{"kind": map[string]any{"type": "string", "enum": []any{"circle"}}, "radius": map[string]any{"type": "number", "minimum": 0}}},
+				map[string]any{"type": "object", "additionalProperties": false, "required": []any{"kind", "side"}, "properties": map[string]any{"kind": map[string]any{"type": "string", "enum": []any{"square"}}, "side": map[string]any{"type": "number", "minimum": 0}}},
+			}},
+			wantKey: "oneOf",
+		},
+		{
+			name: "compatible allOf retains intersection",
+			raw: map[string]any{"allOf": []any{
+				map[string]any{"type": "string", "minLength": 3},
+				map[string]any{"type": "string", "pattern": "^[a-z]+$"},
+			}},
+			wantKey: "allOf",
+		},
+		{
+			name:    "duplicate alternatives are rejected",
+			raw:     map[string]any{"anyOf": []any{map[string]any{"type": "string"}, map[string]any{"type": "string"}}},
+			wantErr: "duplicate",
+		},
+		{
+			name:    "contradictory intersection is rejected",
+			raw:     map[string]any{"allOf": []any{map[string]any{"type": "string"}, map[string]any{"type": "integer"}}},
+			wantErr: "allOf",
+		},
+		{
+			name: "untyped composition wrapper with object sibling is deferred",
+			raw: map[string]any{
+				"oneOf":      []any{map[string]any{"type": "string"}, map[string]any{"type": "integer"}},
+				"properties": map[string]any{"dropped_without_a_type": map[string]any{"type": "string"}},
+			},
+			wantErr: "explicit type",
+		},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			projected, err := sourceProjectionSchema(testCase.raw)
+			if testCase.wantErr != "" {
+				if err == nil || !strings.Contains(err.Error(), testCase.wantErr) {
+					t.Fatalf("sourceProjectionSchema() error = %v, want %q", err, testCase.wantErr)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("sourceProjectionSchema(): %v", err)
+			}
+			object, ok := projected.(map[string]any)
+			if !ok || object[testCase.wantKey] == nil {
+				t.Fatalf("projected composition = %#v, want retained %s", projected, testCase.wantKey)
+			}
+			if testCase.name == "discriminated object alternatives retain named branches" && object["x-source-discriminator"] == nil {
+				t.Fatalf("projected composition lost source discriminator: %#v", object)
+			}
+			raw, err := json.Marshal(projected)
+			if err != nil {
+				t.Fatalf("marshal projected composition: %v", err)
+			}
+			if _, err := engine.CompileSchema(raw); err != nil {
+				t.Fatalf("engine compile projected composition: %v", err)
+			}
+		})
+	}
+}
+
+func TestSourceProjectionClosedCompositionPreservesNullableObjectWrapperRegardlessOfTypeOrder(t *testing.T) {
+	raw := map[string]any{
+		"type":                 []any{"null", "object"},
+		"additionalProperties": false,
+		"required":             []any{"selector"},
+		"properties": map[string]any{
+			"selector": map[string]any{"type": "string", "minLength": 1, "maxLength": 32},
+		},
+		"anyOf": []any{
+			map[string]any{"type": "null"},
+			map[string]any{"type": "object", "additionalProperties": false, "properties": map[string]any{"selector": map[string]any{"type": "string", "minLength": 1, "maxLength": 32}}},
+		},
+	}
+
+	projected, err := sourceProjectionSchema(raw)
+	if err != nil {
+		t.Fatalf("sourceProjectionSchema(): %v", err)
+	}
+	encoded, err := json.Marshal(projected)
+	if err != nil {
+		t.Fatalf("marshal projected schema: %v", err)
+	}
+	schema, err := engine.CompileSchema(encoded)
+	if err != nil {
+		t.Fatalf("CompileSchema(): %v", err)
+	}
+	if err := schema.Validate(map[string]any{}); err == nil || !strings.Contains(err.Error(), "required property") {
+		t.Fatalf("projected nullable object accepted missing wrapper property: %v", err)
+	}
+	if err := schema.Validate(map[string]any{"selector": "name"}); err != nil {
+		t.Fatalf("projected nullable object rejected declared wrapper property: %v", err)
+	}
+}
+
+func TestBatch1ClosedSchemaCompositionManifestReconciles(t *testing.T) {
+	encoded, err := os.ReadFile(filepath.Join("testdata", "sourceprojection", "batch1-closed-schema-composition-manifest.json.gz.b64"))
+	if err != nil {
+		t.Fatalf("read Batch 1 composition manifest fixture: %v", err)
+	}
+	compressed, err := base64.StdEncoding.DecodeString(string(encoded))
+	if err != nil {
+		t.Fatalf("decode Batch 1 composition manifest fixture: %v", err)
+	}
+	reader, err := gzip.NewReader(bytes.NewReader(compressed))
+	if err != nil {
+		t.Fatalf("open Batch 1 composition manifest fixture: %v", err)
+	}
+	raw, err := io.ReadAll(reader)
+	if closeErr := reader.Close(); err == nil {
+		err = closeErr
+	}
+	if err != nil {
+		t.Fatalf("inflate Batch 1 composition manifest fixture: %v", err)
+	}
+	var manifest struct {
+		SchemaVersion string `json:"schema_version"`
+		Commit        string `json:"authoritative_manifest_commit"`
+		Records       []struct {
+			RecordKey string `json:"record_key"`
+			Provider  string `json:"provider"`
+			Lane      string `json:"lane"`
+			State     string `json:"declaration_state"`
+			Target    struct {
+				Endpoint struct {
+					Method string `json:"method"`
+					Path   string `json:"path"`
+				} `json:"endpoint"`
+				OperationKey string `json:"operation_key"`
+			} `json:"canonical_target"`
+			CLIPath struct {
+				Availability string `json:"current_availability"`
+				Path         string `json:"path"`
+				Source       string `json:"source"`
+			} `json:"intended_cli_path"`
+			Source struct {
+				Method   string `json:"method"`
+				Path     string `json:"path"`
+				Location string `json:"source_location"`
+				URL      string `json:"source_url"`
+				SHA256   string `json:"source_sha256"`
+			} `json:"source"`
+			Missing struct {
+				Component  string `json:"component"`
+				Evidence   string `json:"evidence"`
+				Foundation string `json:"foundation"`
+			} `json:"missing_implementation"`
+		} `json:"records"`
+	}
+	if err := json.Unmarshal(raw, &manifest); err != nil {
+		t.Fatalf("decode Batch 1 composition manifest fixture: %v", err)
+	}
+	if manifest.SchemaVersion != "batch1-closed-schema-composition-fixture/v1" || manifest.Commit != "d842f739c" {
+		t.Fatalf("fixture provenance = version %q commit %q", manifest.SchemaVersion, manifest.Commit)
+	}
+	if len(manifest.Records) != 608 {
+		t.Fatalf("composition record count = %d, want 608", len(manifest.Records))
+	}
+	wantProviders := map[string]int{"bitbucket": 30, "circleci": 3, "gitlab": 542, "jira": 1, "vercel": 32}
+	wantProviderSamples := map[string]struct {
+		method, path, composition string
+	}{
+		"bitbucket:bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/branch-restrictions": {"POST", "/repositories/{workspace}/{repo_slug}/branch-restrictions", "allOf"},
+		"circleci:circleci.rest.createContext":                                                    {"POST", "/context", "oneOf"},
+		"gitlab:deleteApiV4AdminKnowledgeGraphNamespacesId":                                       {"DELETE", "/api/v4/admin/knowledge_graph/namespaces/{id}", "oneOf"},
+		"jira:jira.rest.submitBulkEdit":                                                           {"POST", "/rest/api/3/bulk/issues/fields", "allOf"},
+		"vercel:vercel.rest.addBypassIp":                                                          {"POST", "/v1/security/firewall/bypass", "oneOf"},
+	}
+	gotProviders := map[string]int{}
+	seen := map[string]bool{}
+	for _, record := range manifest.Records {
+		if record.RecordKey == "" || seen[record.RecordKey] {
+			t.Fatalf("composition record has absent or duplicate stable identity %q", record.RecordKey)
+		}
+		seen[record.RecordKey] = true
+		gotProviders[record.Provider]++
+		if record.State != "deferred" || record.Missing.Component != "typed_input_schema" || record.Missing.Foundation != "cli-request-schema-foundation-r1" || !strings.Contains(record.Missing.Evidence, "Of") {
+			t.Fatalf("%s lost its exact missing_foundation composition disposition: state=%q missing=%+v", record.RecordKey, record.State, record.Missing)
+		}
+		if record.Source.Method == "" || record.Source.Path == "" || record.Source.Location == "" || record.Source.URL == "" || record.Source.SHA256 == "" || !strings.EqualFold(record.Source.Method, record.Target.Endpoint.Method) || record.Source.Path != record.Target.Endpoint.Path || record.Target.OperationKey == "" || record.CLIPath.Path == "" || record.CLIPath.Availability == "" || record.CLIPath.Source == "" {
+			t.Fatalf("%s has incomplete source-to-target provenance: source=%+v target=%+v", record.RecordKey, record.Source, record.Target)
+		}
+		if sample, isSample := wantProviderSamples[record.RecordKey]; isSample {
+			if !strings.EqualFold(record.Source.Method, sample.method) || record.Source.Path != sample.path || !strings.Contains(record.Missing.Evidence, sample.composition) {
+				t.Fatalf("provider regression %s = method=%q path=%q evidence=%q, want %s %s with %s", record.RecordKey, record.Source.Method, record.Source.Path, record.Missing.Evidence, sample.method, sample.path, sample.composition)
+			}
+			delete(wantProviderSamples, record.RecordKey)
+		}
+		switch record.Lane {
+		case "etl", "reverse_etl", "direct_read", "direct_write", "binary_download", "binary_upload":
+		default:
+			t.Fatalf("%s has invented or absent execution lane %q", record.RecordKey, record.Lane)
+		}
+	}
+	if !reflect.DeepEqual(gotProviders, wantProviders) {
+		t.Fatalf("composition provider reconciliation = %#v, want %#v", gotProviders, wantProviders)
+	}
+	if len(wantProviderSamples) != 0 {
+		t.Fatalf("missing Batch 1 connector regression samples: %#v", wantProviderSamples)
 	}
 }
 

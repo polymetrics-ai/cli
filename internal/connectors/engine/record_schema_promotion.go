@@ -131,11 +131,12 @@ func ValidateRecordSchemaFieldMapping(raw json.RawMessage, fields []string) erro
 // command flag which supplies one structured JSON value to a reverse-ETL
 // record. A JSON flag is deliberately narrower than a generic request body:
 // it must name exactly one top-level field of a concrete write action, and
-// that field must itself be an explicitly typed object or array, or a genuine
-// declared multi-kind JSON union. A plain scalar remains a scalar flag; only a
-// provider-owned union needs JSON syntax to preserve every declared arm. The
-// runner calls this through Connector during runtime preflight; connectorgen
-// calls the same function while validating authored CLI metadata.
+// that field must itself be an explicitly typed object or array, a genuine
+// declared multi-kind JSON union, or a closed composition. A plain scalar
+// remains a scalar flag; a closed provider-owned composition needs JSON syntax
+// to preserve every declared arm without flattening it. The runner calls this
+// through Connector during runtime preflight; connectorgen calls the same
+// function while validating authored CLI metadata.
 func ValidateStructuredJSONRecordField(raw json.RawMessage, field string) error {
 	if field == "" {
 		return fmt.Errorf("structured JSON field %q must map to one top-level record property", field)
@@ -149,30 +150,11 @@ func ValidateStructuredJSONRecordField(raw json.RawMessage, field string) error 
 		return fmt.Errorf("record field %q is not declared in record_schema", field)
 	}
 
-	var schema struct {
-		Type json.RawMessage `json:"type"`
+	node, err := compileStructuredJSONRecordField(property, field)
+	if err != nil {
+		return err
 	}
-	if err := json.Unmarshal(property, &schema); err != nil {
-		return fmt.Errorf("structured JSON field %q has invalid schema: %w", field, err)
-	}
-	var types []string
-	var single string
-	if err := json.Unmarshal(schema.Type, &single); err == nil {
-		types = []string{single}
-	} else if err := json.Unmarshal(schema.Type, &types); err != nil {
-		return fmt.Errorf("structured JSON field %q has invalid schema: %w", field, err)
-	}
-	structured := false
-	nonNullTypes := map[string]bool{}
-	for _, typeName := range types {
-		if typeName == "object" || typeName == "array" {
-			structured = true
-		}
-		if typeName != "null" {
-			nonNullTypes[typeName] = true
-		}
-	}
-	if !structured && len(nonNullTypes) < 2 {
+	if !schemaNodeAdmitsStructuredJSONValue(node) {
 		return fmt.Errorf("structured JSON field %q must declare type object or array", field)
 	}
 	return nil
@@ -190,26 +172,114 @@ func ValidateStructuredJSONRecordStringArm(raw json.RawMessage, field string) er
 	if err != nil {
 		return err
 	}
-	property := properties[field]
-	var schema struct {
-		Type json.RawMessage `json:"type"`
+	node, err := compileStructuredJSONRecordField(properties[field], field)
+	if err != nil {
+		return err
 	}
-	if err := json.Unmarshal(property, &schema); err != nil {
-		return fmt.Errorf("structured JSON field %q has invalid schema: %w", field, err)
-	}
-	var types []string
-	var single string
-	if err := json.Unmarshal(schema.Type, &single); err == nil {
-		types = []string{single}
-	} else if err := json.Unmarshal(schema.Type, &types); err != nil {
-		return fmt.Errorf("structured JSON field %q has invalid schema: %w", field, err)
-	}
-	for _, typeName := range types {
-		if typeName == "string" {
-			return nil
-		}
+	if schemaNodeAllowsJSONType(node, "string") {
+		return nil
 	}
 	return fmt.Errorf("structured JSON field %q has no declared string arm", field)
+}
+
+func compileStructuredJSONRecordField(property json.RawMessage, field string) (*schemaNode, error) {
+	compiled, err := CompileSchema(property)
+	if err != nil {
+		return nil, fmt.Errorf("structured JSON field %q has invalid schema: %w", field, err)
+	}
+	return compiled.node, nil
+}
+
+func schemaNodeAdmitsStructuredJSONValue(node *schemaNode) bool {
+	if schemaNodeHasComposition(node) {
+		return schemaNodeCompositionIsClosed(node)
+	}
+	structured := false
+	nonNullTypes := map[string]bool{}
+	for _, typeName := range node.types {
+		if typeName == "object" || typeName == "array" {
+			structured = true
+		}
+		if typeName != "null" {
+			nonNullTypes[typeName] = true
+		}
+	}
+	return structured || len(nonNullTypes) >= 2
+}
+
+func schemaNodeHasComposition(node *schemaNode) bool {
+	return len(node.oneOf) != 0 || len(node.anyOf) != 0 || len(node.allOf) != 0
+}
+
+// schemaNodeCompositionIsClosed is intentionally stricter than ordinary
+// record-schema admission. A composition arm without a declared type, an open
+// object, or an untyped array item would turn the named JSON flag into a
+// generic value escape hatch, so it is deferred instead of being promoted.
+func schemaNodeCompositionIsClosed(node *schemaNode) bool {
+	if !schemaNodeHasComposition(node) && len(node.types) == 0 {
+		return false
+	}
+	for _, typeName := range node.types {
+		switch typeName {
+		case "object":
+			if node.additionalProperties {
+				return false
+			}
+			for _, property := range node.properties {
+				if !schemaNodeCompositionIsClosed(property) {
+					return false
+				}
+			}
+		case "array":
+			if node.items == nil || !schemaNodeCompositionIsClosed(node.items) {
+				return false
+			}
+		}
+	}
+	for _, alternatives := range [][]*schemaNode{node.oneOf, node.anyOf, node.allOf} {
+		for _, alternative := range alternatives {
+			if !schemaNodeCompositionIsClosed(alternative) {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+func schemaNodeAllowsJSONType(node *schemaNode, wanted string) bool {
+	if len(node.types) > 0 && !schemaTypesContain(node.types, wanted) {
+		return false
+	}
+	for _, alternatives := range [][]*schemaNode{node.oneOf, node.anyOf} {
+		if len(alternatives) == 0 {
+			continue
+		}
+		matches := false
+		for _, alternative := range alternatives {
+			if schemaNodeAllowsJSONType(alternative, wanted) {
+				matches = true
+				break
+			}
+		}
+		if !matches {
+			return false
+		}
+	}
+	for _, alternative := range node.allOf {
+		if !schemaNodeAllowsJSONType(alternative, wanted) {
+			return false
+		}
+	}
+	return true
+}
+
+func schemaTypesContain(types []string, wanted string) bool {
+	for _, typeName := range types {
+		if typeName == wanted {
+			return true
+		}
+	}
+	return false
 }
 
 func recordSchemaTopLevelProperties(raw json.RawMessage) (map[string]json.RawMessage, []string, error) {

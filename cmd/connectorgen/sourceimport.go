@@ -7753,10 +7753,25 @@ func validateBoundedRequestSchemaWithinEnum(schema any, form sourceDocumentForm,
 	if err := sourceValidateSchemaForm(object, form); err != nil {
 		return err
 	}
-	for _, composition := range []string{"oneOf", "anyOf", "allOf", "not"} {
-		if _, exists := object[composition]; exists {
-			return fmt.Errorf("ambiguous request schema uses %s", composition)
+	hasComposition := false
+	for _, composition := range []string{"oneOf", "anyOf", "allOf"} {
+		rawArms, exists := object[composition]
+		if !exists {
+			continue
 		}
+		hasComposition = true
+		arms, ok := rawArms.([]any)
+		if !ok || len(arms) == 0 {
+			return fmt.Errorf("request schema %s must be a non-empty array of schema objects", composition)
+		}
+		for index, arm := range arms {
+			if err := validateBoundedRequestSchemaWithinEnum(arm, form, limits, depth+1, boundedByFiniteSet); err != nil {
+				return fmt.Errorf("request schema %s arm %d: %w", composition, index, err)
+			}
+		}
+	}
+	if _, exists := object["not"]; exists {
+		return fmt.Errorf("unsupported request schema keyword not")
 	}
 	for _, keyword := range []string{"contains", "if", "then", "else", "unevaluatedItems", "contentSchema", "$defs", "definitions", "dependencies"} {
 		if _, exists := object[keyword]; exists {
@@ -7785,6 +7800,16 @@ func validateBoundedRequestSchemaWithinEnum(schema any, form sourceDocumentForm,
 		if bounded {
 			return nil
 		}
+		if hasComposition {
+			if keyword := sourceCompositionWrapperTypedKeyword(object); keyword != "" {
+				return fmt.Errorf("request schema composition wrapper has %s without an explicit type", keyword)
+			}
+			// The composition children above each received the same bounded
+			// grammar validation. A wrapper with no direct type is valid JSON
+			// Schema and must remain a typed composition rather than being
+			// flattened or discarded.
+			return nil
+		}
 		return fmt.Errorf("unbounded request schema has no type")
 	}
 	for _, typeName := range typeNames {
@@ -7793,6 +7818,23 @@ func validateBoundedRequestSchemaWithinEnum(schema any, form sourceDocumentForm,
 		}
 	}
 	return nil
+}
+
+// sourceCompositionWrapperTypedKeyword rejects an untyped wrapper that adds
+// object- or array-only behavior alongside a composition. The engine can
+// preserve a pure composition wrapper, but silently treating these sibling
+// keywords as generic metadata would drop provider constraints. A source must
+// declare its wrapper type or remain a source-cited typed-input gap.
+func sourceCompositionWrapperTypedKeyword(object map[string]any) string {
+	for _, keyword := range []string{
+		"required", "properties", "patternProperties", "additionalProperties",
+		"items", "prefixItems", "minItems", "maxItems", "minProperties", "maxProperties",
+	} {
+		if _, exists := object[keyword]; exists {
+			return keyword
+		}
+	}
+	return ""
 }
 
 func validateBoundedRequestSchemaType(object map[string]any, typeName string, form sourceDocumentForm, limits sourceImportLimits, depth int, bounded bool) error {

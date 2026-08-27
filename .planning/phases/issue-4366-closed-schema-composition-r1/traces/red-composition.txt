@@ -1,0 +1,41 @@
+# Red evidence — #4366
+
+Recorded before production changes to `cmd/connectorgen` or
+`internal/connectors/engine`.
+
+```text
+$ go test -timeout 20m ./cmd/connectorgen -run 'Test(SourceImportClosesReferencedNestedCompositionWithoutChangingSourceIdentity|SourceImportRejectsExternalCompositionReferenceBeforeProviderIO|SourceProjectionSchemaPreservesClosedComposition|Batch1ClosedSchemaCompositionManifestReconciles)' -count=1
+--- FAIL: TestSourceProjectionSchemaPreservesClosedComposition
+    nested nullable scalar union: oneOf requires a typed gap
+    discriminated object alternatives: oneOf requires a typed gap
+    compatible allOf: source schema has no type
+    duplicate anyOf: anyOf requires a typed gap
+    contradictory allOf: source schema has no type
+--- FAIL: TestSourceImportClosesReferencedNestedCompositionWithoutChangingSourceIdentity
+    request body media "application/json": ambiguous request schema uses allOf
+FAIL	polymetrics.ai/cmd/connectorgen
+
+$ go test -timeout 20m ./internal/connectors/engine -run 'TestSchema(ClosedCompositionValidation|CompileRejectsMalformedOrDuplicateComposition)' -count=1
+--- FAIL: TestSchemaClosedCompositionValidation
+    nested anyOf: compile schema: properties.selector: compile schema: unknown keyword "anyOf"
+    compatible allOf: compile schema: unknown keyword "allOf"
+--- FAIL: TestSchemaCompileRejectsMalformedOrDuplicateComposition
+    duplicate oneOf alternatives: CompileSchema() error = <nil>, want "duplicate"
+    duplicate anyOf alternatives: compile schema: unknown keyword "anyOf"
+FAIL	polymetrics.ai/internal/connectors/engine
+```
+
+The fixture corruption discovered in the first attempted manifest test was
+replaced with the checked-in gzip/base64 immutable manifest fixture before this
+record was written; it did not alter the red production failures above.
+
+```text
+$ go test -timeout 20m ./cmd/connectorgen -run TestSourceProjectionClosedCompositionPreservesNullableObjectWrapperRegardlessOfTypeOrder -count=1
+--- FAIL: TestSourceProjectionClosedCompositionPreservesNullableObjectWrapperRegardlessOfTypeOrder
+    sourceprojection_test.go:2922: projected nullable object accepted missing wrapper property: <nil>
+FAIL	polymetrics.ai/cmd/connectorgen
+```
+
+This review-discovered red test was added before changing the projection loop:
+it covered a closed nullable object wrapper whose provider type array lists
+`null` before `object`.

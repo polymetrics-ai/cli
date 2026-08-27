@@ -122,6 +122,36 @@ func TestValidateStructuredJSONRecordFieldAllowsDeclaredScalarUnionOnly(t *testi
 	}
 }
 
+func TestValidateStructuredJSONRecordFieldAllowsOnlyClosedComposition(t *testing.T) {
+	closed := json.RawMessage(`{
+		"type":"object","additionalProperties":false,
+		"properties":{"shape":{"anyOf":[
+			{"type":"object","additionalProperties":false,"required":["kind","radius"],"properties":{"kind":{"type":"string","enum":["circle"]},"radius":{"type":"number"}}},
+			{"type":"object","additionalProperties":false,"required":["kind","side"],"properties":{"kind":{"type":"string","enum":["square"]},"side":{"type":"number"}}}
+		]}}
+	}`)
+	if err := ValidateStructuredJSONRecordField(closed, "shape"); err != nil {
+		t.Fatalf("closed composition structured field: %v", err)
+	}
+	nullable := json.RawMessage(`{
+		"type":"object","additionalProperties":false,
+		"properties":{"choice":{"oneOf":[{"type":"string"},{"type":"null"}]}}
+	}`)
+	if err := ValidateStructuredJSONRecordField(nullable, "choice"); err != nil {
+		t.Fatalf("nullable closed composition structured field: %v", err)
+	}
+	if err := ValidateStructuredJSONRecordStringArm(nullable, "choice"); err != nil {
+		t.Fatalf("nullable closed composition string arm: %v", err)
+	}
+	open := json.RawMessage(`{
+		"type":"object","additionalProperties":false,
+		"properties":{"shape":{"oneOf":[{"type":"object","properties":{"kind":{"type":"string"}}},{"type":"null"}]}}
+	}`)
+	if err := ValidateStructuredJSONRecordField(open, "shape"); err == nil || !strings.Contains(err.Error(), "object or array") {
+		t.Fatalf("open composition structured field error = %v, want closed admission refusal", err)
+	}
+}
+
 func TestValidateStructuredJSONRecordStringArmRequiresNamedDeclaredStringUnion(t *testing.T) {
 	withString := json.RawMessage(`{
 		"type":"object","additionalProperties":false,

@@ -34,7 +34,38 @@
             "type": "string"
           },
           "issue_field_values": {
-            "items": {},
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "field_id": {
+                  "type": "integer"
+                },
+                "value": {
+                  "oneOf": [
+                    {
+                      "maxLength": 8192,
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "items": {
+                        "maxLength": 8192,
+                        "type": "string"
+                      },
+                      "maxItems": 256,
+                      "type": "array"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "field_id",
+                "value"
+              ],
+              "type": "object"
+            },
             "maxItems": 256,
             "type": "array"
           },
@@ -52,10 +83,14 @@
             ]
           },
           "title": {
-            "maxLength": 1048576,
-            "type": [
-              "integer",
-              "string"
+            "oneOf": [
+              {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
             ]
           },
           "type": {
@@ -119,7 +154,54 @@
             "type": "integer"
           },
           "issue_field_values": {
-            "items": {},
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "confidence": {
+                  "enum": [
+                    "low",
+                    "medium",
+                    "high"
+                  ],
+                  "maxLength": 8192,
+                  "type": "string"
+                },
+                "field_id": {
+                  "type": "integer"
+                },
+                "rationale": {
+                  "maxLength": 8192,
+                  "type": "string"
+                },
+                "suggest": {
+                  "type": "boolean"
+                },
+                "value": {
+                  "oneOf": [
+                    {
+                      "maxLength": 8192,
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "items": {
+                        "maxLength": 8192,
+                        "type": "string"
+                      },
+                      "maxItems": 256,
+                      "type": "array"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "field_id",
+                "value"
+              ],
+              "type": "object"
+            },
             "maxItems": 256,
             "type": "array"
           },
@@ -1036,10 +1118,14 @@
             "type": "boolean"
           },
           "workflow_id": {
-            "maxLength": 1048576,
-            "type": [
-              "integer",
-              "string"
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "maxLength": 8192,
+                "type": "string"
+              }
             ]
           }
         }
@@ -1400,8 +1486,32 @@
             "type": "boolean"
           },
           "config": {
-            "additionalProperties": true,
-            "maxProperties": 256,
+            "additionalProperties": false,
+            "properties": {
+              "content_type": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "insecure_ssl": {
+                "oneOf": [
+                  {
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ]
+              },
+              "secret": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "url": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
             "type": "object"
           },
           "events": {
@@ -1455,8 +1565,32 @@
             "type": "array"
           },
           "config": {
-            "additionalProperties": true,
-            "maxProperties": 256,
+            "additionalProperties": false,
+            "properties": {
+              "content_type": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "insecure_ssl": {
+                "oneOf": [
+                  {
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ]
+              },
+              "secret": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "url": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
             "type": "object"
           },
           "events": {
@@ -4602,10 +4736,14 @@
         ],
         "properties": {
           "workflow_id": {
-            "maxLength": 1048576,
-            "type": [
-              "integer",
-              "string"
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "maxLength": 8192,
+                "type": "string"
+              }
             ]
           }
         }
@@ -4630,10 +4768,14 @@
         ],
         "properties": {
           "workflow_id": {
-            "maxLength": 1048576,
-            "type": [
-              "integer",
-              "string"
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "maxLength": 8192,
+                "type": "string"
+              }
             ]
           }
         }
@@ -8403,7 +8545,38 @@
         ],
         "properties": {
           "issue_field_values": {
-            "items": {},
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "field_id": {
+                  "type": "integer"
+                },
+                "value": {
+                  "oneOf": [
+                    {
+                      "maxLength": 8192,
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "items": {
+                        "maxLength": 8192,
+                        "type": "string"
+                      },
+                      "maxItems": 256,
+                      "type": "array"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "field_id",
+                "value"
+              ],
+              "type": "object"
+            },
             "maxItems": 25,
             "type": "array"
           },
@@ -8435,7 +8608,30 @@
         ],
         "properties": {
           "issue_field_values": {
-            "items": {},
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "field_id": {
+                  "type": "integer"
+                },
+                "value": {
+                  "oneOf": [
+                    {
+                      "maxLength": 8192,
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "field_id",
+                "value"
+              ],
+              "type": "object"
+            },
             "maxItems": 25,
             "type": "array"
           },
@@ -8892,10 +9088,14 @@
         ],
         "properties": {
           "pages_deployment_id": {
-            "maxLength": 1048576,
-            "type": [
-              "integer",
-              "string"
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "maxLength": 8192,
+                "type": "string"
+              }
             ]
           }
         }
@@ -10233,10 +10433,14 @@
             "type": "string"
           },
           "insecure_ssl": {
-            "maxLength": 1048576,
-            "type": [
-              "number",
-              "string"
+            "oneOf": [
+              {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
             ]
           },
           "secret": {
@@ -12504,10 +12708,18 @@
             "type": "object"
           },
           "public": {
-            "maxLength": 1048576,
-            "type": [
-              "boolean",
-              "string"
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "enum": [
+                  "true",
+                  "false"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              }
             ]
           }
         }
@@ -13053,8 +13265,29 @@
             "type": "string"
           },
           "budget_type": {
-            "maxLength": 1048576,
-            "type": "string"
+            "oneOf": [
+              {
+                "enum": [
+                  "BundlePricing"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "ProductPricing"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "SkuPricing"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              }
+            ]
           },
           "org": {
             "maxLength": 8192,
@@ -13144,8 +13377,29 @@
             "type": "string"
           },
           "budget_type": {
-            "maxLength": 1048576,
-            "type": "string"
+            "oneOf": [
+              {
+                "enum": [
+                  "BundlePricing"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "ProductPricing"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "SkuPricing"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              }
+            ]
           },
           "org": {
             "maxLength": 8192,
@@ -18775,7 +19029,17 @@
             "type": "string"
           },
           "selected_repository_ids": {
-            "items": {},
+            "items": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "maxLength": 8192,
+                  "type": "string"
+                }
+              ]
+            },
             "maxItems": 256,
             "type": "array"
           },
@@ -18979,8 +19243,43 @@
             "type": "boolean"
           },
           "config": {
-            "additionalProperties": true,
-            "maxProperties": 256,
+            "additionalProperties": false,
+            "properties": {
+              "content_type": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "insecure_ssl": {
+                "oneOf": [
+                  {
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ]
+              },
+              "password": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "secret": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "url": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "username": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "url"
+            ],
             "type": "object"
           },
           "events": {
@@ -19031,8 +19330,35 @@
             "type": "boolean"
           },
           "config": {
-            "additionalProperties": true,
-            "maxProperties": 256,
+            "additionalProperties": false,
+            "properties": {
+              "content_type": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "insecure_ssl": {
+                "oneOf": [
+                  {
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ]
+              },
+              "secret": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "url": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "url"
+            ],
             "type": "object"
           },
           "events": {
@@ -19127,10 +19453,14 @@
             "type": "integer"
           },
           "insecure_ssl": {
-            "maxLength": 1048576,
-            "type": [
-              "number",
-              "string"
+            "oneOf": [
+              {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
             ]
           },
           "org": {
@@ -19324,6 +19654,8 @@
             "type": "boolean"
           },
           "max_open_pull_requests": {
+            "maximum": 1000,
+            "minimum": 1,
             "type": "integer"
           },
           "org": {
@@ -21497,7 +21829,22 @@
             "type": "integer"
           },
           "sort_by": {
-            "items": {},
+            "items": {
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "maxLength": 8192,
+                    "type": "string"
+                  }
+                ]
+              },
+              "maxItems": 2,
+              "minItems": 2,
+              "type": "array"
+            },
             "maxItems": 256,
             "type": "array"
           },
@@ -23299,6 +23646,8 @@
             "type": "boolean"
           },
           "max_open_pull_requests": {
+            "maximum": 1000,
+            "minimum": 1,
             "type": "integer"
           }
         }
@@ -24164,7 +24513,17 @@
             "type": "string"
           },
           "selected_repository_ids": {
-            "items": {},
+            "items": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "maxLength": 8192,
+                  "type": "string"
+                }
+              ]
+            },
             "maxItems": 256,
             "type": "array"
           }
@@ -25592,7 +25951,22 @@
             "type": "integer"
           },
           "sort_by": {
-            "items": {},
+            "items": {
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "maxLength": 8192,
+                    "type": "string"
+                  }
+                ]
+              },
+              "maxItems": 2,
+              "minItems": 2,
+              "type": "array"
+            },
             "maxItems": 256,
             "type": "array"
           },
@@ -28363,10 +28737,14 @@
             "type": "integer"
           },
           "insecure_ssl": {
-            "maxLength": 1048576,
-            "type": [
-              "number",
-              "string"
+            "oneOf": [
+              {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
             ]
           },
           "secret": {

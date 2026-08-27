@@ -10143,9 +10143,10 @@
         {
           "name": "budget-type",
           "summary": "Sets budget_type.",
-          "type": "string",
+          "type": "json",
+          "allow_bare_string": true,
           "maps_to": "record.budget_type",
-          "max_bytes": 4194304
+          "max_bytes": 1048576
         },
         {
           "name": "org",
@@ -10520,9 +10521,10 @@
         {
           "name": "budget-type",
           "summary": "Sets budget_type.",
-          "type": "string",
+          "type": "json",
+          "allow_bare_string": true,
           "maps_to": "record.budget_type",
-          "max_bytes": 4194304
+          "max_bytes": 1048576
         },
         {
           "name": "org",

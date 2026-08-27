@@ -1,0 +1,23 @@
+{
+  "issue": 4366,
+  "phase": "closed-schema-composition-foundation-r1",
+  "base": "main",
+  "branch": "fm/cli-closed-schema-composition-foundation-r1",
+  "lifecycle": {
+    "discuss_phase": "inline_manual_fallback_recorded",
+    "plan_phase_tdd": "complete",
+    "execute_phase": "complete: closed schema conversion, generated source contracts, and docs parity",
+    "verify_work": "complete: focused packages and applicable direct-PR gates green; aggregate repository test delegated to CI per per-command timeout rule",
+    "code_review": "Policy correction: a fresh independent Codex re-review is required on the exact post-correction head; no Claude review is awaited, requested, or claimed"
+  },
+  "red_green": {
+    "red": "complete: traces/red-composition.txt",
+    "green": "full cmd/connectorgen, engine, and commandrunner suites passed with source/generator checks",
+    "refactor": "complete: deferred composition fallback is explicit and generated composition consumers read named arms"
+  },
+  "promotion": {
+    "credential_bound_runnable": 0,
+    "missing_foundation": 608,
+    "reconciled_rows": 608
+  }
+}

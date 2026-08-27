@@ -246,6 +246,88 @@ func TestSchemaValidateInstances(t *testing.T) {
 	}
 }
 
+func TestSchemaClosedCompositionValidation(t *testing.T) {
+	tests := []struct {
+		name      string
+		raw       string
+		instance  string
+		wantErr   bool
+		errSubstr string
+	}{
+		{
+			name:     "nullable scalar oneOf",
+			raw:      `{"oneOf":[{"type":"string","minLength":1},{"type":"null"}]}`,
+			instance: `null`,
+		},
+		{
+			name:     "nested anyOf selects a source-backed scalar arm",
+			raw:      `{"type":"object","additionalProperties":false,"required":["selector"],"properties":{"selector":{"anyOf":[{"type":"string","enum":["name"]},{"type":"integer","minimum":1}]}}}`,
+			instance: `{"selector":1}`,
+		},
+		{
+			name:     "compatible allOf intersection",
+			raw:      `{"allOf":[{"type":"string","minLength":3},{"type":"string","pattern":"^[a-z]+$"}]}`,
+			instance: `"alpha"`,
+		},
+		{
+			name:     "discriminated object selects exactly one alternative",
+			raw:      `{"oneOf":[{"type":"object","additionalProperties":false,"required":["kind","radius"],"properties":{"kind":{"type":"string","enum":["circle"]},"radius":{"type":"number","minimum":0}}},{"type":"object","additionalProperties":false,"required":["kind","side"],"properties":{"kind":{"type":"string","enum":["square"]},"side":{"type":"number","minimum":0}}}]}`,
+			instance: `{"kind":"circle","radius":2}`,
+		},
+		{
+			name:      "oneOf ambiguous selection fails locally",
+			raw:       `{"oneOf":[{"type":"string"},{"type":"string","minLength":1}]}`,
+			instance:  `"x"`,
+			wantErr:   true,
+			errSubstr: "oneOf",
+		},
+	}
+
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			schema, err := CompileSchema(json.RawMessage(testCase.raw))
+			if err != nil {
+				t.Fatalf("CompileSchema: %v", err)
+			}
+			var value any
+			if err := json.Unmarshal([]byte(testCase.instance), &value); err != nil {
+				t.Fatalf("decode instance: %v", err)
+			}
+			err = schema.Validate(value)
+			if testCase.wantErr {
+				if err == nil || !strings.Contains(err.Error(), testCase.errSubstr) {
+					t.Fatalf("Validate() error = %v, want %q", err, testCase.errSubstr)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("Validate(): %v", err)
+			}
+		})
+	}
+}
+
+func TestSchemaCompileRejectsMalformedOrDuplicateComposition(t *testing.T) {
+	tests := []struct {
+		name string
+		raw  string
+		want string
+	}{
+		{name: "empty anyOf", raw: `{"anyOf":[]}`, want: "anyOf"},
+		{name: "duplicate oneOf alternatives", raw: `{"oneOf":[{"type":"string"},{"type":"string"}]}`, want: "duplicate"},
+		{name: "duplicate anyOf alternatives", raw: `{"anyOf":[{"type":"integer"},{"type":"integer"}]}`, want: "duplicate"},
+		{name: "contradictory enum intersection", raw: `{"allOf":[{"type":"string","enum":["a"]},{"type":"string","enum":["b"]}]}`, want: "allOf"},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			_, err := CompileSchema(json.RawMessage(testCase.raw))
+			if err == nil || !strings.Contains(err.Error(), testCase.want) {
+				t.Fatalf("CompileSchema() error = %v, want %q", err, testCase.want)
+			}
+		})
+	}
+}
+
 func TestSchemaEnumExactNumbersBeyondFloatPrecision(t *testing.T) {
 	schema, err := CompileSchema(json.RawMessage(`{"type":"integer","enum":[9007199254740992]}`))
 	if err != nil {
