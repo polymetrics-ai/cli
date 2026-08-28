@@ -3,7 +3,7 @@
   "docs": "https://developers.asana.com/reference/rest-api-reference (pinned source: https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml)",
   "reviewed_at": "2026-07-31",
   "operation_ledger_version": 1,
-  "scope": "Every HTTP operation in the pinned official Asana OpenAPI paths map is represented exactly once: 212 executable routes use covered_by, 36 source-backed operations name their exact incomplete foundation, and /batch is the sole not-applicable generic wrapper. Destructive/admin/delete operations are exposed only through named reverse-ETL actions with typed destructive confirmation and plan -> preview -> explicit approval -> execute. The /batch raw subrequest wrapper is disallowed because every underlying documented operation is represented individually.",
+  "scope": "Every HTTP operation in the pinned official Asana OpenAPI paths map is represented exactly once: 213 executable routes use covered_by, 35 source-backed operations name their exact incomplete foundation, and /batch is the sole not-applicable generic wrapper. Destructive/admin/delete operations are exposed only through named reverse-ETL actions with typed destructive confirmation and plan -> preview -> explicit approval -> execute. The /batch raw subrequest wrapper is disallowed because every underlying documented operation is represented individually.",
   "endpoints": [
     {
       "method": "GET",
@@ -138,14 +138,11 @@
     {
       "method": "POST",
       "path": "/attachments",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-encoding-foundation-r1; missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAttachmentForObject",
-        "source_url": "https://developers.asana.com/reference/createattachmentforobject",
-        "notes": "source_operation=asana.rest.createAttachmentForObject"
+      "covered_by": {
+        "writes": [
+          "upload_attachment_file",
+          "create_external_attachment"
+        ]
       }
     },
     {

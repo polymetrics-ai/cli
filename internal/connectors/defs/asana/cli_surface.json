@@ -952,7 +952,7 @@
     },
     {
       "path": "attachments create-attachment-for-object",
-      "summary": "Unavailable source-bound Asana mutation: Upload an attachment.",
+      "summary": "Source-bound direct-write alias for an Asana file attachment.",
       "intent": "direct_write",
       "availability": "planned",
       "operation": "create_attachment_for_object",
@@ -960,11 +960,18 @@
       "source_url": "https://developers.asana.com/reference/createattachmentforobject",
       "flags": [
         {
-          "name": "data-json",
+          "name": "parent",
           "type": "string",
-          "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
-          "maps_to": "record.data",
-          "allow_empty": false
+          "summary": "Required identifier of the parent task, project, or project brief.",
+          "maps_to": "body.parent",
+          "required": true
+        },
+        {
+          "name": "file-path",
+          "type": "string",
+          "summary": "Project-relative file path mapped to Asana's multipart `file` part.",
+          "maps_to": "body.file",
+          "required": true
         }
       ],
       "api_surface": [
@@ -975,7 +982,132 @@
       ],
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-encoding-foundation-r1; missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAttachmentForObject"
+      "notes": "source_operation=asana.rest.createAttachmentForObject; the executable one-record write is attachments upload-attachment-file. This direct_write alias remains planned because the legacy file_upload operation is not a direct executor and Asana documents no fixed file-media allow-list for a direct multipart operation."
+    },
+    {
+      "path": "attachments upload-attachment-file",
+      "summary": "Upload one file attachment to an Asana object.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upload_attachment_file",
+      "source_cli_path": "POST /attachments",
+      "source_url": "https://developers.asana.com/reference/createattachmentforobject",
+      "flags": [
+        {
+          "name": "parent",
+          "type": "string",
+          "summary": "Required identifier of the parent task, project, or project brief.",
+          "maps_to": "record.parent",
+          "required": true
+        },
+        {
+          "name": "file-path",
+          "type": "string",
+          "summary": "Project-relative path to the file bytes uploaded in Asana's `file` multipart part.",
+          "maps_to": "record.file_path",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/attachments"
+        }
+      ],
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "source_operation=asana.rest.createAttachmentForObject; source location paths[\"/attachments\"].post; Asana documents multipart/form-data and a 100 MB attachment limit."
+    },
+    {
+      "path": "attachments create-external-attachment",
+      "summary": "Create one external URL attachment on an Asana object.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_external_attachment",
+      "source_cli_path": "POST /attachments",
+      "source_url": "https://developers.asana.com/reference/createattachmentforobject",
+      "flags": [
+        {
+          "name": "parent",
+          "type": "string",
+          "summary": "Required identifier of the parent task, project, or project brief.",
+          "maps_to": "record.parent",
+          "required": true
+        },
+        {
+          "name": "resource-subtype",
+          "type": "enum",
+          "values": [
+            "external"
+          ],
+          "summary": "Required `external` subtype for the URL attachment variant.",
+          "maps_to": "record.resource_subtype",
+          "required": true
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "summary": "Required URL of the external resource.",
+          "maps_to": "record.url",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name of the external resource.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "connect-to-app",
+          "type": "boolean",
+          "summary": "Optional OAuth-only external attachment setting.",
+          "maps_to": "record.connect_to_app"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/attachments"
+        }
+      ],
+      "risk": "high",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "source_operation=asana.rest.createAttachmentForObject; source location paths[\"/attachments\"].post."
+    },
+    {
+      "path": "attachments binary-upload-attachment",
+      "summary": "Planned binary-upload alias for one Asana file attachment.",
+      "intent": "binary_upload",
+      "availability": "planned",
+      "write": "upload_attachment_file",
+      "source_cli_path": "POST /attachments",
+      "source_url": "https://developers.asana.com/reference/createattachmentforobject",
+      "flags": [
+        {
+          "name": "parent",
+          "type": "string",
+          "summary": "Required identifier of the parent task, project, or project brief.",
+          "maps_to": "record.parent",
+          "required": true
+        },
+        {
+          "name": "file-path",
+          "type": "string",
+          "summary": "Project-relative path to the file bytes uploaded in Asana's `file` multipart part.",
+          "maps_to": "record.file_path",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/attachments"
+        }
+      ],
+      "risk": "high",
+      "approval": "binary uploads require plan, preview, approval, execute",
+      "notes": "source_operation=asana.rest.createAttachmentForObject; the reverse-ETL command attachments upload-attachment-file is executable. This binary_upload alias remains planned because a public binary_upload command requires a fixed declared media allow-list, while the locked Asana source documents arbitrary file contents rather than one list."
     },
     {
       "path": "audit-log-api get-audit-log-events",

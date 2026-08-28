@@ -682,7 +682,7 @@
       "id": "create_attachment_for_object",
       "kind": "file_upload",
       "summary": "Upload an attachment",
-      "description": "Unavailable source-bound provider mutation: missing_foundation=cli-request-encoding-foundation-r1; missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAttachmentForObject",
+      "description": "Source-backed Asana attachment metadata. The declared multipart write actions materialize both documented request variants: a file attachment and an external URL attachment. This legacy file_upload operation remains a non-executing direct-write alias until the operation-level multipart direct-write contract can represent Asana's unrestricted file media policy. source_operation=asana.rest.createAttachmentForObject",
       "source_url": "https://developers.asana.com/reference/createattachmentforobject",
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
@@ -696,7 +696,7 @@
       "file": {
         "direction": "upload",
         "path": "/attachments",
-        "max_bytes": 26214400
+        "max_bytes": 104857600
       }
     },
     {

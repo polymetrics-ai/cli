@@ -3975,6 +3975,142 @@
       }
     },
     {
+      "name": "upload_attachment_file",
+      "kind": "create",
+      "method": "POST",
+      "path": "/attachments",
+      "body_type": "multipart",
+      "multipart": {
+        "max_bytes": 104857600,
+        "parts": [
+          {
+            "name": "parent",
+            "type": "field",
+            "field": "parent",
+            "required": true
+          },
+          {
+            "name": "file",
+            "type": "file",
+            "field": "file_path",
+            "required": true,
+            "max_bytes": 104857600
+          }
+        ]
+      },
+      "success_statuses": [
+        200
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "parent",
+          "file_path"
+        ],
+        "properties": {
+          "parent": {
+            "type": "string",
+            "description": "Required identifier of the parent task, project, or project brief."
+          },
+          "file_path": {
+            "type": "string",
+            "description": "Project-relative path whose bytes become the source field `file`."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "uploads one bounded local file as an Asana attachment; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "redact_fields": [
+        "parent",
+        "file_path"
+      ]
+    },
+    {
+      "name": "create_external_attachment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/attachments",
+      "body_type": "multipart",
+      "multipart": {
+        "parts": [
+          {
+            "name": "parent",
+            "type": "field",
+            "field": "parent",
+            "required": true
+          },
+          {
+            "name": "resource_subtype",
+            "type": "field",
+            "field": "resource_subtype",
+            "required": true
+          },
+          {
+            "name": "url",
+            "type": "field",
+            "field": "url",
+            "required": true
+          },
+          {
+            "name": "name",
+            "type": "field",
+            "field": "name",
+            "required": true
+          },
+          {
+            "name": "connect_to_app",
+            "type": "field",
+            "field": "connect_to_app"
+          }
+        ]
+      },
+      "success_statuses": [
+        200
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "parent",
+          "resource_subtype",
+          "url",
+          "name"
+        ],
+        "properties": {
+          "parent": {
+            "type": "string",
+            "description": "Required identifier of the parent task, project, or project brief."
+          },
+          "resource_subtype": {
+            "type": "string",
+            "enum": [
+              "external"
+            ],
+            "description": "Asana requires `external` for a URL attachment."
+          },
+          "url": {
+            "type": "string",
+            "description": "URL of the external resource."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the external resource."
+          },
+          "connect_to_app": {
+            "type": "boolean",
+            "description": "Optional OAuth-only external attachment setting."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "creates an external Asana attachment; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "redact_fields": [
+        "parent",
+        "url"
+      ]
+    },
+    {
       "name": "delete_attachment",
       "kind": "delete",
       "method": "DELETE",

@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "connector": "asana",
+  "purpose": "Companion mapping ledger for the Asana connector. This file makes source-backed runtime gaps visible; it is not an engine loader input and cannot block a mapped command by itself.",
+  "source_lock": {
+    "path": "sources/asana-operation-source-lock.json",
+    "source_url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
+    "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56"
+  },
+  "runtime_definition_files": [
+    {
+      "path": "metadata.json",
+      "role": "connector identity and declared capabilities"
+    },
+    {
+      "path": "spec.json",
+      "role": "connector configuration contract"
+    },
+    {
+      "path": "streams.json",
+      "role": "ETL transport definitions"
+    },
+    {
+      "path": "schemas/",
+      "role": "ETL record schemas"
+    },
+    {
+      "path": "writes.json",
+      "role": "reverse-ETL write actions, including multipart attachment variants"
+    },
+    {
+      "path": "operations.json",
+      "role": "direct read and direct write operation declarations"
+    },
+    {
+      "path": "api_surface.json",
+      "role": "HTTP endpoint coverage ledger"
+    },
+    {
+      "path": "cli_surface.json",
+      "role": "user-visible command-to-declaration mapping"
+    }
+  ],
+  "lane_mapping": {
+    "etl": {
+      "status": "mapped",
+      "implementation": "streams.json with schemas/",
+      "stream_count": 12,
+      "streams": [
+        "workspaces",
+        "projects",
+        "tasks",
+        "users",
+        "teams",
+        "tags",
+        "sections",
+        "stories",
+        "custom_fields",
+        "project_statuses",
+        "team_memberships",
+        "workspace_memberships"
+      ]
+    },
+    "reverse_etl": {
+      "status": "mapped",
+      "implementation": "writes.json and cli_surface.json",
+      "attachment_commands": [
+        "attachments upload-attachment-file",
+        "attachments create-external-attachment"
+      ],
+      "source_operation": "asana.rest.createAttachmentForObject"
+    },
+    "direct_read": {
+      "status": "mapped",
+      "implementation": "operations.json and cli_surface.json",
+      "source_method": "GET",
+      "source_operation_count": 119
+    },
+    "direct_write": {
+      "status": "mapped_with_named_runtime_gap",
+      "command": "attachments create-attachment-for-object",
+      "operation": "create_attachment_for_object",
+      "source_operation": "asana.rest.createAttachmentForObject",
+      "source_location": "paths[\"/attachments\"].post",
+      "equivalent_one_record_execution": [
+        "attachments upload-attachment-file",
+        "attachments create-external-attachment"
+      ]
+    },
+    "binary_upload": {
+      "status": "mapped_with_named_runtime_gap",
+      "command": "attachments binary-upload-attachment",
+      "equivalent_one_record_execution": "attachments upload-attachment-file",
+      "source_operation": "asana.rest.createAttachmentForObject",
+      "source_location": "paths[\"/attachments\"].post",
+      "provider_limit_bytes": 104857600
+    },
+    "binary_download": {
+      "status": "not_applicable_with_provider_evidence",
+      "reason": "The locked Asana source declares application/json response content for its operations and no binary response media contract. No binary-download command is invented."
+    }
+  },
+  "foundations": [
+    {
+      "id": "asana_attachment_direct_write_multipart",
+      "state": "missing_runtime_contract",
+      "affected_lane": "direct_write",
+      "source": {
+        "id": "asana.rest.createAttachmentForObject",
+        "operation_id": "createAttachmentForObject",
+        "method": "POST",
+        "path": "/attachments"
+      },
+      "reason": "The existing file_upload operation is metadata-only. A direct-write executor needs an operation-level multipart request contract with a closed body and an explicit media policy; the locked Asana source intentionally does not publish a fixed file-media allow-list.",
+      "does_not_block": [
+        "source mapping",
+        "reverse-ETL attachment write actions",
+        "direct-read and ETL lanes"
+      ]
+    },
+    {
+      "id": "asana_attachment_binary_upload_media_policy",
+      "state": "missing_runtime_contract",
+      "affected_lane": "binary_upload",
+      "source": {
+        "id": "asana.rest.createAttachmentForObject",
+        "operation_id": "createAttachmentForObject",
+        "method": "POST",
+        "path": "/attachments"
+      },
+      "reason": "The source documents multipart/form-data, full file content, and a 100 MB cap, but no fixed allowable media-type list. The public binary_upload intent requires that list, so declaring one would fabricate a provider contract.",
+      "does_not_block": [
+        "source mapping",
+        "the declared reverse-ETL multipart file action"
+      ]
+    },
+    {
+      "id": "legacy_asana_request_schema_rows",
+      "state": "existing_connector_backlog",
+      "affected_lane": "reverse_etl_and_direct_write",
+      "reason": "Other currently planned Asana mutations still name cli-request-schema-foundation-r1 in their own existing JSON. Their source operations remain mapped; each needs its own closed write or operation request declaration before it can be executable.",
+      "does_not_block": [
+        "the attachment mappings in this change",
+        "source lock provenance",
+        "ETL and direct-read mappings"
+      ]
+    },
+    {
+      "id": "legacy_asana_openapi_reference_sibling_rows",
+      "state": "existing_connector_backlog",
+      "affected_lane": "reverse_etl_and_direct_write",
+      "reason": "Two existing Asana rows name cli-openapi30-reference-sibling-foundation-r1. This is an importer/runtime declaration gap, not a reason to omit the source operation from mapping."
+    },
+    {
+      "id": "asana_enriched_source_lock_projection_parser",
+      "state": "existing_mapping_validator_gap",
+      "affected_lane": "all_source_mapped_lanes",
+      "source": {
+        "path": "sources/asana-operation-source-lock.json",
+        "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56"
+      },
+      "reason": "The current connectorgen source-projection parser rejects the enriched per-operation `source_operation` field with `json: unknown field source_operation`. This does not affect the embedded runtime bundle or the declared attachment commands; it only prevents the older source-projection validator from validating this richer lock format."
+    }
+  ],
+  "non_binding_files": [
+    {
+      "path": "certification.json",
+      "role": "optional live-evidence configuration; it does not decide whether a source-backed operation is mapped or executable"
+    },
+    {
+      "path": "sources/asana-operation-source-lock.json",
+      "role": "immutable source provenance for mapping; it is not the runtime executor"
+    }
+  ]
+}
