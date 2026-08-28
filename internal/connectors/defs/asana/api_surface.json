@@ -3,7 +3,7 @@
   "docs": "https://developers.asana.com/reference/rest-api-reference (pinned source: https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml)",
   "reviewed_at": "2026-07-31",
   "operation_ledger_version": 1,
-  "scope": "Every HTTP operation in the pinned official Asana OpenAPI paths map is represented exactly once: 213 executable routes use covered_by, 35 source-backed operations name their exact incomplete foundation, and /batch is the sole not-applicable generic wrapper. Destructive/admin/delete operations are exposed only through named reverse-ETL actions with typed destructive confirmation and plan -> preview -> explicit approval -> execute. The /batch raw subrequest wrapper is disallowed because every underlying documented operation is represented individually.",
+  "scope": "Every HTTP operation in the pinned official Asana OpenAPI paths map is represented exactly once: 214 executable routes use covered_by, 34 source-backed operations name their exact incomplete foundation, and /batch is the sole not-applicable generic wrapper. Destructive/admin/delete operations are exposed only through named reverse-ETL actions with typed destructive confirmation and plan -> preview -> explicit approval -> execute. The /batch raw subrequest wrapper is disallowed because every underlying documented operation is represented individually.",
   "endpoints": [
     {
       "method": "GET",
@@ -498,13 +498,8 @@
     {
       "method": "GET",
       "path": "/memberships/{membership_gid}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-openapi30-reference-sibling-foundation-r1; source_operation=asana.rest.getMembership",
-        "notes": "source_operation=asana.rest.getMembership"
+      "covered_by": {
+        "direct_read": "memberships get-membership"
       }
     },
     {

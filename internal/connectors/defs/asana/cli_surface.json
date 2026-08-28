@@ -3237,9 +3237,9 @@
     },
     {
       "path": "memberships get-membership",
-      "summary": "Unavailable source-bound Asana read: Get a membership.",
+      "summary": "Get a membership.",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "operation": "get_membership",
       "source_cli_path": "GET /memberships/{membership_gid}",
       "source_url": "https://developers.asana.com/reference/getmembership",
@@ -3247,9 +3247,14 @@
         {
           "name": "membership-gid",
           "type": "string",
+          "maps_to": "path.membership_gid",
           "summary": "Asana path parameter `membership_gid`.",
-          "maps_to": "query.membership_gid",
-          "allow_empty": false
+          "required": true
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "query.opt_pretty"
         }
       ],
       "api_surface": [
@@ -3258,7 +3263,8 @@
           "path": "/memberships/{membership_gid}"
         }
       ],
-      "notes": "missing_foundation=cli-openapi30-reference-sibling-foundation-r1; source_operation=asana.rest.getMembership"
+      "source_operation": "asana.rest.getMembership",
+      "output_policy": "json_redacted"
     },
     {
       "path": "memberships update-membership",

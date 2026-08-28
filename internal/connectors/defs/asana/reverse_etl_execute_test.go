@@ -159,6 +159,7 @@ func TestSourceBoundReadControlsMaterializeEveryCompleteReadLane(t *testing.T) {
 		{path: "access-requests get-access-requests", source: "asana.rest.getAccessRequests", operation: "get_access_requests"},
 		{path: "agents get-agents-for-workspace", source: "asana.rest.getAgentsForWorkspace", operation: "get_agents_for_workspace"},
 		{path: "agents get-agent", source: "asana.rest.getAgent", operation: "get_agent"},
+		{path: "memberships get-membership", source: "asana.rest.getMembership", operation: "get_membership"},
 	} {
 		command := commands[test.path]
 		if command.Intent != "direct_read" || command.Availability != "implemented" || command.SourceOperation != test.source || command.Operation != test.operation {
@@ -225,12 +226,49 @@ func TestExecutableCommandsAreAccountedForByPinnedSourceLock(t *testing.T) {
 			writeEndpoints[endpoint] = struct{}{}
 		}
 	}
-	if directReads != 118 {
-		t.Fatalf("source-locked implemented direct reads = %d, want 118", directReads)
+	if directReads != 119 {
+		t.Fatalf("source-locked implemented direct reads = %d, want 119", directReads)
 	}
 	if directWrites != 96 || len(writeEndpoints) != 95 {
 		t.Fatalf("source-accounted implemented direct writes = %d across %d provider endpoints, want 96 across 95",
 			directWrites, len(writeEndpoints))
+	}
+}
+
+func TestGetMembershipExecutesItsSourceLockedPathBinding(t *testing.T) {
+	bundle := loadBundle(t)
+	capture := newCaptureServer()
+	defer capture.Close()
+	// Keep source-bound configuration closed: point the trusted test bundle at
+	// the local capture server rather than using the user-overridable base_url
+	// field, which the real source-origin preflight correctly refuses.
+	bundle.HTTP.URL = capture.URL
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+
+	emitted := 0
+	result, err := commandrunner.Run(context.Background(), connector, commandrunner.Request{
+		Path: []string{"memberships", "get-membership"},
+		Flags: map[string][]string{
+			"membership-gid": {"fixture-membership"},
+			"opt-pretty":     {"true"},
+		},
+		Config: connectors.RuntimeConfig{
+			Secrets:            map[string]string{"access_token": "synthetic-test-token"},
+			CredentialRevision: "asana-fixture-credential-revision",
+		},
+	}, func(connectors.Record) error {
+		emitted++
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("run getMembership: %v", err)
+	}
+	if result.DirectRead == nil || emitted != 0 || result.DirectRead.Status != http.StatusOK {
+		t.Fatalf("getMembership result = %+v emitted=%d, want one bounded direct-read response returned in metadata", result.DirectRead, emitted)
+	}
+	request := capture.Last()
+	if request == nil || request.Method != http.MethodGet || request.Path != "/memberships/fixture-membership" || !strings.Contains(request.Query, "opt_pretty=true") {
+		t.Fatalf("getMembership request = %+v, want GET /memberships/fixture-membership?opt_pretty=true", request)
 	}
 }
 
@@ -313,10 +351,9 @@ func TestEveryLockedOperationHasOneAccountedCommandLane(t *testing.T) {
 	}
 
 	wantStates := map[string]int{
-		"implemented_direct_read":              106,
+		"implemented_direct_read":              107,
 		"implemented_stream_read_etl":          12,
 		"implemented_direct_write_reverse_etl": 95,
-		"planned_direct_read":                  1,
 		"planned_direct_write":                 34,
 		"unsupported_api":                      1,
 	}
@@ -1053,6 +1090,7 @@ func lookupRecordPath(record map[string]any, parts []string) (any, bool) {
 type capturedRequest struct {
 	Method string
 	Path   string
+	Query  string
 	Body   map[string]any
 }
 
@@ -1067,7 +1105,7 @@ func newCaptureServer() *captureServer {
 	c := &captureServer{}
 	c.Server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		raw, _ := io.ReadAll(r.Body)
-		captured := &capturedRequest{Method: r.Method, Path: r.URL.Path}
+		captured := &capturedRequest{Method: r.Method, Path: r.URL.Path, Query: r.URL.RawQuery}
 		if len(raw) > 0 {
 			var body map[string]any
 			dec := json.NewDecoder(bytes.NewReader(raw))

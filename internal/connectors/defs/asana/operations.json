@@ -1983,7 +1983,7 @@
       "id": "get_membership",
       "kind": "rest_read",
       "summary": "Get a membership",
-      "description": "Unavailable source-bound provider read: missing_foundation=cli-openapi30-reference-sibling-foundation-r1; source_operation=asana.rest.getMembership",
+      "description": "Source-bound fixed direct read for one membership identifier; output remains bounded and redacted.",
       "source_url": "https://developers.asana.com/reference/getmembership",
       "risk": "none",
       "approval": "none; read-only fixed-target operation remains bounded and redacted",
@@ -1997,7 +1997,25 @@
       "rest": {
         "method": "GET",
         "path": "/memberships/{membership_gid}",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "membership_gid",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "opt_pretty",
+            "in": "query",
+            "type": "boolean"
+          }
+        ]
+      },
+      "source_operation": {
+        "id": "asana.rest.getMembership",
+        "method": "GET",
+        "path": "/memberships/{membership_gid}"
       }
     },
     {
