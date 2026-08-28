@@ -81,6 +81,10 @@ a capability missing merely because an importer or certification label exists.
 The Atlas is authoring-only: it cannot block source mapping or certification.
 Implementing a genuinely new runtime foundation still requires the captain's
 approval.
+After changing a real foundation, maintain its Atlas entry in the same change
+under the Atlas README's procedure. Keep provider-specific execution behind a
+closed connector-definition reference; shared owners must not branch on
+connector name.
 
 ## 3. Declare only source-backed operations
 

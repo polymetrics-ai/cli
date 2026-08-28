@@ -44,6 +44,11 @@ warehouse rulings there are binding.
 
 ## 2. FOUNDATION CHECK — perform this before claiming “done”
 
+Run the [Foundation Atlas discovery procedure](foundations/README.md) before
+filling this section. Record the selected stable Atlas IDs and the `reuse`,
+`constrained_extension`, or `actual_gap` classification in the issue plan; the
+Atlas README alone owns its same-change maintenance procedure.
+
 Before an operation, flow, or certification can be declared complete, prove
 that the foundations it needs **exist and execute**. “Declared in JSON”, “has a
 fixture”, and “is in a plan” are not proof.

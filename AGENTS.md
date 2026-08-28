@@ -46,7 +46,9 @@ an existing foundation, an extension through its declared seam, or an actual
 gap. Source locks remain authoritative for provider facts. The Atlas is not a
 runtime input and does not participate in mapping or certification admission;
 it cannot block them. Any genuinely new shared runtime foundation still
-requires the captain's approval.
+requires the captain's approval. Follow the Atlas README's same-change
+maintenance rule when a real shared-foundation contract, selection, supported
+shape, constraint, owner, or proof changes.
 
 ## Project
 
