@@ -1,0 +1,461 @@
+{
+  "schema_version": 2,
+  "connector": "notion",
+  "captured_at": "2026-08-19T11:28:09Z",
+  "rest": {
+    "source_url": "https://developers.notion.com/openapi.json",
+    "sha256": "dee5763763b0b9fbad2aa8d5adb173ca350ec26dda557e658c5dbe9d2ea2f258",
+    "bytes": 1304814,
+    "openapi": "3.1.0",
+    "info_version": "1.0.0",
+    "operations": [
+      {
+        "id": "notion.rest.get-self",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/users/me",
+        "operation_id": "get-self",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/users/me\"].get"
+      },
+      {
+        "id": "notion.rest.get-user",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/users/{user_id}",
+        "operation_id": "get-user",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/users/{user_id}\"].get"
+      },
+      {
+        "id": "notion.rest.get-users",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/users",
+        "operation_id": "get-users",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/users\"].get"
+      },
+      {
+        "id": "notion.rest.post-page",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/pages",
+        "operation_id": "post-page",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/pages\"].post"
+      },
+      {
+        "id": "notion.rest.retrieve-a-page",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/pages/{page_id}",
+        "operation_id": "retrieve-a-page",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/pages/{page_id}\"].get"
+      },
+      {
+        "id": "notion.rest.patch-page",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/pages/{page_id}",
+        "operation_id": "patch-page",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/pages/{page_id}\"].patch"
+      },
+      {
+        "id": "notion.rest.move-page",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/pages/{page_id}/move",
+        "operation_id": "move-page",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/pages/{page_id}/move\"].post"
+      },
+      {
+        "id": "notion.rest.retrieve-a-page-property",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/pages/{page_id}/properties/{property_id}",
+        "operation_id": "retrieve-a-page-property",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/pages/{page_id}/properties/{property_id}\"].get"
+      },
+      {
+        "id": "notion.rest.retrieve-page-markdown",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/pages/{page_id}/markdown",
+        "operation_id": "retrieve-page-markdown",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/pages/{page_id}/markdown\"].get"
+      },
+      {
+        "id": "notion.rest.update-page-markdown",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/pages/{page_id}/markdown",
+        "operation_id": "update-page-markdown",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/pages/{page_id}/markdown\"].patch"
+      },
+      {
+        "id": "notion.rest.retrieve-async-task",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/async_tasks/{task_id}",
+        "operation_id": "retrieve-async-task",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/async_tasks/{task_id}\"].get"
+      },
+      {
+        "id": "notion.rest.retrieve-a-block",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/blocks/{block_id}",
+        "operation_id": "retrieve-a-block",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/blocks/{block_id}\"].get"
+      },
+      {
+        "id": "notion.rest.update-a-block",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/blocks/{block_id}",
+        "operation_id": "update-a-block",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/blocks/{block_id}\"].patch"
+      },
+      {
+        "id": "notion.rest.delete-a-block",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/blocks/{block_id}",
+        "operation_id": "delete-a-block",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/blocks/{block_id}\"].delete"
+      },
+      {
+        "id": "notion.rest.get-block-children",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/blocks/{block_id}/children",
+        "operation_id": "get-block-children",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/blocks/{block_id}/children\"].get"
+      },
+      {
+        "id": "notion.rest.patch-block-children",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/blocks/{block_id}/children",
+        "operation_id": "patch-block-children",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/blocks/{block_id}/children\"].patch"
+      },
+      {
+        "id": "notion.rest.retrieve-a-data-source",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/data_sources/{data_source_id}",
+        "operation_id": "retrieve-a-data-source",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/data_sources/{data_source_id}\"].get"
+      },
+      {
+        "id": "notion.rest.update-a-data-source",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/data_sources/{data_source_id}",
+        "operation_id": "update-a-data-source",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/data_sources/{data_source_id}\"].patch"
+      },
+      {
+        "id": "notion.rest.post-database-query",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/data_sources/{data_source_id}/query",
+        "operation_id": "post-database-query",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/data_sources/{data_source_id}/query\"].post"
+      },
+      {
+        "id": "notion.rest.create-a-database",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/data_sources",
+        "operation_id": "create-a-database",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/data_sources\"].post"
+      },
+      {
+        "id": "notion.rest.list-data-source-templates",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/data_sources/{data_source_id}/templates",
+        "operation_id": "list-data-source-templates",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/data_sources/{data_source_id}/templates\"].get"
+      },
+      {
+        "id": "notion.rest.retrieve-database",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/databases/{database_id}",
+        "operation_id": "retrieve-database",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/databases/{database_id}\"].get"
+      },
+      {
+        "id": "notion.rest.update-database",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/databases/{database_id}",
+        "operation_id": "update-database",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/databases/{database_id}\"].patch"
+      },
+      {
+        "id": "notion.rest.create-database",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/databases",
+        "operation_id": "create-database",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/databases\"].post"
+      },
+      {
+        "id": "notion.rest.post-search",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/search",
+        "operation_id": "post-search",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/search\"].post"
+      },
+      {
+        "id": "notion.rest.create-a-comment",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/comments",
+        "operation_id": "create-a-comment",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/comments\"].post"
+      },
+      {
+        "id": "notion.rest.list-comments",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/comments",
+        "operation_id": "list-comments",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/comments\"].get"
+      },
+      {
+        "id": "notion.rest.retrieve-comment",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/comments/{comment_id}",
+        "operation_id": "retrieve-comment",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/comments/{comment_id}\"].get"
+      },
+      {
+        "id": "notion.rest.update-a-comment",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/comments/{comment_id}",
+        "operation_id": "update-a-comment",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/comments/{comment_id}\"].patch"
+      },
+      {
+        "id": "notion.rest.delete-a-comment",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/comments/{comment_id}",
+        "operation_id": "delete-a-comment",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/comments/{comment_id}\"].delete"
+      },
+      {
+        "id": "notion.rest.create-file",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/file_uploads",
+        "operation_id": "create-file",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/file_uploads\"].post"
+      },
+      {
+        "id": "notion.rest.list-file-uploads",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/file_uploads",
+        "operation_id": "list-file-uploads",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/file_uploads\"].get"
+      },
+      {
+        "id": "notion.rest.upload-file",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/file_uploads/{file_upload_id}/send",
+        "operation_id": "upload-file",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/file_uploads/{file_upload_id}/send\"].post"
+      },
+      {
+        "id": "notion.rest.complete-file-upload",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/file_uploads/{file_upload_id}/complete",
+        "operation_id": "complete-file-upload",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/file_uploads/{file_upload_id}/complete\"].post"
+      },
+      {
+        "id": "notion.rest.retrieve-file-upload",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/file_uploads/{file_upload_id}",
+        "operation_id": "retrieve-file-upload",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/file_uploads/{file_upload_id}\"].get"
+      },
+      {
+        "id": "notion.rest.list-custom-emojis",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/custom_emojis",
+        "operation_id": "list-custom-emojis",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/custom_emojis\"].get"
+      },
+      {
+        "id": "notion.rest.list-views",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/views",
+        "operation_id": "list-views",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/views\"].get"
+      },
+      {
+        "id": "notion.rest.create-view",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/views",
+        "operation_id": "create-view",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/views\"].post"
+      },
+      {
+        "id": "notion.rest.retrieve-a-view",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/views/{view_id}",
+        "operation_id": "retrieve-a-view",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/views/{view_id}\"].get"
+      },
+      {
+        "id": "notion.rest.update-a-view",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/views/{view_id}",
+        "operation_id": "update-a-view",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/views/{view_id}\"].patch"
+      },
+      {
+        "id": "notion.rest.delete-view",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/views/{view_id}",
+        "operation_id": "delete-view",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/views/{view_id}\"].delete"
+      },
+      {
+        "id": "notion.rest.create-view-query",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/views/{view_id}/queries",
+        "operation_id": "create-view-query",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/views/{view_id}/queries\"].post"
+      },
+      {
+        "id": "notion.rest.get-view-query-results",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/views/{view_id}/queries/{query_id}",
+        "operation_id": "get-view-query-results",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/views/{view_id}/queries/{query_id}\"].get"
+      },
+      {
+        "id": "notion.rest.delete-view-query",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/views/{view_id}/queries/{query_id}",
+        "operation_id": "delete-view-query",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/views/{view_id}/queries/{query_id}\"].delete"
+      },
+      {
+        "id": "notion.rest.create-meeting-note",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/blocks/meeting_notes",
+        "operation_id": "create-meeting-note",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/blocks/meeting_notes\"].post"
+      },
+      {
+        "id": "notion.rest.query-meeting-notes",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/blocks/meeting_notes/query",
+        "operation_id": "query-meeting-notes",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/blocks/meeting_notes/query\"].post"
+      },
+      {
+        "id": "notion.rest.create-a-token",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/oauth/token",
+        "operation_id": "create-a-token",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/oauth/token\"].post"
+      },
+      {
+        "id": "notion.rest.revoke-token",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/oauth/revoke",
+        "operation_id": "revoke-token",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/oauth/revoke\"].post"
+      },
+      {
+        "id": "notion.rest.introspect-token",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/oauth/introspect",
+        "operation_id": "introspect-token",
+        "deprecated": false,
+        "source_location": "paths[\"/v1/oauth/introspect\"].post"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 49,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 49
+  }
+}
