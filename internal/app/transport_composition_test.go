@@ -42,6 +42,10 @@ func TestOpenRegistersDefinitionOwnedProductionTransports(t *testing.T) {
 	if !ok {
 		t.Fatal("GitHub connector is not registered")
 	}
+	asana, ok := a.registry.Get("asana")
+	if !ok {
+		t.Fatal("Asana connector is not registered")
+	}
 	warehouse, ok := a.registry.Get("warehouse")
 	if !ok {
 		t.Fatal("local warehouse connector is not registered")
@@ -134,6 +138,33 @@ func TestOpenRegistersDefinitionOwnedProductionTransports(t *testing.T) {
 			}
 			if !a.shouldRunTransport(Connection{}, "pull_requests", SyncMode{ContractMode: mode}, github, warehouse) {
 				t.Fatalf("declared GitHub-to-warehouse %q route was not selected for production dispatch", mode)
+			}
+		})
+	}
+	for _, mode := range []synccontract.Mode{
+		synccontract.ModeFullOverwrite,
+		synccontract.ModeFullAppend,
+		synccontract.ModeIncrementalUpsert,
+		synccontract.ModeIncrementalDedupe,
+		synccontract.ModeIncrementalDedupeHistory,
+	} {
+		t.Run("asana_tasks_to_warehouse_"+string(mode), func(t *testing.T) {
+			resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
+				Source: asana, Destination: warehouse, Stream: "tasks", Mode: mode,
+			})
+			if err != nil {
+				t.Fatalf("Asana tasks-to-warehouse %q preflight = %v", mode, err)
+			}
+			if got := resolved.Source.TransportExecutorReference(); got != declarativeStreamSourceReference {
+				t.Fatalf("Asana tasks-to-warehouse %q source = %+v, want %+v", mode, got, declarativeStreamSourceReference)
+			}
+			if got, want := resolved.Destination.TransportExecutorReference(), (connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "local_parquet_warehouse"}); got != want {
+				t.Fatalf("Asana tasks-to-warehouse %q destination = %+v, want %+v", mode, got, want)
+			}
+			wantTransportDispatch := mode == synccontract.ModeIncrementalDedupe || mode == synccontract.ModeIncrementalDedupeHistory
+			if got := a.shouldRunTransport(Connection{}, "tasks", SyncMode{ContractMode: mode}, asana, warehouse); got != wantTransportDispatch {
+				t.Fatalf("Asana tasks-to-warehouse %q transport dispatch = %t, want %t (other modes retain the warehouse-backed legacy materializer)",
+					mode, got, wantTransportDispatch)
 			}
 		})
 	}

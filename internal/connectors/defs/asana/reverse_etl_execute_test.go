@@ -1,6 +1,6 @@
 // Package asana holds the Asana bundle's connector-local executable-parity
 // test. The bundle itself is pure JSON; this file exists only so the promoted
-// reverse-ETL surface is proven by execution rather than by inspection.
+// read and write-action surfaces are proven by execution rather than inspection.
 package asana
 
 import (
@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"path/filepath"
 	"reflect"
 	"sort"
 	"strconv"
@@ -26,7 +27,8 @@ import (
 )
 
 const (
-	bundleName = "asana"
+	bundleName               = "asana"
+	asanaSourceOpenAPISHA256 = "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56"
 
 	// blockedReverseETLReason is the api_surface.json reason this lane exists
 	// to retire. Every endpoint still carrying it is an operation the audit
@@ -62,6 +64,21 @@ const (
 	blockedDestructiveOperations = 16
 )
 
+type asanaOperationSourceLock struct {
+	SchemaVersion int    `json:"schema_version"`
+	Connector     string `json:"connector"`
+	REST          struct {
+		SHA256     string                 `json:"sha256"`
+		Operations []asanaLockedOperation `json:"operations"`
+	} `json:"rest"`
+}
+
+type asanaLockedOperation struct {
+	ID     string `json:"id"`
+	Method string `json:"method"`
+	Path   string `json:"path"`
+}
+
 func loadBundle(t *testing.T) engine.Bundle {
 	t.Helper()
 	b, err := engine.Load(os.DirFS(".."), bundleName)
@@ -81,6 +98,19 @@ func runtimeConfig(baseURL string) connectors.RuntimeConfig {
 	}
 }
 
+func loadOperationSourceLock(t *testing.T) asanaOperationSourceLock {
+	t.Helper()
+	raw, err := os.ReadFile("sources/asana-operation-source-lock.json")
+	if err != nil {
+		t.Fatalf("read Asana operation source lock: %v", err)
+	}
+	var lock asanaOperationSourceLock
+	if err := json.Unmarshal(raw, &lock); err != nil {
+		t.Fatalf("decode Asana operation source lock: %v", err)
+	}
+	return lock
+}
+
 func TestSourceBoundReadControlsMaterializeEveryCompleteReadLane(t *testing.T) {
 	bundle := loadBundle(t)
 	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
@@ -94,7 +124,10 @@ func TestSourceBoundReadControlsMaterializeEveryCompleteReadLane(t *testing.T) {
 		wantStream string
 	}{
 		{path: "custom-fields list", wantSource: "asana.rest.getCustomFieldsForWorkspace", wantStream: "custom_fields"},
+		{path: "project-statuses list", wantSource: "asana.rest.getProjectStatusesForProject", wantStream: "project_statuses"},
 		{path: "projects list", wantSource: "asana.rest.getProjects", wantStream: "projects"},
+		{path: "sections list", wantSource: "asana.rest.getSectionsForProject", wantStream: "sections"},
+		{path: "stories list", wantSource: "asana.rest.getStoriesForTask", wantStream: "stories"},
 		{path: "tags list", wantSource: "asana.rest.getTags", wantStream: "tags"},
 		{path: "tasks list", wantSource: "asana.rest.getTasks", wantStream: "tasks"},
 		{path: "team-memberships list", wantSource: "asana.rest.getTeamMemberships", wantStream: "team_memberships"},
@@ -108,7 +141,7 @@ func TestSourceBoundReadControlsMaterializeEveryCompleteReadLane(t *testing.T) {
 			if !found {
 				t.Fatalf("command %q is absent", test.path)
 			}
-			if command.Intent != "etl" || command.Availability != "implemented" || command.SourceOperation != test.wantSource || command.Operation != "" || command.Stream != test.wantStream {
+			if command.Intent != "direct_read" || command.Availability != "implemented" || command.SourceOperation != test.wantSource || command.Operation != "" || command.Stream != test.wantStream {
 				t.Fatalf("command = %+v, want implemented source-bound stream %q", command, test.wantStream)
 			}
 			if err := commandrunner.Preflight(connector, strings.Fields(command.Path)); err != nil {
@@ -132,6 +165,107 @@ func TestSourceBoundReadControlsMaterializeEveryCompleteReadLane(t *testing.T) {
 		}
 		if err := commandrunner.Preflight(connector, strings.Fields(command.Path)); err != nil {
 			t.Fatalf("Preflight(%q) = %v, want source-bound credential boundary", command.Path, err)
+		}
+	}
+}
+
+func TestExecutableCommandsAreAccountedForByPinnedSourceLock(t *testing.T) {
+	bundle := loadBundle(t)
+	lock := loadOperationSourceLock(t)
+	if lock.SchemaVersion != 2 || lock.Connector != bundleName || lock.REST.SHA256 != asanaSourceOpenAPISHA256 {
+		t.Fatalf("source lock identity = schema %d connector %q REST sha256 %q, want pinned Asana v2 lock %q",
+			lock.SchemaVersion, lock.Connector, lock.REST.SHA256, asanaSourceOpenAPISHA256)
+	}
+	if len(lock.REST.Operations) != 249 {
+		t.Fatalf("source lock REST operations = %d, want 249", len(lock.REST.Operations))
+	}
+
+	lockedByID := make(map[string]asanaLockedOperation, len(lock.REST.Operations))
+	lockedEndpoints := make(map[string]struct{}, len(lock.REST.Operations))
+	for _, operation := range lock.REST.Operations {
+		if _, duplicate := lockedByID[operation.ID]; duplicate {
+			t.Fatalf("source lock repeats operation id %q", operation.ID)
+		}
+		lockedByID[operation.ID] = operation
+		lockedEndpoints[strings.ToUpper(operation.Method)+" "+operation.Path] = struct{}{}
+	}
+
+	directReads := 0
+	directWrites := 0
+	writeEndpoints := make(map[string]struct{})
+	for _, command := range bundle.CLISurface.Commands {
+		if command.Availability != "implemented" {
+			continue
+		}
+		switch command.Intent {
+		case "direct_read":
+			directReads++
+			if command.SourceOperation == "" || len(command.APISurface) != 1 {
+				t.Fatalf("implemented direct read %q lacks one exact source-lock binding", command.Path)
+			}
+			locked, ok := lockedByID[command.SourceOperation]
+			if !ok {
+				t.Fatalf("implemented direct read %q references absent source operation %q", command.Path, command.SourceOperation)
+			}
+			endpoint := command.APISurface[0]
+			if !strings.EqualFold(locked.Method, endpoint.Method) || locked.Path != endpoint.Path {
+				t.Fatalf("implemented direct read %q maps %s %s, source lock %q maps %s %s",
+					command.Path, endpoint.Method, endpoint.Path, command.SourceOperation, locked.Method, locked.Path)
+			}
+		case "direct_write":
+			directWrites++
+			if command.Write == "" || len(command.APISurface) != 1 {
+				t.Fatalf("implemented direct write %q lacks one exact action/endpoint binding", command.Path)
+			}
+			endpoint := strings.ToUpper(command.APISurface[0].Method) + " " + command.APISurface[0].Path
+			if _, ok := lockedEndpoints[endpoint]; !ok {
+				t.Fatalf("implemented direct write %q endpoint %s is absent from the pinned source lock", command.Path, endpoint)
+			}
+			writeEndpoints[endpoint] = struct{}{}
+		}
+	}
+	if directReads != 118 {
+		t.Fatalf("source-locked implemented direct reads = %d, want 118", directReads)
+	}
+	if directWrites != 96 || len(writeEndpoints) != 95 {
+		t.Fatalf("source-accounted implemented direct writes = %d across %d provider endpoints, want 96 across 95",
+			directWrites, len(writeEndpoints))
+	}
+}
+
+func TestAsanaSourceTransportCoversEveryExecutableStreamWithoutDestinationClaims(t *testing.T) {
+	bundle := loadBundle(t)
+	if bundle.SyncTransport == nil || bundle.SyncTransport.Source == nil {
+		t.Fatal("Asana bundle has no declared source transport")
+	}
+	if bundle.SyncTransport.Destination != nil {
+		t.Fatalf("Asana destination transport = %+v, want no unproven destination role", bundle.SyncTransport.Destination)
+	}
+	source := bundle.SyncTransport.Source
+	if source.Executor.Family != "declarative_api" || source.Executor.ID != "declarative_stream_source" {
+		t.Fatalf("Asana source executor = %+v, want registered declarative stream executor", source.Executor)
+	}
+	if len(source.EligibleStreams) != len(bundle.Streams) {
+		t.Fatalf("Asana transport streams = %d, executable streams = %d", len(source.EligibleStreams), len(bundle.Streams))
+	}
+	eligible := make(map[string]struct{}, len(source.EligibleStreams))
+	for _, stream := range source.EligibleStreams {
+		if stream == "*" {
+			t.Fatal("Asana transport uses wildcard stream eligibility, want exact allowlist")
+		}
+		if _, duplicate := eligible[stream]; duplicate {
+			t.Fatalf("Asana transport repeats stream %q", stream)
+		}
+		eligible[stream] = struct{}{}
+	}
+	for _, stream := range bundle.Streams {
+		if _, ok := eligible[stream.Name]; !ok {
+			t.Errorf("executable Asana stream %q is absent from source transport", stream.Name)
+		}
+	}
+	for _, action := range bundle.Writes {
+		if action.IdempotencyKeyHeader != "" {
+			t.Fatalf("Asana write action %q fabricates provider idempotency header %q", action.Name, action.IdempotencyKeyHeader)
 		}
 	}
 }
@@ -255,12 +389,12 @@ func TestDestructiveOperationsStayBlocked(t *testing.T) {
 	}
 }
 
-// TestReverseETLWriteActionsExecute drives every declared write action through
-// the surface an operator actually uses: the real commandrunner resolves the
-// command, builds the record from the command's own flags, produces a preview,
-// and the real engine issues the HTTP request against a capture server. It
-// asserts execution, not declaration.
-func TestReverseETLWriteActionsExecute(t *testing.T) {
+// TestDirectWriteActionsExecute reconciles every declared write action with
+// the operator surface, then drives every sanitized JSON/no-body fixture
+// through the real commandrunner and engine. The two multipart attachment
+// variants have source-derived focused plan coverage below; this broad harness
+// does not invent provider responses or JSON fixtures for them.
+func TestDirectWriteActionsExecute(t *testing.T) {
 	b := loadBundle(t)
 	if len(b.Writes) == 0 {
 		t.Fatalf("bundle declares no write actions")
@@ -289,7 +423,7 @@ func TestReverseETLWriteActionsExecute(t *testing.T) {
 
 	commandsByWrite := map[string]connectors.CommandSurfaceCommand{}
 	for _, cmd := range conn.CommandSurface().Commands {
-		if cmd.Write == "" {
+		if cmd.Intent != "direct_write" || cmd.Write == "" {
 			continue
 		}
 		if prior, ok := commandsByWrite[cmd.Write]; ok {
@@ -304,8 +438,17 @@ func TestReverseETLWriteActionsExecute(t *testing.T) {
 			if !ok {
 				t.Fatalf("write action %q has no cli_surface command", action.Name)
 			}
-			fixture := loadWriteFixture(t, action)
+			if cmd.Intent != "direct_write" {
+				t.Fatalf("write action %q command intent = %q, want direct_write", action.Name, cmd.Intent)
+			}
 			path := strings.Fields(cmd.Path)
+			if action.Name == "upload_attachment_file" || action.Name == "create_external_attachment" {
+				if err := commandrunner.Preflight(conn, path); err != nil {
+					t.Fatalf("attachment Preflight(%q) = %v, want focused plan test to remain reachable", cmd.Path, err)
+				}
+				return
+			}
+			fixture := loadWriteFixture(t, action)
 
 			// An "implemented" command is a promise the runtime keeps: it must
 			// resolve, build a record from its own flags, and stage a preview
@@ -391,6 +534,138 @@ func TestReverseETLWriteActionsExecute(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestAttachmentDirectWritesBuildSourceDerivedOneRecordPlansWithoutProviderIO(t *testing.T) {
+	bundle := loadBundle(t)
+	capture := newCaptureServer()
+	defer capture.Close()
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+
+	projectRoot := t.TempDir()
+	payloadPath := filepath.Join(projectRoot, "attachment.txt")
+	if err := os.WriteFile(payloadPath, []byte("bounded Asana attachment fixture"), 0o600); err != nil {
+		t.Fatalf("write bounded attachment fixture: %v", err)
+	}
+	uploadRecord := connectors.Record{"parent": "fixture-task", "file_path": "attachment.txt"}
+	uploadConfig := runtimeConfig(capture.URL)
+	uploadConfig.ProjectDir = projectRoot
+	approved, err := engine.ApprovedMultipartPayloadSHA256ForWrite(context.Background(), bundle, connectors.WriteRequest{
+		Action: "upload_attachment_file", Config: uploadConfig,
+	}, []connectors.Record{uploadRecord}, engine.HooksFor(bundle.Name))
+	if err != nil {
+		t.Fatalf("derive bounded upload payload approval: %v", err)
+	}
+	if digest := approved[connectors.PayloadApprovalKey(0, "file_path")]; len(digest) != 64 {
+		t.Fatalf("approved upload payload digest = %q, want SHA-256", digest)
+	}
+	uploadConfig.ApprovedPayloadSHA256 = approved
+
+	tests := []struct {
+		name          string
+		path          []string
+		flags         map[string][]string
+		config        connectors.RuntimeConfig
+		wantAction    string
+		wantRecord    connectors.Record
+		requiredFlags []string
+		wantPayloads  int
+	}{
+		{
+			name: "bounded local file", path: []string{"attachments", "upload-attachment-file"},
+			flags:  map[string][]string{"parent": {"fixture-task"}, "file-path": {"attachment.txt"}},
+			config: uploadConfig, wantAction: "upload_attachment_file", wantRecord: uploadRecord,
+			requiredFlags: []string{"parent", "file-path"}, wantPayloads: 1,
+		},
+		{
+			name: "external URL", path: []string{"attachments", "create-external-attachment"},
+			flags: map[string][]string{
+				"parent": {"fixture-task"}, "resource-subtype": {"external"},
+				"url": {"https://example.test/source"}, "name": {"Source reference"},
+			},
+			config: runtimeConfig(capture.URL), wantAction: "create_external_attachment",
+			wantRecord: connectors.Record{
+				"parent": "fixture-task", "resource_subtype": "external",
+				"url": "https://example.test/source", "name": "Source reference",
+			},
+			requiredFlags: []string{"parent", "resource-subtype", "url", "name"},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			built, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{
+				Path: test.path, Flags: test.flags, Config: test.config, Preview: true,
+			})
+			if err != nil {
+				t.Fatalf("BuildWriteCommand(%q): %v", strings.Join(test.path, " "), err)
+			}
+			if built.Intent != "direct_write" || built.Write != test.wantAction || !built.ApprovalRequired {
+				t.Fatalf("attachment plan identity = %+v, want approval-gated direct_write %q", built, test.wantAction)
+			}
+			if !reflect.DeepEqual(built.Record, test.wantRecord) || built.Preview == nil || built.Preview.RecordsStaged != 1 {
+				t.Fatalf("attachment one-record plan = record %#v preview %+v, want %#v and one staged record",
+					built.Record, built.Preview, test.wantRecord)
+			}
+			for _, required := range test.requiredFlags {
+				missing := make(map[string][]string, len(test.flags)-1)
+				for name, value := range test.flags {
+					if name != required {
+						missing[name] = value
+					}
+				}
+				if _, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{
+					Path: test.path, Flags: missing, Config: test.config,
+				}); err == nil || !strings.Contains(err.Error(), "missing required flag --"+required) {
+					t.Fatalf("attachment plan without --%s error = %v, want required-field refusal", required, err)
+				}
+			}
+		})
+	}
+
+	if err := app.InitProject(projectRoot); err != nil {
+		t.Fatalf("InitProject attachment plan: %v", err)
+	}
+	application, err := app.Open(projectRoot)
+	if err != nil {
+		t.Fatalf("Open attachment plan project: %v", err)
+	}
+	credentialName := bundle.Name + "-attachment-fixture"
+	if _, err := application.AddCredential(context.Background(), app.AddCredentialRequest{
+		Name: credentialName, Connector: bundle.Name,
+		Config: map[string]string{"base_url": capture.URL}, Secrets: map[string]string{"access_token": "synthetic-test-token"},
+	}); err != nil {
+		t.Fatalf("AddCredential attachment plan: %v", err)
+	}
+	for _, test := range tests {
+		t.Run(test.name+" app plan", func(t *testing.T) {
+			plan, preview, err := application.PlanConnectorCommand(context.Background(), app.PlanConnectorCommandRequest{
+				Name: "attachment-" + strings.ReplaceAll(test.name, " ", "-"), Connector: bundle.Name,
+				Credential: credentialName, Path: test.path, Flags: test.flags, Preview: true,
+			})
+			if err != nil {
+				t.Fatalf("PlanConnectorCommand(%q): %v", strings.Join(test.path, " "), err)
+			}
+			if plan.ConnectorCommandIntent != "direct_write" || plan.Action != test.wantAction || plan.RecordCount != 1 {
+				t.Fatalf("persisted attachment plan = %+v, want one-record direct_write %q", plan, test.wantAction)
+			}
+			if preview == nil || preview.RecordsStaged != 1 || preview.Digest == "" || plan.ApprovalToken == "" {
+				t.Fatalf("persisted attachment preview = %+v token=%t, want one staged approved preview",
+					preview, plan.ApprovalToken != "")
+			}
+			if len(plan.PayloadIdentity) != test.wantPayloads {
+				t.Fatalf("attachment payload identities = %+v, want %d", plan.PayloadIdentity, test.wantPayloads)
+			}
+			if test.wantPayloads == 1 {
+				identity := plan.PayloadIdentity[0]
+				if identity.Field != "file_path" || identity.SizeBytes != int64(len("bounded Asana attachment fixture")) || len(identity.ContentSHA256) != 64 {
+					t.Fatalf("bounded attachment payload identity = %+v", identity)
+				}
+			}
+		})
+	}
+	if got := capture.Last(); got != nil {
+		t.Fatalf("attachment planning performed provider I/O: %+v", got)
 	}
 }
 

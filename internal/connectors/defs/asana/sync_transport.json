@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_stream_source"
+    },
+    "eligible_streams": [
+      "workspaces",
+      "projects",
+      "tasks",
+      "users",
+      "teams",
+      "tags",
+      "sections",
+      "stories",
+      "custom_fields",
+      "project_statuses",
+      "team_memberships",
+      "workspace_memberships"
+    ],
+    "modes": [
+      "full_overwrite",
+      "full_append",
+      "incremental_upsert",
+      "incremental_dedupe",
+      "incremental_dedupe_history"
+    ],
+    "delivery": {
+      "idempotency": "keyed",
+      "ordering": "source_ordered",
+      "deletes": "tombstone"
+    },
+    "conformance": {
+      "suite": "declarative_stream_transport",
+      "run_id": "all_executable_streams_v1"
+    }
+  }
+}

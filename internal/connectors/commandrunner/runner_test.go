@@ -35,6 +35,8 @@ type fakeConnector struct {
 	operationReadBindingsErr   error
 	sourceBoundRead            sourceBoundReadPreflightCall
 	sourceBoundReadErr         error
+	sourceBoundStreamRead      sourceBoundStreamReadPreflightCall
+	sourceBoundStreamReadErr   error
 	sourceBoundOriginOperation string
 	sourceBoundOriginStream    string
 	sourceBoundOriginConfig    connectors.RuntimeConfig
@@ -94,6 +96,13 @@ type operationDirectReadBindingPreflightCall struct {
 
 type sourceBoundReadPreflightCall struct {
 	operation       string
+	sourceOperation string
+	method          string
+	path            string
+}
+
+type sourceBoundStreamReadPreflightCall struct {
+	stream          string
 	sourceOperation string
 	method          string
 	path            string
@@ -405,6 +414,10 @@ func (f *fakeConnector) PreflightSourceBoundRead(operation, sourceOperation, met
 	f.sourceBoundRead = sourceBoundReadPreflightCall{operation: operation, sourceOperation: sourceOperation, method: method, path: path}
 	return f.sourceBoundReadErr
 }
+func (f *fakeConnector) PreflightSourceBoundStreamRead(stream, sourceOperation, method, path string) error {
+	f.sourceBoundStreamRead = sourceBoundStreamReadPreflightCall{stream: stream, sourceOperation: sourceOperation, method: method, path: path}
+	return f.sourceBoundStreamReadErr
+}
 func (f *fakeConnector) PreflightSourceBoundOperationOrigin(operation string, cfg connectors.RuntimeConfig) error {
 	f.sourceBoundOriginOperation = operation
 	f.sourceBoundOriginConfig = cfg
@@ -578,6 +591,73 @@ func TestRunImplementedStreamCommand(t *testing.T) {
 	}
 	if len(records) != 1 || records[0]["state"] != "closed" {
 		t.Fatalf("records = %+v, want one closed record", records)
+	}
+}
+
+func TestRunStreamBackedDirectReadUsesStreamExecutorWithoutPageNavigation(t *testing.T) {
+	connector := &fakeConnector{
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path: "records list", Intent: "direct_read", Availability: "implemented", Stream: "records",
+			SourceOperation: "provider.rest.listRecords",
+			APISurface:      []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/records"}},
+			Flags:           []connectors.CommandSurfaceFlag{{Name: "state", Type: "string", MapsTo: "query.state"}},
+		}}},
+		readRecords: []connectors.Record{{"id": "one"}, {"id": "two"}},
+	}
+
+	var records []connectors.Record
+	result, err := Run(context.Background(), connector, Request{
+		Path: []string{"records", "list"}, Flags: map[string][]string{"state": {"open"}}, Limit: 1,
+	}, func(record connectors.Record) error {
+		records = append(records, record)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run stream-backed direct read: %v", err)
+	}
+	if result.Command != "records list" || result.Stream != "records" || result.Count != 1 {
+		t.Fatalf("stream-backed direct-read result = %+v, want records list/records/1", result)
+	}
+	if connector.readReq.Stream != "records" || connector.readReq.Query["state"] != "open" {
+		t.Fatalf("stream-backed direct-read request = %+v, want records stream and state=open", connector.readReq)
+	}
+	if connector.sourceBoundStreamRead != (sourceBoundStreamReadPreflightCall{
+		stream: "records", sourceOperation: "provider.rest.listRecords", method: http.MethodGet, path: "/records",
+	}) {
+		t.Fatalf("source-bound stream preflight = %+v, want exact locked endpoint", connector.sourceBoundStreamRead)
+	}
+	if len(records) != 1 || records[0]["id"] != "one" {
+		t.Fatalf("stream-backed direct-read records = %+v, want first bounded record", records)
+	}
+
+	for _, flag := range []string{"page", "page-cursor"} {
+		t.Run("reject_"+flag, func(t *testing.T) {
+			_, err := Run(context.Background(), connector, Request{
+				Path: []string{"records", "list"}, Flags: map[string][]string{flag: {"2"}}, Page: 2,
+			}, func(connectors.Record) error { return nil })
+			if err == nil || !strings.Contains(err.Error(), "unknown flag --"+flag) {
+				t.Fatalf("stream-backed direct read --%s error = %v, want closed page-flag refusal", flag, err)
+			}
+		})
+	}
+}
+
+func TestPreflightSourceBoundOriginRoutesStreamBackedDirectRead(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "records list", Intent: "direct_read", Availability: "implemented", Stream: "records",
+		SourceOperation: "provider.rest.listRecords",
+		APISurface:      []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/records"}},
+	}}}}
+	config := map[string]string{"base_url": "https://api.example.test"}
+	if err := PreflightSourceBoundOrigin(connector, []string{"records", "list"}, config); err != nil {
+		t.Fatalf("PreflightSourceBoundOrigin stream-backed direct read: %v", err)
+	}
+	if connector.sourceBoundOriginStream != "records" || connector.sourceBoundOriginOperation != "" {
+		t.Fatalf("origin preflight routed to stream %q operation %q, want records stream only",
+			connector.sourceBoundOriginStream, connector.sourceBoundOriginOperation)
+	}
+	if connector.sourceBoundOriginConfig.Config["base_url"] != config["base_url"] {
+		t.Fatalf("origin preflight config = %+v, want caller public config", connector.sourceBoundOriginConfig.Config)
 	}
 }
 
@@ -1267,6 +1347,42 @@ func TestBuildWriteCommandPlansWithoutExecuting(t *testing.T) {
 	}
 	if got := result.Record["title"]; got != "Ship connector commands" {
 		t.Fatalf("plan record title = %#v, want title", got)
+	}
+}
+
+func TestBuildWriteCommandPlansWriteBackedDirectWriteWithoutExecuting(t *testing.T) {
+	connector := &fakeConnector{
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path: "widgets create", Intent: "direct_write", Availability: "implemented", Write: "create_widget",
+			Risk:  "creates a widget",
+			Flags: []connectors.CommandSurfaceFlag{{Name: "name", Type: "string", MapsTo: "record.name", Required: true}},
+		}}},
+		manifest: connectors.Manifest{WriteActions: []connectors.WriteActionSpec{{
+			Name: "create_widget", Method: http.MethodPost, Path: "/widgets", Risk: "creates a widget",
+		}}},
+	}
+
+	result, err := BuildWriteCommand(context.Background(), connector, Request{
+		Path: []string{"widgets", "create"}, Flags: map[string][]string{"name": {"one"}}, Preview: true,
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand write-backed direct write: %v", err)
+	}
+	if result.Write != "create_widget" || result.Record["name"] != "one" || result.RedactedRecord["name"] != "one" {
+		t.Fatalf("write-backed direct-write plan = %+v, want one create_widget record", result)
+	}
+	if !result.ApprovalRequired || result.Approval != "direct writes require plan, preview, approval, execute" {
+		t.Fatalf("write-backed direct-write approval = required %t policy %q", result.ApprovalRequired, result.Approval)
+	}
+	if result.Preview == nil || result.Preview.RecordsStaged != 1 {
+		t.Fatalf("write-backed direct-write preview = %+v, want one staged record", result.Preview)
+	}
+	if connector.validateReq.Action != "create_widget" || connector.dryRunReq.Action != "create_widget" {
+		t.Fatalf("write-backed direct-write validation/dry-run = %q/%q, want create_widget",
+			connector.validateReq.Action, connector.dryRunReq.Action)
+	}
+	if connector.writeReq.Action != "" || len(connector.writeRecords) != 0 {
+		t.Fatalf("write-backed direct write executed during planning: request=%+v records=%+v", connector.writeReq, connector.writeRecords)
 	}
 }
 

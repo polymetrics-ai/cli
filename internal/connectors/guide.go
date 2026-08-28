@@ -314,6 +314,9 @@ func commandSurfaceRenderedFlags(cmd CommandSurfaceCommand) []CommandSurfaceFlag
 	case "binary_download", "text_export":
 		runtimeFlags = BinaryDownloadFlags()
 	case "direct_read":
+		if strings.TrimSpace(cmd.Stream) != "" {
+			return cmd.Flags
+		}
 		runtimeFlags = DirectReadPageFlags()
 	default:
 		return cmd.Flags

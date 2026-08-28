@@ -250,6 +250,21 @@ func TestSourceBoundReadHelpUsesClosedPagingFlags(t *testing.T) {
 	}
 }
 
+func TestSourceBoundStreamDirectReadHelpUsesStreamLimitWithoutPageFlags(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"asana", "tasks", "list", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(source-bound stream help) code = %d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	help := stdout.String()
+	if strings.Contains(help, "PAGE FLAGS") || strings.Contains(help, "--page-cursor") {
+		t.Fatalf("stream-backed direct-read help exposes unsupported direct-read navigation:\n%s", help)
+	}
+	if !strings.Contains(help, "--limit") {
+		t.Fatalf("stream-backed direct-read help omitted its bounded stream limit:\n%s", help)
+	}
+}
+
 func TestPromotedAsanaMutationHelpIsExecutableRatherThanHistoricalPlan(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"asana", "allocations", "delete-allocation", "--help"}, &stdout, &stderr)

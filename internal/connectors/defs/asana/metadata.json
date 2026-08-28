@@ -1,7 +1,7 @@
 {
   "name": "asana",
   "display_name": "Asana",
-  "description": "Reads 106 bounded source-bound direct operations and 12 declared Asana ETL streams, and executes 94 approval-gated reverse-ETL actions. The pinned OpenAPI ledger accounts for every official operation as an executable covered_by route, an exact named foundation gap, or the one not-applicable generic batch wrapper.",
+  "description": "Runs 118 bounded source-backed direct-read commands and 96 approval-gated one-record direct-write commands. The same 12 declared streams and 96 write actions remain available to saved-connection ETL and warehouse-table reverse ETL. The pinned OpenAPI ledger accounts for every official operation as an executable covered_by route, an exact named foundation gap, or the one not-applicable generic batch wrapper.",
   "integration_type": "api",
   "docs_url": "https://developers.asana.com/reference/rest-api-reference",
   "release_stage": "ga",
@@ -18,7 +18,7 @@
   },
   "risk": {
     "read": "external Asana API reads use fixed declared streams or bounded source-bound operations; no raw provider query/path passthrough",
-    "write": "external mutations require named reverse-ETL actions, schemas, previews, explicit approval, and typed destructive confirmation when destructive/admin",
+    "write": "external mutations require named write actions, schemas, previews, explicit approval, and typed destructive confirmation when destructive/admin; interactive commands are one-record direct writes while warehouse-table reverse ETL remains system-level",
     "approval": "all write execution follows plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive"
   }
 }

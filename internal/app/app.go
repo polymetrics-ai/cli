@@ -266,12 +266,12 @@ func (a *App) ProjectDir() string { return a.projectDir }
 
 func (a *App) projectRoot() string { return filepath.Dir(a.projectDir) }
 
-// connectorCommandRuntime gives the public binary-upload command one
-// documented confinement root: the project root a caller invokes pm in. The
-// application's .polymetrics directory remains private state storage and is
-// never a path callers must know to provide upload bytes.
+// connectorCommandRuntime gives public binary-upload and direct-write commands
+// one documented confinement root: the project root a caller invokes pm in.
+// The application's .polymetrics directory remains private state storage and
+// is never a path callers must know to provide attachment bytes.
 func (a *App) connectorCommandRuntime(intent string, runtime connectors.RuntimeConfig) connectors.RuntimeConfig {
-	if intent == "binary_upload" {
+	if intent == "binary_upload" || intent == "direct_write" {
 		runtime.ProjectDir = a.projectRoot()
 	}
 	return runtime

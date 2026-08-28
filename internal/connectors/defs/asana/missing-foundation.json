@@ -25,6 +25,10 @@
       "role": "ETL record schemas"
     },
     {
+      "path": "sync_transport.json",
+      "role": "source-only closed transport declaration for all executable streams; no Asana destination transport is claimed"
+    },
+    {
       "path": "writes.json",
       "role": "reverse-ETL write actions, including multipart attachment variants"
     },
@@ -44,7 +48,7 @@
   "lane_mapping": {
     "etl": {
       "status": "mapped",
-      "implementation": "streams.json with schemas/",
+      "implementation": "saved connections use streams.json with schemas/; sync_transport.json admits every executable stream to the existing warehouse-backed declarative source executor",
       "stream_count": 12,
       "streams": [
         "workspaces",
@@ -63,7 +67,7 @@
     },
     "reverse_etl": {
       "status": "mapped",
-      "implementation": "writes.json and cli_surface.json",
+      "implementation": "system-level pm reverse reads a local warehouse table and applies writes.json actions; no Asana destination sync transport or provider idempotency is claimed",
       "attachment_commands": [
         "attachments upload-attachment-file",
         "attachments create-external-attachment"
@@ -72,17 +76,25 @@
     },
     "direct_read": {
       "status": "mapped",
-      "implementation": "operations.json and cli_surface.json",
+      "implementation": "cli_surface.json binds 106 operation-backed and 12 stream-backed implemented one-request commands to operations.json or streams.json",
       "source_method": "GET",
-      "source_operation_count": 119
+      "source_operation_count": 119,
+      "implemented_command_count": 118,
+      "planned_command_count": 1
     },
     "direct_write": {
-      "status": "mapped_with_named_runtime_gap",
-      "command": "attachments create-attachment-for-object",
-      "operation": "create_attachment_for_object",
-      "source_operation": "asana.rest.createAttachmentForObject",
-      "source_location": "paths[\"/attachments\"].post",
-      "equivalent_one_record_execution": [
+      "status": "mapped",
+      "implementation": "cli_surface.json binds 96 implemented one-record commands to writes.json; plan -> preview -> approval -> execute is preserved",
+      "implemented_command_count": 96,
+      "planned_command_count": 35,
+      "unsupported_command_count": 1,
+      "named_operation_runtime_gap": {
+        "command": "attachments create-attachment-for-object",
+        "operation": "create_attachment_for_object",
+        "source_operation": "asana.rest.createAttachmentForObject",
+        "source_location": "paths[\"/attachments\"].post"
+      },
+      "equivalent_implemented_one_record_commands": [
         "attachments upload-attachment-file",
         "attachments create-external-attachment"
       ]
@@ -114,7 +126,7 @@
       "reason": "The existing file_upload operation is metadata-only. A direct-write executor needs an operation-level multipart request contract with a closed body and an explicit media policy; the locked Asana source intentionally does not publish a fixed file-media allow-list.",
       "does_not_block": [
         "source mapping",
-        "reverse-ETL attachment write actions",
+        "the equivalent direct-write and reverse-ETL attachment write actions",
         "direct-read and ETL lanes"
       ]
     },
@@ -131,7 +143,7 @@
       "reason": "The source documents multipart/form-data, full file content, and a 100 MB cap, but no fixed allowable media-type list. The public binary_upload intent requires that list, so declaring one would fabricate a provider contract.",
       "does_not_block": [
         "source mapping",
-        "the declared reverse-ETL multipart file action"
+        "the declared direct-write/reverse-ETL multipart file action"
       ]
     },
     {

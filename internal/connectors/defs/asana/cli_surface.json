@@ -1,5 +1,5 @@
 {
-  "tagline": "Read 106 bounded source-bound direct operations and 12 ETL streams; execute 94 approval-gated reverse-ETL actions through declared contracts only.",
+  "tagline": "Run 118 bounded source-backed direct reads and 96 approval-gated one-record direct writes; use saved connections and local warehouse tables for bulk ETL and reverse ETL.",
   "usage": "pm asana <command> [flags]",
   "source_cli": {
     "name": "Asana REST API",
@@ -391,12 +391,12 @@
     {
       "name": "plan",
       "type": "string",
-      "summary": "Execute an approved reverse-ETL plan by id."
+      "summary": "Execute an approved one-record direct-write plan by id."
     },
     {
       "name": "preview",
       "type": "boolean",
-      "summary": "Preview a reverse-ETL write command without making a network mutation."
+      "summary": "Preview a one-record direct-write command without making a network mutation."
     },
     {
       "name": "approval-token-stdin",
@@ -406,7 +406,7 @@
     {
       "name": "confirm",
       "type": "string",
-      "summary": "Typed confirmation challenge for destructive/admin reverse-ETL writes."
+      "summary": "Typed confirmation challenge for destructive/admin one-record direct writes."
     }
   ],
   "commands": [
@@ -448,7 +448,7 @@
     {
       "path": "access-requests create-access-request",
       "summary": "Unavailable source-bound Asana mutation: Create an access request.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "create_access_request",
       "source_cli_path": "POST /access_requests",
@@ -476,13 +476,13 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAccessRequest"
     },
     {
       "path": "access-requests approve-access-request",
       "summary": "Implemented source-bound Asana mutation: Approve an access request.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "POST /access_requests/{access_request_gid}/approve",
       "source_url": "https://developers.asana.com/reference/approveaccessrequest",
@@ -503,14 +503,14 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "approve_access_request"
     },
     {
       "path": "access-requests reject-access-request",
       "summary": "Implemented source-bound Asana mutation: Reject an access request.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "POST /access_requests/{access_request_gid}/reject",
       "source_url": "https://developers.asana.com/reference/rejectaccessrequest",
@@ -531,8 +531,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "reject_access_request"
     },
     {
@@ -712,7 +712,7 @@
     {
       "path": "allocations update-allocation",
       "summary": "Unavailable source-bound Asana mutation: Update an allocation.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "update_allocation",
       "source_cli_path": "PUT /allocations/{allocation_gid}",
@@ -747,13 +747,13 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateAllocation"
     },
     {
       "path": "allocations delete-allocation",
       "summary": "Implemented source-bound Asana mutation: Delete an allocation.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /allocations/{allocation_gid}",
       "source_url": "https://developers.asana.com/reference/deleteallocation",
@@ -779,8 +779,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "delete_allocation"
     },
     {
@@ -825,7 +825,7 @@
     {
       "path": "allocations create-allocation",
       "summary": "Unavailable source-bound Asana mutation: Create an allocation.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "create_allocation",
       "source_cli_path": "POST /allocations",
@@ -853,7 +853,7 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAllocation"
     },
     {
@@ -890,7 +890,7 @@
     {
       "path": "attachments delete-attachment",
       "summary": "Implemented source-bound Asana mutation: Delete an attachment.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /attachments/{attachment_gid}",
       "source_url": "https://developers.asana.com/reference/deleteattachment",
@@ -916,8 +916,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "delete_attachment"
     },
     {
@@ -981,13 +981,13 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "source_operation=asana.rest.createAttachmentForObject; the executable one-record write is attachments upload-attachment-file. This direct_write alias remains planned because the legacy file_upload operation is not a direct executor and Asana documents no fixed file-media allow-list for a direct multipart operation."
     },
     {
       "path": "attachments upload-attachment-file",
       "summary": "Upload one file attachment to an Asana object.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "upload_attachment_file",
       "source_cli_path": "POST /attachments",
@@ -1015,13 +1015,13 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute",
       "notes": "source_operation=asana.rest.createAttachmentForObject; source location paths[\"/attachments\"].post; Asana documents multipart/form-data and a 100 MB attachment limit."
     },
     {
       "path": "attachments create-external-attachment",
       "summary": "Create one external URL attachment on an Asana object.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "create_external_attachment",
       "source_cli_path": "POST /attachments",
@@ -1072,7 +1072,7 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute",
       "notes": "source_operation=asana.rest.createAttachmentForObject; source location paths[\"/attachments\"].post."
     },
     {
@@ -1107,7 +1107,7 @@
       ],
       "risk": "high",
       "approval": "binary uploads require plan, preview, approval, execute",
-      "notes": "source_operation=asana.rest.createAttachmentForObject; the reverse-ETL command attachments upload-attachment-file is executable. This binary_upload alias remains planned because a public binary_upload command requires a fixed declared media allow-list, while the locked Asana source documents arbitrary file contents rather than one list."
+      "notes": "source_operation=asana.rest.createAttachmentForObject; the direct-write command attachments upload-attachment-file is executable. This binary_upload alias remains planned because a public binary_upload command requires a fixed declared media allow-list, while the locked Asana source documents arbitrary file contents rather than one list."
     },
     {
       "path": "audit-log-api get-audit-log-events",
@@ -1175,7 +1175,7 @@
     {
       "path": "batch-api create-batch-request",
       "summary": "Not-applicable source-bound Asana mutation: Submit parallel requests.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "unsupported_api",
       "operation": "create_batch_request",
       "source_cli_path": "POST /batch",
@@ -1232,7 +1232,7 @@
     {
       "path": "budgets create-budget",
       "summary": "Unavailable source-bound Asana mutation: Create a budget.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "create_budget",
       "source_cli_path": "POST /budgets",
@@ -1260,7 +1260,7 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createBudget"
     },
     {
@@ -1297,7 +1297,7 @@
     {
       "path": "budgets update-budget",
       "summary": "Unavailable source-bound Asana mutation: Update a budget.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "update_budget",
       "source_cli_path": "PUT /budgets/{budget_gid}",
@@ -1332,13 +1332,13 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateBudget"
     },
     {
       "path": "budgets delete-budget",
       "summary": "Implemented source-bound Asana mutation: Delete a budget.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /budgets/{budget_gid}",
       "source_url": "https://developers.asana.com/reference/deletebudget",
@@ -1364,8 +1364,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "delete_budget"
     },
     {
@@ -1495,7 +1495,7 @@
     {
       "path": "custom-fields create-custom-field",
       "summary": "fixed-target Asana mutation: Create a custom field.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "create_custom_field",
       "source_cli_path": "POST /custom_fields",
@@ -1682,8 +1682,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "custom-fields get-custom-field",
@@ -1719,7 +1719,7 @@
     {
       "path": "custom-fields update-custom-field",
       "summary": "fixed-target Asana mutation: Update a custom field.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "update_custom_field",
       "source_cli_path": "PUT /custom_fields/{custom_field_gid}",
@@ -1907,13 +1907,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "custom-fields delete-custom-field",
       "summary": "Implemented source-bound Asana mutation: Delete a custom field.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /custom_fields/{custom_field_gid}",
       "source_url": "https://developers.asana.com/reference/deletecustomfield",
@@ -1939,14 +1939,14 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "delete_custom_field"
     },
     {
       "path": "custom-fields list",
-      "summary": "Get the configured workspace's custom fields through the declared Asana ETL stream.",
-      "intent": "etl",
+      "summary": "Get the configured workspace's custom fields through the declared Asana source stream.",
+      "intent": "direct_read",
       "availability": "implemented",
       "source_cli_path": "GET /workspaces/{workspace_gid}/custom_fields",
       "source_url": "https://developers.asana.com/reference/getcustomfieldsforworkspace",
@@ -1962,7 +1962,7 @@
     {
       "path": "custom-fields create-enum-option-for-custom-field",
       "summary": "fixed-target Asana mutation: Create an enum option.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "create_enum_option_for_custom_field",
       "source_cli_path": "POST /custom_fields/{custom_field_gid}/enum_options",
@@ -2018,13 +2018,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "custom-fields insert-enum-option-for-custom-field",
       "summary": "fixed-target Asana mutation: Reorder a custom field's enum.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "insert_enum_option_for_custom_field",
       "source_cli_path": "POST /custom_fields/{custom_field_gid}/enum_options/insert",
@@ -2067,13 +2067,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "custom-fields update-enum-option",
       "summary": "fixed-target Asana mutation: Update an enum option.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "update_enum_option",
       "source_cli_path": "PUT /enum_options/{enum_option_gid}",
@@ -2115,8 +2115,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "custom-types get-custom-types",
@@ -2217,7 +2217,7 @@
     {
       "path": "exports create-graph-export",
       "summary": "fixed-target Asana mutation: Initiate a graph export.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "create_graph_export",
       "source_cli_path": "POST /exports/graph",
@@ -2238,13 +2238,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "exports create-resource-export",
       "summary": "fixed-target Asana mutation: Initiate a resource export.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "create_resource_export",
       "source_cli_path": "POST /exports/resource",
@@ -2278,8 +2278,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "goal-relationships get-goal-relationship",
@@ -2315,7 +2315,7 @@
     {
       "path": "goal-relationships update-goal-relationship",
       "summary": "fixed-target Asana mutation: Update a goal relationship.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "update_goal_relationship",
       "source_cli_path": "PUT /goal_relationships/{goal_relationship_gid}",
@@ -2357,8 +2357,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "goal-relationships get-goal-relationships",
@@ -2398,7 +2398,7 @@
     {
       "path": "goal-relationships add-supporting-relationship",
       "summary": "fixed-target Asana mutation: Add a supporting goal relationship.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "add_supporting_relationship",
       "source_cli_path": "POST /goals/{goal_gid}/addSupportingRelationship",
@@ -2447,13 +2447,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "goal-relationships remove-supporting-relationship",
       "summary": "Unavailable source-bound Asana mutation: Removes a supporting goal relationship.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "remove_supporting_relationship",
       "source_cli_path": "POST /goals/{goal_gid}/removeSupportingRelationship",
@@ -2488,7 +2488,7 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeSupportingRelationship"
     },
     {
@@ -2525,7 +2525,7 @@
     {
       "path": "goals update-goal",
       "summary": "fixed-target Asana mutation: Update a goal.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "update_goal",
       "source_cli_path": "PUT /goals/{goal_gid}",
@@ -2629,13 +2629,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "goals delete-goal",
       "summary": "Implemented source-bound Asana mutation: Delete a goal.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /goals/{goal_gid}",
       "source_url": "https://developers.asana.com/reference/deletegoal",
@@ -2661,8 +2661,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "delete_goal"
     },
     {
@@ -2722,7 +2722,7 @@
     {
       "path": "goals create-goal",
       "summary": "fixed-target Asana mutation: Create a goal.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "create_goal",
       "source_cli_path": "POST /goals",
@@ -2817,13 +2817,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "goals create-goal-metric",
       "summary": "fixed-target Asana mutation: Create a goal metric.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "create_goal_metric",
       "source_cli_path": "POST /goals/{goal_gid}/setMetric",
@@ -2896,13 +2896,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "goals update-goal-metric",
       "summary": "fixed-target Asana mutation: Update a goal metric.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "update_goal_metric",
       "source_cli_path": "POST /goals/{goal_gid}/setMetricCurrentValue",
@@ -2930,13 +2930,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "goals add-followers",
       "summary": "fixed-target Asana mutation: Add a collaborator to a goal.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "add_followers",
       "source_cli_path": "POST /goals/{goal_gid}/addFollowers",
@@ -2964,13 +2964,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "goals remove-followers",
       "summary": "Unavailable source-bound Asana mutation: Remove a collaborator from a goal.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "remove_followers",
       "source_cli_path": "POST /goals/{goal_gid}/removeFollowers",
@@ -3005,7 +3005,7 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowers"
     },
     {
@@ -3042,7 +3042,7 @@
     {
       "path": "goals add-custom-field-setting-for-goal",
       "summary": "fixed-target Asana mutation: Add a custom field to a goal.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "add_custom_field_setting_for_goal",
       "source_cli_path": "POST /goals/{goal_gid}/addCustomFieldSetting",
@@ -3084,13 +3084,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "goals remove-custom-field-setting-for-goal",
       "summary": "Unavailable source-bound Asana mutation: Remove a custom field from a goal.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "remove_custom_field_setting_for_goal",
       "source_cli_path": "POST /goals/{goal_gid}/removeCustomFieldSetting",
@@ -3125,7 +3125,7 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForGoal"
     },
     {
@@ -3204,7 +3204,7 @@
     {
       "path": "memberships create-membership",
       "summary": "Unavailable source-bound Asana mutation: Create a membership.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "create_membership",
       "source_cli_path": "POST /memberships",
@@ -3232,13 +3232,13 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-openapi30-reference-sibling-foundation-r1; missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createMembership"
     },
     {
       "path": "memberships get-membership",
       "summary": "Unavailable source-bound Asana read: Get a membership.",
-      "intent": "etl",
+      "intent": "direct_read",
       "availability": "planned",
       "operation": "get_membership",
       "source_cli_path": "GET /memberships/{membership_gid}",
@@ -3263,7 +3263,7 @@
     {
       "path": "memberships update-membership",
       "summary": "Unavailable source-bound Asana mutation: Update a membership.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "update_membership",
       "source_cli_path": "PUT /memberships/{membership_gid}",
@@ -3298,13 +3298,13 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateMembership"
     },
     {
       "path": "memberships delete-membership",
       "summary": "Implemented source-bound Asana mutation: Delete a membership.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /memberships/{membership_gid}",
       "source_url": "https://developers.asana.com/reference/deletemembership",
@@ -3330,8 +3330,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "delete_membership"
     },
     {
@@ -3368,7 +3368,7 @@
     {
       "path": "ooo-entries update-ooo-entry",
       "summary": "fixed-target Asana mutation: Update an OOO entry.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "update_ooo_entry",
       "source_cli_path": "PUT /ooo_entries/{ooo_entry_gid}",
@@ -3404,13 +3404,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "ooo-entries delete-ooo-entry",
       "summary": "Implemented source-bound Asana mutation: Delete an OOO entry.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /ooo_entries/{ooo_entry_gid}",
       "source_url": "https://developers.asana.com/reference/deleteoooentry",
@@ -3436,8 +3436,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "delete_ooo_entry"
     },
     {
@@ -3489,7 +3489,7 @@
     {
       "path": "ooo-entries create-ooo-entry",
       "summary": "fixed-target Asana mutation: Create an OOO entry.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "create_ooo_entry",
       "source_cli_path": "POST /ooo_entries",
@@ -3531,13 +3531,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "organization-exports create-organization-export",
       "summary": "Unavailable source-bound Asana mutation: Create an organization export request.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "create_organization_export",
       "source_cli_path": "POST /organization_exports",
@@ -3565,7 +3565,7 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createOrganizationExport"
     },
     {
@@ -3743,7 +3743,7 @@
     {
       "path": "portfolios create-portfolio",
       "summary": "fixed-target Asana mutation: Create a portfolio.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "create_portfolio",
       "source_cli_path": "POST /portfolios",
@@ -3811,8 +3811,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "portfolios get-portfolio",
@@ -3848,7 +3848,7 @@
     {
       "path": "portfolios update-portfolio",
       "summary": "fixed-target Asana mutation: Update a portfolio.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "update_portfolio",
       "source_cli_path": "PUT /portfolios/{portfolio_gid}",
@@ -3911,13 +3911,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "portfolios delete-portfolio",
       "summary": "Implemented source-bound Asana mutation: Delete a portfolio.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /portfolios/{portfolio_gid}",
       "source_url": "https://developers.asana.com/reference/deleteportfolio",
@@ -3943,8 +3943,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "delete_portfolio"
     },
     {
@@ -3981,7 +3981,7 @@
     {
       "path": "portfolios add-item-for-portfolio",
       "summary": "fixed-target Asana mutation: Add a portfolio item.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "add_item_for_portfolio",
       "source_cli_path": "POST /portfolios/{portfolio_gid}/addItem",
@@ -4024,13 +4024,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "portfolios remove-item-for-portfolio",
       "summary": "Unavailable source-bound Asana mutation: Remove a portfolio item.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "remove_item_for_portfolio",
       "source_cli_path": "POST /portfolios/{portfolio_gid}/removeItem",
@@ -4065,13 +4065,13 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeItemForPortfolio"
     },
     {
       "path": "portfolios add-custom-field-setting-for-portfolio",
       "summary": "fixed-target Asana mutation: Add a custom field to a portfolio.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "add_custom_field_setting_for_portfolio",
       "source_cli_path": "POST /portfolios/{portfolio_gid}/addCustomFieldSetting",
@@ -4113,13 +4113,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "portfolios remove-custom-field-setting-for-portfolio",
       "summary": "Unavailable source-bound Asana mutation: Remove a custom field from a portfolio.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "remove_custom_field_setting_for_portfolio",
       "source_cli_path": "POST /portfolios/{portfolio_gid}/removeCustomFieldSetting",
@@ -4154,13 +4154,13 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForPortfolio"
     },
     {
       "path": "portfolios add-members-for-portfolio",
       "summary": "fixed-target Asana mutation: Add users to a portfolio.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "add_members_for_portfolio",
       "source_cli_path": "POST /portfolios/{portfolio_gid}/addMembers",
@@ -4189,13 +4189,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "portfolios remove-members-for-portfolio",
       "summary": "Unavailable source-bound Asana mutation: Remove users from a portfolio.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "remove_members_for_portfolio",
       "source_cli_path": "POST /portfolios/{portfolio_gid}/removeMembers",
@@ -4230,13 +4230,13 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeMembersForPortfolio"
     },
     {
       "path": "portfolios duplicate-portfolio",
       "summary": "fixed-target Asana mutation: Duplicate a portfolio.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "duplicate_portfolio",
       "source_cli_path": "POST /portfolios/{portfolio_gid}/duplicate",
@@ -4272,8 +4272,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "project-briefs get-project-brief",
@@ -4309,7 +4309,7 @@
     {
       "path": "project-briefs update-project-brief",
       "summary": "fixed-target Asana mutation: Update a project brief.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "update_project_brief",
       "source_cli_path": "PUT /project_briefs/{project_brief_gid}",
@@ -4352,13 +4352,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "project-briefs delete-project-brief",
       "summary": "Implemented source-bound Asana mutation: Delete a project brief.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /project_briefs/{project_brief_gid}",
       "source_url": "https://developers.asana.com/reference/deleteprojectbrief",
@@ -4384,14 +4384,14 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "delete_project_brief"
     },
     {
       "path": "project-briefs create-project-brief",
       "summary": "fixed-target Asana mutation: Create a project brief.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "create_project_brief",
       "source_cli_path": "POST /projects/{project_gid}/project_briefs",
@@ -4434,8 +4434,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "project-memberships get-project-membership",
@@ -4538,7 +4538,7 @@
     {
       "path": "project-portfolio-settings update-project-portfolio-setting",
       "summary": "fixed-target Asana mutation: Update a project portfolio setting.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "update_project_portfolio_setting",
       "source_cli_path": "PUT /project_portfolio_settings/{project_portfolio_setting_gid}",
@@ -4566,8 +4566,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "project-portfolio-settings get-project-portfolio-settings-for-project",
@@ -4665,7 +4665,7 @@
     {
       "path": "project-statuses delete-project-status",
       "summary": "Implemented source-bound Asana mutation: Delete a project status.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /project_statuses/{project_status_gid}",
       "source_url": "https://developers.asana.com/reference/deleteprojectstatus",
@@ -4691,14 +4691,14 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "delete_project_status"
     },
     {
       "path": "project-statuses list",
       "summary": "Get statuses from a project.",
-      "intent": "etl",
+      "intent": "direct_read",
       "availability": "implemented",
       "source_cli_path": "GET /projects/{project_gid}/project_statuses",
       "source_url": "https://developers.asana.com/reference/getprojectstatusesforproject",
@@ -4714,7 +4714,7 @@
     {
       "path": "project-statuses create-project-status-for-project",
       "summary": "fixed-target Asana mutation: Create a project status.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "create_project_status_for_project",
       "source_cli_path": "POST /projects/{project_gid}/project_statuses",
@@ -4764,8 +4764,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "project-templates get-project-template",
@@ -4801,7 +4801,7 @@
     {
       "path": "project-templates delete-project-template",
       "summary": "Implemented source-bound Asana mutation: Delete a project template.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /project_templates/{project_template_gid}",
       "source_url": "https://developers.asana.com/reference/deleteprojecttemplate",
@@ -4827,8 +4827,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "delete_project_template"
     },
     {
@@ -4899,7 +4899,7 @@
     {
       "path": "project-templates instantiate-project",
       "summary": "fixed-target Asana mutation: Instantiate a project from a project template.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "instantiate_project",
       "source_cli_path": "POST /project_templates/{project_template_gid}/instantiateProject",
@@ -4982,13 +4982,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "projects list",
-      "summary": "Get multiple projects through the declared Asana ETL stream.",
-      "intent": "etl",
+      "summary": "Get multiple projects through the declared Asana source stream.",
+      "intent": "direct_read",
       "availability": "implemented",
       "source_cli_path": "GET /projects",
       "source_url": "https://developers.asana.com/reference/getprojects",
@@ -5003,8 +5003,8 @@
     },
     {
       "path": "projects create",
-      "summary": "Plan create a project through the declared Asana reverse-ETL action.",
-      "intent": "reverse_etl",
+      "summary": "Plan create a project through the declared Asana direct-write action.",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "POST /projects",
       "source_url": "https://developers.asana.com/reference/createproject",
@@ -5032,7 +5032,7 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute"
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute"
     },
     {
       "path": "projects get-project",
@@ -5067,8 +5067,8 @@
     },
     {
       "path": "projects update",
-      "summary": "Plan update a project through the declared Asana reverse-ETL action.",
-      "intent": "reverse_etl",
+      "summary": "Plan update a project through the declared Asana direct-write action.",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "PUT /projects/{project_gid}",
       "source_url": "https://developers.asana.com/reference/updateproject",
@@ -5098,12 +5098,12 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute"
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute"
     },
     {
       "path": "projects delete",
-      "summary": "Plan delete a project through the declared Asana reverse-ETL action.",
-      "intent": "reverse_etl",
+      "summary": "Plan delete a project through the declared Asana direct-write action.",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /projects/{project_gid}",
       "source_url": "https://developers.asana.com/reference/deleteproject",
@@ -5127,12 +5127,12 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive execution requires the typed global --confirm destructive challenge"
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive execution requires the typed global --confirm destructive challenge"
     },
     {
       "path": "projects duplicate-project",
       "summary": "fixed-target Asana mutation: Duplicate a project.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "duplicate_project",
       "source_cli_path": "POST /projects/{project_gid}/duplicate",
@@ -5188,8 +5188,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "projects get-projects-for-task",
@@ -5261,7 +5261,7 @@
     {
       "path": "projects create-project-for-team",
       "summary": "fixed-target Asana mutation: Create a project in a team.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "create_project_for_team",
       "source_cli_path": "POST /teams/{team_gid}/projects",
@@ -5449,8 +5449,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "projects get-projects-for-workspace",
@@ -5491,7 +5491,7 @@
     {
       "path": "projects create-project-for-workspace",
       "summary": "fixed-target Asana mutation: Create a project in a workspace.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "create_project_for_workspace",
       "source_cli_path": "POST /workspaces/{workspace_gid}/projects",
@@ -5679,8 +5679,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "projects search-projects-for-workspace",
@@ -5858,7 +5858,7 @@
     {
       "path": "projects add-custom-field-setting-for-project",
       "summary": "fixed-target Asana mutation: Add a custom field to a project.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "add_custom_field_setting_for_project",
       "source_cli_path": "POST /projects/{project_gid}/addCustomFieldSetting",
@@ -5900,13 +5900,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "projects remove-custom-field-setting-for-project",
       "summary": "Unavailable source-bound Asana mutation: Remove a custom field from a project.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "remove_custom_field_setting_for_project",
       "source_cli_path": "POST /projects/{project_gid}/removeCustomFieldSetting",
@@ -5941,7 +5941,7 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForProject"
     },
     {
@@ -5978,7 +5978,7 @@
     {
       "path": "projects add-members-for-project",
       "summary": "fixed-target Asana mutation: Add users to a project.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "add_members_for_project",
       "source_cli_path": "POST /projects/{project_gid}/addMembers",
@@ -6007,13 +6007,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "projects remove-members-for-project",
       "summary": "Unavailable source-bound Asana mutation: Remove users from a project.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "remove_members_for_project",
       "source_cli_path": "POST /projects/{project_gid}/removeMembers",
@@ -6048,13 +6048,13 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeMembersForProject"
     },
     {
       "path": "projects add-followers-for-project",
       "summary": "fixed-target Asana mutation: Add followers to a project.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "add_followers_for_project",
       "source_cli_path": "POST /projects/{project_gid}/addFollowers",
@@ -6083,13 +6083,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "projects remove-followers-for-project",
       "summary": "Unavailable source-bound Asana mutation: Remove followers from a project.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "remove_followers_for_project",
       "source_cli_path": "POST /projects/{project_gid}/removeFollowers",
@@ -6124,13 +6124,13 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowersForProject"
     },
     {
       "path": "projects save-as-template",
       "summary": "fixed-target Asana mutation: Create a project template from a project.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "project_save_as_template",
       "source_cli_path": "POST /projects/{project_gid}/saveAsTemplate",
@@ -6179,8 +6179,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "rates get-rates",
@@ -6219,7 +6219,7 @@
     {
       "path": "rates create-rate",
       "summary": "Unavailable source-bound Asana mutation: Create a rate.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "create_rate",
       "source_cli_path": "POST /rates",
@@ -6247,7 +6247,7 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createRate"
     },
     {
@@ -6284,7 +6284,7 @@
     {
       "path": "rates update-rate",
       "summary": "Unavailable source-bound Asana mutation: Update a rate.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "update_rate",
       "source_cli_path": "PUT /rates/{rate_gid}",
@@ -6319,13 +6319,13 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateRate"
     },
     {
       "path": "rates delete-rate",
       "summary": "Implemented source-bound Asana mutation: Delete a rate.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /rates/{rate_gid}",
       "source_url": "https://developers.asana.com/reference/deleterate",
@@ -6351,8 +6351,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "delete_rate"
     },
     {
@@ -6428,7 +6428,7 @@
     {
       "path": "roles create-role",
       "summary": "Unavailable source-bound Asana mutation: Create a role.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "create_role",
       "source_cli_path": "POST /roles",
@@ -6456,7 +6456,7 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createRole"
     },
     {
@@ -6493,7 +6493,7 @@
     {
       "path": "roles update-role",
       "summary": "Unavailable source-bound Asana mutation: Update a role.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "update_role",
       "source_cli_path": "PUT /roles/{role_gid}",
@@ -6528,13 +6528,13 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateRole"
     },
     {
       "path": "roles delete-role",
       "summary": "Implemented source-bound Asana mutation: Delete a role.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /roles/{role_gid}",
       "source_url": "https://developers.asana.com/reference/deleterole",
@@ -6560,14 +6560,14 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "delete_role"
     },
     {
       "path": "rules trigger-rule",
       "summary": "fixed-target Asana mutation: Trigger a rule.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "trigger_rule",
       "source_cli_path": "POST /rule_triggers/{rule_trigger_gid}/run",
@@ -6596,8 +6596,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "sections get-section",
@@ -6632,8 +6632,8 @@
     },
     {
       "path": "sections update",
-      "summary": "Plan update a section through the declared Asana reverse-ETL action.",
-      "intent": "reverse_etl",
+      "summary": "Plan update a section through the declared Asana direct-write action.",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "PUT /sections/{section_gid}",
       "source_url": "https://developers.asana.com/reference/updatesection",
@@ -6664,12 +6664,12 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute"
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute"
     },
     {
       "path": "sections delete",
-      "summary": "Plan delete a section through the declared Asana reverse-ETL action.",
-      "intent": "reverse_etl",
+      "summary": "Plan delete a section through the declared Asana direct-write action.",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /sections/{section_gid}",
       "source_url": "https://developers.asana.com/reference/deletesection",
@@ -6693,12 +6693,12 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive execution requires the typed global --confirm destructive challenge"
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive execution requires the typed global --confirm destructive challenge"
     },
     {
       "path": "sections list",
       "summary": "Get sections in a project.",
-      "intent": "etl",
+      "intent": "direct_read",
       "availability": "implemented",
       "source_cli_path": "GET /projects/{project_gid}/sections",
       "source_url": "https://developers.asana.com/reference/getsectionsforproject",
@@ -6713,8 +6713,8 @@
     },
     {
       "path": "sections create",
-      "summary": "Plan create a section in a project through the declared Asana reverse-ETL action.",
-      "intent": "reverse_etl",
+      "summary": "Plan create a section in a project through the declared Asana direct-write action.",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "POST /projects/{project_gid}/sections",
       "source_url": "https://developers.asana.com/reference/createsectionforproject",
@@ -6745,12 +6745,12 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute"
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute"
     },
     {
       "path": "sections add-task-for-section",
       "summary": "fixed-target Asana mutation: Add task to section.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "add_task_for_section",
       "source_cli_path": "POST /sections/{section_gid}/addTask",
@@ -6793,13 +6793,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "sections insert-section-for-project",
       "summary": "fixed-target Asana mutation: Move or Insert sections.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "insert_section_for_project",
       "source_cli_path": "POST /projects/{project_gid}/sections/insert",
@@ -6842,8 +6842,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "status-updates get-status",
@@ -6879,7 +6879,7 @@
     {
       "path": "status-updates delete-status",
       "summary": "Implemented source-bound Asana mutation: Delete a status update.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /status_updates/{status_update_gid}",
       "source_url": "https://developers.asana.com/reference/deletestatus",
@@ -6905,8 +6905,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "delete_status"
     },
     {
@@ -6947,7 +6947,7 @@
     {
       "path": "status-updates create-status-for-object",
       "summary": "fixed-target Asana mutation: Create a status update.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "create_status_for_object",
       "source_cli_path": "POST /status_updates",
@@ -6989,8 +6989,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "stories get-story",
@@ -7026,7 +7026,7 @@
     {
       "path": "stories update-story",
       "summary": "fixed-target Asana mutation: Update a story.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "update_story",
       "source_cli_path": "PUT /stories/{story_gid}",
@@ -7075,13 +7075,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "stories delete-story",
       "summary": "Implemented source-bound Asana mutation: Delete a story.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /stories/{story_gid}",
       "source_url": "https://developers.asana.com/reference/deletestory",
@@ -7107,14 +7107,14 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "delete_story"
     },
     {
       "path": "stories list",
       "summary": "Get stories from a task.",
-      "intent": "etl",
+      "intent": "direct_read",
       "availability": "implemented",
       "source_cli_path": "GET /tasks/{task_gid}/stories",
       "source_url": "https://developers.asana.com/reference/getstoriesfortask",
@@ -7129,8 +7129,8 @@
     },
     {
       "path": "tasks comments add",
-      "summary": "Plan create a story on a task through the declared Asana reverse-ETL action.",
-      "intent": "reverse_etl",
+      "summary": "Plan create a story on a task through the declared Asana direct-write action.",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "POST /tasks/{task_gid}/stories",
       "source_url": "https://developers.asana.com/reference/createstoryfortask",
@@ -7161,7 +7161,7 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute"
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute"
     },
     {
       "path": "stories get-stories-for-goal",
@@ -7197,7 +7197,7 @@
     {
       "path": "stories create-story-for-goal",
       "summary": "fixed-target Asana mutation: Create a story on a goal.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "create_story_for_goal",
       "source_cli_path": "POST /goals/{goal_gid}/stories",
@@ -7246,13 +7246,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "tags list",
-      "summary": "Get multiple tags through the declared Asana ETL stream.",
-      "intent": "etl",
+      "summary": "Get multiple tags through the declared Asana source stream.",
+      "intent": "direct_read",
       "availability": "implemented",
       "source_cli_path": "GET /tags",
       "source_url": "https://developers.asana.com/reference/gettags",
@@ -7267,8 +7267,8 @@
     },
     {
       "path": "tags create",
-      "summary": "Plan create a tag through the declared Asana reverse-ETL action.",
-      "intent": "reverse_etl",
+      "summary": "Plan create a tag through the declared Asana direct-write action.",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "POST /tags",
       "source_url": "https://developers.asana.com/reference/createtag",
@@ -7296,7 +7296,7 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute"
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute"
     },
     {
       "path": "tags get-tag",
@@ -7331,8 +7331,8 @@
     },
     {
       "path": "tags update",
-      "summary": "Plan update a tag through the declared Asana reverse-ETL action.",
-      "intent": "reverse_etl",
+      "summary": "Plan update a tag through the declared Asana direct-write action.",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "PUT /tags/{tag_gid}",
       "source_url": "https://developers.asana.com/reference/updatetag",
@@ -7377,12 +7377,12 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute"
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute"
     },
     {
       "path": "tags delete",
-      "summary": "Plan delete a tag through the declared Asana reverse-ETL action.",
-      "intent": "reverse_etl",
+      "summary": "Plan delete a tag through the declared Asana direct-write action.",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /tags/{tag_gid}",
       "source_url": "https://developers.asana.com/reference/deletetag",
@@ -7406,7 +7406,7 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive execution requires the typed global --confirm destructive challenge"
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive execution requires the typed global --confirm destructive challenge"
     },
     {
       "path": "tags get-tags-for-task",
@@ -7473,7 +7473,7 @@
     {
       "path": "tags create-tag-for-workspace",
       "summary": "fixed-target Asana mutation: Create a tag in a workspace.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "create_tag_for_workspace",
       "source_cli_path": "POST /workspaces/{workspace_gid}/tags",
@@ -7522,8 +7522,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "task-templates get-task-templates",
@@ -7588,7 +7588,7 @@
     {
       "path": "task-templates delete-task-template",
       "summary": "Implemented source-bound Asana mutation: Delete a task template.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /task_templates/{task_template_gid}",
       "source_url": "https://developers.asana.com/reference/deletetasktemplate",
@@ -7614,14 +7614,14 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "delete_task_template"
     },
     {
       "path": "task-templates instantiate-task",
       "summary": "fixed-target Asana mutation: Instantiate a task from a task template.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "instantiate_task",
       "source_cli_path": "POST /task_templates/{task_template_gid}/instantiateTask",
@@ -7650,13 +7650,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "tasks list",
-      "summary": "Get multiple tasks through the declared Asana ETL stream.",
-      "intent": "etl",
+      "summary": "Get multiple tasks through the declared Asana source stream.",
+      "intent": "direct_read",
       "availability": "implemented",
       "source_cli_path": "GET /tasks",
       "source_url": "https://developers.asana.com/reference/gettasks",
@@ -7671,8 +7671,8 @@
     },
     {
       "path": "tasks create",
-      "summary": "Plan create a task through the declared Asana reverse-ETL action.",
-      "intent": "reverse_etl",
+      "summary": "Plan create a task through the declared Asana direct-write action.",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "POST /tasks",
       "source_url": "https://developers.asana.com/reference/createtask",
@@ -7700,7 +7700,7 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute"
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute"
     },
     {
       "path": "tasks get-task",
@@ -7735,8 +7735,8 @@
     },
     {
       "path": "tasks update",
-      "summary": "Plan update a task through the declared Asana reverse-ETL action.",
-      "intent": "reverse_etl",
+      "summary": "Plan update a task through the declared Asana direct-write action.",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "PUT /tasks/{task_gid}",
       "source_url": "https://developers.asana.com/reference/updatetask",
@@ -7766,12 +7766,12 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute"
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute"
     },
     {
       "path": "tasks delete",
-      "summary": "Plan delete a task through the declared Asana reverse-ETL action.",
-      "intent": "reverse_etl",
+      "summary": "Plan delete a task through the declared Asana direct-write action.",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /tasks/{task_gid}",
       "source_url": "https://developers.asana.com/reference/deletetask",
@@ -7795,12 +7795,12 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive execution requires the typed global --confirm destructive challenge"
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive execution requires the typed global --confirm destructive challenge"
     },
     {
       "path": "tasks duplicate-task",
       "summary": "fixed-target Asana mutation: Duplicate a task.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "duplicate_task",
       "source_cli_path": "POST /tasks/{task_gid}/duplicate",
@@ -7836,8 +7836,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "tasks get-tasks-for-project",
@@ -8012,7 +8012,7 @@
     {
       "path": "tasks create-subtask-for-task",
       "summary": "fixed-target Asana mutation: Create a subtask.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "create_subtask_for_task",
       "source_cli_path": "POST /tasks/{task_gid}/subtasks",
@@ -8190,13 +8190,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "tasks set-parent-for-task",
       "summary": "fixed-target Asana mutation: Set the parent of a task.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "set_parent_for_task",
       "source_cli_path": "POST /tasks/{task_gid}/setParent",
@@ -8239,8 +8239,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "tasks get-dependencies-for-task",
@@ -8276,7 +8276,7 @@
     {
       "path": "tasks add-dependencies-for-task",
       "summary": "fixed-target Asana mutation: Set dependencies for a task.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "add_dependencies_for_task",
       "source_cli_path": "POST /tasks/{task_gid}/addDependencies",
@@ -8304,13 +8304,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "tasks remove-dependencies-for-task",
       "summary": "Unavailable source-bound Asana mutation: Unlink dependencies from a task.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "remove_dependencies_for_task",
       "source_cli_path": "POST /tasks/{task_gid}/removeDependencies",
@@ -8345,7 +8345,7 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeDependenciesForTask"
     },
     {
@@ -8382,7 +8382,7 @@
     {
       "path": "tasks add-dependents-for-task",
       "summary": "fixed-target Asana mutation: Set dependents for a task.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "add_dependents_for_task",
       "source_cli_path": "POST /tasks/{task_gid}/addDependents",
@@ -8410,13 +8410,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "tasks remove-dependents-for-task",
       "summary": "Unavailable source-bound Asana mutation: Unlink dependents from a task.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "remove_dependents_for_task",
       "source_cli_path": "POST /tasks/{task_gid}/removeDependents",
@@ -8451,13 +8451,13 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeDependentsForTask"
     },
     {
       "path": "tasks add-project-for-task",
       "summary": "fixed-target Asana mutation: Add a project to a task.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "add_project_for_task",
       "source_cli_path": "POST /tasks/{task_gid}/addProject",
@@ -8507,13 +8507,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "tasks remove-project-for-task",
       "summary": "Unavailable source-bound Asana mutation: Remove a project from a task.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "remove_project_for_task",
       "source_cli_path": "POST /tasks/{task_gid}/removeProject",
@@ -8548,13 +8548,13 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeProjectForTask"
     },
     {
       "path": "tasks add-tag-for-task",
       "summary": "fixed-target Asana mutation: Add a tag to a task.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "add_tag_for_task",
       "source_cli_path": "POST /tasks/{task_gid}/addTag",
@@ -8583,13 +8583,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "tasks remove-tag-for-task",
       "summary": "Unavailable source-bound Asana mutation: Remove a tag from a task.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "remove_tag_for_task",
       "source_cli_path": "POST /tasks/{task_gid}/removeTag",
@@ -8624,13 +8624,13 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeTagForTask"
     },
     {
       "path": "tasks add-followers-for-task",
       "summary": "fixed-target Asana mutation: Add followers to a task.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "add_followers_for_task",
       "source_cli_path": "POST /tasks/{task_gid}/addFollowers",
@@ -8658,13 +8658,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "tasks remove-follower-for-task",
       "summary": "Unavailable source-bound Asana mutation: Remove followers from a task.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "remove_follower_for_task",
       "source_cli_path": "POST /tasks/{task_gid}/removeFollowers",
@@ -8699,7 +8699,7 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowerForTask"
     },
     {
@@ -9078,8 +9078,8 @@
     },
     {
       "path": "team-memberships list",
-      "summary": "Get team memberships through the declared Asana ETL stream.",
-      "intent": "etl",
+      "summary": "Get team memberships through the declared Asana source stream.",
+      "intent": "direct_read",
       "availability": "implemented",
       "source_cli_path": "GET /team_memberships",
       "source_url": "https://developers.asana.com/reference/getteammemberships",
@@ -9163,7 +9163,7 @@
     {
       "path": "teams create-team",
       "summary": "fixed-target Asana mutation: Create a team.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "create_team",
       "source_cli_path": "POST /teams",
@@ -9267,8 +9267,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "teams get-team",
@@ -9304,7 +9304,7 @@
     {
       "path": "teams update-team",
       "summary": "fixed-target Asana mutation: Update a team.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "update_team",
       "source_cli_path": "PUT /teams/{team_gid}",
@@ -9416,13 +9416,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "teams list",
-      "summary": "Get teams in the configured workspace through the declared Asana ETL stream.",
-      "intent": "etl",
+      "summary": "Get teams in the configured workspace through the declared Asana source stream.",
+      "intent": "direct_read",
       "availability": "implemented",
       "source_cli_path": "GET /workspaces/{workspace_gid}/teams",
       "source_url": "https://developers.asana.com/reference/getteamsforworkspace",
@@ -9475,7 +9475,7 @@
     {
       "path": "teams add-user-for-team",
       "summary": "fixed-target Asana mutation: Add a user to a team.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "add_user_for_team",
       "source_cli_path": "POST /teams/{team_gid}/addUser",
@@ -9504,13 +9504,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "teams remove-user-for-team",
       "summary": "Unavailable source-bound Asana mutation: Remove a user from a team.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "remove_user_for_team",
       "source_cli_path": "POST /teams/{team_gid}/removeUser",
@@ -9545,7 +9545,7 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeUserForTeam"
     },
     {
@@ -9653,7 +9653,7 @@
     {
       "path": "time-tracking-categories update-time-tracking-category",
       "summary": "Unavailable source-bound Asana mutation: Update a time tracking category.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "update_time_tracking_category",
       "source_cli_path": "PUT /time_tracking_categories/{time_tracking_category_gid}",
@@ -9688,13 +9688,13 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateTimeTrackingCategory"
     },
     {
       "path": "time-tracking-categories delete-time-tracking-category",
       "summary": "Implemented source-bound Asana mutation: Delete a time tracking category.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /time_tracking_categories/{time_tracking_category_gid}",
       "source_url": "https://developers.asana.com/reference/deletetimetrackingcategory",
@@ -9720,8 +9720,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "delete_time_tracking_category"
     },
     {
@@ -9803,7 +9803,7 @@
     {
       "path": "time-tracking-categories create-time-tracking-category",
       "summary": "Unavailable source-bound Asana mutation: Create a time tracking category.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "create_time_tracking_category",
       "source_cli_path": "POST /time_tracking_categories",
@@ -9831,7 +9831,7 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createTimeTrackingCategory"
     },
     {
@@ -9868,7 +9868,7 @@
     {
       "path": "time-tracking-entries create-time-tracking-entry",
       "summary": "fixed-target Asana mutation: Create a time tracking entry.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "create_time_tracking_entry",
       "source_cli_path": "POST /tasks/{task_gid}/time_tracking_entries",
@@ -9930,8 +9930,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "time-tracking-entries get-time-tracking-entry",
@@ -9967,7 +9967,7 @@
     {
       "path": "time-tracking-entries update-time-tracking-entry",
       "summary": "fixed-target Asana mutation: Update a time tracking entry.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "update_time_tracking_entry",
       "source_cli_path": "PUT /time_tracking_entries/{time_tracking_entry_gid}",
@@ -10029,13 +10029,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "time-tracking-entries delete-time-tracking-entry",
       "summary": "Implemented source-bound Asana mutation: Delete a time tracking entry.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /time_tracking_entries/{time_tracking_entry_gid}",
       "source_url": "https://developers.asana.com/reference/deletetimetrackingentry",
@@ -10061,8 +10061,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "delete_time_tracking_entry"
     },
     {
@@ -10163,7 +10163,7 @@
     {
       "path": "timesheet-approval-statuses update-timesheet-approval-status",
       "summary": "Unavailable source-bound Asana mutation: Update a timesheet approval status.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "update_timesheet_approval_status",
       "source_cli_path": "PUT /timesheet_approval_statuses/{timesheet_approval_status_gid}",
@@ -10198,7 +10198,7 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateTimesheetApprovalStatus"
     },
     {
@@ -10254,7 +10254,7 @@
     {
       "path": "timesheet-approval-statuses create-timesheet-approval-status",
       "summary": "Unavailable source-bound Asana mutation: Create a timesheet approval status.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "create_timesheet_approval_status",
       "source_cli_path": "POST /timesheet_approval_statuses",
@@ -10282,7 +10282,7 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createTimesheetApprovalStatus"
     },
     {
@@ -10428,8 +10428,8 @@
     },
     {
       "path": "users list",
-      "summary": "Get multiple users through the declared Asana ETL stream.",
-      "intent": "etl",
+      "summary": "Get multiple users through the declared Asana source stream.",
+      "intent": "direct_read",
       "availability": "implemented",
       "source_cli_path": "GET /users",
       "source_url": "https://developers.asana.com/reference/getusers",
@@ -10481,7 +10481,7 @@
     {
       "path": "users update-user",
       "summary": "fixed-target Asana mutation: Update a user.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "update_user",
       "source_cli_path": "PUT /users/{user_gid}",
@@ -10510,8 +10510,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "users get-favorites-for-user",
@@ -10667,7 +10667,7 @@
     {
       "path": "users update-user-for-workspace",
       "summary": "fixed-target Asana mutation: Update a user in a workspace or organization.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "update_user_for_workspace",
       "source_cli_path": "PUT /workspaces/{workspace_gid}/users/{user_gid}",
@@ -10704,8 +10704,8 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "webhooks get-webhooks",
@@ -10745,7 +10745,7 @@
     {
       "path": "webhooks create-webhook",
       "summary": "Unavailable source-bound Asana mutation: Establish a webhook.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "create_webhook",
       "source_cli_path": "POST /webhooks",
@@ -10766,7 +10766,7 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createWebhook"
     },
     {
@@ -10803,7 +10803,7 @@
     {
       "path": "webhooks update-webhook",
       "summary": "Unavailable source-bound Asana mutation: Update a webhook.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "update_webhook",
       "source_cli_path": "PUT /webhooks/{webhook_gid}",
@@ -10831,13 +10831,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateWebhook"
     },
     {
       "path": "webhooks delete-webhook",
       "summary": "Implemented source-bound Asana mutation: Delete a webhook.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "source_cli_path": "DELETE /webhooks/{webhook_gid}",
       "source_url": "https://developers.asana.com/reference/deletewebhook",
@@ -10863,8 +10863,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Implemented source-bound provider mutation through the declared reverse-ETL action.",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Implemented source-bound provider mutation through the declared direct-write action.",
       "write": "delete_webhook"
     },
     {
@@ -10931,8 +10931,8 @@
     },
     {
       "path": "workspace-memberships list",
-      "summary": "Get the configured workspace's memberships through the declared Asana ETL stream.",
-      "intent": "etl",
+      "summary": "Get the configured workspace's memberships through the declared Asana source stream.",
+      "intent": "direct_read",
       "availability": "implemented",
       "source_cli_path": "GET /workspaces/{workspace_gid}/workspace_memberships",
       "source_url": "https://developers.asana.com/reference/getworkspacemembershipsforworkspace",
@@ -10947,8 +10947,8 @@
     },
     {
       "path": "workspaces list",
-      "summary": "Get multiple workspaces through the declared Asana ETL stream.",
-      "intent": "etl",
+      "summary": "Get multiple workspaces through the declared Asana source stream.",
+      "intent": "direct_read",
       "availability": "implemented",
       "source_operation": "asana.rest.getWorkspaces",
       "source_cli_path": "GET /workspaces",
@@ -10995,7 +10995,7 @@
     {
       "path": "workspaces update-workspace",
       "summary": "fixed-target Asana mutation: Update a workspace.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "update_workspace",
       "source_cli_path": "PUT /workspaces/{workspace_gid}",
@@ -11024,13 +11024,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "workspaces add-user-for-workspace",
       "summary": "fixed-target Asana mutation: Add a user to a workspace or organization.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "implemented",
       "write": "add_user_for_workspace",
       "source_cli_path": "POST /workspaces/{workspace_gid}/addUser",
@@ -11059,13 +11059,13 @@
         }
       ],
       "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "notes": "Typed direct-write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
       "path": "workspaces remove-user-for-workspace",
       "summary": "Unavailable source-bound Asana mutation: Remove a user from a workspace or organization.",
-      "intent": "reverse_etl",
+      "intent": "direct_write",
       "availability": "planned",
       "operation": "remove_user_for_workspace",
       "source_cli_path": "POST /workspaces/{workspace_gid}/removeUser",
@@ -11100,7 +11100,7 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
       "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeUserForWorkspace"
     },
     {
@@ -11143,11 +11143,11 @@
   "help_topics": [
     {
       "name": "destructive-confirmation",
-      "summary": "Asana DELETE/destructive/admin operations are in scope only through typed destructive confirmation and reverse ETL plan -> preview -> approval -> execute."
+      "summary": "Asana DELETE/destructive/admin one-record direct writes are in scope only through typed destructive confirmation and direct-write plan -> preview -> approval -> execute."
     },
     {
       "name": "operation-ledger",
-      "summary": "The pinned OpenAPI ledger has 249 operations: 111 ETL/read, 125 reverse-ETL write, 3 direct/search, 1 file-upload input, 8 changefeed, and 1 disallowed batch wrapper."
+      "summary": "The pinned OpenAPI ledger has 249 provider operations: 119 GET, 81 POST, 26 PUT, and 23 DELETE; connector command intent is declared separately from provider HTTP method."
     },
     {
       "name": "shared-foundations",

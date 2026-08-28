@@ -605,7 +605,7 @@ func TestMultipartDirectWriteCommandPreflightPlanPreviewApprovalAndExecute(t *te
 	defer server.Close()
 
 	a := setupMultipartRestWriteDemoApp(t, ctx, server.URL)
-	if err := os.WriteFile(filepath.Join(a.ProjectDir(), "attachment.txt"), []byte("fixture attachment bytes"), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(filepath.Dir(a.ProjectDir()), "attachment.txt"), []byte("fixture attachment bytes"), 0o600); err != nil {
 		t.Fatalf("WriteFile attachment: %v", err)
 	}
 	connector, ok := a.Registry().Get(multipartRestWriteDemoConnector)
@@ -680,7 +680,7 @@ func TestMultipartDirectWriteCommandRejectsChangedPayloadBeforeNetwork(t *testin
 	defer server.Close()
 
 	a := setupMultipartRestWriteDemoApp(t, ctx, server.URL)
-	attachment := filepath.Join(a.ProjectDir(), "attachment.txt")
+	attachment := filepath.Join(filepath.Dir(a.ProjectDir()), "attachment.txt")
 	if err := os.WriteFile(attachment, []byte("approved bytes"), 0o600); err != nil {
 		t.Fatalf("WriteFile approved attachment: %v", err)
 	}
@@ -726,7 +726,7 @@ func TestMultipartDirectWriteCommandBindsDeclaredUploadField(t *testing.T) {
 	defer server.Close()
 
 	a := setupMultipartRestWriteDemoAppWithBundle(t, ctx, server.URL, multipartRestWriteDemoBundleWithUploadField())
-	if err := os.WriteFile(filepath.Join(a.ProjectDir(), "attachment.txt"), []byte("fixture attachment bytes"), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(filepath.Dir(a.ProjectDir()), "attachment.txt"), []byte("fixture attachment bytes"), 0o600); err != nil {
 		t.Fatalf("WriteFile attachment: %v", err)
 	}
 	plan, preview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{

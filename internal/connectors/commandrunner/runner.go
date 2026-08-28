@@ -69,8 +69,9 @@ type WriteCommand struct {
 	Command   string `json:"command"`
 	Intent    string `json:"intent"`
 	Write     string `json:"write"`
-	// Operation is set only for a typed direct_write command. Write remains
-	// the plan action for backward-compatible reverse_etl command plans.
+	// Operation is set only for an operation-backed direct_write command. Write
+	// names the plan action for write-backed direct_write, reverse_etl, and
+	// binary_upload command plans.
 	Operation             string                   `json:"operation,omitempty"`
 	MutationClass         string                   `json:"mutation_class"`
 	TargetResource        string                   `json:"target_resource"`
@@ -88,7 +89,7 @@ type WriteCommand struct {
 	Preview               *connectors.WritePreview `json:"preview,omitempty"`
 }
 
-var ErrNotWriteCommand = errors.New("connector command is not a reverse ETL write command")
+var ErrNotWriteCommand = errors.New("connector command is not a plannable write command")
 
 // declarativeWritePreflighter is implemented by the declarative engine. It
 // lets runtime preflight reject a write schema that the engine could not
@@ -255,6 +256,9 @@ func PreflightSourceBoundOrigin(connector connectors.Connector, path []string, c
 	cfg := connectors.RuntimeConfig{Config: config}
 	switch cmd.Intent {
 	case "direct_read":
+		if strings.TrimSpace(cmd.Stream) != "" {
+			return preflighter.PreflightSourceBoundStreamOrigin(cmd.Stream, cfg)
+		}
 		if strings.TrimSpace(cmd.Operation) == "" {
 			return &BlockedCommandError{Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "source-bound direct read has no operation"}
 		}
@@ -279,7 +283,7 @@ func PreflightRequest(connector connectors.Connector, req Request) error {
 		return err
 	}
 	flags := req.Flags
-	if cmd.Intent == "direct_read" {
+	if cmd.Intent == "direct_read" && strings.TrimSpace(cmd.Stream) == "" {
 		flags = withoutDirectReadPageFlags(flags)
 	}
 	if _, err := validateCommandFlagSetForPreflight(cmd, flags, req.PlanContinuation); err != nil {
@@ -293,10 +297,10 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 	if err != nil {
 		return WriteCommand{}, err
 	}
-	if cmd.Intent == "direct_write" {
+	if cmd.Intent == "direct_write" && strings.TrimSpace(cmd.Operation) != "" {
 		return buildOperationDirectWriteCommand(ctx, connector, cmd, command, req)
 	}
-	if cmd.Intent != "reverse_etl" && cmd.Intent != "binary_upload" {
+	if cmd.Intent != "reverse_etl" && cmd.Intent != "direct_write" && cmd.Intent != "binary_upload" {
 		return WriteCommand{}, ErrNotWriteCommand
 	}
 	if cmd.Availability != "implemented" || cmd.Write == "" {
@@ -305,7 +309,7 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 			Command:      command,
 			Intent:       cmd.Intent,
 			Availability: cmd.Availability,
-			Reason:       "implemented reverse ETL and binary_upload commands must reference a write action",
+			Reason:       "implemented write-action commands must reference a write action",
 		}
 	}
 	action, ok := findWriteAction(connectors.ManifestOf(connector), cmd.Write)
@@ -367,6 +371,9 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 func writeCommandApproval(intent string) string {
 	if intent == "binary_upload" {
 		return "binary uploads require plan, preview, approval, execute"
+	}
+	if intent == "direct_write" {
+		return "direct writes require plan, preview, approval, execute"
 	}
 	return "reverse ETL writes require plan, preview, approval, execute"
 }
@@ -442,7 +449,7 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 	if err != nil {
 		return Result{}, err
 	}
-	if cmd.Intent == "direct_read" {
+	if cmd.Intent == "direct_read" && strings.TrimSpace(cmd.Stream) == "" {
 		if err := connectors.ValidateDirectReadPageCursor(req.PageCursor); err != nil {
 			return Result{}, err
 		}
@@ -454,7 +461,7 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 	if cmd.Intent == "status_check" {
 		return runStatusCheck(ctx, connector, cmd, req)
 	}
-	if cmd.Intent != "etl" || cmd.Availability != "implemented" || cmd.Stream == "" {
+	if (cmd.Intent != "etl" && cmd.Intent != "direct_read") || cmd.Availability != "implemented" || cmd.Stream == "" {
 		return Result{}, &BlockedCommandError{
 			Connector:    connector.Name(),
 			Command:      command,
@@ -715,6 +722,12 @@ func preflightImplementedCommand(connector connectors.Connector, cmd connectors.
 		}
 		return cmd, nil
 	}
+	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" && cmd.Stream != "" {
+		if err := validateSourceBoundStreamReadCommand(connector, cmd); err != nil {
+			return connectors.CommandSurfaceCommand{}, err
+		}
+		return cmd, nil
+	}
 	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" && cmd.Operation != "" {
 		if err := validateOperationDirectReadCommand(connector, cmd); err != nil {
 			return connectors.CommandSurfaceCommand{}, err
@@ -727,7 +740,7 @@ func preflightImplementedCommand(connector connectors.Connector, cmd connectors.
 		}
 		return cmd, nil
 	}
-	if cmd.Intent == "direct_write" && cmd.Availability == "implemented" {
+	if cmd.Intent == "direct_write" && cmd.Availability == "implemented" && cmd.Operation != "" {
 		if err := validateOperationDirectWriteCommand(connector, cmd); err != nil {
 			return connectors.CommandSurfaceCommand{}, err
 		}
@@ -739,7 +752,7 @@ func preflightImplementedCommand(connector connectors.Connector, cmd connectors.
 		}
 		return cmd, nil
 	}
-	if cmd.Intent == "reverse_etl" && cmd.Availability == "implemented" && cmd.Write != "" {
+	if (cmd.Intent == "reverse_etl" || cmd.Intent == "direct_write") && cmd.Availability == "implemented" && cmd.Write != "" {
 		if preflighter, ok := connector.(declarativeWritePreflighter); ok {
 			if err := preflighter.PreflightWriteAction(cmd.Write); err != nil {
 				return connectors.CommandSurfaceCommand{}, &BlockedCommandError{
@@ -887,7 +900,7 @@ func preflightStructuredJSONFlags(connector connectors.Connector, cmd connectors
 			continue
 		}
 		switch {
-		case (cmd.Intent == "reverse_etl" || cmd.Intent == "binary_upload") && strings.TrimSpace(cmd.Write) != "":
+		case (cmd.Intent == "reverse_etl" || cmd.Intent == "direct_write" || cmd.Intent == "binary_upload") && strings.TrimSpace(cmd.Write) != "":
 			field, ok := strings.CutPrefix(flag.MapsTo, "record.")
 			if !ok || field == "" {
 				return fmt.Errorf("structured JSON flag --%s must map to a record field", flag.Name)
@@ -1251,11 +1264,11 @@ func validateSourceBoundStreamReadCommand(connector connectors.Connector, cmd co
 		return nil
 	}
 	if cmd.Stream == "" || len(cmd.APISurface) != 1 {
-		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "source-bound ETL commands require one declared stream and exactly one api_surface endpoint"}
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "source-bound stream reads require one declared stream and exactly one api_surface endpoint"}
 	}
 	method := strings.ToUpper(strings.TrimSpace(cmd.APISurface[0].Method))
 	if method != http.MethodGet || isAbsoluteHTTPURL(cmd.APISurface[0].Path) {
-		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "source-bound ETL commands require one fixed relative GET endpoint"}
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "source-bound stream reads require one fixed relative GET endpoint"}
 	}
 	preflighter, ok := connector.(connectors.SourceBoundStreamReadPreflighter)
 	if !ok {
@@ -2872,6 +2885,13 @@ func ConfirmationChallengeForCommand(connector connectors.Connector, cmd connect
 		}
 		return string(connectors.ConfirmationForWriteAction(action).Kind)
 	case "direct_write":
+		if strings.TrimSpace(cmd.Write) != "" {
+			action, ok := findWriteAction(connectors.ManifestOf(connector), cmd.Write)
+			if !ok {
+				return ""
+			}
+			return string(connectors.ConfirmationForWriteAction(action).Kind)
+		}
 		provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
 		if !ok || strings.TrimSpace(cmd.Operation) == "" {
 			return ""

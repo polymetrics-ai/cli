@@ -1162,7 +1162,7 @@ func renderConnectorCommandDetail(connectorName string, connector connectors.Con
 // rather than from literals here, so runtime help and the generated
 // manual/skill/website docs cannot document different flags.
 func writeConnectorPageFlags(b *strings.Builder, cmd connectors.CommandSurfaceCommand) {
-	if cmd.Intent != "direct_read" {
+	if cmd.Intent != "direct_read" || strings.TrimSpace(cmd.Stream) != "" {
 		return
 	}
 	b.WriteString("\nPAGE FLAGS\n")
