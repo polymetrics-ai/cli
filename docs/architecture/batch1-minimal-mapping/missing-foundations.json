@@ -1,0 +1,15 @@
+{
+  "schema_version": "batch1-minimal-missing-foundations/v1",
+  "base_sha": "813f457a925f7ee3fe3bea101a43e445992c8552",
+  "selection": "Only a source-backed lane mapping that lacks an existing runtime executor capability belongs here. Current Batch 1 gaps are JSON materialization or non-lane dispositions, not runtime-foundation gaps.",
+  "missing_foundation_count": 0,
+  "entries": [],
+  "non_gating_metadata": {
+    "source_lock_hash_retention": "non_gating_metadata_only",
+    "source_import_success": "non_gating_metadata_only",
+    "certification_status": "non_gating_metadata_only",
+    "credential_availability": "non_gating_metadata_only",
+    "destructive_method": "non_gating_metadata_only",
+    "existing_command_or_runtime_binding": "non_gating_metadata_only"
+  }
+}
