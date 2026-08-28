@@ -70,6 +70,18 @@ Certification cannot configure runtime, supply a missing provider fact, or make
 a declaration true merely by repeating it. Raw bytes, a URL, or a digest prove
 provenance, not execution semantics.
 
+## Consult the Foundation Atlas before claiming a gap
+
+Before creating or updating a connector's `missing-foundation.json`, consult
+the CLI-owned `docs/connector-canon/foundations/` Atlas when present. Inspect
+the matching owner symbols and proof tests, then classify each claimed gap as
+reuse, a constrained extension, or genuinely absent. Record the exact gap or
+contract mismatch and matching Atlas ID; never duplicate provider facts or call
+a capability missing merely because an importer or certification label exists.
+The Atlas is authoring-only: it cannot block source mapping or certification.
+Implementing a genuinely new runtime foundation still requires the captain's
+approval.
+
 ## 3. Declare only source-backed operations
 
 Declare an operation, field, media type, and schema constraint only when the
