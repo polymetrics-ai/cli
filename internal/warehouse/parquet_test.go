@@ -4,8 +4,50 @@ import (
 	"context"
 	"fmt"
 	"path/filepath"
+	"reflect"
 	"testing"
 )
+
+// TestWriteTablePreservesConnectorJSONStrings pins the warehouse boundary:
+// provider JSON strings remain strings even when their bytes resemble a SQL
+// DATE or TIMESTAMP. Reverse ETL validates the reopened row against the
+// connector's request schema, so DuckDB type inference must not silently turn
+// a documented string field into time.Time inside a nested request object.
+func TestWriteTablePreservesConnectorJSONStrings(t *testing.T) {
+	ctx := context.Background()
+	path := filepath.Join(t.TempDir(), "connector_json_strings"+TableFileExt)
+	wantData := map[string]any{
+		"date":           "2026-01-07",
+		"timestamp":      "2026-01-07T03:04:05Z",
+		"malformed_date": "2026-13-40",
+		"plain":          "not-a-date",
+		"number":         int64(7),
+		"fraction":       1.25,
+		"enabled":        true,
+		"nullable":       nil,
+		"items": []any{
+			map[string]any{"when": "2026-01-08T04:05:06Z", "count": int64(2)},
+		},
+	}
+	if err := WriteTable(ctx, path, []Row{{"id": "fixture", "data": wantData}}); err != nil {
+		t.Fatalf("WriteTable() error = %v", err)
+	}
+
+	var got Row
+	if err := ReadTable(ctx, path, func(row Row) error {
+		got = row
+		return nil
+	}); err != nil {
+		t.Fatalf("ReadTable() error = %v", err)
+	}
+	gotData, ok := got["data"].(map[string]any)
+	if !ok {
+		t.Fatalf("reopened data = %T(%v), want JSON object", got["data"], got["data"])
+	}
+	if !reflect.DeepEqual(gotData, wantData) {
+		t.Fatalf("reopened data = %#v, want exact JSON shape %#v", gotData, wantData)
+	}
+}
 
 // TestWriteTableKeepsAColumnThatFirstAppearsLate is the regression proof for a
 // silent column drop. The table is built by handing rows to a JSON reader that
