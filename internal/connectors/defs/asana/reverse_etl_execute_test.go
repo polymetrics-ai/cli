@@ -24,6 +24,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/warehouse"
 )
 
 const (
@@ -230,6 +231,100 @@ func TestExecutableCommandsAreAccountedForByPinnedSourceLock(t *testing.T) {
 	if directWrites != 96 || len(writeEndpoints) != 95 {
 		t.Fatalf("source-accounted implemented direct writes = %d across %d provider endpoints, want 96 across 95",
 			directWrites, len(writeEndpoints))
+	}
+}
+
+// TestEveryLockedOperationHasOneAccountedCommandLane is the executable form of
+// the 249-row source-lock -> API surface -> CLI lane matrix. Provider operations
+// are counted once even when one operation deliberately exposes several command
+// variants (the two attachment writes and their planned aliases).
+func TestEveryLockedOperationHasOneAccountedCommandLane(t *testing.T) {
+	bundle := loadBundle(t)
+	lock := loadOperationSourceLock(t)
+
+	endpointKey := func(method, path string) string {
+		return strings.ToUpper(method) + " " + path
+	}
+	apiByEndpoint := make(map[string]engine.SurfaceEndpoint, len(bundle.Surface.Endpoints))
+	for _, endpoint := range bundle.Surface.Endpoints {
+		key := endpointKey(endpoint.Method, endpoint.Path)
+		if _, duplicate := apiByEndpoint[key]; duplicate {
+			t.Fatalf("api_surface repeats provider endpoint %s", key)
+		}
+		apiByEndpoint[key] = endpoint
+	}
+	commandsByEndpoint := make(map[string][]engine.CLICommand)
+	for _, command := range bundle.CLISurface.Commands {
+		for _, endpoint := range command.APISurface {
+			key := endpointKey(endpoint.Method, endpoint.Path)
+			commandsByEndpoint[key] = append(commandsByEndpoint[key], command)
+		}
+	}
+
+	states := map[string]int{}
+	commandRows := 0
+	for _, operation := range lock.REST.Operations {
+		key := endpointKey(operation.Method, operation.Path)
+		endpoint, ok := apiByEndpoint[key]
+		if !ok {
+			t.Errorf("source operation %q has no api_surface row for %s", operation.ID, key)
+			continue
+		}
+		commands := commandsByEndpoint[key]
+		if len(commands) == 0 {
+			t.Errorf("source operation %q has no command lane for %s", operation.ID, key)
+			continue
+		}
+		commandRows += len(commands)
+
+		hasCommand := func(intent, availability string) bool {
+			for _, command := range commands {
+				if command.Intent == intent && command.Availability == availability {
+					return true
+				}
+			}
+			return false
+		}
+		switch {
+		case endpoint.CoveredBy != nil && endpoint.CoveredBy.DirectRead != "":
+			states["implemented_direct_read"]++
+			if !hasCommand("direct_read", "implemented") {
+				t.Errorf("source operation %q is direct-read covered but has no implemented direct_read command", operation.ID)
+			}
+		case endpoint.CoveredBy != nil && endpoint.CoveredBy.Stream != "":
+			states["implemented_stream_read_etl"]++
+			if !hasCommand("direct_read", "implemented") {
+				t.Errorf("source operation %q is stream covered but has no implemented direct_read command", operation.ID)
+			}
+		case endpoint.CoveredBy != nil && (endpoint.CoveredBy.Write != "" || len(endpoint.CoveredBy.Writes) > 0):
+			states["implemented_direct_write_reverse_etl"]++
+			if !hasCommand("direct_write", "implemented") {
+				t.Errorf("source operation %q is write covered but has no implemented direct_write command", operation.ID)
+			}
+		case hasCommand("direct_read", "planned"):
+			states["planned_direct_read"]++
+		case hasCommand("direct_write", "planned"):
+			states["planned_direct_write"]++
+		case hasCommand("direct_write", "unsupported_api"):
+			states["unsupported_api"]++
+		default:
+			t.Errorf("source operation %q has commands but no accounted lane: %+v", operation.ID, commands)
+		}
+	}
+
+	wantStates := map[string]int{
+		"implemented_direct_read":              106,
+		"implemented_stream_read_etl":          12,
+		"implemented_direct_write_reverse_etl": 95,
+		"planned_direct_read":                  1,
+		"planned_direct_write":                 34,
+		"unsupported_api":                      1,
+	}
+	if !reflect.DeepEqual(states, wantStates) {
+		t.Fatalf("249-row source-lock lane matrix = %v, want %v", states, wantStates)
+	}
+	if commandRows != 252 {
+		t.Fatalf("source-lock matrix command rows = %d, want 252 (249 operations plus three attachment aliases)", commandRows)
 	}
 }
 
@@ -532,6 +627,115 @@ func TestDirectWriteActionsExecute(t *testing.T) {
 	}
 }
 
+// TestBulkReverseETLActionsPlanPreviewApproveAndRun proves that every Asana
+// writes.json action is usable from the saved reverse-ETL route, not only from
+// its one-record command. Each subtest materializes one source row in the local
+// warehouse, dry-runs the exact provider request, consumes the bounded approval,
+// and then observes exactly one request at the capture server.
+func TestBulkReverseETLActionsPlanPreviewApproveAndRun(t *testing.T) {
+	bundle := loadBundle(t)
+	capture := newCaptureServer()
+	defer capture.Close()
+
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject() = %v", err)
+	}
+	application, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open() = %v", err)
+	}
+	credentialName := bundle.Name + "-bulk-fixture"
+	if _, err := application.AddCredential(ctx, app.AddCredentialRequest{
+		Name: credentialName, Connector: bundle.Name,
+		Config: map[string]string{"base_url": capture.URL}, Secrets: map[string]string{"access_token": "synthetic-test-token"},
+	}); err != nil {
+		t.Fatalf("AddCredential(%s) = %v", bundle.Name, err)
+	}
+
+	// Bulk reverse-ETL resolves multipart payloads relative to the app-owned
+	// runtime project directory. Keep the bounded fixture there so the real
+	// payload-identity and root-confinement checks participate in all three
+	// plan/preview/run reads of the record.
+	if err := os.WriteFile(filepath.Join(application.ProjectDir(), "asana-bulk-attachment.txt"), []byte("bounded Asana bulk attachment fixture"), 0o600); err != nil {
+		t.Fatalf("write bounded bulk attachment fixture: %v", err)
+	}
+
+	for _, action := range bundle.Writes {
+		t.Run(action.Name, func(t *testing.T) {
+			fixture := bulkWriteFixture(t, action)
+			table := "asana_bulk_" + action.Name
+			tablePath := filepath.Join(application.ProjectDir(), "warehouse", table+warehouse.TableFileExt)
+			if err := warehouse.WriteTable(ctx, tablePath, []warehouse.Row{warehouse.Row(fixture.Record)}); err != nil {
+				t.Fatalf("materialize source table: %v", err)
+			}
+
+			plan, err := application.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+				Name:                  "asana_bulk_" + action.Name,
+				SourceTable:           table,
+				DestinationConnector:  bundle.Name,
+				DestinationCredential: credentialName,
+				Action:                action.Name,
+				Mappings:              identityMappings(fixture.Record),
+				Limit:                 1,
+			})
+			if err != nil {
+				t.Fatalf("PlanReverseETL() = %v", err)
+			}
+			if plan.RecordCount != 1 {
+				t.Fatalf("planned records = %d, want 1", plan.RecordCount)
+			}
+			approvalToken := plan.ApprovalToken
+
+			previewed, preview, err := application.PreviewReversePlan(ctx, plan.ID, nil)
+			if err != nil {
+				t.Fatalf("PreviewReversePlan() = %v", err)
+			}
+			if preview.RecordsStaged != 1 || preview.Action != action.Name || preview.Digest == "" {
+				t.Fatalf("preview = %+v, want one staged %q action with a digest", preview, action.Name)
+			}
+			if previewed.ApprovalToken != "" {
+				approvalToken = previewed.ApprovalToken
+			}
+			if approvalToken == "" {
+				t.Fatal("plan/preview lifecycle produced no bounded approval token")
+			}
+
+			confirmation := connectors.WriteConfirmation{}
+			if engine.DestructiveTargetForWrite(bundle.Name, action).RequiresApproval() {
+				confirmation = connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}
+			}
+			capture.Reset()
+			run, err := application.RunReverseETL(ctx, app.RunReverseETLRequest{
+				PlanID:        plan.ID,
+				ApprovalToken: approvalToken,
+				Confirmation:  confirmation,
+			})
+			if err != nil {
+				t.Fatalf("RunReverseETL() = %v", err)
+			}
+			if run.Status != "completed" || run.RecordsStaged != 1 || run.RecordsSucceeded != 1 || run.RecordsFailed != 0 {
+				t.Fatalf("run = status %q, staged/succeeded/failed %d/%d/%d, want completed 1/1/0",
+					run.Status, run.RecordsStaged, run.RecordsSucceeded, run.RecordsFailed)
+			}
+			if capture.Count() != 1 {
+				t.Fatalf("provider requests = %d, want exactly 1", capture.Count())
+			}
+			got := capture.Last()
+			if got == nil {
+				t.Fatal("bulk reverse ETL sent no provider request")
+			}
+			if !strings.EqualFold(got.Method, fixture.Expect.Method) {
+				t.Fatalf("method = %q, want %q", got.Method, fixture.Expect.Method)
+			}
+			if got.Path != fixture.Expect.Path {
+				t.Fatalf("path = %q, want %q", got.Path, fixture.Expect.Path)
+			}
+		})
+	}
+}
+
 func TestAttachmentDirectWritesBuildSourceDerivedOneRecordPlansWithoutProviderIO(t *testing.T) {
 	bundle := loadBundle(t)
 	capture := newCaptureServer()
@@ -748,6 +952,43 @@ func loadWriteFixture(t *testing.T, action engine.WriteAction) writeFixture {
 	return fx
 }
 
+func bulkWriteFixture(t *testing.T, action engine.WriteAction) writeFixture {
+	t.Helper()
+	switch action.Name {
+	case "upload_attachment_file":
+		return writeFixture{
+			Record: map[string]any{"parent": "fixture-task", "file_path": "asana-bulk-attachment.txt"},
+			Expect: struct {
+				Method string         `json:"method"`
+				Path   string         `json:"path"`
+				Body   map[string]any `json:"body,omitempty"`
+			}{Method: http.MethodPost, Path: "/attachments"},
+		}
+	case "create_external_attachment":
+		return writeFixture{
+			Record: map[string]any{
+				"parent": "fixture-task", "resource_subtype": "external",
+				"url": "https://example.test/source", "name": "Source reference",
+			},
+			Expect: struct {
+				Method string         `json:"method"`
+				Path   string         `json:"path"`
+				Body   map[string]any `json:"body,omitempty"`
+			}{Method: http.MethodPost, Path: "/attachments"},
+		}
+	default:
+		return loadWriteFixture(t, action)
+	}
+}
+
+func identityMappings(record map[string]any) map[string]string {
+	mappings := make(map[string]string, len(record))
+	for field := range record {
+		mappings[field] = field
+	}
+	return mappings
+}
+
 // flagsFromRecord reverse-maps a fixture record onto the command's declared
 // flags, so BuildWriteCommand exercises the same flag plumbing the CLI uses.
 func flagsFromRecord(cmd connectors.CommandSurfaceCommand, record map[string]any) map[string][]string {
@@ -817,8 +1058,9 @@ type capturedRequest struct {
 
 type captureServer struct {
 	*httptest.Server
-	mu   sync.Mutex
-	last *capturedRequest
+	mu    sync.Mutex
+	last  *capturedRequest
+	count int
 }
 
 func newCaptureServer() *captureServer {
@@ -836,6 +1078,7 @@ func newCaptureServer() *captureServer {
 		}
 		c.mu.Lock()
 		c.last = captured
+		c.count++
 		c.mu.Unlock()
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -847,6 +1090,7 @@ func newCaptureServer() *captureServer {
 func (c *captureServer) Reset() {
 	c.mu.Lock()
 	c.last = nil
+	c.count = 0
 	c.mu.Unlock()
 }
 
@@ -854,4 +1098,10 @@ func (c *captureServer) Last() *capturedRequest {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	return c.last
+}
+
+func (c *captureServer) Count() int {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.count
 }

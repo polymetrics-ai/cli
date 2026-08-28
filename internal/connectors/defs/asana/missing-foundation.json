@@ -26,7 +26,7 @@
     },
     {
       "path": "sync_transport.json",
-      "role": "source-only closed transport declaration for all executable streams; no Asana destination transport is claimed"
+      "role": "source-only event-token transport for project-scoped tasks incremental append/upsert/dedupe; no Asana destination transport is claimed"
     },
     {
       "path": "writes.json",
@@ -48,9 +48,9 @@
   "lane_mapping": {
     "etl": {
       "status": "mapped",
-      "implementation": "saved connections use streams.json with schemas/; sync_transport.json admits every executable stream to the existing warehouse-backed declarative source executor",
-      "stream_count": 12,
-      "streams": [
+      "implementation": "saved connections use streams.json with schemas/ for exhaustive full-refresh overwrite/append across all 12 streams; sync_transport.json admits only project-scoped tasks to the Asana Events token executor for incremental append/upsert/dedupe",
+      "full_refresh_stream_count": 12,
+      "full_refresh_streams": [
         "workspaces",
         "projects",
         "tasks",
@@ -63,6 +63,15 @@
         "project_statuses",
         "team_memberships",
         "workspace_memberships"
+      ],
+      "incremental_stream_count": 1,
+      "incremental_streams": [
+        "tasks"
+      ],
+      "incremental_modes": [
+        "incremental_append",
+        "incremental_upsert",
+        "incremental_dedupe"
       ]
     },
     "reverse_etl": {
@@ -75,10 +84,12 @@
       "source_operation": "asana.rest.createAttachmentForObject"
     },
     "direct_read": {
-      "status": "mapped",
-      "implementation": "cli_surface.json binds 106 operation-backed and 12 stream-backed implemented one-request commands to operations.json or streams.json",
+      "status": "mapped_with_runtime_bound_gap",
+      "implementation": "cli_surface.json binds 106 bounded operation-backed commands and 12 stream-backed commands. The stream-backed command route sets a record limit but no MaxPages/fanout request bound, so those 12 declarations do not yet satisfy the one-provider-request direct_read contract; saved ETL is unaffected.",
       "source_method": "GET",
       "source_operation_count": 119,
+      "bounded_operation_command_count": 106,
+      "stream_command_bound_gap_count": 12,
       "implemented_command_count": 118,
       "planned_command_count": 1
     },
@@ -113,6 +124,28 @@
     }
   },
   "foundations": [
+    {
+      "id": "asana_stream_direct_read_request_bound",
+      "state": "missing_runtime_contract",
+      "affected_lane": "direct_read",
+      "reason": "The 12 stream-backed interactive commands call Connector.Read with a record Limit but no MaxPages or fan-out request bound. Pagination may issue more than one provider request; sections, stories, and project_statuses additionally perform fan-out discovery and child reads. The commands remain mapped, but their current runtime route is not a bounded one-provider-request direct read.",
+      "does_not_block": [
+        "the 106 bounded operation-backed direct reads",
+        "saved full-refresh ETL for all 12 streams",
+        "project-scoped tasks event-token incremental ETL"
+      ]
+    },
+    {
+      "id": "asana_incremental_event_scope_coverage",
+      "state": "existing_mapping_backlog",
+      "affected_lane": "etl",
+      "source_evidence_contract": "event_source_contract.json",
+      "reason": "The locked Asana Events contract proves the implemented project-scoped tasks token window. It does not establish complete event scope/resource coverage for the other 11 streams and documents no total event ordering for history/change capture, so event_source_contract.json records event_total_order=not_documented and sync_transport.json deliberately admits only tasks incremental append/upsert/dedupe.",
+      "does_not_block": [
+        "full-refresh overwrite and append for all 12 streams",
+        "project-scoped tasks incremental append/upsert/dedupe"
+      ]
+    },
     {
       "id": "asana_attachment_direct_write_multipart",
       "state": "missing_runtime_contract",
@@ -175,6 +208,11 @@
     }
   ],
   "non_binding_files": [
+    {
+      "path": "event_source_contract.json",
+      "schema": "event_source_contract.schema.json",
+      "role": "closed source-lock evidence projection bound to sync_transport.json's registered executor; tests and certification consume its facts, but it contains no executable lifecycle or runtime policy"
+    },
     {
       "path": "certification.json",
       "role": "optional live-evidence configuration; it does not decide whether a source-backed operation is mapped or executable"

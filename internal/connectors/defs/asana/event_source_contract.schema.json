@@ -1,0 +1,217 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Asana event-token source evidence contract",
+  "description": "Closed projection of provider facts used by the registered Asana event-token executor. This document is evidence, not an executable lifecycle or code-hook surface.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schema_version",
+    "definition_binding",
+    "source_lock",
+    "provider_contract"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "enum": ["event_source_contract.schema.json"]
+    },
+    "schema_version": {
+      "type": "integer",
+      "enum": [1]
+    },
+    "definition_binding": {
+      "type": "object",
+      "required": ["sync_transport", "executor", "conformance"],
+      "additionalProperties": false,
+      "properties": {
+        "sync_transport": {
+          "type": "string",
+          "enum": ["sync_transport.json"]
+        },
+        "executor": {
+          "type": "object",
+          "required": ["family", "id"],
+          "additionalProperties": false,
+          "properties": {
+            "family": {
+              "type": "string",
+              "enum": ["declarative_api"]
+            },
+            "id": {
+              "type": "string",
+              "enum": ["asana_event_token_source"]
+            }
+          }
+        },
+        "conformance": {
+          "type": "object",
+          "required": ["suite", "run_id"],
+          "additionalProperties": false,
+          "properties": {
+            "suite": {
+              "type": "string",
+              "enum": ["asana_event_token_source"]
+            },
+            "run_id": {
+              "type": "string",
+              "enum": ["source_lock_contract_v1"]
+            }
+          }
+        }
+      }
+    },
+    "source_lock": {
+      "type": "object",
+      "required": ["path", "file_sha256", "schema_version", "connector", "rest_sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "enum": ["sources/asana-operation-source-lock.json"]
+        },
+        "file_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "schema_version": {
+          "type": "integer",
+          "enum": [2]
+        },
+        "connector": {
+          "type": "string",
+          "enum": ["asana"]
+        },
+        "rest_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "provider_contract": {
+      "type": "object",
+      "required": ["eligible_stream", "event_scope", "event_record", "hydration", "snapshot", "security"],
+      "additionalProperties": false,
+      "properties": {
+        "eligible_stream": {
+          "type": "string",
+          "enum": ["tasks"]
+        },
+        "event_scope": {
+          "type": "object",
+          "required": [
+            "operation_id",
+            "source_location",
+            "method",
+            "path",
+            "resource_parameter",
+            "resource_kind",
+            "emitted_resource_type",
+            "sync_parameter",
+            "initial_sync",
+            "initial_status",
+            "expired_status",
+            "records_pointer",
+            "next_token_pointer",
+            "has_more_pointer",
+            "event_total_order"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "operation_id": {"type": "string", "enum": ["asana.rest.getEvents"]},
+            "source_location": {"type": "string", "enum": ["paths[\"/events\"].get"]},
+            "method": {"type": "string", "enum": ["GET"]},
+            "path": {"type": "string", "enum": ["/events"]},
+            "resource_parameter": {"type": "string", "enum": ["resource"]},
+            "resource_kind": {"type": "string", "enum": ["project"]},
+            "emitted_resource_type": {"type": "string", "enum": ["task"]},
+            "sync_parameter": {"type": "string", "enum": ["sync"]},
+            "initial_sync": {"type": "string", "enum": ["omit"]},
+            "initial_status": {"type": "integer", "enum": [412]},
+            "expired_status": {"type": "integer", "enum": [412]},
+            "records_pointer": {"type": "string", "enum": ["$.data"]},
+            "next_token_pointer": {"type": "string", "enum": ["$.sync"]},
+            "has_more_pointer": {"type": "string", "enum": ["$.has_more"]},
+            "event_total_order": {"type": "string", "enum": ["not_documented"]}
+          }
+        },
+        "event_record": {
+          "type": "object",
+          "required": [
+            "schema",
+            "action_pointer",
+            "resource_gid_pointer",
+            "resource_type_pointer",
+            "actions",
+            "tombstone_action",
+            "scope_change_action"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "schema": {"type": "string", "enum": ["EventResponse"]},
+            "action_pointer": {"type": "string", "enum": ["$.action"]},
+            "resource_gid_pointer": {"type": "string", "enum": ["$.resource.gid"]},
+            "resource_type_pointer": {"type": "string", "enum": ["$.resource.resource_type"]},
+            "actions": {
+              "type": "array",
+              "minItems": 5,
+              "maxItems": 5,
+              "items": {
+                "type": "string",
+                "enum": ["changed", "added", "removed", "deleted", "undeleted"]
+              }
+            },
+            "tombstone_action": {"type": "string", "enum": ["deleted"]},
+            "scope_change_action": {"type": "string", "enum": ["removed"]}
+          }
+        },
+        "hydration": {
+          "type": "object",
+          "required": ["operation_id", "source_location", "method", "path", "path_parameter", "response_pointer"],
+          "additionalProperties": false,
+          "properties": {
+            "operation_id": {"type": "string", "enum": ["asana.rest.getTask"]},
+            "source_location": {"type": "string", "enum": ["paths[\"/tasks/{task_gid}\"].get"]},
+            "method": {"type": "string", "enum": ["GET"]},
+            "path": {"type": "string", "enum": ["/tasks/{task_gid}"]},
+            "path_parameter": {"type": "string", "enum": ["task_gid"]},
+            "response_pointer": {"type": "string", "enum": ["$.data"]}
+          }
+        },
+        "snapshot": {
+          "type": "object",
+          "required": ["operation_id", "source_location", "method", "path", "scope_query_parameter", "records_pointer", "continuation_pointer"],
+          "additionalProperties": false,
+          "properties": {
+            "operation_id": {"type": "string", "enum": ["asana.rest.getTasks"]},
+            "source_location": {"type": "string", "enum": ["paths[\"/tasks\"].get"]},
+            "method": {"type": "string", "enum": ["GET"]},
+            "path": {"type": "string", "enum": ["/tasks"]},
+            "scope_query_parameter": {"type": "string", "enum": ["project"]},
+            "records_pointer": {"type": "string", "enum": ["$.data"]},
+            "continuation_pointer": {"type": "string", "enum": ["$.next_page.uri"]}
+          }
+        },
+        "security": {
+          "type": "object",
+          "required": ["event_operation", "task_read_operation"],
+          "additionalProperties": false,
+          "properties": {
+            "event_operation": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {"type": "string", "enum": ["personalAccessToken", "oauth2"]}
+            },
+            "task_read_operation": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {"type": "string", "enum": ["personalAccessToken", "oauth2:tasks:read"]}
+            }
+          }
+        }
+      }
+    }
+  }
+}
