@@ -108,6 +108,10 @@ filename.
    `connectorgen params-import`, then derive surface metadata with
    `connectorgen surface-sync`. Do not hand-author opaque provider cursors,
    generated `maps_to` fields, output policy, or a made-up API endpoint.
+   Mapping and projection read the source lock's identity/citation view, not
+   `certification.json`, credentials, or retention digest fields. Validate
+   retained bytes separately with `source-import`, and validate live proof
+   separately through certification; neither is an admission label.
 3. Project request direction, not the whole response schema. Exclude OpenAPI
    `readOnly` fields recursively, including resolved `allOf` arms, remove those
    names from `required`, and reject them before provider I/O. Do not use a

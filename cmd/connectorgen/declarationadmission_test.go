@@ -946,6 +946,22 @@ func TestDeclarationAdmissionMappingEvidenceDoesNotRequireRetentionMetadata(t *t
 	}
 }
 
+func TestDeclarationAdmissionMappingDoesNotRequireCertificationOverlay(t *testing.T) {
+	defsRoot := declarationAdmissionCatalogFixtureDir(t)
+	certificationPath := filepath.Join(defsRoot, "cli-surface", "certification.json")
+	if err := os.WriteFile(certificationPath, []byte(`{"schema_version":"invalid"}`), 0o600); err != nil {
+		t.Fatalf("write malformed certification overlay: %v", err)
+	}
+
+	report, err := declarationAdmissionPathCheck(defsRoot)
+	if err != nil {
+		t.Fatalf("declaration admission read certification-only overlay: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("declaration admission findings = %+v, want mapping independent of certification", report.Findings)
+	}
+}
+
 func TestDeclarationAdmissionV3MappingEvidenceDoesNotRequireRetentionMetadata(t *testing.T) {
 	defsRoot := declarationAdmissionCatalogFixtureDir(t)
 	lockPath := filepath.Join(defsRoot, "cli-surface", "sources", "cli-surface-operation-source-lock.json")

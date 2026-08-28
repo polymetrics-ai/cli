@@ -11,6 +11,7 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+	"testing/fstest"
 
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
@@ -405,6 +406,157 @@ func TestSourceProjectionRequiresExplicitReadOnlyNonMutationDeclaration(t *testi
 	mutationSurface.Endpoints[0].Method = "POST"
 	if findings := validateSourceExecutableCoverage(engine.Bundle{Name: "alpha", Surface: &mutationSurface, CLISurface: &engine.CLISurface{}}, file, sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{mutation}}); len(findings) != 1 || !strings.Contains(findings[0].Message, "read-only declaration cannot cover a mutating source operation") {
 		t.Fatalf("mutating read-only declaration findings = %+v", findings)
+	}
+}
+
+func TestSourceProjectionMappingIgnoresRetentionAndEmbeddedSourceOperation(t *testing.T) {
+	lockRaw := []byte(`{
+  "schema_version": 2,
+  "connector": "alpha",
+  "source_contract": {"kind": "provider-evidence-only"},
+  "rest": {
+    "source_url": "https://provider.example.test/openapi.json",
+    "sha256": {"malformed": true},
+    "bytes": "not-a-byte-count",
+    "openapi": false,
+    "operations": [{
+      "id": "alpha.rest.listWidgets",
+      "protocol": "rest",
+      "method": "GET",
+      "path": "/widgets",
+      "operation_id": "listWidgets",
+      "deprecated": false,
+      "source_location": "paths[\"/widgets\"].get",
+      "source_operation": {"summary": "List widgets", "responses": {"200": {"description": "ok"}}}
+    }]
+  },
+  "counts": {"rest": 1, "graphql_query": 0, "graphql_mutation": 0, "total": 1}
+}`)
+	if _, err := parseSourceImportLock(lockRaw, "alpha"); err == nil {
+		t.Fatal("strict source-import parser accepted malformed retention or enriched mapping representation")
+	}
+	if _, err := parseDeclarationAdmissionSourceLock(lockRaw, "alpha"); err != nil {
+		t.Fatalf("mapping-only source-lock parser rejected source evidence: %v", err)
+	}
+
+	descriptor := sourceImportDescriptorDocument{
+		SchemaVersion: 3,
+		MergeBlocked:  true,
+		Operations: []sourceOperationDescriptor{{
+			Connector:           "alpha",
+			Protocol:            "rest",
+			SourceID:            "alpha.rest.listWidgets",
+			ProviderOperationID: "listWidgets",
+			Source: sourceImportSource{
+				URL:      "https://provider.example.test/openapi.json",
+				Location: `paths["/widgets"].get`,
+			},
+			Method: "get",
+			Path:   "/widgets",
+			Runtime: sourceRuntimeReachability{
+				MergeBlocked: true,
+				Gaps: []sourceContractGap{{
+					Foundation: "fixture-execution-foundation-r1",
+					Location:   "paths[/widgets].get",
+					Reason:     "fixture keeps execution outside this mapping-only proof",
+				}},
+			},
+		}},
+	}
+	descriptorRaw, err := json.Marshal(descriptor)
+	if err != nil {
+		t.Fatalf("encode source descriptor: %v", err)
+	}
+	fsys := fstest.MapFS{
+		"alpha/sources/alpha-operation-source-lock.json": &fstest.MapFile{Data: lockRaw},
+		"alpha/sources/alpha-operation-descriptor.json":  &fstest.MapFile{Data: descriptorRaw},
+	}
+	bundle := engine.Bundle{Name: "alpha", CLISurface: &engine.CLISurface{}}
+	if findings := checkSourceProjection(fsys, bundle); len(findings) != 0 {
+		t.Fatalf("mapping-only projection findings = %+v, want none", findings)
+	}
+
+	descriptor.Operations[0].Path = "/invented"
+	descriptorRaw, err = json.Marshal(descriptor)
+	if err != nil {
+		t.Fatalf("encode drifted source descriptor: %v", err)
+	}
+	fsys["alpha/sources/alpha-operation-descriptor.json"] = &fstest.MapFile{Data: descriptorRaw}
+	findings := checkSourceProjection(fsys, bundle)
+	if len(findings) != 1 || !strings.Contains(findings[0].Message, "provider contract drift") {
+		t.Fatalf("drifted mapping findings = %+v, want provider contract drift", findings)
+	}
+}
+
+func TestSourceProjectionSourceReferenceIgnoresRetentionButPreservesClosedGap(t *testing.T) {
+	const connector = "alpha"
+	raw := sourceImportV3SourceReferenceLock(
+		t,
+		connector,
+		"widgets",
+		"https://provider.example.test/openapi.json",
+		strings.Repeat("a", 64),
+		512,
+		"GET",
+		"/widgets",
+	)
+	strictLock, err := parseSourceImportLock(raw, connector)
+	if err != nil {
+		t.Fatalf("parse valid source-reference lock: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), strictLock, nil, defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import valid source-reference lock: %v", err)
+	}
+	descriptorRaw, err := marshalSourceImportResult(result)
+	if err != nil {
+		t.Fatalf("marshal source-reference descriptor: %v", err)
+	}
+	var descriptor sourceImportDescriptorDocument
+	if err := decodeSourceStrictJSON(descriptorRaw, &descriptor); err != nil {
+		t.Fatalf("decode source-reference descriptor: %v", err)
+	}
+
+	var wire map[string]any
+	if err := json.Unmarshal(raw, &wire); err != nil {
+		t.Fatalf("decode source-reference fixture: %v", err)
+	}
+	rest, ok := wire["rest"].(map[string]any)
+	if !ok {
+		t.Fatalf("source-reference fixture REST value = %T, want object", wire["rest"])
+	}
+	documents, ok := rest["source_documents"].([]any)
+	if !ok || len(documents) != 1 {
+		t.Fatalf("source-reference fixture documents = %#v, want one", rest["source_documents"])
+	}
+	document, ok := documents[0].(map[string]any)
+	if !ok {
+		t.Fatalf("source-reference fixture document = %T, want object", documents[0])
+	}
+	reference, ok := document["source_reference"].(map[string]any)
+	if !ok {
+		t.Fatalf("source-reference fixture reference = %T, want object", document["source_reference"])
+	}
+	reference["sha256"] = map[string]any{"retention": "malformed"}
+	raw, err = json.Marshal(wire)
+	if err != nil {
+		t.Fatalf("encode malformed-retention source reference: %v", err)
+	}
+	if _, err := parseSourceImportLock(raw, connector); err == nil {
+		t.Fatal("strict source-import parser accepted malformed source-reference retention")
+	}
+	mappingLock, err := parseDeclarationAdmissionSourceLock(raw, connector)
+	if err != nil {
+		t.Fatalf("mapping-only source-lock parser rejected source-reference identity: %v", err)
+	}
+	if findings := validateSourceDescriptorAgainstMappingLock(connector, "sources/alpha-operation-descriptor.json", mappingLock, descriptor); len(findings) != 0 {
+		t.Fatalf("mapping-only source-reference findings = %+v, want none", findings)
+	}
+
+	descriptor.Operations[0].Runtime.Gaps[0].Foundation = "invented-executor"
+	findings := validateSourceDescriptorAgainstMappingLock(connector, "sources/alpha-operation-descriptor.json", mappingLock, descriptor)
+	if len(findings) != 1 || !strings.Contains(findings[0].Message, "reference contract drift") {
+		t.Fatalf("tampered source-reference findings = %+v, want closed-gap refusal", findings)
 	}
 }
 
@@ -1680,9 +1832,6 @@ func TestSourceProjectionRestoresRequiredPathFlagForSourceBoundDirectRead(t *tes
 	}
 	bundle := engine.Bundle{
 		Name: "alpha", Spec: spec,
-		Certification: &engine.CertificationSpec{DirectReadGeneration: &engine.CertificationReadCandidateGeneration{Cohorts: []engine.CertificationReadCandidateCohort{{
-			Name: "fixture", CommandCount: 1, Commands: []string{"widgets get"},
-		}}}},
 		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
 			Path: "widgets get", Intent: "direct_read", Availability: "partial",
 			APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/accounts/{account}/widgets/{widget}"}},
@@ -2518,12 +2667,7 @@ func TestSourceProjectionRestoresReachableSourceBoundRead(t *testing.T) {
     "notes": %q
   }]
 }`, sourceProjectionBlockedReadCommandNote(source.SourceID)))
-	writeProjectionFixture(t, filepath.Join(bundleDir, "certification.json"), `{
-  "schema_version": 1,
-  "direct_read_generation": {
-    "cohorts": [{"name":"fixture","command_count":1,"commands":["widgets list"]}]
-  }
-}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "certification.json"), `{"schema_version":"invalid"}`)
 	writeProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"), fmt.Sprintf(`{
   "api": "alpha",
   "endpoints": [{
@@ -2847,7 +2991,7 @@ func walkClosedObjectSchemas(value any, path string, empty *[]string) {
 
 func sourceProjectionTestOperation() sourceOperationDescriptor {
 	return sourceOperationDescriptor{
-		Connector: "alpha", SourceID: "items/create", Method: "post", Path: "/items/{owner}",
+		Connector: "alpha", Protocol: "rest", SourceID: "items/create", Method: "post", Path: "/items/{owner}",
 		Request: sourceRequestDescriptor{
 			Path:  []sourceParameterDescriptor{{Name: "owner", Required: true, Schema: map[string]any{"type": "string"}}},
 			Query: []sourceParameterDescriptor{{Name: "mode", Required: true, Schema: map[string]any{"type": "string", "enum": []any{"fast", "safe"}}}},

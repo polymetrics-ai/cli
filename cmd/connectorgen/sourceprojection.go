@@ -4286,22 +4286,23 @@ func orderedSemanticEqual(left, right any) bool {
 	return reflect.DeepEqual(leftValue, rightValue)
 }
 
-// checkSourceProjection proves the checked-in descriptor is the exact lock
-// projection and every executable source request is field-complete at both the
-// action and CLI boundary. Operations with an explicit typed gap stay visible
-// and intentionally do not masquerade as implemented coverage.
+// checkSourceProjection proves the checked-in descriptor is the exact
+// mapping-relevant lock projection and every executable source request is
+// field-complete at both the action and CLI boundary. Retention integrity stays
+// with source-import. Operations with an explicit typed gap stay visible and
+// intentionally do not masquerade as implemented coverage.
 func checkSourceProjection(fsys fs.FS, bundle engine.Bundle) []Finding {
 	lockPath := filepath.ToSlash(filepath.Join(bundle.Name, "sources", bundle.Name+"-operation-source-lock.json"))
 	lockRaw, err := fs.ReadFile(fsys, lockPath)
 	if err != nil {
 		return nil
 	}
-	lock, err := parseSourceImportLock(lockRaw, bundle.Name)
+	lock, err := parseDeclarationAdmissionSourceLock(lockRaw, bundle.Name)
 	if err != nil {
 		return []Finding{sourceProjectionFinding(bundle.Name, lockPath, err.Error())}
 	}
-	if unavailable, exists := sourceImportUnavailableDocument(lock); exists {
-		return []Finding{sourceProjectionFinding(bundle.Name, lockPath, sourceImportUnavailableFindingMessage(unavailable))}
+	if unavailable, exists := sourceProjectionUnavailableMappingDocument(lock); exists {
+		return []Finding{sourceProjectionFinding(bundle.Name, lockPath, sourceProjectionUnavailableMappingFindingMessage(unavailable))}
 	}
 	descriptorPath := filepath.ToSlash(filepath.Join(bundle.Name, "sources", bundle.Name+"-operation-descriptor.json"))
 	descriptorRaw, err := fs.ReadFile(fsys, descriptorPath)
@@ -4312,9 +4313,27 @@ func checkSourceProjection(fsys fs.FS, bundle engine.Bundle) []Finding {
 	if err := decodeSourceStrictJSON(descriptorRaw, &descriptor); err != nil {
 		return []Finding{sourceProjectionFinding(bundle.Name, descriptorPath, "parse canonical source descriptor: "+err.Error())}
 	}
-	findings := validateSourceDescriptorAgainstLock(bundle.Name, descriptorPath, lock, descriptor)
+	findings := validateSourceDescriptorAgainstMappingLock(bundle.Name, descriptorPath, lock, descriptor)
 	findings = append(findings, validateSourceExecutableCoverage(bundle, descriptorPath, descriptor)...)
 	return findings
+}
+
+func sourceProjectionUnavailableMappingDocument(lock declarationAdmissionReviewedSourceLock) (declarationAdmissionReviewedUnavailableDocument, bool) {
+	if len(lock.Unavailable) == 0 {
+		return declarationAdmissionReviewedUnavailableDocument{}, false
+	}
+	return lock.Unavailable[0], true
+}
+
+func sourceProjectionUnavailableMappingFindingMessage(document declarationAdmissionReviewedUnavailableDocument) string {
+	reason := strings.TrimSpace(document.Reason)
+	if reason == "" {
+		reason = "provider operation inventory is unavailable"
+	}
+	if document.SourceURL != "" {
+		return fmt.Sprintf("source inventory is unavailable: document %q cites %s: %s", document.ID, document.SourceURL, reason)
+	}
+	return fmt.Sprintf("source inventory is unavailable: document %q: %s", document.ID, reason)
 }
 
 func sourceImportUnavailableDocument(lock sourceImportLock) (sourceImportRESTDocument, bool) {
@@ -4338,6 +4357,146 @@ func sourceImportUnavailableFindingMessage(document sourceImportRESTDocument) st
 
 func sourceProjectionFinding(connector, file, message string) Finding {
 	return Finding{Connector: connector, File: strings.TrimPrefix(file, connector+"/"), Rule: ruleSourceProjection, Message: message}
+}
+
+// validateSourceDescriptorAgainstMappingLock binds a checked-in descriptor to
+// only the source-lock facts used by declaration projection: stable identity,
+// provider identity, citation, method, and route. Retention hashes and bytes
+// are validated by source-import and deliberately do not enter this boundary.
+func validateSourceDescriptorAgainstMappingLock(connector, file string, lock declarationAdmissionReviewedSourceLock, descriptor sourceImportDescriptorDocument) []Finding {
+	if unavailable, exists := sourceProjectionUnavailableMappingDocument(lock); exists {
+		return []Finding{sourceProjectionFinding(connector, file, sourceProjectionUnavailableMappingFindingMessage(unavailable))}
+	}
+	if descriptor.SchemaVersion != 2 && descriptor.SchemaVersion != 3 {
+		return []Finding{sourceProjectionFinding(connector, file, fmt.Sprintf("source descriptor schema_version = %d, want 2 or 3", descriptor.SchemaVersion))}
+	}
+	if len(descriptor.Operations) != len(lock.Operations) {
+		return []Finding{sourceProjectionFinding(connector, file, fmt.Sprintf("source descriptor has %d identities, lock requires %d", len(descriptor.Operations), len(lock.Operations)))}
+	}
+
+	providerAliases := make(map[string]string, len(lock.Operations))
+	ambiguousAliases := map[string]bool{}
+	for sourceID, operation := range lock.Operations {
+		if lock.SchemaVersion >= 3 || operation.SourceReference || operation.Protocol != "rest" || operation.ProviderOperationID == "" || ambiguousAliases[operation.ProviderOperationID] {
+			continue
+		}
+		if previous, exists := providerAliases[operation.ProviderOperationID]; exists && previous != sourceID {
+			delete(providerAliases, operation.ProviderOperationID)
+			ambiguousAliases[operation.ProviderOperationID] = true
+			continue
+		}
+		providerAliases[operation.ProviderOperationID] = sourceID
+	}
+
+	seenDescriptorIDs := map[string]bool{}
+	matchedSourceIDs := map[string]bool{}
+	referenceGaps := []sourceContractGap{}
+	referenceCount := 0
+	for _, operation := range descriptor.Operations {
+		if seenDescriptorIDs[operation.SourceID] {
+			return []Finding{sourceProjectionFinding(connector, file, "duplicate source identity "+operation.SourceID)}
+		}
+		seenDescriptorIDs[operation.SourceID] = true
+
+		sourceID := operation.SourceID
+		reviewed, found := lock.Operations[sourceID]
+		if !found {
+			if alias, exists := providerAliases[sourceID]; exists {
+				sourceID = alias
+				reviewed, found = lock.Operations[sourceID]
+			}
+		}
+		if !found || matchedSourceIDs[sourceID] {
+			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provider contract drift for "+operation.SourceID)}
+		}
+		matchedSourceIDs[sourceID] = true
+
+		if reviewed.SourceReference {
+			gap := sourceContractGapFor(
+				sourceContractUnavailableFoundation,
+				"source operation "+sourceID+" at "+reviewed.SourceURL+"#"+reviewed.Location,
+				"canonical provider source is cited without retained bytes; request, response, pagination, authentication, and execution contract details are source_contract_unavailable",
+			)
+			expected := sourceOperationDescriptor{
+				Connector:           connector,
+				Protocol:            reviewed.Protocol,
+				SourceID:            sourceID,
+				ProviderOperationID: reviewed.ProviderOperationID,
+				Source: sourceImportSource{
+					URL:        reviewed.SourceURL,
+					Location:   reviewed.Location,
+					DocumentID: reviewed.DocumentID,
+				},
+				Method: strings.ToLower(reviewed.Method),
+				Path:   reviewed.Path,
+				Runtime: sourceRuntimeReachability{
+					MergeBlocked: true,
+					Gaps:         []sourceContractGap{gap},
+				},
+			}
+			normalized := operation
+			// A citation-only reference may retain digest/form metadata, but that
+			// representation is not declaration admission. Every executable field
+			// and the exact source_contract_unavailable disposition remain closed.
+			normalized.Source.SHA256 = ""
+			normalized.Source.Bytes = 0
+			normalized.Source.Form = ""
+			normalized.Source.Version = ""
+			if !reflect.DeepEqual(normalized, expected) {
+				return []Finding{sourceProjectionFinding(connector, file, "source descriptor reference contract drift for "+sourceID)}
+			}
+			referenceCount++
+			referenceGaps = append(referenceGaps, gap)
+			continue
+		}
+
+		citationMatches := reviewed.SourceURL == "" || operation.Source.URL == reviewed.SourceURL || operation.Source.PublishedURL == reviewed.SourceURL || operation.Source.CitationURL == reviewed.SourceURL
+		if operation.Connector != connector || operation.Protocol != reviewed.Protocol || !citationMatches || operation.Source.Location != reviewed.Location || (reviewed.DocumentID != "" && operation.Source.DocumentID != reviewed.DocumentID) {
+			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provider contract drift for "+sourceID)}
+		}
+		if reviewed.Protocol == "rest" && (operation.ProviderOperationID != reviewed.ProviderOperationID || !strings.EqualFold(operation.Method, reviewed.Method) || operation.Path != reviewed.Path) {
+			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provider contract drift for "+sourceID)}
+		}
+		if operation.Runtime.MergeBlocked != (len(operation.Runtime.Gaps) > 0) {
+			return []Finding{sourceProjectionFinding(connector, file, "source descriptor gap state is inconsistent for "+sourceID)}
+		}
+	}
+	if referenceCount > 0 {
+		if !descriptor.MergeBlocked {
+			return []Finding{sourceProjectionFinding(connector, file, "source descriptor reference contract drift: merge_blocked must remain true")}
+		}
+		descriptorGaps := sourceSortedGaps(descriptor.Gaps)
+		if referenceCount == len(lock.Operations) {
+			if !reflect.DeepEqual(descriptorGaps, sourceSortedGaps(referenceGaps)) {
+				return []Finding{sourceProjectionFinding(connector, file, "source descriptor reference contract drift: descriptor gaps do not match the cited source contract")}
+			}
+		} else {
+			for _, gap := range referenceGaps {
+				found := false
+				for _, descriptorGap := range descriptorGaps {
+					if descriptorGap == gap {
+						found = true
+						break
+					}
+				}
+				if !found {
+					return []Finding{sourceProjectionFinding(connector, file, "source descriptor reference contract drift: descriptor gaps omit the cited source contract")}
+				}
+			}
+		}
+	}
+
+	if len(matchedSourceIDs) != len(lock.Operations) {
+		missing := make([]string, 0, len(lock.Operations)-len(matchedSourceIDs))
+		for sourceID := range lock.Operations {
+			if !matchedSourceIDs[sourceID] {
+				missing = append(missing, sourceID)
+			}
+		}
+		sort.Strings(missing)
+		return []Finding{sourceProjectionFinding(connector, file, "source descriptor is missing identity "+missing[0])}
+	}
+	return nil
 }
 
 func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImportLock, descriptor sourceImportDescriptorDocument) []Finding {
@@ -4691,20 +4850,6 @@ func sourceProjectionDeclaredDirectRead(bundle engine.Bundle, source sourceOpera
 	return false
 }
 
-func sourceProjectionReadCandidateCommandDeclared(bundle engine.Bundle, path string) bool {
-	if bundle.Certification == nil || bundle.Certification.DirectReadGeneration == nil {
-		return false
-	}
-	for _, cohort := range bundle.Certification.DirectReadGeneration.Cohorts {
-		for _, command := range cohort.Commands {
-			if command == path {
-				return true
-			}
-		}
-	}
-	return false
-}
-
 func sourceProjectionCommandHasEndpointRef(command engine.CLICommand, endpoint string) bool {
 	for _, surface := range command.APISurface {
 		if sourceProjectionEndpointKey(surface.Method, surface.Path) == endpoint {
@@ -4730,9 +4875,6 @@ func sourceProjectionRestoreSourceBoundDirectReadPathFlags(bundle *engine.Bundle
 		command := &bundle.CLISurface.Commands[index]
 		sourceID, ok := sourceProjectionEngineSourceBoundDirectReadID(*command)
 		if !ok || len(command.APISurface) != 1 {
-			continue
-		}
-		if !sourceProjectionReadCandidateCommandDeclared(*bundle, command.Path) {
 			continue
 		}
 		source, found := operations[sourceID]
@@ -5177,10 +5319,11 @@ func sourceProjectionReadOnlyResult(bundleDir string, result sourceImportResult)
 	return filtered, nil
 }
 
-// sourceProjectionExecutionSurface reads only the declaration-owned execution
-// surfaces needed to classify a locked source operation. Source import must
-// keep working for a descriptor-only fixture, so absent optional runtime files
-// mean that no executable route has been declared rather than a raw fallback.
+// sourceProjectionExecutionSurface reads only declaration-owned execution
+// surfaces needed to classify a locked source operation. Certification is a
+// live-proof overlay, not a source-mapping input. Source import must keep
+// working for a descriptor-only fixture, so absent optional runtime files mean
+// that no executable route has been declared rather than a raw fallback.
 func sourceProjectionExecutionSurface(bundleDir, connector string) (engine.Bundle, error) {
 	bundle := engine.Bundle{Name: connector}
 	for _, document := range []struct {
@@ -5250,14 +5393,6 @@ func sourceProjectionExecutionSurface(bundleDir, connector string) (engine.Bundl
 				return err
 			}
 			bundle.Surface = &value
-			return nil
-		}},
-		{path: "certification.json", decode: func(raw []byte) error {
-			var value engine.CertificationSpec
-			if err := json.Unmarshal(raw, &value); err != nil {
-				return err
-			}
-			bundle.Certification = &value
 			return nil
 		}},
 	} {

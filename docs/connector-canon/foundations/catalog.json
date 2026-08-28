@@ -185,6 +185,7 @@
         "primary_package": "polymetrics.ai/cmd/connectorgen",
         "supporting_packages": [],
         "files": [
+          "cmd/connectorgen/authoringfs.go",
           "cmd/connectorgen/declarationadmission.go",
           "cmd/connectorgen/operationevidence.go",
           "cmd/connectorgen/sourceprojection.go",
@@ -194,8 +195,20 @@
         ],
         "symbols": [
           {
+            "file": "cmd/connectorgen/authoringfs.go",
+            "name": "withoutCertificationOverlayFS"
+          },
+          {
+            "file": "cmd/connectorgen/declarationadmission.go",
+            "name": "parseDeclarationAdmissionSourceLock"
+          },
+          {
             "file": "cmd/connectorgen/sourceprojection.go",
             "name": "sourceOperationExecutionFoundation"
+          },
+          {
+            "file": "cmd/connectorgen/sourceprojection.go",
+            "name": "validateSourceDescriptorAgainstMappingLock"
           },
           {
             "file": "cmd/connectorgen/surfacesync.go",
@@ -263,7 +276,8 @@
           "generated surfaces retain exact provider-operation identity",
           "provider operations retain every executable saved and interactive lane without duplicating source identity",
           "source-projected read-only fields are rejected as request input before provider I/O",
-          "projection gaps remain explicit and source-bound"
+          "projection gaps remain explicit and source-bound",
+          "mapping admission and projection are independent of certification overlays and retention hash or byte representation"
         ]
       },
       "selection": {
@@ -294,7 +308,9 @@
         "OpenAPI request projection excludes readOnly properties recursively, including resolved allOf arms, and removes excluded names from required.",
         "Array query encoding must retain the source-declared style, explode behavior, and delimiter; generic value stringification is not source projection.",
         "Aliases and multiple lane bindings must not inflate the provider-operation count.",
-        "A projected implemented label is incomplete until the selected runtime path passes preflight."
+        "A projected implemented label is incomplete until the selected runtime path passes preflight.",
+        "The mapping-only lock view still fails closed on connector ownership, stable identity, citation, location, method, route, counts, and the exact source_contract_unavailable disposition.",
+        "Strict retained-byte and digest validation remains owned by source-import rather than declaration projection."
       ],
       "non_goals": [
         "Executing provider requests or saved syncs.",
@@ -352,16 +368,31 @@
           "file": "cmd/connectorgen/operationevidence_test.go",
           "name": "TestOperationEvidencePreservesSavedAndInteractiveLanes"
         },
-      {
-        "package": "./cmd/connectorgen",
-        "file": "cmd/connectorgen/main_test.go",
-        "name": "TestValidate_CLISurfaceActionBackedDirectWriteStructuredJSON"
-      },
-      {
-        "package": "./internal/connectors/defs/asana",
-        "file": "internal/connectors/defs/asana/reverse_etl_execute_test.go",
-        "name": "TestWriteQueryCellsMatchPinnedFormEncoding"
-      }
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/main_test.go",
+          "name": "TestValidate_CLISurfaceActionBackedDirectWriteStructuredJSON"
+        },
+        {
+          "package": "./internal/connectors/defs/asana",
+          "file": "internal/connectors/defs/asana/reverse_etl_execute_test.go",
+          "name": "TestWriteQueryCellsMatchPinnedFormEncoding"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/declarationadmission_test.go",
+          "name": "TestDeclarationAdmissionMappingDoesNotRequireCertificationOverlay"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/sourceprojection_test.go",
+          "name": "TestSourceProjectionMappingIgnoresRetentionAndEmbeddedSourceOperation"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/sourceprojection_test.go",
+          "name": "TestSourceProjectionSourceReferenceIgnoresRetentionButPreservesClosedGap"
+        }
       ],
       "known_gap_refs": [
         {
@@ -1893,7 +1924,8 @@
       "constraints": [
         "Certification must bind exact source, projected definition, executor, scope, mode, and resource evidence.",
         "A fixture, file name, declaration, or repeated self-claim is not accepted live proof.",
-        "Provider refusal and unavailable live environments remain explicit results rather than passing states."
+        "Provider refusal and unavailable live environments remain explicit results rather than passing states.",
+        "Certification overlays and live credentials validate proof only; their absence or malformed representation cannot admit, suppress, or remap a source operation."
       ],
       "non_goals": [
         "Configuring runtime execution or filling missing provider facts.",

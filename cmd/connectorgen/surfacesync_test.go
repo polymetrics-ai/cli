@@ -642,6 +642,9 @@ func TestSyncRuntimeOperationEndpointLedgerCreatesCompactProjection(t *testing.T
 			t.Fatalf("write %s: %v", target, err)
 		}
 	}
+	if err := os.WriteFile(filepath.Join(root, "cli-surface", "certification.json"), []byte(`{"schema_version":"invalid"}`), 0o644); err != nil {
+		t.Fatalf("write malformed certification overlay: %v", err)
+	}
 
 	stats, err := syncRuntimeOperationEndpointLedger(root, false)
 	if err != nil {

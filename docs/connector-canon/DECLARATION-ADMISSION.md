@@ -34,6 +34,16 @@ or malformed without changing the mapping certificate. The strict
 `source-import` path still rejects such retention defects. It remains the
 separate retained-source certificate.
 
+`surface-sync` and the runtime operation-endpoint ledger consume the same
+mapping-only lock projection. They therefore do not load `certification.json`
+and do not require retention hashes or byte counts to materialize an already
+checked-in canonical descriptor. This separation does not make the projection
+permissive: stable identity, citation, document location, method, route, and
+counts still fail closed, and a citation-only `source_reference` must retain
+its exact `source_contract_unavailable` disposition. `source-import` alone
+validates retained bytes and hashes; certification alone validates fixture or
+live-provider proof and credentials.
+
 Each source row records a stable source ID, protocol, provider HTTPS URL,
 exact document location, optional raw provider operation ID, method/base/path,
 one binding identity, and the provider operation's `none`, `delete`, or

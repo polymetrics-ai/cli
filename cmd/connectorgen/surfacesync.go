@@ -239,15 +239,16 @@ func syncCheckedInSourceProjection(bundleDir, connector string, check bool) (sou
 	if descriptor.SchemaVersion != 2 && descriptor.SchemaVersion != 3 {
 		return sourceProjectionStats{}, fmt.Errorf("source descriptor schema_version = %d, want 2 or 3", descriptor.SchemaVersion)
 	}
-	// The checked-in lock owns every descriptor contract. Parse and bind it
-	// before projection rather than using a mutable header marker to decide
-	// whether validation applies: otherwise changing a citation document's kind
-	// can turn declaration-only evidence into a materialization input.
-	lock, err := parseSourceImportLock(lockRaw, connector)
+	// The checked-in lock owns provider mapping and source-reference disposition.
+	// Parse and bind that view before projection rather than using a mutable
+	// header marker to decide whether validation applies: otherwise changing a
+	// citation document's kind can turn declaration-only evidence into a
+	// materialization input. Source-import separately owns retention integrity.
+	lock, err := parseDeclarationAdmissionSourceLock(lockRaw, connector)
 	if err != nil {
-		return sourceProjectionStats{}, fmt.Errorf("parse source lock: %w", err)
+		return sourceProjectionStats{}, fmt.Errorf("parse source lock mapping evidence: %w", err)
 	}
-	if findings := validateSourceDescriptorAgainstLock(connector, filepath.ToSlash(filepath.Join("sources", connector+"-operation-descriptor.json")), lock, descriptor); len(findings) != 0 {
+	if findings := validateSourceDescriptorAgainstMappingLock(connector, filepath.ToSlash(filepath.Join("sources", connector+"-operation-descriptor.json")), lock, descriptor); len(findings) != 0 {
 		return sourceProjectionStats{}, fmt.Errorf("validate canonical source descriptor: %s", findings[0].Message)
 	}
 	return projectSourceMutationMappingsToBundle(bundleDir, sourceImportResult{
@@ -275,7 +276,7 @@ func syncRuntimeOperationEndpointLedger(dir string, check bool) (runtimeOperatio
 			continue
 		}
 		name := entry.Name()
-		bundle, err := engine.Load(sourceFS, name)
+		bundle, err := engine.Load(withoutCertificationOverlayFS{FS: sourceFS, connector: name}, name)
 		if err != nil {
 			return runtimeOperationEndpointLedgerStats{}, fmt.Errorf("load %s: %w", name, err)
 		}
