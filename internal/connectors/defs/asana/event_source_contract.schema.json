@@ -142,6 +142,8 @@
             "action_pointer",
             "resource_gid_pointer",
             "resource_type_pointer",
+            "parent_gid_pointer",
+            "parent_resource_type_pointer",
             "actions",
             "tombstone_action",
             "scope_change_action"
@@ -152,6 +154,8 @@
             "action_pointer": {"type": "string", "enum": ["$.action"]},
             "resource_gid_pointer": {"type": "string", "enum": ["$.resource.gid"]},
             "resource_type_pointer": {"type": "string", "enum": ["$.resource.resource_type"]},
+            "parent_gid_pointer": {"type": "string", "enum": ["$.parent.gid"]},
+            "parent_resource_type_pointer": {"type": "string", "enum": ["$.parent.resource_type"]},
             "actions": {
               "type": "array",
               "minItems": 5,

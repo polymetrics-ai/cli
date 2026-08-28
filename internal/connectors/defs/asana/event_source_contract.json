@@ -43,6 +43,8 @@
       "action_pointer": "$.action",
       "resource_gid_pointer": "$.resource.gid",
       "resource_type_pointer": "$.resource.resource_type",
+      "parent_gid_pointer": "$.parent.gid",
+      "parent_resource_type_pointer": "$.parent.resource_type",
       "actions": [
         "changed",
         "added",

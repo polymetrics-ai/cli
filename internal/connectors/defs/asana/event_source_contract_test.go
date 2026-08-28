@@ -55,13 +55,15 @@ type asanaEventSourceContract struct {
 			EventTotalOrder     string `json:"event_total_order"`
 		} `json:"event_scope"`
 		EventRecord struct {
-			Schema              string   `json:"schema"`
-			ActionPointer       string   `json:"action_pointer"`
-			ResourceGIDPointer  string   `json:"resource_gid_pointer"`
-			ResourceTypePointer string   `json:"resource_type_pointer"`
-			Actions             []string `json:"actions"`
-			TombstoneAction     string   `json:"tombstone_action"`
-			ScopeChangeAction   string   `json:"scope_change_action"`
+			Schema                    string   `json:"schema"`
+			ActionPointer             string   `json:"action_pointer"`
+			ResourceGIDPointer        string   `json:"resource_gid_pointer"`
+			ResourceTypePointer       string   `json:"resource_type_pointer"`
+			ParentGIDPointer          string   `json:"parent_gid_pointer"`
+			ParentResourceTypePointer string   `json:"parent_resource_type_pointer"`
+			Actions                   []string `json:"actions"`
+			TombstoneAction           string   `json:"tombstone_action"`
+			ScopeChangeAction         string   `json:"scope_change_action"`
 		} `json:"event_record"`
 		Hydration struct {
 			OperationID     string `json:"operation_id"`
@@ -197,6 +199,56 @@ func TestAsanaEventSourceContractIsSchemaValidAndSourceLocked(t *testing.T) {
 		if bytes.Contains(contractRaw, []byte(forbidden)) {
 			t.Fatalf("provider evidence contract contains runtime policy/code-hook key %s", forbidden)
 		}
+	}
+}
+
+func TestAsanaEventSourceContractProjectsEventParentRelationship(t *testing.T) {
+	contractRaw, err := os.ReadFile(asanaEventSourceContractPath)
+	if err != nil {
+		t.Fatalf("read Asana event source contract: %v", err)
+	}
+	var contract asanaEventSourceContract
+	decoder := json.NewDecoder(bytes.NewReader(contractRaw))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(&contract); err != nil {
+		t.Fatalf("strict-decode Asana event source contract: %v", err)
+	}
+	if contract.Provider.EventRecord.ParentGIDPointer != "$.parent.gid" || contract.Provider.EventRecord.ParentResourceTypePointer != "$.parent.resource_type" {
+		t.Fatalf("event parent projection = gid %q resource type %q", contract.Provider.EventRecord.ParentGIDPointer, contract.Provider.EventRecord.ParentResourceTypePointer)
+	}
+
+	lockRaw, err := os.ReadFile(contract.SourceLock.Path)
+	if err != nil {
+		t.Fatalf("read event contract source lock %q: %v", contract.SourceLock.Path, err)
+	}
+	var lock asanaEventContractSourceLock
+	if err := json.Unmarshal(lockRaw, &lock); err != nil {
+		t.Fatalf("decode event contract source lock: %v", err)
+	}
+	record := contract.Provider.EventRecord
+	raw, ok := lock.SourceContract.Components.Schemas[record.Schema]
+	if !ok {
+		t.Fatalf("source lock has no event schema %q", record.Schema)
+	}
+	schema := decodeAsanaEventContractJSON(t, raw, record.Schema)
+	properties := asanaEventContractObjectAt(t, schema, "properties")
+	parent := asanaEventContractObjectAt(t, properties, "parent")
+	allOf := asanaEventContractArrayAt(t, parent, "allOf")
+	parentRef := asanaEventContractObject(t, allOf[0], "EventResponse.parent allOf[0]")
+	if got := asanaEventContractStringAt(t, parentRef, "$ref"); got != "#/components/schemas/AsanaNamedResource" {
+		t.Fatalf("EventResponse.parent ref = %q", got)
+	}
+	parentDescription := strings.ToLower(asanaEventContractStringAt(t, asanaEventContractObject(t, allOf[1], "EventResponse.parent allOf[1]"), "description"))
+	for _, phrase := range []string{"parent object", "added to or removed from"} {
+		if !strings.Contains(parentDescription, phrase) {
+			t.Fatalf("EventResponse.parent does not document %q: %q", phrase, parentDescription)
+		}
+	}
+	parentSchema := decodeAsanaEventContractJSON(t, lock.SourceContract.Components.Schemas["AsanaNamedResource"], "AsanaNamedResource")
+	parentProperties := asanaEventContractObjectAt(t, parentSchema, "properties")
+	for _, pointer := range []string{record.ParentGIDPointer, record.ParentResourceTypePointer} {
+		field := strings.TrimPrefix(pointer, "$.parent.")
+		assertAsanaEventContractResponseField(t, parentProperties, field, "string")
 	}
 }
 
