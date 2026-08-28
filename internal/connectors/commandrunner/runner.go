@@ -2631,9 +2631,9 @@ func setRecordValue(record connectors.Record, path string, value any) error {
 }
 
 // coerceRecordFlagValue is the only route that admits the declarative `json`
-// flag kind. It is intentionally unavailable to direct reads, direct writes,
-// paths, queries, headers, and arbitrary body fields; preflight has already
-// tied it to one engine-validated reverse-ETL record property.
+// flag kind. It is intentionally unavailable to direct reads, operation-backed
+// direct writes, paths, queries, headers, and arbitrary body fields; preflight
+// has already tied it to one engine-validated write-action record property.
 func coerceRecordFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, error) {
 	if flag.Type == "json" {
 		return coerceDeclaredStructuredJSONRecordFlagValue(flag, values)
@@ -2696,7 +2696,8 @@ func structuredJSONRecordValueStartsContainer(raw string) bool {
 // URL, header, or JSON field because only the exact body mapping reaches this
 // path. Other control characters remain refused.
 func coerceCommandFlagValue(cmd connectors.CommandSurfaceCommand, flag connectors.CommandSurfaceFlag, values []string) (any, error) {
-	if (cmd.Intent == "reverse_etl" || cmd.Intent == "binary_upload") && strings.HasPrefix(flag.MapsTo, "record.") {
+	actionBackedDirectWrite := cmd.Intent == "direct_write" && strings.TrimSpace(cmd.Write) != ""
+	if (cmd.Intent == "reverse_etl" || cmd.Intent == "binary_upload" || actionBackedDirectWrite) && strings.HasPrefix(flag.MapsTo, "record.") {
 		return coerceRecordFlagValue(flag, values)
 	}
 	if flag.Type == "json" && isDeclaredStructuredJSONOperationBodyFlag(cmd, flag) {

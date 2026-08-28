@@ -1782,6 +1782,70 @@ func TestBuildWriteCommandSupportsOnlyDeclaredStructuredJSONRecordFlags(t *testi
 	}
 }
 
+// An action-backed direct_write uses the same one-record plan as reverse ETL.
+// Its JSON flag remains closed by the named write action and record schema; the
+// direct_write intent must not turn JSON into a generic HTTP-body escape hatch.
+func TestBuildDirectWriteCommandSupportsOnlyDeclaredStructuredJSONRecordFlags(t *testing.T) {
+	newConnector := func(write string) connectors.Connector {
+		return engine.New(engine.Bundle{
+			Name: "widgets",
+			Writes: []engine.WriteAction{{
+				Name:   "create_widget",
+				Kind:   "create",
+				Method: http.MethodPost,
+				Path:   "/widgets",
+				RecordSchema: json.RawMessage(`{
+					"type":"object","additionalProperties":false,"required":["payload"],
+					"properties":{"payload":{"type":"object","additionalProperties":false,"required":["kind"],"properties":{"kind":{"type":"string"}}}}
+				}`),
+			}},
+			CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+				Path: "widgets create", Intent: "direct_write", Availability: "implemented", Write: write,
+				Flags: []engine.CLIFlag{{Name: "payload", Type: "json", MapsTo: "record.payload", Required: true, MaxBytes: 64}},
+			}}},
+		}, nil)
+	}
+
+	connector := newConnector("create_widget")
+	if err := Preflight(connector, []string{"widgets", "create"}); err != nil {
+		t.Fatalf("Preflight action-backed direct_write: %v", err)
+	}
+
+	command, err := BuildWriteCommand(context.Background(), connector, Request{
+		Path: []string{"widgets", "create"}, Flags: map[string][]string{"payload": {`{"kind":"fixture"}`}},
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand action-backed direct_write: %v", err)
+	}
+	payload, ok := command.Record["payload"].(map[string]any)
+	if !ok || payload["kind"] != "fixture" {
+		t.Fatalf("planned payload = %#v, want parsed object", command.Record["payload"])
+	}
+
+	for _, tc := range []struct {
+		name    string
+		value   string
+		wantErr string
+	}{
+		{name: "malformed JSON", value: `{`, wantErr: "invalid JSON"},
+		{name: "schema mismatch", value: `[]`, wantErr: "does not match type"},
+		{name: "bounded input", value: `{"kind":"` + strings.Repeat("x", 64) + `"}`, wantErr: "structured JSON exceeds 64 bytes"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := BuildWriteCommand(context.Background(), connector, Request{
+				Path: []string{"widgets", "create"}, Flags: map[string][]string{"payload": {tc.value}},
+			})
+			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+				t.Fatalf("BuildWriteCommand error = %v, want %q", err, tc.wantErr)
+			}
+		})
+	}
+
+	if err := Preflight(newConnector(""), []string{"widgets", "create"}); err == nil || !strings.Contains(err.Error(), "no resolvable runtime binding") {
+		t.Fatalf("actionless direct_write Preflight error = %v, want closed runtime-binding rejection", err)
+	}
+}
+
 // binary_upload is a public command intent, but it is still a reverse-plan
 // write. This exercises the real commandrunner boundary: a declared file flag
 // must produce a plan, while a normal JSON write must not be promoted merely
