@@ -65,6 +65,12 @@ func (a *App) selectTransportRoute(conn Connection, streamName string, mode Sync
 	sourceDeclarative := isDeclarativeStreamTransportConnector(source)
 	destinationDescriptor, destinationDeclared := connectors.DestinationTransportDescriptorOf(destination)
 	destinationIssueLabel := destinationDeclared && destinationDescriptor.Executor == issueLabelDestinationReference
+	if isAsanaFullRefreshWarehouseRoute(source, destination, mode.ContractMode) {
+		// The event-token executor owns only proven incremental project-task
+		// semantics. Full refresh for every Asana stream retains the existing
+		// exhaustive connector Read -> local warehouse materializer route.
+		return false, transportRouteDeclarationAbsent, nil
+	}
 	if sourceDeclarative && isBoundedLocalWarehouseLegacyRoute(destination, mode.ContractMode) {
 		// The local warehouse primitive owns a closed, bounded ordinary ETL
 		// representation for these executable modes. Its two dedupe modes are

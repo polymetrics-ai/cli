@@ -90,6 +90,7 @@ func definitionTransportDefinitionFactories(a *App, registry *connectors.Registr
 		return nil, fmt.Errorf("definition transport factories require a connector registry")
 	}
 	var sourceEvidences []connectors.ConformanceEvidenceReference
+	asanaEventSourceDeclared := false
 	destinationEvidences := make(map[connectors.TransportExecutorReference][]connectors.ConformanceEvidenceReference, len(declarativeDestinationAdapters))
 	for _, metadata := range registry.List() {
 		connector, ok := registry.Get(metadata.Name)
@@ -102,6 +103,9 @@ func definitionTransportDefinitionFactories(a *App, registry *connectors.Registr
 		}
 		if descriptor.Source != nil && descriptor.Source.Executor == declarativeStreamSourceReference {
 			sourceEvidences = appendDefinitionTransportEvidence(sourceEvidences, descriptor.Source.Conformance)
+		}
+		if descriptor.Source != nil && descriptor.Source.Executor == asanaEventSourceReference {
+			asanaEventSourceDeclared = true
 		}
 		if descriptor.Destination != nil {
 			for _, adapter := range declarativeDestinationAdapters {
@@ -122,6 +126,25 @@ func definitionTransportDefinitionFactories(a *App, registry *connectors.Registr
 					return nil, err
 				}
 				return &declarativeStreamSourceExecutor{}, nil
+			},
+		})
+	}
+	if asanaEventSourceDeclared {
+		// Unlike the legacy declarative adapter above, this evidence is fixed by
+		// the implementation factory. A connector descriptor cannot self-admit a
+		// different suite/run pair merely by naming this executor.
+		factories = append(factories, synctransport.DefinitionFactory{
+			Reference:      asanaEventSourceReference,
+			SourceEvidence: asanaEventSourceConformance,
+			BuildSource: func(connector connectors.Connector) (synctransport.SourceExecutor, error) {
+				descriptor, ok := connectors.SourceTransportDescriptorOf(connector)
+				if !ok || descriptor.Executor != asanaEventSourceReference || descriptor.Conformance != asanaEventSourceConformance {
+					return nil, fmt.Errorf("Asana event-token source received an incompatible declaration")
+				}
+				if _, ok := connector.(connectors.OperationDirectReader); !ok {
+					return nil, fmt.Errorf("Asana event-token source requires source-bound operation reads")
+				}
+				return &asanaEventSourceExecutor{}, nil
 			},
 		})
 	}

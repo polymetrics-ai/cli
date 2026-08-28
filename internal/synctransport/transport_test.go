@@ -924,6 +924,49 @@ func TestTransportPreflight_EnforcesDeliveryGuaranteeCompatibility(t *testing.T)
 	}
 }
 
+func TestTransportPreflight_AdmitsCompleteWindowCoalescingOnlyForCurrentStateDedupe(t *testing.T) {
+	pair := newTestTransportPair("api", "database")
+	mode := synccontract.ModeIncrementalDedupe
+	pair.source.descriptor.Source.Modes = []synccontract.Mode{mode}
+	pair.source.descriptor.Source.Delivery.Ordering = connectors.DeliveryOrderingWindowCoalesced
+	pair.destination.descriptor.Destination.Modes = []synccontract.Mode{mode}
+	pair.destination.descriptor.Destination.EligibleActions = []string{"apply"}
+	pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{Mode: mode, Strategy: connectors.ApplyStrategyDedupe, Action: "apply"}}
+	registry := NewRegistry(pair.verifier)
+	registerTransportPair(t, registry, pair)
+
+	if _, err := registry.Preflight(PreflightRequest{Source: pair.source, Destination: pair.destination, Stream: "records", Mode: mode, DestinationAction: "apply"}); err != nil {
+		t.Fatalf("complete token-window coalescing should support current-state dedupe: %v", err)
+	}
+}
+
+func TestTransportPreflight_RejectsWindowCoalescingForOrderedEventModes(t *testing.T) {
+	pair := newTestTransportPair("api", "database")
+	mode := synccontract.ModeIncrementalDedupeHistory
+	pair.source.descriptor.Source.Modes = []synccontract.Mode{mode}
+	pair.source.descriptor.Source.Delivery.Ordering = connectors.DeliveryOrderingWindowCoalesced
+	pair.destination.descriptor.Destination.Modes = []synccontract.Mode{mode}
+	pair.destination.descriptor.Destination.EligibleActions = []string{"apply"}
+	pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{Mode: mode, Strategy: connectors.ApplyStrategyDedupeHistory, Action: "apply"}}
+	registry := NewRegistry(pair.verifier)
+	registerTransportPair(t, registry, pair)
+
+	_, err := registry.Preflight(PreflightRequest{Source: pair.source, Destination: pair.destination, Stream: "records", Mode: mode, DestinationAction: "apply"})
+	if err == nil || !strings.Contains(err.Error(), "source-ordered") {
+		t.Fatalf("window-coalesced history preflight error = %v, want source-order refusal", err)
+	}
+	if pair.sourceExecutor.readCalls != 0 || pair.destinationExecutor.applyCalls != 0 {
+		t.Fatalf("source/apply calls = %d/%d, want pre-I/O refusal", pair.sourceExecutor.readCalls, pair.destinationExecutor.applyCalls)
+	}
+
+	// Destination descriptors intentionally cannot declare change_capture, so
+	// assert the lower compatibility seam directly: window coalescing must never
+	// be interpreted as the event ordering required by change capture.
+	if err := validateDeliveryCompatibility(synccontract.ModeChangeCapture, connectors.ApplyStrategyChangeApply, pair.source.descriptor.Source.Delivery, testDeliveryGuarantees()); err == nil || !strings.Contains(err.Error(), "source-ordered") {
+		t.Fatalf("window-coalesced change-capture compatibility error = %v, want source-order refusal", err)
+	}
+}
+
 func TestTransportRuntime_RejectsUndeclaredTombstoneBeforeIO(t *testing.T) {
 	pair := newTestTransportPair("database", "database")
 	pair.source.descriptor.Source.Delivery.Deletes = connectors.DeliveryDeletesTombstone

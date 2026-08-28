@@ -142,11 +142,9 @@ func TestOpenRegistersDefinitionOwnedProductionTransports(t *testing.T) {
 		})
 	}
 	for _, mode := range []synccontract.Mode{
-		synccontract.ModeFullOverwrite,
-		synccontract.ModeFullAppend,
+		synccontract.ModeIncrementalAppend,
 		synccontract.ModeIncrementalUpsert,
 		synccontract.ModeIncrementalDedupe,
-		synccontract.ModeIncrementalDedupeHistory,
 	} {
 		t.Run("asana_tasks_to_warehouse_"+string(mode), func(t *testing.T) {
 			resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
@@ -155,18 +153,35 @@ func TestOpenRegistersDefinitionOwnedProductionTransports(t *testing.T) {
 			if err != nil {
 				t.Fatalf("Asana tasks-to-warehouse %q preflight = %v", mode, err)
 			}
-			if got := resolved.Source.TransportExecutorReference(); got != declarativeStreamSourceReference {
-				t.Fatalf("Asana tasks-to-warehouse %q source = %+v, want %+v", mode, got, declarativeStreamSourceReference)
+			if got := resolved.Source.TransportExecutorReference(); got != asanaEventSourceReference {
+				t.Fatalf("Asana tasks-to-warehouse %q source = %+v, want %+v", mode, got, asanaEventSourceReference)
 			}
 			if got, want := resolved.Destination.TransportExecutorReference(), (connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "local_parquet_warehouse"}); got != want {
 				t.Fatalf("Asana tasks-to-warehouse %q destination = %+v, want %+v", mode, got, want)
 			}
-			wantTransportDispatch := mode == synccontract.ModeIncrementalDedupe || mode == synccontract.ModeIncrementalDedupeHistory
-			if got := a.shouldRunTransport(Connection{}, "tasks", SyncMode{ContractMode: mode}, asana, warehouse); got != wantTransportDispatch {
-				t.Fatalf("Asana tasks-to-warehouse %q transport dispatch = %t, want %t (other modes retain the warehouse-backed legacy materializer)",
-					mode, got, wantTransportDispatch)
+			if got := a.shouldRunTransport(Connection{}, "tasks", SyncMode{ContractMode: mode}, asana, warehouse); !got {
+				t.Fatalf("Asana tasks-to-warehouse %q event-token route was not selected", mode)
 			}
 		})
+	}
+	for _, mode := range []synccontract.Mode{synccontract.ModeFullOverwrite, synccontract.ModeFullAppend} {
+		if _, err := a.transports.Preflight(synctransport.PreflightRequest{Source: asana, Destination: warehouse, Stream: "tasks", Mode: mode}); err == nil {
+			t.Fatalf("Asana tasks-to-warehouse %q unexpectedly admitted by event-token transport", mode)
+		}
+		if selected, reason, err := a.selectTransportRoute(Connection{}, "tasks", SyncMode{ContractMode: mode}, asana, warehouse); err != nil || selected || reason != transportRouteDeclarationAbsent {
+			t.Fatalf("Asana tasks-to-warehouse %q route = selected=%t reason=%q err=%v, want established full-refresh warehouse route", mode, selected, reason, err)
+		}
+	}
+	for _, mode := range []synccontract.Mode{synccontract.ModeIncrementalDedupeHistory, synccontract.ModeChangeCapture} {
+		if _, err := a.transports.Preflight(synctransport.PreflightRequest{Source: asana, Destination: warehouse, Stream: "tasks", Mode: mode}); err == nil {
+			t.Fatalf("Asana tasks-to-warehouse %q unexpectedly admitted by event-token transport", mode)
+		}
+	}
+	if _, err := a.transports.Preflight(synctransport.PreflightRequest{Source: asana, Destination: warehouse, Stream: "projects", Mode: synccontract.ModeIncrementalAppend}); err == nil {
+		t.Fatal("Asana projects incremental transport admitted without source-backed event coverage")
+	}
+	if selected, reason, err := a.selectTransportRoute(Connection{}, "projects", SyncMode{ContractMode: synccontract.ModeIncrementalAppend}, asana, warehouse); err == nil || selected || reason != transportRouteDeclared {
+		t.Fatalf("Asana projects incremental route = selected=%t reason=%q err=%v, want declared pre-I/O refusal rather than legacy fallback", selected, reason, err)
 	}
 	_, err = a.transports.Preflight(synctransport.PreflightRequest{
 		Source:      github,

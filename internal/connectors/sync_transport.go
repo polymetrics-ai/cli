@@ -58,8 +58,13 @@ const (
 type DeliveryOrdering string
 
 const (
-	DeliveryOrderingSource    DeliveryOrdering = "source_ordered"
-	DeliveryOrderingUnordered DeliveryOrdering = "unordered"
+	DeliveryOrderingSource DeliveryOrdering = "source_ordered"
+	// DeliveryOrderingWindowCoalesced means the executor exhausts one complete
+	// provider-defined token window, coalesces it by stable key without relying
+	// on event order, and only then emits current state. It is not source order
+	// and therefore cannot represent ordered history or change capture.
+	DeliveryOrderingWindowCoalesced DeliveryOrdering = "window_coalesced"
+	DeliveryOrderingUnordered       DeliveryOrdering = "unordered"
 )
 
 type DeliveryDeletes string
@@ -565,7 +570,7 @@ func (d DeliveryGuarantees) Validate() error {
 		return fmt.Errorf("unsupported transport idempotency guarantee %q", d.Idempotency)
 	}
 	switch d.Ordering {
-	case DeliveryOrderingSource, DeliveryOrderingUnordered:
+	case DeliveryOrderingSource, DeliveryOrderingWindowCoalesced, DeliveryOrderingUnordered:
 	default:
 		return fmt.Errorf("unsupported transport ordering guarantee %q", d.Ordering)
 	}

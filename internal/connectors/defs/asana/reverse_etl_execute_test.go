@@ -233,7 +233,7 @@ func TestExecutableCommandsAreAccountedForByPinnedSourceLock(t *testing.T) {
 	}
 }
 
-func TestAsanaSourceTransportCoversEveryExecutableStreamWithoutDestinationClaims(t *testing.T) {
+func TestAsanaSourceTransportClaimsOnlyProvenProjectTaskEventScope(t *testing.T) {
 	bundle := loadBundle(t)
 	if bundle.SyncTransport == nil || bundle.SyncTransport.Source == nil {
 		t.Fatal("Asana bundle has no declared source transport")
@@ -242,26 +242,21 @@ func TestAsanaSourceTransportCoversEveryExecutableStreamWithoutDestinationClaims
 		t.Fatalf("Asana destination transport = %+v, want no unproven destination role", bundle.SyncTransport.Destination)
 	}
 	source := bundle.SyncTransport.Source
-	if source.Executor.Family != "declarative_api" || source.Executor.ID != "declarative_stream_source" {
-		t.Fatalf("Asana source executor = %+v, want registered declarative stream executor", source.Executor)
+	if source.Executor.Family != "declarative_api" || source.Executor.ID != "asana_event_token_source" {
+		t.Fatalf("Asana source executor = %+v, want registered event-token executor", source.Executor)
 	}
-	if len(source.EligibleStreams) != len(bundle.Streams) {
-		t.Fatalf("Asana transport streams = %d, executable streams = %d", len(source.EligibleStreams), len(bundle.Streams))
+	if !reflect.DeepEqual(source.EligibleStreams, []string{"tasks"}) {
+		t.Fatalf("Asana event-token streams = %v, want only the source-proven project task scope", source.EligibleStreams)
 	}
-	eligible := make(map[string]struct{}, len(source.EligibleStreams))
-	for _, stream := range source.EligibleStreams {
-		if stream == "*" {
-			t.Fatal("Asana transport uses wildcard stream eligibility, want exact allowlist")
-		}
-		if _, duplicate := eligible[stream]; duplicate {
-			t.Fatalf("Asana transport repeats stream %q", stream)
-		}
-		eligible[stream] = struct{}{}
+	wantModes := []string{"incremental_append", "incremental_upsert", "incremental_dedupe"}
+	if got := fmt.Sprint(source.Modes); got != fmt.Sprint(wantModes) {
+		t.Fatalf("Asana event-token modes = %v, want %v", source.Modes, wantModes)
 	}
-	for _, stream := range bundle.Streams {
-		if _, ok := eligible[stream.Name]; !ok {
-			t.Errorf("executable Asana stream %q is absent from source transport", stream.Name)
-		}
+	if source.Delivery.Idempotency != "keyed" || source.Delivery.Ordering != "window_coalesced" || source.Delivery.Deletes != "tombstone" {
+		t.Fatalf("Asana event-token delivery = %+v, want keyed complete-window coalesce with tombstones", source.Delivery)
+	}
+	if source.Conformance.Suite != "asana_event_token_source" || source.Conformance.RunID != "source_lock_contract_v1" {
+		t.Fatalf("Asana event-token conformance = %+v", source.Conformance)
 	}
 	for _, action := range bundle.Writes {
 		if action.IdempotencyKeyHeader != "" {

@@ -1211,7 +1211,7 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 				return Connection{}, err
 			}
 		}
-		if err := ValidateStreamSyncConfig(stream); err != nil {
+		if err := a.validateEndpointStreamSyncConfig(source, destination, name, stream, mode); err != nil {
 			return Connection{}, fmt.Errorf("validate stream %q: %w", name, err)
 		}
 		streamID, err := allocateUniquePrefixedID("stream", streamIDs)
@@ -1477,15 +1477,15 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		return a.failRun(runID, err)
 	}
 	stream.SyncMode = mode.Name
-	if err := ValidateStreamSyncConfig(stream); err != nil {
-		return a.failRun(runID, err)
-	}
 	source, sourceCredential, sourceRuntime, err := a.resolveEndpointWithCredential(ctx, conn.Source)
 	if err != nil {
 		return a.failRun(runID, err)
 	}
 	destination, destRuntime, err := a.resolveEndpoint(ctx, conn.Destination)
 	if err != nil {
+		return a.failRun(runID, err)
+	}
+	if err := a.validateEndpointStreamSyncConfig(source, destination, req.Stream, stream, mode); err != nil {
 		return a.failRun(runID, err)
 	}
 	destinationDescriptor, declared := connectors.DestinationTransportDescriptorOf(destination)

@@ -245,7 +245,7 @@ func localWarehouseTransportRawRecords(receipt synctransport.WarehouseReceipt, w
 	if deduped && len(stream.PrimaryKey) == 0 {
 		return nil, fmt.Errorf("local warehouse transport %q requires primary key fields", strategy.Mode)
 	}
-	if !deduped && len(workset.Tombstones) > 0 {
+	if !deduped && strategy.Mode != synccontract.ModeIncrementalAppend && len(workset.Tombstones) > 0 {
 		return nil, fmt.Errorf("local warehouse transport %q cannot apply tombstones", strategy.Mode)
 	}
 	if strategy.Strategy == connectors.ApplyStrategyDedupeHistory && stream.CursorField == "" {
@@ -263,9 +263,18 @@ func localWarehouseTransportRawRecords(receipt synctransport.WarehouseReceipt, w
 				return nil, fmt.Errorf("local warehouse transport record %d: %w", index, err)
 			}
 		}
-		cursor, err := recordCursor(cloned, stream.CursorField)
-		if err != nil {
-			return nil, fmt.Errorf("local warehouse transport record %d: %w", index, err)
+		cursor := ""
+		if strategy.Mode == synccontract.ModeIncrementalAppend {
+			// Incremental append is checkpointed by the provider token carried by
+			// the acknowledged workset. A row field is not a valid substitute for
+			// that source position.
+			cursor = string(workset.CandidateCheckpoint.Position.Primary)
+		} else {
+			var err error
+			cursor, err = recordCursor(cloned, stream.CursorField)
+			if err != nil {
+				return nil, fmt.Errorf("local warehouse transport record %d: %w", index, err)
+			}
 		}
 		raw = append(raw, localRawRecord{
 			RawID:        fmt.Sprintf("%s:%012d", receipt.ID, index+1),
@@ -289,6 +298,12 @@ func localWarehouseTransportRawRecords(receipt synctransport.WarehouseReceipt, w
 		var key connectors.Record
 		if err := json.Unmarshal(tombstone.Key, &key); err != nil || key == nil {
 			return nil, fmt.Errorf("local warehouse transport tombstone %d has an invalid key", index)
+		}
+		if strategy.Mode == synccontract.ModeIncrementalAppend {
+			// Append preserves deletions as changelog rows rather than folding
+			// them away. The marker is added only by the warehouse materializer;
+			// the provider record emitted by the source remains untouched.
+			key["_polymetrics_deleted"] = true
 		}
 		primaryKey, err := primaryKeyTuple(key, stream.PrimaryKey)
 		if err != nil {

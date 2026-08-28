@@ -3224,6 +3224,7 @@ func (Warehouse) SyncTransportDescriptor() *SyncTransportDescriptor {
 		Modes: []synccontract.Mode{
 			synccontract.ModeFullOverwrite,
 			synccontract.ModeFullAppend,
+			synccontract.ModeIncrementalAppend,
 			synccontract.ModeIncrementalUpsert,
 			synccontract.ModeIncrementalDedupe,
 			synccontract.ModeIncrementalDedupeHistory,
@@ -3238,6 +3239,7 @@ func (Warehouse) SyncTransportDescriptor() *SyncTransportDescriptor {
 		ApplyStrategies: []DestinationApplyStrategy{
 			{Mode: synccontract.ModeFullOverwrite, Strategy: ApplyStrategyReplace, Action: localWarehouseDestinationTransportAction},
 			{Mode: synccontract.ModeFullAppend, Strategy: ApplyStrategyAppend, Action: localWarehouseDestinationTransportAction},
+			{Mode: synccontract.ModeIncrementalAppend, Strategy: ApplyStrategyAppend, Action: localWarehouseDestinationTransportAction},
 			{Mode: synccontract.ModeIncrementalUpsert, Strategy: ApplyStrategyMerge, Action: localWarehouseDestinationTransportAction},
 			{Mode: synccontract.ModeIncrementalDedupe, Strategy: ApplyStrategyDedupe, Action: localWarehouseDestinationTransportAction},
 			{Mode: synccontract.ModeIncrementalDedupeHistory, Strategy: ApplyStrategyDedupeHistory, Action: localWarehouseDestinationTransportAction},
