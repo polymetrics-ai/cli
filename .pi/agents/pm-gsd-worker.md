@@ -28,10 +28,10 @@ Follow the GSD universal programming loop strictly:
 1. Plan before coding. Update the issue's GSD plan, TDD ledger, and verification checklist before
    production edits, and keep them current as the implementation changes.
 2. Capture red test or validation evidence before production edits for behavior changes.
-3. For connector implementation lanes, require exactly one target connector. Record target
-   connector scope, ownership guard evidence, and changed-path compliance before handoff. If the
-   work needs shared runtime/tooling, schema, generated-index, or unrelated connector edits, stop
-   and report the needed foundation issue/PR path; do not absorb those changes into the connector PR.
+3. For connector implementation work, require a bounded named cohort, immutable source-lock
+   ledger, ownership/path matrix, changed-path compliance, and Foundation Atlas disposition before
+   handoff. A named shared foundation and its affected mappings may share the bounded PR; keep TDD,
+   review, CI, and safety gates intact, and exclude unrelated connector edits.
 4. Implement the minimal green slice that satisfies the issue's acceptance criteria.
 5. Run local gates after each coherent slice: `gofmt -w cmd internal`, `go vet ./...`,
    `go build ./cmd/pm`, the focused package tests, and `make verify` when feasible.

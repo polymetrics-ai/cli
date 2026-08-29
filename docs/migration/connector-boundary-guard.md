@@ -51,12 +51,14 @@ The validator rejects shared runtime/tooling, unrelated connectors, unrelated ge
 docs/website churn, and guardrail exception/config edits — the guard's own files under
 `internal/connectors/boundary/`, `cmd/connectorgen/ownership.go`,
 `cmd/connectorgen/ownership_test.go`, `cmd/connectorgen/boundary.go`, this doc, and required-check
-workflow files. Use a separate foundation PR for those changes.
+workflow files. This optional single-connector guard is not the cohort-delivery admission rule.
 
-`ownership` therefore only applies to single-connector implementation lanes, and it has no
-foundation-PR mode: a PR that deliberately spans connectors or edits shared tooling cannot satisfy
-it by construction, so a non-zero exit there is the gate refusing to classify the PR, not a defect
-in the PR. That is also why it is wired into neither `make verify` nor any workflow, unlike
+`ownership` therefore only applies to optional single-connector implementation lanes. A bounded
+cohort PR that deliberately spans connectors or edits a named shared foundation is instead admitted
+by its immutable source-lock ledger, per-connector ownership/path matrix, changed-path review, and
+Foundation Atlas disposition. A non-zero exit from `ownership` for that cohort means this optional
+single-lane guard does not classify the PR; it is not a cohort-delivery defect. That is also why it
+is wired into neither `make verify` nor any workflow, unlike
 `connectorgen boundary` (`make connector-boundary`, `.github/workflows/connector-boundary.yml`),
 which applies to every PR. Run `ownership` by hand on connector lanes; do not add it to a blanket
 gate until it can recognise a foundation PR.

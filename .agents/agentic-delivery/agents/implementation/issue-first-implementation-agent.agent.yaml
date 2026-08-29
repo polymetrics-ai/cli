@@ -48,7 +48,7 @@ outputs:
   - TDD evidence
   - verification summary
   - worker handoff when assigned by a parent issue orchestrator
-  - connector implementation evidence when applicable: target connector scope, ownership guard evidence, changed-path compliance, and foundation issue/PR path
+  - connector implementation evidence when applicable: named cohort, immutable source-lock ledger, ownership/path matrix, changed-path compliance, Foundation Atlas disposition, and named shared-foundation scope
   - PR body containing Closes or Refs issue number
   - automated review disposition summary before merge
 permissions:
@@ -78,7 +78,7 @@ workflow:
 - load_gsd_programming_loop
 - confirm_parent_pr_exists_for_stacked_issue
 - create_or_update_gsd_plan
-- enforce_connector_target_scope_and_foundation_split_when_connector_lane
+- enforce_bounded_connector_cohort_and_foundation_atlas_when_connector_lane
 - enforce_cli_help_docs_website_parity_when_cli_changes
 - write_red_test_for_behavior_change
 - implement_minimal_slice
@@ -98,7 +98,7 @@ workflow:
 guardrails:
   input:
   - issue must include acceptance criteria and verification
-  - connector implementation issues must name exactly one target connector or record a blocker
+  - connector implementation issues must name a bounded connector cohort, immutable source-lock ledger, ownership/path matrix, and Foundation Atlas disposition or record a blocker
   blocking_human_gates:
   - auth scope changes
   - secrets
@@ -108,7 +108,7 @@ guardrails:
   output:
   - no secrets in artifacts
   - PR body must reference issue
-  - connector PRs must include exactly one target connector and no generic shared runtime/tooling or unrelated connector changes; naming or linking a foundation issue/PR does not authorize those paths in the connector PR, and they must move into the foundation PR before target-aware validation or integration
+  - connector PRs must retain source evidence, the immutable cohort ledger, ownership/path matrix, changed-path compliance, Foundation Atlas disposition, TDD, review, CI, and safety gates; a named shared foundation and affected mappings may share the bounded PR, while unrelated connector changes remain out of scope
   - skipped Claude review status must not be counted as review completion
   - Claude run failures or quota exhaustion must be recorded as blockers, not clean reviews
   - Copilot backup review must not be treated as approval

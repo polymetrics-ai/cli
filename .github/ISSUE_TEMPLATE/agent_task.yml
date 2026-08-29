@@ -71,12 +71,11 @@ body:
       label: Connector implementation scope
       description: Fill when task type is connector-implementation; leave not applicable otherwise.
       value: |
-        - Target connector scope (exactly one connector slug):
-        - Connector-owned paths:
-        - Ownership guard evidence required:
+        - Named connector cohort:
+        - Immutable source-lock ledger / ownership-path matrix:
         - Changed-path compliance required:
-        - Foundation issue/PR path for shared runtime/tooling, schema, generated-index, or unrelated connector work:
-        - no-mistakes handling: stop/ask for foundation split instead of auto-absorbing generic shared changes into the connector PR.
+        - Foundation Atlas disposition and named shared-foundation scope:
+        - no-mistakes handling: preserve source evidence, TDD, review, CI, and safety gates; exclude unrelated connector work.
     validations:
       required: false
   - type: textarea

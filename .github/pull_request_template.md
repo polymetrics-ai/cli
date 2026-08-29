@@ -32,7 +32,7 @@ after opening with `gh api /repos/<owner>/<repo>/pulls/<n> --jq .base.ref`. -->
 
 ## Connector Implementation Scope
 
-<!-- Fill this for connector implementation lanes. Connector PRs must declare exactly one target connector and must not absorb generic shared runtime/tooling or unrelated connector changes. Use a separate foundation issue/PR for legitimate shared work. -->
+<!-- Fill this for connector implementation work. Declare the bounded named cohort, immutable source-lock ledger, ownership/path matrix, changed-path compliance, and Foundation Atlas disposition. A named shared foundation and affected mappings may share this bounded PR; unrelated connector work is excluded. -->
 
 - Applies:
 - Target connector scope:
@@ -78,8 +78,8 @@ reason and evidence. Copilot review is not approval. -->
 ## Checklist
 
 - [ ] Tests or docs updated for behavior changes
-- [ ] Connector implementation scope is declared when applicable: exactly one target connector, ownership guard evidence, changed-path compliance, and foundation PR path or not applicable
-- [ ] no-mistakes connector-lane finding, if any, stopped/asked for foundation split instead of absorbing shared runtime/tooling or unrelated connector changes
+- [ ] Connector implementation scope is declared when applicable: named cohort, immutable source-lock ledger, ownership/path matrix, changed-path compliance, Foundation Atlas disposition, and named shared-foundation scope or not applicable
+- [ ] Connector cohort evidence preserves source facts, TDD, review, CI, and safety gates; unrelated connector work is excluded
 - [ ] `make verify` passes locally, or the skipped checks are explained
 - [ ] Claude automatic review completed, Copilot fallback was justified, or review blocker was recorded
 - [ ] Every actionable automated review finding has a reasoned disposition reply

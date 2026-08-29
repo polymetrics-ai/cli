@@ -16,11 +16,11 @@ as `/pm-auto-loop` with `problem_type = connector`, which activates the RESEARCH
 
 Connector-specific expectations (everything else is inherited from pm-auto-loop):
 
-0. **Target connector scope.** Declare exactly one target connector before any implementation lane
-   starts. Connector implementation lanes may edit only the target connector-owned paths and must
-   record ownership guard evidence plus changed-path compliance. If research or planning discovers
-   shared runtime/tooling, schema, generated-index, or unrelated connector changes, stop that lane
-   and split the shared work into a separate foundation issue/PR before proceeding.
+0. **Cohort scope.** Declare a bounded named connector cohort, immutable source-lock ledger,
+   per-connector ownership/path matrix, changed-path compliance, and Foundation Atlas disposition
+   before any implementation work starts. A named shared runtime/tooling, schema, or
+   generated-index foundation and its affected mappings may share the bounded PR; preserve source
+   evidence, TDD, review, CI, and safety gates, and exclude unrelated connector changes.
 1. **RESEARCH first (mandatory for connectors).** Dispatch `pm-web-researcher` to produce the full
    API-surface doc per `.agents/agentic-delivery/contracts/connector-research-doc-template.md`. Do not
    start PARENT_PLAN until its coverage self-check reports `unclassified_endpoints: 0`,

@@ -32,9 +32,10 @@ Decompose the problem (connector or implementation) into:
    sub-issues, and acceptance criteria.
 3. A dependency graph (which sub-issues are ready vs blocked) so the orchestrator can build a
    ready queue.
-4. For connector implementation work, exactly one target connector per implementation lane, plus a
-   foundation issue/PR path for shared runtime/tooling, schema, generated-index, or unrelated
-   connector changes. Do not plan those shared changes inside a connector PR.
+4. For connector implementation work, define a bounded named cohort, immutable source-lock ledger,
+   per-connector ownership/path matrix, changed-path compliance, and Foundation Atlas disposition.
+   A named shared foundation and affected mappings may be planned in the same bounded PR; retain
+   source evidence, TDD, review, CI, and safety gates, and exclude unrelated connector changes.
 
 Write the decomposition to the phase planning area (`.planning/phases/<phase>/PLAN.md` or the
 parent roadmap the prompt names). Do not call `gh` — issue creation is the Codex issue-creator's

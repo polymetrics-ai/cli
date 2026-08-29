@@ -11,7 +11,7 @@ default_rules:
   - If the repo-local GSD/Pi adapter is unavailable, record the manual GSD loop fallback and keep TDD evidence.
   - Plan before production edits and keep the GSD plan, TDD ledger, and verification checklist current.
   - For CLI command, flag, output, connector surface, or help-topic changes, follow .agents/agentic-delivery/references/cli-help-docs-website-parity.md.
-  - For connector implementation lanes, require exactly one target connector, ownership guard evidence, changed-path compliance, and a separate foundation issue/PR for shared runtime/tooling or unrelated connector work.
+  - For connector implementation lanes, require a bounded named connector cohort, immutable source-lock ledger, ownership/path matrix, and changed-path compliance. A named shared foundation and its affected mappings may share the bounded PR after the Foundation Atlas check; retain TDD, review, CI, and all safety gates, and exclude unrelated connector work.
   - Commit and push coherent green slices to the active issue/PR branch after local green gates.
   - Never push to main; stop only for a human gate or explicit coordinator handoff.
   - Keep PR scope to one primary issue.
