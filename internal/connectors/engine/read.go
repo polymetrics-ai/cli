@@ -2069,7 +2069,7 @@ func Check(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks)
 // requesterWithCheckSuccessStatuses applies the optional, declaration-owned
 // base-check status set without mutating the shared runtime requester. An
 // omitted set preserves the legacy generic-2xx acceptance policy; a declared
-// set accepts only exact 2xx codes, never an implicit range.
+// set accepts only exact HTTP codes, never an implicit range.
 func requesterWithCheckSuccessStatuses(requester *connsdk.Requester, check *RequestSpec) (*connsdk.Requester, error) {
 	if check == nil || len(check.SuccessStatuses) == 0 {
 		return requester, nil
@@ -2077,12 +2077,16 @@ func requesterWithCheckSuccessStatuses(requester *connsdk.Requester, check *Requ
 	accepted := make([]connsdk.StatusRange, 0, len(check.SuccessStatuses))
 	seen := make(map[int]struct{}, len(check.SuccessStatuses))
 	for _, declared := range check.SuccessStatuses {
-		if len(declared) != 3 || strings.TrimSpace(declared) != declared {
-			return nil, fmt.Errorf("check success status %q must be an exact 2xx status", declared)
+		status, err := connsdk.NormalizeExactHTTPStatus(declared)
+		if err != nil {
+			var rangeErr *connsdk.ExactHTTPStatusRangeError
+			if errors.As(err, &rangeErr) {
+				return nil, fmt.Errorf("check success status %q requires runtime gap: %s", declared, connsdk.ExactHTTPStatusRangeExecutionGap)
+			}
+			return nil, fmt.Errorf("check success status %q must be an unambiguous numeric HTTP status: %w", declared, err)
 		}
-		status, err := strconv.Atoi(declared)
-		if err != nil || status < http.StatusOK || status >= http.StatusMultipleChoices {
-			return nil, fmt.Errorf("check success status %q must be an exact 2xx status", declared)
+		if status < http.StatusOK || status >= http.StatusMultipleChoices {
+			return nil, fmt.Errorf("check success status %q requires runtime gap: %s", declared, connsdk.ExactHTTPStatusNon2xxExecutionGap)
 		}
 		if _, duplicate := seen[status]; duplicate {
 			return nil, fmt.Errorf("check success status %q is duplicated", declared)

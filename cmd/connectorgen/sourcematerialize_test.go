@@ -69,6 +69,149 @@ func TestSourceMaterialize_EdgeUsesExactRetainedSourceURLs(t *testing.T) {
 	}
 }
 
+func TestSourceMaterialize_StatusSpellingsPreserveSourceEvidenceAndNormalizeRuntime(t *testing.T) {
+	tests := []struct {
+		name        string
+		status      string
+		wantFailure string
+	}{
+		{name: "happy canonical 200", status: "200"},
+		{name: "happy plus 200", status: "+200"},
+		{name: "edge zero-padded 0200", status: "0200"},
+		{name: "edge blocks exact non-2xx base check", status: "404", wantFailure: "runtime gap: exact response-status non-2xx execution"},
+		{name: "bad uninterpretable status", status: "provider-success", wantFailure: `source operation "alpha.rest.get.shared" success status "provider-success" must be an unambiguous numeric HTTP status`},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			defsRoot, _, fetcher := sourceMaterializeFixture(t, sourceMaterializeFixtureOptions{GetSuccessStatus: tt.status})
+			stderr := new(bytes.Buffer)
+			code := runSourceMaterializeWithFetcher([]string{"source-materialize", "alpha", "--defs", defsRoot}, new(bytes.Buffer), stderr, fetcher)
+			if tt.wantFailure != "" {
+				if code == 0 || !strings.Contains(stderr.String(), tt.wantFailure) {
+					t.Fatalf("uninterpretable status result = %d/%q, want failure containing %q", code, stderr.String(), tt.wantFailure)
+				}
+				return
+			}
+			if code != 0 {
+				t.Fatalf("materialize exit code = %d stderr=%s", code, stderr.String())
+			}
+			bundle, err := engine.Load(os.DirFS(defsRoot), "alpha")
+			if err != nil {
+				t.Fatalf("load materialized bundle: %v", err)
+			}
+			if bundle.HTTP.Check == nil || !reflect.DeepEqual(bundle.HTTP.Check.SuccessStatuses, []string{"200"}) {
+				t.Fatalf("materialized check statuses = %#v, want exact runtime [200]", bundle.HTTP.Check)
+			}
+			if len(bundle.Operations) != 1 || bundle.Operations[0].REST == nil || bundle.Operations[0].REST.Response == nil || !reflect.DeepEqual(bundle.Operations[0].REST.Response.SuccessStatuses, []string{"200"}) {
+				t.Fatalf("materialized operation statuses = %#v, want exact runtime [200]", bundle.Operations)
+			}
+			descriptor, err := os.ReadFile(filepath.Join(defsRoot, "alpha", "sources", "alpha-operation-descriptor.json"))
+			if err != nil {
+				t.Fatalf("read source descriptor: %v", err)
+			}
+			if !bytes.Contains(descriptor, []byte(`"status": "`+tt.status+`"`)) {
+				t.Fatalf("source descriptor did not retain original status spelling %q: %s", tt.status, descriptor)
+			}
+		})
+	}
+}
+
+func TestSourceMaterialize_EdgePreservesRawEquivalentStatusesAndDeduplicatesRuntime(t *testing.T) {
+	defsRoot, _, fetcher := sourceMaterializeFixture(t, sourceMaterializeFixtureOptions{
+		GetSuccessStatus:           "200",
+		GetAdditionalSuccessStatus: []string{"0200"},
+		GetBindingSuccessStatuses:  []string{"200", "0200"},
+	})
+	stderr := new(bytes.Buffer)
+	if code := runSourceMaterializeWithFetcher([]string{"source-materialize", "alpha", "--defs", defsRoot}, new(bytes.Buffer), stderr, fetcher); code != 0 {
+		t.Fatalf("materialize equivalent statuses = %d stderr=%s", code, stderr.String())
+	}
+	bundle, err := engine.Load(os.DirFS(defsRoot), "alpha")
+	if err != nil {
+		t.Fatalf("load materialized bundle: %v", err)
+	}
+	if bundle.HTTP.Check == nil || !reflect.DeepEqual(bundle.HTTP.Check.SuccessStatuses, []string{"200"}) {
+		t.Fatalf("materialized check statuses = %#v, want deduplicated exact runtime [200]", bundle.HTTP.Check)
+	}
+	if len(bundle.Operations) != 1 || bundle.Operations[0].REST == nil || bundle.Operations[0].REST.Response == nil || !reflect.DeepEqual(bundle.Operations[0].REST.Response.SuccessStatuses, []string{"200"}) {
+		t.Fatalf("materialized operation statuses = %#v, want deduplicated exact runtime [200]", bundle.Operations)
+	}
+	descriptor, err := os.ReadFile(filepath.Join(defsRoot, "alpha", "sources", "alpha-operation-descriptor.json"))
+	if err != nil {
+		t.Fatalf("read source descriptor: %v", err)
+	}
+	for _, rawStatus := range []string{"200", "0200"} {
+		if !bytes.Contains(descriptor, []byte(`"status": "`+rawStatus+`"`)) {
+			t.Fatalf("source descriptor did not retain original status spelling %q: %s", rawStatus, descriptor)
+		}
+	}
+}
+
+func TestSourceMaterialize_EdgeAccountsFor2XXSourceStatusAsBlocked(t *testing.T) {
+	defsRoot, _, fetcher := sourceMaterializeFixture(t, sourceMaterializeFixtureOptions{PostSuccessStatus: "2XX", BlockPostForStatusRange: true})
+	stderr := new(bytes.Buffer)
+	if code := runSourceMaterializeWithFetcher([]string{"source-materialize", "alpha", "--defs", defsRoot}, new(bytes.Buffer), stderr, fetcher); code != 0 {
+		t.Fatalf("blocked 2XX materialization = %d stderr=%s", code, stderr.String())
+	}
+	var report struct {
+		Operations []sourceMaterializeFoundationRow `json:"operations"`
+	}
+	reportBytes, err := os.ReadFile(filepath.Join(defsRoot, "alpha", "missing-foundation.json"))
+	if err != nil {
+		t.Fatalf("read missing-foundation report: %v", err)
+	}
+	if err := json.Unmarshal(reportBytes, &report); err != nil {
+		t.Fatalf("decode missing-foundation report: %v", err)
+	}
+	var blocked *sourceMaterializeFoundationRow
+	for i := range report.Operations {
+		if report.Operations[i].SourceID == "alpha.rest.post.shared" {
+			blocked = &report.Operations[i]
+			break
+		}
+	}
+	if blocked == nil || blocked.State != "blocked" || !strings.Contains(blocked.Reason, "runtime gap: exact response-status range execution") {
+		t.Fatalf("2XX source accounting = %#v, want named blocked runtime gap", blocked)
+	}
+	descriptor, err := os.ReadFile(filepath.Join(defsRoot, "alpha", "sources", "alpha-operation-descriptor.json"))
+	if err != nil {
+		t.Fatalf("read source descriptor: %v", err)
+	}
+	if !bytes.Contains(descriptor, []byte(`"status": "2XX"`)) {
+		t.Fatalf("source descriptor did not retain 2XX provider spelling: %s", descriptor)
+	}
+	writes, err := os.ReadFile(filepath.Join(defsRoot, "alpha", "writes.json"))
+	if err != nil {
+		t.Fatalf("read writes: %v", err)
+	}
+	if bytes.Contains(writes, []byte("create_widget")) {
+		t.Fatalf("2XX source operation was widened into an executable write: %s", writes)
+	}
+}
+
+func TestSourceMaterializeWrite_EdgeNamesExactDeclared404RuntimeGap(t *testing.T) {
+	defsRoot, _, fetcher := sourceMaterializeFixture(t, sourceMaterializeFixtureOptions{PostSuccessStatus: "404"})
+	stderr := new(bytes.Buffer)
+	if code := runSourceMaterializeWithFetcher([]string{"source-materialize", "alpha", "--defs", defsRoot}, new(bytes.Buffer), stderr, fetcher); code == 0 || !strings.Contains(stderr.String(), "runtime gap: exact response-status non-2xx execution") {
+		t.Fatalf("materialize exact declared 404 = %d stderr=%s, want named runtime gap", code, stderr.String())
+	}
+	lock, err := os.ReadFile(filepath.Join(defsRoot, "alpha", "sources", "alpha-operation-source-lock.json"))
+	if err != nil {
+		t.Fatalf("read source lock: %v", err)
+	}
+	if !bytes.Contains(lock, []byte(`"404"`)) {
+		t.Fatalf("source lock did not retain 404 provider spelling: %s", lock)
+	}
+}
+
+func TestSourceMaterialize_BadUninterpretableRetainedResponseIsValidationError(t *testing.T) {
+	defsRoot, _, fetcher := sourceMaterializeFixture(t, sourceMaterializeFixtureOptions{GetAdditionalSuccessStatus: []string{"provider-status"}})
+	stderr := new(bytes.Buffer)
+	if code := runSourceMaterializeWithFetcher([]string{"source-materialize", "alpha", "--defs", defsRoot}, new(bytes.Buffer), stderr, fetcher); code == 0 || !strings.Contains(stderr.String(), `source operation "alpha.rest.get.shared" response status "provider-status" must be an unambiguous numeric HTTP status`) {
+		t.Fatalf("uninterpretable retained response result = %d stderr=%s, want source-context validation error", code, stderr.String())
+	}
+}
+
 func TestSourceMaterialize_RejectsBadV4Plans(t *testing.T) {
 	tests := []struct {
 		name      string
@@ -84,7 +227,8 @@ func TestSourceMaterialize_RejectsBadV4Plans(t *testing.T) {
 		{name: "blocked row cannot carry executable inputs", options: sourceMaterializeFixtureOptions{BlockedWriteWithInputs: true}, wantError: "must not declare inputs"},
 		{name: "blocked check row cannot become executable", options: sourceMaterializeFixtureOptions{BlockedCheck: true}, wantError: "must select a materialized"},
 		{name: "runtime-blocked check row cannot become executable", options: sourceMaterializeFixtureOptions{RuntimeBlockedCheck: true}, wantError: "not runtime-admissible"},
-		{name: "wildcard check status requires blocked mapping", options: sourceMaterializeFixtureOptions{WildcardCheckStatus: true}, wantError: "mark this operation blocked or unsupported"},
+		{name: "edge wildcard check status names range execution gap", options: sourceMaterializeFixtureOptions{WildcardCheckStatus: true}, wantError: "runtime gap: exact response-status range execution"},
+		{name: "edge numeric status range names range execution gap", options: sourceMaterializeFixtureOptions{PostSuccessStatus: "200-299"}, wantError: "runtime gap: exact response-status range execution"},
 		{name: "owned output symlink escape", options: sourceMaterializeFixtureOptions{OutputSymlink: true}, wantError: "must not traverse a symlink"},
 	}
 	for _, tt := range tests {
@@ -741,6 +885,11 @@ type sourceMaterializeFixtureOptions struct {
 	BlockedCheck                bool
 	RuntimeBlockedCheck         bool
 	WildcardCheckStatus         bool
+	GetSuccessStatus            string
+	GetAdditionalSuccessStatus  []string
+	GetBindingSuccessStatuses   []string
+	PostSuccessStatus           string
+	BlockPostForStatusRange     bool
 	OutputSymlink               bool
 }
 
@@ -751,7 +900,12 @@ func sourceMaterializeFixture(t *testing.T, options sourceMaterializeFixtureOpti
 	if err := os.MkdirAll(sourcesDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
+	getStatus := options.GetSuccessStatus
+	if getStatus == "" {
+		getStatus = "200"
+	}
 	getRaw := []byte(`{"openapi":"3.0.3","info":{"title":"alpha","version":"1"},"paths":{"/widgets":{"get":{"operationId":"listWidgets","responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"type":"object","additionalProperties":false,"properties":{"items":{"type":"array","items":{"type":"string"}}}}}}}}}}}}`)
+	getRaw = bytes.Replace(getRaw, []byte(`"200"`), []byte(`"`+getStatus+`"`), 1)
 	if options.RuntimeBlockedCheck {
 		var getDocument map[string]any
 		if err := json.Unmarshal(getRaw, &getDocument); err != nil {
@@ -767,8 +921,34 @@ func sourceMaterializeFixture(t *testing.T, options sourceMaterializeFixtureOpti
 			t.Fatal(err)
 		}
 	}
+	if len(options.GetAdditionalSuccessStatus) != 0 {
+		var getDocument map[string]any
+		if err := json.Unmarshal(getRaw, &getDocument); err != nil {
+			t.Fatal(err)
+		}
+		responses := getDocument["paths"].(map[string]any)["/widgets"].(map[string]any)["get"].(map[string]any)["responses"].(map[string]any)
+		for _, status := range options.GetAdditionalSuccessStatus {
+			responses[status] = map[string]any{
+				"description": "also ok",
+				"content": map[string]any{
+					"application/json": map[string]any{
+						"schema": map[string]any{"type": "object", "additionalProperties": false, "properties": map[string]any{"items": map[string]any{"type": "array", "items": map[string]any{"type": "string"}}}},
+					},
+				},
+			}
+		}
+		var err error
+		getRaw, err = json.Marshal(getDocument)
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
 	if options.WildcardCheckStatus {
 		getRaw = bytes.Replace(getRaw, []byte(`"200"`), []byte(`"2XX"`), 1)
+	}
+	postStatus := options.PostSuccessStatus
+	if postStatus == "" {
+		postStatus = "201"
 	}
 	postSchema := map[string]any{"type": "object", "additionalProperties": false, "required": []any{"title"}, "properties": map[string]any{"title": map[string]any{"type": "string", "maxLength": 64}}}
 	if options.OpenWriteBody {
@@ -787,7 +967,7 @@ func sourceMaterializeFixture(t *testing.T, options sourceMaterializeFixtureOpti
 					"operationId": "createWidget",
 					"requestBody": map[string]any{"required": true, "content": postContent},
 					"responses": map[string]any{
-						"201": map[string]any{
+						postStatus: map[string]any{
 							"description": "created",
 							"content": map[string]any{
 								"application/json": map[string]any{
@@ -805,6 +985,13 @@ func sourceMaterializeFixture(t *testing.T, options sourceMaterializeFixtureOpti
 		t.Fatal(err)
 	}
 	getID, postID := "alpha.rest.get.shared", "alpha.rest.post.shared"
+	getBindingStatuses := []any{getStatus}
+	if len(options.GetBindingSuccessStatuses) != 0 {
+		getBindingStatuses = make([]any, len(options.GetBindingSuccessStatuses))
+		for i, status := range options.GetBindingSuccessStatuses {
+			getBindingStatuses[i] = status
+		}
+	}
 	plan := map[string]any{
 		"metadata": map[string]any{"display_name": "Alpha", "description": "Alpha fixture connector.", "integration_type": "api", "release_stage": "preview", "docs_url": "https://docs.example.invalid/alpha"},
 		"config": map[string]any{"properties": []any{
@@ -813,10 +1000,10 @@ func sourceMaterializeFixture(t *testing.T, options sourceMaterializeFixtureOpti
 		}},
 		"auth":   map[string]any{"mode": "bearer", "token": "{{ secrets.token }}"},
 		"server": map[string]any{"url": "{{ config.base_url }}", "user_agent": "alpha-source-lock/1"},
-		"check":  map[string]any{"source_id": getID, "method": "GET", "path": "/widgets", "success_statuses": []any{"200"}},
+		"check":  map[string]any{"source_id": getID, "method": "GET", "path": "/widgets", "success_statuses": getBindingStatuses},
 		"operations": []any{
-			map[string]any{"source_id": getID, "state": "materialized", "citation": map[string]any{"document_id": "get", "location": `paths["/widgets"].get`}, "binding": map[string]any{"kind": "direct_read", "id": "list_widgets", "command_path": "widgets list", "command_summary": "List widgets", "output_policy": "json_redacted", "max_response_bytes": 4096, "success_statuses": []any{"200"}, "risk": "low"}},
-			map[string]any{"source_id": postID, "state": "materialized", "citation": map[string]any{"document_id": "post", "location": `paths["/widgets"].post`}, "inputs": []any{map[string]any{"source": "body.title", "target": "record.title"}}, "binding": map[string]any{"kind": "write", "id": "create_widget", "success_statuses": []any{"201"}, "request_media": "application/json", "write_kind": "create", "mutation_class": "create", "approval": "destructive", "risk": "high"}},
+			map[string]any{"source_id": getID, "state": "materialized", "citation": map[string]any{"document_id": "get", "location": `paths["/widgets"].get`}, "binding": map[string]any{"kind": "direct_read", "id": "list_widgets", "command_path": "widgets list", "command_summary": "List widgets", "output_policy": "json_redacted", "max_response_bytes": 4096, "success_statuses": getBindingStatuses, "risk": "low"}},
+			map[string]any{"source_id": postID, "state": "materialized", "citation": map[string]any{"document_id": "post", "location": `paths["/widgets"].post`}, "inputs": []any{map[string]any{"source": "body.title", "target": "record.title"}}, "binding": map[string]any{"kind": "write", "id": "create_widget", "success_statuses": []any{postStatus}, "request_media": "application/json", "write_kind": "create", "mutation_class": "create", "approval": "destructive", "risk": "high"}},
 		},
 	}
 	if options.MissingBodyBinding {
@@ -826,6 +1013,13 @@ func sourceMaterializeFixture(t *testing.T, options sourceMaterializeFixtureOpti
 		postOperation := plan["operations"].([]any)[1].(map[string]any)
 		postOperation["state"] = "blocked"
 		postOperation["reason"] = "Runtime cannot faithfully materialize an open provider object; blocked pending explicit typed body support."
+		delete(postOperation, "binding")
+		delete(postOperation, "inputs")
+	}
+	if options.BlockPostForStatusRange {
+		postOperation := plan["operations"].([]any)[1].(map[string]any)
+		postOperation["state"] = "blocked"
+		postOperation["reason"] = "runtime gap: exact response-status range execution"
 		delete(postOperation, "binding")
 		delete(postOperation, "inputs")
 	}

@@ -27,6 +27,7 @@ import (
 
 	"gopkg.in/yaml.v3"
 
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -9122,10 +9123,10 @@ func sourceOutputForResponses(method string, responses []sourceResponseDescripto
 }
 
 func sourceSuccessfulResponseStatus(status string) bool {
-	if strings.EqualFold(status, "2XX") {
+	if strings.EqualFold(strings.TrimSpace(status), "2XX") {
 		return true
 	}
-	code, err := strconv.Atoi(status)
+	code, err := connsdk.NormalizeExactHTTPStatus(status)
 	return err == nil && code >= 200 && code < 300
 }
 

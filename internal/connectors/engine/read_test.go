@@ -2296,8 +2296,12 @@ func TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome(t *testing.T) {
 		wantCalls int
 	}{
 		{name: "happy accepts exact declared 204", statuses: `["204"]`, response: http.StatusNoContent, wantCalls: 1},
+		{name: "happy normalizes plus 200", statuses: `["+200"]`, response: http.StatusOK, wantCalls: 1},
+		{name: "edge normalizes zero-padded 0200", statuses: `["0200"]`, response: http.StatusOK, wantCalls: 1},
+		{name: "edge blocks exact non-2xx 404 before provider IO", statuses: `["404"]`, response: http.StatusNotFound, wantError: "exact response-status non-2xx execution", wantCalls: 0},
 		{name: "bad rejects undeclared 200", statuses: `["204"]`, response: http.StatusOK, wantError: "not declared", wantCalls: 1},
-		{name: "edge rejects status range before provider IO", statuses: `["200-299"]`, response: http.StatusOK, wantError: "exact 2xx status", wantCalls: 0},
+		{name: "bad rejects uninterpretable status before provider IO", statuses: `["provider-success"]`, response: http.StatusOK, wantError: "unambiguous numeric HTTP status", wantCalls: 0},
+		{name: "edge rejects status range before provider IO", statuses: `["2XX"]`, response: http.StatusOK, wantError: "exact response-status range execution", wantCalls: 0},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -2331,6 +2335,17 @@ func TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome(t *testing.T) {
 			}
 			if calls != tt.wantCalls {
 				t.Fatalf("provider calls = %d, want %d", calls, tt.wantCalls)
+			}
+		})
+	}
+}
+
+func TestRequesterWithCheckSuccessStatuses_BlocksNon2xxRuntimeGaps(t *testing.T) {
+	for _, status := range []string{"100", "599"} {
+		t.Run(status, func(t *testing.T) {
+			_, err := requesterWithCheckSuccessStatuses(&connsdk.Requester{}, &RequestSpec{SuccessStatuses: []string{status}})
+			if err == nil || !strings.Contains(err.Error(), "exact response-status non-2xx execution") {
+				t.Fatalf("configure non-2xx status %q error = %v, want named runtime gap", status, err)
 			}
 		})
 	}

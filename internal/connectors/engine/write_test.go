@@ -1151,7 +1151,7 @@ func TestDryRunWritePreviewResolvedPathRedactsNestedRecordFields(t *testing.T) {
 
 // --- delete semantics: missing_ok_status ---
 
-func TestWriteDeleteMissingOkStatusDoesNotCountAsWritten(t *testing.T) {
+func TestWriteDelete_HappyDocumentedMissingOK404DoesNotCountAsWritten(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 	}))
@@ -1263,7 +1263,7 @@ func TestWriteDeleteFailureAccountingExcludesPriorUnchangedRecords(t *testing.T)
 	}
 }
 
-func TestWriteDeleteNonListed404Fails(t *testing.T) {
+func TestWriteDelete_BadUndeclared404Fails(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 	}))

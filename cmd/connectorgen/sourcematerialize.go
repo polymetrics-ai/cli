@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"net/http"
 	"os"
 	"path/filepath"
 	"sort"
@@ -478,14 +479,15 @@ func sourceMaterializeOutputs(lock sourceImportLock, result sourceImportResult) 
 	if err != nil {
 		return nil, err
 	}
-	if err := sourceMaterializeValidateCheck(plan.Check, byID, rows); err != nil {
+	checkStatuses, err := sourceMaterializeValidateCheck(plan.Check, byID, rows)
+	if err != nil {
 		return nil, err
 	}
 	checkMaxBytes, err := sourceMaterializeCheckMaxResponseBytes(plan.Check, rows)
 	if err != nil {
 		return nil, err
 	}
-	metadata, spec, streams := sourceMaterializeBaseDocuments(lock.Connector, plan, properties, checkMaxBytes)
+	metadata, spec, streams := sourceMaterializeBaseDocuments(lock.Connector, plan, properties, checkMaxBytes, checkStatuses)
 	operations := []any{}
 	writes := []any{}
 	endpoints := []any{}
@@ -499,6 +501,9 @@ func sourceMaterializeOutputs(lock sourceImportLock, result sourceImportResult) 
 		}
 		if source.Source.DocumentID != row.Citation.DocumentID || source.Source.Location != row.Citation.Location {
 			return nil, fmt.Errorf("source lock v4 materialization citation for %q does not match the retained source descriptor", row.SourceID)
+		}
+		if err := sourceMaterializeValidateStatusRangeDisposition(source, row); err != nil {
+			return nil, err
 		}
 		foundationRow := sourceMaterializeFoundationRow{SourceID: row.SourceID, State: row.State, Citation: row.Citation, Reason: row.Reason}
 		switch row.State {
@@ -561,7 +566,7 @@ func sourceMaterializeOutputs(lock sourceImportLock, result sourceImportResult) 
 	return outputs, nil
 }
 
-func sourceMaterializeBaseDocuments(connector string, plan sourceMaterialization, properties map[string]sourceMaterializationConfigProperty, checkMaxBytes int) (map[string]any, map[string]any, map[string]any) {
+func sourceMaterializeBaseDocuments(connector string, plan sourceMaterialization, properties map[string]sourceMaterializationConfigProperty, checkMaxBytes int, checkStatuses []string) (map[string]any, map[string]any, map[string]any) {
 	configProperties := map[string]any{}
 	required := []any{}
 	names := make([]string, 0, len(properties))
@@ -607,7 +612,7 @@ func sourceMaterializeBaseDocuments(connector string, plan sourceMaterialization
 		}
 	}
 	metadata := map[string]any{"name": connector, "display_name": plan.Metadata.DisplayName, "description": plan.Metadata.Description, "integration_type": plan.Metadata.IntegrationType, "docs_url": plan.Metadata.DocsURL, "release_stage": plan.Metadata.ReleaseStage, "capabilities": capabilities}
-	base := map[string]any{"url": plan.Server.URL, "user_agent": plan.Server.UserAgent, "pagination": map[string]any{"type": "none"}, "check": map[string]any{"method": plan.Check.Method, "path": plan.Check.Path, "success_statuses": plan.Check.SuccessStatuses, "max_bytes": checkMaxBytes}}
+	base := map[string]any{"url": plan.Server.URL, "user_agent": plan.Server.UserAgent, "pagination": map[string]any{"type": "none"}, "check": map[string]any{"method": plan.Check.Method, "path": plan.Check.Path, "success_statuses": checkStatuses, "max_bytes": checkMaxBytes}}
 	if plan.Auth.Mode != "none" {
 		base["auth"] = []any{sourceMaterializeAuthDocument(plan.Auth)}
 	}
@@ -640,22 +645,29 @@ func sourceMaterializeAuthDocument(auth sourceMaterializationAuth) map[string]an
 	return result
 }
 
-func sourceMaterializeValidateCheck(check sourceMaterializationCheck, sources map[string]sourceOperationDescriptor, rows map[string]sourceMaterializationOperation) error {
+func sourceMaterializeValidateCheck(check sourceMaterializationCheck, sources map[string]sourceOperationDescriptor, rows map[string]sourceMaterializationOperation) ([]string, error) {
 	source, found := sources[check.SourceID]
 	row, selected := rows[check.SourceID]
 	if !found || !selected || strings.ToUpper(source.Method) != "GET" || check.Method != "GET" || check.Path != source.Path || len(check.SuccessStatuses) == 0 {
-		return fmt.Errorf("source lock v4 materialization check must select one exact retained GET operation with explicit success statuses")
+		return nil, fmt.Errorf("source lock v4 materialization check must select one exact retained GET operation with explicit success statuses")
 	}
 	if row.State != "materialized" || row.Binding == nil || row.Binding.Kind != "direct_read" {
-		return fmt.Errorf("source lock v4 materialization check %q must select a materialized direct_read operation", check.SourceID)
+		return nil, fmt.Errorf("source lock v4 materialization check %q must select a materialized direct_read operation", check.SourceID)
 	}
 	if err := sourceMaterializeValidateMaterializedRuntime(source, *row.Binding); err != nil {
-		return fmt.Errorf("source lock v4 materialization check %q is not runtime-admissible: %w", check.SourceID, err)
+		return nil, fmt.Errorf("source lock v4 materialization check %q is not runtime-admissible: %w", check.SourceID, err)
 	}
 	if len(source.Request.Path) != 0 || len(source.Request.Query) != 0 || len(source.Request.Header) != 0 || source.Request.Body != nil || len(source.Request.Media) != 0 {
-		return fmt.Errorf("source lock v4 materialization check %q has caller-controlled inputs and cannot be an implicit default", check.SourceID)
+		return nil, fmt.Errorf("source lock v4 materialization check %q has caller-controlled inputs and cannot be an implicit default", check.SourceID)
 	}
-	return sourceMaterializeValidateSuccessStatuses(source, check.SuccessStatuses)
+	statuses, err := sourceMaterializeValidateSuccessStatuses(source, check.SuccessStatuses)
+	if err != nil {
+		return nil, err
+	}
+	if err := sourceMaterializeRequireRuntime2xx(source, statuses); err != nil {
+		return nil, err
+	}
+	return statuses, nil
 }
 
 // sourceMaterializeCheckMaxResponseBytes carries the selected retained GET
@@ -705,13 +717,17 @@ func sourceMaterializeValidateMaterializedRuntime(source sourceOperationDescript
 }
 
 func sourceMaterializeDirectRead(source sourceOperationDescriptor, row sourceMaterializationOperation, binding sourceMaterializationOperationBind) (map[string]any, map[string]any, map[string]any, error) {
+	statuses, err := sourceMaterializeValidateSuccessStatuses(source, binding.SuccessStatuses)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	if err := sourceMaterializeRequireRuntime2xx(source, statuses); err != nil {
+		return nil, nil, nil, err
+	}
 	if strings.ToUpper(source.Method) != "GET" || source.Protocol != "rest" || source.Output.Class != sourceOutputJSON || source.Request.Body != nil || len(source.Request.Media) != 0 || binding.OutputPolicy != "json_redacted" {
 		return nil, nil, nil, fmt.Errorf("source operation %q is not a bounded JSON GET direct-read contract", source.SourceID)
 	}
 	if err := sourceMaterializeValidateMaterializedRuntime(source, binding); err != nil {
-		return nil, nil, nil, err
-	}
-	if err := sourceMaterializeValidateSuccessStatuses(source, binding.SuccessStatuses); err != nil {
 		return nil, nil, nil, err
 	}
 	if len(source.Request.Query) != 0 {
@@ -723,7 +739,7 @@ func sourceMaterializeDirectRead(source sourceOperationDescriptor, row sourceMat
 	if len(source.Request.Path) != 0 || len(source.Request.Header) != 0 {
 		return nil, nil, nil, fmt.Errorf("source operation %q needs a path/header foundation not declared by source-materialize", source.SourceID)
 	}
-	rest := map[string]any{"method": "GET", "path": source.Path, "max_bytes": binding.MaxResponseBytes, "response": map[string]any{"success_statuses": binding.SuccessStatuses}}
+	rest := map[string]any{"method": "GET", "path": source.Path, "max_bytes": binding.MaxResponseBytes, "response": map[string]any{"success_statuses": statuses}}
 	op := map[string]any{"id": binding.ID, "kind": "rest_read", "summary": binding.CommandSummary, "source_url": sourceMaterializeCitationURL(source), "risk": binding.Risk, "approval": "none", "output_policy": binding.OutputPolicy, "source_operation": map[string]any{"id": source.SourceID, "method": "GET", "path": source.Path}, "rest": rest}
 	// A rest_read operation becomes executable through its implemented direct
 	// read CLI surface; api_surface's operations ledger is reserved for fixed
@@ -734,6 +750,10 @@ func sourceMaterializeDirectRead(source sourceOperationDescriptor, row sourceMat
 }
 
 func sourceMaterializeWrite(source sourceOperationDescriptor, row sourceMaterializationOperation, binding sourceMaterializationOperationBind) (map[string]any, map[string]any, error) {
+	runtimeStatuses, err := sourceMaterializeValidateSuccessStatuses(source, binding.SuccessStatuses)
+	if err != nil {
+		return nil, nil, err
+	}
 	if source.Protocol != "rest" || !sourceMaterializeMutationMethod(source.Method) || source.Request.Body == nil {
 		return nil, nil, fmt.Errorf("source operation %q is not the selected JSON mutation contract", source.SourceID)
 	}
@@ -741,9 +761,6 @@ func sourceMaterializeWrite(source sourceOperationDescriptor, row sourceMaterial
 		return nil, nil, fmt.Errorf("source operation %q is not the selected JSON mutation contract: generated body_type json sends application/json, so source and binding media must be exactly application/json", source.SourceID)
 	}
 	if err := sourceMaterializeValidateMaterializedRuntime(source, binding); err != nil {
-		return nil, nil, err
-	}
-	if err := sourceMaterializeValidateSuccessStatuses(source, binding.SuccessStatuses); err != nil {
 		return nil, nil, err
 	}
 	if len(source.Request.Path) != 0 || len(source.Request.Query) != 0 || len(source.Request.Header) != 0 {
@@ -765,7 +782,7 @@ func sourceMaterializeWrite(source sourceOperationDescriptor, row sourceMaterial
 			return nil, nil, fmt.Errorf("source operation %q write inputs support only exact body.<field> -> record.<field> bindings", source.SourceID)
 		}
 	}
-	statuses, err := sourceMaterializeStatusCodes(binding.SuccessStatuses)
+	statuses, err := sourceMaterializeStatusCodes(source, runtimeStatuses)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -827,7 +844,7 @@ func sourceMaterializeValidateInputBindings(source sourceOperationDescriptor, ro
 		// body inputs pending for sourceMaterializeWrite, which rejects the
 		// unselected media union with the precise actionable error rather than
 		// incorrectly treating a documented field as absent.
-		if !declared[input.Source] && !(strings.HasPrefix(input.Source, "body.") && len(source.Request.Media) > 0) {
+		if !declared[input.Source] && (!strings.HasPrefix(input.Source, "body.") || len(source.Request.Media) == 0) {
 			return fmt.Errorf("source operation %q binds undeclared source input %q", source.SourceID, input.Source)
 		}
 		bound[input.Source] = input.Target
@@ -876,32 +893,77 @@ func sourceMaterializeValidateBodyInputs(source sourceOperationDescriptor, row s
 	return nil
 }
 
-func sourceMaterializeValidateSuccessStatuses(source sourceOperationDescriptor, statuses []string) error {
+func sourceMaterializeValidateSuccessStatuses(source sourceOperationDescriptor, statuses []string) ([]string, error) {
 	available := map[string]bool{}
 	for _, response := range source.Responses {
 		available[response.Status] = true
 	}
-	seen := map[string]bool{}
+	seen := make(map[int]struct{}, len(statuses))
+	normalized := make([]string, 0, len(statuses))
 	for _, status := range statuses {
-		code, err := strconv.Atoi(status)
-		if seen[status] || !available[status] || err != nil || code < 200 || code > 299 {
-			return fmt.Errorf("source operation %q success status %q must be an exact numeric 2xx status retained by the source; mark this operation blocked or unsupported with an explicit cited reason", source.SourceID, status)
+		if !available[status] {
+			return nil, fmt.Errorf("source operation %q success status %q is not retained by the source", source.SourceID, status)
 		}
-		seen[status] = true
+		code, err := connsdk.NormalizeExactHTTPStatus(status)
+		if err != nil {
+			var rangeErr *connsdk.ExactHTTPStatusRangeError
+			if errors.As(err, &rangeErr) {
+				return nil, fmt.Errorf("source operation %q success status %q requires runtime gap: %s; mark this operation blocked with that cited runtime gap", source.SourceID, status, connsdk.ExactHTTPStatusRangeExecutionGap)
+			}
+			return nil, fmt.Errorf("source operation %q success status %q must be an unambiguous numeric HTTP status: %w", source.SourceID, status, err)
+		}
+		if _, duplicate := seen[code]; duplicate {
+			continue
+		}
+		seen[code] = struct{}{}
+		normalized = append(normalized, strconv.Itoa(code))
 	}
-	return nil
+	return normalized, nil
 }
 
-func sourceMaterializeStatusCodes(statuses []string) ([]any, error) {
+func sourceMaterializeStatusCodes(source sourceOperationDescriptor, statuses []string) ([]any, error) {
+	if err := sourceMaterializeRequireRuntime2xx(source, statuses); err != nil {
+		return nil, err
+	}
 	result := make([]any, 0, len(statuses))
 	for _, status := range statuses {
 		code, err := strconv.Atoi(status)
-		if err != nil || code < 200 || code > 299 {
-			return nil, fmt.Errorf("materialized write has invalid success status %q", status)
+		if err != nil {
+			return nil, fmt.Errorf("source operation %q has invalid materialized write success status %q", source.SourceID, status)
 		}
 		result = append(result, code)
 	}
 	return result, nil
+}
+
+func sourceMaterializeRequireRuntime2xx(source sourceOperationDescriptor, statuses []string) error {
+	for _, status := range statuses {
+		code, err := strconv.Atoi(status)
+		if err != nil {
+			return fmt.Errorf("source operation %q has invalid normalized success status %q", source.SourceID, status)
+		}
+		if code < http.StatusOK || code >= http.StatusMultipleChoices {
+			return fmt.Errorf("source operation %q success status %q requires runtime gap: %s; mark this operation blocked with that cited runtime gap", source.SourceID, status, connsdk.ExactHTTPStatusNon2xxExecutionGap)
+		}
+	}
+	return nil
+}
+
+func sourceMaterializeValidateStatusRangeDisposition(source sourceOperationDescriptor, row sourceMaterializationOperation) error {
+	for _, response := range source.Responses {
+		_, err := connsdk.NormalizeExactHTTPStatus(response.Status)
+		if err == nil {
+			continue
+		}
+		var rangeErr *connsdk.ExactHTTPStatusRangeError
+		if !errors.As(err, &rangeErr) {
+			return fmt.Errorf("source operation %q response status %q must be an unambiguous numeric HTTP status: %w", source.SourceID, response.Status, err)
+		}
+		if row.State != "blocked" || !strings.Contains(row.Reason, connsdk.ExactHTTPStatusRangeExecutionGap) {
+			return fmt.Errorf("source operation %q response status %q requires runtime gap: %s; retain this source row as blocked with that named reason", source.SourceID, response.Status, connsdk.ExactHTTPStatusRangeExecutionGap)
+		}
+	}
+	return nil
 }
 
 func sourceMaterializeMutationMethod(method string) bool {
