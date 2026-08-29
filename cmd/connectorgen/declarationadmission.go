@@ -434,6 +434,144 @@ type declarationAdmissionV3RESTWire struct {
 	SourceDocuments    []declarationAdmissionRESTDocumentWire `json:"source_documents"`
 }
 
+// The mapping reader intentionally retains only source identity and inventory
+// semantics. These version- and variant-specific wires still close the JSON
+// shape before it is projected into the common review wire below: a zero-value
+// discriminator must not make a v2 source-reference field look like an
+// ordinary legacy field, and a v3 document must not inherit another document
+// variant's operation fields. Retention/capture leaves remain RawMessage so
+// source-import continues to own their strict representation.
+type declarationAdmissionMappingLegacyOrdinaryLockWire struct {
+	SchemaVersion  int                                               `json:"schema_version"`
+	Connector      string                                            `json:"connector"`
+	CapturedAt     json.RawMessage                                   `json:"captured_at,omitempty"`
+	Rest           declarationAdmissionMappingLegacyOrdinaryRESTWire `json:"rest"`
+	GraphQL        json.RawMessage                                   `json:"graphql,omitempty"`
+	Counts         sourceImportCounts                                `json:"counts,omitempty"`
+	SourceContract json.RawMessage                                   `json:"source_contract,omitempty"`
+}
+
+type declarationAdmissionMappingLegacyReferenceLockWire struct {
+	SchemaVersion      int                                                `json:"schema_version"`
+	Connector          string                                             `json:"connector"`
+	CapturedAt         json.RawMessage                                    `json:"captured_at,omitempty"`
+	Rest               declarationAdmissionMappingLegacyReferenceRESTWire `json:"rest"`
+	GraphQL            json.RawMessage                                    `json:"graphql,omitempty"`
+	Counts             sourceImportCounts                                 `json:"counts,omitempty"`
+	OperationsFound    json.RawMessage                                    `json:"operations_found"`
+	CoverageConfidence json.RawMessage                                    `json:"coverage_confidence"`
+	SourceContract     json.RawMessage                                    `json:"source_contract,omitempty"`
+}
+
+type declarationAdmissionMappingV3LockWire struct {
+	SchemaVersion  int                                         `json:"schema_version"`
+	Connector      string                                      `json:"connector"`
+	CapturedAt     json.RawMessage                             `json:"captured_at,omitempty"`
+	Rest           declarationAdmissionMappingV3RESTClosedWire `json:"rest"`
+	GraphQL        json.RawMessage                             `json:"graphql,omitempty"`
+	Counts         sourceImportCounts                          `json:"counts,omitempty"`
+	SourceContract json.RawMessage                             `json:"source_contract,omitempty"`
+}
+
+type declarationAdmissionMappingRESTOperationIdentityWire struct {
+	ID              string          `json:"id"`
+	Protocol        string          `json:"protocol"`
+	Method          string          `json:"method"`
+	Path            string          `json:"path"`
+	OperationID     string          `json:"operation_id"`
+	Deprecated      json.RawMessage `json:"deprecated"`
+	SourceLocation  string          `json:"source_location"`
+	SourceOperation json.RawMessage `json:"source_operation,omitempty"`
+}
+
+type declarationAdmissionMappingLegacyOrdinaryRESTOperationWire struct {
+	declarationAdmissionMappingRESTOperationIdentityWire
+	CitationURL     string                                                    `json:"citation_url,omitempty"`
+	CitationBinding *declarationAdmissionRenderedReferenceCitationBindingWire `json:"citation_binding,omitempty"`
+}
+
+type declarationAdmissionMappingLegacyReferenceRESTOperationWire struct {
+	declarationAdmissionMappingRESTOperationIdentityWire
+	SourceURL       string          `json:"source_url"`
+	CitationURL     json.RawMessage `json:"citation_url,omitempty"`
+	CitationBinding json.RawMessage `json:"citation_binding,omitempty"`
+}
+
+type declarationAdmissionMappingLegacyOrdinaryRESTWire struct {
+	declarationAdmissionSourceArtifactWire
+	Commit      json.RawMessage                                              `json:"commit,omitempty"`
+	InfoVersion json.RawMessage                                              `json:"info_version,omitempty"`
+	Operations  []declarationAdmissionMappingLegacyOrdinaryRESTOperationWire `json:"operations,omitempty"`
+}
+
+type declarationAdmissionMappingLegacyReferenceRESTWire struct {
+	declarationAdmissionSourceArtifactWire
+	Commit          json.RawMessage                                               `json:"commit,omitempty"`
+	InfoVersion     json.RawMessage                                               `json:"info_version,omitempty"`
+	SourceKind      string                                                        `json:"source_kind"`
+	OperationCounts json.RawMessage                                               `json:"operation_counts"`
+	Supplements     []declarationAdmissionRESTSupplementWire                      `json:"supplements"`
+	Operations      []declarationAdmissionMappingLegacyReferenceRESTOperationWire `json:"operations"`
+}
+
+type declarationAdmissionMappingV3RESTClosedWire struct {
+	Retrieval          json.RawMessage   `json:"retrieval"`
+	OpenAPIVersions    json.RawMessage   `json:"openapi"`
+	CoverageConfidence json.RawMessage   `json:"coverage_confidence,omitempty"`
+	SourceDocuments    []json.RawMessage `json:"source_documents"`
+}
+
+type declarationAdmissionMappingV3OpenAPIDocumentWire struct {
+	ID              string                                                       `json:"id"`
+	Kind            string                                                       `json:"kind,omitempty"`
+	ContentType     json.RawMessage                                              `json:"content_type,omitempty"`
+	Artifact        declarationAdmissionIgnoredArtifactWire                      `json:"artifact"`
+	PublishedSource declarationAdmissionPublishedSourceWire                      `json:"published_source"`
+	InfoVersion     json.RawMessage                                              `json:"info_version,omitempty"`
+	Operations      []declarationAdmissionMappingLegacyOrdinaryRESTOperationWire `json:"operations"`
+}
+
+type declarationAdmissionMappingV3RenderedReferenceDocumentWire struct {
+	ID              string                                                       `json:"id"`
+	Kind            string                                                       `json:"kind,omitempty"`
+	ContentType     json.RawMessage                                              `json:"content_type,omitempty"`
+	Artifact        declarationAdmissionIgnoredArtifactWire                      `json:"artifact"`
+	PublishedSource declarationAdmissionPublishedSourceWire                      `json:"published_source"`
+	InfoVersion     json.RawMessage                                              `json:"info_version,omitempty"`
+	Operations      []declarationAdmissionMappingLegacyOrdinaryRESTOperationWire `json:"operations"`
+}
+
+type declarationAdmissionMappingV3BundleDocumentWire struct {
+	ID              string                                                       `json:"id"`
+	Kind            string                                                       `json:"kind,omitempty"`
+	ContentType     json.RawMessage                                              `json:"content_type,omitempty"`
+	Artifact        declarationAdmissionIgnoredArtifactWire                      `json:"artifact"`
+	PublishedSource declarationAdmissionPublishedSourceWire                      `json:"published_source"`
+	InfoVersion     json.RawMessage                                              `json:"info_version,omitempty"`
+	Operations      []declarationAdmissionMappingLegacyOrdinaryRESTOperationWire `json:"operations"`
+}
+
+type declarationAdmissionMappingV3SourceReferenceDocumentWire struct {
+	ID              string                                                 `json:"id"`
+	Kind            string                                                 `json:"kind,omitempty"`
+	Artifact        declarationAdmissionIgnoredArtifactWire                `json:"artifact"`
+	SourceReference declarationAdmissionSourceArtifactWire                 `json:"source_reference"`
+	PublishedSource declarationAdmissionPublishedSourceWire                `json:"published_source"`
+	InfoVersion     json.RawMessage                                        `json:"info_version,omitempty"`
+	Operations      []declarationAdmissionMappingRESTOperationIdentityWire `json:"operations"`
+}
+
+type declarationAdmissionMappingV3UnavailableDocumentWire struct {
+	ID                string                                  `json:"id"`
+	Kind              string                                  `json:"kind,omitempty"`
+	ContentType       json.RawMessage                         `json:"content_type,omitempty"`
+	Artifact          declarationAdmissionIgnoredArtifactWire `json:"artifact"`
+	PublishedSource   declarationAdmissionPublishedSourceWire `json:"published_source"`
+	InfoVersion       json.RawMessage                         `json:"info_version,omitempty"`
+	UnavailableReason json.RawMessage                         `json:"unavailable_reason"`
+	Operations        []json.RawMessage                       `json:"operations"`
+}
+
 type declarationAdmissionGraphQLFieldWire struct {
 	Root       string          `json:"root"`
 	Name       string          `json:"name"`
@@ -454,9 +592,161 @@ type declarationAdmissionGraphQLWire struct {
 	TypeSystem       json.RawMessage                        `json:"type_system"`
 }
 
-func parseDeclarationAdmissionSourceLock(raw []byte, expectedConnector string) (declarationAdmissionReviewedSourceLock, error) {
+// decodeDeclarationAdmissionMappingSourceLockWire selects a closed wire shape
+// before constructing the shared, deliberately lossy mapping projection. The
+// shared projection is retained for its existing semantic checks, but it is no
+// longer allowed to decide a source variant from a zero-value discriminator.
+func decodeDeclarationAdmissionMappingSourceLockWire(raw []byte) (declarationAdmissionSourceLockWire, error) {
+	var selector struct {
+		SchemaVersion int             `json:"schema_version"`
+		Rest          json.RawMessage `json:"rest"`
+	}
+	if err := json.Unmarshal(raw, &selector); err != nil {
+		return declarationAdmissionSourceLockWire{}, err
+	}
+
+	switch selector.SchemaVersion {
+	case 1:
+		declaresSourceKind, err := declarationAdmissionMappingJSONFieldPresent(selector.Rest, "source_kind")
+		if err != nil {
+			return declarationAdmissionSourceLockWire{}, fmt.Errorf("parse source lock REST mapping discriminator: %w", err)
+		}
+		if declaresSourceKind {
+			return declarationAdmissionSourceLockWire{}, errors.New("source-reference locks require schema version 2")
+		}
+		var legacy declarationAdmissionMappingLegacyOrdinaryLockWire
+		if err := decodeSourceStrictJSON(raw, &legacy); err != nil {
+			return declarationAdmissionSourceLockWire{}, err
+		}
+	case 2:
+		declaresSourceKind, err := declarationAdmissionMappingJSONFieldPresent(selector.Rest, "source_kind")
+		if err != nil {
+			return declarationAdmissionSourceLockWire{}, fmt.Errorf("parse source lock REST mapping discriminator: %w", err)
+		}
+		if declaresSourceKind {
+			var reference declarationAdmissionMappingLegacyReferenceLockWire
+			if err := decodeSourceStrictJSON(raw, &reference); err != nil {
+				return declarationAdmissionSourceLockWire{}, err
+			}
+			if reference.Rest.SourceKind != sourceImportLegacySourceReferenceKind {
+				return declarationAdmissionSourceLockWire{}, fmt.Errorf("source lock has unsupported legacy REST source kind %q", reference.Rest.SourceKind)
+			}
+			if err := validateDeclarationAdmissionMappingLegacyReferenceClosedWire(reference.Rest); err != nil {
+				return declarationAdmissionSourceLockWire{}, err
+			}
+		} else {
+			var legacy declarationAdmissionMappingLegacyOrdinaryLockWire
+			if err := decodeSourceStrictJSON(raw, &legacy); err != nil {
+				return declarationAdmissionSourceLockWire{}, err
+			}
+		}
+	case 3:
+		var v3 declarationAdmissionMappingV3LockWire
+		if err := decodeSourceStrictJSON(raw, &v3); err != nil {
+			return declarationAdmissionSourceLockWire{}, err
+		}
+		if err := validateDeclarationAdmissionMappingV3ClosedWire(v3.Rest); err != nil {
+			return declarationAdmissionSourceLockWire{}, err
+		}
+	default:
+		return declarationAdmissionSourceLockWire{}, fmt.Errorf("source lock has unsupported schema version %d", selector.SchemaVersion)
+	}
+
 	var wire declarationAdmissionSourceLockWire
 	if err := decodeSourceStrictJSON(raw, &wire); err != nil {
+		return declarationAdmissionSourceLockWire{}, err
+	}
+	return wire, nil
+}
+
+func declarationAdmissionMappingJSONFieldPresent(raw json.RawMessage, name string) (bool, error) {
+	if len(raw) == 0 || strings.TrimSpace(string(raw)) == "null" {
+		return false, nil
+	}
+	var fields map[string]json.RawMessage
+	if err := decodeSourceStrictJSON(raw, &fields); err != nil {
+		return false, err
+	}
+	_, present := fields[name]
+	return present, nil
+}
+
+func validateDeclarationAdmissionMappingLegacyReferenceClosedWire(rest declarationAdmissionMappingLegacyReferenceRESTWire) error {
+	for _, operation := range rest.Operations {
+		if len(operation.CitationURL) != 0 {
+			return fmt.Errorf("source-reference operation %q must not declare a citation URL", operation.ID)
+		}
+		if len(operation.CitationBinding) != 0 {
+			return fmt.Errorf("source-reference operation %q must not declare a citation binding", operation.ID)
+		}
+	}
+	return nil
+}
+
+func validateDeclarationAdmissionMappingV3ClosedWire(rest declarationAdmissionMappingV3RESTClosedWire) error {
+	for index, rawDocument := range rest.SourceDocuments {
+		kind, err := declarationAdmissionMappingV3DocumentKind(rawDocument)
+		if err != nil {
+			return fmt.Errorf("source lock v3 REST document %d has invalid kind discriminator: %w", index, err)
+		}
+		switch kind {
+		case sourceImportDocumentKindOpenAPI:
+			var document declarationAdmissionMappingV3OpenAPIDocumentWire
+			if err := decodeSourceStrictJSON(rawDocument, &document); err != nil {
+				return fmt.Errorf("parse source lock v3 OpenAPI document %d: %w", index, err)
+			}
+		case sourceImportDocumentKindRenderedReference:
+			var document declarationAdmissionMappingV3RenderedReferenceDocumentWire
+			if err := decodeSourceStrictJSON(rawDocument, &document); err != nil {
+				return fmt.Errorf("parse source lock v3 rendered-reference document %d: %w", index, err)
+			}
+		case sourceImportDocumentKindBundle:
+			var document declarationAdmissionMappingV3BundleDocumentWire
+			if err := decodeSourceStrictJSON(rawDocument, &document); err != nil {
+				return fmt.Errorf("parse source lock v3 bundle document %d: %w", index, err)
+			}
+		case sourceImportDocumentKindSourceReference:
+			var document declarationAdmissionMappingV3SourceReferenceDocumentWire
+			if err := decodeSourceStrictJSON(rawDocument, &document); err != nil {
+				return fmt.Errorf("parse source lock v3 source-reference document %d: %w", index, err)
+			}
+		case sourceImportDocumentKindUnavailable:
+			var document declarationAdmissionMappingV3UnavailableDocumentWire
+			if err := decodeSourceStrictJSON(rawDocument, &document); err != nil {
+				return fmt.Errorf("parse source lock v3 unavailable document %d: %w", index, err)
+			}
+		default:
+			return fmt.Errorf("source lock v3 REST document %d has unsupported kind %q", index, kind)
+		}
+	}
+	return nil
+}
+
+func declarationAdmissionMappingV3DocumentKind(raw json.RawMessage) (string, error) {
+	if len(raw) == 0 || strings.TrimSpace(string(raw)) == "null" {
+		return sourceImportDocumentKindOpenAPI, nil
+	}
+	var fields map[string]json.RawMessage
+	if err := decodeSourceStrictJSON(raw, &fields); err != nil {
+		return "", err
+	}
+	rawKind, declared := fields["kind"]
+	if !declared {
+		return sourceImportDocumentKindOpenAPI, nil
+	}
+	var kind string
+	if err := decodeSourceStrictJSON(rawKind, &kind); err != nil {
+		return "", err
+	}
+	if kind == "" {
+		return "", errors.New("kind must be a non-empty string when declared")
+	}
+	return kind, nil
+}
+
+func parseDeclarationAdmissionSourceLock(raw []byte, expectedConnector string) (declarationAdmissionReviewedSourceLock, error) {
+	wire, err := decodeDeclarationAdmissionMappingSourceLockWire(raw)
+	if err != nil {
 		return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("parse source lock mapping evidence: %w", err)
 	}
 	if wire.SchemaVersion != 1 && wire.SchemaVersion != 2 && wire.SchemaVersion != 3 {
@@ -813,6 +1103,14 @@ func validateDeclarationAdmissionMappingReferenceRESTOperation(operation declara
 func validateDeclarationAdmissionMappingLegacySourceReference(rest declarationAdmissionLegacyRESTWire, wire declarationAdmissionSourceLockWire, graphqlQueryCount, graphqlMutationCount int) error {
 	if rest.SourceKind != sourceImportLegacySourceReferenceKind {
 		return fmt.Errorf("source lock has unsupported legacy REST source kind %q", rest.SourceKind)
+	}
+	if _, err := declarationAdmissionMappingArtifactForm(rest.OpenAPI, rest.Swagger); err != nil {
+		return fmt.Errorf("source-reference primary has invalid source form: %w", err)
+	}
+	for _, supplement := range rest.Supplements {
+		if _, err := declarationAdmissionMappingArtifactForm(supplement.OpenAPI, supplement.Swagger); err != nil {
+			return fmt.Errorf("source-reference supplement %q has invalid source form: %w", supplement.SourceURL, err)
+		}
 	}
 	if len(rest.Operations) == 0 {
 		return errors.New("source-reference lock has no operation inventory")

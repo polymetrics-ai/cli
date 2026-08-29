@@ -113,8 +113,11 @@ filename.
    retained bytes separately with `source-import`, and validate live proof
    separately through certification; neither is an admission label. The
    mapping view still validates source-reference identity and supplement
-   bindings, unavailable reason/source URL, and the v3 document envelope
-   before it materializes a command surface.
+   bindings, unavailable reason/source URL, and the version- and
+   document-kind-specific v3 envelope before it materializes a command surface.
+   An empty or `null` discriminator is not an ordinary fallback: the mapping
+   reader rejects foreign variant fields before a zero value can select another
+   source-lock wire.
 3. Project request direction, not the whole response schema. Exclude OpenAPI
    `readOnly` fields recursively, including resolved `allOf` arms, remove those
    names from `required`, and reject them before provider I/O. Do not use a

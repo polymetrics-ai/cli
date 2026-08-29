@@ -44,7 +44,10 @@ uppercase supported method, bounded control-free identity/location/provider-ID,
 source form, and legacy supplement bindings/counts; unavailable documents keep
 a non-empty control-free reason and optional canonical source URL; and v3
 documents keep retrieval, source-document inventory/form/version, zero-operation,
-and coverage-confidence coherence. A `source_reference` must retain its exact
+and coverage-confidence coherence. Version and document-kind selection is
+presence-aware and closed, so a foreign, empty, or `null` variant field cannot
+fall through a Go zero value into a different mapping wire. A `source_reference`
+must retain its exact
 `source_contract_unavailable` disposition. `source-import` alone validates
 retained bytes and hashes; certification alone validates fixture or live-provider
 proof and credentials.

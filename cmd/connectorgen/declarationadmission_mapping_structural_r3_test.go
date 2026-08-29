@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"strings"
+	"strconv"
 	"testing"
 )
 
@@ -11,81 +11,89 @@ import (
 // varies structural fields only: bytes, digests, capture metadata, and opaque
 // source_operation/source_contract leaves remain non-binding to mapping.
 func TestDeclarationAdmissionMappingReaderR3RejectsCrossVersionAndVariantDrift(t *testing.T) {
-	tests := []struct {
+	ordinaryTests := []struct {
 		name   string
-		lock   func() map[string]any
 		mutate func(map[string]any)
 	}{
 		{
-			name: "ordinary schema v1 and v2 reject root operations_found",
-			lock: func() map[string]any { return declarationAdmissionR3LegacyOrdinaryLock(2) },
+			name: "root operations_found",
 			mutate: func(lock map[string]any) {
 				lock["operations_found"] = map[string]any{"rest": 1, "graphql_query": 0, "graphql_mutation": 0, "total": 1}
 			},
 		},
 		{
-			name: "ordinary schema v1 and v2 reject root coverage_confidence",
-			lock: func() map[string]any { return declarationAdmissionR3LegacyOrdinaryLock(1) },
+			name: "root coverage_confidence",
 			mutate: func(lock map[string]any) {
 				lock["coverage_confidence"] = map[string]any{"level": "ordinary", "basis": "foreign variant"}
 			},
 		},
 		{
-			name: "ordinary schema v1 and v2 reject empty and null source_kind discriminators",
-			lock: func() map[string]any { return declarationAdmissionR3LegacyOrdinaryLock(2) },
+			name: "empty source_kind discriminator",
 			mutate: func(lock map[string]any) {
 				lock["rest"].(map[string]any)["source_kind"] = ""
 			},
 		},
 		{
-			name: "ordinary schema v1 and v2 reject null source_kind discriminator",
-			lock: func() map[string]any { return declarationAdmissionR3LegacyOrdinaryLock(1) },
+			name: "null source_kind discriminator",
 			mutate: func(lock map[string]any) {
 				lock["rest"].(map[string]any)["source_kind"] = nil
 			},
 		},
 		{
-			name: "ordinary schema v1 and v2 reject empty and null operation_counts",
-			lock: func() map[string]any { return declarationAdmissionR3LegacyOrdinaryLock(2) },
+			name: "empty operation_counts",
 			mutate: func(lock map[string]any) {
 				lock["rest"].(map[string]any)["operation_counts"] = map[string]any{}
 			},
 		},
 		{
-			name: "ordinary schema v1 and v2 reject null operation_counts",
-			lock: func() map[string]any { return declarationAdmissionR3LegacyOrdinaryLock(1) },
+			name: "null operation_counts",
 			mutate: func(lock map[string]any) {
 				lock["rest"].(map[string]any)["operation_counts"] = nil
 			},
 		},
 		{
-			name: "ordinary schema v1 and v2 reject empty and null supplements",
-			lock: func() map[string]any { return declarationAdmissionR3LegacyOrdinaryLock(2) },
+			name: "empty supplements",
 			mutate: func(lock map[string]any) {
 				lock["rest"].(map[string]any)["supplements"] = []any{}
 			},
 		},
 		{
-			name: "ordinary schema v1 and v2 reject null supplements",
-			lock: func() map[string]any { return declarationAdmissionR3LegacyOrdinaryLock(1) },
+			name: "null supplements",
 			mutate: func(lock map[string]any) {
 				lock["rest"].(map[string]any)["supplements"] = nil
 			},
 		},
 		{
-			name: "ordinary schema v1 and v2 reject empty operation source_url",
-			lock: func() map[string]any { return declarationAdmissionR3LegacyOrdinaryLock(2) },
+			name: "empty operation source_url",
 			mutate: func(lock map[string]any) {
 				declarationAdmissionR3LegacyOperation(lock)["source_url"] = ""
 			},
 		},
 		{
-			name: "ordinary schema v1 and v2 reject null operation source_url",
-			lock: func() map[string]any { return declarationAdmissionR3LegacyOrdinaryLock(1) },
+			name: "null operation source_url",
 			mutate: func(lock map[string]any) {
 				declarationAdmissionR3LegacyOperation(lock)["source_url"] = nil
 			},
 		},
+	}
+	for _, version := range []int{1, 2} {
+		for _, test := range ordinaryTests {
+			version, test := version, test
+			t.Run("ordinary schema v"+strconv.Itoa(version)+" rejects "+test.name, func(t *testing.T) {
+				lock := declarationAdmissionR3LegacyOrdinaryLock(version)
+				test.mutate(lock)
+				if err := declarationAdmissionR3Parse(lock); err == nil {
+					t.Fatal("mapping reader accepted cross-version or variant field drift")
+				}
+			})
+		}
+	}
+
+	tests := []struct {
+		name   string
+		lock   func() map[string]any
+		mutate func(map[string]any)
+	}{
 		{
 			name: "legacy source_reference rejects empty and null operation citation_url",
 			lock: declarationAdmissionR3LegacyReferenceLock,
@@ -165,24 +173,55 @@ func TestDeclarationAdmissionMappingReaderR3LegacyReferenceValidatesSourceFormPi
 		t.Fatalf("mapping reader rejected absent optional source-form pins: %v", err)
 	}
 
+	for _, test := range []struct {
+		name   string
+		mutate func(map[string]any)
+	}{
+		{
+			name: "accepts primary OpenAPI 3.1 and supplement Swagger 2.0",
+			mutate: func(lock map[string]any) {
+				declarationAdmissionR3REST(lock)["openapi"] = "3.1.0"
+			},
+		},
+		{
+			name: "accepts primary Swagger 2.0 and supplement OpenAPI 3.0",
+			mutate: func(lock map[string]any) {
+				rest := declarationAdmissionR3REST(lock)
+				delete(rest, "openapi")
+				rest["swagger"] = "2.0"
+				supplement := declarationAdmissionR3Supplement(lock)
+				delete(supplement, "swagger")
+				supplement["openapi"] = "3.0.3"
+			},
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			lock := declarationAdmissionR3LegacyReferenceLock()
+			test.mutate(lock)
+			if err := declarationAdmissionR3Parse(lock); err != nil {
+				t.Fatalf("mapping reader rejected supported source-form pins while retention is malformed: %v", err)
+			}
+		})
+	}
+
 	tests := []struct {
 		name   string
 		mutate func(map[string]any)
 	}{
 		{
-			name: "primary openapi wrong JSON type",
+			name:   "primary openapi wrong JSON type",
 			mutate: func(lock map[string]any) { declarationAdmissionR3REST(lock)["openapi"] = 3 },
 		},
 		{
-			name: "supplement openapi wrong JSON type",
+			name:   "supplement openapi wrong JSON type",
 			mutate: func(lock map[string]any) { declarationAdmissionR3Supplement(lock)["openapi"] = 3 },
 		},
 		{
-			name: "primary unsupported openapi",
+			name:   "primary unsupported openapi",
 			mutate: func(lock map[string]any) { declarationAdmissionR3REST(lock)["openapi"] = "2.0.0" },
 		},
 		{
-			name: "supplement unsupported openapi",
+			name:   "supplement unsupported openapi",
 			mutate: func(lock map[string]any) { declarationAdmissionR3Supplement(lock)["openapi"] = "2.0.0" },
 		},
 		{
@@ -202,11 +241,11 @@ func TestDeclarationAdmissionMappingReaderR3LegacyReferenceValidatesSourceFormPi
 			},
 		},
 		{
-			name: "primary simultaneous openapi and swagger",
+			name:   "primary simultaneous openapi and swagger",
 			mutate: func(lock map[string]any) { declarationAdmissionR3REST(lock)["swagger"] = "2.0" },
 		},
 		{
-			name: "supplement simultaneous openapi and swagger",
+			name:   "supplement simultaneous openapi and swagger",
 			mutate: func(lock map[string]any) { declarationAdmissionR3Supplement(lock)["openapi"] = "3.1.0" },
 		},
 	}
@@ -216,6 +255,54 @@ func TestDeclarationAdmissionMappingReaderR3LegacyReferenceValidatesSourceFormPi
 			test.mutate(lock)
 			if err := declarationAdmissionR3Parse(lock); err == nil {
 				t.Fatal("mapping reader accepted invalid source-form pin")
+			}
+		})
+	}
+}
+
+func TestDeclarationAdmissionMappingReaderR3AcceptsClosedVariants(t *testing.T) {
+	tests := []struct {
+		name string
+		lock func() map[string]any
+	}{
+		{
+			name: "ordinary schema v1 with opaque source contract and operation",
+			lock: func() map[string]any { return declarationAdmissionR3LegacyOrdinaryLock(1) },
+		},
+		{
+			name: "ordinary schema v2 with opaque source contract and operation",
+			lock: func() map[string]any { return declarationAdmissionR3LegacyOrdinaryLock(2) },
+		},
+		{
+			name: "legacy source reference with malformed retention",
+			lock: declarationAdmissionR3LegacyReferenceLock,
+		},
+	}
+	for _, kind := range []string{"openapi", "rendered_reference", "bundle", "source_reference", "unavailable"} {
+		kind := kind
+		tests = append(tests, struct {
+			name string
+			lock func() map[string]any
+		}{
+			name: "schema v3 " + kind + " document with malformed retention",
+			lock: func() map[string]any { return declarationAdmissionR3V3Lock(kind) },
+		})
+	}
+	tests = append(tests, struct {
+		name string
+		lock func() map[string]any
+	}{
+		name: "schema v3 accepts absent OpenAPI kind as its compatibility default",
+		lock: func() map[string]any {
+			lock := declarationAdmissionR3V3Lock("openapi")
+			delete(lock["rest"].(map[string]any)["source_documents"].([]any)[0].(map[string]any), "kind")
+			return lock
+		},
+	})
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if err := declarationAdmissionR3Parse(test.lock()); err != nil {
+				t.Fatalf("mapping reader rejected closed supported variant: %v", err)
 			}
 		})
 	}
@@ -254,8 +341,8 @@ func declarationAdmissionR3LegacyOrdinaryLock(version int) map[string]any {
 
 func declarationAdmissionR3LegacyReferenceLock() map[string]any {
 	return map[string]any{
-		"schema_version": 2,
-		"connector":      "fixture",
+		"schema_version":   2,
+		"connector":        "fixture",
 		"operations_found": map[string]any{"rest": 2, "graphql_query": 0, "graphql_mutation": 0, "total": 2},
 		"coverage_confidence": map[string]any{
 			"level": sourceImportLegacySourceReferenceKind,
@@ -270,10 +357,10 @@ func declarationAdmissionR3LegacyReferenceLock() map[string]any {
 			"openapi":          "3.0.3",
 			"operation_counts": map[string]any{"GET": 1, "POST": 1},
 			"supplements": []any{map[string]any{
-				"source_url": "https://docs.polymetrics.invalid/fixture/supplement",
-				"sha256":     []any{"malformed", "retention"},
-				"bytes":      map[string]any{"malformed": true},
-				"swagger":    "2.0",
+				"source_url":      "https://docs.polymetrics.invalid/fixture/supplement",
+				"sha256":          []any{"malformed", "retention"},
+				"bytes":           map[string]any{"malformed": true},
+				"swagger":         "2.0",
 				"source_location": "Supplemental provider reference",
 				"operation_count": 1,
 			}},
@@ -281,7 +368,7 @@ func declarationAdmissionR3LegacyReferenceLock() map[string]any {
 				map[string]any{
 					"id": "fixture.rest.list-widgets", "protocol": "rest", "method": "GET", "path": "/widgets",
 					"operation_id": "listWidgets", "deprecated": false, "source_location": `paths["/widgets"].get`,
-					"source_url": "https://docs.polymetrics.invalid/fixture/openapi.json",
+					"source_url":       "https://docs.polymetrics.invalid/fixture/openapi.json",
 					"source_operation": []any{"opaque provider operation"},
 				},
 				map[string]any{
@@ -317,8 +404,8 @@ func declarationAdmissionR3V3Lock(kind string) map[string]any {
 		"source_operation": map[string]any{"opaque": []any{"provider-specific", true}},
 	}
 	rest := map[string]any{
-		"retrieval": "provider reference inventory",
-		"openapi":   []any{},
+		"retrieval":        "provider reference inventory",
+		"openapi":          []any{},
 		"source_documents": []any{document},
 	}
 	switch kind {
@@ -363,11 +450,11 @@ func declarationAdmissionR3V3Lock(kind string) map[string]any {
 		count = 0
 	}
 	return map[string]any{
-		"schema_version": 3,
-		"connector":      "fixture",
+		"schema_version":  3,
+		"connector":       "fixture",
 		"source_contract": map[string]any{"opaque": []any{"provider-specific", true}},
-		"rest":           rest,
-		"counts":         map[string]any{"rest": count, "graphql_query": 0, "graphql_mutation": 0, "total": count},
+		"rest":            rest,
+		"counts":          map[string]any{"rest": count, "graphql_query": 0, "graphql_mutation": 0, "total": count},
 	}
 }
 
@@ -391,8 +478,5 @@ func declarationAdmissionR3ValueName(value any) string {
 	if value == nil {
 		return "null"
 	}
-	if stringValue, ok := value.(string); ok && stringValue == "" {
-		return "empty"
-	}
-	return strings.ReplaceAll(strings.TrimSpace(strings.Trim(strings.TrimSpace(""), "")), " ", "-")
+	return "empty"
 }
