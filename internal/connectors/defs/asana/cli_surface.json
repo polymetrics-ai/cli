@@ -1160,19 +1160,21 @@
     },
     {
       "path": "batch-api create-batch-request",
-      "summary": "Not-applicable source-bound Asana mutation: Submit parallel requests.",
+      "summary": "Submit up to 10 explicitly allow-listed typed Asana write actions in one provider batch.",
       "intent": "direct_write",
-      "availability": "unsupported_api",
-      "operation": "create_batch_request",
+      "availability": "implemented",
+      "write": "create_batch_request",
       "source_cli_path": "POST /batch",
       "source_url": "https://developers.asana.com/reference/createbatchrequest",
+      "source_operation": "asana.rest.createBatchRequest",
       "flags": [
         {
-          "name": "data-json",
-          "type": "string",
-          "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
-          "maps_to": "record.data",
-          "allow_empty": false
+          "name": "actions-json",
+          "type": "json",
+          "summary": "JSON array of 1..10 objects shaped as {action, record}; action must name an explicitly allow-listed Asana write declaration, and method/path/body are derived from that declaration.",
+          "maps_to": "record.actions",
+          "max_bytes": 1048576,
+          "required": true
         }
       ],
       "api_surface": [
@@ -1182,8 +1184,8 @@
         }
       ],
       "risk": "high",
-      "approval": "not exposed; generic batch subrequests are disallowed to avoid raw API passthrough",
-      "notes": "not_applicable=generic_batch_wrapper; source_operation=asana.rest.createBatchRequest"
+      "approval": "direct-write plan -> preview -> explicit approval -> execute plus typed confirmation destructive; callers cannot provide raw methods, paths, headers, or bodies",
+      "notes": "Implemented through the closed create_batch_request action. Each subrequest resolves from an existing named typed Asana write action; uploads, organization exports, nested batches, SCIM, GET/HEAD, and caller-selected HTTP are not admitted."
     },
     {
       "path": "budgets get-budgets",

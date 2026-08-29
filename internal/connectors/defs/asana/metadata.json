@@ -1,7 +1,7 @@
 {
   "name": "asana",
   "display_name": "Asana",
-  "description": "Maps 107 bounded operation-backed direct reads, 12 stream-backed interactive read commands that still need a one-provider-request bound, and 130 approval-gated one-record direct writes. All 12 streams support saved full-refresh ETL; project-scoped tasks additionally support source-backed event-token incremental modes; all 130 write actions support warehouse-table reverse ETL. The pinned OpenAPI ledger accounts for every official operation as an executable covered_by route or the one not-applicable generic batch wrapper.",
+  "description": "Maps 107 bounded operation-backed direct reads, 12 stream-backed interactive reads with a global one-provider-request budget, and 131 approval-gated one-record direct writes across all 130 mutation endpoints. All 12 streams support saved full-refresh ETL; project-scoped tasks additionally support source-backed event-token incremental modes; all 131 write actions support warehouse-table reverse ETL. Every operation in the pinned OpenAPI ledger has an executable covered_by route, including POST /batch through a closed declaration-backed action selector.",
   "integration_type": "api",
   "docs_url": "https://developers.asana.com/reference/rest-api-reference",
   "release_stage": "ga",
@@ -17,8 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "107 operation-backed commands are bounded source reads; the 12 stream-backed interactive commands use declared streams but still need an explicit one-provider-request/page/fanout bound; saved full-refresh ETL remains separate and exhaustive; no raw provider query/path passthrough",
-    "write": "external mutations require named write actions, schemas, previews, explicit approval, and typed destructive confirmation when destructive/admin; interactive commands are one-record direct writes while warehouse-table reverse ETL remains system-level",
+    "read": "107 operation-backed commands are bounded source reads; the 12 stream-backed interactive commands have one aggregate provider-send and page budget across pagination, retries, redirects, and fan-out; saved full-refresh ETL remains separate and exhaustive; no raw provider query/path passthrough",
+    "write": "external mutations require named write actions, schemas, previews, explicit approval, and typed destructive confirmation when destructive/admin; POST /batch selects only explicitly allow-listed named actions and derives provider method/path/body from their declarations; interactive commands are one-record direct writes while warehouse-table reverse ETL remains system-level",
     "approval": "all write execution follows plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive"
   }
 }

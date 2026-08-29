@@ -551,7 +551,7 @@ type WriteAction struct {
 	// samples and returned write errors. DryRunWrite preview warnings preserve
 	// their resolved values.
 	RedactFields []string `json:"redact_fields,omitempty"`
-	BodyType     string   `json:"body_type,omitempty"` // json (default) | form | none | graphql | json_array | multipart | base64_upload | binary_upload
+	BodyType     string   `json:"body_type,omitempty"` // json (default) | form | none | graphql | json_array | multipart | base64_upload | binary_upload | declared_batch
 	// SuccessStatuses optionally narrows generic 2xx success to the exact
 	// provider receipt statuses the action declares.
 	SuccessStatuses []int `json:"success_statuses,omitempty"`
@@ -565,7 +565,12 @@ type WriteAction struct {
 	Multipart    *MultipartSpec      `json:"multipart,omitempty"`
 	Base64Upload *Base64UploadSpec   `json:"base64_upload,omitempty"`
 	BinaryUpload *BinaryUploadSpec   `json:"binary_upload,omitempty"`
-	RecordSchema json.RawMessage     `json:"record_schema"`
+	// DeclaredBatch turns one record into a provider batch whose subrequests
+	// may select only the named write actions in AllowedActions. Callers never
+	// provide a method, path, headers, or raw body: those are resolved from the
+	// existing typed action declarations and sealed into the ordinary preview.
+	DeclaredBatch *DeclaredBatchSpec `json:"declared_batch,omitempty"`
+	RecordSchema  json.RawMessage    `json:"record_schema"`
 	// IdempotencyKeyHeader names a provider-documented request header. Execution
 	// generates one fresh key per record and reuses it only across that record's retries.
 	IdempotencyKeyHeader string `json:"idempotency_key_header,omitempty"`
@@ -667,6 +672,25 @@ type GraphQLRequestSpec struct {
 type MultipartSpec struct {
 	MaxBytes int64               `json:"max_bytes,omitempty"`
 	Parts    []MultipartPartSpec `json:"parts,omitempty"`
+}
+
+// DeclaredBatchSpec describes a closed provider batch envelope over existing
+// named write actions. The field names are provider facts owned by the bundle;
+// the executor is fixed engine code, not a JSON callback or generic HTTP hook.
+// AllowedActions is an explicit allow-list so adding a new connector action
+// never silently makes it batch-addressable.
+type DeclaredBatchSpec struct {
+	MaxActions            int      `json:"max_actions"`
+	AllowedActions        []string `json:"allowed_actions"`
+	AllowedMethods        []string `json:"allowed_methods"`
+	ProviderEnvelopeField string   `json:"provider_envelope_field"`
+	ProviderActionsField  string   `json:"provider_actions_field"`
+	ProviderMethodField   string   `json:"provider_method_field"`
+	ProviderPathField     string   `json:"provider_path_field"`
+	ProviderDataField     string   `json:"provider_data_field"`
+	InnerBodyField        string   `json:"inner_body_field"`
+	ResponseEnvelopeField string   `json:"response_envelope_field"`
+	ResponseStatusField   string   `json:"response_status_field"`
 }
 
 // Base64UploadSpec describes body_type "base64_upload": a JSON body carrying a
@@ -2304,6 +2328,10 @@ func compileDynamicKeyPattern(pattern string) (*regexp.Regexp, error) {
 }
 
 func validateWriteBodies(actions []WriteAction) error {
+	actionsByName := make(map[string]WriteAction, len(actions))
+	for _, action := range actions {
+		actionsByName[action.Name] = action
+	}
 	for i, action := range actions {
 		if err := validateDynamicFields(i, action); err != nil {
 			return err
@@ -2336,6 +2364,9 @@ func validateWriteBodies(actions []WriteAction) error {
 		if action.BinaryUpload != nil && bodyType != "binary_upload" {
 			return fmt.Errorf("action %d (%q) declares binary_upload but body_type is %q", i, action.Name, bodyType)
 		}
+		if action.DeclaredBatch != nil && bodyType != "declared_batch" {
+			return fmt.Errorf("action %d (%q) declares declared_batch but body_type is %q", i, action.Name, bodyType)
+		}
 		switch bodyType {
 		case "graphql":
 			if action.GraphQL == nil {
@@ -2365,6 +2396,10 @@ func validateWriteBodies(actions []WriteAction) error {
 			if err := validateBinaryUploadSpec(i, action); err != nil {
 				return err
 			}
+		case "declared_batch":
+			if err := validateDeclaredBatchSpec(i, action, actionsByName); err != nil {
+				return err
+			}
 		case "multipart":
 			if action.Multipart == nil || len(action.Multipart.Parts) == 0 {
 				return fmt.Errorf("action %d (%q) body_type multipart requires multipart.parts", i, action.Name)
@@ -2383,6 +2418,86 @@ func validateWriteBodies(actions []WriteAction) error {
 				}
 			}
 		}
+	}
+	return nil
+}
+
+func validateDeclaredBatchSpec(index int, action WriteAction, actionsByName map[string]WriteAction) error {
+	spec := action.DeclaredBatch
+	if spec == nil {
+		return fmt.Errorf("action %d (%q) body_type declared_batch requires declared_batch", index, action.Name)
+	}
+	if !strings.EqualFold(strings.TrimSpace(action.Method), http.MethodPost) {
+		return fmt.Errorf("action %d (%q) declared_batch method must be POST", index, action.Name)
+	}
+	if spec.MaxActions < 1 || spec.MaxActions > 64 {
+		return fmt.Errorf("action %d (%q) declared_batch max_actions must be between 1 and 64", index, action.Name)
+	}
+	fields := map[string]string{
+		"provider_envelope_field": spec.ProviderEnvelopeField,
+		"provider_actions_field":  spec.ProviderActionsField,
+		"provider_method_field":   spec.ProviderMethodField,
+		"provider_path_field":     spec.ProviderPathField,
+		"provider_data_field":     spec.ProviderDataField,
+		"inner_body_field":        spec.InnerBodyField,
+		"response_envelope_field": spec.ResponseEnvelopeField,
+		"response_status_field":   spec.ResponseStatusField,
+	}
+	for name, field := range fields {
+		if !isPreparedWriteBindingField(field) {
+			return fmt.Errorf("action %d (%q) declared_batch %s must be a simple field name", index, action.Name, name)
+		}
+	}
+	if spec.ProviderMethodField == spec.ProviderPathField || spec.ProviderMethodField == spec.ProviderDataField || spec.ProviderPathField == spec.ProviderDataField {
+		return fmt.Errorf("action %d (%q) declared_batch provider method, path, and data fields must be distinct", index, action.Name)
+	}
+	allowedMethods := make(map[string]struct{}, len(spec.AllowedMethods))
+	for _, raw := range spec.AllowedMethods {
+		method := strings.ToUpper(strings.TrimSpace(raw))
+		switch method {
+		case http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete:
+		default:
+			return fmt.Errorf("action %d (%q) declared_batch allowed method %q is unsupported", index, action.Name, raw)
+		}
+		if _, duplicate := allowedMethods[method]; duplicate {
+			return fmt.Errorf("action %d (%q) declared_batch repeats allowed method %q", index, action.Name, method)
+		}
+		allowedMethods[method] = struct{}{}
+	}
+	if len(allowedMethods) == 0 {
+		return fmt.Errorf("action %d (%q) declared_batch requires allowed_methods", index, action.Name)
+	}
+	seenActions := make(map[string]struct{}, len(spec.AllowedActions))
+	for _, name := range spec.AllowedActions {
+		if name == action.Name {
+			return fmt.Errorf("action %d (%q) declared_batch cannot select itself", index, action.Name)
+		}
+		if _, duplicate := seenActions[name]; duplicate {
+			return fmt.Errorf("action %d (%q) declared_batch repeats allowed action %q", index, action.Name, name)
+		}
+		seenActions[name] = struct{}{}
+		inner, ok := actionsByName[name]
+		if !ok {
+			return fmt.Errorf("action %d (%q) declared_batch references unknown write action %q", index, action.Name, name)
+		}
+		method := strings.ToUpper(strings.TrimSpace(inner.Method))
+		if _, ok := allowedMethods[method]; !ok {
+			return fmt.Errorf("action %d (%q) declared_batch action %q method %s is outside allowed_methods", index, action.Name, name, method)
+		}
+		switch bodyTypeOf(inner) {
+		case "json", "none":
+		default:
+			return fmt.Errorf("action %d (%q) declared_batch action %q has unsupported body_type %q", index, action.Name, name, bodyTypeOf(inner))
+		}
+		if strings.TrimSpace(inner.Hook) != "" || strings.TrimSpace(inner.BaseURL) != "" || strings.TrimSpace(inner.Route) != "" || strings.TrimSpace(inner.IdempotencyKeyHeader) != "" {
+			return fmt.Errorf("action %d (%q) declared_batch action %q requires unsupported alternate execution semantics", index, action.Name, name)
+		}
+		if confirmationKindForWriteAction(inner) == string(connectors.ConfirmationKindDestructive) && confirmationKindForWriteAction(action) != string(connectors.ConfirmationKindDestructive) {
+			return fmt.Errorf("action %d (%q) declared_batch selecting destructive action %q requires destructive confirmation", index, action.Name, name)
+		}
+	}
+	if len(seenActions) == 0 {
+		return fmt.Errorf("action %d (%q) declared_batch requires allowed_actions", index, action.Name)
 	}
 	return nil
 }

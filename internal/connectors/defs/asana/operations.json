@@ -794,10 +794,10 @@
       "id": "create_batch_request",
       "kind": "composite",
       "summary": "Submit parallel requests",
-      "description": "Not-applicable source-bound provider generic wrapper: not_applicable=generic_batch_wrapper; source_operation=asana.rest.createBatchRequest",
+      "description": "Implemented source-bound Asana operation mapped to {'write': 'create_batch_request'}; source_operation=asana.rest.createBatchRequest. Execution accepts only explicitly allow-listed named typed write actions and derives every provider method/path/body from their declarations.",
       "source_url": "https://developers.asana.com/reference/createbatchrequest",
       "risk": "high",
-      "approval": "not exposed; generic batch subrequests are disallowed to avoid raw API passthrough",
+      "approval": "direct-write plan -> preview -> explicit approval -> execute plus typed confirmation destructive; no raw subrequest passthrough",
       "output_policy": "json_redacted",
       "auth_scopes": [
         "asana:personal-access-token"
@@ -807,7 +807,10 @@
       "audit_event": "asana.create_batch_request",
       "composite": {
         "steps": [
-          "disallowed:batch_raw_subrequest_wrapper"
+          "resolve:explicit_allowlisted_write_action",
+          "derive:declared_method_path_body",
+          "execute:closed_provider_batch",
+          "validate:ordered_per_action_status"
         ]
       }
     },

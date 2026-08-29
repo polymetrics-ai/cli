@@ -298,7 +298,7 @@ func prepareDeclarativeRequest(b Bundle, action WriteAction, record connectors.R
 		Query:   query.Encode(),
 		Headers: headers,
 	}
-	body, format, contentType, err := prepareCanonicalWriteBody(action, record, recordIndex, cfg, requirePayloadApproval)
+	body, format, contentType, err := prepareCanonicalWriteBody(b, action, record, recordIndex, cfg, requirePayloadApproval)
 	if err != nil {
 		return PreparedRequest{}, err
 	}
@@ -327,7 +327,7 @@ func canonicalWriteURL(baseURL, path string, query url.Values) (string, error) {
 	return parsed.String(), nil
 }
 
-func prepareCanonicalWriteBody(action WriteAction, record connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, requirePayloadApproval bool) (string, string, string, error) {
+func prepareCanonicalWriteBody(b Bundle, action WriteAction, record connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, requirePayloadApproval bool) (string, string, string, error) {
 	vars := Vars{Config: cfg.Config, Secrets: cfg.Secrets, Record: map[string]any(record)}
 	marshalJSON := func(payload any) (string, string, string, error) {
 		if payload == nil {
@@ -340,6 +340,12 @@ func prepareCanonicalWriteBody(action WriteAction, record connectors.Record, rec
 		return string(raw), "json", "application/json", nil
 	}
 	switch bodyTypeOf(action) {
+	case "declared_batch":
+		payload, _, err := buildDeclaredBatchPayload(b, action, record, cfg)
+		if err != nil {
+			return "", "", "", err
+		}
+		return marshalJSON(payload)
 	case "form":
 		body := buildForm(record, action.PathFields).Encode()
 		if body == "" {

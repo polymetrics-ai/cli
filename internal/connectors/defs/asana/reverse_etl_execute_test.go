@@ -58,11 +58,11 @@ const (
 	// bound to a real write action. It includes the source-complete no-body
 	// DELETE/POST promotions, so their source coverage cannot drift back to a
 	// blocked ledger row while the command remains executable.
-	reverseETLBoundEndpoints = 128
+	reverseETLBoundEndpoints = 129
 
 	// blockedDestructiveOperations must remain zero now that every source-locked
-	// destructive mutation is bound to a typed action. The generic /batch
-	// wrapper is unsupported_api, not an unbound destructive operation.
+	// destructive mutation is bound to a typed action. The /batch operation is
+	// likewise bound to a closed typed action and never exposes raw HTTP input.
 	blockedDestructiveOperations = 0
 )
 
@@ -235,8 +235,8 @@ func TestExecutableCommandsAreAccountedForByPinnedSourceLock(t *testing.T) {
 	if directReads != 119 {
 		t.Fatalf("source-locked implemented direct reads = %d, want 119", directReads)
 	}
-	if directWrites != 130 || len(writeEndpoints) != 129 {
-		t.Fatalf("source-accounted implemented direct writes = %d across %d provider endpoints, want 130 across 129",
+	if directWrites != 131 || len(writeEndpoints) != 130 {
+		t.Fatalf("source-accounted implemented direct writes = %d across %d provider endpoints, want 131 across 130",
 			directWrites, len(writeEndpoints))
 	}
 }
@@ -473,8 +473,6 @@ func TestEveryLockedOperationHasOneAccountedCommandLane(t *testing.T) {
 			states["planned_direct_read"]++
 		case hasCommand("direct_write", "planned"):
 			states["planned_direct_write"]++
-		case hasCommand("direct_write", "unsupported_api"):
-			states["unsupported_api"]++
 		default:
 			t.Errorf("source operation %q has commands but no accounted lane: %+v", operation.ID, commands)
 		}
@@ -483,8 +481,7 @@ func TestEveryLockedOperationHasOneAccountedCommandLane(t *testing.T) {
 	wantStates := map[string]int{
 		"implemented_direct_read":              107,
 		"implemented_stream_read_etl":          12,
-		"implemented_direct_write_reverse_etl": 129,
-		"unsupported_api":                      1,
+		"implemented_direct_write_reverse_etl": 130,
 	}
 	if !reflect.DeepEqual(states, wantStates) {
 		t.Fatalf("249-row source-lock lane matrix = %v, want %v", states, wantStates)
@@ -1081,6 +1078,74 @@ func TestAttachmentBinaryUploadAliasUsesExplicitProviderUnrestrictedMediaPolicy(
 	}
 }
 
+func TestBatchActionUsesClosedSourceBackedActionSelection(t *testing.T) {
+	bundle := loadBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	capture := newCaptureServer()
+	defer capture.Close()
+
+	var batch engine.WriteAction
+	for _, action := range bundle.Writes {
+		if action.Name == "create_batch_request" {
+			batch = action
+			break
+		}
+	}
+	if batch.Name == "" || batch.BodyType != "declared_batch" || batch.DeclaredBatch == nil {
+		t.Fatalf("create_batch_request = %+v, want closed declared_batch action", batch)
+	}
+	if batch.DeclaredBatch.MaxActions != 10 || len(batch.DeclaredBatch.AllowedActions) != 127 {
+		t.Fatalf("batch action bounds = max %d allowed %d, want 10 and 127", batch.DeclaredBatch.MaxActions, len(batch.DeclaredBatch.AllowedActions))
+	}
+	for _, forbidden := range []string{"create_batch_request", "upload_attachment_file", "create_external_attachment", "create_organization_export"} {
+		if slices.Contains(batch.DeclaredBatch.AllowedActions, forbidden) {
+			t.Errorf("batch allow-list contains provider-forbidden action %q", forbidden)
+		}
+	}
+
+	var command connectors.CommandSurfaceCommand
+	for _, candidate := range connector.CommandSurface().Commands {
+		if candidate.Path == "batch-api create-batch-request" {
+			command = candidate
+			break
+		}
+	}
+	if command.Intent != "direct_write" || command.Availability != "implemented" || command.Write != batch.Name || command.SourceOperation != "asana.rest.createBatchRequest" {
+		t.Fatalf("batch command = %+v, want implemented source-bound direct_write", command)
+	}
+	if len(command.Flags) != 1 || command.Flags[0].Name != "actions-json" || command.Flags[0].Type != "json" || command.Flags[0].MapsTo != "record.actions" || !command.Flags[0].Required {
+		t.Fatalf("batch command flags = %+v, want one required JSON action selector", command.Flags)
+	}
+
+	fixture := loadWriteFixture(t, batch)
+	built, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{
+		Path: strings.Fields(command.Path), Flags: flagsFromRecord(t, command, fixture.Record),
+		Config: runtimeConfig(capture.URL), Preview: true,
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand(batch): %v", err)
+	}
+	if built.Write != batch.Name || built.Preview == nil || built.Preview.RecordsStaged != 1 || !built.ApprovalRequired {
+		t.Fatalf("batch preview = %+v, want one approval-bound typed batch", built)
+	}
+	if capture.Count() != 0 {
+		t.Fatalf("batch preview made %d provider requests, want zero", capture.Count())
+	}
+
+	for _, forbidden := range []string{"create_organization_export", "upload_attachment_file", "raw_http"} {
+		record := connectors.Record{"actions": []any{map[string]any{"action": forbidden, "record": map[string]any{}}}}
+		_, err := engine.DryRunWrite(context.Background(), bundle, connectors.WriteRequest{
+			Action: batch.Name, Config: runtimeConfig(capture.URL),
+		}, []connectors.Record{record}, engine.HooksFor(bundle.Name))
+		if err == nil || !strings.Contains(err.Error(), "undeclared action") {
+			t.Errorf("batch selection %q error = %v, want pre-I/O undeclared-action refusal", forbidden, err)
+		}
+	}
+	if capture.Count() != 0 {
+		t.Fatalf("invalid batch selections made %d provider requests, want zero", capture.Count())
+	}
+}
+
 func assertRedactFieldsLoadCompatible(t *testing.T, action engine.WriteAction, cmd connectors.CommandSurfaceCommand, record map[string]any) {
 	t.Helper()
 	for _, field := range cmd.RedactFields {
@@ -1305,6 +1370,18 @@ func newCaptureServer() *captureServer {
 		c.mu.Unlock()
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
+		if r.URL.Path == "/batch" {
+			actions := []any{}
+			if envelope, ok := captured.Body["data"].(map[string]any); ok {
+				actions, _ = envelope["actions"].([]any)
+			}
+			results := make([]map[string]any, len(actions))
+			for i := range results {
+				results[i] = map[string]any{"status_code": http.StatusOK}
+			}
+			_ = json.NewEncoder(w).Encode(map[string]any{"data": results})
+			return
+		}
 		_, _ = w.Write([]byte(`{"data":{}}`))
 	}))
 	return c

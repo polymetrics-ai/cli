@@ -30,7 +30,7 @@
     },
     {
       "path": "writes.json",
-      "role": "reverse-ETL write actions, including multipart attachment variants"
+      "role": "reverse-ETL write actions, including multipart attachment variants and the closed declared-action batch adapter"
     },
     {
       "path": "operations.json",
@@ -84,21 +84,21 @@
       "source_operation": "asana.rest.createAttachmentForObject"
     },
     "direct_read": {
-      "status": "mapped_with_runtime_bound_gap",
-      "implementation": "cli_surface.json binds 107 bounded operation-backed commands and 12 stream-backed commands. The stream-backed command route sets a record limit but no MaxPages/fanout request bound, so those 12 declarations do not yet satisfy the one-provider-request direct_read contract; saved ETL is unaffected.",
+      "status": "mapped",
+      "implementation": "cli_surface.json binds 107 bounded operation-backed commands and 12 stream-backed commands. Interactive stream reads carry a global one-provider-request budget across pagination, retries, redirects, discovery, and fan-out; saved ETL leaves that budget unset and remains exhaustive.",
       "source_method": "GET",
       "source_operation_count": 119,
       "bounded_operation_command_count": 107,
-      "stream_command_bound_gap_count": 12,
+      "bounded_stream_command_count": 12,
       "implemented_command_count": 119,
       "planned_command_count": 0
     },
     "direct_write": {
       "status": "mapped",
-      "implementation": "cli_surface.json binds 130 implemented one-record commands to writes.json; plan -> preview -> approval -> execute is preserved",
-      "implemented_command_count": 130,
+      "implementation": "cli_surface.json binds 131 implemented one-record commands to writes.json across every locked mutation endpoint; plan -> preview -> approval -> execute is preserved. POST /batch accepts only 1..10 explicitly allow-listed named Asana write actions and derives all subrequest wire fields from those declarations.",
+      "implemented_command_count": 131,
       "planned_command_count": 1,
-      "unsupported_command_count": 1,
+      "unsupported_command_count": 0,
       "named_operation_runtime_gap": {
         "command": "attachments create-attachment-for-object",
         "operation": "create_attachment_for_object",
@@ -126,11 +126,12 @@
   "foundations": [
     {
       "id": "asana_stream_direct_read_request_bound",
-      "state": "missing_runtime_contract",
+      "state": "resolved_runtime_mapping",
       "affected_lane": "direct_read",
-      "reason": "The 12 stream-backed interactive commands call Connector.Read with a record Limit but no MaxPages or fan-out request bound. Pagination may issue more than one provider request; sections, stories, and project_statuses additionally perform fan-out discovery and child reads. The commands remain mapped, but their current runtime route is not a bounded one-provider-request direct read.",
+      "reason": "The 12 stream-backed interactive commands now apply one aggregate provider-send and page budget across pagination, retries, redirects, discovery, and fan-out. The same shared stream executor remains unbounded when invoked by saved ETL, preserving exhaustive transport behavior.",
       "does_not_block": [
         "the 107 bounded operation-backed direct reads",
+        "the 12 bounded stream-backed interactive direct reads",
         "saved full-refresh ETL for all 12 streams",
         "project-scoped tasks event-token incremental ETL"
       ]
@@ -185,7 +186,7 @@
       "affected_lane": "reverse_etl_and_direct_write",
       "reason": "The 34 formerly planned Asana mutations now use named write actions with closed record roots. Exactly documented fields are projected recursively where representable; source-owned allOf containers remain one named, byte- and property-bounded JSON field rather than a generic HTTP body.",
       "does_not_block": [
-        "all 130 declared write actions",
+        "all 131 declared write actions",
         "source lock provenance",
         "ETL and direct-read mappings"
       ]
