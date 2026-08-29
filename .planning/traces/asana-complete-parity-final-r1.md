@@ -116,20 +116,27 @@ bash scripts/tests/connector-canon.sh
 go run ./cmd/pm docs validate --connectors-dir /tmp/cli-asana-docs.ET7QkZ/connectors
 # PASS: isolated generated connector-doc tree validates
 
+go run ./cmd/pm docs generate --dir /tmp/cli-asana-docs-review.BkxvaI/cli --connectors-dir /tmp/cli-asana-docs-review.BkxvaI/connectors
+# PASS: canonical generator changed only the Asana entries in the aggregate
+# connector README, Markdown catalog, and JSON catalog
+
+go run ./cmd/pm docs validate --connectors-dir docs/connectors
+# PASS: checked-in connector docs and aggregate catalogs validate
+
 jq empty docs/connector-canon/foundations/catalog.schema.json docs/connector-canon/foundations/catalog.json internal/connectors/defs/asana/missing-foundation.json
 jq -e '([.foundations[].id] | length) == ([.foundations[].id] | unique | length)' docs/connector-canon/foundations/catalog.json
 git diff --check
 # PASS
 ```
 
-The checked-in full-tree `pm docs validate` still reports the pre-existing
-aggregate `docs/connectors/catalog/*.json` as stale. This slice intentionally
-generated into an isolated tree and copied only
-`docs/connectors/asana/{MANUAL,SKILL}.md`, as required; it did not fan out to
-other connector docs or aggregate catalogs. The global generated
-`operation-evidence.json`, declaration-admission ledgers, and endpoint ledger
-are likewise untouched; their multi-connector regeneration is not hand-edited
-inside an Asana parity slice.
+The canonical docs generator was run into an isolated tree. Its three
+Asana-derived aggregate changes were copied byte-for-byte into
+`docs/connectors/README.md` and
+`docs/connectors/catalog/all-connectors.{json,md}`; the checked-in full-tree
+validator now passes. No unrelated connector documentation was regenerated or
+copied. The global generated `operation-evidence.json`, declaration-admission
+ledgers, and endpoint ledger remain untouched; their multi-connector
+regeneration is not hand-edited inside an Asana parity slice.
 
 ## Remaining honest limitations
 

@@ -8476,7 +8476,7 @@
   {
     "name": "asana",
     "display_name": "Asana",
-    "description": "Reads 106 bounded source-bound direct operations and 12 declared Asana ETL streams, and executes 94 approval-gated reverse-ETL actions. The pinned OpenAPI ledger accounts for every official operation as an executable covered_by route, an exact named foundation gap, or the one not-applicable generic batch wrapper.",
+    "description": "Maps 107 bounded operation-backed direct reads, 12 stream-backed interactive reads with a global one-provider-request budget, and 131 approval-gated one-record direct writes across all 130 mutation endpoints. All 12 streams support saved full-refresh ETL; project-scoped tasks additionally support source-backed event-token incremental modes; all 131 write actions support warehouse-table reverse ETL. Every operation in the pinned OpenAPI ledger has an executable covered_by route, including POST /batch through a closed declaration-backed action selector.",
     "integration_type": "api",
     "docs_url": "https://developers.asana.com/reference/rest-api-reference",
     "release_stage": "ga",
@@ -8486,6 +8486,31 @@
       "read": true,
       "write": true,
       "query": false
+    },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "asana_event_token_source"
+        },
+        "eligible_streams": [
+          "tasks"
+        ],
+        "modes": [
+          "incremental_append",
+          "incremental_upsert",
+          "incremental_dedupe"
+        ],
+        "delivery": {
+          "idempotency": "keyed",
+          "ordering": "window_coalesced",
+          "deletes": "tombstone"
+        },
+        "conformance": {
+          "suite": "asana_event_token_source",
+          "run_id": "source_lock_contract_v1"
+        }
+      }
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
@@ -9175,6 +9200,20 @@
         "confirm": "destructive"
       },
       {
+        "name": "upload_attachment_file",
+        "kind": "create",
+        "method": "POST",
+        "path": "/attachments",
+        "risk": "uploads one bounded local file as an Asana attachment; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_external_attachment",
+        "kind": "create",
+        "method": "POST",
+        "path": "/attachments",
+        "risk": "creates an external Asana attachment; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
         "name": "delete_attachment",
         "kind": "delete",
         "method": "DELETE",
@@ -9333,11 +9372,289 @@
         "path": "/access_requests/{{ record.access_request_gid }}/reject",
         "risk": "destructive mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
         "confirm": "destructive"
+      },
+      {
+        "name": "create_access_request",
+        "kind": "create",
+        "method": "POST",
+        "path": "/access_requests",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_allocation",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/allocations/{{ record.allocation_gid }}",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_allocation",
+        "kind": "create",
+        "method": "POST",
+        "path": "/allocations",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_budget",
+        "kind": "create",
+        "method": "POST",
+        "path": "/budgets",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_budget",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/budgets/{{ record.budget_gid }}",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_supporting_relationship",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/goals/{{ record.goal_gid }}/removeSupportingRelationship",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_followers",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/goals/{{ record.goal_gid }}/removeFollowers",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_custom_field_setting_for_goal",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/goals/{{ record.goal_gid }}/removeCustomFieldSetting",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_membership",
+        "kind": "create",
+        "method": "POST",
+        "path": "/memberships",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_membership",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/memberships/{{ record.membership_gid }}",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_organization_export",
+        "kind": "create",
+        "method": "POST",
+        "path": "/organization_exports",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_item_for_portfolio",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/portfolios/{{ record.portfolio_gid }}/removeItem",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_custom_field_setting_for_portfolio",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/portfolios/{{ record.portfolio_gid }}/removeCustomFieldSetting",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_members_for_portfolio",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/portfolios/{{ record.portfolio_gid }}/removeMembers",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_custom_field_setting_for_project",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/projects/{{ record.project_gid }}/removeCustomFieldSetting",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_members_for_project",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/projects/{{ record.project_gid }}/removeMembers",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_followers_for_project",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/projects/{{ record.project_gid }}/removeFollowers",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_rate",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rates",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_rate",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rates/{{ record.rate_gid }}",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_role",
+        "kind": "create",
+        "method": "POST",
+        "path": "/roles",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_role",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/roles/{{ record.role_gid }}",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_dependencies_for_task",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/removeDependencies",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_dependents_for_task",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/removeDependents",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_project_for_task",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/removeProject",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_tag_for_task",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/removeTag",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_follower_for_task",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/removeFollowers",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_user_for_team",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/teams/{{ record.team_gid }}/removeUser",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_time_tracking_category",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/time_tracking_categories/{{ record.time_tracking_category_gid }}",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_time_tracking_category",
+        "kind": "create",
+        "method": "POST",
+        "path": "/time_tracking_categories",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_timesheet_approval_status",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/timesheet_approval_statuses/{{ record.timesheet_approval_status_gid }}",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_timesheet_approval_status",
+        "kind": "create",
+        "method": "POST",
+        "path": "/timesheet_approval_statuses",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_webhook",
+        "kind": "create",
+        "method": "POST",
+        "path": "/webhooks",
+        "risk": "external source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_webhook",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/webhooks/{{ record.webhook_gid }}",
+        "risk": "external source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "remove_user_for_workspace",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/workspaces/{{ record.workspace_gid }}/removeUser",
+        "risk": "destructive source-bound Asana mutation; requires plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_batch_request",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/batch",
+        "risk": "executes up to 10 explicitly allow-listed Asana write actions in one provider batch; partial provider results fail closed and the entire approved batch requires typed destructive confirmation",
+        "confirm": "destructive"
       }
     ],
     "risk": {
-      "read": "external Asana API reads use fixed declared streams or bounded source-bound operations; no raw provider query/path passthrough",
-      "write": "external mutations require named reverse-ETL actions, schemas, previews, explicit approval, and typed destructive confirmation when destructive/admin",
+      "read": "107 operation-backed commands are bounded source reads; the 12 stream-backed interactive commands have one aggregate provider-send and page budget across pagination, retries, redirects, and fan-out; saved full-refresh ETL remains separate and exhaustive; no raw provider query/path passthrough",
+      "write": "external mutations require named write actions, schemas, previews, explicit approval, and typed destructive confirmation when destructive/admin; POST /batch selects only explicitly allow-listed named actions and derives provider method/path/body from their declarations; interactive commands are one-record direct writes while warehouse-table reverse ETL remains system-level",
       "approval": "all write execution follows plan -\u003e preview -\u003e explicit approval -\u003e execute; destructive actions also require confirm: destructive"
     },
     "icon": {
