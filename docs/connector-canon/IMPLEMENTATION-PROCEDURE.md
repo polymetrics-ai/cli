@@ -39,7 +39,13 @@ warehouse rulings there are binding.
    primary classification: stream, direct read, reverse action, CDC/changefeed,
    typed exclusion, or not applicable. Do not create duplicate operations for
    aliases or documentation cross-links.
-4. Name the intended warehouse flows explicitly. A connector that only has a
+4. Keep the authoring chain explicit: immutable source lock → source-backed
+   mapping/projection → connector runtime definitions → lane-specific execution
+   witness. Runtime loads the projected JSON definitions, not OpenAPI, rendered
+   pages, the source lock, or certification output. One provider operation may
+   have both a saved lane (`etl` or `reverse_etl`) and an interactive direct
+   lane; record both without counting the source operation twice.
+5. Name the intended warehouse flows explicitly. A connector that only has a
    read definition has not delivered a reverse or bidirectional flow.
 
 ## 2. FOUNDATION CHECK — perform this before claiming “done”
@@ -81,6 +87,12 @@ repository-wide guard against shipping a command whose metadata says
 `availability: implemented` but whose runtime refuses it. It is structural
 proof, not live-provider proof.
 
+Certification is proof-only and non-admitting. A missing live environment or
+accepted certification artifact may keep a connector uncertified, but it must
+not block source mapping, definition projection, or an independently proven
+runtime lane. Conversely, a certification file cannot make a missing mapping or
+executor executable.
+
 When a foundation is absent, open/link a dedicated foundation issue, state the
 missing executable contract, and stop that claim at the truthful state. Do not
 hide the gap in an adapter, a raw query, a hard-coded flag, or a certification
@@ -96,14 +108,36 @@ filename.
    `connectorgen params-import`, then derive surface metadata with
    `connectorgen surface-sync`. Do not hand-author opaque provider cursors,
    generated `maps_to` fields, output policy, or a made-up API endpoint.
-3. Direct reads follow the declared paginator. Callers navigate through
+3. Project request direction, not the whole response schema. Exclude OpenAPI
+   `readOnly` fields recursively, including resolved `allOf` arms, remove those
+   names from `required`, and reject them before provider I/O. Do not use a
+   permissive named-object fallback to reintroduce read-only fields.
+4. Encode query arrays from the locked parameter contract. For OpenAPI form
+   parameters with `explode: false`, emit the declared delimiter (normally a
+   comma), omit absent values, and avoid double encoding. Never stringify a Go
+   slice or hard-code a provider-specific query join in shared runtime.
+5. A structured `record.*` flag is valid for an action-backed direct write only
+   when the named field exists in that action's closed request schema. It is not
+   a generic JSON body or operation-backed HTTP escape hatch.
+6. Promote arbitrary-MIME upload only when the provider source explicitly says
+   that this exact file part is unrestricted. The declaration remains typed,
+   path-confined, byte-bounded, digest-bound, previewed, and approval-gated;
+   absence of an allow-list is not unrestricted-media evidence.
+7. A provider batch endpoint must remain a closed declared-action adapter. Its
+   bundle allow-lists existing named actions and methods; the engine derives
+   each subrequest's method, relative path, and typed body. Do not accept raw
+   caller-authored HTTP, query-bearing subrequests, nested batches, or actions
+   outside the allow-list.
+8. Direct reads follow the declared paginator. Callers navigate through
    `--page` or `--page-cursor`; raw opaque provider cursors are not a second
    navigation channel. Returned page metadata must describe what reached the
-   wire and must not imply completeness it cannot prove.
-4. Mark an operation implemented only after the Foundation Check is green. An
+   wire and must not imply completeness it cannot prove. One interactive
+   request budget covers discovery, fanout children, pagination, retries, and
+   redirects in aggregate; saved ETL keeps its separate transport lifecycle.
+9. Mark an operation implemented only after the Foundation Check is green. An
    unsupported, unsafe, provider-restricted, partial, or planned operation must
    say so in the declaration and docs.
-5. Keep generated output synchronized rather than hand-edited:
+10. Keep generated output synchronized rather than hand-edited:
 
    ```bash
    go run ./cmd/connectorgen validate internal/connectors/defs
@@ -134,6 +168,13 @@ modeling the two producers: an inbound committed source transaction and an
 outbound keyed warehouse/Parquet-DuckDB delta. Tombstones are explicit; do not
 infer deletion from an absent record.
 
+The DuckDB/Parquet boundary must preserve connector JSON shape rather than
+guessing semantic types. Date- and timestamp-looking JSON strings remain
+strings, nested scalar types round-trip unchanged, and a valid batch containing
+only `{}` rows retains its row count. Empty-object reconstruction requires
+file-bound metadata plus the expected physical schema; a column name alone is
+not authority.
+
 ## 5. Author flows and schedules without bypasses
 
 1. Create the connection/materialization first. A flow consumes named
@@ -151,7 +192,8 @@ infer deletion from an absent record.
 ## 6. Test in layers
 
 1. **Definition and derivation:** schema validation, API-surface checks,
-   parameter import/surface sync, and focused fixtures.
+   parameter import/surface sync, request-direction checks, exact query fixtures,
+   independent saved/direct lane evidence, and focused fixtures.
 2. **Runtime preflight:** run the real preflight test above. Add a focused
    regression that would fail if this connector claimed an unexecutable
    operation.

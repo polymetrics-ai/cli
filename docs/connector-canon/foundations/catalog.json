@@ -186,9 +186,11 @@
         "supporting_packages": [],
         "files": [
           "cmd/connectorgen/declarationadmission.go",
+          "cmd/connectorgen/operationevidence.go",
           "cmd/connectorgen/sourceprojection.go",
           "cmd/connectorgen/surfacereconcile.go",
-          "cmd/connectorgen/surfacesync.go"
+          "cmd/connectorgen/surfacesync.go",
+          "cmd/connectorgen/validate.go"
         ],
         "symbols": [
           {
@@ -214,6 +216,18 @@
           {
             "file": "cmd/connectorgen/declarationadmission.go",
             "name": "runDeclarationAdmission"
+          },
+          {
+            "file": "cmd/connectorgen/sourceprojection.go",
+            "name": "sourceProjectionSchema"
+          },
+          {
+            "file": "cmd/connectorgen/operationevidence.go",
+            "name": "operationEvidenceClassify"
+          },
+          {
+            "file": "cmd/connectorgen/validate.go",
+            "name": "checkCLISurfaceWriteFlags"
           }
         ]
       },
@@ -237,6 +251,8 @@
         "request_response_shapes": [
           "API and CLI endpoint bindings",
           "derived command parameters and maps_to bindings",
+          "direction-aware closed request schemas that exclude source read-only fields",
+          "independent saved-target and interactive-command lane evidence",
           "operation, stream, and write projections",
           "runtime operation endpoint ledger rows",
           "source-backed deferred and unsupported dispositions"
@@ -245,6 +261,8 @@
         "guarantees": [
           "every reviewed source operation has one accounted declaration state",
           "generated surfaces retain exact provider-operation identity",
+          "provider operations retain every executable saved and interactive lane without duplicating source identity",
+          "source-projected read-only fields are rejected as request input before provider I/O",
           "projection gaps remain explicit and source-bound"
         ]
       },
@@ -273,6 +291,8 @@
       },
       "constraints": [
         "Projection must not invent a stream, write action, request field, response policy, or lane absent from the source-backed contract.",
+        "OpenAPI request projection excludes readOnly properties recursively, including resolved allOf arms, and removes excluded names from required.",
+        "Array query encoding must retain the source-declared style, explode behavior, and delimiter; generic value stringification is not source projection.",
         "Aliases and multiple lane bindings must not inflate the provider-operation count.",
         "A projected implemented label is incomplete until the selected runtime path passes preflight."
       ],
@@ -321,7 +341,27 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/sourceprojection_test.go",
           "name": "TestInstalledReverseActions_CoverProviderRequestContract"
-        }
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/sourceprojection_test.go",
+          "name": "TestSourceProjectionRequestSchemaExcludesReadOnlyFieldsAcrossAllOf"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/operationevidence_test.go",
+          "name": "TestOperationEvidencePreservesSavedAndInteractiveLanes"
+        },
+      {
+        "package": "./cmd/connectorgen",
+        "file": "cmd/connectorgen/main_test.go",
+        "name": "TestValidate_CLISurfaceActionBackedDirectWriteStructuredJSON"
+      },
+      {
+        "package": "./internal/connectors/defs/asana",
+        "file": "internal/connectors/defs/asana/reverse_etl_execute_test.go",
+        "name": "TestWriteQueryCellsMatchPinnedFormEncoding"
+      }
       ],
       "known_gap_refs": [
         {
@@ -357,7 +397,9 @@
         "files": [
           "internal/connectors/bundleregistry/registry.go",
           "internal/connectors/defs/defs.go",
-          "internal/connectors/engine/bundle.go"
+          "internal/connectors/engine/bundle.go",
+          "internal/connectors/engine/schema/operations.schema.json",
+          "internal/connectors/engine/schema/writes.schema.json"
         ],
         "symbols": [
           {
@@ -383,6 +425,18 @@
           {
             "file": "internal/connectors/bundleregistry/registry.go",
             "name": "New"
+          },
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "DeclaredBatchSpec"
+          },
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "validateDeclaredBatchSpec"
+          },
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "validateMultipartMediaTypes"
           }
         ]
       },
@@ -406,6 +460,8 @@
           "authentication and connector metadata",
           "binary and structured operation definitions",
           "certification and rate-limit declarations",
+          "closed named-action provider batch envelopes",
+          "explicit provider-unrestricted multipart media policy",
           "schemas, streams, writes, and operations",
           "sync transport and database declarations"
         ],
@@ -421,6 +477,8 @@
         "guarantees": [
           "closed schema validation before registration",
           "embedded immutable definition snapshot",
+          "declared batches can select only their source-backed allow-listed actions and methods",
+          "unrestricted upload media is available only through an explicit typed provider policy",
           "one registry combines declarative connectors with sanctioned hook and native overlays"
         ]
       },
@@ -442,6 +500,8 @@
       },
       "constraints": [
         "Unknown fields, duplicate identities, unsafe references, and invalid cross-file bindings fail bundle loading.",
+        "A declared batch cannot select arbitrary HTTP methods, paths, bodies, nested batches, or undeclared actions.",
+        "Provider-unrestricted media must be an explicit source-backed policy on a file part and cannot coexist with an allow-list or fixed content type.",
         "Loading a definition does not prove its declared executor is implemented or live-certified.",
         "Runtime loads projected definitions, not provider source locks or this Atlas."
       ],
@@ -490,6 +550,16 @@
           "package": "./internal/connectors/bundleregistry",
           "file": "internal/connectors/bundleregistry/registry_test.go",
           "name": "TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/declared_batch_test.go",
+          "name": "TestDeclaredBatchRejectsOpenOrInvalidSubrequestsBeforeProviderIO"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/multipart_media_test.go",
+          "name": "TestValidateMultipartMediaTypes"
         }
       ],
       "known_gap_refs": [],
@@ -509,24 +579,28 @@
       "owner": {
         "primary_package": "polymetrics.ai/internal/connectors/engine",
         "supporting_packages": [
+          "polymetrics.ai/internal/connectors",
           "polymetrics.ai/internal/connectors/commandrunner",
           "polymetrics.ai/internal/connectors/connsdk"
         ],
         "files": [
           "internal/connectors/commandrunner/runner.go",
           "internal/connectors/connectors.go",
+          "internal/connectors/manifest.go",
           "internal/connectors/connsdk/http.go",
           "internal/connectors/connsdk/rate_limit_requester.go",
           "internal/connectors/engine/binary_read.go",
           "internal/connectors/engine/command_binding.go",
           "internal/connectors/engine/connector.go",
+          "internal/connectors/engine/declared_batch.go",
           "internal/connectors/engine/direct_read.go",
           "internal/connectors/engine/direct_read_paginate.go",
           "internal/connectors/engine/read.go",
           "internal/connectors/engine/read_request_budget.go",
-          "internal/connectors/engine/direct_write.go",
-          "internal/connectors/engine/structured_rest_body.go",
-          "internal/connectors/engine/write.go"
+        "internal/connectors/engine/direct_write.go",
+        "internal/connectors/engine/structured_rest_body.go",
+        "internal/connectors/engine/write.go",
+        "internal/connectors/engine/write_prepare.go"
         ],
         "symbols": [
           {
@@ -560,6 +634,22 @@
           {
             "file": "internal/connectors/connsdk/http.go",
             "name": "(*Requester).admitRequesterSend"
+          },
+          {
+            "file": "internal/connectors/commandrunner/runner.go",
+            "name": "coerceCommandFlagValue"
+          },
+          {
+            "file": "internal/connectors/engine/declared_batch.go",
+            "name": "buildDeclaredBatchPayload"
+          },
+          {
+            "file": "internal/connectors/engine/declared_batch.go",
+            "name": "validateDeclaredBatchResponse"
+          },
+          {
+            "file": "internal/connectors/engine/write_prepare.go",
+            "name": "prepareCanonicalMultipartSpec"
           }
         ]
       },
@@ -579,8 +669,10 @@
         ],
         "request_response_shapes": [
           "aggregate request-budgeted stream-backed direct reads",
+          "action-backed named structured JSON record fields",
           "base64 and binary upload actions",
           "bounded binary download responses",
+          "closed provider batch envelopes over allow-listed named actions",
           "declared JSON, form, and multipart writes",
           "fixed GraphQL operation bindings",
           "fixed REST reads and writes",
@@ -590,6 +682,8 @@
         "sync_modes": [],
         "guarantees": [
           "declaration and input preflight before provider I/O",
+          "action-backed structured JSON is decoded only for declared record fields and validated against the write schema",
+          "declared batches derive every method, path, and body from an existing allow-listed typed action",
           "interactive stream reads share one caller request budget across fan-out discovery, child sequences, retries, and redirects while saved ETL keeps its established unbounded zero value",
           "one bounded provider-facing command invocation",
           "preview and approval binding for mutation paths",
@@ -617,7 +711,10 @@
       },
       "constraints": [
         "A direct command must remain bounded and must not own a warehouse checkpoint or saved sync lifecycle.",
+        "Structured JSON command flags are available only for action-backed direct writes, never as a generic operation body or HTTP escape hatch.",
+        "Declared batches cannot accept caller-authored methods, paths, raw bodies, query-bearing subrequests, nested batches, or undeclared actions.",
         "Request fields, media types, response policies, and retry behavior must be declared and source-backed.",
+        "Provider-unrestricted upload media requires an explicit declaration and remains path-confined, byte-bounded, digest-bound, previewed, and approval-gated.",
         "Binary upload uses typed write-action variants; binary download uses a declared successful response and byte bound."
       ],
       "non_goals": [
@@ -675,6 +772,21 @@
           "package": "./internal/connectors/commandrunner",
           "file": "internal/connectors/commandrunner/runner_test.go",
           "name": "TestEveryImplementedCommandPassesRuntimePreflight"
+        },
+        {
+          "package": "./internal/connectors/commandrunner",
+          "file": "internal/connectors/commandrunner/runner_test.go",
+          "name": "TestBuildDirectWriteCommandSupportsOnlyDeclaredStructuredJSONRecordFlags"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/declared_batch_test.go",
+          "name": "TestDeclaredBatchExecutesOnlyResolvedNamedActions"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/multipart_media_test.go",
+          "name": "TestCanonicalMultipartPreviewBindsProviderUnrestrictedMediaPolicy"
         }
       ],
       "known_gap_refs": [
@@ -1222,6 +1334,18 @@
           {
             "file": "internal/app/query_engine_duckdb.go",
             "name": "duckdbEngine.QuerySQL"
+          },
+          {
+            "file": "internal/warehouse/parquet.go",
+            "name": "(*TableWriter).Commit"
+          },
+          {
+            "file": "internal/warehouse/parquet.go",
+            "name": "ReadTable"
+          },
+          {
+            "file": "internal/warehouse/parquet.go",
+            "name": "NormalizeValue"
           }
         ]
       },
@@ -1240,6 +1364,8 @@
         "request_response_shapes": [
           "connection-owned staged records and tombstones",
           "durable warehouse acknowledgement and read-back",
+          "recursive connector JSON strings including date- and timestamp-shaped values",
+          "row-count-preserving all-empty-object batches",
           "Parquet final tables",
           "raw WAL records",
           "warehouse receipts and reopened worksets"
@@ -1259,6 +1385,8 @@
         "guarantees": [
           "connection-owned warehouse paths",
           "durable stage before destination apply",
+          "connector JSON string values retain string type through DuckDB and Parquet round trips",
+          "valid empty-object batches retain row cardinality through file-bound metadata and physical-schema checks",
           "Parquet publication and destination read-back before checkpoint completion",
           "typed dedupe and history materialization strategies"
         ]
@@ -1282,6 +1410,8 @@
       },
       "constraints": [
         "DuckDB is the only local query engine and Parquet implementation.",
+        "Empty-object reconstruction requires matching file metadata and physical schema; a sentinel column name alone is not authority.",
+        "Warehouse normalization must preserve JSON scalar types and propagate downstream emitter failures.",
         "Every table and stage path is connection-owned and structurally validated.",
         "Incremental modes still require an admitted provider cursor or event executor; warehouse materialization cannot manufacture one.",
         "Change capture requires its typed source and transport path and is not implied by ordinary materialization."
@@ -1328,6 +1458,21 @@
           "package": "./internal/app",
           "file": "internal/app/warehouse_parquet_read_test.go",
           "name": "TestQuerySQLAggregatesOverParquetTables"
+        },
+        {
+          "package": "./internal/warehouse",
+          "file": "internal/warehouse/parquet_test.go",
+          "name": "TestWriteTablePreservesConnectorJSONStrings"
+        },
+        {
+          "package": "./internal/warehouse",
+          "file": "internal/warehouse/parquet_test.go",
+          "name": "TestWriteTablePreservesAllEmptyObjectBatches"
+        },
+        {
+          "package": "./internal/warehouse",
+          "file": "internal/warehouse/parquet_test.go",
+          "name": "TestReadAllEmptyObjectTableStopsOnEmitterError"
         }
       ],
       "known_gap_refs": [],
