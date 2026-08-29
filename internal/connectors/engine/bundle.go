@@ -725,10 +725,11 @@ type BinaryUploadSpec struct {
 }
 
 type MultipartPartSpec struct {
-	Name        string `json:"name"`
-	Type        string `json:"type"`
-	Field       string `json:"field"`
-	ContentType string `json:"content_type,omitempty"`
+	Name        string                             `json:"name"`
+	Type        string                             `json:"type"`
+	Field       string                             `json:"field"`
+	ContentType string                             `json:"content_type,omitempty"`
+	MediaPolicy connectors.BinaryUploadMediaPolicy `json:"media_policy,omitempty"`
 	// AllowedMediaTypes bounds what the part's bytes may sniff as. ContentType
 	// is what the bundle asserts to the provider; this is what makes that
 	// assertion checkable. Absent means unconstrained; present and empty is a
@@ -2695,6 +2696,23 @@ func isArrayType(node map[string]any) bool {
 // absent means unconstrained and present means bounded, and a bundle must not be
 // able to look bounded while permitting everything.
 func validateMultipartMediaTypes(part MultipartPartSpec) error {
+	switch part.MediaPolicy {
+	case "":
+		// Existing declaration semantics continue below.
+	case connectors.BinaryUploadMediaPolicyProviderUnrestricted:
+		if part.Type != "file" {
+			return fmt.Errorf("media_policy %q is only meaningful on a file part, got type %q", part.MediaPolicy, part.Type)
+		}
+		if part.AllowedMediaTypes != nil {
+			return fmt.Errorf("media_policy %q must not declare allowed_media_types", part.MediaPolicy)
+		}
+		if strings.TrimSpace(part.ContentType) != "" {
+			return fmt.Errorf("media_policy %q must not declare content_type", part.MediaPolicy)
+		}
+		return nil
+	default:
+		return fmt.Errorf("unsupported media_policy %q", part.MediaPolicy)
+	}
 	if part.AllowedMediaTypes == nil {
 		return nil
 	}
@@ -3040,7 +3058,7 @@ func validateOperationMultipartSemantics(i int, op OperationSpec) error {
 			if part.MaxBytes <= 0 {
 				return fmt.Errorf("operation %d (%q) rest.multipart file part %q requires a positive max_bytes", i, op.ID, part.Name)
 			}
-			if strings.TrimSpace(part.ContentType) == "" && len(part.AllowedMediaTypes) == 0 {
+			if strings.TrimSpace(part.ContentType) == "" && len(part.AllowedMediaTypes) == 0 && part.MediaPolicy == "" {
 				return fmt.Errorf("operation %d (%q) rest.multipart file part %q requires declared media policy", i, op.ID, part.Name)
 			}
 		default:

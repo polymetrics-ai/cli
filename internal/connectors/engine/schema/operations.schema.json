@@ -216,6 +216,7 @@
                         "type": { "type": "string", "enum": ["field", "file"] },
                         "field": { "type": "string" },
                         "content_type": { "type": "string" },
+                        "media_policy": { "type": "string", "enum": ["provider_unrestricted"] },
                         "allowed_media_types": {
                           "type": "array",
                           "minItems": 1,

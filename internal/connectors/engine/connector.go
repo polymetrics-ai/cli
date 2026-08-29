@@ -631,6 +631,7 @@ func BinaryUploadSourcesForWriteAction(action WriteAction) ([]connectors.BinaryU
 			sources = append(sources, connectors.BinaryUploadSource{
 				Field:             part.Field,
 				MaxBytes:          part.MaxBytes,
+				MediaPolicy:       part.MediaPolicy,
 				AllowedMediaTypes: append([]string(nil), part.AllowedMediaTypes...),
 			})
 		}
@@ -644,8 +645,17 @@ func BinaryUploadSourcesForWriteAction(action WriteAction) ([]connectors.BinaryU
 		if strings.TrimSpace(source.Field) == "" || source.MaxBytes <= 0 {
 			return nil, fmt.Errorf("binary upload source must declare its field and positive byte cap")
 		}
-		if len(source.AllowedMediaTypes) == 0 {
-			return nil, fmt.Errorf("binary upload source %q must declare allowed_media_types", source.Field)
+		switch source.MediaPolicy {
+		case "":
+			if len(source.AllowedMediaTypes) == 0 {
+				return nil, fmt.Errorf("binary upload source %q must declare an explicit media policy", source.Field)
+			}
+		case connectors.BinaryUploadMediaPolicyProviderUnrestricted:
+			if source.AllowedMediaTypes != nil {
+				return nil, fmt.Errorf("binary upload source %q provider-unrestricted media policy must not declare allowed_media_types", source.Field)
+			}
+		default:
+			return nil, fmt.Errorf("binary upload source %q has unsupported media policy %q", source.Field, source.MediaPolicy)
 		}
 	}
 	return sources, nil

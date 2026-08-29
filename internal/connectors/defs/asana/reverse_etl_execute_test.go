@@ -1034,6 +1034,53 @@ func TestAttachmentDirectWritesBuildSourceDerivedOneRecordPlansWithoutProviderIO
 	}
 }
 
+func TestAttachmentBinaryUploadAliasUsesExplicitProviderUnrestrictedMediaPolicy(t *testing.T) {
+	bundle := loadBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+
+	var upload engine.WriteAction
+	for _, action := range bundle.Writes {
+		if action.Name == "upload_attachment_file" {
+			upload = action
+			break
+		}
+	}
+	if upload.Name == "" || upload.Multipart == nil || len(upload.Multipart.Parts) != 2 {
+		t.Fatalf("upload_attachment_file = %+v, want declared two-part multipart action", upload)
+	}
+	filePart := upload.Multipart.Parts[1]
+	if filePart.Name != "file" || filePart.MediaPolicy != connectors.BinaryUploadMediaPolicyProviderUnrestricted || len(filePart.AllowedMediaTypes) != 0 {
+		t.Fatalf("attachment file media contract = %+v, want explicit provider-unrestricted policy and no fabricated allow-list", filePart)
+	}
+
+	var binaryCommand connectors.CommandSurfaceCommand
+	for _, command := range connector.CommandSurface().Commands {
+		if command.Path == "attachments binary-upload-attachment" {
+			binaryCommand = command
+			break
+		}
+	}
+	if binaryCommand.Intent != "binary_upload" || binaryCommand.Availability != "implemented" || binaryCommand.Write != upload.Name {
+		t.Fatalf("binary upload command = %+v, want implemented alias bound to upload_attachment_file", binaryCommand)
+	}
+	if err := commandrunner.Preflight(connector, strings.Fields(binaryCommand.Path)); err != nil {
+		t.Fatalf("binary upload preflight: %v", err)
+	}
+	plan, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{
+		Path: strings.Fields(binaryCommand.Path),
+		Flags: map[string][]string{
+			"parent":    {"fixture-task"},
+			"file-path": {"opaque.fixture"},
+		},
+	})
+	if err != nil {
+		t.Fatalf("binary upload plan: %v", err)
+	}
+	if plan.Intent != "binary_upload" || plan.Write != upload.Name || plan.Record["file_path"] != "opaque.fixture" || !plan.ApprovalRequired {
+		t.Fatalf("binary upload plan = %+v, want one approval-bound declared attachment file", plan)
+	}
+}
+
 func assertRedactFieldsLoadCompatible(t *testing.T, action engine.WriteAction, cmd connectors.CommandSurfaceCommand, record map[string]any) {
 	t.Helper()
 	for _, field := range cmd.RedactFields {

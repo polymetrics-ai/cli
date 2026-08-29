@@ -3993,6 +3993,7 @@
             "name": "file",
             "type": "file",
             "field": "file_path",
+            "media_policy": "provider_unrestricted",
             "required": true,
             "max_bytes": 104857600
           }

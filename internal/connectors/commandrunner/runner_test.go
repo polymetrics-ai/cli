@@ -1909,6 +1909,14 @@ func TestBuildWriteCommandPlansOnlyDeclaredBinaryUploadActions(t *testing.T) {
 			RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"required":["file_path"],"properties":{"file_path":{"type":"string"}}}`),
 			Multipart:    &engine.MultipartSpec{MaxBytes: 1024, Parts: []engine.MultipartPartSpec{{Name: "file", Type: "file", Field: "file_path", Required: true, MaxBytes: 1024, AllowedMediaTypes: []string{"application/octet-stream"}}}},
 		}},
+		{name: "provider unrestricted multipart file part", action: engine.WriteAction{
+			Name: "upload_unrestricted_multipart", Kind: "create", Method: http.MethodPost, Path: "/assets", BodyType: "multipart",
+			RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"required":["file_path"],"properties":{"file_path":{"type":"string"}}}`),
+			Multipart: &engine.MultipartSpec{MaxBytes: 1024, Parts: []engine.MultipartPartSpec{{
+				Name: "file", Type: "file", Field: "file_path", Required: true, MaxBytes: 1024,
+				MediaPolicy: connectors.BinaryUploadMediaPolicyProviderUnrestricted,
+			}}},
+		}},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			connector := newConnector(tt.action, "record.file_path")
@@ -1950,6 +1958,16 @@ func TestBuildWriteCommandPlansOnlyDeclaredBinaryUploadActions(t *testing.T) {
 			action:     binary,
 			flagTarget: "record.other_path",
 			want:       "source",
+		},
+		{
+			name: "multipart without an explicit media policy cannot be public",
+			action: engine.WriteAction{
+				Name: "upload_unbounded_multipart", Kind: "create", Method: http.MethodPost, Path: "/assets", BodyType: "multipart",
+				RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"required":["file_path"],"properties":{"file_path":{"type":"string"}}}`),
+				Multipart:    &engine.MultipartSpec{MaxBytes: 1024, Parts: []engine.MultipartPartSpec{{Name: "file", Type: "file", Field: "file_path", Required: true, MaxBytes: 1024}}},
+			},
+			flagTarget: "record.file_path",
+			want:       "media policy",
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {

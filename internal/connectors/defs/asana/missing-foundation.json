@@ -111,9 +111,9 @@
       ]
     },
     "binary_upload": {
-      "status": "mapped_with_named_runtime_gap",
+      "status": "mapped",
       "command": "attachments binary-upload-attachment",
-      "equivalent_one_record_execution": "attachments upload-attachment-file",
+      "implementation": "the implemented command binds the upload_attachment_file action's bounded multipart file source and closed provider_unrestricted media policy to the ordinary plan -> preview -> approval -> execute lifecycle",
       "source_operation": "asana.rest.createAttachmentForObject",
       "source_location": "paths[\"/attachments\"].post",
       "provider_limit_bytes": 104857600
@@ -156,7 +156,7 @@
         "method": "POST",
         "path": "/attachments"
       },
-      "reason": "The existing file_upload operation is metadata-only. A direct-write executor needs an operation-level multipart request contract with a closed body and an explicit media policy; the locked Asana source intentionally does not publish a fixed file-media allow-list.",
+      "reason": "The existing file_upload operation is metadata-only. Its legacy operation alias still lacks an operation-level multipart request declaration with the two documented request variants. The equivalent named write actions and binary-upload alias are executable through the closed write-action contract.",
       "does_not_block": [
         "source mapping",
         "the equivalent direct-write and reverse-ETL attachment write actions",
@@ -165,7 +165,7 @@
     },
     {
       "id": "asana_attachment_binary_upload_media_policy",
-      "state": "missing_runtime_contract",
+      "state": "resolved_runtime_mapping",
       "affected_lane": "binary_upload",
       "source": {
         "id": "asana.rest.createAttachmentForObject",
@@ -173,7 +173,7 @@
         "method": "POST",
         "path": "/attachments"
       },
-      "reason": "The source documents multipart/form-data, full file content, and a 100 MB cap, but no fixed allowable media-type list. The public binary_upload intent requires that list, so declaring one would fabricate a provider contract.",
+      "reason": "The source documents multipart/form-data, arbitrary full file contents, and a 100 MB cap but no finite media allow-list. The upload_attachment_file action therefore declares the closed provider_unrestricted media policy; public binary-upload preflight accepts that explicit provider fact without inventing MIME types and still preserves the byte cap, project-root confinement, payload digest, preview, and approval binding.",
       "does_not_block": [
         "source mapping",
         "the declared direct-write/reverse-ETL multipart file action"

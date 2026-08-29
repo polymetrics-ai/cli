@@ -25,12 +25,13 @@ type declarativeWriteDefinition struct {
 }
 
 type canonicalMultipartFile struct {
-	FieldName         string   `json:"field_name"`
-	SourcePathDigest  string   `json:"source_path_digest"`
-	ContentSHA256     string   `json:"content_sha256,omitempty"`
-	ContentType       string   `json:"content_type,omitempty"`
-	AllowedMediaTypes []string `json:"allowed_media_types,omitempty"`
-	MaxBytes          int64    `json:"max_bytes,omitempty"`
+	FieldName         string                             `json:"field_name"`
+	SourcePathDigest  string                             `json:"source_path_digest"`
+	ContentSHA256     string                             `json:"content_sha256,omitempty"`
+	ContentType       string                             `json:"content_type,omitempty"`
+	MediaPolicy       connectors.BinaryUploadMediaPolicy `json:"media_policy,omitempty"`
+	AllowedMediaTypes []string                           `json:"allowed_media_types,omitempty"`
+	MaxBytes          int64                              `json:"max_bytes,omitempty"`
 }
 
 func prepareDeclarativeWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, records []connectors.Record, h Hooks) (PreparedWrite, error) {
@@ -472,6 +473,7 @@ func prepareCanonicalMultipartSpec(subject string, multipart *MultipartSpec, rec
 			SourcePathDigest:  digestBytes([]byte(filepath.Clean(path))),
 			ContentSHA256:     approved,
 			ContentType:       part.ContentType,
+			MediaPolicy:       part.MediaPolicy,
 			AllowedMediaTypes: append([]string(nil), part.AllowedMediaTypes...),
 			MaxBytes:          part.MaxBytes,
 		})

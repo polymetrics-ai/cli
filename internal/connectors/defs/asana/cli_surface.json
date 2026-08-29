@@ -1063,9 +1063,9 @@
     },
     {
       "path": "attachments binary-upload-attachment",
-      "summary": "Planned binary-upload alias for one Asana file attachment.",
+      "summary": "Upload one bounded local file as an Asana attachment.",
       "intent": "binary_upload",
-      "availability": "planned",
+      "availability": "implemented",
       "write": "upload_attachment_file",
       "source_cli_path": "POST /attachments",
       "source_url": "https://developers.asana.com/reference/createattachmentforobject",
@@ -1093,7 +1093,7 @@
       ],
       "risk": "high",
       "approval": "binary uploads require plan, preview, approval, execute",
-      "notes": "source_operation=asana.rest.createAttachmentForObject; the direct-write command attachments upload-attachment-file is executable. This binary_upload alias remains planned because a public binary_upload command requires a fixed declared media allow-list, while the locked Asana source documents arbitrary file contents rather than one list."
+      "notes": "source_operation=asana.rest.createAttachmentForObject; the locked provider contract accepts arbitrary file contents rather than publishing a finite media allow-list. The upload_attachment_file action carries the closed provider_unrestricted media policy, so this alias uses the same bounded multipart request and approval lifecycle without fabricating MIME types."
     },
     {
       "path": "audit-log-api get-audit-log-events",
