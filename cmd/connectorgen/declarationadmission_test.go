@@ -1007,6 +1007,95 @@ func TestDeclarationAdmissionV3MappingEvidenceDoesNotRequireRetentionMetadata(t 
 	}
 }
 
+// TestDeclarationAdmissionMappingV3EventSchemaInventoryIsClosedAndIgnored
+// proves the mapping reader can admit the closed selector envelope without
+// projecting event schema details into declaration admission. Source import
+// remains responsible for proving selector/document resolution against the
+// retained provider artifact.
+func TestDeclarationAdmissionMappingV3EventSchemaInventoryIsClosedAndIgnored(t *testing.T) {
+	tests := []struct {
+		name   string
+		mutate func(map[string]any)
+		want   string
+	}{
+		{
+			name: "valid source selector is ignored after structural admission",
+		},
+		{
+			name: "unknown inventory field",
+			mutate: func(inventory map[string]any) {
+				inventory["provider_schema"] = map[string]any{"type": "object"}
+			},
+			want: `unknown field "provider_schema"`,
+		},
+		{
+			name: "unknown nested selector field",
+			mutate: func(inventory map[string]any) {
+				inventory["schemas"].([]any)[0].(map[string]any)["provider_schema"] = true
+			},
+			want: `unknown field "provider_schema"`,
+		},
+	}
+
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			raw := declarationAdmissionV3EventSchemaInventoryFixture(t)
+			if testCase.mutate != nil {
+				var lock map[string]any
+				if err := json.Unmarshal(raw, &lock); err != nil {
+					t.Fatalf("decode v3 event-schema inventory fixture: %v", err)
+				}
+				rest := lock["rest"].(map[string]any)
+				testCase.mutate(rest["event_schema_inventory"].(map[string]any))
+				var err error
+				raw, err = json.Marshal(lock)
+				if err != nil {
+					t.Fatalf("encode mutated v3 event-schema inventory fixture: %v", err)
+				}
+			}
+
+			reviewed, err := parseDeclarationAdmissionSourceLock(raw, "fixture")
+			if testCase.want != "" {
+				if err == nil || !strings.Contains(err.Error(), testCase.want) {
+					t.Fatalf("mapping reader error = %v, want %q", err, testCase.want)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("mapping reader rejected closed event-schema inventory: %v", err)
+			}
+			if got, want := len(reviewed.Operations), 1; got != want {
+				t.Fatalf("reviewed operation count = %d, want %d", got, want)
+			}
+		})
+	}
+}
+
+func TestDeclarationAdmissionMappingReaderAcceptsRetainedAsanaV3EventSchemaInventory(t *testing.T) {
+	lockPath := filepath.Join("..", "..", "internal", "connectors", "defs", "asana", "sources", "asana-operation-source-lock.json")
+	raw, err := os.ReadFile(lockPath)
+	if err != nil {
+		t.Fatalf("read retained Asana v3 source lock: %v", err)
+	}
+	reviewed, err := parseDeclarationAdmissionSourceLock(raw, "asana")
+	if err != nil {
+		t.Fatalf("mapping reader rejected retained Asana v3 event-schema inventory: %v", err)
+	}
+	if got, want := len(reviewed.Operations), 249; got != want {
+		t.Fatalf("reviewed Asana operation count = %d, want %d", got, want)
+	}
+}
+
+func declarationAdmissionV3EventSchemaInventoryFixture(t *testing.T) []byte {
+	t.Helper()
+	raw := sourceImportV3FixtureLock(t, "fixture", []sourceImportV3FixtureDocument{{
+		ID:       "primary",
+		Path:     "/widgets",
+		Artifact: []byte(`{"openapi":"3.0.3"}`),
+	}})
+	return sourceImportAddEventSchemaInventory(t, raw, sourceImportEventInventory("primary", "EventResponse"))
+}
+
 func TestDeclarationAdmissionMappingEvidenceReaderPreservesIdentityValidation(t *testing.T) {
 	tests := []struct {
 		name   string

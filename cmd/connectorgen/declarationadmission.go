@@ -432,6 +432,10 @@ type declarationAdmissionV3RESTWire struct {
 	OpenAPIVersions    json.RawMessage                        `json:"openapi"`
 	CoverageConfidence json.RawMessage                        `json:"coverage_confidence,omitempty"`
 	SourceDocuments    []declarationAdmissionRESTDocumentWire `json:"source_documents"`
+	// EventSchemaInventory is deliberately opaque after the closed mapping
+	// wire has admitted it below. Mapping admission projects operation
+	// identities only; source import owns selector/source-document resolution.
+	EventSchemaInventory json.RawMessage `json:"event_schema_inventory,omitempty"`
 }
 
 // The mapping reader intentionally retains only source identity and inventory
@@ -515,10 +519,25 @@ type declarationAdmissionMappingLegacyReferenceRESTWire struct {
 }
 
 type declarationAdmissionMappingV3RESTClosedWire struct {
-	Retrieval          json.RawMessage   `json:"retrieval"`
-	OpenAPIVersions    json.RawMessage   `json:"openapi"`
-	CoverageConfidence json.RawMessage   `json:"coverage_confidence,omitempty"`
-	SourceDocuments    []json.RawMessage `json:"source_documents"`
+	Retrieval            json.RawMessage                                        `json:"retrieval"`
+	OpenAPIVersions      json.RawMessage                                        `json:"openapi"`
+	CoverageConfidence   json.RawMessage                                        `json:"coverage_confidence,omitempty"`
+	SourceDocuments      []json.RawMessage                                      `json:"source_documents"`
+	EventSchemaInventory *declarationAdmissionMappingV3EventSchemaInventoryWire `json:"event_schema_inventory,omitempty"`
+}
+
+// declarationAdmissionMappingV3EventSchemaInventoryWire closes the optional
+// source-selector envelope before mapping projection discards it. It must not
+// become an open provider-schema escape hatch: the retained source document is
+// still the sole owner of provider schema bytes.
+type declarationAdmissionMappingV3EventSchemaInventoryWire struct {
+	SourceDocument string                                                 `json:"source_document"`
+	Schemas        []declarationAdmissionMappingV3EventSchemaSelectorWire `json:"schemas"`
+}
+
+type declarationAdmissionMappingV3EventSchemaSelectorWire struct {
+	Name           string `json:"name"`
+	SourceLocation string `json:"source_location"`
 }
 
 type declarationAdmissionMappingV3OpenAPIDocumentWire struct {
