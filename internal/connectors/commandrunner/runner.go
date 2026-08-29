@@ -489,6 +489,10 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 		Query:  query,
 		Limit:  limit,
 	}
+	if cmd.Intent == "direct_read" {
+		readReq.MaxPages = 1
+		readReq.MaxRequests = 1
+	}
 	err = connector.Read(ctx, readReq, connectors.LimitEmitter(limit, func(record connectors.Record) error {
 		result.Count++
 		return emit(record)

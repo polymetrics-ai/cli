@@ -220,6 +220,11 @@ type Requester struct {
 	// inside net/http without another admission. The engine attaches a
 	// declaration-aware implementation where a policy matches.
 	Admission RateLimitAdmission
+	// SendAdmission is an optional caller-owned hard cap across logical sends.
+	// It is checked before provider rate-limit admission and is copied with the
+	// Requester, so route-specific clones cannot reset an aggregate command
+	// budget. It carries no route, payload, or credential data.
+	SendAdmission RequestSendAdmission
 	// Observer receives parsed response rate-limit facts synchronously. It is
 	// deliberately not an output hook; #3755 owns operator-visible events.
 	Observer RateLimitObserver
@@ -475,6 +480,11 @@ func (r *Requester) admitRequesterSend(ctx context.Context, req *http.Request, r
 	}
 	nextAttempt := *requesterAttempt + 1
 	nextRoute := RateLimitRoute{Method: req.Method, Path: r.rateLimitRoutePath(req.URL), Attempt: nextAttempt}
+	if r.SendAdmission != nil {
+		if err := r.SendAdmission.AdmitSend(ctx, RateLimitRequest{Method: nextRoute.Method, Attempt: nextAttempt}); err != nil {
+			return &requestAdmissionError{err: err}
+		}
+	}
 	admissionCtx, cancelAdmission := r.rateLimitAdmissionContext(ctx)
 	defer cancelAdmission()
 	started := time.Now()

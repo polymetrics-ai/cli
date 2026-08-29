@@ -621,6 +621,12 @@ func TestRunStreamBackedDirectReadUsesStreamExecutorWithoutPageNavigation(t *tes
 	if connector.readReq.Stream != "records" || connector.readReq.Query["state"] != "open" {
 		t.Fatalf("stream-backed direct-read request = %+v, want records stream and state=open", connector.readReq)
 	}
+	if connector.readReq.MaxRequests != 1 {
+		t.Fatalf("stream-backed direct-read MaxRequests = %d, want one aggregate provider request", connector.readReq.MaxRequests)
+	}
+	if connector.readReq.MaxPages != 1 {
+		t.Fatalf("stream-backed direct-read MaxPages = %d, want one page", connector.readReq.MaxPages)
+	}
 	if connector.sourceBoundStreamRead != (sourceBoundStreamReadPreflightCall{
 		stream: "records", sourceOperation: "provider.rest.listRecords", method: http.MethodGet, path: "/records",
 	}) {
@@ -639,6 +645,26 @@ func TestRunStreamBackedDirectReadUsesStreamExecutorWithoutPageNavigation(t *tes
 				t.Fatalf("stream-backed direct read --%s error = %v, want closed page-flag refusal", flag, err)
 			}
 		})
+	}
+}
+
+func TestRunETLLeavesGlobalRequestBudgetUnbounded(t *testing.T) {
+	connector := &fakeConnector{
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path: "records sync", Intent: "etl", Availability: "implemented", Stream: "records",
+		}}},
+		readRecords: []connectors.Record{{"id": "one"}},
+	}
+
+	_, err := Run(context.Background(), connector, Request{Path: []string{"records", "sync"}}, func(connectors.Record) error { return nil })
+	if err != nil {
+		t.Fatalf("Run ETL: %v", err)
+	}
+	if connector.readReq.MaxRequests != 0 {
+		t.Fatalf("ETL MaxRequests = %d, want zero/unbounded for saved transport", connector.readReq.MaxRequests)
+	}
+	if connector.readReq.MaxPages != 0 {
+		t.Fatalf("ETL MaxPages = %d, want zero/unbounded for saved transport", connector.readReq.MaxPages)
 	}
 }
 

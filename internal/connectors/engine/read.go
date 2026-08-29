@@ -68,6 +68,9 @@ func readWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, 
 	if req.MaxPages < 0 {
 		return fmt.Errorf("engine: max pages must not be negative")
 	}
+	if req.MaxRequests < 0 {
+		return fmt.Errorf("engine: max requests must not be negative")
+	}
 	if req.Continuation != nil && !trackPaginationOutcome {
 		return fmt.Errorf("engine: source continuation requires tracked pagination outcome")
 	}
@@ -99,6 +102,7 @@ func readWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, 
 	if rt.Requester.BaseURL != routeBaseURL {
 		return fmt.Errorf("engine: resolved stream route base changed before execution")
 	}
+	attachReadRequestBudget(rt, req.MaxRequests)
 	if sleeper != nil {
 		rt.Requester.Sleep = sleeper
 	}

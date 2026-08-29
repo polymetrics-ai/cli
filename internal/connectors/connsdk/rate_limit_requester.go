@@ -41,6 +41,15 @@ type RateLimitAdmission interface {
 	Admit(ctx context.Context, request RateLimitRequest) error
 }
 
+// RequestSendAdmission is a caller-owned hard gate for logical Requester
+// sends. It is separate from provider rate-limit admission because exhausting
+// a command request budget is not a rate-limit event. Requester clones retain
+// the same admission instance, so one budget spans route-specific requesters,
+// retries, and permitted redirects.
+type RequestSendAdmission interface {
+	AdmitSend(ctx context.Context, request RateLimitRequest) error
+}
+
 // RateLimitObserver receives parsed, secret-free rate-limit facts from a
 // provider response. It is called synchronously before a retry is scheduled
 // so attached policies can tighten their next admissions. It is not an operator

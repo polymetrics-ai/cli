@@ -2998,6 +2998,143 @@ func TestReadFanOutRequestIDsPreliminaryPaginatedRequest(t *testing.T) {
 	}
 }
 
+// TestReadMaxRequestsBoundsRequestBackedFanOutGlobally is the F24 RED witness:
+// MaxPages is intentionally per sequence, but an interactive command budget is
+// aggregate. The preliminary parent listing consumes the only admitted send,
+// so the first child request must be refused before it reaches the provider.
+func TestReadMaxRequestsBoundsRequestBackedFanOutGlobally(t *testing.T) {
+	var hits int
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		hits++
+		if r.URL.Path != "/projects" {
+			t.Fatalf("provider request %d path = %q, want only fan-out discovery /projects", hits, r.URL.Path)
+		}
+		_, _ = w.Write([]byte(`{"data":[{"id":"p1"}]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Path:    "/projects/{{ fanout.id }}/tasks",
+		Records: RecordsSpec{Path: "data"},
+		FanOut: &FanOutSpec{
+			IDsFrom: FanOutIDsFrom{Request: &FanOutIDsRequest{
+				Path:        "/projects",
+				RecordsPath: "data",
+				IDField:     "id",
+			}},
+			Into: FanOutInto{PathVar: "parent_id"},
+		},
+	})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets", MaxRequests: 1}, nil)
+	var stopped *connectors.ReadRequestBudgetExceededError
+	if !errors.As(err, &stopped) {
+		t.Fatalf("Read error = %v, want typed ReadRequestBudgetExceededError", err)
+	}
+	if stopped.Limit != 1 || stopped.Used != 1 {
+		t.Fatalf("budget error = %+v, want limit=1 used=1", stopped)
+	}
+	if hits != 1 {
+		t.Fatalf("provider requests = %d, want exactly 1 across discovery and children", hits)
+	}
+}
+
+// TestReadMaxRequestsZeroLeavesSavedFanOutUnbounded proves the new caller cap
+// is opt-in. Saved ETL passes the zero value and must retain the established
+// discovery-plus-all-children behavior.
+func TestReadMaxRequestsZeroLeavesSavedFanOutUnbounded(t *testing.T) {
+	var paths []string
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		paths = append(paths, r.URL.Path)
+		switch r.URL.Path {
+		case "/projects":
+			_, _ = w.Write([]byte(`{"data":[{"id":"p1"},{"id":"p2"}]}`))
+		case "/projects/p1/tasks":
+			_, _ = w.Write([]byte(`{"data":[{"id":"t1"}]}`))
+		case "/projects/p2/tasks":
+			_, _ = w.Write([]byte(`{"data":[{"id":"t2"}]}`))
+		default:
+			t.Fatalf("unexpected provider request path %q", r.URL.Path)
+		}
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Path:    "/projects/{{ fanout.id }}/tasks",
+		Records: RecordsSpec{Path: "data"},
+		FanOut: &FanOutSpec{
+			IDsFrom: FanOutIDsFrom{Request: &FanOutIDsRequest{Path: "/projects", RecordsPath: "data", IDField: "id"}},
+			Into:    FanOutInto{PathVar: "parent_id"},
+		},
+	})
+
+	records, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read saved-ETL zero budget: %v", err)
+	}
+	if got, want := strings.Join(paths, ","), "/projects,/projects/p1/tasks,/projects/p2/tasks"; got != want {
+		t.Fatalf("provider request sequence = %q, want %q", got, want)
+	}
+	if len(records) != 2 {
+		t.Fatalf("records = %d, want 2", len(records))
+	}
+}
+
+func TestReadMaxRequestsRejectsNegativeBeforeProviderIO(t *testing.T) {
+	var hits int
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		hits++
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{Records: RecordsSpec{Path: "data"}})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets", MaxRequests: -1}, nil)
+	if err == nil || !strings.Contains(err.Error(), "max requests must not be negative") {
+		t.Fatalf("Read error = %v, want negative max-requests rejection", err)
+	}
+	if hits != 0 {
+		t.Fatalf("provider requests = %d, want 0", hits)
+	}
+}
+
+func TestReadMaxRequestsCountsRetrySendsGlobally(t *testing.T) {
+	var hits int
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		hits++
+		http.Error(w, "transient", http.StatusInternalServerError)
+	})
+	b := newTestBundle(t, srv, StreamSpec{Records: RecordsSpec{Path: "data"}})
+
+	err := ReadWithSleeper(context.Background(), b, connectors.ReadRequest{Stream: "widgets", MaxRequests: 1}, nil, func(connectors.Record) error {
+		return nil
+	}, func(context.Context, time.Duration) error { return nil })
+	var stopped *connectors.ReadRequestBudgetExceededError
+	if !errors.As(err, &stopped) {
+		t.Fatalf("Read error = %v, want retry stopped by typed request budget", err)
+	}
+	if hits != 1 {
+		t.Fatalf("provider retry requests = %d, want exactly 1", hits)
+	}
+}
+
+func TestReadMaxRequestsCountsRedirectHopsGlobally(t *testing.T) {
+	var hits int
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		hits++
+		if r.URL.Path == "/widgets" {
+			http.Redirect(w, r, "/redirected", http.StatusFound)
+			return
+		}
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{Records: RecordsSpec{Path: "data"}})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets", MaxRequests: 1}, nil)
+	var stopped *connectors.ReadRequestBudgetExceededError
+	if !errors.As(err, &stopped) {
+		t.Fatalf("Read error = %v, want redirect stopped by typed request budget", err)
+	}
+	if hits != 1 {
+		t.Fatalf("provider redirect requests = %d, want exactly 1", hits)
+	}
+}
+
 // TestReadFanOutEachIDSequenceOwnPagination proves each id's sub-sequence
 // paginates independently: id A's sequence needs 2 pages, id B's needs 1.
 func TestReadFanOutEachIDSequenceOwnPagination(t *testing.T) {
