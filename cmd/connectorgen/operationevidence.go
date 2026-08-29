@@ -1123,6 +1123,20 @@ func operationEvidenceClassify(row *operationEvidenceRow, targets operationEvide
 	for _, command := range commands {
 		class := operationEvidenceClassForCommand(command.Intent, command.Operation)
 		operationEvidenceSetClassification(row, class, command.Availability == "implemented")
+		// A command can expose a bounded direct request and also invoke a named
+		// source-to-warehouse stream. Keep the command's direct-read identity,
+		// while recording the independently executable ETL lane when the stream
+		// binding is implemented. A stream-less direct read remains only direct.
+		if class == operationEvidenceClassDirectRead && command.Stream != "" && command.Availability == "implemented" {
+			operationEvidenceSetClassification(row, operationEvidenceClassETL, true)
+		}
+		// An implemented direct write can likewise invoke a named warehouse-to-
+		// destination action. Keep its direct-write identity while recording the
+		// independently executable reverse-ETL lane. A write-less direct command
+		// remains only direct.
+		if class == operationEvidenceClassDirectWrite && command.Write != "" && command.Availability == "implemented" {
+			operationEvidenceSetClassification(row, operationEvidenceClassReverseETL, true)
+		}
 	}
 }
 

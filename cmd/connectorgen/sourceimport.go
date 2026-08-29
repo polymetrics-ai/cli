@@ -1857,10 +1857,11 @@ type sourceImportDocumentContext struct {
 }
 
 func (context sourceImportDocumentContext) lockedRESTOperation(method, path string) (sourceImportRESTOperation, bool) {
-	if context.Document == nil {
-		return sourceImportRESTOperation{}, false
+	operations := context.Lock.Rest.Operations
+	if context.Document != nil {
+		operations = context.Document.Operations
 	}
-	for _, operation := range context.Document.Operations {
+	for _, operation := range operations {
 		if strings.EqualFold(operation.Method, method) && operation.Path == path {
 			return operation, true
 		}
@@ -6761,13 +6762,19 @@ func importSourceOperation(documentContext sourceImportDocumentContext, doc map[
 	if sourceID == "" {
 		sourceID = fmt.Sprintf("%s.rest.%s_%s", lock.Connector, method, path)
 	}
-	if documentContext.Document != nil {
+	if documentContext.Document != nil || len(lock.Rest.Operations) > 0 {
 		locked, exists := documentContext.lockedRESTOperation(method, path)
 		if !exists {
-			return sourceOperationDescriptor{}, fmt.Errorf("%s is not present in source document %q inventory", location, documentContext.Document.ID)
+			if documentContext.Document != nil {
+				return sourceOperationDescriptor{}, fmt.Errorf("%s is not present in source document %q inventory", location, documentContext.Document.ID)
+			}
+			return sourceOperationDescriptor{}, fmt.Errorf("%s is not present in source lock REST inventory", location)
 		}
 		if locked.OperationID != providerID || locked.SourceLocation != location {
-			return sourceOperationDescriptor{}, fmt.Errorf("%s disagrees with source document %q inventory", location, documentContext.Document.ID)
+			if documentContext.Document != nil {
+				return sourceOperationDescriptor{}, fmt.Errorf("%s disagrees with source document %q inventory", location, documentContext.Document.ID)
+			}
+			return sourceOperationDescriptor{}, fmt.Errorf("%s disagrees with source lock REST inventory", location)
 		}
 		sourceID = locked.ID
 	}

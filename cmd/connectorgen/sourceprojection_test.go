@@ -1150,6 +1150,145 @@ func TestRetainedAsanaMutationDispositionsCoverEveryDeferredSourceOperation(t *t
 	}
 }
 
+func TestRetainedAsanaMultipartActionsCoverLockedAttachmentOperation(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	bundleDir := filepath.Join(root, "internal", "connectors", "defs", "asana")
+	bundle, err := sourceProjectionExecutionSurface(bundleDir, "asana")
+	if err != nil {
+		t.Fatalf("load Asana execution surface: %v", err)
+	}
+	descriptorRaw, err := os.ReadFile(filepath.Join(bundleDir, "sources", "asana-operation-descriptor.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var descriptor sourceImportDescriptorDocument
+	if err := decodeSourceStrictJSON(descriptorRaw, &descriptor); err != nil {
+		t.Fatalf("decode Asana descriptor: %v", err)
+	}
+	var source sourceOperationDescriptor
+	for _, operation := range descriptor.Operations {
+		if operation.SourceID == "asana.rest.createAttachmentForObject" {
+			source = operation
+			break
+		}
+	}
+	if source.SourceID == "" {
+		t.Fatal("retained Asana attachment source operation is absent")
+	}
+	actions := make(map[string]engine.WriteAction, len(bundle.Writes))
+	for _, action := range bundle.Writes {
+		actions[action.Name] = action
+	}
+	commands := make(map[string]engine.CLICommand, len(bundle.CLISurface.Commands))
+	for _, command := range bundle.CLISurface.Commands {
+		if command.Write != "" && command.Availability == "implemented" {
+			commands[command.Write] = command
+		}
+	}
+
+	for _, name := range []string{"upload_attachment_file", "create_external_attachment"} {
+		action, actionFound := actions[name]
+		command, commandFound := commands[name]
+		if !actionFound || !commandFound {
+			t.Fatalf("retained Asana attachment action/command %q found=%t/%t", name, actionFound, commandFound)
+		}
+		if !sourceActionCoversOperation(action, command, source) {
+			t.Fatalf("retained Asana multipart action %q does not cover its locked provider operation", name)
+		}
+	}
+	if !sourceProjectionMutationActionIsComplete(bundle, source) {
+		t.Fatal("retained Asana attachment source operation has no complete declared multipart action")
+	}
+
+	fileAction := actions["upload_attachment_file"]
+	fileCommand := commands["upload_attachment_file"]
+	for _, tc := range []struct {
+		name    string
+		action  engine.WriteAction
+		command engine.CLICommand
+		source  sourceOperationDescriptor
+	}{
+		{
+			name:    "non-multipart provider media is not accepted",
+			action:  fileAction,
+			command: fileCommand,
+			source: func() sourceOperationDescriptor {
+				wrong := source
+				wrong.Request.MediaType = "application/json"
+				return wrong
+			}(),
+		},
+		{
+			name: "missing provider-required part is not accepted",
+			action: func() engine.WriteAction {
+				wrong := fileAction
+				multipart := *fileAction.Multipart
+				multipart.Parts = append([]engine.MultipartPartSpec(nil), fileAction.Multipart.Parts[1:]...)
+				wrong.Multipart = &multipart
+				return wrong
+			}(),
+			command: fileCommand,
+			source:  source,
+		},
+		{
+			name: "provider-required part must be required in the action and record",
+			action: func() engine.WriteAction {
+				wrong := fileAction
+				multipart := *fileAction.Multipart
+				multipart.Parts = append([]engine.MultipartPartSpec(nil), fileAction.Multipart.Parts...)
+				multipart.Parts[0].Required = false
+				wrong.Multipart = &multipart
+				return wrong
+			}(),
+			command: fileCommand,
+			source:  source,
+		},
+		{
+			name: "multipart part must bind a closed record property",
+			action: func() engine.WriteAction {
+				wrong := fileAction
+				wrong.RecordSchema = bytes.Replace(wrong.RecordSchema, []byte(`"file_path"`), []byte(`"unmapped_file_path"`), 1)
+				return wrong
+			}(),
+			command: fileCommand,
+			source:  source,
+		},
+		{
+			name: "unmapped multipart part is not accepted",
+			action: func() engine.WriteAction {
+				wrong := fileAction
+				multipart := *fileAction.Multipart
+				multipart.Parts = append([]engine.MultipartPartSpec(nil), fileAction.Multipart.Parts...)
+				multipart.Parts[0].Name = "not_a_provider_part"
+				wrong.Multipart = &multipart
+				return wrong
+			}(),
+			command: fileCommand,
+			source:  source,
+		},
+		{
+			name:   "missing required multipart flag is not accepted",
+			action: fileAction,
+			command: func() engine.CLICommand {
+				wrong := fileCommand
+				wrong.Flags = append([]engine.CLIFlag(nil), fileCommand.Flags[1:]...)
+				return wrong
+			}(),
+			source: source,
+		},
+	} {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			if sourceActionCoversOperation(tc.action, tc.command, tc.source) {
+				t.Fatal("multipart coverage accepted a malformed provider/action binding")
+			}
+		})
+	}
+}
+
 func copyInstalledAsanaProjectionBundle(t *testing.T) (string, string) {
 	t.Helper()
 	root, err := repoRoot()

@@ -9,6 +9,8 @@ import (
 	"slices"
 	"strings"
 	"testing"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 const githubIssuesSourceID = "github.rest.issues/list-for-repo"
@@ -19,6 +21,108 @@ func TestOperationEvidenceClassForCommandUsesIntentNotOperationName(t *testing.T
 	}
 	if got := operationEvidenceClassForCommand("direct_write", "releases_upload_asset"); got != operationEvidenceClassDirectWrite {
 		t.Fatalf("direct_write classification = %q, want %q; an operation name must not promote an ordinary write", got, operationEvidenceClassDirectWrite)
+	}
+}
+
+func TestOperationEvidenceClassifyKeepsImplementedStreamBoundDirectReadsInBothLanes(t *testing.T) {
+	for _, tc := range []struct {
+		name       string
+		command    engine.CLICommand
+		wantETL    operationEvidenceClassification
+		wantDirect operationEvidenceClassification
+	}{
+		{
+			name: "implemented stream-bound direct read",
+			command: engine.CLICommand{
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Stream:       "custom_fields",
+			},
+			wantETL:    operationEvidenceClassification{Declared: true, Enabled: true},
+			wantDirect: operationEvidenceClassification{Declared: true, Enabled: true},
+		},
+		{
+			name: "implemented direct read without stream is not ETL",
+			command: engine.CLICommand{
+				Intent:       "direct_read",
+				Availability: "implemented",
+			},
+			wantETL:    operationEvidenceClassification{},
+			wantDirect: operationEvidenceClassification{Declared: true, Enabled: true},
+		},
+		{
+			name: "non-direct read stream binding is not implicit ETL",
+			command: engine.CLICommand{
+				Intent:       "binary_download",
+				Availability: "implemented",
+				Stream:       "attachment_bytes",
+			},
+			wantETL:    operationEvidenceClassification{},
+			wantDirect: operationEvidenceClassification{},
+		},
+	} {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			row := operationEvidenceRow{Classifications: operationEvidenceEmptyClassifications()}
+			operationEvidenceClassify(&row, []engine.CLICommand{tc.command}, "")
+			if got := row.Classifications[operationEvidenceClassETL]; got != tc.wantETL {
+				t.Fatalf("ETL classification = %+v, want %+v", got, tc.wantETL)
+			}
+			if got := row.Classifications[operationEvidenceClassDirectRead]; got != tc.wantDirect {
+				t.Fatalf("direct-read classification = %+v, want %+v", got, tc.wantDirect)
+			}
+		})
+	}
+}
+
+func TestOperationEvidenceClassifyKeepsImplementedWriteBoundDirectWritesInBothLanes(t *testing.T) {
+	for _, tc := range []struct {
+		name        string
+		command     engine.CLICommand
+		wantReverse operationEvidenceClassification
+		wantDirect  operationEvidenceClassification
+	}{
+		{
+			name: "implemented write-bound direct write",
+			command: engine.CLICommand{
+				Intent:       "direct_write",
+				Availability: "implemented",
+				Write:        "add_custom_field_setting_for_goal",
+			},
+			wantReverse: operationEvidenceClassification{Declared: true, Enabled: true},
+			wantDirect:  operationEvidenceClassification{Declared: true, Enabled: true},
+		},
+		{
+			name: "implemented direct write without write binding is not reverse ETL",
+			command: engine.CLICommand{
+				Intent:       "direct_write",
+				Availability: "implemented",
+			},
+			wantReverse: operationEvidenceClassification{},
+			wantDirect:  operationEvidenceClassification{Declared: true, Enabled: true},
+		},
+		{
+			name: "reverse ETL write binding is not implicit direct write",
+			command: engine.CLICommand{
+				Intent:       "reverse_etl",
+				Availability: "implemented",
+				Write:        "upload_attachment_file",
+			},
+			wantReverse: operationEvidenceClassification{Declared: true, Enabled: true},
+			wantDirect:  operationEvidenceClassification{},
+		},
+	} {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			row := operationEvidenceRow{Classifications: operationEvidenceEmptyClassifications()}
+			operationEvidenceClassify(&row, []engine.CLICommand{tc.command}, "")
+			if got := row.Classifications[operationEvidenceClassReverseETL]; got != tc.wantReverse {
+				t.Fatalf("reverse-ETL classification = %+v, want %+v", got, tc.wantReverse)
+			}
+			if got := row.Classifications[operationEvidenceClassDirectWrite]; got != tc.wantDirect {
+				t.Fatalf("direct-write classification = %+v, want %+v", got, tc.wantDirect)
+			}
+		})
 	}
 }
 

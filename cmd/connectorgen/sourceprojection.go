@@ -5617,6 +5617,9 @@ func sourceOperationHasNoCallerFields(operation sourceOperationDescriptor) bool 
 }
 
 func sourceActionCoversOperation(action engine.WriteAction, command engine.CLICommand, operation sourceOperationDescriptor) bool {
+	if sourceNormalizedMediaType(operation.Request.MediaType) == "multipart/form-data" {
+		return sourceMultipartActionCoversOperation(action, command, operation)
+	}
 	actionObject := newOrderedObject()
 	actionObject.set("body_type", action.BodyType)
 	actionObject.set("path", action.Path)
@@ -5686,6 +5689,182 @@ func sourceActionCoversOperation(action engine.WriteAction, command engine.CLICo
 	}
 	for _, name := range contract.BodyFields {
 		if !bodyFields[name] {
+			return false
+		}
+	}
+	return true
+}
+
+// sourceMultipartActionCoversOperation recognizes a closed, declaration-owned
+// multipart variant of a provider multipart request. Unlike a generic body
+// projection, every emitted part, record property, and CLI flag must be bound
+// to a retained provider field. The provider may offer several legal multipart
+// variants (for example an uploaded file or an external URL); each declared
+// closed variant can cover the source route when it supplies every
+// provider-required part and no invented input channel.
+func sourceMultipartActionCoversOperation(action engine.WriteAction, command engine.CLICommand, operation sourceOperationDescriptor) bool {
+	if action.BodyType != "multipart" || action.Multipart == nil || len(action.Multipart.Parts) == 0 ||
+		operation.Request.Body == nil || sourceNormalizedMediaType(operation.Request.MediaType) != "multipart/form-data" ||
+		command.Availability != "implemented" || command.Write != action.Name ||
+		!sourceProjectionCommandHasEndpointRef(command, sourceProjectionEndpointKey(operation.Method, operation.Path)) {
+		return false
+	}
+	body, ok := operation.Request.Body.Schema.(map[string]any)
+	if !ok || sourceSchemaType(body) != "object" {
+		return false
+	}
+	sourceFields := sourceProjectionObjectProperties(body)
+	if len(sourceFields) == 0 {
+		return false
+	}
+
+	schema, err := engine.CompileSchema(action.RecordSchema)
+	if err != nil {
+		return false
+	}
+	decoder := json.NewDecoder(bytes.NewReader(action.RecordSchema))
+	decoder.UseNumber()
+	var schemaDocument map[string]any
+	if err := decoder.Decode(&schemaDocument); err != nil {
+		return false
+	}
+	recordFields, _ := schemaDocument["properties"].(map[string]any)
+	if len(recordFields) == 0 {
+		return false
+	}
+	recordProperties := map[string]bool{}
+	for _, name := range schema.Properties() {
+		recordProperties[name] = true
+	}
+	recordRequired := map[string]bool{}
+	for _, name := range schema.RequiredKeys() {
+		recordRequired[name] = true
+	}
+	flags := map[string]engine.CLIFlag{}
+	for _, flag := range command.Flags {
+		if name, ok := strings.CutPrefix(flag.MapsTo, "record."); ok {
+			flags[name] = flag
+		}
+	}
+
+	partNames := make(map[string]engine.MultipartPartSpec, len(action.Multipart.Parts))
+	partFields := make(map[string]bool, len(action.Multipart.Parts))
+	for _, part := range action.Multipart.Parts {
+		if part.Name == "" || part.Field == "" || partNames[part.Name].Name != "" || partFields[part.Field] {
+			return false
+		}
+		sourceField, found := sourceFields[part.Name]
+		if !found || !sourceMultipartPartMatchesSourceField(part, sourceField, recordFields[part.Field]) || !recordProperties[part.Field] {
+			return false
+		}
+		mustBeRequired := sourceSchemaRequired(body)[part.Name]
+		if mustBeRequired && !part.Required {
+			return false
+		}
+		if !sourceMultipartRecordFlagCoversField(part.Field, recordFields[part.Field], part.Required || mustBeRequired, recordRequired, flags) {
+			return false
+		}
+		partNames[part.Name] = part
+		partFields[part.Field] = true
+	}
+	for name := range sourceSchemaRequired(body) {
+		part, found := partNames[name]
+		if !found || !part.Required {
+			return false
+		}
+	}
+	// A multipart action's closed record schema is its only caller-controlled
+	// body surface. An extra record property without a declared multipart part
+	// would otherwise become an unchecked provider input.
+	for field := range recordFields {
+		if !partFields[field] {
+			return false
+		}
+	}
+	return sourceMultipartRequiredInputsCovered(action, operation, recordFields, recordRequired, flags)
+}
+
+func sourceMultipartPartMatchesSourceField(part engine.MultipartPartSpec, sourceField, recordField any) bool {
+	sourceSchema, sourceOK := sourceField.(map[string]any)
+	recordSchema, recordOK := recordField.(map[string]any)
+	if !sourceOK || !recordOK {
+		return false
+	}
+	sourceType := sourceProjectionFlagType(sourceSchema)
+	recordType := sourceProjectionFlagType(recordSchema)
+	switch part.Type {
+	case "file":
+		format, _ := sourceSchema["format"].(string)
+		return sourceType == "string" && recordType == "string" && format == "binary"
+	case "field":
+		if sourceType == "json" || recordType != sourceType {
+			return false
+		}
+		return sourceMultipartEnumIsSubset(recordSchema, sourceSchema)
+	default:
+		return false
+	}
+}
+
+func sourceMultipartEnumIsSubset(recordSchema, sourceSchema map[string]any) bool {
+	sourceValues := sourceAnySlice(sourceSchema["enum"])
+	if len(sourceValues) == 0 {
+		return true
+	}
+	allowed := make(map[string]bool, len(sourceValues))
+	for _, raw := range sourceValues {
+		value, ok := raw.(string)
+		if !ok {
+			return false
+		}
+		allowed[value] = true
+	}
+	recordValues := sourceAnySlice(recordSchema["enum"])
+	if len(recordValues) == 0 {
+		return false
+	}
+	for _, raw := range recordValues {
+		value, ok := raw.(string)
+		if !ok || !allowed[value] {
+			return false
+		}
+	}
+	return true
+}
+
+func sourceMultipartRecordFlagCoversField(field string, recordField any, required bool, recordRequired map[string]bool, flags map[string]engine.CLIFlag) bool {
+	flag, found := flags[field]
+	if !found || flag.MapsTo != "record."+field || flag.Type != sourceProjectionFlagType(recordField) || !sourceProjectionFlagEnumEquivalent(flag.Values, recordField) {
+		return false
+	}
+	return !required || (recordRequired[field] && flag.Required)
+}
+
+func sourceMultipartRequiredInputsCovered(action engine.WriteAction, operation sourceOperationDescriptor, recordFields map[string]any, recordRequired map[string]bool, flags map[string]engine.CLIFlag) bool {
+	pathFields := make(map[string]bool, len(action.PathFields))
+	for _, field := range action.PathFields {
+		pathFields[field] = true
+	}
+	for _, parameter := range operation.Request.Path {
+		if parameter.Required && (!pathFields[parameter.Name] || !sourceMultipartRecordFlagCoversField(parameter.Name, recordFields[parameter.Name], true, recordRequired, flags)) {
+			return false
+		}
+	}
+	for _, parameter := range operation.Request.Query {
+		if !parameter.Required {
+			continue
+		}
+		query, found := action.Query[parameter.Name]
+		if !found || query.Template != "{{ record."+parameter.Name+" }}" || query.OmitWhenAbsent || query.Default != "" ||
+			!sourceMultipartRecordFlagCoversField(parameter.Name, recordFields[parameter.Name], true, recordRequired, flags) {
+			return false
+		}
+	}
+	// writes.json has no declaration-owned arbitrary header-input channel. A
+	// source-required header therefore remains uncovered rather than being
+	// silently assumed from credential or transport state.
+	for _, parameter := range operation.Request.Header {
+		if parameter.Required {
 			return false
 		}
 	}

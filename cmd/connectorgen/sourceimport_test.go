@@ -1313,6 +1313,80 @@ func TestSourceImportCheckedInGitHubArtifactsAreRetainedAndLockVerified(t *testi
 	}
 }
 
+func TestSourceImportRetainedAsanaPreservesLockedRESTOperationIDs(t *testing.T) {
+	defsRoot := filepath.Join("..", "..", "internal", "connectors", "defs")
+	lock, err := loadConnectorSourceImportLock(defsRoot, "asana")
+	if err != nil {
+		t.Fatalf("load Asana source lock: %v", err)
+	}
+	fetcher, err := newConnectorSourceImportRetainedArtifactFetcher(defsRoot, "asana", defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("construct Asana retained-artifact reader: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, fetcher, defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import retained Asana source lock: %v", err)
+	}
+	byRoute := make(map[string]sourceOperationDescriptor, len(result.Operations))
+	for _, operation := range result.Operations {
+		byRoute[strings.ToUpper(operation.Method)+"\x00"+operation.Path] = operation
+	}
+	for _, want := range []struct {
+		name        string
+		sourceID    string
+		operationID string
+		method      string
+		path        string
+	}{
+		{
+			name:        "fixed 100 ETL custom fields",
+			sourceID:    "asana.rest.getCustomFieldsForWorkspace",
+			operationID: "getCustomFieldsForWorkspace",
+			method:      "GET",
+			path:        "/workspaces/{workspace_gid}/custom_fields",
+		},
+		{
+			name:        "partial mutation custom field",
+			sourceID:    "asana.rest.createCustomField",
+			operationID: "createCustomField",
+			method:      "POST",
+			path:        "/custom_fields",
+		},
+		{
+			name:        "fan-out sections stream",
+			sourceID:    "asana.rest.getSectionsForProject",
+			operationID: "getSectionsForProject",
+			method:      "GET",
+			path:        "/projects/{project_gid}/sections",
+		},
+	} {
+		want := want
+		t.Run(want.name, func(t *testing.T) {
+			operation, found := byRoute[want.method+"\x00"+want.path]
+			if !found {
+				t.Fatalf("imported Asana operation %s %s is absent", want.method, want.path)
+			}
+			if operation.SourceID != want.sourceID || operation.ProviderOperationID != want.operationID {
+				t.Fatalf("imported Asana operation %s %s identity = source_id=%q operation_id=%q, want source_id=%q operation_id=%q", want.method, want.path, operation.SourceID, operation.ProviderOperationID, want.sourceID, want.operationID)
+			}
+		})
+	}
+
+	t.Run("rejects mismatched locked provider identity before ID propagation", func(t *testing.T) {
+		mismatched := lock
+		mismatched.Rest.Operations = append([]sourceImportRESTOperation(nil), lock.Rest.Operations...)
+		for index := range mismatched.Rest.Operations {
+			if mismatched.Rest.Operations[index].ID == "asana.rest.getSectionsForProject" {
+				mismatched.Rest.Operations[index].OperationID = "wrongSectionsOperation"
+				break
+			}
+		}
+		if _, err := importSourceLockResult(context.Background(), mismatched, fetcher, defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "disagrees with source lock REST inventory") {
+			t.Fatalf("mismatched locked provider identity error = %v, want locked/provider refusal", err)
+		}
+	})
+}
+
 func TestSourceImportCommandReadsConnectorOwnedRetainedArtifact(t *testing.T) {
 	t.Parallel()
 	defsRoot := t.TempDir()
