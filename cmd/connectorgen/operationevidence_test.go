@@ -52,9 +52,15 @@ func TestOperationEvidencePreservesSavedAndInteractiveLanes(t *testing.T) {
 			disabledLanes: []string{operationEvidenceClassETL, operationEvidenceClassReverseETL},
 		},
 		{
-			name:          "unsupported batch operation",
-			sourceID:      "asana.rest.createBatchRequest",
-			disabledLanes: operationEvidenceClasses,
+			name:         "closed batch direct write and reverse ETL",
+			sourceID:     "asana.rest.createBatchRequest",
+			enabledLanes: []string{operationEvidenceClassReverseETL, operationEvidenceClassDirectWrite},
+			disabledLanes: []string{
+				operationEvidenceClassETL,
+				operationEvidenceClassDirectRead,
+				operationEvidenceClassBinaryDownload,
+				operationEvidenceClassBinaryUpload,
+			},
 		},
 	}
 	for _, test := range tests {
@@ -72,6 +78,14 @@ func TestOperationEvidencePreservesSavedAndInteractiveLanes(t *testing.T) {
 			for _, lane := range test.disabledLanes {
 				if classification := row.Classifications[lane]; classification.Enabled {
 					t.Fatalf("%s classification = %+v, want disabled; runtime targets = %v, CLI paths = %v", lane, classification, row.Runtime.Targets, row.CLI.Paths)
+				}
+			}
+			if test.sourceID == "asana.rest.createBatchRequest" {
+				if row.Canonical.Method != "POST" || row.Canonical.Path != "/batch" || row.Source.URL == "" || row.Source.Location == "" {
+					t.Fatalf("batch source evidence = canonical %+v source %+v, want locked POST /batch citation", row.Canonical, row.Source)
+				}
+				if !slices.Contains(row.Runtime.Targets, "write:create_batch_request") || !slices.Contains(row.CLI.Paths, "batch-api create-batch-request") {
+					t.Fatalf("batch execution evidence = targets %v paths %v, want closed declared action and command", row.Runtime.Targets, row.CLI.Paths)
 				}
 			}
 		})
