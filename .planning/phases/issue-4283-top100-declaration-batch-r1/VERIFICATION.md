@@ -9,7 +9,7 @@
 - [x] Read the required routing, GSD adapter, issue contract, CLI parity, connector lane, and source-rigidity audit materials.
 - [x] Processed Firstmate inbox messages `001.msg` and `002.msg` as historical scope context.
 - [x] Captured RED policy evidence: the three authoritative direct clauses in required-skills routing, task-skill matrix, and issue-agent contract had the obsolete mandatory split.
-- [x] Captured GREEN policy evidence: `focused-policy-regression` passes against the three authoritative clauses; `AGENTS.md` has no direct obsolete clause; all 17 non-authoritative copies were restored exactly; YAML/JSON parsing, `git diff --check`, and `go run ./cmd/agentcontractgen check` pass. The repository has no dedicated delivery-policy regression harness.
+- [x] Captured GREEN policy evidence: the correct `focused-policy-regression` passes with the three authoritative paths as separate positional arguments (`exit_status=0`); `AGENTS.md` has no direct obsolete clause; all 17 non-authoritative copies were restored exactly; YAML/JSON parsing and `go run ./cmd/agentcontractgen check` pass (`exit_status=0`). The earlier space-joined-path invocation is excluded from evidence. The repository has no dedicated delivery-policy regression harness.
 - [x] Processed Firstmate inbox message `006.msg`: commit `924197b49adc516ec7bdb3b6d928c9701cfab946` was normal-fast-forward pushed and remote verified, then `006.msg` was moved to `handled/`.
 - [ ] Processed current Firstmate inbox message `007.msg`: narrowed correction, focused validation, commit/push, then move to `handled/`.
 
