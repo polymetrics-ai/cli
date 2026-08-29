@@ -251,6 +251,9 @@ func localWarehouseTransportRawRecords(receipt synctransport.WarehouseReceipt, w
 	if strategy.Strategy == connectors.ApplyStrategyDedupeHistory && stream.CursorField == "" {
 		return nil, fmt.Errorf("local warehouse transport %q requires a cursor field", strategy.Mode)
 	}
+	if strategy.Mode == synccontract.ModeIncrementalAppend && len(workset.CandidateCheckpoint.Position.Primary) == 0 {
+		return nil, fmt.Errorf("local warehouse transport %q requires a durable source checkpoint", strategy.Mode)
+	}
 	now := time.Now().UTC().Format(time.RFC3339Nano)
 	raw := make([]localRawRecord, 0, len(workset.Records)+len(workset.Tombstones))
 	for index, record := range workset.Records {
@@ -269,7 +272,7 @@ func localWarehouseTransportRawRecords(receipt synctransport.WarehouseReceipt, w
 			// the acknowledged workset. A row field is not a valid substitute for
 			// that source position.
 			cursor = string(workset.CandidateCheckpoint.Position.Primary)
-		} else {
+		} else if strategy.Strategy == connectors.ApplyStrategyDedupeHistory {
 			var err error
 			cursor, err = recordCursor(cloned, stream.CursorField)
 			if err != nil {

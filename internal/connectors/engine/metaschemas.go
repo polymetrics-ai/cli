@@ -19,6 +19,9 @@ var pollingWatermarkSchemaJSON string
 //go:embed schema/sync_transport.schema.json
 var syncTransportSchemaJSON string
 
+//go:embed schema/enabled_connector_contract.schema.json
+var enabledConnectorContractSchemaJSON string
+
 //go:embed schema/spec.schema.json
 var specSchemaJSON string
 

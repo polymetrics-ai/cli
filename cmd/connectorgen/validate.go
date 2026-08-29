@@ -45,6 +45,7 @@ const (
 	ruleDefaultTypeMismatch       = "default_type_mismatch"
 	ruleIncrementalPolicy         = "incremental_policy"
 	ruleSourceProjection          = "source_projection"
+	ruleEnabledConnectorContract  = "enabled_connector_contract"
 )
 
 var supportedParamFormats = map[string]bool{
@@ -301,6 +302,7 @@ func validateBundleDir(fsys fs.FS, name string) (findings, warnings []Finding) {
 	findings = append(findings, checkDefaultTypeMismatch(b)...)
 	findings = append(findings, checkIncrementalPolicies(b)...)
 	findings = append(findings, checkSourceProjection(fsys, b)...)
+	findings = append(findings, checkEnabledConnectorContract(fsys, b)...)
 	warnings = append(warnings, checkIncrementalStartDateFormat(b)...)
 	return findings, warnings
 }

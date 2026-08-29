@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_stream_source"
+    },
+    "eligible_streams": ["projects", "groups", "users", "issues"],
+    "modes": ["full_overwrite", "full_append"],
+    "delivery": {
+      "idempotency": "at_least_once",
+      "ordering": "unordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "declarative_stream_transport",
+      "run_id": "all_executable_streams_v1"
+    }
+  }
+}

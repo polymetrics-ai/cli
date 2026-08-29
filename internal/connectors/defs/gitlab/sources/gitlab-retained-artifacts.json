@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "connector": "gitlab",
+  "artifacts": [
+    {
+      "sha256": "53244a720b8509536290e0058c946a246817c775c797df36f4c9aa1225fdf0a4",
+      "bytes": 102560,
+      "source_url": "https://docs.gitlab.com/api/repository_files/",
+      "retrieved_at": "2026-08-30T00:00:00Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "f59c93194c095d0e925a5751a08eb7a2176a26c6b5f38bda52f805154219d0f0",
+      "bytes": 103189,
+      "source_url": "https://docs.gitlab.com/user/packages/generic_packages/",
+      "retrieved_at": "2026-08-30T00:00:00Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

@@ -22,6 +22,7 @@ type Definition struct {
 	Changefeed       *ChangefeedDescriptor       `json:"changefeed,omitempty"`
 	PollingWatermark *PollingWatermarkDescriptor `json:"polling_watermark,omitempty"`
 	SyncTransport    *SyncTransportDescriptor    `json:"sync_transport,omitempty"`
+	EnabledContract  *EnabledConnectorContract   `json:"enabled_connector_contract,omitempty"`
 	Spec             json.RawMessage             `json:"spec"`
 	Streams          []StreamSummary             `json:"streams"`
 	WriteActions     []WriteActionInfo           `json:"write_actions,omitempty"`
@@ -120,6 +121,9 @@ func DefinitionOf(c Connector) (Definition, bool) {
 	}
 	if def.SyncTransport != nil {
 		def.SyncTransport = def.SyncTransport.Clone()
+	}
+	if def.EnabledContract != nil {
+		def.EnabledContract = def.EnabledContract.Clone()
 	}
 	def.WriteActions = cloneWriteActionInfos(def.WriteActions)
 	def.Capabilities.CDC = HasImplementedChangefeed(c, def.Changefeed)

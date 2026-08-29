@@ -26,5 +26,5 @@ package defs
 
 import "embed"
 
-//go:embed operation_endpoint_ledger.json declaration_admission_sources.json */metadata.json */changefeed.json */polling_watermark.json */sync_transport.json */spec.json */streams.json */writes.json */schemas/* github/sources/github-operation-source-lock.json */docs.md circleci/composite_provider_path_identity.json */operations.json */cli_surface.json */certification.json */rate_limits.json */database.json
+//go:embed operation_endpoint_ledger.json declaration_admission_sources.json */metadata.json */changefeed.json */polling_watermark.json */sync_transport.json */enabled_connector_contract.json */spec.json */streams.json */writes.json */schemas/* github/sources/github-operation-source-lock.json */docs.md circleci/composite_provider_path_identity.json */operations.json */cli_surface.json */certification.json */rate_limits.json */database.json
 var FS embed.FS

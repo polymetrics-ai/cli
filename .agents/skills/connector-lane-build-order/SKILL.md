@@ -70,6 +70,22 @@ definition artifacts → lane-specific execution witness. Do not skip from sourc
 documentation to certification, and do not use certification output as an
 authoring input.
 
+For a full-lane cohort, make the intermediate lane artifacts explicit in an
+`enabled_connector_contract.json`: it names the fixed lane inventory, the
+source-lock binding, lane artifacts, cited gaps, and any exact source-operation
+binding used by runtime policy. `connectorgen validate` is the build-time gate
+for every declared source lock, supplemental retained artifact, hash, and byte
+identity. The installed runtime validates only embedded executable definitions
+and their closed bindings; it must not require repository-only source files.
+
+A local fake-server conformance test may prove the definition-selected request
+method, path, query, headers, body, status handling, warehouse stage/reopen,
+and plan → preview → approval → execute boundary. It does not prove undocumented
+provider cursor, ordering, deletion, idempotency, or media semantics. Keep
+source facts in the lock and runtime policy in the closed execution contract:
+`full_append` and `full_overwrite` are local full-snapshot policies, not
+provider claims.
+
 The runtime loads projected connector JSON, not the source lock. The source lock
 nevertheless must account for every provider fact used by `spec.json`, schemas,
 streams, writes, operations, API and CLI surfaces, and saved-connection transport

@@ -1112,6 +1112,10 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 	if b.SyncTransport != nil {
 		syncTransport = b.SyncTransport.Clone()
 	}
+	var enabledContract *connectors.EnabledConnectorContract
+	if b.EnabledContract != nil {
+		enabledContract = b.EnabledContract.Clone()
+	}
 
 	return connectors.Definition{
 		Name:             b.Metadata.Name,
@@ -1124,6 +1128,7 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 		Changefeed:       changefeed,
 		PollingWatermark: pollingWatermark,
 		SyncTransport:    syncTransport,
+		EnabledContract:  enabledContract,
 		Spec:             specJSON(b),
 		Streams:          streamSummaries,
 		WriteActions:     writeActions,

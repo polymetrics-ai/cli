@@ -9,26 +9,26 @@
       "method": "POST",
       "path": "/namespaces/{id}/gitlab_subscription",
       "operation": {
-        "model": "deprecated",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "low",
+        "risk": "medium",
         "blocked_by_default": true,
-        "reason": "GitLab's published OpenAPI marks this callable operation deprecated; preserve it in the provider inventory but do not plan new parity work.",
+        "reason": "GitLab documents this operation as deprecated; that source fact remains visible. It is blocked until a bounded request contract, safety policy, approval path, and command/action binding are declared.",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/api/openapi/openapi_v3.yaml",
-        "notes": "classification=justified_excluded; counting=write; operationId=postApiV4NamespacesIdGitlabSubscription; summary=Create a subscription for the namespace; tags=GitLab subscriptions; request_content_types=application/json; source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
+        "notes": "classification=blocked_our_foundation; source_deprecation=provider_documented; counting=write; operationId=postApiV4NamespacesIdGitlabSubscription; summary=Create a subscription for the namespace; tags=GitLab subscriptions; request_content_types=application/json; source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
       }
     },
     {
       "method": "PUT",
       "path": "/namespaces/{id}/gitlab_subscription",
       "operation": {
-        "model": "deprecated",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "low",
+        "risk": "medium",
         "blocked_by_default": true,
-        "reason": "GitLab's published OpenAPI marks this callable operation deprecated; preserve it in the provider inventory but do not plan new parity work.",
+        "reason": "GitLab documents this operation as deprecated; that source fact remains visible. It is blocked until a bounded request contract, safety policy, approval path, and command/action binding are declared.",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/api/openapi/openapi_v3.yaml",
-        "notes": "classification=justified_excluded; counting=write; operationId=putApiV4NamespacesIdGitlabSubscription; summary=Update the subscription for the namespace; tags=GitLab subscriptions; request_content_types=application/json; source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
+        "notes": "classification=blocked_our_foundation; source_deprecation=provider_documented; counting=write; operationId=putApiV4NamespacesIdGitlabSubscription; summary=Update the subscription for the namespace; tags=GitLab subscriptions; request_content_types=application/json; source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
       }
     },
     {
@@ -42,13 +42,13 @@
       "method": "POST",
       "path": "/namespaces/{id}/minutes",
       "operation": {
-        "model": "deprecated",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "low",
+        "risk": "medium",
         "blocked_by_default": true,
-        "reason": "GitLab's published OpenAPI marks this callable operation deprecated; preserve it in the provider inventory but do not plan new parity work.",
+        "reason": "GitLab documents this operation as deprecated; that source fact remains visible. It is blocked until a bounded request contract, safety policy, approval path, and command/action binding are declared.",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/api/openapi/openapi_v3.yaml",
-        "notes": "classification=justified_excluded; counting=write; operationId=postApiV4NamespacesIdMinutes; summary=Create a compute minutes purchase record for the namespace; tags=CI minutes; request_content_types=application/json; source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
+        "notes": "classification=blocked_our_foundation; source_deprecation=provider_documented; counting=write; operationId=postApiV4NamespacesIdMinutes; summary=Create a compute minutes purchase record for the namespace; tags=CI minutes; request_content_types=application/json; source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
       }
     },
     {
@@ -62,13 +62,13 @@
       "method": "POST",
       "path": "/namespaces/{id}/subscription_add_on_purchase/{add_on_name}",
       "operation": {
-        "model": "deprecated",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "low",
+        "risk": "medium",
         "blocked_by_default": true,
-        "reason": "GitLab's published OpenAPI marks this callable operation deprecated; preserve it in the provider inventory but do not plan new parity work.",
+        "reason": "GitLab documents this operation as deprecated; that source fact remains visible. It is blocked until a bounded request contract, safety policy, approval path, and command/action binding are declared.",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/api/openapi/openapi_v3.yaml",
-        "notes": "classification=justified_excluded; counting=write; operationId=postApiV4NamespacesIdSubscriptionAddOnPurchaseAddOnName; summary=Create an add-on purchase for the namespace; tags=Add on purchases; request_content_types=application/json; source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
+        "notes": "classification=blocked_our_foundation; source_deprecation=provider_documented; counting=write; operationId=postApiV4NamespacesIdSubscriptionAddOnPurchaseAddOnName; summary=Create an add-on purchase for the namespace; tags=Add on purchases; request_content_types=application/json; source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
       }
     },
     {
@@ -82,13 +82,13 @@
       "method": "PUT",
       "path": "/namespaces/{id}/subscription_add_on_purchase/{add_on_name}",
       "operation": {
-        "model": "deprecated",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "low",
+        "risk": "medium",
         "blocked_by_default": true,
-        "reason": "GitLab's published OpenAPI marks this callable operation deprecated; preserve it in the provider inventory but do not plan new parity work.",
+        "reason": "GitLab documents this operation as deprecated; that source fact remains visible. It is blocked until a bounded request contract, safety policy, approval path, and command/action binding are declared.",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/api/openapi/openapi_v3.yaml",
-        "notes": "classification=justified_excluded; counting=write; operationId=putApiV4NamespacesIdSubscriptionAddOnPurchaseAddOnName; summary=Update the add-on purchase for the namespace; tags=Add on purchases; request_content_types=application/json; source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
+        "notes": "classification=blocked_our_foundation; source_deprecation=provider_documented; counting=write; operationId=putApiV4NamespacesIdSubscriptionAddOnPurchaseAddOnName; summary=Update the add-on purchase for the namespace; tags=Add on purchases; request_content_types=application/json; source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
       }
     },
     {
@@ -4427,13 +4427,13 @@
       "method": "PUT",
       "path": "/user/{user_id}/credit_card_validation",
       "operation": {
-        "model": "deprecated",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "low",
+        "risk": "medium",
         "blocked_by_default": true,
-        "reason": "GitLab's published OpenAPI marks this callable operation deprecated; preserve it in the provider inventory but do not plan new parity work.",
+        "reason": "GitLab documents this operation as deprecated; that source fact remains visible. It is blocked until a bounded request contract, safety policy, approval path, and command/action binding are declared.",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/api/openapi/openapi_v3.yaml",
-        "notes": "classification=justified_excluded; counting=write; operationId=putApiV4UserUserIdCreditCardValidation; summary=Update a user's credit_card_validation; tags=Users; request_content_types=application/json; source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
+        "notes": "classification=blocked_our_foundation; source_deprecation=provider_documented; counting=write; operationId=putApiV4UserUserIdCreditCardValidation; summary=Update a user's credit_card_validation; tags=Users; request_content_types=application/json; source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
       }
     },
     {
@@ -5850,26 +5850,26 @@
       "method": "PUT",
       "path": "/projects/{id}/labels",
       "operation": {
-        "model": "deprecated",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "low",
+        "risk": "medium",
         "blocked_by_default": true,
-        "reason": "GitLab's published OpenAPI marks this callable operation deprecated; preserve it in the provider inventory but do not plan new parity work.",
+        "reason": "GitLab documents this operation as deprecated; that source fact remains visible. It is blocked until a bounded request contract, safety policy, approval path, and command/action binding are declared.",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/api/openapi/openapi_v3.yaml",
-        "notes": "classification=justified_excluded; counting=write; operationId=putApiV4ProjectsIdLabels; summary=Update an existing label. At least one optional parameter is required.; tags=Labels; request_content_types=application/json; source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
+        "notes": "classification=blocked_our_foundation; source_deprecation=provider_documented; counting=write; operationId=putApiV4ProjectsIdLabels; summary=Update an existing label. At least one optional parameter is required.; tags=Labels; request_content_types=application/json; source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
       }
     },
     {
       "method": "DELETE",
       "path": "/projects/{id}/labels",
       "operation": {
-        "model": "deprecated",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "GitLab's published OpenAPI marks this callable operation deprecated; preserve it in the provider inventory but do not plan new parity work.",
+        "reason": "GitLab documents this deletion as deprecated; that source fact remains visible. It is blocked until an operation-specific plan, preview, approval, typed confirmation, and execution contract are declared.",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/api/openapi/openapi_v3.yaml",
-        "notes": "classification=justified_excluded; counting=write; operationId=deleteApiV4ProjectsIdLabels; summary=Delete an existing label; tags=Labels; request_content_types=(none declared); source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
+        "notes": "classification=blocked_our_foundation; source_deprecation=provider_documented; counting=write; operationId=deleteApiV4ProjectsIdLabels; summary=Delete an existing label; tags=Labels; request_content_types=(none declared); source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
       }
     },
     {
@@ -5909,13 +5909,13 @@
       "method": "PUT",
       "path": "/projects/{id}/labels/promote",
       "operation": {
-        "model": "deprecated",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "low",
+        "risk": "medium",
         "blocked_by_default": true,
-        "reason": "GitLab's published OpenAPI marks this callable operation deprecated; preserve it in the provider inventory but do not plan new parity work.",
+        "reason": "GitLab documents this operation as deprecated; that source fact remains visible. It is blocked until a bounded request contract, safety policy, approval path, and command/action binding are declared.",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/api/openapi/openapi_v3.yaml",
-        "notes": "classification=justified_excluded; counting=write; operationId=putApiV4ProjectsIdLabelsPromote; summary=Promote a label to a group label; tags=Labels; request_content_types=application/json; source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
+        "notes": "classification=blocked_our_foundation; source_deprecation=provider_documented; counting=write; operationId=putApiV4ProjectsIdLabelsPromote; summary=Promote a label to a group label; tags=Labels; request_content_types=application/json; source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
       }
     },
     {
@@ -6839,13 +6839,13 @@
       "method": "GET",
       "path": "/feature_flags/unleash/{project_id}/features",
       "operation": {
-        "model": "deprecated",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "medium",
         "blocked_by_default": true,
-        "reason": "GitLab's published OpenAPI marks this callable operation deprecated; preserve it in the provider inventory but do not plan new parity work.",
+        "reason": "GitLab documents this read as deprecated; that source fact remains visible. It is blocked until a connector-owned closed direct-read contract, declaration, schema, fixtures, and command binding are added.",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/api/openapi/openapi_v3.yaml",
-        "notes": "classification=justified_excluded; counting=read; operationId=getApiV4FeatureFlagsUnleashProjectIdFeatures; summary=Get a list of features (v2 client support); tags=Unleash; request_content_types=(none declared); source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
+        "notes": "classification=blocked_our_foundation; source_deprecation=provider_documented; counting=read; operationId=getApiV4FeatureFlagsUnleashProjectIdFeatures; summary=Get a list of features (v2 client support); tags=Unleash; request_content_types=(none declared); source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
       }
     },
     {
@@ -10137,13 +10137,13 @@
       "method": "POST",
       "path": "/projects/{id}/merge_requests/{merge_request_iid}/approvals",
       "operation": {
-        "model": "deprecated",
+        "model": "admin_reverse_etl",
         "status": "blocked",
-        "risk": "low",
+        "risk": "medium",
         "blocked_by_default": true,
-        "reason": "GitLab's published OpenAPI marks this callable operation deprecated; preserve it in the provider inventory but do not plan new parity work.",
+        "reason": "GitLab documents this operation as deprecated; that source fact remains visible. It is blocked until a bounded request contract, safety policy, approval path, and command/action binding are declared.",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/api/openapi/openapi_v3.yaml",
-        "notes": "classification=justified_excluded; counting=write; operationId=postApiV4ProjectsIdMergeRequestsMergeRequestIidApprovals; summary=Change approval-related configuration; tags=Merge request approvals; request_content_types=application/json; source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
+        "notes": "classification=blocked_our_foundation; source_deprecation=provider_documented; counting=write; operationId=postApiV4ProjectsIdMergeRequestsMergeRequestIidApprovals; summary=Change approval-related configuration; tags=Merge request approvals; request_content_types=application/json; source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
       }
     },
     {

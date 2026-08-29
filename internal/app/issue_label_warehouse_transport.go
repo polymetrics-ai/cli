@@ -2043,7 +2043,7 @@ func (e *declarativeStreamSourceExecutor) readConfiguredIssue(ctx context.Contex
 // and suppressed on resume, so acknowledged pages are not re-delivered even
 // though the provider sequence must be traversed again to recover its position.
 func (e *declarativeStreamSourceExecutor) readDeclarativeCollection(ctx context.Context, connector connectors.Connector, request synctransport.SourceRequest, emit func(synctransport.SourcePage) error) (synctransport.SourceReadOutcome, error) {
-	maxPages, err := declarativeTransportMaxPages(request.Runtime.Config)
+	maxPages, err := declarativeTransportMaxPages(request.Connector, request.Stream, request.Mode, request.Runtime.Config)
 	if err != nil {
 		return synctransport.SourceReadOutcome{}, err
 	}
@@ -2136,9 +2136,16 @@ func declarativeCollectionIncrementalMode(mode synccontract.Mode) bool {
 	}
 }
 
-func declarativeTransportMaxPages(config map[string]string) (int, error) {
+func declarativeTransportMaxPages(connector connectors.Connector, stream string, mode synccontract.Mode, config map[string]string) (int, error) {
 	raw := strings.TrimSpace(config[declarativeTransportMaxPagesConfig])
 	if raw == "" {
+		if enabledFullSnapshotTransportSource(connector, stream, mode) {
+			// A full mode must finish the declared provider collection before
+			// reporting success. The opted-in source owns its paginator's
+			// continuation and bounded request controls; treating its default
+			// one-page convenience budget as a complete snapshot would be false.
+			return 0, nil
+		}
 		return 1, nil
 	}
 	switch strings.ToLower(raw) {

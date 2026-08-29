@@ -71,7 +71,7 @@ func (a *App) selectTransportRoute(conn Connection, streamName string, mode Sync
 		// exhaustive connector Read -> local warehouse materializer route.
 		return false, transportRouteDeclarationAbsent, nil
 	}
-	if sourceDeclarative && isBoundedLocalWarehouseLegacyRoute(destination, mode.ContractMode) {
+	if sourceDeclarative && isBoundedLocalWarehouseLegacyRoute(destination, mode.ContractMode) && !isEnabledFullSnapshotWarehouseTransport(source, destination, streamName, mode.ContractMode) {
 		// The local warehouse primitive owns a closed, bounded ordinary ETL
 		// representation for these executable modes. Its two dedupe modes are
 		// the only ones promoted to the registered transport executor below;
@@ -100,7 +100,7 @@ func (a *App) selectTransportRoute(conn Connection, streamName string, mode Sync
 			return true, transportRouteDeclared, nil
 		}
 		materializer, localWarehouse := destination.(connectors.LocalWarehouseMaterializer)
-		if localWarehouse && materializer.MaterializesLocalWarehouse() && isWarehouseDedupeContractMode(mode.ContractMode) {
+		if localWarehouse && materializer.MaterializesLocalWarehouse() && (isWarehouseDedupeContractMode(mode.ContractMode) || isEnabledFullSnapshotWarehouseTransport(source, destination, streamName, mode.ContractMode)) {
 			return true, transportRouteDeclared, nil
 		}
 		return false, transportRouteDeclared, &synctransport.DeclaredDestinationRouteError{
@@ -142,6 +142,59 @@ func isBoundedLocalWarehouseLegacyRoute(destination connectors.Connector, mode s
 	}
 	materializer, ok := destination.(connectors.LocalWarehouseMaterializer)
 	return ok && materializer.MaterializesLocalWarehouse()
+}
+
+// isEnabledFullSnapshotWarehouseTransport admits a full provider collection
+// to the durable registered transport only when the connector itself carries
+// the closed enabled-contract evidence. This is deliberately structural: a
+// source's HTTP verb, connector name, or a local warehouse destination alone
+// cannot replace the established ETL route. The descriptor and registry still
+// validate the executor, stream, mode, and durable destination independently.
+func isEnabledFullSnapshotWarehouseTransport(source, destination connectors.Connector, stream string, mode synccontract.Mode) bool {
+	if !isLocalWarehouseDestination(destination) || !enabledFullSnapshotTransportSource(source, stream, mode) {
+		return false
+	}
+	materializer, ok := destination.(connectors.LocalWarehouseMaterializer)
+	return ok && materializer.MaterializesLocalWarehouse()
+}
+
+func enabledFullSnapshotTransportSource(source connectors.Connector, stream string, mode synccontract.Mode) bool {
+	if mode != synccontract.ModeFullOverwrite && mode != synccontract.ModeFullAppend {
+		return false
+	}
+	definition, ok := connectors.DefinitionOf(source)
+	if !ok || definition.EnabledContract == nil {
+		return false
+	}
+	for _, lane := range definition.EnabledContract.Lanes {
+		if lane.Name != "sync_transport" || lane.State != connectors.EnabledLaneImplemented || lane.Transport == nil || !enabledContractFullSnapshotMode(lane.Transport.Modes, mode) || !enabledContractStreamEvidence(lane.Transport.Streams, stream) {
+			continue
+		}
+		for _, flow := range lane.Warehouse {
+			if flow.Direction == "provider_to_duckdb" {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func enabledContractFullSnapshotMode(modes []string, mode synccontract.Mode) bool {
+	for _, candidate := range modes {
+		if candidate == string(mode) {
+			return true
+		}
+	}
+	return false
+}
+
+func enabledContractStreamEvidence(streams []connectors.EnabledContractTransportStreamEvidence, stream string) bool {
+	for _, candidate := range streams {
+		if candidate.Stream == stream && candidate.SourceOperation != "" {
+			return true
+		}
+	}
+	return false
 }
 
 func isIssueLabelTransportConnector(connector connectors.Connector) bool {

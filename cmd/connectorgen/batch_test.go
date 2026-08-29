@@ -695,6 +695,28 @@ func TestBatchMaterializeExcludesProtocolMetadataOperations(t *testing.T) {
 	}
 }
 
+func TestBatchSurfaceSplitDoesNotExcludeDeprecatedProviderOperations(t *testing.T) {
+	surface := engine.APISurface{API: "Example API", Endpoints: []engine.SurfaceEndpoint{{
+		Method: http.MethodPut,
+		Path:   "/legacy-widget",
+		Operation: &engine.SurfaceOperation{
+			Model:            "deprecated",
+			Status:           "blocked",
+			Risk:             "medium",
+			BlockedByDefault: true,
+			Reason:           "The provider documents this operation as deprecated, but the closed write contract is still unavailable.",
+		},
+	}}}
+
+	split, err := batchSurfaceSplit(&surface)
+	if err != nil {
+		t.Fatalf("split deprecated provider operation: %v", err)
+	}
+	if want := (BatchOperationSplit{ProviderBlocked: 1}); split != want {
+		t.Fatalf("deprecated provider operation split = %+v, want %+v so deprecation is not an admission exclusion", split, want)
+	}
+}
+
 func TestBatchMaterializeDropsPreexistingDestinationBundle(t *testing.T) {
 	sourceDefsRoot := t.TempDir()
 	writeBatchBundle(t, sourceDefsRoot, cliSurfaceBundleFS(validCLISurfaceJSON()))

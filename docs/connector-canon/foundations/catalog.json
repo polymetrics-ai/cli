@@ -275,10 +275,13 @@
       "layer": "source_projection_admission",
       "status": "available",
       "kind": "generic",
-      "summary": "Projects canonical source operations into connector definitions and global operation ledgers, derives command bindings and flags, and accounts every source operation through declaration admission without treating projection as execution proof. The existing closed-name admission seam retains source parameter spelling in the descriptor and blocks an unsafe provider spelling rather than creating an ad-hoc alias or raw transport escape.",
+      "summary": "Projects canonical source operations into connector definitions and global operation ledgers, derives command bindings and flags, and accounts every source operation through declaration admission without treating projection as execution proof. Enabled-connector contracts add a source-lock denominator with exact lane selectors, retained supplemental evidence, and derived complete/partial/not-applicable coverage so an implemented subset is never presented as provider-surface parity. The existing closed-name admission seam retains source parameter spelling in the descriptor and blocks an unsafe provider spelling rather than creating an ad-hoc alias or raw transport escape.",
       "owner": {
         "primary_package": "polymetrics.ai/cmd/connectorgen",
-        "supporting_packages": [],
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors",
+          "polymetrics.ai/internal/connectors/engine"
+        ],
         "files": [
           "cmd/connectorgen/authoringfs.go",
           "cmd/connectorgen/declarationadmission.go",
@@ -286,7 +289,10 @@
           "cmd/connectorgen/sourceprojection.go",
           "cmd/connectorgen/surfacereconcile.go",
           "cmd/connectorgen/surfacesync.go",
-          "cmd/connectorgen/validate.go"
+          "cmd/connectorgen/validate.go",
+          "cmd/connectorgen/enabledcontract.go",
+          "internal/connectors/enabled_contract.go",
+          "internal/connectors/engine/schema/enabled_connector_contract.schema.json"
         ],
         "symbols": [
           {
@@ -356,6 +362,18 @@
           {
             "file": "cmd/connectorgen/validate.go",
             "name": "checkCLISurfaceWriteFlags"
+          },
+          {
+            "file": "cmd/connectorgen/enabledcontract.go",
+            "name": "checkEnabledConnectorContract"
+          },
+          {
+            "file": "internal/connectors/enabled_contract.go",
+            "name": "EnabledConnectorContract.ReconcileSourceOperations"
+          },
+          {
+            "file": "internal/connectors/enabled_contract.go",
+            "name": "EnabledContractSourceCoverage.Validate"
           }
         ]
       },
@@ -387,7 +405,8 @@
           "operation, stream, and write projections",
           "runtime operation endpoint ledger rows",
           "source-selected runtime endpoint-ledger refreshes that retain unselected connector rows",
-          "source-backed deferred and unsupported dispositions"
+          "source-backed deferred and unsupported dispositions",
+          "source-lock denominator lane contracts with derived complete, partial, and not-applicable coverage"
         ],
         "sync_modes": [],
         "guarantees": [
@@ -399,7 +418,8 @@
           "projection gaps remain explicit and source-bound",
           "a source-selected endpoint-ledger refresh changes only that connector's runtime row and retains unselected rows",
           "mapping admission and projection are independent of certification overlays and retained hash, byte, and capture representation while preserving version- and document-kind-specific source-reference, unavailable-document, v3 envelope, and closed event-schema-selector structure",
-          "unavailable retained-source, certification-subject, or generated-surface evidence remains a per-source typed foundation gap and cannot suppress a source identity or fabricate an executable lane"
+          "unavailable retained-source, certification-subject, or generated-surface evidence remains a per-source typed foundation gap and cannot suppress a source identity or fabricate an executable lane",
+          "source deprecation and destructive classification remain source facts; they cannot become a declaration-admission exclusion or erase the named actual foundation gap"
         ]
       },
       "selection": {
@@ -413,6 +433,7 @@
           "internal/connectors/defs/<connector>/operations.json",
           "internal/connectors/defs/<connector>/streams.json",
           "internal/connectors/defs/<connector>/writes.json",
+          "internal/connectors/defs/<connector>/enabled_connector_contract.json",
           "internal/connectors/defs/declaration_admission_inventory.json",
           "internal/connectors/defs/declaration_admission_sources.json",
           "internal/connectors/defs/declaration_admissions.json",
@@ -423,7 +444,8 @@
           "connectorgen operation-evidence --connector <name>",
           "connectorgen surface-reconcile",
           "connectorgen surface-sync",
-          "connectorgen surface-sync --connector <name>"
+          "connectorgen surface-sync --connector <name>",
+          "connectorgen validate --connector <name>"
         ],
         "notes": "Source identities and declaration bindings select projections; a selected surface sync preserves every unselected runtime endpoint-ledger row. Generated availability remains subject to real runtime preflight."
       },
@@ -434,6 +456,8 @@
         "Array query encoding must retain the source-declared style, explode behavior, and delimiter; generic value stringification is not source projection.",
         "A required requestBody with one data envelope makes that record field required; an optional requestBody remains optional.",
         "A declared batch is projectable only when a closed v3 batch_action_inventory resolves against retained provider bytes and the definition keeps a typed action allow-list; optional outer query fields remain source-projected while caller-authored subrequest HTTP stays forbidden.",
+        "An enabled-contract lane derives complete, partial, or not-applicable coverage from its source denominator; a partially implemented lane must retain its remaining source identities as named deferred or provider-evidenced outcomes and cannot be reported as full provider-surface parity.",
+        "A provider-documented deprecated or destructive operation remains in the source denominator. Its API-surface row must retain source evidence and a named request, approval, response, or other actual foundation gap rather than classifying deprecation or destructive nature as an exclusion.",
         "Aliases and multiple lane bindings must not inflate the provider-operation count.",
         "A projected implemented label is incomplete until the selected runtime path passes preflight.",
         "A selected runtime endpoint-ledger refresh may replace only its named connector entry and must preserve every unselected entry; it must not make an unrelated missing source descriptor an admission gate.",
@@ -466,6 +490,14 @@
             "internal/connectors/defs/operation_endpoint_ledger.json"
           ],
           "notes": "Global ledgers account reviewed source identities and their runtime endpoints independently of certification."
+        },
+        {
+          "name": "GitLab enabled source-lock lane contract",
+          "files": [
+            "internal/connectors/defs/gitlab/enabled_connector_contract.json",
+            "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json"
+          ],
+          "notes": "Exact primary and supplemental source locks reconcile the complete GitLab denominator; lane coverage visibly distinguishes partial direct-read and reverse-ETL subsets from complete local ETL/sync overlays."
         }
       ],
       "proof_tests": [
@@ -618,6 +650,16 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/sourceprojection_test.go",
           "name": "TestSourceProjectionPreservesOnlySourceBackedDeclaredBatch"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/gitlab_enabled_contract_test.go",
+          "name": "TestGitLabEnabledContractReconcilesSourceLock"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/gitlab_enabled_contract_test.go",
+          "name": "TestGitLabDeprecatedSourceOperationsRemainFoundationBlocked"
         }
       ],
       "known_gap_refs": [
@@ -634,6 +676,7 @@
       ],
       "update_conditions": [
         "Projection rules, declaration states, lane bindings, or operation identity semantics change.",
+        "Enabled-contract source denominator, lane coverage state, source-lock reconciliation, or deprecation-admission behavior changes.",
         "A global admission or endpoint-ledger artifact changes shape or ownership.",
         "Surface derivation, runtime-preflight handoff, or proof tests change."
       ],
@@ -1692,7 +1735,7 @@
       "layer": "warehouse_etl",
       "status": "available",
       "kind": "generic",
-      "summary": "Stages connection-owned source work durably, materializes WAL records into Parquet-backed DuckDB tables under declared apply strategies, reads back destination receipts, and executes saved ETL through the local warehouse boundary.",
+      "summary": "Stages connection-owned source work durably, materializes WAL records into Parquet-backed DuckDB tables under declared apply strategies, reads back destination receipts, and executes saved ETL through the local warehouse boundary. Full-snapshot materialization does not require a provider row cursor; incremental and history strategies retain their closed durable checkpoint and row-cursor requirements.",
       "owner": {
         "primary_package": "polymetrics.ai/internal/app",
         "supporting_packages": [
@@ -1724,6 +1767,10 @@
           {
             "file": "internal/app/local_warehouse_transport.go",
             "name": "materializeLocalWarehouseTransportTable"
+          },
+          {
+            "file": "internal/app/local_warehouse_transport.go",
+            "name": "localWarehouseTransportRawRecords"
           },
           {
             "file": "internal/app/local_warehouse.go",
@@ -1790,7 +1837,9 @@
           "connector JSON string values retain string type through DuckDB and Parquet round trips",
           "valid empty-object batches retain row cardinality through file-bound metadata and physical-schema checks",
           "Parquet publication and destination read-back before checkpoint completion",
-          "typed dedupe and history materialization strategies"
+          "typed dedupe and history materialization strategies",
+          "full_append and full_overwrite accept source snapshots without inventing a row cursor",
+          "incremental_append retains its durable source checkpoint and dedupe history retains its declared row cursor"
         ]
       },
       "selection": {
@@ -1815,7 +1864,9 @@
         "Empty-object reconstruction requires matching file metadata and physical schema; a sentinel column name alone is not authority.",
         "Warehouse normalization must preserve JSON scalar types and propagate downstream emitter failures.",
         "Every table and stage path is connection-owned and structurally validated.",
+        "full_append and full_overwrite are local execution policies selected by the connection; they do not assert a provider cursor, ordering, delete, or idempotency semantic.",
         "Incremental modes still require an admitted provider cursor or event executor; warehouse materialization cannot manufacture one.",
+        "Dedupe history requires a declared row cursor; incremental append requires a durable candidate checkpoint.",
         "Change capture requires its typed source and transport path and is not implied by ordinary materialization."
       ],
       "non_goals": [
@@ -1838,6 +1889,14 @@
             "internal/app/transport_dispatch.go"
           ],
           "notes": "Saved connections enter the generic transport and warehouse lifecycle rather than a connector-specific bulk loop."
+        },
+        {
+          "name": "GitLab source-lock full-snapshot fixture",
+          "files": [
+            "internal/connectors/defs/gitlab/enabled_connector_contract.json",
+            "internal/cli/gitlab_transport_test.go"
+          ],
+          "notes": "A source-bound GET operation supplies the fixture request and response evidence; full modes remain local warehouse policy and fake-server proof does not claim provider incremental, order, deletion, or idempotency semantics."
         }
       ],
       "proof_tests": [
@@ -1855,6 +1914,21 @@
           "package": "./internal/app",
           "file": "internal/app/transport_dispatch_test.go",
           "name": "TestRunETLCanonicalFullAppendUsesRegisteredTransports"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/local_warehouse_transport_cursor_test.go",
+          "name": "TestLocalWarehouseTransportRawRecordsFullSnapshotsDoNotRequireRowCursor"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/local_warehouse_transport_cursor_test.go",
+          "name": "TestLocalWarehouseTransportRawRecordsRetainsIncrementalAndHistoryCursorRequirements"
+        },
+        {
+          "package": "./internal/cli",
+          "file": "internal/cli/gitlab_transport_test.go",
+          "name": "TestGitLabSourceTransportMaterializesConnectionOwnedDuckDB"
         },
         {
           "package": "./internal/app",
@@ -1881,6 +1955,7 @@
       "update_conditions": [
         "Warehouse stage, receipt, read-back, WAL, Parquet, DuckDB, path ownership, or apply-strategy behavior changes.",
         "A saved ETL mode becomes supported, constrained, or unsupported by local materialization.",
+        "Full-snapshot cursor handling or incremental/history cursor-checkpoint constraints change.",
         "Transport dispatch, owner symbols, or durable proof tests change."
       ],
       "supersedes": []

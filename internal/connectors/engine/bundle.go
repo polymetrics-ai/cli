@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -21,6 +22,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/database"
+	"polymetrics.ai/internal/synccontract"
 )
 
 // namePattern is the shared connector/stream/action naming rule (design §A,
@@ -37,6 +39,7 @@ type Bundle struct {
 	Changefeed                    *connectors.ChangefeedDescriptor       // changefeed.json; nil when a connector has not been surveyed
 	PollingWatermark              *connectors.PollingWatermarkDescriptor // polling_watermark.json; nil until a native database declaration exists
 	SyncTransport                 *connectors.SyncTransportDescriptor    // sync_transport.json; nil when no closed source/destination role is declared
+	EnabledContract               *connectors.EnabledConnectorContract   // enabled_connector_contract.json; nil until a connector adopts the full lane inventory
 	Database                      *database.Definition                   // database.json; nil for non-database or unmigrated bundles
 	Spec                          *Schema                                // compiled spec.json; SecretKeys() from x-secret
 	RawSpec                       json.RawMessage                        // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
@@ -1627,8 +1630,8 @@ type CertificationWriteWaveBlockedAction struct {
 // metaSchemas holds the compiled meta-schemas used to validate the bundle
 // files themselves, lazily compiled once from the embedded schema/ dir.
 var metaSchemas = struct {
-	metadata, changefeed, pollingWatermark, syncTransport, spec, streams, writes, apiSurface, compositeProviderPathIdentity, operations, cliSurface, declarationAdmission, declarationAdmissionSources, declarationAdmissionInventory, certification, rateLimits *Schema
-	err                                                                                                                                                                                                                                                          error
+	metadata, changefeed, pollingWatermark, syncTransport, enabledConnectorContract, spec, streams, writes, apiSurface, compositeProviderPathIdentity, operations, cliSurface, declarationAdmission, declarationAdmissionSources, declarationAdmissionInventory, certification, rateLimits *Schema
+	err                                                                                                                                                                                                                                                                                    error
 }{}
 
 func init() {
@@ -1647,6 +1650,7 @@ func init() {
 	metaSchemas.changefeed = compileMeta(changefeedSchemaJSON)
 	metaSchemas.pollingWatermark = compileMeta(pollingWatermarkSchemaJSON)
 	metaSchemas.syncTransport = compileMeta(syncTransportSchemaJSON)
+	metaSchemas.enabledConnectorContract = compileMeta(enabledConnectorContractSchemaJSON)
 	metaSchemas.spec = compileMeta(specSchemaJSON)
 	metaSchemas.streams = compileMeta(streamsSchemaJSON)
 	metaSchemas.writes = compileMeta(writesSchemaJSON)
@@ -1860,6 +1864,13 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 	if err != nil {
 		return Bundle{}, err
 	}
+	enabledContract, err := loadEnabledConnectorContract(sub, dirName)
+	if err != nil {
+		return Bundle{}, err
+	}
+	if enabledContract != nil && enabledContract.Connector != dirName {
+		return Bundle{}, fmt.Errorf("load bundle %s: enabled_connector_contract.json connector %q does not match directory", dirName, enabledContract.Connector)
+	}
 	databaseDefinition, err := loadDatabaseDefinition(sub, dirName)
 	if err != nil {
 		return Bundle{}, err
@@ -1881,6 +1892,9 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 	writes, err := loadWrites(sub, dirName)
 	if err != nil {
 		return Bundle{}, err
+	}
+	if err := validateEnabledConnectorContractActivation(enabledContract, syncTransport, streams, writes); err != nil {
+		return Bundle{}, fmt.Errorf("load bundle %s: enabled_connector_contract.json: %w", dirName, err)
 	}
 
 	operations, rawOperations, err := loadOperations(sub, dirName)
@@ -1941,6 +1955,7 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 		Changefeed:                    changefeed,
 		PollingWatermark:              pollingWatermark,
 		SyncTransport:                 syncTransport,
+		EnabledContract:               enabledContract,
 		Database:                      databaseDefinition,
 		Spec:                          spec,
 		RawSpec:                       rawSpec,
@@ -2115,6 +2130,132 @@ func loadSyncTransport(sub fs.FS, dirName string) (*connectors.SyncTransportDesc
 		return nil, fmt.Errorf("load bundle %s: sync_transport.json: %w", dirName, err)
 	}
 	return descriptor.Clone(), nil
+}
+
+// loadEnabledConnectorContract keeps the full lane inventory additive while
+// requiring every opted-in connector to expose only the closed, validated
+// states in inspection and generated documentation.
+func loadEnabledConnectorContract(sub fs.FS, dirName string) (*connectors.EnabledConnectorContract, error) {
+	if !fileExists(sub, "enabled_connector_contract.json") {
+		return nil, nil
+	}
+	raw, err := readFile(sub, "enabled_connector_contract.json")
+	if err != nil {
+		return nil, fmt.Errorf("load bundle %s: %w", dirName, err)
+	}
+	if err := metaSchemas.enabledConnectorContract.Validate(mustDecodeAny(raw)); err != nil {
+		return nil, fmt.Errorf("load bundle %s: enabled_connector_contract.json: %w", dirName, err)
+	}
+	var contract connectors.EnabledConnectorContract
+	if err := strictDecode(raw, &contract); err != nil {
+		return nil, fmt.Errorf("load bundle %s: enabled_connector_contract.json: %w", dirName, err)
+	}
+	if err := contract.Validate(); err != nil {
+		return nil, fmt.Errorf("load bundle %s: enabled_connector_contract.json: %w", dirName, err)
+	}
+	// Contract artifacts include source locks and coverage manifests which are
+	// intentionally repository-only; the installed binary does not embed them.
+	// connectorgen validates their presence and retained-byte identities. Runtime
+	// loading validates only the embedded closed contract and its executable
+	// stream/write bindings below.
+	return contract.Clone(), nil
+}
+
+// validateEnabledConnectorContractActivation ties the optional full lane
+// inventory to actual loaded artifacts. It cannot inspect a provider source;
+// connectorgen reconciles those immutable identities separately. It does keep
+// an enabled artifact from inventing transport modes, delivery guarantees, or
+// a destination action count the runtime cannot select.
+func validateEnabledConnectorContractActivation(contract *connectors.EnabledConnectorContract, transport *connectors.SyncTransportDescriptor, streams []StreamSpec, writes []WriteAction) error {
+	if contract == nil {
+		return nil
+	}
+	if err := contract.Validate(); err != nil {
+		return err
+	}
+	findLane := func(name string) *connectors.EnabledConnectorLane {
+		for index := range contract.Lanes {
+			if contract.Lanes[index].Name == name {
+				return &contract.Lanes[index]
+			}
+		}
+		return nil
+	}
+	syncLane := findLane("sync_transport")
+	if syncLane == nil || syncLane.State != connectors.EnabledLaneImplemented || syncLane.Transport == nil {
+		return nil
+	}
+	if transport == nil || transport.Source == nil {
+		return fmt.Errorf("implemented sync_transport lane requires sync_transport.json source_transport")
+	}
+	if !sameEnabledContractStrings(syncLane.Transport.Modes, syncModesAsStrings(transport.Source.Modes)) {
+		return fmt.Errorf("sync transport modes do not match the enabled contract")
+	}
+	if transport.Source.Delivery != syncLane.Transport.RuntimeDelivery {
+		return fmt.Errorf("sync transport delivery policy does not match the enabled contract")
+	}
+	if !sameEnabledContractStrings(transport.Source.EligibleStreams, enabledContractTransportStreamNames(syncLane.Transport.Streams)) {
+		return fmt.Errorf("sync transport eligible streams do not match the enabled contract")
+	}
+	streamNames := make([]string, 0, len(streams))
+	for _, stream := range streams {
+		streamNames = append(streamNames, stream.Name)
+	}
+	if !sameEnabledContractStrings(streamNames, enabledContractTransportStreamNames(syncLane.Transport.Streams)) {
+		return fmt.Errorf("sync transport evidence must account for every executable stream")
+	}
+	if syncLane.Transport.RuntimeDelivery.Idempotency != connectors.DeliveryIdempotencyAtLeastOnce || syncLane.Transport.RuntimeDelivery.Ordering != connectors.DeliveryOrderingUnordered || syncLane.Transport.RuntimeDelivery.Deletes != connectors.DeliveryDeletesUnavailable {
+		return fmt.Errorf("transport without provider cursor, order, and delete evidence must use conservative at_least_once/unordered/not_available delivery")
+	}
+	for _, evidence := range syncLane.Transport.Streams {
+		if evidence.CursorEvidence != "not_declared" || evidence.DeleteEvidence != "not_declared" || evidence.OrderEvidence != "not_declared" {
+			return fmt.Errorf("sync transport evidence for stream %q must not claim undeclared provider cursor, delete, or order semantics", evidence.Stream)
+		}
+	}
+	for _, mode := range syncLane.Transport.Modes {
+		if strings.HasPrefix(mode, "incremental_") {
+			return fmt.Errorf("sync transport mode %q requires source-cited cursor evidence for every eligible stream", mode)
+		}
+	}
+	reverseLane := findLane("reverse_etl")
+	if reverseLane == nil || reverseLane.State != connectors.EnabledLaneImplemented || reverseLane.Transport == nil || reverseLane.Transport.Destination == nil {
+		return nil
+	}
+	destination := reverseLane.Transport.Destination
+	if destination.ActionsArtifact != "writes.json" || destination.ExpectedActions != len(writes) || reverseLane.Source.Implemented != len(writes) {
+		return fmt.Errorf("DuckDB-to-provider destination does not match loaded typed write actions")
+	}
+	if destination.PlanExecutor != "internal/app.PlanReverseETL" || destination.PreviewExecutor != "internal/app.PreviewReversePlan" || destination.ApprovalExecutor != "internal/app.RunReverseETL" {
+		return fmt.Errorf("DuckDB-to-provider destination must bind the closed reverse plan/preview/approval executors")
+	}
+	return nil
+}
+
+func syncModesAsStrings(modes []synccontract.Mode) []string {
+	values := make([]string, 0, len(modes))
+	for _, mode := range modes {
+		values = append(values, string(mode))
+	}
+	return values
+}
+
+func enabledContractTransportStreamNames(evidence []connectors.EnabledContractTransportStreamEvidence) []string {
+	values := make([]string, 0, len(evidence))
+	for _, stream := range evidence {
+		values = append(values, stream.Stream)
+	}
+	return values
+}
+
+func sameEnabledContractStrings(left, right []string) bool {
+	if len(left) != len(right) {
+		return false
+	}
+	left = append([]string(nil), left...)
+	right = append([]string(nil), right...)
+	sort.Strings(left)
+	sort.Strings(right)
+	return slices.Equal(left, right)
 }
 
 // loadDatabaseDefinition keeps database.json optional for the existing broad

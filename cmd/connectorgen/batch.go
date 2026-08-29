@@ -1057,7 +1057,7 @@ func batchProtocolMetadataExclusion(endpoint engine.SurfaceEndpoint) error {
 
 func batchOperationIsExcluded(model string) bool {
 	switch model {
-	case "duplicate", "deprecated", "disallowed":
+	case "duplicate", "disallowed":
 		return true
 	default:
 		return false

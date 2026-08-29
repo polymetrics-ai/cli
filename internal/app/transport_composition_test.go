@@ -42,6 +42,10 @@ func TestOpenRegistersDefinitionOwnedProductionTransports(t *testing.T) {
 	if !ok {
 		t.Fatal("GitHub connector is not registered")
 	}
+	gitlab, ok := a.registry.Get("gitlab")
+	if !ok {
+		t.Fatal("GitLab connector is not registered")
+	}
 	asana, ok := a.registry.Get("asana")
 	if !ok {
 		t.Fatal("Asana connector is not registered")
@@ -115,6 +119,24 @@ func TestOpenRegistersDefinitionOwnedProductionTransports(t *testing.T) {
 	}
 	if got, want := githubPostgresResolved.Destination.TransportExecutorReference(), postgresResolved.Destination.TransportExecutorReference(); got != want {
 		t.Fatalf("registered API destination reference = %+v, want %+v", got, want)
+	}
+	gitlabWarehouseResolved, err := a.transports.Preflight(synctransport.PreflightRequest{
+		Source:      gitlab,
+		Destination: warehouse,
+		Stream:      "projects",
+		Mode:        synccontract.ModeFullAppend,
+	})
+	if err != nil {
+		t.Fatalf("definition-owned GitLab-to-warehouse full append preflight = %v", err)
+	}
+	if got, want := gitlabWarehouseResolved.Source.TransportExecutorReference(), declarativeStreamSourceReference; got != want {
+		t.Fatalf("registered GitLab source reference = %+v, want %+v", got, want)
+	}
+	if got, want := gitlabWarehouseResolved.Destination.TransportExecutorReference(), (connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "local_parquet_warehouse"}); got != want {
+		t.Fatalf("registered GitLab warehouse destination reference = %+v, want %+v", got, want)
+	}
+	if selected, reason, err := a.selectTransportRoute(Connection{}, "projects", SyncMode{ContractMode: synccontract.ModeFullAppend}, gitlab, warehouse); err != nil || !selected || reason != transportRouteDeclared {
+		t.Fatalf("GitLab-to-warehouse full append route = selected=%t reason=%q err=%v, want source-cited declared transport", selected, reason, err)
 	}
 	if a.shouldRunTransport(Connection{}, "commits", SyncMode{ContractMode: synccontract.ModeFullAppend}, github, postgres) != true {
 		t.Fatal("declared GitHub commits-to-PostgreSQL route was not selected for production dispatch")

@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "connector": "gitlab",
+  "source_lock": {
+    "path": "sources/gitlab-operation-source-lock.json",
+    "sha256": "b33e80759af3a529d71a0bb58c8c76d65c9f0b20774a042196c6d3c0c57310bd",
+    "bytes": 3611238,
+    "canonical_evidence": true
+  },
+  "supplemental_source_locks": [
+    {"path": "sources/gitlab-binary-operation-source-lock.json", "operations": 2}
+  ],
+  "lanes": [
+    {
+      "name": "direct_read",
+      "state": "implemented",
+      "reason": "582 exact source-bound GET direct reads are command-dispatchable; the remaining GET/HEAD identities retain their per-source named foundation outcomes.",
+      "citations": [{"url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "location": "rest.operations method GET or HEAD"}],
+      "artifacts": ["operations.json", "api_surface.json", "cli_surface.json", "sources/gitlab-operation-source-lock.json"],
+      "source": {"partition": true, "methods": ["GET", "HEAD"], "coverage": "partial", "expected": 749, "implemented": 582, "deferred_foundation": 167, "unsupported_with_provider_evidence": 0}
+    },
+    {
+      "name": "direct_write",
+      "state": "deferred_foundation",
+      "reason": "GitLab mutations are exposed only through approval-gated reverse ETL; no separate direct-write command is admitted by this cohort.",
+      "citations": [{"url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "location": "rest.operations mutating methods"}],
+      "artifacts": ["writes.json", "cli_surface.json", "sources/gitlab-operation-source-lock.json"],
+      "source": {"partition": false, "coverage": "not_applicable", "expected": 0, "implemented": 0, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0}
+    },
+    {
+      "name": "binary_download",
+      "state": "deferred_foundation",
+      "reason": "GitLab documents a raw repository-file download, but the retained page does not publish a closed response-media contract or complete executable request/response schema; source_contract_unavailable remains explicit until a source-citable binary response contract is retained.",
+      "citations": [{"url": "https://docs.gitlab.com/api/repository_files/#retrieve-a-raw-file-from-a-repository", "location": "GET /projects/:id/repository/files/:file_path/raw"}],
+      "artifacts": ["sources/gitlab-binary-operation-source-lock.json", "sources/artifacts/53244a720b8509536290e0058c946a246817c775c797df36f4c9aa1225fdf0a4.artifact", "operations.json", "api_surface.json"],
+      "source": {"source_lock": "sources/gitlab-binary-operation-source-lock.json", "partition": false, "operation_ids": ["gitlab.docs.repository_files.raw_download"], "coverage": "partial", "expected": 1, "implemented": 0, "deferred_foundation": 1, "unsupported_with_provider_evidence": 0}
+    },
+    {
+      "name": "binary_upload",
+      "state": "deferred_foundation",
+      "reason": "GitLab documents generic-package file upload, but the retained page does not publish a closed request-media contract or complete typed request/response schema; source_contract_unavailable remains explicit until a source-citable binary upload contract is retained.",
+      "citations": [{"url": "https://docs.gitlab.com/user/packages/generic_packages/#publish-a-single-file", "location": "PUT /projects/:id/packages/generic/:package_name/:package_version/:file_name"}],
+      "artifacts": ["sources/gitlab-binary-operation-source-lock.json", "sources/artifacts/f59c93194c095d0e925a5751a08eb7a2176a26c6b5f38bda52f805154219d0f0.artifact", "writes.json", "operations.json"],
+      "source": {"source_lock": "sources/gitlab-binary-operation-source-lock.json", "partition": false, "operation_ids": ["gitlab.docs.generic_packages.upload_file"], "coverage": "partial", "expected": 1, "implemented": 0, "deferred_foundation": 1, "unsupported_with_provider_evidence": 0}
+    },
+    {
+      "name": "etl",
+      "state": "implemented",
+      "reason": "Four fixed GET streams use the declared source executor and the local DuckDB/Parquet warehouse destination; no API-to-API route is selected.",
+      "citations": [{"url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "location": "GET /api/v4/projects, /groups, /users, /issues"}],
+      "artifacts": ["streams.json", "schemas/projects.json", "schemas/groups.json", "schemas/users.json", "schemas/issues.json", "sync_transport.json", "cli_surface.json"],
+      "source": {"partition": false, "operation_ids": ["getApiV4Projects", "getApiV4Groups", "getApiV4Users", "getApiV4Issues"], "coverage": "complete", "expected": 4, "implemented": 4, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0},
+      "warehouse_flows": [{"direction": "provider_to_duckdb", "runtime": "internal/app/declarativeStreamSourceExecutor -> internal/app/localWarehouseDestinationExecutor", "proof": "internal/cli/gitlab_transport_test.go:TestGitLabSourceTransportMaterializesConnectionOwnedDuckDB"}]
+    },
+    {
+      "name": "reverse_etl",
+      "state": "implemented",
+      "reason": "147 source-bound mutations are available only through DuckDB/Parquet-backed reverse plan and preview before approval-gated dispatch; 856 remaining mutations retain named foundation outcomes.",
+      "citations": [{"url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "location": "rest.operations method DELETE, PATCH, POST, or PUT"}],
+      "artifacts": ["writes.json", "api_surface.json", "cli_surface.json", "sources/gitlab-operation-source-lock.json"],
+      "source": {"partition": true, "methods": ["DELETE", "PATCH", "POST", "PUT"], "coverage": "partial", "expected": 1003, "implemented": 147, "deferred_foundation": 856, "unsupported_with_provider_evidence": 0},
+      "transport": {
+        "modes": ["full_overwrite", "full_append"],
+        "runtime_delivery": {"idempotency": "at_least_once", "ordering": "unordered", "deletes": "not_available"},
+        "streams": [
+          {"stream": "projects", "source_operation": "getApiV4Projects", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "groups", "source_operation": "getApiV4Groups", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "users", "source_operation": "getApiV4Users", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "issues", "source_operation": "getApiV4Issues", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"}
+        ],
+        "destination": {"kind": "reverse_plan_preview_approval", "actions_artifact": "writes.json", "expected_actions": 147, "plan_executor": "internal/app.PlanReverseETL", "preview_executor": "internal/app.PreviewReversePlan", "approval_executor": "internal/app.RunReverseETL"}
+      },
+      "warehouse_flows": [{"direction": "duckdb_to_provider", "runtime": "internal/app.PlanReverseETL -> internal/app.PreviewReversePlan", "proof": "internal/cli/gitlab_transport_test.go:TestGitLabDuckDBReversePlanAndPreviewRemainProviderIOFree"}]
+    },
+    {
+      "name": "sync_transport",
+      "state": "implemented",
+      "reason": "The shared declarative source is registered with immutable conformance evidence for a bounded full-snapshot route to the local durable DuckDB/Parquet warehouse; order, cursors, and delete events are not claimed where the locked source does not declare them.",
+      "citations": [{"url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "location": "GET /api/v4/projects, /groups, /users, /issues"}],
+      "artifacts": ["sync_transport.json", "streams.json", "enabled_connector_contract.json"],
+      "source": {"partition": false, "operation_ids": ["getApiV4Projects", "getApiV4Groups", "getApiV4Users", "getApiV4Issues"], "coverage": "complete", "expected": 4, "implemented": 4, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0},
+      "transport": {
+        "modes": ["full_overwrite", "full_append"],
+        "runtime_delivery": {"idempotency": "at_least_once", "ordering": "unordered", "deletes": "not_available"},
+        "streams": [
+          {"stream": "projects", "source_operation": "getApiV4Projects", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "groups", "source_operation": "getApiV4Groups", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "users", "source_operation": "getApiV4Users", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "issues", "source_operation": "getApiV4Issues", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"}
+        ]
+      },
+      "warehouse_flows": [{"direction": "provider_to_duckdb", "runtime": "internal/app/declarativeStreamSourceExecutor -> internal/app/localWarehouseDestinationExecutor", "proof": "internal/cli/gitlab_transport_test.go:TestGitLabSourceTransportMaterializesConnectionOwnedDuckDB"}]
+    }
+  ]
+}
