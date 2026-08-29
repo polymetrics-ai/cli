@@ -2043,10 +2043,43 @@ func Check(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks)
 	if err != nil {
 		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: err}
 	}
+	requester, err = requesterWithCheckSuccessStatuses(requester, b.HTTP.Check)
+	if err != nil {
+		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: err}
+	}
 	_, err = requester.Do(ctx, method, checkPath, checkQuery, nil)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Class: class, Hint: hint, Err: err}
 	}
 	return nil
+}
+
+// requesterWithCheckSuccessStatuses applies the optional, declaration-owned
+// base-check status set without mutating the shared runtime requester. An
+// omitted set preserves the legacy generic-2xx acceptance policy; a declared
+// set accepts only exact 2xx codes, never an implicit range.
+func requesterWithCheckSuccessStatuses(requester *connsdk.Requester, check *RequestSpec) (*connsdk.Requester, error) {
+	if check == nil || len(check.SuccessStatuses) == 0 {
+		return requester, nil
+	}
+	accepted := make([]connsdk.StatusRange, 0, len(check.SuccessStatuses))
+	seen := make(map[int]struct{}, len(check.SuccessStatuses))
+	for _, declared := range check.SuccessStatuses {
+		if len(declared) != 3 || strings.TrimSpace(declared) != declared {
+			return nil, fmt.Errorf("check success status %q must be an exact 2xx status", declared)
+		}
+		status, err := strconv.Atoi(declared)
+		if err != nil || status < http.StatusOK || status >= http.StatusMultipleChoices {
+			return nil, fmt.Errorf("check success status %q must be an exact 2xx status", declared)
+		}
+		if _, duplicate := seen[status]; duplicate {
+			return nil, fmt.Errorf("check success status %q is duplicated", declared)
+		}
+		seen[status] = struct{}{}
+		accepted = append(accepted, connsdk.StatusRange{Min: status, Max: status})
+	}
+	clone := *requester
+	clone.AcceptedStatuses = accepted
+	return &clone, nil
 }

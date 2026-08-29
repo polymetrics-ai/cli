@@ -83,7 +83,8 @@
           "properties": {
             "method": { "type": "string" },
             "path": { "type": "string" },
-            "query": { "type": "object" }
+            "query": { "type": "object" },
+            "success_statuses": { "type": "array", "minItems": 1, "items": { "type": "string" } }
           }
         },
         "error_map": {

@@ -200,9 +200,10 @@ type OperationRouteSpec struct {
 // meta-schema rejection (post-hardening) or a silently-dropped no-op
 // (pre-hardening) — see read.go's Check() for how it is now resolved+sent.
 type RequestSpec struct {
-	Method string                `json:"method"`
-	Path   string                `json:"path"`
-	Query  map[string]QueryParam `json:"query,omitempty"`
+	Method          string                `json:"method"`
+	Path            string                `json:"path"`
+	Query           map[string]QueryParam `json:"query,omitempty"`
+	SuccessStatuses []string              `json:"success_statuses,omitempty"`
 }
 
 // AuthSpec describes one candidate authenticator, selected by "when" (first

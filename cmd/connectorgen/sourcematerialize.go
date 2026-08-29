@@ -317,6 +317,9 @@ func validateSourceMaterializationWire(lock sourceImportLock) error {
 			if row.Binding != nil || strings.TrimSpace(row.Reason) == "" {
 				return fmt.Errorf("source lock v4 materialization operation %q must have a non-empty reason and no binding when %s", row.SourceID, row.State)
 			}
+			if len(row.Inputs) != 0 {
+				return fmt.Errorf("source lock v4 materialization operation %q must not declare inputs when %s; blocked and unsupported rows are accounting-only", row.SourceID, row.State)
+			}
 		default:
 			return fmt.Errorf("source lock v4 materialization operation %q has unsupported state %q", row.SourceID, row.State)
 		}
@@ -466,11 +469,15 @@ func sourceMaterializeOutputs(lock sourceImportLock, result sourceImportResult) 
 	if len(byID) != len(plan.Operations) {
 		return nil, fmt.Errorf("source lock v4 materialization accounts for %d operations but retained source imports %d", len(plan.Operations), len(byID))
 	}
-	if err := sourceMaterializeValidateCheck(plan.Check, byID); err != nil {
-		return nil, err
+	rows := make(map[string]sourceMaterializationOperation, len(plan.Operations))
+	for _, row := range plan.Operations {
+		rows[row.SourceID] = row
 	}
 	properties, err := sourceMaterializationConfigProperties(plan.Config)
 	if err != nil {
+		return nil, err
+	}
+	if err := sourceMaterializeValidateCheck(plan.Check, byID, rows); err != nil {
 		return nil, err
 	}
 	metadata, spec, streams := sourceMaterializeBaseDocuments(lock.Connector, plan, properties)
@@ -505,7 +512,7 @@ func sourceMaterializeOutputs(lock sourceImportLock, result sourceImportResult) 
 			foundationRow.Binding = binding.Kind + ":" + binding.ID
 			switch binding.Kind {
 			case "direct_read":
-				op, command, endpoint, err := sourceMaterializeDirectRead(source, row, binding, properties)
+				op, command, endpoint, err := sourceMaterializeDirectRead(source, row, binding)
 				if err != nil {
 					return nil, err
 				}
@@ -595,7 +602,7 @@ func sourceMaterializeBaseDocuments(connector string, plan sourceMaterialization
 		}
 	}
 	metadata := map[string]any{"name": connector, "display_name": plan.Metadata.DisplayName, "description": plan.Metadata.Description, "integration_type": plan.Metadata.IntegrationType, "docs_url": plan.Metadata.DocsURL, "release_stage": plan.Metadata.ReleaseStage, "capabilities": capabilities}
-	base := map[string]any{"url": plan.Server.URL, "user_agent": plan.Server.UserAgent, "pagination": map[string]any{"type": "none"}, "check": map[string]any{"method": plan.Check.Method, "path": plan.Check.Path}}
+	base := map[string]any{"url": plan.Server.URL, "user_agent": plan.Server.UserAgent, "pagination": map[string]any{"type": "none"}, "check": map[string]any{"method": plan.Check.Method, "path": plan.Check.Path, "success_statuses": plan.Check.SuccessStatuses}}
 	if plan.Auth.Mode != "none" {
 		base["auth"] = []any{sourceMaterializeAuthDocument(plan.Auth)}
 	}
@@ -628,10 +635,17 @@ func sourceMaterializeAuthDocument(auth sourceMaterializationAuth) map[string]an
 	return result
 }
 
-func sourceMaterializeValidateCheck(check sourceMaterializationCheck, sources map[string]sourceOperationDescriptor) error {
+func sourceMaterializeValidateCheck(check sourceMaterializationCheck, sources map[string]sourceOperationDescriptor, rows map[string]sourceMaterializationOperation) error {
 	source, found := sources[check.SourceID]
-	if !found || strings.ToUpper(source.Method) != "GET" || check.Method != "GET" || check.Path != source.Path || len(check.SuccessStatuses) == 0 {
+	row, selected := rows[check.SourceID]
+	if !found || !selected || strings.ToUpper(source.Method) != "GET" || check.Method != "GET" || check.Path != source.Path || len(check.SuccessStatuses) == 0 {
 		return fmt.Errorf("source lock v4 materialization check must select one exact retained GET operation with explicit success statuses")
+	}
+	if row.State != "materialized" || row.Binding == nil || row.Binding.Kind != "direct_read" {
+		return fmt.Errorf("source lock v4 materialization check %q must select a materialized direct_read operation", check.SourceID)
+	}
+	if err := sourceMaterializeValidateMaterializedRuntime(source, *row.Binding); err != nil {
+		return fmt.Errorf("source lock v4 materialization check %q is not runtime-admissible: %w", check.SourceID, err)
 	}
 	if len(source.Request.Path) != 0 || len(source.Request.Query) != 0 || len(source.Request.Header) != 0 || source.Request.Body != nil || len(source.Request.Media) != 0 {
 		return fmt.Errorf("source lock v4 materialization check %q has caller-controlled inputs and cannot be an implicit default", check.SourceID)
@@ -639,35 +653,61 @@ func sourceMaterializeValidateCheck(check sourceMaterializationCheck, sources ma
 	return sourceMaterializeValidateSuccessStatuses(source, check.SuccessStatuses)
 }
 
-func sourceMaterializeDirectRead(source sourceOperationDescriptor, row sourceMaterializationOperation, binding sourceMaterializationOperationBind, properties map[string]sourceMaterializationConfigProperty) (map[string]any, map[string]any, map[string]any, error) {
+// sourceMaterializeValidateMaterializedRuntime accepts only a descriptor that
+// the generated bundle can express without guessing a provider transport,
+// scope, page walk, or byte policy. A source row with one of these contracts
+// remains valid as blocked/unsupported accounting, but cannot be executable.
+func sourceMaterializeValidateMaterializedRuntime(source sourceOperationDescriptor, binding sourceMaterializationOperationBind) error {
+	if source.Runtime.MergeBlocked || len(source.Runtime.Gaps) != 0 || source.Runtime.NonExecutableMutation != nil || source.Runtime.PartialCoverageMutation != nil {
+		return fmt.Errorf("source operation %q runtime reachability is blocked; mark it blocked or unsupported with its retained mapping reason", source.SourceID)
+	}
+	if source.AuthScopes.Declared {
+		return fmt.Errorf("source operation %q has a declared authentication scope that source-materialize cannot faithfully bind", source.SourceID)
+	}
+	if source.Pagination != nil {
+		return fmt.Errorf("source operation %q has declared pagination that source-materialize cannot faithfully bind", source.SourceID)
+	}
+	if source.Servers.Root.Declared || source.Servers.PathItem.Declared || source.Servers.Operation.Declared || source.Servers.Swagger != nil || len(source.Servers.Gaps) != 0 {
+		return fmt.Errorf("source operation %q has declared server routing that source-materialize cannot faithfully bind", source.SourceID)
+	}
+	switch binding.Kind {
+	case "direct_read":
+		if source.ByteLimits.Request != 0 {
+			return fmt.Errorf("source operation %q has a declared request byte limit that source-materialize cannot faithfully bind", source.SourceID)
+		}
+		if source.ByteLimits.Response > 0 && source.ByteLimits.Response != int64(binding.MaxResponseBytes) {
+			return fmt.Errorf("source operation %q response byte limit %d does not exactly match direct_read max_response_bytes %d", source.SourceID, source.ByteLimits.Response, binding.MaxResponseBytes)
+		}
+	case "write":
+		if source.ByteLimits.Request != 0 || source.ByteLimits.Response != 0 {
+			return fmt.Errorf("source operation %q has declared byte limits that source-materialize cannot faithfully bind for a write", source.SourceID)
+		}
+	default:
+		return fmt.Errorf("source operation %q has unsupported runtime binding kind %q", source.SourceID, binding.Kind)
+	}
+	return nil
+}
+
+func sourceMaterializeDirectRead(source sourceOperationDescriptor, row sourceMaterializationOperation, binding sourceMaterializationOperationBind) (map[string]any, map[string]any, map[string]any, error) {
 	if strings.ToUpper(source.Method) != "GET" || source.Protocol != "rest" || source.Output.Class != sourceOutputJSON || source.Request.Body != nil || len(source.Request.Media) != 0 || binding.OutputPolicy != "json_redacted" {
 		return nil, nil, nil, fmt.Errorf("source operation %q is not a bounded JSON GET direct-read contract", source.SourceID)
+	}
+	if err := sourceMaterializeValidateMaterializedRuntime(source, binding); err != nil {
+		return nil, nil, nil, err
 	}
 	if err := sourceMaterializeValidateSuccessStatuses(source, binding.SuccessStatuses); err != nil {
 		return nil, nil, nil, err
 	}
-	query := map[string]any{}
-	for _, input := range row.Inputs {
-		location, name, _ := strings.Cut(input.Source, ".")
-		if location != "query" || !strings.HasPrefix(input.Target, "config.") {
-			return nil, nil, nil, fmt.Errorf("source operation %q direct-read inputs support only query -> config bindings", source.SourceID)
-		}
-		configName := strings.TrimPrefix(input.Target, "config.")
-		if configName == "" || configName != strings.TrimSpace(configName) {
-			return nil, nil, nil, fmt.Errorf("source operation %q direct-read input %q has an invalid config target", source.SourceID, input.Source)
-		}
-		if _, found := properties[configName]; !found {
-			return nil, nil, nil, fmt.Errorf("source operation %q direct-read input %q targets undeclared config %q", source.SourceID, input.Source, configName)
-		}
-		query[name] = "{{ " + input.Target + " }}"
+	if len(source.Request.Query) != 0 {
+		return nil, nil, nil, fmt.Errorf("source operation %q has query wire semantics that source-materialize cannot faithfully preserve; mark it blocked or unsupported with an explicit reason", source.SourceID)
+	}
+	if len(row.Inputs) != 0 {
+		return nil, nil, nil, fmt.Errorf("source operation %q direct-read inputs require query wire semantics that source-materialize cannot faithfully preserve", source.SourceID)
 	}
 	if len(source.Request.Path) != 0 || len(source.Request.Header) != 0 {
 		return nil, nil, nil, fmt.Errorf("source operation %q needs a path/header foundation not declared by source-materialize", source.SourceID)
 	}
 	rest := map[string]any{"method": "GET", "path": source.Path, "max_bytes": binding.MaxResponseBytes, "response": map[string]any{"success_statuses": binding.SuccessStatuses}}
-	if len(query) > 0 {
-		rest["query"] = query
-	}
 	op := map[string]any{"id": binding.ID, "kind": "rest_read", "summary": binding.CommandSummary, "source_url": sourceMaterializeCitationURL(source), "risk": binding.Risk, "approval": "none", "output_policy": binding.OutputPolicy, "source_operation": map[string]any{"id": source.SourceID, "method": "GET", "path": source.Path}, "rest": rest}
 	// A rest_read operation becomes executable through its implemented direct
 	// read CLI surface; api_surface's operations ledger is reserved for fixed
@@ -678,8 +718,14 @@ func sourceMaterializeDirectRead(source sourceOperationDescriptor, row sourceMat
 }
 
 func sourceMaterializeWrite(source sourceOperationDescriptor, row sourceMaterializationOperation, binding sourceMaterializationOperationBind) (map[string]any, map[string]any, error) {
-	if source.Protocol != "rest" || !sourceMaterializeMutationMethod(source.Method) || source.Request.Body == nil || source.RequestMediaType() != binding.RequestMedia || !sourceJSONMediaType(binding.RequestMedia) {
+	if source.Protocol != "rest" || !sourceMaterializeMutationMethod(source.Method) || source.Request.Body == nil {
 		return nil, nil, fmt.Errorf("source operation %q is not the selected JSON mutation contract", source.SourceID)
+	}
+	if source.RequestMediaType() != "application/json" || binding.RequestMedia != "application/json" {
+		return nil, nil, fmt.Errorf("source operation %q is not the selected JSON mutation contract: generated body_type json sends application/json, so source and binding media must be exactly application/json", source.SourceID)
+	}
+	if err := sourceMaterializeValidateMaterializedRuntime(source, binding); err != nil {
+		return nil, nil, err
 	}
 	if err := sourceMaterializeValidateSuccessStatuses(source, binding.SuccessStatuses); err != nil {
 		return nil, nil, err
@@ -1004,8 +1050,11 @@ func sourceMaterializePublishWithOps(bundleDir, connector string, outputs []sour
 	if err != nil {
 		return fmt.Errorf("reserve publish backup: %w", err)
 	}
-	if err := ops.Remove(backup); err != nil {
-		return fmt.Errorf("prepare publish backup: %w", err)
+	if removeErr := ops.Remove(backup); removeErr != nil {
+		if cleanupErr := ops.RemoveAll(backup); cleanupErr != nil {
+			return fmt.Errorf("prepare publish backup: %v; cleanup reserved backup %q failed: %v", removeErr, backup, cleanupErr)
+		}
+		return fmt.Errorf("prepare publish backup: %w", removeErr)
 	}
 	if err := ops.Rename(bundleDir, backup); err != nil {
 		return fmt.Errorf("prepare recoverable publish: %w", err)

@@ -494,6 +494,10 @@ type sourceGraphQLTypeSystem struct {
 
 type sourceImportGraphQL struct {
 	sourceImportArtifact
+	// DocumentID is the lock-owned identity for the retained GraphQL schema
+	// artifact. Unlike a field-derived operation ID, it remains stable for
+	// every query/mutation row that cites the same retained schema.
+	DocumentID       string                  `json:"document_id,omitempty"`
 	ProjectionSHA256 string                  `json:"projection_sha256,omitempty"`
 	ProjectionBytes  int64                   `json:"projection_bytes,omitempty"`
 	QueryFields      []sourceGraphQLField    `json:"query_fields"`
@@ -1966,10 +1970,16 @@ func validateSourceImportGraphQLInventory(lock sourceImportLock) error {
 	}
 	graphqlCount := len(lock.GraphQL.QueryFields) + len(lock.GraphQL.MutationFields)
 	if graphqlCount == 0 {
+		if lock.SchemaVersion == 4 && lock.GraphQL.DocumentID != "" {
+			return fmt.Errorf("source lock v4 GraphQL document_id requires a GraphQL inventory")
+		}
 		if lock.Counts.GraphQLQuery != 0 || lock.Counts.GraphQLMutation != 0 {
 			return fmt.Errorf("source lock GraphQL counts require a GraphQL inventory")
 		}
 		return nil
+	}
+	if lock.SchemaVersion == 4 && (lock.GraphQL.DocumentID == "" || lock.GraphQL.DocumentID != strings.ToLower(lock.GraphQL.DocumentID) || lock.GraphQL.DocumentID != strings.TrimSpace(lock.GraphQL.DocumentID) || !sourceImportDocumentID(lock.GraphQL.DocumentID)) {
+		return fmt.Errorf("source lock v4 GraphQL inventory requires a canonical document_id")
 	}
 	if err := validateSourceImportArtifact(lock.GraphQL.sourceImportArtifact); err != nil {
 		return fmt.Errorf("source lock has invalid GraphQL artifact: %w", err)
@@ -2879,12 +2889,13 @@ func appendLockedGraphQLProjection(ctx context.Context, lock sourceImportLock, f
 	schema := sourceGraphQLSchemaDescriptor{
 		Connector: lock.Connector,
 		Source: sourceImportSource{
-			URL:      lock.GraphQL.SourceURL,
-			SHA256:   strings.ToLower(firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)),
-			Bytes:    firstPositiveInt64(lock.GraphQL.ProjectionBytes, lock.GraphQL.Bytes),
-			Location: "graphql.type_system",
-			Form:     "graphql",
-			Version:  strconv.Itoa(lock.SchemaVersion),
+			DocumentID: lock.GraphQL.DocumentID,
+			URL:        lock.GraphQL.SourceURL,
+			SHA256:     strings.ToLower(firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)),
+			Bytes:      firstPositiveInt64(lock.GraphQL.ProjectionBytes, lock.GraphQL.Bytes),
+			Location:   "graphql.type_system",
+			Form:       "graphql",
+			Version:    strconv.Itoa(lock.SchemaVersion),
 		},
 		TypeSystem: lock.GraphQL.TypeSystem,
 	}
@@ -2903,12 +2914,13 @@ func appendLockedGraphQLProjection(ctx context.Context, lock sourceImportLock, f
 			Protocol:  "graphql",
 			SourceID:  fmt.Sprintf("%s.graphql.%s.%s", lock.Connector, kind, field.Name),
 			Source: sourceImportSource{
-				URL:      lock.GraphQL.SourceURL,
-				SHA256:   strings.ToLower(firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)),
-				Bytes:    firstPositiveInt64(lock.GraphQL.ProjectionBytes, lock.GraphQL.Bytes),
-				Location: location,
-				Form:     "graphql",
-				Version:  strconv.Itoa(lock.SchemaVersion),
+				DocumentID: lock.GraphQL.DocumentID,
+				URL:        lock.GraphQL.SourceURL,
+				SHA256:     strings.ToLower(firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)),
+				Bytes:      firstPositiveInt64(lock.GraphQL.ProjectionBytes, lock.GraphQL.Bytes),
+				Location:   location,
+				Form:       "graphql",
+				Version:    strconv.Itoa(lock.SchemaVersion),
 			},
 			Method:     "post",
 			Path:       "/graphql",

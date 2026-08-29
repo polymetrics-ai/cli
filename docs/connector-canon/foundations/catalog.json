@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 4,
+  "catalog_revision": 5,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -17,13 +17,14 @@
       "layer": "source_retention_import",
       "status": "available",
       "kind": "generic",
-      "summary": "Retains verified provider artifacts and imports locked OpenAPI, rendered-reference, bundle, and GraphQL sources into closed canonical operation descriptors and source-selected event/batch inventories while preserving unresolved evidence as explicit gaps.",
+      "summary": "Retains verified provider artifacts and imports locked OpenAPI, rendered-reference, bundle, and GraphQL sources into closed canonical operation descriptors and source-selected event/batch inventories while preserving unresolved evidence as explicit gaps. Source-lock v4 materialization consumes these cited descriptors and fails closed when the current runtime cannot faithfully represent a retained contract.",
       "owner": {
         "primary_package": "polymetrics.ai/cmd/connectorgen",
         "supporting_packages": [],
         "files": [
           "cmd/connectorgen/sourceartifact.go",
-          "cmd/connectorgen/sourceimport.go"
+          "cmd/connectorgen/sourceimport.go",
+          "cmd/connectorgen/sourcematerialize.go"
         ],
         "symbols": [
           {
@@ -61,6 +62,14 @@
           {
             "file": "cmd/connectorgen/sourceimport.go",
             "name": "appendLockedGraphQLProjection"
+          },
+          {
+            "file": "cmd/connectorgen/sourcematerialize.go",
+            "name": "sourceMaterializeOutputs"
+          },
+          {
+            "file": "cmd/connectorgen/sourcematerialize.go",
+            "name": "sourceMaterializeValidateMaterializedRuntime"
           }
         ]
       },
@@ -84,6 +93,7 @@
           "OpenAPI 3.1",
           "rendered_reference",
           "retained artifact bundle",
+          "source-lock v4 explicit materialization plan",
           "source_reference"
         ],
         "request_response_shapes": [
@@ -94,6 +104,7 @@
           "request- versus response-phase unresolved reference evidence",
           "request body media types and encodings",
           "response status, media, headers, and schema descriptors",
+          "source-lock v4 per-operation materialization accounting with typed bindings and citations",
           "closed event-schema and declared-batch selector inventories resolved against retained provider bytes",
           "server and path overrides"
         ],
@@ -102,6 +113,7 @@
           "bounded fetch and parse budgets",
           "canonical source identity and digest verification",
           "citation retention",
+          "materialized source-lock rows fail closed when retained runtime reachability, routing, input wire semantics, media, scope, pagination, or byte constraints cannot be represented",
           "malformed, unavailable, or unresolved contracts remain explicit gaps"
         ]
       },
@@ -115,7 +127,8 @@
         ],
         "selectors": [
           "connectorgen source-retain",
-          "connectorgen source-import"
+          "connectorgen source-import",
+          "connectorgen source-materialize"
         ],
         "notes": "The source lock selects retained artifacts and forms; import produces authoring descriptors and never registers a runtime executor."
       },
@@ -123,7 +136,8 @@
         "Only contracts stated by retained provider evidence may be imported.",
         "A batch inventory may name only one locked provider operation, canonical schema selectors, a provider-proven maximum, and closed provider envelope/method/response fields; it cannot carry raw executable HTTP.",
         "Reference cycles and unsupported dialect details must remain explicit rather than being guessed or flattened.",
-        "Retained bytes, URLs, and hashes prove provenance, not runtime behavior."
+        "Retained bytes, URLs, and hashes prove provenance, not runtime behavior.",
+        "A v4 materialized row must preserve every retained runtime-relevant contract exactly or be represented as cited blocked/unsupported accounting; the materializer does not synthesize a transport escape."
       ],
       "non_goals": [
         "Admitting a command, stream, write, or sync mode into runtime.",
@@ -176,6 +190,11 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/sourceimport_batch_action_inventory_test.go",
           "name": "TestSourceImportV3BatchActionInventoryRejectsUnboundOrOpenContracts"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/sourcematerialize_test.go",
+          "name": "TestSourceMaterialize_GraphQLBlockedRowsRetainExactDocumentCitation"
         }
       ],
       "known_gap_refs": [
@@ -193,7 +212,8 @@
       "update_conditions": [
         "A supported source form, dialect, schema keyword, parameter binding, media encoding, or response descriptor changes.",
         "Artifact identity, citation, fetch-bound, or unresolved-reference behavior changes.",
-        "An owner symbol or proof test is moved, replaced, or narrowed."
+        "An owner symbol or proof test is moved, replaced, or narrowed.",
+        "Source-lock v4 materialization accounting or fail-closed descriptor-mapping behavior changes."
       ],
       "supersedes": []
     },
@@ -705,7 +725,7 @@
       "layer": "direct_execution",
       "status": "available",
       "kind": "generic",
-      "summary": "Executes definition-bound direct reads, direct writes, binary downloads, and binary uploads through common preflight, request encoding, response handling, preview, approval, and command-binding paths.",
+      "summary": "Executes definition-bound direct reads, direct writes, binary downloads, and binary uploads through common preflight, request encoding, response handling, preview, approval, and command-binding paths. Its declarative base check can preserve an explicit exact allowed 2xx status set through the existing requester status policy.",
       "owner": {
         "primary_package": "polymetrics.ai/internal/connectors/engine",
         "supporting_packages": [
@@ -719,6 +739,7 @@
           "internal/connectors/manifest.go",
           "internal/connectors/connsdk/http.go",
           "internal/connectors/connsdk/rate_limit_requester.go",
+          "internal/connectors/engine/bundle.go",
           "internal/connectors/engine/binary_read.go",
           "internal/connectors/engine/command_binding.go",
           "internal/connectors/engine/connector.go",
@@ -760,6 +781,14 @@
           {
             "file": "internal/connectors/engine/read.go",
             "name": "Read"
+          },
+          {
+            "file": "internal/connectors/engine/read.go",
+            "name": "Check"
+          },
+          {
+            "file": "internal/connectors/engine/read.go",
+            "name": "requesterWithCheckSuccessStatuses"
           },
           {
             "file": "internal/connectors/connsdk/http.go",
@@ -806,6 +835,7 @@
           "declared JSON, form, and multipart writes",
           "fixed GraphQL operation bindings",
           "fixed REST reads and writes",
+          "base check requests with optional exact accepted 2xx statuses",
           "stream-backed bounded direct reads",
           "structured nested REST request bodies"
         ],
@@ -817,6 +847,7 @@
           "interactive stream reads share one caller request budget across fan-out discovery, child sequences, retries, and redirects while saved ETL keeps its established unbounded zero value",
           "one bounded provider-facing command invocation",
           "preview and approval binding for mutation paths",
+          "declared base-check success statuses are enforced as an exact allowed set when present",
           "response and payload bounds"
         ]
       },
@@ -845,7 +876,8 @@
         "Declared batches cannot accept caller-authored methods, paths, raw bodies, query-bearing subrequests, nested batches, or undeclared actions.",
         "Request fields, media types, response policies, and retry behavior must be declared and source-backed.",
         "Provider-unrestricted upload media requires an explicit declaration and remains path-confined, byte-bounded, digest-bound, previewed, and approval-gated.",
-        "Binary upload uses typed write-action variants; binary download uses a declared successful response and byte bound."
+        "Binary upload uses typed write-action variants; binary download uses a declared successful response and byte bound.",
+        "A declared base-check success_statuses set contains exact 2xx codes; omitted status metadata retains the legacy generic 2xx policy."
       ],
       "non_goals": [
         "Bulk ETL, warehouse materialization, scheduling, or flow orchestration.",
@@ -917,6 +949,11 @@
           "package": "./internal/connectors/engine",
           "file": "internal/connectors/engine/multipart_media_test.go",
           "name": "TestCanonicalMultipartPreviewBindsProviderUnrestrictedMediaPolicy"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/read_test.go",
+          "name": "TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome"
         }
       ],
       "known_gap_refs": [
@@ -929,7 +966,8 @@
       "update_conditions": [
         "A direct executor kind, request encoder, response policy, pagination contract, binary behavior, or approval path changes.",
         "Command binding or runtime-preflight selection changes.",
-        "A supported direct request shape, owner symbol, constraint, or proof test changes."
+        "A supported direct request shape, owner symbol, constraint, or proof test changes.",
+        "Base-check accepted-status behavior changes."
       ],
       "supersedes": []
     },

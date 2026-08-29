@@ -2287,6 +2287,55 @@ func TestCheckDeclarativeRequestSucceeds(t *testing.T) {
 	}
 }
 
+func TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome(t *testing.T) {
+	tests := []struct {
+		name      string
+		statuses  string
+		response  int
+		wantError string
+		wantCalls int
+	}{
+		{name: "happy accepts exact declared 204", statuses: `["204"]`, response: http.StatusNoContent, wantCalls: 1},
+		{name: "bad rejects undeclared 200", statuses: `["204"]`, response: http.StatusOK, wantError: "not declared", wantCalls: 1},
+		{name: "edge rejects status range before provider IO", statuses: `["200-299"]`, response: http.StatusOK, wantError: "exact 2xx status", wantCalls: 0},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			calls := 0
+			srv := jsonServer(t, func(w http.ResponseWriter, _ *http.Request) {
+				calls++
+				w.WriteHeader(tt.response)
+			})
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/streams.json"].Data = []byte(fmt.Sprintf(`{
+				"base": {
+					"url": "{{ config.base_url }}",
+					"check": { "method": "GET", "path": "/status", "success_statuses": %s }
+				},
+				"streams": [
+					{ "name": "widgets", "path": "/widgets", "records": { "path": "data" }, "schema": "schemas/widgets.json" }
+				]
+			}`, tt.statuses))
+			bundle, err := Load(fsys, "acme")
+			if err != nil {
+				t.Fatalf("Load exact check statuses: %v", err)
+			}
+			bundle.HTTP.URL = srv.URL
+			err = Check(context.Background(), bundle, connectors.RuntimeConfig{}, nil)
+			if tt.wantError == "" {
+				if err != nil {
+					t.Fatalf("Check exact status: %v", err)
+				}
+			} else if err == nil || !strings.Contains(err.Error(), tt.wantError) {
+				t.Fatalf("Check exact status error = %v, want %q", err, tt.wantError)
+			}
+			if calls != tt.wantCalls {
+				t.Fatalf("provider calls = %d, want %d", calls, tt.wantCalls)
+			}
+		})
+	}
+}
+
 func TestCheckNoDeclaredCheckIsNoop(t *testing.T) {
 	b := Bundle{Name: "acme", HTTP: HTTPBase{URL: "http://example.invalid"}}
 	if err := Check(context.Background(), b, connectors.RuntimeConfig{}, nil); err != nil {

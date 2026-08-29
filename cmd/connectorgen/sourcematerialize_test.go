@@ -3,6 +3,8 @@ package main
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"os"
@@ -26,8 +28,12 @@ func TestSourceMaterialize_HappyBundleAndByteIdenticalCheck(t *testing.T) {
 			t.Fatalf("generated %s: %v", name, err)
 		}
 	}
-	if _, err := engine.Load(os.DirFS(defsRoot), "alpha"); err != nil {
+	bundle, err := engine.Load(os.DirFS(defsRoot), "alpha")
+	if err != nil {
 		t.Fatalf("generated bundle does not load: %v", err)
+	}
+	if bundle.HTTP.Check == nil || !reflect.DeepEqual(bundle.HTTP.Check.SuccessStatuses, []string{"200"}) {
+		t.Fatalf("generated base check status policy = %#v, want exact [200]", bundle.HTTP.Check)
 	}
 	if findings, err := validateOperationalContractPath(bundleDir, "alpha", "declared"); err != nil || len(findings) != 0 {
 		t.Fatalf("declared operational contract = findings=%+v err=%v", findings, err)
@@ -75,6 +81,9 @@ func TestSourceMaterialize_RejectsBadV4Plans(t *testing.T) {
 		{name: "non-api integration type", options: sourceMaterializeFixtureOptions{IntegrationType: "database"}, wantError: "metadata.integration_type \"database\" is not supported"},
 		{name: "required body input lacks binding", options: sourceMaterializeFixtureOptions{MissingBodyBinding: true}, wantError: "required input \"body.title\""},
 		{name: "unselected request media arm", options: sourceMaterializeFixtureOptions{WrongRequestMedia: true, MultipleMedia: true}, wantError: "not the selected JSON mutation contract"},
+		{name: "blocked row cannot carry executable inputs", options: sourceMaterializeFixtureOptions{BlockedWriteWithInputs: true}, wantError: "must not declare inputs"},
+		{name: "blocked check row cannot become executable", options: sourceMaterializeFixtureOptions{BlockedCheck: true}, wantError: "must select a materialized"},
+		{name: "runtime-blocked check row cannot become executable", options: sourceMaterializeFixtureOptions{RuntimeBlockedCheck: true}, wantError: "not runtime-admissible"},
 		{name: "owned output symlink escape", options: sourceMaterializeFixtureOptions{OutputSymlink: true}, wantError: "must not traverse a symlink"},
 	}
 	for _, tt := range tests {
@@ -213,6 +222,83 @@ func TestSourceMaterializeWrite_RejectsOpenProviderObjectWithoutSynthesis(t *tes
 	}
 }
 
+func TestSourceMaterializeDirectRead_RejectsRuntimeUnrepresentableContracts(t *testing.T) {
+	base := sourceOperationDescriptor{
+		SourceID:  "alpha.rest.get.widgets",
+		Protocol:  "rest",
+		Method:    "GET",
+		Path:      "/widgets",
+		Request:   sourceRequestDescriptor{Path: []sourceParameterDescriptor{}, Query: []sourceParameterDescriptor{}, Header: []sourceParameterDescriptor{}},
+		Responses: []sourceResponseDescriptor{{Status: "200"}},
+		Output:    sourceOutputDescriptor{Class: sourceOutputJSON},
+	}
+	row := sourceMaterializationOperation{SourceID: base.SourceID}
+	binding := sourceMaterializationOperationBind{Kind: "direct_read", ID: "list_widgets", CommandPath: "widgets list", CommandSummary: "List widgets", OutputPolicy: "json_redacted", MaxResponseBytes: 4096, SuccessStatuses: []string{"200"}, Risk: "low"}
+	tests := []struct {
+		name   string
+		mutate func(*sourceOperationDescriptor)
+		want   string
+	}{
+		{name: "descriptor merge blocked", mutate: func(source *sourceOperationDescriptor) { source.Runtime.MergeBlocked = true }, want: "runtime reachability is blocked"},
+		{name: "declared auth scope", mutate: func(source *sourceOperationDescriptor) { source.AuthScopes.Declared = true }, want: "declared authentication scope"},
+		{name: "declared pagination", mutate: func(source *sourceOperationDescriptor) { source.Pagination = map[string]any{"type": "cursor"} }, want: "declared pagination"},
+		{name: "declared server routing", mutate: func(source *sourceOperationDescriptor) { source.Servers.Root.Declared = true }, want: "declared server routing"},
+		{name: "response byte limit mismatch", mutate: func(source *sourceOperationDescriptor) { source.ByteLimits.Response = 128 }, want: "response byte limit"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			source := base
+			tt.mutate(&source)
+			if _, _, _, err := sourceMaterializeDirectRead(source, row, binding); err == nil || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("direct read error = %v, want fail-closed error containing %q", err, tt.want)
+			}
+		})
+	}
+}
+
+func TestSourceMaterializeDirectRead_RejectsQueryWithoutExactWireRepresentation(t *testing.T) {
+	source := sourceOperationDescriptor{
+		SourceID: "alpha.rest.get.widgets",
+		Protocol: "rest",
+		Method:   "GET",
+		Path:     "/widgets",
+		Request: sourceRequestDescriptor{
+			Path:   []sourceParameterDescriptor{},
+			Header: []sourceParameterDescriptor{},
+			Query:  []sourceParameterDescriptor{{Name: "tags", Schema: map[string]any{"type": "array"}, Wire: sourceParameterWireDescriptor{Style: "form"}}},
+		},
+		Responses: []sourceResponseDescriptor{{Status: "200"}},
+		Output:    sourceOutputDescriptor{Class: sourceOutputJSON},
+	}
+	row := sourceMaterializationOperation{SourceID: source.SourceID, Inputs: []sourceMaterializationInputBinding{{Source: "query.tags", Target: "config.base_url"}}}
+	binding := sourceMaterializationOperationBind{Kind: "direct_read", ID: "list_widgets", CommandPath: "widgets list", CommandSummary: "List widgets", OutputPolicy: "json_redacted", MaxResponseBytes: 4096, SuccessStatuses: []string{"200"}, Risk: "low"}
+	if _, _, _, err := sourceMaterializeDirectRead(source, row, binding); err == nil || !strings.Contains(err.Error(), "query wire") {
+		t.Fatalf("query wire error = %v, want explicit blocked mapping", err)
+	}
+}
+
+func TestSourceMaterializeWrite_RejectsVendorJSONWhenRuntimeSendsApplicationJSON(t *testing.T) {
+	source := sourceOperationDescriptor{
+		SourceID: "alpha.rest.post.widget",
+		Protocol: "rest",
+		Method:   "POST",
+		Path:     "/widgets",
+		Request: sourceRequestDescriptor{
+			MediaType: "application/vnd.alpha+json",
+			Body: &sourceRequestBodyDescriptor{Required: true, Schema: map[string]any{
+				"type": "object", "additionalProperties": false,
+				"required": []any{"title"}, "properties": map[string]any{"title": map[string]any{"type": "string"}},
+			}},
+		},
+		Responses: []sourceResponseDescriptor{{Status: "201"}},
+	}
+	row := sourceMaterializationOperation{SourceID: source.SourceID, Inputs: []sourceMaterializationInputBinding{{Source: "body.title", Target: "record.title"}}}
+	binding := sourceMaterializationOperationBind{Kind: "write", ID: "create_widget", RequestMedia: "application/vnd.alpha+json", WriteKind: "create", MutationClass: "create", Approval: "none", Risk: "high", SuccessStatuses: []string{"201"}}
+	if _, _, err := sourceMaterializeWrite(source, row, binding); err == nil || !strings.Contains(err.Error(), "application/json") {
+		t.Fatalf("vendor JSON error = %v, want exact-media blocked mapping", err)
+	}
+}
+
 func TestSourceMaterialize_HappyAccountsForOpenProviderWriteAsBlocked(t *testing.T) {
 	defsRoot, _, fetcher := sourceMaterializeFixture(t, sourceMaterializeFixtureOptions{OpenWriteBody: true, BlockOpenWrite: true})
 	stdout, stderr := new(bytes.Buffer), new(bytes.Buffer)
@@ -253,6 +339,83 @@ func TestSourceMaterialize_HappyAccountsForOpenProviderWriteAsBlocked(t *testing
 	}
 	if bytes.Contains(writes, []byte("create_widget")) {
 		t.Fatalf("blocked write was emitted as executable: %s", writes)
+	}
+}
+
+func TestSourceMaterialize_GraphQLBlockedRowsRetainExactDocumentCitation(t *testing.T) {
+	_, lockRaw, restFetcher := sourceMaterializeFixture(t, sourceMaterializeFixtureOptions{})
+	graphqlRaw := []byte("type Query { viewer: String }\n")
+	digest := sha256.Sum256(graphqlRaw)
+	graphql := sourceImportGraphQL{
+		sourceImportArtifact: sourceImportArtifact{
+			SourceURL: "https://fixtures.polymetrics.invalid/alpha.graphql",
+			SHA256:    hex.EncodeToString(digest[:]),
+			Bytes:     int64(len(graphqlRaw)),
+		},
+		QueryFields: []sourceGraphQLField{{
+			Root: "Query", Name: "viewer", Line: 1, Signature: "viewer: String",
+			Arguments: []sourceGraphQLArgument{}, ReturnType: sourceGraphQLTypeRef{Kind: "named", Name: "String"},
+		}},
+		TypeSystem: sourceGraphQLTypeSystem{Enums: []sourceGraphQLNamedType{}, InputObjects: []sourceGraphQLNamedType{}, Interfaces: []sourceGraphQLNamedType{}, Objects: []sourceGraphQLNamedType{}, Scalars: []string{"String"}, Unions: []sourceGraphQLNamedType{}},
+	}
+	projection, err := canonicalSourceGraphQLProjection(graphql)
+	if err != nil {
+		t.Fatal(err)
+	}
+	projectionDigest := sha256.Sum256(projection)
+	graphql.ProjectionSHA256 = hex.EncodeToString(projectionDigest[:])
+	graphql.ProjectionBytes = int64(len(projection))
+	graphqlRawPlan, err := json.Marshal(graphql)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var graphqlPlan map[string]any
+	if err := json.Unmarshal(graphqlRawPlan, &graphqlPlan); err != nil {
+		t.Fatal(err)
+	}
+	graphqlPlan["document_id"] = "graphql-schema"
+
+	var raw map[string]any
+	if err := json.Unmarshal(lockRaw, &raw); err != nil {
+		t.Fatal(err)
+	}
+	raw["graphql"] = graphqlPlan
+	raw["counts"] = map[string]any{"rest": 2, "graphql_query": 1, "graphql_mutation": 0, "total": 3}
+	plan := raw["materialization"].(map[string]any)
+	plan["operations"] = append(plan["operations"].([]any), map[string]any{
+		"source_id": "alpha.graphql.query.viewer", "state": "blocked",
+		"citation": map[string]any{"document_id": "graphql-schema", "location": `graphql.query_fields["viewer"]@line:1`},
+		"reason":   "No fixed GraphQL document materialization section is declared.",
+	})
+	withGraphQL, err := json.Marshal(raw)
+	if err != nil {
+		t.Fatal(err)
+	}
+	lock, err := parseSourceImportLock(withGraphQL, "alpha")
+	if err != nil {
+		t.Fatalf("parse v4 GraphQL lock: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(ctx context.Context, sourceURL string) ([]byte, error) {
+		if sourceURL == graphql.SourceURL {
+			return graphqlRaw, nil
+		}
+		return restFetcher.Fetch(ctx, sourceURL)
+	}), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import v4 GraphQL lock: %v", err)
+	}
+	var imported *sourceOperationDescriptor
+	for index := range result.Operations {
+		if result.Operations[index].SourceID == "alpha.graphql.query.viewer" {
+			imported = &result.Operations[index]
+			break
+		}
+	}
+	if imported == nil || imported.Source.DocumentID != "graphql-schema" {
+		t.Fatalf("GraphQL document identity = %#v, want retained graphql-schema identity", imported)
+	}
+	if _, err := sourceMaterializeOutputs(lock, result); err != nil {
+		t.Fatalf("all-accounted blocked GraphQL materialization: %v", err)
 	}
 }
 
@@ -430,6 +593,53 @@ func TestSourceMaterializePublish_ReportsUnrecoverableRollbackBoundary(t *testin
 	}
 }
 
+func TestSourceMaterializePublish_BackupReservationCleanupBoundary(t *testing.T) {
+	tests := []struct {
+		name          string
+		removeAllFail bool
+	}{
+		{name: "cleans reserved backup after preparation failure"},
+		{name: "names reserved backup when cleanup also fails", removeAllFail: true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			bundleDir := sourceMaterializeGeneratedBundle(t)
+			var reserved string
+			err := sourceMaterializePublishWithOps(bundleDir, "alpha", nil, sourceMaterializePublishOps{
+				Rename: os.Rename,
+				Remove: func(path string) error {
+					if strings.Contains(filepath.Base(path), "-source-materialize-backup-") {
+						reserved = path
+						return errors.New("injected backup reservation removal failure")
+					}
+					return os.Remove(path)
+				},
+				RemoveAll: func(path string) error {
+					if path == reserved && tt.removeAllFail {
+						return errors.New("injected reserved backup cleanup failure")
+					}
+					return os.RemoveAll(path)
+				},
+			})
+			if err == nil || !strings.Contains(err.Error(), "injected backup reservation removal failure") {
+				t.Fatalf("backup reservation error = %v", err)
+			}
+			if reserved == "" {
+				t.Fatal("publish did not reserve a backup path")
+			}
+			if tt.removeAllFail {
+				if !strings.Contains(err.Error(), reserved) || !strings.Contains(err.Error(), "injected reserved backup cleanup failure") {
+					t.Fatalf("unrecovered reservation error = %q, want path and cleanup context", err)
+				}
+				return
+			}
+			if _, statErr := os.Stat(reserved); !os.IsNotExist(statErr) {
+				t.Fatalf("reserved backup was left behind at %q: %v", reserved, statErr)
+			}
+		})
+	}
+}
+
 func sourceMaterializeGeneratedBundle(t *testing.T) string {
 	t.Helper()
 	defsRoot, _, fetcher := sourceMaterializeFixture(t, sourceMaterializeFixtureOptions{})
@@ -478,6 +688,9 @@ type sourceMaterializeFixtureOptions struct {
 	MultipleMedia               bool
 	OpenWriteBody               bool
 	BlockOpenWrite              bool
+	BlockedWriteWithInputs      bool
+	BlockedCheck                bool
+	RuntimeBlockedCheck         bool
 	OutputSymlink               bool
 }
 
@@ -489,6 +702,21 @@ func sourceMaterializeFixture(t *testing.T, options sourceMaterializeFixtureOpti
 		t.Fatal(err)
 	}
 	getRaw := []byte(`{"openapi":"3.0.3","info":{"title":"alpha","version":"1"},"paths":{"/widgets":{"get":{"operationId":"listWidgets","responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"type":"object","additionalProperties":false,"properties":{"items":{"type":"array","items":{"type":"string"}}}}}}}}}}}}`)
+	if options.RuntimeBlockedCheck {
+		var getDocument map[string]any
+		if err := json.Unmarshal(getRaw, &getDocument); err != nil {
+			t.Fatal(err)
+		}
+		getDocument["paths"].(map[string]any)["/widgets"].(map[string]any)["get"].(map[string]any)["parameters"] = []any{map[string]any{
+			"name": "filter", "in": "query", "style": "deepObject",
+			"schema": map[string]any{"type": "object", "additionalProperties": false, "properties": map[string]any{"name": map[string]any{"type": "string"}}},
+		}}
+		var err error
+		getRaw, err = json.Marshal(getDocument)
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
 	postSchema := map[string]any{"type": "object", "additionalProperties": false, "required": []any{"title"}, "properties": map[string]any{"title": map[string]any{"type": "string", "maxLength": 64}}}
 	if options.OpenWriteBody {
 		delete(postSchema, "additionalProperties")
@@ -547,6 +775,18 @@ func sourceMaterializeFixture(t *testing.T, options sourceMaterializeFixtureOpti
 		postOperation["reason"] = "Runtime cannot faithfully materialize an open provider object; blocked pending explicit typed body support."
 		delete(postOperation, "binding")
 		delete(postOperation, "inputs")
+	}
+	if options.BlockedWriteWithInputs {
+		postOperation := plan["operations"].([]any)[1].(map[string]any)
+		postOperation["state"] = "blocked"
+		postOperation["reason"] = "Blocked fixture row must not retain executable input bindings."
+		delete(postOperation, "binding")
+	}
+	if options.BlockedCheck {
+		getOperation := plan["operations"].([]any)[0].(map[string]any)
+		getOperation["state"] = "blocked"
+		getOperation["reason"] = "Blocked fixture check is accounted but not executable."
+		delete(getOperation, "binding")
 	}
 	if options.WrongRequestMedia {
 		plan["operations"].([]any)[1].(map[string]any)["binding"].(map[string]any)["request_media"] = "application/xml"
