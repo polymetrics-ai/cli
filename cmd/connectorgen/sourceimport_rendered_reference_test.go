@@ -653,6 +653,191 @@ func TestSourceImportVersion3RenderedReferenceCitationNeedsPointerOrVerifiedCapt
 	})
 }
 
+func TestDeclarationAdmissionMappingVersion3RenderedReferenceCitationNeedsOperationBinding(t *testing.T) {
+	t.Run("canonical operation fragment ignores retention representation", func(t *testing.T) {
+		raw, page := sourceImportV3RenderedReferenceLock(t, renderedReferenceCitationURL)
+		descriptor := renderedReferenceMappingDescriptor(t, raw, page)
+		lock, document, _ := renderedReferenceMappingFixtureParts(t, raw)
+		artifact, ok := document["artifact"].(map[string]any)
+		if !ok {
+			t.Fatalf("rendered-reference artifact = %T, want object", document["artifact"])
+		}
+		published, ok := document["published_source"].(map[string]any)
+		if !ok {
+			t.Fatalf("rendered-reference publication = %T, want object", document["published_source"])
+		}
+		artifact["sha256"] = map[string]any{"retention": "malformed"}
+		artifact["bytes"] = "not-a-byte-count"
+		published["capture_url"] = []any{"retention-only"}
+		published["sha256"] = map[string]any{"retention": "malformed"}
+		published["bytes"] = "not-a-byte-count"
+		raw = marshalRenderedReferenceMappingFixture(t, lock)
+		if _, err := parseSourceImportLock(raw, "fixture"); err == nil {
+			t.Fatal("strict source-import parser accepted malformed rendered-reference retention")
+		}
+		mappingLock, err := parseDeclarationAdmissionSourceLock(raw, "fixture")
+		if err != nil {
+			t.Fatalf("mapping reader rejected canonical operation fragment: %v", err)
+		}
+		reviewed := mappingLock.Operations["fixture.rest.reference.list-widgets"]
+		if reviewed.SourceURL != renderedReferencePublishedURL || reviewed.CitationURL != renderedReferenceCitationURL || reviewed.PublishedSourceURL != renderedReferencePublishedURL {
+			t.Fatalf("reviewed rendered-reference citation = %+v, want canonical base plus exact operation citation", reviewed)
+		}
+		if findings := validateSourceDescriptorAgainstMappingLock("fixture", "sources/fixture-operation-descriptor.json", mappingLock, descriptor); len(findings) != 0 {
+			t.Fatalf("canonical operation-fragment mapping findings = %+v, want none", findings)
+		}
+		descriptor.Operations[0].Source.CitationURL = renderedReferencePublishedURL
+		if findings := validateSourceDescriptorAgainstMappingLock("fixture", "sources/fixture-operation-descriptor.json", mappingLock, descriptor); len(findings) != 1 || !strings.Contains(findings[0].Message, "provider contract drift") {
+			t.Fatalf("operation-citation drift findings = %+v, want provider contract drift", findings)
+		}
+	})
+
+	t.Run("capture extraction binding ignores retention representation", func(t *testing.T) {
+		raw, page := sourceImportV3RenderedReferenceLock(t, renderedReferencePublishedURL)
+		lock, document, operation := renderedReferenceMappingFixtureParts(t, raw)
+		published, ok := document["published_source"].(map[string]any)
+		if !ok {
+			t.Fatalf("rendered-reference publication = %T, want object", document["published_source"])
+		}
+		operation["citation_binding"] = map[string]any{
+			"capture_url":     published["capture_url"],
+			"capture_sha256":  published["sha256"],
+			"capture_bytes":   published["bytes"],
+			"source_location": operation["source_location"],
+		}
+		raw = marshalRenderedReferenceMappingFixture(t, lock)
+		descriptor := renderedReferenceMappingDescriptor(t, raw, page)
+
+		binding, ok := operation["citation_binding"].(map[string]any)
+		if !ok {
+			t.Fatalf("rendered-reference citation binding = %T, want object", operation["citation_binding"])
+		}
+		binding["capture_url"] = []any{"retention-only"}
+		binding["capture_sha256"] = map[string]any{"retention": "malformed"}
+		binding["capture_bytes"] = "not-a-byte-count"
+		raw = marshalRenderedReferenceMappingFixture(t, lock)
+		if _, err := parseSourceImportLock(raw, "fixture"); err == nil {
+			t.Fatal("strict source-import parser accepted malformed citation-binding retention")
+		}
+		mappingLock, err := parseDeclarationAdmissionSourceLock(raw, "fixture")
+		if err != nil {
+			t.Fatalf("mapping reader rejected capture extraction binding: %v", err)
+		}
+		if findings := validateSourceDescriptorAgainstMappingLock("fixture", "sources/fixture-operation-descriptor.json", mappingLock, descriptor); len(findings) != 0 {
+			t.Fatalf("capture-binding mapping findings = %+v, want none", findings)
+		}
+	})
+
+	tests := []struct {
+		name     string
+		citation string
+		bind     func(operation, published map[string]any)
+	}{
+		{
+			name:     "generic publication URL without binding",
+			citation: renderedReferencePublishedURL,
+		},
+		{
+			name:     "unrelated operation fragment",
+			citation: strings.Replace(renderedReferenceCitationURL, "#list-widgets", "#unrelated-widget", 1),
+		},
+		{
+			name:     "different publication origin",
+			citation: "https://other.polymetrics.invalid/reference/widgets#list-widgets",
+		},
+		{
+			name:     "capture binding for a different extraction location",
+			citation: renderedReferencePublishedURL,
+			bind: func(operation, published map[string]any) {
+				operation["citation_binding"] = map[string]any{
+					"capture_url":     published["capture_url"],
+					"capture_sha256":  published["sha256"],
+					"capture_bytes":   published["bytes"],
+					"source_location": "#different-operation",
+				}
+			},
+		},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			raw, _ := sourceImportV3RenderedReferenceLock(t, testCase.citation)
+			lock, document, operation := renderedReferenceMappingFixtureParts(t, raw)
+			published, ok := document["published_source"].(map[string]any)
+			if !ok {
+				t.Fatalf("rendered-reference publication = %T, want object", document["published_source"])
+			}
+			if testCase.bind != nil {
+				testCase.bind(operation, published)
+			}
+			raw = marshalRenderedReferenceMappingFixture(t, lock)
+			if _, err := parseDeclarationAdmissionSourceLock(raw, "fixture"); err == nil || !strings.Contains(err.Error(), "citation") {
+				t.Fatalf("mapping reader error = %v, want rendered-reference citation refusal", err)
+			}
+		})
+	}
+}
+
+func renderedReferenceMappingDescriptor(t *testing.T, raw, page []byte) sourceImportDescriptorDocument {
+	t.Helper()
+	lock, err := parseSourceImportLock(raw, "fixture")
+	if err != nil {
+		t.Fatalf("parse strict rendered-reference fixture: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return page, nil
+	}), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import strict rendered-reference fixture: %v", err)
+	}
+	descriptorRaw, err := marshalSourceImportResult(result)
+	if err != nil {
+		t.Fatalf("marshal rendered-reference descriptor: %v", err)
+	}
+	var descriptor sourceImportDescriptorDocument
+	if err := decodeSourceStrictJSON(descriptorRaw, &descriptor); err != nil {
+		t.Fatalf("decode rendered-reference descriptor: %v", err)
+	}
+	return descriptor
+}
+
+func renderedReferenceMappingFixtureParts(t *testing.T, raw []byte) (map[string]any, map[string]any, map[string]any) {
+	t.Helper()
+	var lock map[string]any
+	if err := json.Unmarshal(raw, &lock); err != nil {
+		t.Fatalf("decode rendered-reference mapping fixture: %v", err)
+	}
+	rest, ok := lock["rest"].(map[string]any)
+	if !ok {
+		t.Fatalf("rendered-reference REST value = %T, want object", lock["rest"])
+	}
+	documents, ok := rest["source_documents"].([]any)
+	if !ok || len(documents) != 1 {
+		t.Fatalf("rendered-reference documents = %#v, want one", rest["source_documents"])
+	}
+	document, ok := documents[0].(map[string]any)
+	if !ok {
+		t.Fatalf("rendered-reference document = %T, want object", documents[0])
+	}
+	operations, ok := document["operations"].([]any)
+	if !ok || len(operations) != 1 {
+		t.Fatalf("rendered-reference operations = %#v, want one", document["operations"])
+	}
+	operation, ok := operations[0].(map[string]any)
+	if !ok {
+		t.Fatalf("rendered-reference operation = %T, want object", operations[0])
+	}
+	return lock, document, operation
+}
+
+func marshalRenderedReferenceMappingFixture(t *testing.T, lock map[string]any) []byte {
+	t.Helper()
+	raw, err := json.Marshal(lock)
+	if err != nil {
+		t.Fatalf("encode rendered-reference mapping fixture: %v", err)
+	}
+	return raw
+}
+
 func TestSourceImportVersion3BundleRejectsArchiveHashMismatch(t *testing.T) {
 	raw, archive := sourceImportV3BundleLock(t)
 	lock, err := parseSourceImportLock(raw, "fixture")

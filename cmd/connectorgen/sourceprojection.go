@@ -4451,6 +4451,9 @@ func validateSourceDescriptorAgainstMappingLock(connector, file string, lock dec
 		}
 
 		citationMatches := reviewed.SourceURL == "" || operation.Source.URL == reviewed.SourceURL || operation.Source.PublishedURL == reviewed.SourceURL || operation.Source.CitationURL == reviewed.SourceURL
+		if reviewed.CitationURL != "" {
+			citationMatches = operation.Source.CitationURL == reviewed.CitationURL && operation.Source.PublishedURL == reviewed.PublishedSourceURL
+		}
 		if operation.Connector != connector || operation.Protocol != reviewed.Protocol || !citationMatches || operation.Source.Location != reviewed.Location || (reviewed.DocumentID != "" && operation.Source.DocumentID != reviewed.DocumentID) {
 			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provider contract drift for "+sourceID)}
 		}

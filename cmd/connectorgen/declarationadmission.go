@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net/url"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -305,6 +306,8 @@ func declarationAdmissionPathCheck(dir string) (declarationAdmissionReport, erro
 type declarationAdmissionReviewedOperation struct {
 	Protocol            string
 	SourceURL           string
+	CitationURL         string
+	PublishedSourceURL  string
 	Location            string
 	DocumentID          string
 	ProviderOperationID string
@@ -368,16 +371,27 @@ type declarationAdmissionRESTSupplementWire struct {
 }
 
 type declarationAdmissionRESTOperationWire struct {
-	ID              string          `json:"id"`
-	Protocol        string          `json:"protocol"`
-	Method          string          `json:"method"`
-	Path            string          `json:"path"`
-	OperationID     string          `json:"operation_id"`
-	Deprecated      json.RawMessage `json:"deprecated"`
-	SourceLocation  string          `json:"source_location"`
-	SourceURL       string          `json:"source_url,omitempty"`
-	CitationURL     string          `json:"citation_url,omitempty"`
-	SourceOperation json.RawMessage `json:"source_operation,omitempty"`
+	ID              string                                                    `json:"id"`
+	Protocol        string                                                    `json:"protocol"`
+	Method          string                                                    `json:"method"`
+	Path            string                                                    `json:"path"`
+	OperationID     string                                                    `json:"operation_id"`
+	Deprecated      json.RawMessage                                           `json:"deprecated"`
+	SourceLocation  string                                                    `json:"source_location"`
+	SourceURL       string                                                    `json:"source_url,omitempty"`
+	CitationURL     string                                                    `json:"citation_url,omitempty"`
+	CitationBinding *declarationAdmissionRenderedReferenceCitationBindingWire `json:"citation_binding,omitempty"`
+	SourceOperation json.RawMessage                                           `json:"source_operation,omitempty"`
+}
+
+// declarationAdmissionRenderedReferenceCitationBindingWire retains only the
+// operation extraction identity needed by mapping admission. Source import
+// separately validates the capture URL, byte count, and digest representation.
+type declarationAdmissionRenderedReferenceCitationBindingWire struct {
+	CaptureURL     json.RawMessage `json:"capture_url"`
+	CaptureSHA256  json.RawMessage `json:"capture_sha256"`
+	CaptureBytes   json.RawMessage `json:"capture_bytes"`
+	SourceLocation string          `json:"source_location"`
 }
 
 type declarationAdmissionIgnoredArtifactWire struct {
@@ -511,6 +525,14 @@ func parseDeclarationAdmissionSourceLock(raw []byte, expectedConnector string) (
 			if err := validateDeclarationAdmissionMappingRESTOperation(operation); err != nil {
 				return declarationAdmissionReviewedSourceLock{}, err
 			}
+			if operation.CitationBinding != nil {
+				return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock legacy REST operation %q declares a rendered-reference citation binding", operation.ID)
+			}
+			if operation.CitationURL != "" {
+				if err := validateDeclarationAdmissionMappingSourceURL(operation.CitationURL); err != nil {
+					return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock REST operation %q has invalid citation URL: %w", operation.ID, err)
+				}
+			}
 			sourceURL := rest.SourceURL
 			sourceReference := rest.SourceKind != ""
 			if sourceReference {
@@ -600,8 +622,10 @@ func parseDeclarationAdmissionSourceLock(raw []byte, expectedConnector string) (
 				}
 				sourceReference := kind == sourceImportDocumentKindSourceReference
 				sourceURL := ""
+				citationURL := ""
+				publishedSourceURL := ""
 				if sourceReference {
-					if operation.CitationURL != "" || operation.SourceURL != "" {
+					if operation.CitationURL != "" || operation.SourceURL != "" || operation.CitationBinding != nil {
 						return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 source-reference operation %q must inherit its document citation", operation.ID)
 					}
 					sourceURL = document.SourceReference.SourceURL
@@ -609,13 +633,33 @@ func parseDeclarationAdmissionSourceLock(raw []byte, expectedConnector string) (
 					if operation.SourceURL != "" {
 						return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 REST operation %q declares a reference-only source URL", operation.ID)
 					}
-					sourceURL = operation.CitationURL
-					if sourceURL == "" {
-						sourceURL = document.PublishedSource.SourceURL
+					if kind == sourceImportDocumentKindRenderedReference {
+						canonicalCitationBase, err := validateDeclarationAdmissionRenderedReferenceCitation(operation, document)
+						if err != nil {
+							return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 rendered-reference operation %q has invalid citation: %w", operation.ID, err)
+						}
+						sourceURL = canonicalCitationBase
+						citationURL = operation.CitationURL
+						publishedSourceURL = document.PublishedSource.SourceURL
+					} else {
+						if operation.CitationBinding != nil {
+							return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 REST operation %q declares a rendered-reference citation binding for kind %q", operation.ID, kind)
+						}
+						if operation.CitationURL != "" {
+							if err := validateDeclarationAdmissionMappingSourceURL(operation.CitationURL); err != nil {
+								return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock REST operation %q has invalid citation URL: %w", operation.ID, err)
+							}
+						}
+						sourceURL = operation.CitationURL
+						if sourceURL == "" {
+							sourceURL = document.PublishedSource.SourceURL
+						}
 					}
 				}
-				if err := validateDeclarationAdmissionMappingSourceURL(sourceURL); err != nil {
-					return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock operation %q has invalid provider source URL: %w", operation.ID, err)
+				if kind != sourceImportDocumentKindRenderedReference {
+					if err := validateDeclarationAdmissionMappingSourceURL(sourceURL); err != nil {
+						return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock operation %q has invalid provider source URL: %w", operation.ID, err)
+					}
 				}
 				route := strings.ToUpper(operation.Method) + "\x00" + operation.Path
 				if previous, duplicate := seenRoutes[route]; duplicate {
@@ -624,7 +668,8 @@ func parseDeclarationAdmissionSourceLock(raw []byte, expectedConnector string) (
 				seenRoutes[route] = document.ID
 				restCount++
 				if err := addOperation(operation.ID, declarationAdmissionReviewedOperation{
-					Protocol: operation.Protocol, SourceURL: sourceURL, Location: operation.SourceLocation, DocumentID: document.ID,
+					Protocol: operation.Protocol, SourceURL: sourceURL, CitationURL: citationURL, PublishedSourceURL: publishedSourceURL,
+					Location: operation.SourceLocation, DocumentID: document.ID,
 					ProviderOperationID: operation.OperationID, Method: operation.Method, Path: operation.Path,
 					SourceReference: sourceReference,
 				}); err != nil {
@@ -662,12 +707,47 @@ func validateDeclarationAdmissionMappingRESTOperation(operation declarationAdmis
 	if err := validateSourceImportPath(operation.Path); err != nil {
 		return fmt.Errorf("source lock REST operation %q has invalid path: %w", operation.ID, err)
 	}
-	if operation.CitationURL != "" {
-		if err := validateDeclarationAdmissionMappingSourceURL(operation.CitationURL); err != nil {
-			return fmt.Errorf("source lock REST operation %q has invalid citation URL: %w", operation.ID, err)
+	return nil
+}
+
+func validateDeclarationAdmissionRenderedReferenceCitation(operation declarationAdmissionRESTOperationWire, document declarationAdmissionRESTDocumentWire) (string, error) {
+	if err := validateDeclarationAdmissionMappingSourceURL(document.PublishedSource.SourceURL); err != nil {
+		return "", fmt.Errorf("published source URL: %w", err)
+	}
+	raw := operation.CitationURL
+	if raw == "" || raw != strings.TrimSpace(raw) || strings.ContainsAny(raw, "\r\n") {
+		return "", errors.New("citation must be a non-empty canonical absolute HTTPS URL")
+	}
+	citation, err := url.Parse(raw)
+	if err != nil || !citation.IsAbs() || !strings.EqualFold(citation.Scheme, "https") || citation.Host == "" || citation.User != nil {
+		return "", errors.New("citation must be a canonical absolute HTTPS URL without userinfo")
+	}
+	published, err := url.Parse(document.PublishedSource.SourceURL)
+	if err != nil || !sourceImportURLsShareOrigin(citation, published) {
+		return "", errors.New("citation must use the published-source origin")
+	}
+	canonicalCitation := *citation
+	canonicalCitation.Fragment = ""
+	canonicalCitation.RawFragment = ""
+	canonicalBase, err := safety.CanonicalProviderCitationURL(canonicalCitation.String())
+	if err != nil || canonicalBase != canonicalCitation.String() {
+		return "", errors.New("citation base URL is not canonical")
+	}
+	if operation.CitationBinding != nil {
+		if operation.CitationBinding.SourceLocation == "" || operation.CitationBinding.SourceLocation != operation.SourceLocation {
+			return "", errors.New("citation capture extraction binding does not match the locked operation location")
 		}
 	}
-	return nil
+	if fragment := strings.TrimSpace(citation.Fragment); fragment != "" {
+		if fragment != strings.TrimPrefix(operation.SourceLocation, "#") {
+			return "", fmt.Errorf("citation fragment %q does not match locked operation extraction location %q", fragment, operation.SourceLocation)
+		}
+		return canonicalBase, nil
+	}
+	if operation.CitationBinding == nil {
+		return "", errors.New("citation must include an operation-specific fragment or capture extraction binding")
+	}
+	return canonicalBase, nil
 }
 
 func declarationAdmissionMappingGraphQLOperations(raw json.RawMessage, connector string, addOperation func(string, declarationAdmissionReviewedOperation) error) (int, int, error) {
