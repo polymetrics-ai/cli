@@ -9,6 +9,8 @@
 - Working branch: `fm/cli-batch1-authoring-rgr-r1`.
 - Exact base commit: `7212f14bf8b602c317f30c6e0addcfb6655d88c4`.
 - Exact fixed implementation commit: `90265feba13a6249de88c2176097d13007db43d4`.
+- Exact rendered-reference review-fix parent: `da521166b4c39a39fb52242fef4e67427ab4a356`.
+- Exact rendered-reference review-fix commit: `0d94f6fd65385ad3ca51b037eaaef047e7f79e23`.
 - Task: Make source-backed declaration admission and mapping projection independent of certification-overlay availability, certification credentials, and retention/hash representation while preserving strict source-import and certification validation.
 - Verification: Focused Red/Green tests, the complete `cmd/connectorgen` package test, authoring commands over checked-in connector definitions, Go formatting/vetting, JSON validation, and repository contract checks.
 
@@ -159,3 +161,45 @@ from commit `90265feba13a6249de88c2176097d13007db43d4`.
 
 No provider request, live credential, runtime transport, warehouse operation, or
 source-lock rewrite was used as evidence for this authoring-only slice.
+
+## Rendered-reference review fix
+
+An independent exact-SHA review found that the mapping-only schema-v3 reader
+discarded `citation_binding`, rejected valid operation-fragment citations, and
+could admit a generic rendered publication URL as operation proof. The Red was:
+
+```text
+go test -timeout 3m ./cmd/connectorgen -run '^TestDeclarationAdmissionMappingVersion3RenderedReferenceCitationNeedsOperationBinding$' -count=1
+```
+
+It failed in all three intended ways: the valid fragment was rejected as a URL
+fragment, the valid binding was rejected as an unknown field, and the generic
+publication URL without either binding was accepted.
+
+Commit `0d94f6fd65385ad3ca51b037eaaef047e7f79e23` changes exactly:
+
+- `cmd/connectorgen/declarationadmission.go`
+- `cmd/connectorgen/sourceprojection.go`
+- `cmd/connectorgen/sourceimport_rendered_reference_test.go`
+
+The mapping reader now retains the operation-specific citation identity, accepts
+either a matching operation fragment or a capture extraction binding, rejects a
+bare generic rendered-reference URL, and treats capture URL/hash/byte values as
+retention representation rather than declaration admission. Descriptor
+validation preserves the exact operation citation and published URL. Strict
+source import remains unchanged and continues to validate the full capture
+binding, byte count, and SHA-256.
+
+The final focused Green was:
+
+```text
+go test -timeout 5m ./cmd/connectorgen -run 'TestSourceImportVersion3RenderedReference|TestDeclarationAdmissionMappingVersion3RenderedReferenceCitationNeedsOperationBinding|TestDeclarationAdmissionMappingEvidenceDoesNotRequireRetentionMetadata|TestDeclarationAdmissionV3MappingEvidenceDoesNotRequireRetentionMetadata|TestSourceProjectionMappingIgnoresRetentionAndEmbeddedSourceOperation|TestSourceProjectionSourceReferenceIgnoresRetentionButPreservesClosedGap' -count=1
+```
+
+Result: `ok polymetrics.ai/cmd/connectorgen 1.149s`. `go vet ./cmd/connectorgen`,
+`gofmt -d` over the three changed Go files,
+`declaration-admission --json`, `certification-matrix --check`, and `git diff
+--check` all passed. The complete package rerun terminated after `188.324s`
+with exactly the same five baseline failures itemized above and no new
+rendered-reference failure. No runtime, connector definition, source-lock,
+credential, or certification implementation changed.
