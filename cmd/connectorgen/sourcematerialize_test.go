@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -71,6 +72,7 @@ func TestSourceMaterialize_RejectsBadV4Plans(t *testing.T) {
 		{name: "legacy lock requires v4", options: sourceMaterializeFixtureOptions{Legacy: true}, wantError: "schema v4"},
 		{name: "unknown materialization field", options: sourceMaterializeFixtureOptions{UnknownMaterializationField: true}, wantError: "unknown field"},
 		{name: "duplicate source accounting", options: sourceMaterializeFixtureOptions{DuplicateAccounting: true}, wantError: "duplicate source operation ID"},
+		{name: "non-api integration type", options: sourceMaterializeFixtureOptions{IntegrationType: "database"}, wantError: "metadata.integration_type \"database\" is not supported"},
 		{name: "required body input lacks binding", options: sourceMaterializeFixtureOptions{MissingBodyBinding: true}, wantError: "required input \"body.title\""},
 		{name: "unselected request media arm", options: sourceMaterializeFixtureOptions{WrongRequestMedia: true, MultipleMedia: true}, wantError: "not the selected JSON mutation contract"},
 		{name: "owned output symlink escape", options: sourceMaterializeFixtureOptions{OutputSymlink: true}, wantError: "must not traverse a symlink"},
@@ -84,6 +86,45 @@ func TestSourceMaterialize_RejectsBadV4Plans(t *testing.T) {
 				t.Fatalf("exit/stderr = %d/%q, want failure containing %q", code, stderr.String(), tt.wantError)
 			}
 		})
+	}
+}
+
+func TestValidate_OperationalContractRejectsMismatchedBundleTarget(t *testing.T) {
+	defsRoot, _, fetcher := sourceMaterializeFixture(t, sourceMaterializeFixtureOptions{})
+	if code := runSourceMaterializeWithFetcher([]string{"source-materialize", "alpha", "--defs", defsRoot}, new(bytes.Buffer), new(bytes.Buffer), fetcher); code != 0 {
+		t.Fatalf("materialize exit = %d", code)
+	}
+	stdout, stderr := new(bytes.Buffer), new(bytes.Buffer)
+	code := run([]string{"validate", filepath.Join(defsRoot, "alpha"), "--connector", "other", "--require-operational-contract", "write", "--json"}, stdout, stderr)
+	if code != 2 || !strings.Contains(stderr.String(), "does not match bundle target") || stdout.Len() != 0 {
+		t.Fatalf("mismatched target = %d stdout=%q stderr=%q, want typed target mismatch", code, stdout.String(), stderr.String())
+	}
+}
+
+func TestValidate_OperationalContractRejectsNonAPIIntegration(t *testing.T) {
+	defsRoot, _, fetcher := sourceMaterializeFixture(t, sourceMaterializeFixtureOptions{})
+	if code := runSourceMaterializeWithFetcher([]string{"source-materialize", "alpha", "--defs", defsRoot}, new(bytes.Buffer), new(bytes.Buffer), fetcher); code != 0 {
+		t.Fatalf("materialize exit = %d", code)
+	}
+	metadataPath := filepath.Join(defsRoot, "alpha", "metadata.json")
+	raw, err := os.ReadFile(metadataPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var metadata map[string]any
+	if err := json.Unmarshal(raw, &metadata); err != nil {
+		t.Fatal(err)
+	}
+	metadata["integration_type"] = "database"
+	changed, err := json.Marshal(metadata)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(metadataPath, changed, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := validateOperationalContractPath(filepath.Join(defsRoot, "alpha"), "alpha", "write"); err == nil || !strings.Contains(err.Error(), "metadata.integration_type \"api\"") {
+		t.Fatalf("non-api operational contract error = %v", err)
 	}
 }
 
@@ -106,6 +147,86 @@ func TestSourceMaterialize_AtomicNoWriteOnLateFailure(t *testing.T) {
 	if err != nil || !bytes.Equal(got, sentinel) {
 		t.Fatalf("atomic failure changed original metadata: got=%q err=%v", got, err)
 	}
+}
+
+func TestSourceMaterializePublish_RollsBackInstallRenameFailure(t *testing.T) {
+	bundleDir := sourceMaterializeGeneratedBundle(t)
+	metadataPath := filepath.Join(bundleDir, "metadata.json")
+	before, err := os.ReadFile(metadataPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	renames := 0
+	err = sourceMaterializePublishWithOps(bundleDir, "alpha", nil, sourceMaterializePublishOps{
+		Rename: func(oldPath, newPath string) error {
+			renames++
+			if renames == 2 {
+				return errors.New("injected staged-install rename failure")
+			}
+			return os.Rename(oldPath, newPath)
+		},
+		Remove:    os.Remove,
+		RemoveAll: os.RemoveAll,
+	})
+	if err == nil || !strings.Contains(err.Error(), "publish staged bundle") {
+		t.Fatalf("install rename failure = %v", err)
+	}
+	after, readErr := os.ReadFile(metadataPath)
+	if readErr != nil || !bytes.Equal(after, before) {
+		t.Fatalf("rollback did not preserve live bundle: metadata=%q err=%v", after, readErr)
+	}
+}
+
+func TestSourceMaterializePublish_CleanupFailureDoesNotFailInstalledBundle(t *testing.T) {
+	bundleDir := sourceMaterializeGeneratedBundle(t)
+	err := sourceMaterializePublishWithOps(bundleDir, "alpha", nil, sourceMaterializePublishOps{
+		Rename: os.Rename,
+		Remove: os.Remove,
+		RemoveAll: func(path string) error {
+			if strings.Contains(filepath.Base(path), "-source-materialize-backup-") {
+				return errors.New("injected backup cleanup failure")
+			}
+			return os.RemoveAll(path)
+		},
+	})
+	if err != nil {
+		t.Fatalf("successful install reported cleanup failure: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(bundleDir, "metadata.json")); err != nil {
+		t.Fatalf("successful install removed live bundle: %v", err)
+	}
+}
+
+func TestSourceMaterializePublish_ReportsUnrecoverableRollbackBoundary(t *testing.T) {
+	bundleDir := sourceMaterializeGeneratedBundle(t)
+	renames := 0
+	err := sourceMaterializePublishWithOps(bundleDir, "alpha", nil, sourceMaterializePublishOps{
+		Rename: func(oldPath, newPath string) error {
+			renames++
+			if renames >= 2 {
+				return errors.New("injected commit-window rename failure")
+			}
+			return os.Rename(oldPath, newPath)
+		},
+		Remove:    os.Remove,
+		RemoveAll: os.RemoveAll,
+	})
+	if err == nil || !strings.Contains(err.Error(), "previous bundle retained at") || !strings.Contains(err.Error(), "manual recovery") {
+		t.Fatalf("unrecoverable rollback error = %v", err)
+	}
+	if _, statErr := os.Stat(bundleDir); !os.IsNotExist(statErr) {
+		t.Fatalf("unrecoverable boundary expected live path absent, stat err=%v", statErr)
+	}
+}
+
+func sourceMaterializeGeneratedBundle(t *testing.T) string {
+	t.Helper()
+	defsRoot, _, fetcher := sourceMaterializeFixture(t, sourceMaterializeFixtureOptions{})
+	stderr := new(bytes.Buffer)
+	if code := runSourceMaterializeWithFetcher([]string{"source-materialize", "alpha", "--defs", defsRoot}, new(bytes.Buffer), stderr, fetcher); code != 0 {
+		t.Fatalf("materialize generated bundle = %d stderr=%s", code, stderr.String())
+	}
+	return filepath.Join(defsRoot, "alpha")
 }
 
 func TestValidate_OperationalContractGateIsOptIn(t *testing.T) {
@@ -140,6 +261,7 @@ type sourceMaterializeFixtureOptions struct {
 	Legacy                      bool
 	UnknownMaterializationField bool
 	DuplicateAccounting         bool
+	IntegrationType             string
 	MissingBodyBinding          bool
 	WrongRequestMedia           bool
 	MultipleMedia               bool
@@ -208,6 +330,9 @@ func sourceMaterializeFixture(t *testing.T, options sourceMaterializeFixtureOpti
 	}
 	if options.DuplicateAccounting {
 		plan["operations"] = append(plan["operations"].([]any), plan["operations"].([]any)[0])
+	}
+	if options.IntegrationType != "" {
+		plan["metadata"].(map[string]any)["integration_type"] = options.IntegrationType
 	}
 	if options.UnknownMaterializationField {
 		plan["unexpected"] = true

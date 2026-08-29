@@ -341,7 +341,7 @@ func validateSourceMaterializationMetadata(metadata sourceMaterializationMetadat
 			return fmt.Errorf("source lock v4 materialization metadata.%s must be a non-empty one-line value", name)
 		}
 	}
-	if metadata.IntegrationType != "api" && metadata.IntegrationType != "database" && metadata.IntegrationType != "file" {
+	if metadata.IntegrationType != "api" {
 		return fmt.Errorf("source lock v4 materialization metadata.integration_type %q is not supported", metadata.IntegrationType)
 	}
 	return nil
@@ -938,13 +938,38 @@ func sourceMaterializeHasDrift(bundleDir string, outputs []sourceMaterializeOutp
 	return false, nil
 }
 
-func sourceMaterializePublish(bundleDir, connector string, outputs []sourceMaterializeOutput) (err error) {
+type sourceMaterializePublishOps struct {
+	Rename    func(oldPath, newPath string) error
+	Remove    func(path string) error
+	RemoveAll func(path string) error
+}
+
+func sourceMaterializeDefaultPublishOps() sourceMaterializePublishOps {
+	return sourceMaterializePublishOps{Rename: os.Rename, Remove: os.Remove, RemoveAll: os.RemoveAll}
+}
+
+// sourceMaterializePublish installs a fully validated staged bundle through a
+// same-parent two-rename transaction. Filesystems do not generally provide an
+// atomic replacement for a non-empty directory, so this is deliberately a
+// rollback-protected publish, not a crash-atomic directory swap: an install
+// rename error restores the prior bundle. If the rollback rename itself fails,
+// both recovery paths are retained and named in the error for manual repair.
+func sourceMaterializePublish(bundleDir, connector string, outputs []sourceMaterializeOutput) error {
+	return sourceMaterializePublishWithOps(bundleDir, connector, outputs, sourceMaterializeDefaultPublishOps())
+}
+
+func sourceMaterializePublishWithOps(bundleDir, connector string, outputs []sourceMaterializeOutput, ops sourceMaterializePublishOps) (err error) {
 	parent := filepath.Dir(bundleDir)
 	stageRoot, err := os.MkdirTemp(parent, "."+connector+"-source-materialize-")
 	if err != nil {
 		return fmt.Errorf("create staging directory: %w", err)
 	}
-	defer func() { _ = os.RemoveAll(stageRoot) }()
+	preserveRecoveryArtifacts := false
+	defer func() {
+		if !preserveRecoveryArtifacts {
+			_ = ops.RemoveAll(stageRoot)
+		}
+	}()
 	stageBundle := filepath.Join(stageRoot, connector)
 	if err := sourceMaterializeCopyTree(bundleDir, stageBundle); err != nil {
 		return err
@@ -965,21 +990,23 @@ func sourceMaterializePublish(bundleDir, connector string, outputs []sourceMater
 	if err != nil {
 		return fmt.Errorf("reserve publish backup: %w", err)
 	}
-	if err := os.Remove(backup); err != nil {
+	if err := ops.Remove(backup); err != nil {
 		return fmt.Errorf("prepare publish backup: %w", err)
 	}
-	if err := os.Rename(bundleDir, backup); err != nil {
-		return fmt.Errorf("prepare atomic publish: %w", err)
+	if err := ops.Rename(bundleDir, backup); err != nil {
+		return fmt.Errorf("prepare recoverable publish: %w", err)
 	}
-	if err := os.Rename(stageBundle, bundleDir); err != nil {
-		if restoreErr := os.Rename(backup, bundleDir); restoreErr != nil {
-			return fmt.Errorf("publish staged bundle: %w (restore previous bundle: %v)", err, restoreErr)
+	if err := ops.Rename(stageBundle, bundleDir); err != nil {
+		if restoreErr := ops.Rename(backup, bundleDir); restoreErr != nil {
+			preserveRecoveryArtifacts = true
+			return fmt.Errorf("publish staged bundle: %w; rollback failed: %v; previous bundle retained at %q and staged bundle retained at %q for manual recovery", err, restoreErr, backup, stageBundle)
 		}
 		return fmt.Errorf("publish staged bundle: %w", err)
 	}
-	if err := os.RemoveAll(backup); err != nil {
-		return fmt.Errorf("remove published backup: %w", err)
-	}
+	// The live bundle is installed at this point. Backup cleanup is best effort:
+	// returning it as an error would falsely claim that a successful publish
+	// failed, while the hidden sibling backup remains recoverable for cleanup.
+	_ = ops.RemoveAll(backup)
 	return nil
 }
 
@@ -1044,10 +1071,15 @@ func validateOperationalContractPath(dir, connector, profile string) ([]Finding,
 	}
 	if connector == "" {
 		connector = filepath.Base(cleanDir)
+	} else if filepath.Base(cleanDir) != connector {
+		return nil, sourceMaterializeBundleTargetMismatchError{Connector: connector, Target: filepath.Base(cleanDir)}
 	}
 	bundle, err := engine.Load(os.DirFS(filepath.Dir(cleanDir)), connector)
 	if err != nil {
 		return nil, fmt.Errorf("load operational-contract bundle: %w", err)
+	}
+	if bundle.Metadata.IntegrationType != "api" {
+		return nil, fmt.Errorf("operational contract requires metadata.integration_type \"api\", got %q", bundle.Metadata.IntegrationType)
 	}
 	wanted, err := sourceMaterializeOperationalProfile(profile, bundle)
 	if err != nil {
@@ -1060,6 +1092,19 @@ func validateOperationalContractPath(dir, connector, profile string) ([]Finding,
 		}
 	}
 	return findings, nil
+}
+
+// sourceMaterializeBundleTargetMismatchError makes connector selection
+// fail-closed whenever a caller passes a concrete bundle directory for a
+// different connector. It prevents the operational gate from silently
+// inspecting a sibling bundle under the same definitions root.
+type sourceMaterializeBundleTargetMismatchError struct {
+	Connector string
+	Target    string
+}
+
+func (err sourceMaterializeBundleTargetMismatchError) Error() string {
+	return fmt.Sprintf("--connector %q does not match bundle target %q", err.Connector, err.Target)
 }
 
 func sourceMaterializeOperationalProfile(profile string, bundle engine.Bundle) ([]string, error) {

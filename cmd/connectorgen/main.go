@@ -220,8 +220,15 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 		dir = filepath.Join(root, "internal/connectors/defs")
 	}
 
-	if connector != "" && !isBundleDir(dir) {
-		dir = filepath.Join(dir, connector)
+	if connector != "" {
+		if isBundleDir(dir) {
+			if filepath.Base(filepath.Clean(dir)) != connector {
+				logln(stderr, "connectorgen validate:", sourceMaterializeBundleTargetMismatchError{Connector: connector, Target: filepath.Base(filepath.Clean(dir))})
+				return 2
+			}
+		} else {
+			dir = filepath.Join(dir, connector)
+		}
 	}
 	report, err := validatePath(dir)
 	if err != nil {
