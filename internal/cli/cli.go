@@ -2344,6 +2344,9 @@ func runDocs(args []string, stdout io.Writer) error {
 	if len(args) == 0 {
 		return errUsage
 	}
+	if args[0] == "connector" {
+		return runDocsConnector(args[1:], stdout)
+	}
 	flags := parseFlags(args[1:])
 	switch args[0] {
 	case "generate":
@@ -2379,6 +2382,108 @@ func runDocs(args []string, stdout io.Writer) error {
 	default:
 		return errUsage
 	}
+}
+
+const docsConnectorHelp = `NAME
+  pm docs connector - generate or validate one connector's authored docs
+
+SYNOPSIS
+  pm docs connector generate --connector <name> [--connectors-dir <path>]
+  pm docs connector validate --connector <name> [--connectors-dir <path>]
+
+DESCRIPTION
+  Generates or validates only the named connector's MANUAL.md, SKILL.md, and
+  referenced icon asset. It does not rewrite other connector directories or
+  the all-connector README/catalog. Use pm docs generate and pm docs validate
+  for the full publication and full catalog validation pass.
+
+OPTIONS
+  --connector name        registered connector name
+  --connectors-dir path   connector docs root; default docs/connectors
+
+SECURITY
+  Generated docs contain no credentials.
+
+EXIT STATUS
+  0 success
+  1 runtime error
+  2 usage error
+`
+
+type docsConnectorOptions struct {
+	connector string
+	dir       string
+}
+
+func runDocsConnector(args []string, stdout io.Writer) error {
+	if len(args) == 0 {
+		_, _ = fmt.Fprint(stdout, docsConnectorHelp)
+		return nil
+	}
+
+	action := args[0]
+	opts, err := parseDocsConnectorOptions(args[1:])
+	if err != nil {
+		return err
+	}
+
+	switch action {
+	case "generate":
+		if err := writeSelectedConnectorDocs(opts.dir, opts.connector, appRegistry()); err != nil {
+			return err
+		}
+		_, _ = fmt.Fprintf(stdout, "Generated connector docs for %s in %s\n", opts.connector, opts.dir)
+		return nil
+	case "validate":
+		if err := validateSelectedConnectorDocs(opts.dir, opts.connector, appRegistry()); err != nil {
+			return err
+		}
+		_, _ = fmt.Fprintf(stdout, "Validated connector docs for %s in %s\n", opts.connector, opts.dir)
+		return nil
+	default:
+		return errUsage
+	}
+}
+
+func parseDocsConnectorOptions(args []string) (docsConnectorOptions, error) {
+	opts := docsConnectorOptions{dir: filepath.Join("docs", "connectors")}
+	connectorsDirSet := false
+	for index := 0; index < len(args); index++ {
+		arg := args[index]
+		name, value, hasValue := strings.Cut(arg, "=")
+		switch name {
+		case "--connector", "--connectors-dir":
+			if !hasValue {
+				if index+1 >= len(args) || strings.HasPrefix(args[index+1], "--") {
+					return docsConnectorOptions{}, fmt.Errorf("%s requires a value", name)
+				}
+				index++
+				value = args[index]
+			}
+			if strings.TrimSpace(value) == "" {
+				return docsConnectorOptions{}, fmt.Errorf("%s requires a non-empty value", name)
+			}
+			switch name {
+			case "--connector":
+				if opts.connector != "" {
+					return docsConnectorOptions{}, errors.New("--connector may be specified only once")
+				}
+				opts.connector = value
+			case "--connectors-dir":
+				if connectorsDirSet {
+					return docsConnectorOptions{}, errors.New("--connectors-dir may be specified only once")
+				}
+				opts.dir = value
+				connectorsDirSet = true
+			}
+		default:
+			return docsConnectorOptions{}, fmt.Errorf("unknown flag or argument %q", arg)
+		}
+	}
+	if opts.connector == "" {
+		return docsConnectorOptions{}, errors.New("missing --connector")
+	}
+	return opts, nil
 }
 
 func runRuntime(ctx context.Context, cfg config.Config, args []string, stdout io.Writer, jsonOut bool) error {

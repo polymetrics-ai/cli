@@ -738,6 +738,82 @@ func TestDocsGenerateAndValidateConnectorDocs(t *testing.T) {
 	}
 }
 
+func TestDocsConnectorGenerateAndValidateSelectedOnly(t *testing.T) {
+	dir := t.TempDir()
+	connectorsDir := filepath.Join(dir, "connectors")
+	const selected = "asana"
+
+	sentinels := map[string]string{
+		filepath.Join(connectorsDir, "github", "MANUAL.md"):            "unselected manual sentinel\n",
+		filepath.Join(connectorsDir, "github", "SKILL.md"):             "unselected skill sentinel\n",
+		filepath.Join(connectorsDir, "icons", "github.svg"):            "unselected icon sentinel\n",
+		filepath.Join(connectorsDir, "README.md"):                      "shared README sentinel\n",
+		filepath.Join(connectorsDir, "catalog", "all-connectors.json"): "shared catalog JSON sentinel\n",
+		filepath.Join(connectorsDir, "catalog", "all-connectors.md"):   "shared catalog markdown sentinel\n",
+	}
+	for path, content := range sentinels {
+		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+			t.Fatalf("create sentinel parent %s: %v", path, err)
+		}
+		if err := os.WriteFile(path, []byte(content), 0o644); err != nil {
+			t.Fatalf("write sentinel %s: %v", path, err)
+		}
+	}
+
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"docs", "connector", "generate", "--connector", selected, "--connectors-dir", connectorsDir}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("selected docs generate code = %d stderr = %s", code, stderr.String())
+	}
+	for path, want := range map[string]string{
+		filepath.Join(connectorsDir, selected, "MANUAL.md"): "# pm connectors inspect asana",
+		filepath.Join(connectorsDir, selected, "SKILL.md"):  "name: pm-asana",
+		filepath.Join(connectorsDir, "icons", "asana.svg"):  "<svg",
+	} {
+		content, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatalf("read selected output %s: %v", path, err)
+		}
+		if !strings.Contains(string(content), want) {
+			t.Fatalf("selected output %s missing %q", path, want)
+		}
+	}
+	for path, want := range sentinels {
+		got, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatalf("read untouched output %s: %v", path, err)
+		}
+		if string(got) != want {
+			t.Fatalf("untouched output %s = %q, want %q", path, got, want)
+		}
+	}
+
+	stdout.Reset()
+	stderr.Reset()
+	code = cli.Run([]string{"docs", "connector", "validate", "--connector=" + selected, "--connectors-dir=" + connectorsDir}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("selected docs validate code = %d stderr = %s stdout = %s", code, stderr.String(), stdout.String())
+	}
+
+	selectedSkillPath := filepath.Join(connectorsDir, selected, "SKILL.md")
+	selectedSkill, err := os.ReadFile(selectedSkillPath)
+	if err != nil {
+		t.Fatalf("read selected skill before staleness check: %v", err)
+	}
+	if err := os.WriteFile(selectedSkillPath, append(selectedSkill, []byte("\nstale selected skill\n")...), 0o644); err != nil {
+		t.Fatalf("write stale selected skill: %v", err)
+	}
+	stdout.Reset()
+	stderr.Reset()
+	code = cli.Run([]string{"docs", "connector", "validate", "--connector", selected, "--connectors-dir", connectorsDir}, &stdout, &stderr)
+	if code != 1 {
+		t.Fatalf("stale selected docs validate code = %d, want 1; stderr = %s", code, stderr.String())
+	}
+	if got := stderr.String(); !strings.Contains(got, "pm docs connector generate --connector asana") || strings.Contains(got, "run pm docs generate") {
+		t.Fatalf("selected validation regeneration guidance = %q, want scoped command only", got)
+	}
+}
+
 func TestConnectorListJSON(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"connectors", "list", "--json"}, &stdout, &stderr)
