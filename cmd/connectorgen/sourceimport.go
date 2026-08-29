@@ -172,6 +172,83 @@ type sourceImportRenderedReferenceCitationBinding struct {
 	SourceLocation string `json:"source_location"`
 }
 
+// sourceImportOperationEnrichment is the closed source-lock representation of
+// an OpenAPI operation excerpt retained for mapping. Source import does not
+// execute or derive provider facts from this enrichment: it fetches and
+// verifies the hash-pinned artifact instead. Keeping the envelope typed lets
+// an immutable lock retain the documented mapping detail without widening
+// strict decoding for arbitrary operation fields.
+type sourceImportOperationEnrichment struct {
+	Summary        string                                             `json:"summary,omitempty"`
+	Description    string                                             `json:"description,omitempty"`
+	Tags           []string                                           `json:"tags,omitempty"`
+	Security       []map[string][]string                              `json:"security,omitempty"`
+	PathParameters []sourceImportOperationEnrichmentParameter         `json:"path_parameters,omitempty"`
+	Parameters     []sourceImportOperationEnrichmentParameter         `json:"parameters,omitempty"`
+	RequestBody    *sourceImportOperationEnrichmentRequestBody        `json:"requestBody,omitempty"`
+	Responses      map[string]sourceImportOperationEnrichmentResponse `json:"responses,omitempty"`
+}
+
+// sourceImportOperationEnrichmentParameter retains the parameter fields
+// present in the source-lock enrichment. Schema and example values remain
+// provider-owned OpenAPI values; the lock's hash-pinned artifact is the only
+// input source import interprets.
+type sourceImportOperationEnrichmentParameter struct {
+	Reference   string                     `json:"$ref,omitempty"`
+	Name        string                     `json:"name,omitempty"`
+	In          string                     `json:"in,omitempty"`
+	Description string                     `json:"description,omitempty"`
+	Required    bool                       `json:"required,omitempty"`
+	Deprecated  bool                       `json:"deprecated,omitempty"`
+	Example     json.RawMessage            `json:"example,omitempty"`
+	Schema      map[string]json.RawMessage `json:"schema,omitempty"`
+	Style       string                     `json:"style,omitempty"`
+	Explode     bool                       `json:"explode,omitempty"`
+	EnvVariable string                     `json:"x-env-variable,omitempty"`
+}
+
+type sourceImportOperationEnrichmentRequestBody struct {
+	Description string                                              `json:"description,omitempty"`
+	Required    bool                                                `json:"required,omitempty"`
+	Content     map[string]sourceImportOperationEnrichmentMediaType `json:"content,omitempty"`
+}
+
+type sourceImportOperationEnrichmentResponse struct {
+	Reference   string                                              `json:"$ref,omitempty"`
+	Description string                                              `json:"description,omitempty"`
+	Content     map[string]sourceImportOperationEnrichmentMediaType `json:"content,omitempty"`
+}
+
+type sourceImportOperationEnrichmentMediaType struct {
+	Schema   map[string]json.RawMessage `json:"schema,omitempty"`
+	Examples map[string]json.RawMessage `json:"examples,omitempty"`
+}
+
+// sourceImportSourceContractEnrichment is the closed, provider-authored
+// contract excerpt retained alongside a byte-backed legacy source lock. It is
+// mapping detail only: source import still obtains all executable provider
+// facts from the hash-pinned artifact. Component entries remain opaque OpenAPI
+// fragments because their grammar is owned by that artifact importer, while
+// the source-lock enrichment envelope itself remains closed.
+type sourceImportSourceContractEnrichment struct {
+	OpenAPI    string                                         `json:"openapi"`
+	Servers    []sourceImportSourceContractEnrichmentServer   `json:"servers,omitempty"`
+	Security   []map[string][]string                          `json:"security,omitempty"`
+	Components sourceImportSourceContractEnrichmentComponents `json:"components"`
+}
+
+type sourceImportSourceContractEnrichmentServer struct {
+	URL         string `json:"url"`
+	Description string `json:"description,omitempty"`
+}
+
+type sourceImportSourceContractEnrichmentComponents struct {
+	Parameters      map[string]json.RawMessage `json:"parameters,omitempty"`
+	Responses       map[string]json.RawMessage `json:"responses,omitempty"`
+	Schemas         map[string]json.RawMessage `json:"schemas,omitempty"`
+	SecuritySchemes map[string]json.RawMessage `json:"securitySchemes,omitempty"`
+}
+
 type sourceImportRESTOperation struct {
 	ID             string `json:"id"`
 	Protocol       string `json:"protocol"`
@@ -186,6 +263,7 @@ type sourceImportRESTOperation struct {
 	SourceURL       string                                        `json:"-"`
 	CitationURL     string                                        `json:"citation_url,omitempty"`
 	CitationBinding *sourceImportRenderedReferenceCitationBinding `json:"citation_binding,omitempty"`
+	SourceOperation *sourceImportOperationEnrichment              `json:"source_operation,omitempty"`
 }
 
 type sourceImportREST struct {
@@ -405,12 +483,13 @@ type sourceImportLock struct {
 // versioned. In particular, a future schema must not inherit v2 semantics just
 // because its version number happens to be greater than two.
 type sourceImportLockLegacy struct {
-	SchemaVersion int                 `json:"schema_version"`
-	Connector     string              `json:"connector"`
-	CapturedAt    string              `json:"captured_at,omitempty"`
-	Rest          sourceImportREST    `json:"rest"`
-	GraphQL       sourceImportGraphQL `json:"graphql,omitempty"`
-	Counts        sourceImportCounts  `json:"counts,omitempty"`
+	SchemaVersion  int                                   `json:"schema_version"`
+	Connector      string                                `json:"connector"`
+	CapturedAt     string                                `json:"captured_at,omitempty"`
+	Rest           sourceImportREST                      `json:"rest"`
+	GraphQL        sourceImportGraphQL                   `json:"graphql,omitempty"`
+	Counts         sourceImportCounts                    `json:"counts,omitempty"`
+	SourceContract *sourceImportSourceContractEnrichment `json:"source_contract,omitempty"`
 }
 
 type sourceImportLockLegacyReference struct {
