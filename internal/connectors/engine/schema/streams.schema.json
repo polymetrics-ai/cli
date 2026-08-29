@@ -84,7 +84,8 @@
             "method": { "type": "string" },
             "path": { "type": "string" },
             "query": { "type": "object" },
-            "success_statuses": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+            "success_statuses": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+            "max_bytes": { "type": "integer", "minimum": 1, "maximum": 67108864 }
           }
         },
         "error_map": {

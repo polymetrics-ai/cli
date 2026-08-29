@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 5,
+  "catalog_revision": 6,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -725,7 +725,7 @@
       "layer": "direct_execution",
       "status": "available",
       "kind": "generic",
-      "summary": "Executes definition-bound direct reads, direct writes, binary downloads, and binary uploads through common preflight, request encoding, response handling, preview, approval, and command-binding paths. Its declarative base check can preserve an explicit exact allowed 2xx status set through the existing requester status policy.",
+      "summary": "Executes definition-bound direct reads, direct writes, binary downloads, and binary uploads through common preflight, request encoding, response handling, preview, approval, and command-binding paths. Its declarative base check can preserve an explicit exact allowed 2xx status set and an explicit response-byte cap through the existing requester policy.",
       "owner": {
         "primary_package": "polymetrics.ai/internal/connectors/engine",
         "supporting_packages": [
@@ -835,7 +835,7 @@
           "declared JSON, form, and multipart writes",
           "fixed GraphQL operation bindings",
           "fixed REST reads and writes",
-          "base check requests with optional exact accepted 2xx statuses",
+          "base check requests with optional exact accepted 2xx statuses and bounded response bytes",
           "stream-backed bounded direct reads",
           "structured nested REST request bodies"
         ],
@@ -848,6 +848,7 @@
           "one bounded provider-facing command invocation",
           "preview and approval binding for mutation paths",
           "declared base-check success statuses are enforced as an exact allowed set when present",
+          "declared base-check max_bytes captures at most one excess byte and rejects oversized successful responses",
           "response and payload bounds"
         ]
       },
@@ -877,7 +878,8 @@
         "Request fields, media types, response policies, and retry behavior must be declared and source-backed.",
         "Provider-unrestricted upload media requires an explicit declaration and remains path-confined, byte-bounded, digest-bound, previewed, and approval-gated.",
         "Binary upload uses typed write-action variants; binary download uses a declared successful response and byte bound.",
-        "A declared base-check success_statuses set contains exact 2xx codes; omitted status metadata retains the legacy generic 2xx policy."
+        "A declared base-check success_statuses set contains exact 2xx codes; omitted status metadata retains the legacy generic 2xx policy.",
+        "A declared base-check max_bytes is between 1 and the existing 64 MiB requester cap and uses that bounded requester path; omitted max_bytes retains the legacy response bound."
       ],
       "non_goals": [
         "Bulk ETL, warehouse materialization, scheduling, or flow orchestration.",
@@ -954,6 +956,11 @@
           "package": "./internal/connectors/engine",
           "file": "internal/connectors/engine/read_test.go",
           "name": "TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/read_test.go",
+          "name": "TestCheck_ResponseMaxBytesPreservesDeclaredBound"
         }
       ],
       "known_gap_refs": [

@@ -2047,7 +2047,18 @@ func Check(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks)
 	if err != nil {
 		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: err}
 	}
-	_, err = requester.Do(ctx, method, checkPath, checkQuery, nil)
+	if b.HTTP.Check.MaxBytes < 0 || b.HTTP.Check.MaxBytes > connsdk.DefaultMaxResponseBody {
+		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("check max_bytes must be between 1 and %d when declared", connsdk.DefaultMaxResponseBody)}
+	}
+	if b.HTTP.Check.MaxBytes > 0 {
+		response, requestErr := requester.DoLimited(ctx, method, checkPath, checkQuery, nil, b.HTTP.Check.MaxBytes)
+		if requestErr == nil && len(response.Body) > b.HTTP.Check.MaxBytes {
+			return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("check response body exceeds declared max_bytes %d", b.HTTP.Check.MaxBytes)}
+		}
+		err = requestErr
+	} else {
+		_, err = requester.Do(ctx, method, checkPath, checkQuery, nil)
+	}
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Class: class, Hint: hint, Err: err}

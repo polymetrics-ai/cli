@@ -2336,6 +2336,65 @@ func TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome(t *testing.T) {
 	}
 }
 
+func TestCheck_ResponseMaxBytesPreservesDeclaredBound(t *testing.T) {
+	tests := []struct {
+		name        string
+		maxBytes    int
+		response    string
+		wantLoadErr string
+		wantCheck   string
+		wantCalls   int
+	}{
+		{name: "happy accepts response at exact cap", maxBytes: 3, response: "abc", wantCalls: 1},
+		{name: "bad rejects response over cap", maxBytes: 3, response: "abcd", wantCheck: "exceeds declared max_bytes", wantCalls: 1},
+		{name: "edge rejects invalid cap before provider IO", maxBytes: 0, wantLoadErr: "minimum", wantCalls: 0},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			calls := 0
+			srv := jsonServer(t, func(w http.ResponseWriter, _ *http.Request) {
+				calls++
+				_, _ = w.Write([]byte(tt.response))
+			})
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/streams.json"].Data = []byte(fmt.Sprintf(`{
+				"base": {
+					"url": "{{ config.base_url }}",
+					"check": { "method": "GET", "path": "/status", "max_bytes": %d }
+				},
+				"streams": [
+					{ "name": "widgets", "path": "/widgets", "records": { "path": "data" }, "schema": "schemas/widgets.json" }
+				]
+			}`, tt.maxBytes))
+			bundle, err := Load(fsys, "acme")
+			if tt.wantLoadErr != "" {
+				if err == nil || !strings.Contains(err.Error(), tt.wantLoadErr) {
+					t.Fatalf("Load cap error = %v, want %q", err, tt.wantLoadErr)
+				}
+				if calls != tt.wantCalls {
+					t.Fatalf("provider calls after invalid cap = %d, want %d", calls, tt.wantCalls)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("Load check cap: %v", err)
+			}
+			bundle.HTTP.URL = srv.URL
+			err = Check(context.Background(), bundle, connectors.RuntimeConfig{}, nil)
+			if tt.wantCheck == "" {
+				if err != nil {
+					t.Fatalf("Check exact cap: %v", err)
+				}
+			} else if err == nil || !strings.Contains(err.Error(), tt.wantCheck) {
+				t.Fatalf("Check cap error = %v, want %q", err, tt.wantCheck)
+			}
+			if calls != tt.wantCalls {
+				t.Fatalf("provider calls = %d, want %d", calls, tt.wantCalls)
+			}
+		})
+	}
+}
+
 func TestCheckNoDeclaredCheckIsNoop(t *testing.T) {
 	b := Bundle{Name: "acme", HTTP: HTTPBase{URL: "http://example.invalid"}}
 	if err := Check(context.Background(), b, connectors.RuntimeConfig{}, nil); err != nil {

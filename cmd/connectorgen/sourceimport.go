@@ -1493,7 +1493,13 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 	if lock.Counts.REST != restCount || lock.Counts.Total != restCount+len(lock.GraphQL.QueryFields)+len(lock.GraphQL.MutationFields) {
 		return fmt.Errorf("source lock v3 counts do not match document inventories")
 	}
-	return validateSourceImportGraphQLInventory(lock)
+	if err := validateSourceImportGraphQLInventory(lock); err != nil {
+		return err
+	}
+	if lock.SchemaVersion == 4 && len(lock.GraphQL.QueryFields)+len(lock.GraphQL.MutationFields) > 0 && seenDocuments[lock.GraphQL.DocumentID] {
+		return fmt.Errorf("source lock v4 GraphQL document_id %q collides with REST source document ID %q; GraphQL and REST citations must retain distinct document identities", lock.GraphQL.DocumentID, lock.GraphQL.DocumentID)
+	}
+	return nil
 }
 
 func validateSourceImportV3EventSchemaInventory(lock sourceImportLock) error {

@@ -32,8 +32,8 @@ func TestSourceMaterialize_HappyBundleAndByteIdenticalCheck(t *testing.T) {
 	if err != nil {
 		t.Fatalf("generated bundle does not load: %v", err)
 	}
-	if bundle.HTTP.Check == nil || !reflect.DeepEqual(bundle.HTTP.Check.SuccessStatuses, []string{"200"}) {
-		t.Fatalf("generated base check status policy = %#v, want exact [200]", bundle.HTTP.Check)
+	if bundle.HTTP.Check == nil || !reflect.DeepEqual(bundle.HTTP.Check.SuccessStatuses, []string{"200"}) || bundle.HTTP.Check.MaxBytes != 4096 {
+		t.Fatalf("generated base check policy = %#v, want exact [200] and max_bytes 4096", bundle.HTTP.Check)
 	}
 	if findings, err := validateOperationalContractPath(bundleDir, "alpha", "declared"); err != nil || len(findings) != 0 {
 		t.Fatalf("declared operational contract = findings=%+v err=%v", findings, err)
@@ -84,6 +84,7 @@ func TestSourceMaterialize_RejectsBadV4Plans(t *testing.T) {
 		{name: "blocked row cannot carry executable inputs", options: sourceMaterializeFixtureOptions{BlockedWriteWithInputs: true}, wantError: "must not declare inputs"},
 		{name: "blocked check row cannot become executable", options: sourceMaterializeFixtureOptions{BlockedCheck: true}, wantError: "must select a materialized"},
 		{name: "runtime-blocked check row cannot become executable", options: sourceMaterializeFixtureOptions{RuntimeBlockedCheck: true}, wantError: "not runtime-admissible"},
+		{name: "wildcard check status requires blocked mapping", options: sourceMaterializeFixtureOptions{WildcardCheckStatus: true}, wantError: "mark this operation blocked or unsupported"},
 		{name: "owned output symlink escape", options: sourceMaterializeFixtureOptions{OutputSymlink: true}, wantError: "must not traverse a symlink"},
 	}
 	for _, tt := range tests {
@@ -419,6 +420,54 @@ func TestSourceMaterialize_GraphQLBlockedRowsRetainExactDocumentCitation(t *test
 	}
 }
 
+func TestSourceImportV4_RejectsGraphQLDocumentIDCollisionWithREST(t *testing.T) {
+	_, lockRaw, _ := sourceMaterializeFixture(t, sourceMaterializeFixtureOptions{})
+	graphqlRaw := []byte("type Query { viewer: String }\n")
+	digest := sha256.Sum256(graphqlRaw)
+	graphql := sourceImportGraphQL{
+		sourceImportArtifact: sourceImportArtifact{
+			SourceURL: "https://fixtures.polymetrics.invalid/alpha.graphql",
+			SHA256:    hex.EncodeToString(digest[:]),
+			Bytes:     int64(len(graphqlRaw)),
+		},
+		QueryFields: []sourceGraphQLField{{
+			Root: "Query", Name: "viewer", Line: 1, Signature: "viewer: String",
+			Arguments: []sourceGraphQLArgument{}, ReturnType: sourceGraphQLTypeRef{Kind: "named", Name: "String"},
+		}},
+		TypeSystem: sourceGraphQLTypeSystem{Enums: []sourceGraphQLNamedType{}, InputObjects: []sourceGraphQLNamedType{}, Interfaces: []sourceGraphQLNamedType{}, Objects: []sourceGraphQLNamedType{}, Scalars: []string{"String"}, Unions: []sourceGraphQLNamedType{}},
+	}
+	projection, err := canonicalSourceGraphQLProjection(graphql)
+	if err != nil {
+		t.Fatal(err)
+	}
+	projectionDigest := sha256.Sum256(projection)
+	graphql.ProjectionSHA256 = hex.EncodeToString(projectionDigest[:])
+	graphql.ProjectionBytes = int64(len(projection))
+	graphqlRawPlan, err := json.Marshal(graphql)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var graphqlPlan map[string]any
+	if err := json.Unmarshal(graphqlRawPlan, &graphqlPlan); err != nil {
+		t.Fatal(err)
+	}
+	graphqlPlan["document_id"] = "get"
+
+	var raw map[string]any
+	if err := json.Unmarshal(lockRaw, &raw); err != nil {
+		t.Fatal(err)
+	}
+	raw["graphql"] = graphqlPlan
+	raw["counts"] = map[string]any{"rest": 2, "graphql_query": 1, "graphql_mutation": 0, "total": 3}
+	colliding, err := json.Marshal(raw)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := parseSourceImportLock(colliding, "alpha"); err == nil || !strings.Contains(err.Error(), "collides with REST source document ID") {
+		t.Fatalf("GraphQL document ID collision error = %v, want cited REST collision", err)
+	}
+}
+
 func TestSourceMaterialize_EdgeRejectsSymlinkedBundleTarget(t *testing.T) {
 	defsRoot, _, fetcher := sourceMaterializeFixture(t, sourceMaterializeFixtureOptions{})
 	alphaDir := filepath.Join(defsRoot, "alpha")
@@ -691,6 +740,7 @@ type sourceMaterializeFixtureOptions struct {
 	BlockedWriteWithInputs      bool
 	BlockedCheck                bool
 	RuntimeBlockedCheck         bool
+	WildcardCheckStatus         bool
 	OutputSymlink               bool
 }
 
@@ -716,6 +766,9 @@ func sourceMaterializeFixture(t *testing.T, options sourceMaterializeFixtureOpti
 		if err != nil {
 			t.Fatal(err)
 		}
+	}
+	if options.WildcardCheckStatus {
+		getRaw = bytes.Replace(getRaw, []byte(`"200"`), []byte(`"2XX"`), 1)
 	}
 	postSchema := map[string]any{"type": "object", "additionalProperties": false, "required": []any{"title"}, "properties": map[string]any{"title": map[string]any{"type": "string", "maxLength": 64}}}
 	if options.OpenWriteBody {
@@ -787,6 +840,10 @@ func sourceMaterializeFixture(t *testing.T, options sourceMaterializeFixtureOpti
 		getOperation["state"] = "blocked"
 		getOperation["reason"] = "Blocked fixture check is accounted but not executable."
 		delete(getOperation, "binding")
+	}
+	if options.WildcardCheckStatus {
+		plan["check"].(map[string]any)["success_statuses"] = []any{"2XX"}
+		plan["operations"].([]any)[0].(map[string]any)["binding"].(map[string]any)["success_statuses"] = []any{"2XX"}
 	}
 	if options.WrongRequestMedia {
 		plan["operations"].([]any)[1].(map[string]any)["binding"].(map[string]any)["request_media"] = "application/xml"

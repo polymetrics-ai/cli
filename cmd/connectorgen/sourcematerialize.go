@@ -14,6 +14,7 @@ import (
 	"strconv"
 	"strings"
 
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -480,7 +481,11 @@ func sourceMaterializeOutputs(lock sourceImportLock, result sourceImportResult) 
 	if err := sourceMaterializeValidateCheck(plan.Check, byID, rows); err != nil {
 		return nil, err
 	}
-	metadata, spec, streams := sourceMaterializeBaseDocuments(lock.Connector, plan, properties)
+	checkMaxBytes, err := sourceMaterializeCheckMaxResponseBytes(plan.Check, rows)
+	if err != nil {
+		return nil, err
+	}
+	metadata, spec, streams := sourceMaterializeBaseDocuments(lock.Connector, plan, properties, checkMaxBytes)
 	operations := []any{}
 	writes := []any{}
 	endpoints := []any{}
@@ -556,7 +561,7 @@ func sourceMaterializeOutputs(lock sourceImportLock, result sourceImportResult) 
 	return outputs, nil
 }
 
-func sourceMaterializeBaseDocuments(connector string, plan sourceMaterialization, properties map[string]sourceMaterializationConfigProperty) (map[string]any, map[string]any, map[string]any) {
+func sourceMaterializeBaseDocuments(connector string, plan sourceMaterialization, properties map[string]sourceMaterializationConfigProperty, checkMaxBytes int) (map[string]any, map[string]any, map[string]any) {
 	configProperties := map[string]any{}
 	required := []any{}
 	names := make([]string, 0, len(properties))
@@ -602,7 +607,7 @@ func sourceMaterializeBaseDocuments(connector string, plan sourceMaterialization
 		}
 	}
 	metadata := map[string]any{"name": connector, "display_name": plan.Metadata.DisplayName, "description": plan.Metadata.Description, "integration_type": plan.Metadata.IntegrationType, "docs_url": plan.Metadata.DocsURL, "release_stage": plan.Metadata.ReleaseStage, "capabilities": capabilities}
-	base := map[string]any{"url": plan.Server.URL, "user_agent": plan.Server.UserAgent, "pagination": map[string]any{"type": "none"}, "check": map[string]any{"method": plan.Check.Method, "path": plan.Check.Path, "success_statuses": plan.Check.SuccessStatuses}}
+	base := map[string]any{"url": plan.Server.URL, "user_agent": plan.Server.UserAgent, "pagination": map[string]any{"type": "none"}, "check": map[string]any{"method": plan.Check.Method, "path": plan.Check.Path, "success_statuses": plan.Check.SuccessStatuses, "max_bytes": checkMaxBytes}}
 	if plan.Auth.Mode != "none" {
 		base["auth"] = []any{sourceMaterializeAuthDocument(plan.Auth)}
 	}
@@ -651,6 +656,17 @@ func sourceMaterializeValidateCheck(check sourceMaterializationCheck, sources ma
 		return fmt.Errorf("source lock v4 materialization check %q has caller-controlled inputs and cannot be an implicit default", check.SourceID)
 	}
 	return sourceMaterializeValidateSuccessStatuses(source, check.SuccessStatuses)
+}
+
+// sourceMaterializeCheckMaxResponseBytes carries the selected retained GET
+// response boundary into base.check. sourceMaterializeValidateCheck has already
+// established that this is one materialized direct_read binding.
+func sourceMaterializeCheckMaxResponseBytes(check sourceMaterializationCheck, rows map[string]sourceMaterializationOperation) (int, error) {
+	row, ok := rows[check.SourceID]
+	if !ok || row.Binding == nil || row.Binding.Kind != "direct_read" || row.Binding.MaxResponseBytes <= 0 || row.Binding.MaxResponseBytes > connsdk.DefaultMaxResponseBody {
+		return 0, fmt.Errorf("source lock v4 materialization check %q must select a materialized direct_read binding with max_response_bytes between 1 and %d", check.SourceID, connsdk.DefaultMaxResponseBody)
+	}
+	return row.Binding.MaxResponseBytes, nil
 }
 
 // sourceMaterializeValidateMaterializedRuntime accepts only a descriptor that
@@ -867,8 +883,9 @@ func sourceMaterializeValidateSuccessStatuses(source sourceOperationDescriptor, 
 	}
 	seen := map[string]bool{}
 	for _, status := range statuses {
-		if seen[status] || !available[status] || len(status) != 3 || status[0] != '2' {
-			return fmt.Errorf("source operation %q binding names unsupported success status %q", source.SourceID, status)
+		code, err := strconv.Atoi(status)
+		if seen[status] || !available[status] || err != nil || code < 200 || code > 299 {
+			return fmt.Errorf("source operation %q success status %q must be an exact numeric 2xx status retained by the source; mark this operation blocked or unsupported with an explicit cited reason", source.SourceID, status)
 		}
 		seen[status] = true
 	}

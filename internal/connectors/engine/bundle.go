@@ -204,6 +204,7 @@ type RequestSpec struct {
 	Path            string                `json:"path"`
 	Query           map[string]QueryParam `json:"query,omitempty"`
 	SuccessStatuses []string              `json:"success_statuses,omitempty"`
+	MaxBytes        int                   `json:"max_bytes,omitempty"`
 }
 
 // AuthSpec describes one candidate authenticator, selected by "when" (first
