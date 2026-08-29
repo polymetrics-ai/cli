@@ -37,12 +37,12 @@ for Wave 6 cleanup and are not active instructions for this flow.
 Task type: `<task-type-from-task-skill-matrix>`
 
 Connector implementation scope (fill when applicable):
-- named connector cohort: `<one or more connector slugs>`
-- immutable source-lock ledger and per-connector ownership/path matrix: `<path>`
+- target connector scope: `<exactly one target connector slug>`
+- connector-owned paths: `<target defs/docs/fixtures/tests>`
+- ownership guard evidence required: `<command/check>`
 - changed-path compliance required: `<yes>`
-- Foundation Atlas disposition for each shared contract: `<reuse | extension | actual_gap with captain approval>`
-- shared foundation/mapping scope in this bounded PR: `<paths and named consumers, or none>`
-- unrelated connector work: `<excluded>`
+- foundation issue/PR path for shared runtime/tooling, schema, generated-index, or unrelated connector work: `<URL or blocker>`
+- no-mistakes handling: connector PR validation must stop/ask for foundation split instead of auto-absorbing generic shared changes
 
 Required skills:
 - the installed GSD sequence for implementation or behavior-changing work: `discuss-phase`,
@@ -91,9 +91,8 @@ Before merge:
 - confirm required Go/design skills from `.agents/agentic-delivery/references/required-skills-routing.md` were loaded and recorded
 - for CLI feature work, confirm runtime help, bare namespace behavior, `docs/cli/**`, website docs,
   generated help/manual artifacts, and tests are updated or explicitly marked not applicable
-- for connector implementation work, confirm the named cohort, immutable source-lock ledger,
-  ownership/path matrix, changed-path compliance, Foundation Atlas disposition, and any in-PR
-  shared foundation are recorded before PR review
+- for connector implementation work, confirm exactly one target connector, ownership guard evidence,
+  changed-path compliance, and any foundation PR path are recorded before PR review
 - commit and push coherent green slices to the active issue/PR branch after local green gates;
   never push to `main`
 - observe automatic Claude review after implementation when the PR is non-draft and targets

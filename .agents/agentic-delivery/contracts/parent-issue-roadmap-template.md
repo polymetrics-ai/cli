@@ -33,12 +33,10 @@ Use this template for epic-sized work that is intentionally split into sub-issue
 
 ## Branch and PR policy
 
-- Connector implementation work must declare a bounded named cohort, immutable source-lock ledger,
-  per-connector ownership/path matrix, changed-path compliance requirements, and Foundation Atlas
-  disposition before the canonical worker starts the wave.
-- A named shared runtime/tooling, schema, or generated-index foundation and its affected mappings
-  may ship in that bounded PR after the Atlas check; source evidence, TDD, review, CI, and safety
-  gates remain mandatory, and unrelated connector work is excluded.
+- Connector implementation sub-issues must declare exactly one target connector, ownership guard
+  evidence, changed-path compliance requirements, and any foundation issue/PR path before the
+  canonical worker starts the wave.
+- Shared runtime/tooling, schema, generated-index, or unrelated connector work discovered by a connector lane is split to a separate foundation issue/PR before the connector implementation proceeds.
 - Parent branch starts from `main`.
 - Parent PR targets `main` and is created as soon as the parent branch exists.
 - Parent PR stays draft and may use `Refs #<parent-issue>` until all required sub-issues are
@@ -59,10 +57,10 @@ and review-routing mechanics live in
 `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`. Record evidence against
 every current criterion in the parent job state before advancing `integrate_sub_pr`.
 
-For connector implementation work, also record the named cohort, source-lock ledger,
-per-connector ownership/path matrix, changed-path compliance, and Foundation Atlas disposition.
-A shared foundation is in scope only when it and every affected mapping are explicitly named in
-the bounded PR; an unrelated connector is never authorized by that declaration.
+For a connector implementation child, also record the exact target connector, ownership guard,
+changed-path compliance, and separate foundation issue/PR for any shared runtime/tooling or
+unrelated connector work. Naming or linking a foundation issue does not authorize those paths in
+the connector PR.
 
 ## Human gates
 

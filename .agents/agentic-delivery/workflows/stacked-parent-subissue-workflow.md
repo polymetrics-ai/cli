@@ -78,11 +78,10 @@ keywords for PRs targeting the default branch.
    missing and no human gate blocks creation. If the parent branch has no diff against `main`, add
    the parent seed commit described above first.
 4. Create the sub-issue branch from the parent branch.
-5. Follow the issue-to-PR contract and test-first loop. For connector implementation work,
-   confirm the bounded named cohort, immutable source-lock ledger, ownership/path matrix,
-   changed-path compliance, and Foundation Atlas disposition before production edits. A named
-   shared foundation and its affected mappings may remain in the bounded PR; unrelated connector
-   work remains out of scope.
+5. Follow the issue-to-PR contract and test-first loop. For connector implementation lanes,
+   confirm exactly one target connector, ownership guard evidence, changed-path compliance, and any
+   foundation issue/PR path before production edits; split shared runtime/tooling or unrelated
+   connector work before the connector sub-PR proceeds.
 6. Run targeted verification and broader issue verification.
 7. Run the installed `code-review` flow, disposition every finding, and complete the applicable
    no-mistakes child review, test, docs, and lint gates without `--yes`.

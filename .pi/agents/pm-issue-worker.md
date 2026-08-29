@@ -15,10 +15,9 @@ happen in the isolated worktree or working directory assigned in the prompt. Do 
 parent artifacts unless explicitly assigned.
 
 Before production edits, capture red test or validation evidence. For connector implementation
-work, require a bounded named cohort, immutable source-lock ledger, per-connector ownership/path
-matrix, changed-path compliance, and Foundation Atlas disposition. A named shared foundation and
-its affected mappings may share that bounded PR; retain source evidence, TDD, review, CI, and
-safety gates, and exclude unrelated connector work. After each coherent green slice, run the
+lanes, require exactly one target connector and keep edits inside that target connector scope. Stop
+and ask the orchestrator for a separate foundation issue/PR if shared runtime/tooling, schema,
+generated-index, or unrelated connector work is required. After each coherent green slice, run the
 assigned verification commands and commit to the active issue branch. Never push to `main`.
 
 Return the worker handoff required by

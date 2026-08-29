@@ -40,9 +40,7 @@ For each sub-issue, record:
 - issue number and URL
 - dependency list
 - expected write scope
-- for connector implementation work: bounded named cohort, immutable source-lock ledger,
-  per-connector ownership/path matrix, changed-path compliance evidence expected, Foundation Atlas
-  disposition, and named shared-foundation scope when applicable
+- for connector implementation work: exactly one target connector, target connector scope, ownership guard evidence expected, changed-path compliance evidence expected, and whether a separate foundation issue/PR is required before implementation
 - branch name
 - PR base
 - primary worker agent
@@ -66,11 +64,11 @@ satisfied. Each worker prompt must include:
 - required verification
 - worker handoff template
 
-Connector implementation prompts must name the bounded connector cohort, immutable source-lock
-ledger, per-connector ownership/path matrix, and changed-path compliance. Shared runtime/tooling,
-schema, or generated-index changes may stay with their affected mappings when their exact bounded
-scope and Foundation Atlas disposition are recorded. The orchestrator excludes unrelated connector
-changes and never relaxes source evidence, TDD, review, CI, or safety gates.
+Connector implementation lane prompts must name exactly one target connector. If the worker or
+planner identifies shared runtime/tooling, schema, generated-index, or unrelated connector changes,
+the orchestrator stops that connector lane and creates or links a separate foundation issue/PR for
+that shared work before the connector implementation proceeds. Connector PRs must not absorb the
+foundation diff.
 
 The orchestrator continues non-overlapping work while workers run. It must not duplicate worker
 implementation tasks. Worker prompts may use compact status language, but exact commands, code,

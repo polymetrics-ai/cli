@@ -8,7 +8,5 @@ For every connector change, begin with the current
 [connector delivery canon](../connector-canon/INDEX.md), then read
 [migration conventions](conventions.md) for bundle-authoring mechanics and the
 architecture design only for still-applicable implementation detail. Do not use
-the archived rollout as a task template. Connector work may use a bounded named
-cohort with an immutable source-lock ledger; a named shared foundation and its
-affected mappings may share that PR after the Foundation Atlas check, without
-relaxing source evidence, TDD, review, CI, safety, or warehouse mediation.
+the archived rollout as a task template. Foundation gaps get their own issue;
+the warehouse mediates every flow.
