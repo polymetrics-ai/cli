@@ -29,6 +29,12 @@ type Row = map[string]any
 // DuckDB decompresses it natively with no extension to install.
 const ParquetCompression = "zstd"
 
+const (
+	emptyObjectPhysicalColumn = "__polymetrics_empty_object_row_v1"
+	emptyObjectMetadataKey    = "polymetrics_row_shape"
+	emptyObjectMetadataValue  = "empty_object_v1"
+)
+
 // TableWriter materializes one table as a single Parquet file.
 //
 // Rows are streamed to a staging log and converted in one pass on Commit, so a
@@ -136,10 +142,24 @@ func (w *TableWriter) Commit(ctx context.Context) error {
 	if err := db.QueryRowContext(ctx, structureStatement).Scan(&structure); err != nil {
 		return fmt.Errorf("infer warehouse JSON structure: %w", err)
 	}
-	statement := fmt.Sprintf(
-		`COPY (SELECT unnest(json_transform(json, '%s')) FROM read_ndjson_objects('%s')) TO '%s' (FORMAT parquet, COMPRESSION %s)`,
-		escapeSQLLiteral(structure), escapeSQLLiteral(w.staging), escapeSQLLiteral(w.temp), ParquetCompression,
-	)
+	var statement string
+	if structure == `"JSON"` {
+		// A non-empty batch made entirely of {} records has rows but no logical
+		// columns. Parquet still needs one physical column to retain that row
+		// count. The file-local metadata marker, rather than the sentinel name,
+		// authorizes ReadTable to reconstruct empty maps, so a provider field
+		// that happens to use the sentinel name is never silently discarded.
+		statement = fmt.Sprintf(
+			`COPY (SELECT TRUE AS "%s" FROM read_ndjson_objects('%s')) TO '%s' (FORMAT parquet, COMPRESSION %s, KV_METADATA {%s: '%s'})`,
+			emptyObjectPhysicalColumn, escapeSQLLiteral(w.staging), escapeSQLLiteral(w.temp), ParquetCompression,
+			emptyObjectMetadataKey, emptyObjectMetadataValue,
+		)
+	} else {
+		statement = fmt.Sprintf(
+			`COPY (SELECT unnest(json_transform(json, '%s')) FROM read_ndjson_objects('%s')) TO '%s' (FORMAT parquet, COMPRESSION %s)`,
+			escapeSQLLiteral(structure), escapeSQLLiteral(w.staging), escapeSQLLiteral(w.temp), ParquetCompression,
+		)
+	}
 	if _, err := db.ExecContext(ctx, statement); err != nil {
 		return fmt.Errorf("write parquet table %s: %w", filepath.Base(w.path), err)
 	}
@@ -196,6 +216,13 @@ func ReadTable(ctx context.Context, path string, emit func(Row) error) error {
 		return fmt.Errorf("open duckdb: %w", err)
 	}
 	defer func() { _ = db.Close() }()
+	emptyObjects, err := isAllEmptyObjectTable(ctx, db, path)
+	if err != nil {
+		return err
+	}
+	if emptyObjects {
+		return readAllEmptyObjectTable(ctx, db, path, emit)
+	}
 	rows, err := db.QueryContext(ctx, fmt.Sprintf(`SELECT * FROM read_parquet('%s')`, escapeSQLLiteral(path)))
 	if err != nil {
 		return fmt.Errorf("read warehouse table %s: %w", filepath.Base(path), err)
@@ -227,6 +254,59 @@ func ReadTable(ctx context.Context, path string, emit func(Row) error) error {
 	}
 	if err := rows.Err(); err != nil {
 		return fmt.Errorf("iterate warehouse table %s: %w", filepath.Base(path), err)
+	}
+	return nil
+}
+
+func isAllEmptyObjectTable(ctx context.Context, db *sql.DB, path string) (bool, error) {
+	statement := fmt.Sprintf(
+		`SELECT CAST(value AS VARCHAR) FROM parquet_kv_metadata('%s') WHERE CAST(key AS VARCHAR) = '%s' LIMIT 1`,
+		escapeSQLLiteral(path), emptyObjectMetadataKey,
+	)
+	var marker string
+	if err := db.QueryRowContext(ctx, statement).Scan(&marker); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return false, nil
+		}
+		return false, fmt.Errorf("read warehouse table metadata %s: %w", filepath.Base(path), err)
+	}
+	if marker != emptyObjectMetadataValue {
+		return false, fmt.Errorf("warehouse table %s has unsupported row shape marker %q", filepath.Base(path), marker)
+	}
+	return true, nil
+}
+
+func readAllEmptyObjectTable(ctx context.Context, db *sql.DB, path string, emit func(Row) error) error {
+	statement := fmt.Sprintf(`SELECT * FROM read_parquet('%s')`, escapeSQLLiteral(path))
+	rows, err := db.QueryContext(ctx, statement)
+	if err != nil {
+		return fmt.Errorf("read empty-object warehouse table %s: %w", filepath.Base(path), err)
+	}
+	defer func() { _ = rows.Close() }()
+	columns, err := rows.Columns()
+	if err != nil {
+		return fmt.Errorf("read empty-object warehouse table columns: %w", err)
+	}
+	if len(columns) != 1 || columns[0] != emptyObjectPhysicalColumn {
+		return fmt.Errorf("warehouse table %s empty-object marker has invalid physical columns %v", filepath.Base(path), columns)
+	}
+	var sentinel bool
+	for rows.Next() {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		if err := rows.Scan(&sentinel); err != nil {
+			return fmt.Errorf("scan empty-object warehouse row: %w", err)
+		}
+		if !sentinel {
+			return fmt.Errorf("warehouse table %s has invalid empty-object row marker", filepath.Base(path))
+		}
+		if err := emit(Row{}); err != nil {
+			return err
+		}
+	}
+	if err := rows.Err(); err != nil {
+		return fmt.Errorf("iterate empty-object warehouse table %s: %w", filepath.Base(path), err)
 	}
 	return nil
 }

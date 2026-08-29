@@ -2,6 +2,7 @@ package warehouse
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"path/filepath"
 	"reflect"
@@ -46,6 +47,67 @@ func TestWriteTablePreservesConnectorJSONStrings(t *testing.T) {
 	}
 	if !reflect.DeepEqual(gotData, wantData) {
 		t.Fatalf("reopened data = %#v, want exact JSON shape %#v", gotData, wantData)
+	}
+}
+
+func TestWriteTablePreservesAllEmptyObjectBatches(t *testing.T) {
+	ctx := context.Background()
+	for _, test := range []struct {
+		name string
+		rows []Row
+	}{
+		{
+			name: "nested request objects",
+			rows: []Row{
+				{"id": "one", "data": map[string]any{}},
+				{"id": "two", "data": map[string]any{}},
+			},
+		},
+		{
+			name: "top-level connector records",
+			rows: []Row{{}, {}},
+		},
+		{
+			name: "provider field matching physical sentinel",
+			rows: []Row{{emptyObjectPhysicalColumn: true}},
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			path := filepath.Join(t.TempDir(), "empty_objects"+TableFileExt)
+			if err := WriteTable(ctx, path, test.rows); err != nil {
+				t.Fatalf("WriteTable() error = %v", err)
+			}
+			var got []Row
+			if err := ReadTable(ctx, path, func(row Row) error {
+				got = append(got, row)
+				return nil
+			}); err != nil {
+				t.Fatalf("ReadTable() error = %v", err)
+			}
+			if !reflect.DeepEqual(got, test.rows) {
+				t.Fatalf("reopened rows = %#v, want exact JSON objects %#v", got, test.rows)
+			}
+		})
+	}
+}
+
+func TestReadAllEmptyObjectTableStopsOnEmitterError(t *testing.T) {
+	ctx := context.Background()
+	path := filepath.Join(t.TempDir(), "empty_objects"+TableFileExt)
+	if err := WriteTable(ctx, path, []Row{{}, {}, {}}); err != nil {
+		t.Fatalf("WriteTable() error = %v", err)
+	}
+	wantErr := errors.New("stop after first empty object")
+	emitted := 0
+	err := ReadTable(ctx, path, func(row Row) error {
+		emitted++
+		if len(row) != 0 {
+			t.Fatalf("reopened row = %#v, want empty object", row)
+		}
+		return wantErr
+	})
+	if !errors.Is(err, wantErr) || emitted != 1 {
+		t.Fatalf("ReadTable() = error %v after %d rows, want emitter error after one row", err, emitted)
 	}
 }
 
