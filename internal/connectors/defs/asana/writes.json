@@ -5471,8 +5471,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "goal_gid",
-          "data"
+          "data",
+          "goal_gid"
         ],
         "properties": {
           "data": {
@@ -5523,8 +5523,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "goal_gid",
-          "data"
+          "data",
+          "goal_gid"
         ],
         "properties": {
           "data": {
@@ -5713,8 +5713,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "goal_gid",
-          "data"
+          "data",
+          "goal_gid"
         ],
         "properties": {
           "data": {
@@ -5769,9 +5769,26 @@
         "required": [],
         "properties": {
           "data": {
-            "type": "object",
-            "maxProperties": 256,
-            "additionalProperties": true
+            "additionalProperties": false,
+            "properties": {
+              "access_level": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "member": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "parent": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "role": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "type": "object"
           },
           "opt_pretty": {
             "type": "boolean"
@@ -5799,8 +5816,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "membership_gid",
-          "data"
+          "data",
+          "membership_gid"
         ],
         "properties": {
           "data": {
@@ -5908,8 +5925,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "portfolio_gid",
-          "data"
+          "data",
+          "portfolio_gid"
         ],
         "properties": {
           "data": {
@@ -5960,8 +5977,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "portfolio_gid",
-          "data"
+          "data",
+          "portfolio_gid"
         ],
         "properties": {
           "data": {
@@ -6012,8 +6029,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "portfolio_gid",
-          "data"
+          "data",
+          "portfolio_gid"
         ],
         "properties": {
           "data": {
@@ -6179,8 +6196,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "project_gid",
-          "data"
+          "data",
+          "project_gid"
         ],
         "properties": {
           "data": {
@@ -6231,8 +6248,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "project_gid",
-          "data"
+          "data",
+          "project_gid"
         ],
         "properties": {
           "data": {
@@ -6423,8 +6440,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "project_gid",
-          "data"
+          "data",
+          "project_gid"
         ],
         "properties": {
           "data": {
@@ -6690,8 +6707,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "rate_gid",
-          "data"
+          "data",
+          "rate_gid"
         ],
         "properties": {
           "data": {
@@ -6981,14 +6998,10 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "role_gid",
-          "data"
+          "data",
+          "role_gid"
         ],
         "properties": {
-          "role_gid": {
-            "type": "string",
-            "maxLength": 8192
-          },
           "data": {
             "additionalProperties": false,
             "properties": {
@@ -7162,6 +7175,10 @@
           },
           "opt_pretty": {
             "type": "boolean"
+          },
+          "role_gid": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -7190,8 +7207,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "task_gid",
-          "data"
+          "data",
+          "task_gid"
         ],
         "properties": {
           "data": {
@@ -7243,8 +7260,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "task_gid",
-          "data"
+          "data",
+          "task_gid"
         ],
         "properties": {
           "data": {
@@ -7296,8 +7313,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "task_gid",
-          "data"
+          "data",
+          "task_gid"
         ],
         "properties": {
           "data": {
@@ -7348,8 +7365,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "task_gid",
-          "data"
+          "data",
+          "task_gid"
         ],
         "properties": {
           "data": {
@@ -7400,8 +7417,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "task_gid",
-          "data"
+          "data",
+          "task_gid"
         ],
         "properties": {
           "data": {
@@ -7578,8 +7595,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "team_gid",
-          "data"
+          "data",
+          "team_gid"
         ],
         "properties": {
           "data": {
@@ -7632,18 +7649,44 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "time_tracking_category_gid",
-          "data"
+          "data",
+          "time_tracking_category_gid"
         ],
         "properties": {
-          "time_tracking_category_gid": {
-            "type": "string",
-            "maxLength": 8192
-          },
           "data": {
-            "type": "object",
-            "maxProperties": 256,
-            "additionalProperties": true
+            "additionalProperties": false,
+            "properties": {
+              "color": {
+                "enum": [
+                  "none",
+                  "red",
+                  "orange",
+                  "yellow-orange",
+                  "yellow",
+                  "yellow-green",
+                  "green",
+                  "blue-green",
+                  "aqua",
+                  "blue",
+                  "indigo",
+                  "purple",
+                  "magenta",
+                  "hot-pink",
+                  "pink",
+                  "cool-gray"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "is_archived": {
+                "type": "boolean"
+              },
+              "name": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "type": "object"
           },
           "opt_fields": {
             "items": {
@@ -7660,6 +7703,10 @@
           },
           "opt_pretty": {
             "type": "boolean"
+          },
+          "time_tracking_category_gid": {
+            "maxLength": 8192,
+            "type": "string"
           }
         }
       },
@@ -7694,9 +7741,44 @@
         ],
         "properties": {
           "data": {
-            "type": "object",
-            "maxProperties": 256,
-            "additionalProperties": true
+            "additionalProperties": false,
+            "properties": {
+              "color": {
+                "enum": [
+                  "none",
+                  "red",
+                  "orange",
+                  "yellow-orange",
+                  "yellow",
+                  "yellow-green",
+                  "green",
+                  "blue-green",
+                  "aqua",
+                  "blue",
+                  "indigo",
+                  "purple",
+                  "magenta",
+                  "hot-pink",
+                  "pink",
+                  "cool-gray"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "name": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "workspace": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "workspace"
+            ],
+            "type": "object"
           },
           "opt_fields": {
             "items": {
@@ -7741,8 +7823,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "timesheet_approval_status_gid",
-          "data"
+          "data",
+          "timesheet_approval_status_gid"
         ],
         "properties": {
           "data": {
@@ -7909,8 +7991,51 @@
         ],
         "properties": {
           "data": {
-            "additionalProperties": true,
-            "maxProperties": 256,
+            "additionalProperties": false,
+            "properties": {
+              "filters": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "action": {
+                      "maxLength": 8192,
+                      "type": "string"
+                    },
+                    "fields": {
+                      "items": {
+                        "maxLength": 8192,
+                        "type": "string"
+                      },
+                      "maxItems": 256,
+                      "type": "array"
+                    },
+                    "resource_subtype": {
+                      "maxLength": 8192,
+                      "type": "string"
+                    },
+                    "resource_type": {
+                      "maxLength": 8192,
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "maxItems": 256,
+                "type": "array"
+              },
+              "resource": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "target": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "resource",
+              "target"
+            ],
             "type": "object"
           },
           "opt_fields": {
@@ -7969,13 +8094,44 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "webhook_gid",
-          "data"
+          "data",
+          "webhook_gid"
         ],
         "properties": {
           "data": {
-            "additionalProperties": true,
-            "maxProperties": 256,
+            "additionalProperties": false,
+            "properties": {
+              "filters": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "action": {
+                      "maxLength": 8192,
+                      "type": "string"
+                    },
+                    "fields": {
+                      "items": {
+                        "maxLength": 8192,
+                        "type": "string"
+                      },
+                      "maxItems": 256,
+                      "type": "array"
+                    },
+                    "resource_subtype": {
+                      "maxLength": 8192,
+                      "type": "string"
+                    },
+                    "resource_type": {
+                      "maxLength": 8192,
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "maxItems": 256,
+                "type": "array"
+              }
+            },
             "type": "object"
           },
           "opt_fields": {
@@ -8042,8 +8198,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "workspace_gid",
-          "data"
+          "data",
+          "workspace_gid"
         ],
         "properties": {
           "data": {
@@ -8242,34 +8398,60 @@
         ],
         "properties": {
           "actions": {
-            "type": "array",
-            "minItems": 1,
-            "maxItems": 10,
             "items": {
-              "type": "object",
               "additionalProperties": false,
+              "properties": {
+                "action": {
+                  "maxLength": 128,
+                  "pattern": "^[a-z][a-z0-9_]*$",
+                  "type": "string"
+                },
+                "record": {
+                  "additionalProperties": true,
+                  "maxProperties": 256,
+                  "type": "object"
+                }
+              },
               "required": [
                 "action",
                 "record"
               ],
-              "properties": {
-                "action": {
-                  "type": "string",
-                  "pattern": "^[a-z][a-z0-9_]*$",
-                  "maxLength": 128
-                },
-                "record": {
-                  "type": "object",
-                  "maxProperties": 256,
-                  "additionalProperties": true
-                }
-              }
-            }
+              "type": "object"
+            },
+            "maxItems": 10,
+            "minItems": 1,
+            "type": "array"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "body",
+                "headers",
+                "status_code"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
           }
         }
       },
       "risk": "executes up to 10 explicitly allow-listed Asana write actions in one provider batch; partial provider results fail closed and the entire approved batch requires typed destructive confirmation",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
     }
   ]
 }

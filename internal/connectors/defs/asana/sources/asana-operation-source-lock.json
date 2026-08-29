@@ -2293,6 +2293,39 @@
           "source_location": "components.schemas[\"TaskResponse\"]"
         }
       ]
+    },
+    "batch_action_inventory": {
+      "source_document": "asana-openapi",
+      "source_operation": "asana.rest.createBatchRequest",
+      "request_schema": {
+        "name": "BatchRequest",
+        "source_location": "components.schemas[\"BatchRequest\"]"
+      },
+      "action_schema": {
+        "name": "BatchRequestAction",
+        "source_location": "components.schemas[\"BatchRequestAction\"]"
+      },
+      "response_schema": {
+        "name": "BatchResponse",
+        "source_location": "components.schemas[\"BatchResponse\"]"
+      },
+      "max_actions": 10,
+      "max_actions_source_location": "tags[\"Batch API\"].description",
+      "provider_methods": [
+        "get",
+        "post",
+        "put",
+        "delete",
+        "patch",
+        "head"
+      ],
+      "request_envelope_field": "data",
+      "request_actions_field": "actions",
+      "action_method_field": "method",
+      "action_path_field": "relative_path",
+      "action_data_field": "data",
+      "response_envelope_field": "data",
+      "response_status_field": "status_code"
     }
   },
   "counts": {

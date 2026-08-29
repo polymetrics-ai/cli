@@ -17,6 +17,266 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
+func TestSourceProjectionSingleDataEnvelopeUsesRequestBodyRequiredness(t *testing.T) {
+	t.Parallel()
+	for _, testCase := range []struct {
+		name         string
+		bodyRequired bool
+		wantRequired bool
+	}{
+		{name: "required provider body", bodyRequired: true, wantRequired: true},
+		{name: "optional provider body", bodyRequired: false, wantRequired: false},
+	} {
+		testCase := testCase
+		t.Run(testCase.name, func(t *testing.T) {
+			t.Parallel()
+			var action orderedJSON
+			if err := json.Unmarshal([]byte(`{
+  "name":"create_item","method":"POST","path":"/items","body_type":"json",
+  "record_schema":{"type":"object","additionalProperties":false,"properties":{}},
+  "risk":"standard"
+}`), &action); err != nil {
+				t.Fatal(err)
+			}
+			operation := sourceOperationDescriptor{
+				Method: "POST", Path: "/items",
+				Request: sourceRequestDescriptor{
+					MediaType: "application/json",
+					Body: &sourceRequestBodyDescriptor{
+						Required: testCase.bodyRequired,
+						Schema: map[string]any{
+							"type":                 "object",
+							"additionalProperties": false,
+							"properties": map[string]any{
+								"data": map[string]any{
+									"type":                 "object",
+									"additionalProperties": false,
+									"properties": map[string]any{
+										"name": map[string]any{"type": "string", "minLength": json.Number("1"), "maxLength": json.Number("64")},
+									},
+								},
+							},
+						},
+					},
+				},
+			}
+			contract, err := sourceContractForAction(operation, action.root)
+			if err != nil {
+				t.Fatalf("project single data envelope: %v", err)
+			}
+			if got := contract.Required["data"]; got != testCase.wantRequired {
+				t.Fatalf("projected data required = %t, want provider requestBody.required=%t", got, testCase.wantRequired)
+			}
+		})
+	}
+}
+
+func TestSourceProjectionQueryArrayUsesSourceFormEncoding(t *testing.T) {
+	t.Parallel()
+	explode := false
+	var action orderedJSON
+	if err := json.Unmarshal([]byte(`{
+  "name":"create_item","method":"POST","path":"/items","body_type":"none",
+  "record_schema":{"type":"object","additionalProperties":false,"properties":{}},
+  "risk":"standard"
+}`), &action); err != nil {
+		t.Fatal(err)
+	}
+	operation := sourceOperationDescriptor{
+		Method: "POST", Path: "/items",
+		Request: sourceRequestDescriptor{Query: []sourceParameterDescriptor{{
+			Name: "fields", Required: false,
+			Schema: map[string]any{
+				"type": "array", "minItems": json.Number("1"), "maxItems": json.Number("8"),
+				"items": map[string]any{"type": "string", "minLength": json.Number("1"), "maxLength": json.Number("64")},
+			},
+			Wire: sourceParameterWireDescriptor{Style: "form", Explode: &explode},
+		}}},
+	}
+	contract, err := sourceContractForAction(operation, action.root)
+	if err != nil {
+		t.Fatalf("project query array contract: %v", err)
+	}
+	sourceProjectAction(action.root, contract)
+	rawQuery, _ := action.root.get("query")
+	query, _ := rawQuery.(*orderedObject)
+	rawFields, _ := query.get("fields")
+	fields, _ := rawFields.(*orderedObject)
+	if got := stringField(fields, "template"); got != "{{ record.fields | join:, }}" {
+		t.Fatalf("form/explode=false query template = %q, want comma join", got)
+	}
+}
+
+func TestSourceProjectCommandPreservesDeclaredFlagOrderAndNames(t *testing.T) {
+	t.Parallel()
+	var command orderedJSON
+	if err := json.Unmarshal([]byte(`{
+  "path":"items update","flags":[
+    {"name":"second-json","summary":"second","type":"json","maps_to":"record.second"},
+    {"name":"first-value","summary":"first","type":"string","maps_to":"record.first"}
+  ]
+}`), &command); err != nil {
+		t.Fatal(err)
+	}
+	contract := sourceActionContract{
+		Fields: map[string]any{
+			"first":  map[string]any{"type": "string", "maxLength": json.Number("32")},
+			"second": map[string]any{"type": "object", "additionalProperties": true, "maxProperties": json.Number("8")},
+			"third":  map[string]any{"type": "boolean"},
+		},
+		BareStringFields: map[string]bool{}, SecretFields: map[string]bool{},
+		Required: map[string]bool{"first": true, "second": false, "third": false},
+	}
+	sourceProjectCommand(command.root, contract)
+	flags := arrayField(command.root, "flags")
+	if len(flags) != 3 {
+		t.Fatalf("flag count = %d, want 3", len(flags))
+	}
+	wantNames := []string{"second-json", "first-value", "third"}
+	wantTargets := []string{"record.second", "record.first", "record.third"}
+	for index := range wantNames {
+		flag, _ := flags[index].(*orderedObject)
+		if got := stringField(flag, "name"); got != wantNames[index] {
+			t.Errorf("flag %d name = %q, want %q", index, got, wantNames[index])
+		}
+		if got := stringField(flag, "maps_to"); got != wantTargets[index] {
+			t.Errorf("flag %d target = %q, want %q", index, got, wantTargets[index])
+		}
+	}
+}
+
+func TestSourceProjectionPreservesOnlySourceBackedDeclaredBatch(t *testing.T) {
+	t.Parallel()
+	var action orderedJSON
+	if err := json.Unmarshal([]byte(`{
+  "name":"submit_batch","method":"POST","path":"/batch","body_type":"declared_batch",
+  "declared_batch":{
+    "max_actions":10,"allowed_actions":["create_item"],"allowed_methods":["POST"],
+    "provider_envelope_field":"data","provider_actions_field":"actions","provider_method_field":"method",
+    "provider_path_field":"relative_path","provider_data_field":"data","inner_body_field":"data",
+    "response_envelope_field":"data","response_status_field":"status_code"
+  },
+  "record_schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","additionalProperties":false,"required":["actions"],"properties":{"actions":{"type":"array","minItems":1,"maxItems":10,"items":{"type":"object","additionalProperties":false,"required":["action","record"],"properties":{"action":{"type":"string","maxLength":128},"record":{"type":"object","additionalProperties":true,"maxProperties":256}}}}}},
+  "risk":"high"
+}`), &action); err != nil {
+		t.Fatal(err)
+	}
+	inventory := &sourceImportBatchActionInventory{
+		SourceDocument: "provider", SourceOperation: "alpha.rest.submitBatch", MaxActions: 10,
+		ProviderMethods:       []string{"get", "post", "put", "delete", "patch", "head"},
+		RequestEnvelopeField:  "data",
+		RequestActionsField:   "actions",
+		ActionMethodField:     "method",
+		ActionPathField:       "relative_path",
+		ActionDataField:       "data",
+		ResponseEnvelopeField: "data",
+		ResponseStatusField:   "status_code",
+	}
+	operation := sourceOperationDescriptor{SourceID: inventory.SourceOperation, Method: "POST", Path: "/batch", BatchAction: inventory}
+	contract, err := sourceContractForAction(operation, action.root)
+	if err != nil {
+		t.Fatalf("project source-backed declared batch: %v", err)
+	}
+	if changed := sourceProjectAction(action.root, contract); changed {
+		t.Fatalf("source-backed declared batch action drifted: %#v", action.root)
+	}
+	var command orderedJSON
+	if err := json.Unmarshal([]byte(`{"path":"batch submit","flags":[{"name":"actions-json","summary":"typed actions","type":"json","maps_to":"record.actions","max_bytes":1048576,"required":true}]}`), &command); err != nil {
+		t.Fatal(err)
+	}
+	if changed := sourceProjectCommand(command.root, contract); changed {
+		t.Fatalf("source-backed declared batch command drifted: %#v", command.root)
+	}
+	encodedAction, err := json.Marshal(action)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var loadedAction engine.WriteAction
+	if err := json.Unmarshal(encodedAction, &loadedAction); err != nil {
+		t.Fatal(err)
+	}
+	encodedCommand, err := json.Marshal(command)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var loadedCommand engine.CLICommand
+	if err := json.Unmarshal(encodedCommand, &loadedCommand); err != nil {
+		t.Fatal(err)
+	}
+	if !sourceActionCoversOperation(loadedAction, loadedCommand, operation) {
+		t.Fatal("source-backed declared batch lost its closed spec or record schema during executable-coverage validation")
+	}
+
+	explode := false
+	operation.Request.Query = []sourceParameterDescriptor{
+		{Name: "opt_fields", Schema: map[string]any{"type": "array", "items": map[string]any{"type": "string"}}, Wire: sourceParameterWireDescriptor{Style: "form", Explode: &explode}},
+		{Name: "opt_pretty", Schema: map[string]any{"type": "boolean"}},
+	}
+	contract, err = sourceContractForAction(operation, action.root)
+	if err != nil {
+		t.Fatalf("project source-backed declared batch query: %v", err)
+	}
+	if !sourceProjectAction(action.root, contract) || !sourceProjectCommand(command.root, contract) {
+		t.Fatal("source-backed declared batch query fields were not projected")
+	}
+	encodedAction, err = json.Marshal(action)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := json.Unmarshal(encodedAction, &loadedAction); err != nil {
+		t.Fatal(err)
+	}
+	encodedCommand, err = json.Marshal(command)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := json.Unmarshal(encodedCommand, &loadedCommand); err != nil {
+		t.Fatal(err)
+	}
+	if got := loadedAction.Query["opt_fields"].Template; got != "{{ record.opt_fields | join:, }}" {
+		t.Fatalf("declared batch opt_fields query template = %q, want source form/explode=false encoding", got)
+	}
+	if !sourceActionCoversOperation(loadedAction, loadedCommand, operation) {
+		t.Fatalf("source-backed declared batch with projected outer query fields was not executable-complete: action=%+v command=%+v", loadedAction, loadedCommand)
+	}
+
+	wrongQuery := loadedAction
+	wrongQuery.Query = make(map[string]engine.QueryParam, len(loadedAction.Query))
+	for name, query := range loadedAction.Query {
+		wrongQuery.Query[name] = query
+	}
+	query := wrongQuery.Query["opt_fields"]
+	query.Template = "{{ record.opt_fields }}"
+	wrongQuery.Query["opt_fields"] = query
+	if sourceActionCoversOperation(wrongQuery, loadedCommand, operation) {
+		t.Fatal("declared batch with a non-source query encoding passed executable coverage")
+	}
+	wrongSchema := loadedAction
+	wrongSchema.RecordSchema = json.RawMessage(`{"type":"object","additionalProperties":false,"required":["actions"],"properties":{"actions":{"type":"array","minItems":1,"maxItems":10}}}`)
+	if sourceActionCoversOperation(wrongSchema, loadedCommand, operation) {
+		t.Fatal("declared batch with an incomplete source-projected record schema passed executable coverage")
+	}
+	wrongBatch := loadedAction
+	wrongBatch.DeclaredBatch = new(engine.DeclaredBatchSpec)
+	*wrongBatch.DeclaredBatch = *loadedAction.DeclaredBatch
+	wrongBatch.DeclaredBatch.MaxActions = 9
+	if sourceActionCoversOperation(wrongBatch, loadedCommand, operation) {
+		t.Fatal("declared batch with a source-inconsistent batch contract passed executable coverage")
+	}
+
+	withoutInventory := operation
+	withoutInventory.BatchAction = nil
+	if _, err := sourceContractForAction(withoutInventory, action.root); err == nil || !strings.Contains(err.Error(), "no source-backed batch action inventory") {
+		t.Fatalf("unbound declared batch error = %v", err)
+	}
+	wrongMax := *inventory
+	wrongMax.MaxActions = 9
+	operation.BatchAction = &wrongMax
+	if _, err := sourceContractForAction(operation, action.root); err == nil || !strings.Contains(err.Error(), "max_actions") {
+		t.Fatalf("mismatched declared batch error = %v", err)
+	}
+}
+
 func TestSourceProjection_AddChangeDeletePropagatesToEverySurface(t *testing.T) {
 	bundleDir := t.TempDir()
 	writesPath := filepath.Join(bundleDir, "writes.json")
@@ -919,10 +1179,10 @@ func TestRetainedAsanaSourceImportRejectsReadProjectionDrift(t *testing.T) {
 			},
 		},
 		{
-			name: "deferred direct read omits named foundation",
+			name: "response-only-gap direct read marked planned",
 			mutate: func(t *testing.T, bundleDir string) {
 				mutateAsanaCommand(t, filepath.Join(bundleDir, "cli_surface.json"), "memberships get-membership", func(command map[string]any) {
-					command["notes"] = "planned without a source-cited foundation"
+					command["availability"] = "planned"
 				})
 			},
 		},

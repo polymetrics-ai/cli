@@ -1647,6 +1647,68 @@ func TestSourceImportRetainsBoundedOpenAPI30ReferenceSiblings(t *testing.T) {
 	}
 }
 
+func TestSourceImportQualifiesReferenceSiblingGapByRequestOrResponsePhase(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name         string
+		raw          []byte
+		wantPhase    string
+		wantBlocking bool
+	}{
+		{
+			name: "response-only schema sibling remains evidence without blocking a bounded read",
+			raw: []byte(`{
+  "openapi":"3.0.3","info":{"title":"x","version":"1"},
+  "components":{"schemas":{"Identifier":{"type":"string","maxLength":32}}},
+  "paths":{"/items":{"get":{"operationId":"getItems","responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Identifier","type":"integer"}}}}}}}}
+}`),
+			wantPhase:    "response",
+			wantBlocking: false,
+		},
+		{
+			name: "request schema sibling still blocks an incomplete request contract",
+			raw: []byte(`{
+  "openapi":"3.0.3","info":{"title":"x","version":"1"},
+  "components":{"schemas":{"Identifier":{"type":"string","maxLength":32}}},
+  "paths":{"/items":{"get":{"operationId":"getItems","parameters":[{"name":"id","in":"query","required":true,"schema":{"$ref":"#/components/schemas/Identifier","type":"boolean"}}],"responses":{"200":{"description":"ok"}}}}}
+}`),
+			wantPhase:    "request",
+			wantBlocking: true,
+		},
+	}
+	for _, testCase := range tests {
+		testCase := testCase
+		t.Run(testCase.name, func(t *testing.T) {
+			t.Parallel()
+			result := importInlineSourceResult(t, testCase.raw, defaultSourceImportLimits())
+			if len(result.Operations) != 1 {
+				t.Fatalf("operation count = %d, want 1", len(result.Operations))
+			}
+			operation := result.Operations[0]
+			var siblingGap *sourceContractGap
+			for index := range operation.Runtime.Gaps {
+				if operation.Runtime.Gaps[index].Foundation == sourceOpenAPI30ReferenceSiblingFoundation {
+					siblingGap = &operation.Runtime.Gaps[index]
+					break
+				}
+			}
+			if siblingGap == nil {
+				t.Fatalf("runtime gaps = %+v, want retained OpenAPI 3.0 sibling evidence", operation.Runtime.Gaps)
+			}
+			encoded, err := json.Marshal(siblingGap)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if !strings.Contains(string(encoded), `"phase":"`+testCase.wantPhase+`"`) {
+				t.Fatalf("qualified sibling gap = %s, want phase %q", encoded, testCase.wantPhase)
+			}
+			if got := sourceProjectionReadHasBlockingGap(operation); got != testCase.wantBlocking {
+				t.Fatalf("read blocking = %t, want %t for %s-only sibling gap", got, testCase.wantBlocking, testCase.wantPhase)
+			}
+		})
+	}
+}
+
 func TestSourceImportPreservesInboundEventsAndExtensionsAsMergeBlocked(t *testing.T) {
 	t.Parallel()
 	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"webhooks":{"invoice.created":{"post":{"responses":{"200":{"description":"ok"}}}}},"paths":{"x-provider-metadata":{"tier":"test"},"/deliver":{"x-route-metadata":{"owner":"provider"},"post":{"operationId":"deliver","callbacks":{"notify":{"{$request.body#/callback_url}":{"post":{"responses":{"202":{"description":"accepted"}}}}}},"responses":{"202":{"description":"accepted"}}}}}}`)

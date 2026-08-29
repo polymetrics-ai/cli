@@ -87,27 +87,36 @@ type asanaLockedOperation struct {
 	ID     string `json:"id"`
 	Method string `json:"method"`
 	Path   string `json:"path"`
-	Source struct {
-		PathParameters []struct {
-			Ref string `json:"$ref"`
-		} `json:"path_parameters"`
-		Parameters []struct {
-			Name    string `json:"name"`
-			In      string `json:"in"`
-			Style   string `json:"style"`
-			Explode *bool  `json:"explode"`
-			Schema  struct {
-				Type  string `json:"type"`
-				Items struct {
-					Type string   `json:"type"`
-					Enum []string `json:"enum"`
-				} `json:"items"`
-			} `json:"schema"`
-		} `json:"parameters"`
-		RequestBody *struct {
+}
+
+type asanaSourceOperationDescriptorDocument struct {
+	Operations []asanaSourceOperationDescriptor `json:"operations"`
+}
+
+type asanaSourceOperationDescriptor struct {
+	SourceID string `json:"source_id"`
+	Request  struct {
+		Path  []asanaSourceParameterDescriptor `json:"path"`
+		Query []asanaSourceParameterDescriptor `json:"query"`
+		Body  *struct {
 			Required bool `json:"required"`
-		} `json:"requestBody"`
-	} `json:"source_operation"`
+		} `json:"body"`
+	} `json:"request"`
+}
+
+type asanaSourceParameterDescriptor struct {
+	Name   string `json:"name"`
+	Schema struct {
+		Type  string `json:"type"`
+		Items struct {
+			Type string   `json:"type"`
+			Enum []string `json:"enum"`
+		} `json:"items"`
+	} `json:"schema"`
+	Wire struct {
+		Style   string `json:"style"`
+		Explode *bool  `json:"explode"`
+	} `json:"wire"`
 }
 
 func loadBundle(t *testing.T) engine.Bundle {
@@ -140,6 +149,29 @@ func loadOperationSourceLock(t *testing.T) asanaOperationSourceLock {
 		t.Fatalf("decode Asana operation source lock: %v", err)
 	}
 	return lock
+}
+
+func loadSourceOperationDescriptors(t *testing.T) map[string]asanaSourceOperationDescriptor {
+	t.Helper()
+	raw, err := os.ReadFile("sources/asana-operation-descriptor.json")
+	if err != nil {
+		t.Fatalf("read Asana source operation descriptor: %v", err)
+	}
+	var document asanaSourceOperationDescriptorDocument
+	if err := json.Unmarshal(raw, &document); err != nil {
+		t.Fatalf("decode Asana source operation descriptor: %v", err)
+	}
+	operations := make(map[string]asanaSourceOperationDescriptor, len(document.Operations))
+	for _, operation := range document.Operations {
+		if operation.SourceID == "" {
+			t.Fatal("Asana source operation descriptor has no source_id")
+		}
+		if _, duplicate := operations[operation.SourceID]; duplicate {
+			t.Fatalf("Asana source operation descriptor repeats %q", operation.SourceID)
+		}
+		operations[operation.SourceID] = operation
+	}
+	return operations
 }
 
 func asanaSourceLockRESTDocument(t *testing.T, lock asanaOperationSourceLock) asanaOperationSourceDocument {
@@ -326,8 +358,10 @@ func TestSourceLockedDeferredOperationsAreMaterialized(t *testing.T) {
 
 	bundle := loadBundle(t)
 	lock := loadOperationSourceLock(t)
-	lockedByID := make(map[string]asanaLockedOperation, len(lock.REST.Operations))
-	for _, operation := range lock.REST.Operations {
+	sourceOperations := loadSourceOperationDescriptors(t)
+	sourceDocument := asanaSourceLockRESTDocument(t, lock)
+	lockedByID := make(map[string]asanaLockedOperation, len(sourceDocument.Operations))
+	for _, operation := range sourceDocument.Operations {
 		lockedByID[operation.ID] = operation
 	}
 	commandsByPath := make(map[string]engine.CLICommand, len(bundle.CLISurface.Commands))
@@ -357,8 +391,9 @@ func TestSourceLockedDeferredOperationsAreMaterialized(t *testing.T) {
 				t.Fatalf("command %q api surface = %+v, want %s %s", binding.command, command.APISurface, binding.method, binding.path)
 			}
 			bodyRequired := binding.sourceID != "asana.rest.createMembership"
-			if locked.Source.RequestBody == nil || locked.Source.RequestBody.Required != bodyRequired {
-				t.Fatalf("source lock %q request body = %+v, want required=%t", binding.sourceID, locked.Source.RequestBody, bodyRequired)
+			source, ok := sourceOperations[binding.sourceID]
+			if !ok || source.Request.Body == nil || source.Request.Body.Required != bodyRequired {
+				t.Fatalf("source-derived descriptor %q request body = %+v, want required=%t", binding.sourceID, source.Request.Body, bodyRequired)
 			}
 			var dataFlag *engine.CLIFlag
 			for index := range command.Flags {
@@ -580,6 +615,7 @@ func TestWriteQueryCellsMatchPinnedFormEncoding(t *testing.T) {
 
 	bundle := loadBundle(t)
 	lock := loadOperationSourceLock(t)
+	sourceOperations := loadSourceOperationDescriptors(t)
 	actions := make(map[string]engine.WriteAction, len(bundle.Writes))
 	for _, action := range bundle.Writes {
 		actions[action.Name] = action
@@ -590,8 +626,9 @@ func TestWriteQueryCellsMatchPinnedFormEncoding(t *testing.T) {
 			commands[command.Write] = command
 		}
 	}
-	locked := make(map[string]asanaLockedOperation, len(lock.REST.Operations))
-	for _, operation := range lock.REST.Operations {
+	sourceDocument := asanaSourceLockRESTDocument(t, lock)
+	locked := make(map[string]asanaLockedOperation, len(sourceDocument.Operations))
+	for _, operation := range sourceDocument.Operations {
 		locked[operation.ID] = operation
 	}
 
@@ -606,9 +643,12 @@ func TestWriteQueryCellsMatchPinnedFormEncoding(t *testing.T) {
 			if !ok {
 				t.Fatalf("write command is absent")
 			}
-			operation, ok := locked[cell.sourceOperation]
-			if !ok {
+			if _, ok := locked[cell.sourceOperation]; !ok {
 				t.Fatalf("source operation %q is absent", cell.sourceOperation)
+			}
+			operation, ok := sourceOperations[cell.sourceOperation]
+			if !ok {
+				t.Fatalf("source-derived operation %q is absent", cell.sourceOperation)
 			}
 			var schema struct {
 				Properties map[string]struct {
@@ -625,12 +665,12 @@ func TestWriteQueryCellsMatchPinnedFormEncoding(t *testing.T) {
 			if len(cell.optFields) > 0 {
 				cellCount++
 				var sourceParameterFound bool
-				for _, parameter := range operation.Source.Parameters {
+				for _, parameter := range operation.Request.Query {
 					if parameter.Name != "opt_fields" {
 						continue
 					}
 					sourceParameterFound = true
-					if parameter.In != "query" || parameter.Style != "form" || parameter.Explode == nil || *parameter.Explode || parameter.Schema.Type != "array" || parameter.Schema.Items.Type != "string" {
+					if parameter.Wire.Style != "form" || parameter.Wire.Explode == nil || *parameter.Wire.Explode || parameter.Schema.Type != "array" || parameter.Schema.Items.Type != "string" {
 						t.Fatalf("source opt_fields = %+v, want query array style=form explode=false", parameter)
 					}
 					for _, want := range cell.optFields {
@@ -656,8 +696,8 @@ func TestWriteQueryCellsMatchPinnedFormEncoding(t *testing.T) {
 			if cell.optPretty {
 				cellCount++
 				var prettySource bool
-				for _, parameter := range operation.Source.PathParameters {
-					prettySource = prettySource || parameter.Ref == "#/components/parameters/pretty"
+				for _, parameter := range operation.Request.Query {
+					prettySource = prettySource || parameter.Name == "opt_pretty" && parameter.Schema.Type == "boolean"
 				}
 				if !prettySource {
 					t.Fatal("source operation has no shared opt_pretty parameter")
@@ -1509,8 +1549,14 @@ func TestBatchActionUsesClosedSourceBackedActionSelection(t *testing.T) {
 	if command.Intent != "direct_write" || command.Availability != "implemented" || command.Write != batch.Name || command.SourceOperation != "asana.rest.createBatchRequest" {
 		t.Fatalf("batch command = %+v, want implemented source-bound direct_write", command)
 	}
-	if len(command.Flags) != 1 || command.Flags[0].Name != "actions-json" || command.Flags[0].Type != "json" || command.Flags[0].MapsTo != "record.actions" || !command.Flags[0].Required {
-		t.Fatalf("batch command flags = %+v, want one required JSON action selector", command.Flags)
+	if len(command.Flags) != 3 || command.Flags[0].Name != "actions-json" || command.Flags[0].Type != "json" || command.Flags[0].MapsTo != "record.actions" || !command.Flags[0].Required ||
+		command.Flags[1].Name != "opt-fields" || command.Flags[1].Type != "json" || command.Flags[1].MapsTo != "record.opt_fields" || command.Flags[1].Required ||
+		command.Flags[2].Name != "opt-pretty" || command.Flags[2].Type != "boolean" || command.Flags[2].MapsTo != "record.opt_pretty" || command.Flags[2].Required {
+		t.Fatalf("batch command flags = %+v, want one required action selector plus source-backed optional output fields", command.Flags)
+	}
+	if batch.Query["opt_fields"].Template != "{{ record.opt_fields | join:, }}" || !batch.Query["opt_fields"].OmitWhenAbsent ||
+		batch.Query["opt_pretty"].Template != "{{ record.opt_pretty }}" || !batch.Query["opt_pretty"].OmitWhenAbsent {
+		t.Fatalf("batch query = %+v, want source-backed form/explode=false opt_fields and optional opt_pretty", batch.Query)
 	}
 
 	fixture := loadWriteFixture(t, batch)

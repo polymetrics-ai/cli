@@ -14,7 +14,7 @@
   },
   "source_lock": {
     "path": "sources/asana-operation-source-lock.json",
-    "file_sha256": "af9c24a7d64a923af3a6b508b69d0cef3c413058545356d6c5aff73e108d2e72",
+    "file_sha256": "eb5517f0f1456e4cacb03d4f705fd2244a1ccf6113a9c0d67e29ed2417e407c4",
     "schema_version": 3,
     "connector": "asana",
     "rest_document_id": "asana-openapi",

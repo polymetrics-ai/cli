@@ -954,7 +954,7 @@ func sourceProjectionMutationFoundationNote(source sourceOperationDescriptor) st
 func sourceProjectionAnnotateReadFoundationGaps(operations, cli, surface *orderedObject, result sourceImportResult) sourceProjectionStats {
 	stats := sourceProjectionStats{}
 	for _, source := range result.Operations {
-		if sourceProjectionOperationMutates(source) || !sourceProjectionHasBlockingGap(source.Runtime.Gaps) {
+		if sourceProjectionOperationMutates(source) || !sourceProjectionReadHasBlockingGap(source) {
 			continue
 		}
 		operation := sourceProjectionOperationForEndpoint(operations, source.Method, source.Path)
@@ -2513,7 +2513,7 @@ func sourceProjectionReachableReadSources(result sourceImportResult) map[string]
 // caller values. Required inputs and all other source gaps remain blocking.
 func sourceProjectionReadHasBlockingGap(operation sourceOperationDescriptor) bool {
 	for _, gap := range operation.Runtime.Gaps {
-		if sourceProjectionOptionalParameterSchemaGap(operation, gap) || sourceProjectionOmittedOptionalRequestBodySchemaGap(operation, gap) {
+		if sourceProjectionOptionalParameterSchemaGap(operation, gap) || sourceProjectionOmittedOptionalRequestBodySchemaGap(operation, gap) || sourceProjectionResponseOnlyJSONSchemaGap(operation, gap) {
 			continue
 		}
 		if sourceProjectionHasBlockingGap([]sourceContractGap{gap}) {
@@ -2521,6 +2521,12 @@ func sourceProjectionReadHasBlockingGap(operation sourceOperationDescriptor) boo
 		}
 	}
 	return false
+}
+
+func sourceProjectionResponseOnlyJSONSchemaGap(operation sourceOperationDescriptor, gap sourceContractGap) bool {
+	return gap.Phase == "response" &&
+		gap.Foundation == sourceOpenAPI30ReferenceSiblingFoundation &&
+		operation.Output.Class == sourceOutputJSON
 }
 
 // sourceProjectionNormalizeNonBlockingReadGaps removes only a typed source
@@ -3106,6 +3112,9 @@ func sourceProjectionActionPropertyCount(action *orderedObject) int {
 }
 
 func sourceContractForAction(operation sourceOperationDescriptor, action *orderedObject) (sourceActionContract, error) {
+	if operation.BatchAction != nil || stringField(action, "body_type") == "declared_batch" {
+		return sourceContractForDeclaredBatchAction(operation, action)
+	}
 	contract := sourceActionContract{Fields: map[string]any{}, BareStringFields: map[string]bool{}, SecretFields: map[string]bool{}, Required: map[string]bool{}}
 	// A retained source gap does not authorize a raw body. It does permit a
 	// source-owned named field to use the bounded JSON flag path when its exact
@@ -3130,21 +3139,8 @@ func sourceContractForAction(operation sourceOperationDescriptor, action *ordere
 		contract.Required[parameter.Name] = true
 		contract.PathFields = append(contract.PathFields, parameter.Name)
 	}
-	for _, parameter := range operation.Request.Query {
-		converted, err := sourceProjectionSchema(parameter.Schema)
-		if err != nil && allowBoundedNamedJSON {
-			converted, err = sourceProjectionBoundedNamedJSONSchema(parameter.Schema)
-		}
-		if err != nil {
-			return sourceActionContract{}, err
-		}
-		contract.setSourceField(parameter.Name, parameter.Schema, converted)
-		// One record field can legitimately bind more than one declared input
-		// location (for example a path `name` plus an optional body `name`).
-		// Requiredness is the union of those declarations: an optional second
-		// occurrence must never downgrade the structural path requirement.
-		contract.Required[parameter.Name] = contract.Required[parameter.Name] || parameter.Required
-		contract.Query = append(contract.Query, parameter)
+	if err := sourceContractAddQueryFields(operation, allowBoundedNamedJSON, &contract); err != nil {
+		return sourceActionContract{}, err
 	}
 	if operation.Request.Body != nil {
 		media := sourceNormalizedMediaType(operation.Request.MediaType)
@@ -3181,6 +3177,17 @@ func sourceContractForAction(operation sourceOperationDescriptor, action *ordere
 		}
 		properties, _ := body["properties"].(map[string]any)
 		required := sourceSchemaRequired(body)
+		// OpenAPI requestBody.required applies to the body as a whole.  For the
+		// common single-field JSON envelope, that provider requirement is also
+		// the executable record requirement: without the sole `data` field there
+		// is no body to send.  An optional request body (for example Asana's
+		// createMembership operation) must remain optional, and multi-field bodies
+		// continue to use their schema's own required array.
+		if operation.Request.Body.Required && len(properties) == 1 {
+			if _, dataEnvelope := properties["data"]; dataEnvelope {
+				required["data"] = true
+			}
+		}
 		for _, name := range sortedSourceMapKeys(properties) {
 			if sourceProjectionSchemaReadOnly(properties[name]) {
 				continue
@@ -3205,6 +3212,141 @@ func sourceContractForAction(operation sourceOperationDescriptor, action *ordere
 	sort.Strings(contract.PathFields)
 	sort.Slice(contract.Query, func(i, j int) bool { return contract.Query[i].Name < contract.Query[j].Name })
 	sort.Strings(contract.BodyFields)
+	return contract, nil
+}
+
+func sourceContractAddQueryFields(operation sourceOperationDescriptor, allowBoundedNamedJSON bool, contract *sourceActionContract) error {
+	for _, parameter := range operation.Request.Query {
+		converted, err := sourceProjectionSchema(parameter.Schema)
+		if err != nil && allowBoundedNamedJSON {
+			converted, err = sourceProjectionBoundedNamedJSONSchema(parameter.Schema)
+		}
+		if err != nil {
+			return err
+		}
+		contract.setSourceField(parameter.Name, parameter.Schema, converted)
+		// One record field can legitimately bind more than one declared input
+		// location (for example a path `name` plus an optional body `name`).
+		// Requiredness is the union of those declarations: an optional second
+		// occurrence must never downgrade the structural path requirement.
+		contract.Required[parameter.Name] = contract.Required[parameter.Name] || parameter.Required
+		contract.Query = append(contract.Query, parameter)
+	}
+	return nil
+}
+
+// sourceContractForDeclaredBatchAction preserves a connector definition's
+// closed, typed action selector only when the source descriptor carries the
+// matching provider batch inventory. The provider source owns the envelope,
+// field names, supported methods, and maximum; the definition continues to
+// own which already-declared write actions may be selected. No caller-provided
+// method, path, header, or body is introduced by source projection.
+func sourceContractForDeclaredBatchAction(operation sourceOperationDescriptor, action *orderedObject) (sourceActionContract, error) {
+	inventory := operation.BatchAction
+	if inventory == nil {
+		return sourceActionContract{}, fmt.Errorf("declared_batch action has no source-backed batch action inventory")
+	}
+	if inventory.SourceOperation != operation.SourceID {
+		return sourceActionContract{}, fmt.Errorf("declared_batch source operation %q does not match %q", inventory.SourceOperation, operation.SourceID)
+	}
+	if stringField(action, "body_type") != "declared_batch" {
+		return sourceActionContract{}, fmt.Errorf("source-backed batch operation requires declared_batch")
+	}
+	rawSpec, declared := action.get("declared_batch")
+	spec, ok := rawSpec.(*orderedObject)
+	if !declared || !ok {
+		return sourceActionContract{}, fmt.Errorf("declared_batch action has no closed batch spec")
+	}
+	rawMaxActions, _ := spec.get("max_actions")
+	if int(sourcePositiveInteger(rawMaxActions)) != inventory.MaxActions {
+		return sourceActionContract{}, fmt.Errorf("declared_batch max_actions does not match source-backed maximum %d", inventory.MaxActions)
+	}
+	providerFields := map[string]string{
+		"provider_envelope_field": inventory.RequestEnvelopeField,
+		"provider_actions_field":  inventory.RequestActionsField,
+		"provider_method_field":   inventory.ActionMethodField,
+		"provider_path_field":     inventory.ActionPathField,
+		"provider_data_field":     inventory.ActionDataField,
+		"inner_body_field":        inventory.ActionDataField,
+		"response_envelope_field": inventory.ResponseEnvelopeField,
+		"response_status_field":   inventory.ResponseStatusField,
+	}
+	for name, wanted := range providerFields {
+		if got := stringField(spec, name); got != wanted {
+			return sourceActionContract{}, fmt.Errorf("declared_batch %s = %q, want source-backed %q", name, got, wanted)
+		}
+	}
+	providerMethods := make(map[string]bool, len(inventory.ProviderMethods))
+	for _, method := range inventory.ProviderMethods {
+		providerMethods[strings.ToUpper(method)] = true
+	}
+	allowedMethods := arrayField(spec, "allowed_methods")
+	if len(allowedMethods) == 0 {
+		return sourceActionContract{}, fmt.Errorf("declared_batch has no typed allowed methods")
+	}
+	for _, rawMethod := range allowedMethods {
+		method, ok := rawMethod.(string)
+		if !ok || !providerMethods[strings.ToUpper(method)] {
+			return sourceActionContract{}, fmt.Errorf("declared_batch allowed method %v is absent from the source-backed provider method enum", rawMethod)
+		}
+	}
+	if len(arrayField(spec, "allowed_actions")) == 0 {
+		return sourceActionContract{}, fmt.Errorf("declared_batch has no typed allowed actions")
+	}
+	contract := sourceActionContract{
+		Fields:           map[string]any{},
+		BareStringFields: map[string]bool{},
+		SecretFields:     map[string]bool{},
+		Required:         map[string]bool{},
+		BodyType:         "declared_batch",
+	}
+	if err := sourceContractAddQueryFields(operation, sourceProjectionHasBlockingGap(operation.Runtime.Gaps), &contract); err != nil {
+		return sourceActionContract{}, err
+	}
+	if _, collision := contract.Fields["actions"]; collision {
+		return sourceActionContract{}, fmt.Errorf("declared_batch source query collides with the typed actions selector")
+	}
+
+	rawSchema, exists := action.get("record_schema")
+	if !exists {
+		return sourceActionContract{}, fmt.Errorf("declared_batch action has no record schema")
+	}
+	encoded, err := marshalNoEscapeHTML(rawSchema)
+	if err != nil {
+		return sourceActionContract{}, fmt.Errorf("encode declared_batch record schema: %w", err)
+	}
+	decoder := json.NewDecoder(bytes.NewReader(encoded))
+	decoder.UseNumber()
+	var schema map[string]any
+	if err := decoder.Decode(&schema); err != nil {
+		return sourceActionContract{}, fmt.Errorf("decode declared_batch record schema: %w", err)
+	}
+	if sourceSchemaType(schema) != "object" || schema["additionalProperties"] != false {
+		return sourceActionContract{}, fmt.Errorf("declared_batch record schema is not closed")
+	}
+	properties, _ := schema["properties"].(map[string]any)
+	allowedProperties := map[string]bool{"actions": true}
+	for _, parameter := range contract.Query {
+		allowedProperties[parameter.Name] = true
+	}
+	if len(properties) > len(allowedProperties) {
+		return sourceActionContract{}, fmt.Errorf("declared_batch record schema must expose only the typed actions selector and source-backed query fields")
+	}
+	for name := range properties {
+		if !allowedProperties[name] {
+			return sourceActionContract{}, fmt.Errorf("declared_batch record schema field %q is not source-backed", name)
+		}
+	}
+	actions, _ := properties["actions"].(map[string]any)
+	if actions == nil || sourceSchemaType(actions) != "array" || sourcePositiveInteger(actions["minItems"]) < 1 || int(sourcePositiveInteger(actions["maxItems"])) != inventory.MaxActions {
+		return sourceActionContract{}, fmt.Errorf("declared_batch actions selector does not match source-backed bounds")
+	}
+	if !sourceSchemaRequired(schema)["actions"] {
+		return sourceActionContract{}, fmt.Errorf("declared_batch actions selector must be required")
+	}
+	contract.Fields["actions"] = actions
+	contract.Required["actions"] = true
+	sort.Slice(contract.Query, func(i, j int) bool { return contract.Query[i].Name < contract.Query[j].Name })
 	return contract, nil
 }
 
@@ -3951,12 +4093,13 @@ func sourceProjectAction(action *orderedObject, contract sourceActionContract) b
 
 	query := newOrderedObject()
 	for _, parameter := range contract.Query {
+		template := sourceProjectionQueryParameterTemplate(parameter)
 		if parameter.Required {
-			query.set(parameter.Name, "{{ record."+parameter.Name+" }}")
+			query.set(parameter.Name, template)
 			continue
 		}
 		value := newOrderedObject()
-		value.set("template", "{{ record."+parameter.Name+" }}")
+		value.set("template", template)
 		value.set("omit_when_absent", true)
 		query.set(parameter.Name, value)
 	}
@@ -3997,63 +4140,80 @@ func sourceProjectAction(action *orderedObject, contract sourceActionContract) b
 	return changed
 }
 
+func sourceProjectionQueryParameterTemplate(parameter sourceParameterDescriptor) string {
+	template := "{{ record." + parameter.Name
+	schema, _ := parameter.Schema.(map[string]any)
+	if sourceSchemaType(schema) == "array" && parameter.Wire.Style == "form" && parameter.Wire.Explode != nil && !*parameter.Wire.Explode {
+		template += " | join:,"
+	}
+	return template + " }}"
+}
+
 func sourceProjectCommand(command *orderedObject, contract sourceActionContract) bool {
-	existing := map[string]*orderedObject{}
-	var preserved []any
+	seen := map[string]bool{}
+	flags := make([]any, 0, len(contract.Fields))
 	for _, raw := range arrayField(command, "flags") {
 		flag, ok := raw.(*orderedObject)
 		if !ok {
-			preserved = append(preserved, raw)
+			flags = append(flags, raw)
 			continue
 		}
 		target := stringField(flag, "maps_to")
 		name, record := strings.CutPrefix(target, "record.")
 		if !record {
-			preserved = append(preserved, flag)
+			flags = append(flags, flag)
 			continue
 		}
-		existing[name] = flag
+		if _, retained := contract.Fields[name]; !retained || seen[name] {
+			continue
+		}
+		flags = append(flags, sourceProjectionCommandFlag(name, flag, contract))
+		seen[name] = true
 	}
-	flags := append([]any{}, preserved...)
 	for _, name := range sortedAnyMapKeys(contract.Fields) {
-		flag := newOrderedObject()
-		flag.set("name", strings.ReplaceAll(name, "_", "-"))
-		if prior := existing[name]; prior != nil {
-			if summary := stringField(prior, "summary"); summary != "" {
-				flag.set("summary", summary)
-			}
+		if seen[name] {
+			continue
 		}
-		flagType := sourceProjectionFlagType(contract.Fields[name])
-		flag.set("type", flagType)
-		if contract.BareStringFields[name] {
-			flag.set("allow_bare_string", true)
-		} else {
-			flag.remove("allow_bare_string")
-		}
-		if contract.SecretFields[name] {
-			flag.set("env_only", true)
-		} else {
-			flag.remove("env_only")
-		}
-		if schema, ok := contract.Fields[name].(map[string]any); ok {
-			if values, ok := schema["enum"].([]any); ok && len(values) > 0 {
-				flag.set("values", orderedFromAny(values))
-			}
-		}
-		flag.set("maps_to", "record."+name)
-		if contract.Required[name] {
-			flag.set("required", true)
-		} else {
-			flag.remove("required")
-		}
-		if maxBytes := sourceProjectionFlagMaxBytes(contract.Fields[name], flagType); maxBytes > 0 {
-			flag.set("max_bytes", json.Number(fmt.Sprintf("%d", maxBytes)))
-		} else {
-			flag.remove("max_bytes")
-		}
-		flags = append(flags, flag)
+		flags = append(flags, sourceProjectionCommandFlag(name, nil, contract))
 	}
 	return setOrderedIfDifferent(command, "flags", flags)
+}
+
+func sourceProjectionCommandFlag(name string, prior *orderedObject, contract sourceActionContract) *orderedObject {
+	flag := newOrderedObject()
+	flagName := strings.ReplaceAll(name, "_", "-")
+	if prior != nil {
+		if declared := stringField(prior, "name"); declared != "" {
+			flagName = declared
+		}
+	}
+	flag.set("name", flagName)
+	if prior != nil {
+		if summary := stringField(prior, "summary"); summary != "" {
+			flag.set("summary", summary)
+		}
+	}
+	flagType := sourceProjectionFlagType(contract.Fields[name])
+	flag.set("type", flagType)
+	if contract.BareStringFields[name] {
+		flag.set("allow_bare_string", true)
+	}
+	if contract.SecretFields[name] {
+		flag.set("env_only", true)
+	}
+	if schema, ok := contract.Fields[name].(map[string]any); ok {
+		if values, ok := schema["enum"].([]any); ok && len(values) > 0 {
+			flag.set("values", orderedFromAny(values))
+		}
+	}
+	flag.set("maps_to", "record."+name)
+	if contract.Required[name] {
+		flag.set("required", true)
+	}
+	if maxBytes := sourceProjectionFlagMaxBytes(contract.Fields[name], flagType); maxBytes > 0 {
+		flag.set("max_bytes", json.Number(fmt.Sprintf("%d", maxBytes)))
+	}
+	return flag
 }
 
 func sourceProjectionNewCommand(operation sourceOperationDescriptor, action *orderedObject) *orderedObject {
@@ -5662,6 +5822,10 @@ func sourceActionCoversOperation(action engine.WriteAction, command engine.CLICo
 		pathFields[index] = action.PathFields[index]
 	}
 	actionObject.set("path_fields", pathFields)
+	if action.DeclaredBatch != nil {
+		actionObject.set("declared_batch", orderedFromAny(action.DeclaredBatch))
+		actionObject.set("record_schema", orderedFromAny(action.RecordSchema))
+	}
 	contract, err := sourceContractForAction(operation, actionObject)
 	if err != nil {
 		return false
@@ -5708,7 +5872,7 @@ func sourceActionCoversOperation(action engine.WriteAction, command engine.CLICo
 	}
 	for _, parameter := range contract.Query {
 		query, ok := action.Query[parameter.Name]
-		if !ok || query.Template != "{{ record."+parameter.Name+" }}" || query.OmitWhenAbsent == parameter.Required || query.Default != "" {
+		if !ok || query.Template != sourceProjectionQueryParameterTemplate(parameter) || query.OmitWhenAbsent == parameter.Required || query.Default != "" {
 			return false
 		}
 	}

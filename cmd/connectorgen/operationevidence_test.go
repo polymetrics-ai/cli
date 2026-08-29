@@ -64,7 +64,7 @@ func TestOperationEvidenceClassifyKeepsImplementedStreamBoundDirectReadsInBothLa
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			row := operationEvidenceRow{Classifications: operationEvidenceEmptyClassifications()}
-			operationEvidenceClassify(&row, []engine.CLICommand{tc.command}, "")
+			operationEvidenceClassify(&row, operationEvidenceTargets{}, []engine.CLICommand{tc.command}, "")
 			if got := row.Classifications[operationEvidenceClassETL]; got != tc.wantETL {
 				t.Fatalf("ETL classification = %+v, want %+v", got, tc.wantETL)
 			}
@@ -115,7 +115,7 @@ func TestOperationEvidenceClassifyKeepsImplementedWriteBoundDirectWritesInBothLa
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			row := operationEvidenceRow{Classifications: operationEvidenceEmptyClassifications()}
-			operationEvidenceClassify(&row, []engine.CLICommand{tc.command}, "")
+			operationEvidenceClassify(&row, operationEvidenceTargets{}, []engine.CLICommand{tc.command}, "")
 			if got := row.Classifications[operationEvidenceClassReverseETL]; got != tc.wantReverse {
 				t.Fatalf("reverse-ETL classification = %+v, want %+v", got, tc.wantReverse)
 			}

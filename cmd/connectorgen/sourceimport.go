@@ -282,6 +282,7 @@ type sourceImportREST struct {
 	CoverageConfidence   *sourceImportCoverageConfidence   `json:"-"`
 	SourceDocuments      []sourceImportRESTDocument        `json:"-"`
 	EventSchemaInventory *sourceImportEventSchemaInventory `json:"-"`
+	BatchActionInventory *sourceImportBatchActionInventory `json:"-"`
 }
 
 // sourceImportRESTSupplement is a closed citation for an operation inventory
@@ -421,6 +422,30 @@ type sourceImportEventSchemaSelector struct {
 	SourceLocation string `json:"source_location"`
 }
 
+// sourceImportBatchActionInventory binds one provider-declared batch
+// operation to the exact retained request/action/response schemas and field
+// names used by the closed declared_batch executor. It contains selectors and
+// scalar provider facts only; provider schema bytes remain in the retained
+// source document and the connector definition continues to own the typed
+// allow-list of executable actions.
+type sourceImportBatchActionInventory struct {
+	SourceDocument           string                          `json:"source_document"`
+	SourceOperation          string                          `json:"source_operation"`
+	RequestSchema            sourceImportEventSchemaSelector `json:"request_schema"`
+	ActionSchema             sourceImportEventSchemaSelector `json:"action_schema"`
+	ResponseSchema           sourceImportEventSchemaSelector `json:"response_schema"`
+	MaxActions               int                             `json:"max_actions"`
+	MaxActionsSourceLocation string                          `json:"max_actions_source_location"`
+	ProviderMethods          []string                        `json:"provider_methods"`
+	RequestEnvelopeField     string                          `json:"request_envelope_field"`
+	RequestActionsField      string                          `json:"request_actions_field"`
+	ActionMethodField        string                          `json:"action_method_field"`
+	ActionPathField          string                          `json:"action_path_field"`
+	ActionDataField          string                          `json:"action_data_field"`
+	ResponseEnvelopeField    string                          `json:"response_envelope_field"`
+	ResponseStatusField      string                          `json:"response_status_field"`
+}
+
 type sourceGraphQLTypeRef struct {
 	Kind    string                `json:"kind"`
 	Name    string                `json:"name,omitempty"`
@@ -524,6 +549,7 @@ type sourceImportRESTV3 struct {
 	CoverageConfidence   *sourceImportCoverageConfidence   `json:"coverage_confidence,omitempty"`
 	SourceDocuments      []sourceImportRESTDocument        `json:"source_documents"`
 	EventSchemaInventory *sourceImportEventSchemaInventory `json:"event_schema_inventory,omitempty"`
+	BatchActionInventory *sourceImportBatchActionInventory `json:"batch_action_inventory,omitempty"`
 }
 
 type sourceImportLockV3 struct {
@@ -583,6 +609,7 @@ func (lock *sourceImportLock) UnmarshalJSON(raw []byte) error {
 				CoverageConfidence:   v3.Rest.CoverageConfidence,
 				SourceDocuments:      v3.Rest.SourceDocuments,
 				EventSchemaInventory: v3.Rest.EventSchemaInventory,
+				BatchActionInventory: v3.Rest.BatchActionInventory,
 			},
 			GraphQL: v3.GraphQL,
 			Counts:  v3.Counts,
@@ -674,8 +701,12 @@ type sourceExecutionLimit struct {
 
 type sourceContractGap struct {
 	Foundation string `json:"foundation"`
-	Location   string `json:"location"`
-	Reason     string `json:"reason"`
+	// Phase identifies whether an operation-local source gap belongs to the
+	// request contract or the response declaration.  It is intentionally
+	// omitted for document-wide gaps which are not reached from one operation.
+	Phase    string `json:"phase,omitempty"`
+	Location string `json:"location"`
+	Reason   string `json:"reason"`
 }
 
 // sourceOperationCitation binds a manual declaration disposition to the exact
@@ -815,6 +846,7 @@ type sourceOperationDescriptor struct {
 	AuthScopes          sourceAuthDescriptor              `json:"auth_scopes"`
 	Servers             sourceServerOverrides             `json:"servers"`
 	Runtime             sourceRuntimeReachability         `json:"runtime"`
+	BatchAction         *sourceImportBatchActionInventory `json:"batch_action,omitempty"`
 	GraphQL             *sourceGraphQLOperationDescriptor `json:"graphql,omitempty"`
 }
 
@@ -1357,6 +1389,9 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 	if err := validateSourceImportV3EventSchemaInventory(lock); err != nil {
 		return err
 	}
+	if err := validateSourceImportV3BatchActionInventory(lock); err != nil {
+		return err
+	}
 	if lock.Counts.REST != restCount || lock.Counts.Total != restCount+len(lock.GraphQL.QueryFields)+len(lock.GraphQL.MutationFields) {
 		return fmt.Errorf("source lock v3 counts do not match document inventories")
 	}
@@ -1428,6 +1463,134 @@ func sourceImportEventSchemaLocation(name string) string {
 	return `components.schemas["` + name + `"]`
 }
 
+func validateSourceImportV3BatchActionInventory(lock sourceImportLock) error {
+	inventory := lock.Rest.BatchActionInventory
+	if inventory == nil {
+		return nil
+	}
+	if !sourceImportDocumentID(inventory.SourceDocument) {
+		return fmt.Errorf("source lock v3 batch action inventory has invalid source document %q", inventory.SourceDocument)
+	}
+	var document *sourceImportRESTDocument
+	for index := range lock.Rest.SourceDocuments {
+		if lock.Rest.SourceDocuments[index].ID == inventory.SourceDocument {
+			document = &lock.Rest.SourceDocuments[index]
+			break
+		}
+	}
+	if document == nil {
+		return fmt.Errorf("source lock v3 batch action inventory references unknown source document %q", inventory.SourceDocument)
+	}
+	if document.sourceKind() != sourceImportDocumentKindOpenAPI {
+		return fmt.Errorf("source lock v3 batch action inventory source document %q is not an OpenAPI or Swagger document", inventory.SourceDocument)
+	}
+	var operation *sourceImportRESTOperation
+	for index := range document.Operations {
+		if document.Operations[index].ID == inventory.SourceOperation {
+			operation = &document.Operations[index]
+			break
+		}
+	}
+	if operation == nil {
+		return fmt.Errorf("source lock v3 batch action inventory references unknown source operation %q", inventory.SourceOperation)
+	}
+	if !strings.EqualFold(operation.Method, http.MethodPost) {
+		return fmt.Errorf("source lock v3 batch action inventory source operation %q must use POST", inventory.SourceOperation)
+	}
+	selectors := []struct {
+		role     string
+		selector sourceImportEventSchemaSelector
+	}{
+		{role: "request", selector: inventory.RequestSchema},
+		{role: "action", selector: inventory.ActionSchema},
+		{role: "response", selector: inventory.ResponseSchema},
+	}
+	seenSchemas := map[string]bool{}
+	for _, entry := range selectors {
+		if !sourceImportEventSchemaName(entry.selector.Name) {
+			return fmt.Errorf("source lock v3 batch action inventory has invalid %s schema name %q", entry.role, entry.selector.Name)
+		}
+		if entry.selector.SourceLocation != sourceImportEventSchemaLocation(entry.selector.Name) {
+			return fmt.Errorf("source lock v3 batch action inventory %s schema %q has non-canonical schema source location %q", entry.role, entry.selector.Name, entry.selector.SourceLocation)
+		}
+		if seenSchemas[entry.selector.Name] {
+			return fmt.Errorf("source lock v3 batch action inventory reuses schema %q", entry.selector.Name)
+		}
+		seenSchemas[entry.selector.Name] = true
+	}
+	if inventory.MaxActions < 1 || inventory.MaxActions > 64 {
+		return fmt.Errorf("source lock v3 batch action inventory max_actions must be between 1 and 64")
+	}
+	if _, ok := sourceImportBatchMaxActionsTag(inventory.MaxActionsSourceLocation); !ok {
+		return fmt.Errorf("source lock v3 batch action inventory has invalid max actions source location %q", inventory.MaxActionsSourceLocation)
+	}
+	if len(inventory.ProviderMethods) == 0 {
+		return fmt.Errorf("source lock v3 batch action inventory has no provider methods")
+	}
+	seenMethods := map[string]bool{}
+	for _, method := range inventory.ProviderMethods {
+		if method != strings.ToLower(method) {
+			return fmt.Errorf("source lock v3 batch action inventory provider method %q is not canonical", method)
+		}
+		switch method {
+		case "get", "post", "put", "delete", "patch", "head":
+		default:
+			return fmt.Errorf("source lock v3 batch action inventory has unsupported provider method %q", method)
+		}
+		if seenMethods[method] {
+			return fmt.Errorf("source lock v3 batch action inventory duplicates provider method %q", method)
+		}
+		seenMethods[method] = true
+	}
+	fields := []struct {
+		role  string
+		value string
+	}{
+		{role: "request envelope", value: inventory.RequestEnvelopeField},
+		{role: "request actions", value: inventory.RequestActionsField},
+		{role: "action method", value: inventory.ActionMethodField},
+		{role: "action path", value: inventory.ActionPathField},
+		{role: "action data", value: inventory.ActionDataField},
+		{role: "response envelope", value: inventory.ResponseEnvelopeField},
+		{role: "response status", value: inventory.ResponseStatusField},
+	}
+	for _, field := range fields {
+		if !sourceImportBatchFieldName(field.value) {
+			return fmt.Errorf("source lock v3 batch action inventory has invalid %s field %q", field.role, field.value)
+		}
+	}
+	if inventory.ActionMethodField == inventory.ActionPathField || inventory.ActionMethodField == inventory.ActionDataField || inventory.ActionPathField == inventory.ActionDataField {
+		return fmt.Errorf("source lock v3 batch action inventory action method, path, and data fields must be distinct")
+	}
+	return nil
+}
+
+func sourceImportBatchFieldName(value string) bool {
+	if value == "" || len(value) > 128 {
+		return false
+	}
+	for index, character := range value {
+		if (character >= 'a' && character <= 'z') || character == '_' || (index > 0 && character >= '0' && character <= '9') {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
+func sourceImportBatchMaxActionsTag(location string) (string, bool) {
+	const prefix = `tags["`
+	const suffix = `"].description`
+	if !strings.HasPrefix(location, prefix) || !strings.HasSuffix(location, suffix) {
+		return "", false
+	}
+	name := strings.TrimSuffix(strings.TrimPrefix(location, prefix), suffix)
+	if name == "" || strings.ContainsAny(name, "\"\\\r\n") {
+		return "", false
+	}
+	return name, true
+}
+
 // validateSourceImportV3EventSchemaResolution makes the selector useful at
 // import time. Structural admission above proves it can select only a declared
 // source document and a canonical components.schemas member; this check proves
@@ -1456,6 +1619,159 @@ func validateSourceImportV3EventSchemaResolution(lock sourceImportLock, document
 		}
 	}
 	return nil
+}
+
+func validateSourceImportV3BatchActionResolution(lock sourceImportLock, document sourceImportRESTDocument, source map[string]any) error {
+	inventory := lock.Rest.BatchActionInventory
+	if inventory == nil || inventory.SourceDocument != document.ID {
+		return nil
+	}
+	components, ok := source["components"].(map[string]any)
+	if !ok {
+		return fmt.Errorf("source lock v3 batch action inventory source document %q does not resolve components.schemas", document.ID)
+	}
+	schemas, ok := components["schemas"].(map[string]any)
+	if !ok {
+		return fmt.Errorf("source lock v3 batch action inventory source document %q does not resolve components.schemas", document.ID)
+	}
+	requestSchema, err := sourceImportBatchSchemaObject(schemas, inventory.RequestSchema, document.ID)
+	if err != nil {
+		return err
+	}
+	actionSchema, err := sourceImportBatchSchemaObject(schemas, inventory.ActionSchema, document.ID)
+	if err != nil {
+		return err
+	}
+	responseSchema, err := sourceImportBatchSchemaObject(schemas, inventory.ResponseSchema, document.ID)
+	if err != nil {
+		return err
+	}
+
+	var lockedOperation *sourceImportRESTOperation
+	for index := range document.Operations {
+		if document.Operations[index].ID == inventory.SourceOperation {
+			lockedOperation = &document.Operations[index]
+			break
+		}
+	}
+	if lockedOperation == nil {
+		return fmt.Errorf("source lock v3 batch action inventory references unknown source operation %q", inventory.SourceOperation)
+	}
+	paths, _ := source["paths"].(map[string]any)
+	pathItem, _ := paths[lockedOperation.Path].(map[string]any)
+	operation, _ := pathItem[strings.ToLower(lockedOperation.Method)].(map[string]any)
+	if operation == nil {
+		return fmt.Errorf("source lock v3 batch action inventory source operation %q does not resolve in document %q", inventory.SourceOperation, document.ID)
+	}
+	requestBody, _ := operation["requestBody"].(map[string]any)
+	if required, _ := requestBody["required"].(bool); !required {
+		return fmt.Errorf("source lock v3 batch action inventory source operation %q has no required request body", inventory.SourceOperation)
+	}
+	requestRoot := sourceImportBatchMediaSchema(requestBody["content"])
+	if !sourceImportBatchPropertyReferences(requestRoot, inventory.RequestEnvelopeField, inventory.RequestSchema.Name) {
+		return fmt.Errorf("source lock v3 batch action inventory request envelope field %q does not reference schema %q", inventory.RequestEnvelopeField, inventory.RequestSchema.Name)
+	}
+	requestProperties, _ := requestSchema["properties"].(map[string]any)
+	actions, _ := requestProperties[inventory.RequestActionsField].(map[string]any)
+	if actions == nil || sourceSchemaType(actions) != "array" || !sourceImportBatchReferenceNames(actions["items"], inventory.ActionSchema.Name) {
+		return fmt.Errorf("source lock v3 batch action inventory request actions field %q does not reference schema %q", inventory.RequestActionsField, inventory.ActionSchema.Name)
+	}
+	actionProperties, _ := actionSchema["properties"].(map[string]any)
+	for role, field := range map[string]string{"method": inventory.ActionMethodField, "path": inventory.ActionPathField, "data": inventory.ActionDataField} {
+		if _, exists := actionProperties[field]; !exists {
+			return fmt.Errorf("source lock v3 batch action inventory action %s field %q is absent", role, field)
+		}
+	}
+	actionRequired := sourceSchemaRequired(actionSchema)
+	if !actionRequired[inventory.ActionMethodField] || !actionRequired[inventory.ActionPathField] {
+		return fmt.Errorf("source lock v3 batch action inventory action method/path fields are not required")
+	}
+	methodSchema, _ := actionProperties[inventory.ActionMethodField].(map[string]any)
+	providerMethods := sourceImportBatchStringArray(methodSchema["enum"])
+	if !reflect.DeepEqual(providerMethods, inventory.ProviderMethods) {
+		return fmt.Errorf("source lock v3 batch action inventory provider methods do not match retained action schema")
+	}
+	responses, _ := operation["responses"].(map[string]any)
+	response200, _ := responses["200"].(map[string]any)
+	responseRoot := sourceImportBatchMediaSchema(response200["content"])
+	responseProperties, _ := responseRoot["properties"].(map[string]any)
+	responseEnvelope, _ := responseProperties[inventory.ResponseEnvelopeField].(map[string]any)
+	if responseEnvelope == nil || sourceSchemaType(responseEnvelope) != "array" || !sourceImportBatchReferenceNames(responseEnvelope["items"], inventory.ResponseSchema.Name) {
+		return fmt.Errorf("source lock v3 batch action inventory response envelope field %q does not reference schema %q", inventory.ResponseEnvelopeField, inventory.ResponseSchema.Name)
+	}
+	responseSchemaProperties, _ := responseSchema["properties"].(map[string]any)
+	statusSchema, _ := responseSchemaProperties[inventory.ResponseStatusField].(map[string]any)
+	if statusSchema == nil || sourceSchemaType(statusSchema) != "integer" {
+		return fmt.Errorf("source lock v3 batch action inventory response status field %q is not an integer", inventory.ResponseStatusField)
+	}
+	tagName, _ := sourceImportBatchMaxActionsTag(inventory.MaxActionsSourceLocation)
+	if !sourceImportBatchTagProvesMaxActions(source["tags"], tagName, inventory.MaxActions) {
+		return fmt.Errorf("source lock v3 batch action inventory max actions evidence at %q does not prove %d", inventory.MaxActionsSourceLocation, inventory.MaxActions)
+	}
+	return nil
+}
+
+func sourceImportBatchSchemaObject(schemas map[string]any, selector sourceImportEventSchemaSelector, documentID string) (map[string]any, error) {
+	raw, ok := schemas[selector.Name]
+	if !ok {
+		return nil, fmt.Errorf("source lock v3 batch action inventory selector %q at %q does not resolve to an object schema in document %q", selector.Name, selector.SourceLocation, documentID)
+	}
+	schema, ok := raw.(map[string]any)
+	if !ok || sourceSchemaType(schema) != "object" {
+		return nil, fmt.Errorf("source lock v3 batch action inventory selector %q at %q does not resolve to an object schema in document %q", selector.Name, selector.SourceLocation, documentID)
+	}
+	return schema, nil
+}
+
+func sourceImportBatchMediaSchema(raw any) map[string]any {
+	content, _ := raw.(map[string]any)
+	media, _ := content["application/json"].(map[string]any)
+	schema, _ := media["schema"].(map[string]any)
+	return schema
+}
+
+func sourceImportBatchPropertyReferences(schema map[string]any, field, schemaName string) bool {
+	properties, _ := schema["properties"].(map[string]any)
+	return sourceImportBatchReferenceNames(properties[field], schemaName)
+}
+
+func sourceImportBatchReferenceNames(raw any, schemaName string) bool {
+	schema, _ := raw.(map[string]any)
+	reference, _ := schema["$ref"].(string)
+	return reference == "#/components/schemas/"+schemaName
+}
+
+func sourceImportBatchStringArray(raw any) []string {
+	values, _ := raw.([]any)
+	out := make([]string, 0, len(values))
+	for _, value := range values {
+		text, ok := value.(string)
+		if !ok {
+			return nil
+		}
+		out = append(out, text)
+	}
+	return out
+}
+
+func sourceImportBatchTagProvesMaxActions(raw any, name string, maxActions int) bool {
+	tags, _ := raw.([]any)
+	for _, rawTag := range tags {
+		tag, _ := rawTag.(map[string]any)
+		if tag == nil || tag["name"] != name {
+			continue
+		}
+		description, _ := tag["description"].(string)
+		if !strings.Contains(strings.ToLower(description), "maximum") {
+			return false
+		}
+		for _, token := range strings.FieldsFunc(description, func(character rune) bool { return character < '0' || character > '9' }) {
+			if token == strconv.Itoa(maxActions) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func validateSourceImportSourceReferenceDocument(document sourceImportRESTDocument) error {
@@ -2061,6 +2377,9 @@ func importSourceLockResultV3(ctx context.Context, lock sourceImportLock, fetche
 		if err := validateSourceImportV3EventSchemaResolution(lock, document, doc); err != nil {
 			return sourceImportResult{}, err
 		}
+		if err := validateSourceImportV3BatchActionResolution(lock, document, doc); err != nil {
+			return sourceImportResult{}, err
+		}
 		resolver := sourceReferenceResolver{root: doc, limits: limits, form: form}
 		documentContext := sourceImportDocumentContext{Lock: lock, Artifact: document.Artifact, Document: &document}
 		imported, err := importSourceDocumentResult(documentContext, doc, form, &resolver, limits, budget)
@@ -2068,6 +2387,9 @@ func importSourceLockResultV3(ctx context.Context, lock sourceImportLock, fetche
 			return sourceImportResult{}, fmt.Errorf("import source document %q: %w", document.ID, err)
 		}
 		if err := validateLockedRESTDocumentProjection(document, imported.Operations); err != nil {
+			return sourceImportResult{}, err
+		}
+		if err := sourceImportApplyV3BatchActionInventory(lock, document, &imported); err != nil {
 			return sourceImportResult{}, err
 		}
 		result.Operations = append(result.Operations, imported.Operations...)
@@ -2085,6 +2407,23 @@ func importSourceLockResultV3(ctx context.Context, lock sourceImportLock, fetche
 		return sourceImportResult{}, err
 	}
 	return result, nil
+}
+
+func sourceImportApplyV3BatchActionInventory(lock sourceImportLock, document sourceImportRESTDocument, result *sourceImportResult) error {
+	inventory := lock.Rest.BatchActionInventory
+	if inventory == nil || inventory.SourceDocument != document.ID {
+		return nil
+	}
+	for index := range result.Operations {
+		if result.Operations[index].SourceID != inventory.SourceOperation {
+			continue
+		}
+		contract := *inventory
+		contract.ProviderMethods = append([]string(nil), inventory.ProviderMethods...)
+		result.Operations[index].BatchAction = &contract
+		return nil
+	}
+	return fmt.Errorf("source lock v3 batch action inventory source operation %q was not imported from document %q", inventory.SourceOperation, document.ID)
 }
 
 func importSourceLegacySourceReferenceLock(lock sourceImportLock, limits sourceImportLimits, budget *sourceImportBudget) (sourceImportResult, error) {
@@ -6860,6 +7199,7 @@ func importSourceOperation(documentContext sourceImportDocumentContext, doc map[
 			return sourceOperationDescriptor{}, fmt.Errorf("%s request: %w", location, err)
 		}
 	}
+	requestSchemaReferenceSiblingGapsEnd := len(resolver.schemaReferenceSiblingGaps)
 	responses, _, responseGaps, err := sourceResponses(location, operation, doc, form, resolver, limits, remainingDescriptorBytes)
 	if err != nil {
 		return sourceOperationDescriptor{}, fmt.Errorf("%s responses: %w", location, err)
@@ -6948,7 +7288,8 @@ func importSourceOperation(documentContext sourceImportDocumentContext, doc map[
 	runtimeGaps = append(runtimeGaps, responseGaps...)
 	runtimeGaps = append(runtimeGaps, resolver.requestSchemaCycleGaps(request)...)
 	runtimeGaps = append(runtimeGaps, resolver.responseSchemaCycleGaps(responses)...)
-	runtimeGaps = append(runtimeGaps, resolver.schemaReferenceSiblingGaps[schemaReferenceSiblingGapsStart:]...)
+	runtimeGaps = append(runtimeGaps, sourceContractGapsWithPhase(resolver.schemaReferenceSiblingGaps[schemaReferenceSiblingGapsStart:requestSchemaReferenceSiblingGapsEnd], "request")...)
+	runtimeGaps = append(runtimeGaps, sourceContractGapsWithPhase(resolver.schemaReferenceSiblingGaps[requestSchemaReferenceSiblingGapsEnd:], "response")...)
 	runtimeGaps = sourceSortedGaps(runtimeGaps)
 	runtime := sourceRuntimeReachability{MergeBlocked: len(runtimeGaps) > 0, Gaps: runtimeGaps}
 	return sourceOperationDescriptor{
@@ -6968,6 +7309,18 @@ func importSourceOperation(documentContext sourceImportDocumentContext, doc map[
 		Servers:             servers,
 		Runtime:             runtime,
 	}, nil
+}
+
+func sourceContractGapsWithPhase(gaps []sourceContractGap, phase string) []sourceContractGap {
+	if len(gaps) == 0 {
+		return nil
+	}
+	qualified := make([]sourceContractGap, len(gaps))
+	copy(qualified, gaps)
+	for index := range qualified {
+		qualified[index].Phase = phase
+	}
+	return qualified
 }
 
 type sourceParameterValue struct {
@@ -7873,6 +8226,9 @@ func sourceSortedGaps(gaps []sourceContractGap) []sourceContractGap {
 	sort.Slice(out, func(i, j int) bool {
 		if out[i].Foundation != out[j].Foundation {
 			return out[i].Foundation < out[j].Foundation
+		}
+		if out[i].Phase != out[j].Phase {
+			return out[i].Phase < out[j].Phase
 		}
 		if out[i].Location != out[j].Location {
 			return out[i].Location < out[j].Location

@@ -1195,11 +1195,22 @@
       "flags": [
         {
           "name": "actions-json",
-          "type": "json",
           "summary": "JSON array of 1..10 objects shaped as {action, record}; action must name an explicitly allow-listed Asana write declaration, and method/path/body are derived from that declaration.",
+          "type": "json",
           "maps_to": "record.actions",
-          "max_bytes": 1048576,
-          "required": true
+          "required": true,
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -3287,7 +3298,7 @@
       ],
       "api_surface": [
         {
-          "method": "GET",
+          "method": "get",
           "path": "/memberships/{membership_gid}"
         }
       ],

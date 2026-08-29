@@ -436,6 +436,10 @@ type declarationAdmissionV3RESTWire struct {
 	// wire has admitted it below. Mapping admission projects operation
 	// identities only; source import owns selector/source-document resolution.
 	EventSchemaInventory json.RawMessage `json:"event_schema_inventory,omitempty"`
+	// BatchActionInventory is likewise discarded only after the closed mapping
+	// wire has rejected unknown fields. Source import owns its retained-document
+	// and provider-schema resolution.
+	BatchActionInventory json.RawMessage `json:"batch_action_inventory,omitempty"`
 }
 
 // The mapping reader intentionally retains only source identity and inventory
@@ -524,6 +528,7 @@ type declarationAdmissionMappingV3RESTClosedWire struct {
 	CoverageConfidence   json.RawMessage                                        `json:"coverage_confidence,omitempty"`
 	SourceDocuments      []json.RawMessage                                      `json:"source_documents"`
 	EventSchemaInventory *declarationAdmissionMappingV3EventSchemaInventoryWire `json:"event_schema_inventory,omitempty"`
+	BatchActionInventory *declarationAdmissionMappingV3BatchActionInventoryWire `json:"batch_action_inventory,omitempty"`
 }
 
 // declarationAdmissionMappingV3EventSchemaInventoryWire closes the optional
@@ -538,6 +543,27 @@ type declarationAdmissionMappingV3EventSchemaInventoryWire struct {
 type declarationAdmissionMappingV3EventSchemaSelectorWire struct {
 	Name           string `json:"name"`
 	SourceLocation string `json:"source_location"`
+}
+
+// declarationAdmissionMappingV3BatchActionInventoryWire closes the provider
+// batch selector before mapping admission intentionally discards it. Raw HTTP
+// requests or provider schema fragments have no field in this wire.
+type declarationAdmissionMappingV3BatchActionInventoryWire struct {
+	SourceDocument           string                                               `json:"source_document"`
+	SourceOperation          string                                               `json:"source_operation"`
+	RequestSchema            declarationAdmissionMappingV3EventSchemaSelectorWire `json:"request_schema"`
+	ActionSchema             declarationAdmissionMappingV3EventSchemaSelectorWire `json:"action_schema"`
+	ResponseSchema           declarationAdmissionMappingV3EventSchemaSelectorWire `json:"response_schema"`
+	MaxActions               int                                                  `json:"max_actions"`
+	MaxActionsSourceLocation string                                               `json:"max_actions_source_location"`
+	ProviderMethods          []string                                             `json:"provider_methods"`
+	RequestEnvelopeField     string                                               `json:"request_envelope_field"`
+	RequestActionsField      string                                               `json:"request_actions_field"`
+	ActionMethodField        string                                               `json:"action_method_field"`
+	ActionPathField          string                                               `json:"action_path_field"`
+	ActionDataField          string                                               `json:"action_data_field"`
+	ResponseEnvelopeField    string                                               `json:"response_envelope_field"`
+	ResponseStatusField      string                                               `json:"response_status_field"`
 }
 
 type declarationAdmissionMappingV3OpenAPIDocumentWire struct {
