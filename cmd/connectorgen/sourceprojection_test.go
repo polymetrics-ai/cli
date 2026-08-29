@@ -499,6 +499,292 @@ func TestSourceProjectionGeneratedParameterizedCommandIsRuntimeValidAndStable(t 
 	}
 }
 
+func TestSourceProjectionMaterializesEligibleSourceLockLanesWithMappedRoute(t *testing.T) {
+	bundleDir := t.TempDir()
+	writeProjectionFixture(t, filepath.Join(bundleDir, "metadata.json"), `{"name":"alpha","capabilities":{"read":false,"write":false}}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), `{"schema_version":1,"commands":[]}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "streams.json"), `{"schema_version":1,"base":{"pagination":{"type":"none"}},"streams":[]}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"), `{"api":"alpha","endpoints":[{"method":"GET","path":"/widgets/{id}"},{"method":"DELETE","path":"/widgets/{id}"}]}`)
+
+	read := sourceOperationDescriptor{
+		Connector: "alpha", Protocol: "rest", SourceID: "getSourceWidget", ProviderOperationID: "getSourceWidget",
+		Method: "GET", Path: "/api/v1/widgets/{id}", MappingPath: "/widgets/{id}",
+		Source:  sourceImportSource{URL: "https://provider.invalid/openapi.json", Location: `paths["/api/v1/widgets/{id}"].get`},
+		Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{{Name: "id", Required: true, Schema: map[string]any{"type": "string"}}}},
+		Output:  sourceOutputDescriptor{Class: sourceOutputJSON, Success: []sourceOutputVariant{{Status: "200", MediaType: "application/json", Class: sourceOutputJSON}}},
+		Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{Foundation: sourceOperationExecutionFoundation, Location: "source operation getSourceWidget"}}},
+	}
+	write := sourceOperationDescriptor{
+		Connector: "alpha", Protocol: "rest", SourceID: "deleteSourceWidget", ProviderOperationID: "deleteSourceWidget",
+		Method: "DELETE", Path: "/api/v1/widgets/{id}", MappingPath: "/widgets/{id}",
+		Source:  sourceImportSource{URL: "https://provider.invalid/openapi.json", Location: `paths["/api/v1/widgets/{id}"].delete`},
+		Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{{Name: "id", Required: true, Schema: map[string]any{"type": "string"}}}},
+		Output:  sourceOutputDescriptor{Class: sourceOutputStatus, Success: []sourceOutputVariant{{Status: "204", Class: sourceOutputStatus}}},
+		Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{Foundation: sourceNonExecutableMutationDispositionFoundation, Location: "source operation deleteSourceWidget"}}, NonExecutableMutation: &sourceNonExecutableMutationDisposition{Source: sourceOperationCitation{SourceID: "deleteSourceWidget", Method: "DELETE", Path: "/api/v1/widgets/{id}"}, Reason: "no declaration"}},
+	}
+	blocked := sourceOperationDescriptor{
+		Connector: "alpha", Protocol: "rest", SourceID: "getOpenWidget", ProviderOperationID: "getOpenWidget",
+		Method: "GET", Path: "/api/v1/open-widgets", MappingPath: "/open-widgets",
+		Source:  sourceImportSource{URL: "https://provider.invalid/openapi.json", Location: `paths["/api/v1/open-widgets"].get`},
+		Request: sourceRequestDescriptor{Body: &sourceRequestBodyDescriptor{Required: false, Schema: map[string]any{"type": "object", "additionalProperties": true}}},
+		Output:  sourceOutputDescriptor{Class: sourceOutputJSON, Success: []sourceOutputVariant{{Status: "200", MediaType: "application/json", Class: sourceOutputJSON}}},
+		Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{Foundation: "cli-request-schema-foundation-r1", Location: "request body"}}},
+	}
+
+	stats, err := projectEligibleSourceLockLanesToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{read, write, blocked}}, false)
+	if err != nil {
+		t.Fatalf("materialize eligible source-lock lanes: %v", err)
+	}
+	if stats.Operations != 1 || stats.Writes != 1 || stats.CLI != 2 || stats.Surface != 2 {
+		t.Fatalf("materialization stats = %+v, want one read operation, one write, two commands, and two surface bindings", stats)
+	}
+
+	var operations struct {
+		Operations []struct {
+			ID              string `json:"id"`
+			SourceOperation struct {
+				ID     string `json:"id"`
+				Method string `json:"method"`
+				Path   string `json:"path"`
+			} `json:"source_operation"`
+			REST struct {
+				Path string `json:"path"`
+			} `json:"rest"`
+		} `json:"operations"`
+	}
+	operationsRaw := readProjectionFixture(t, filepath.Join(bundleDir, "operations.json"))
+	if err := json.Unmarshal([]byte(operationsRaw), &operations); err != nil {
+		t.Fatalf("decode generated operations: %v", err)
+	}
+	if len(operations.Operations) != 1 || operations.Operations[0].REST.Path != "/widgets/{id}" || operations.Operations[0].SourceOperation.Path != "/widgets/{id}" || operations.Operations[0].SourceOperation.ID != read.SourceID {
+		t.Fatalf("generated read lost mapped source binding: %+v", operations.Operations)
+	}
+
+	var cli engine.CLISurface
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"))), &cli); err != nil {
+		t.Fatalf("decode generated CLI: %v", err)
+	}
+	bySource := map[string]engine.CLICommand{}
+	for _, command := range cli.Commands {
+		bySource[command.SourceOperation] = command
+	}
+	if command, found := bySource[read.SourceID]; !found || command.Intent != "direct_read" || command.Availability != "implemented" || command.Operation == "" || len(command.APISurface) != 1 || command.APISurface[0].Path != "/widgets/{id}" {
+		t.Fatalf("generated direct read = %+v, want mapped implemented source-bound command", command)
+	}
+	if command, found := bySource[write.SourceID]; !found || command.Intent != "reverse_etl" || command.Availability != "implemented" || command.Write == "" || len(command.APISurface) != 1 || command.APISurface[0].Path != "/widgets/{id}" {
+		t.Fatalf("generated reverse-ETL command = %+v, want mapped implemented source-bound command", command)
+	}
+	if _, found := bySource[blocked.SourceID]; found {
+		t.Fatalf("blocked source contract unexpectedly received a command: %+v", bySource[blocked.SourceID])
+	}
+	var writes struct {
+		Actions []engine.WriteAction `json:"actions"`
+	}
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, filepath.Join(bundleDir, "writes.json"))), &writes); err != nil {
+		t.Fatalf("decode generated writes: %v", err)
+	}
+	var declaredOperations struct {
+		Operations []engine.OperationSpec `json:"operations"`
+	}
+	if err := json.Unmarshal([]byte(operationsRaw), &declaredOperations); err != nil {
+		t.Fatalf("decode generated operation contracts: %v", err)
+	}
+	connector := engine.New(engine.Bundle{Name: "alpha", Metadata: engine.Metadata{Name: "alpha"}, Operations: declaredOperations.Operations, Writes: writes.Actions, CLISurface: &cli}, nil)
+	if _, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{Path: strings.Fields(bySource[write.SourceID].Path), Flags: map[string][]string{"id": {"42"}}}); err != nil {
+		t.Fatalf("generated reverse-ETL command lost source path flag: %v", err)
+	}
+	completeWrite := write
+	completeWrite.Runtime = sourceRuntimeReachability{}
+	if findings := validateSourceExecutableCoverage(engine.Bundle{Name: "alpha", Writes: writes.Actions, CLISurface: &cli}, "fixture", sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{completeWrite}}); len(findings) != 0 {
+		t.Fatalf("mapped source mutation was not covered by generated action/command: %+v", findings)
+	}
+	staleCLI := strings.Replace(readProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json")), `"max_bytes": 32768`, `"max_bytes": 0`, 1)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), staleCLI)
+	staleWrite := write
+	staleWrite.Runtime = sourceRuntimeReachability{
+		MergeBlocked:          true,
+		Gaps:                  []sourceContractGap{{Foundation: sourceNonExecutableMutationDispositionFoundation, Location: "source operation deleteSourceWidget"}},
+		NonExecutableMutation: &sourceNonExecutableMutationDisposition{Source: sourceOperationCitation{SourceID: write.SourceID, Method: write.Method, Path: write.Path}, Reason: "stale generated command flag"},
+	}
+	var generatedWrites orderedJSON
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, filepath.Join(bundleDir, "writes.json"))), &generatedWrites); err != nil {
+		t.Fatalf("decode stale generated writes: %v", err)
+	}
+	if action := sourceProjectionActionForEndpoint(generatedWrites.root, staleWrite.Method, staleWrite.MappingPath); action == nil {
+		t.Fatalf("stale generated action not found at mapped endpoint %s", staleWrite.MappingPath)
+	}
+	if !sourceProjectionGeneratedNoBodyMutationExists(generatedWrites.root, staleWrite) {
+		t.Fatal("stale generated mutation was not recognized for refresh")
+	}
+	stats, err = projectEligibleSourceLockLanesToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{read, staleWrite, blocked}}, false)
+	if err != nil {
+		t.Fatalf("refresh stale generated mutation: %v", err)
+	}
+	if stats.CLI != 1 || stats.Operations != 0 || stats.Writes != 0 {
+		t.Fatalf("stale generated mutation refresh = %+v, want CLI-only refresh", stats)
+	}
+	if !strings.Contains(readProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json")), `"max_bytes": 32768`) {
+		t.Fatal("stale generated mutation did not restore source-derived CLI byte cap")
+	}
+
+	stats, err = projectEligibleSourceLockLanesToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{read, write, blocked}}, false)
+	if err != nil {
+		t.Fatalf("repeat materialization: %v", err)
+	}
+	if stats.Changed() {
+		t.Fatalf("repeat materialization drifted: %+v", stats)
+	}
+}
+
+func TestSourceProjectionGeneratedDirectReadRefusesUnsafeProviderQueryParameter(t *testing.T) {
+	operation := sourceOperationDescriptor{
+		Connector: "alpha", Protocol: "rest", SourceID: "getFilteredWidgets", ProviderOperationID: "getFilteredWidgets",
+		Method: "GET", Path: "/api/v1/widgets", MappingPath: "/widgets",
+		Source: sourceImportSource{URL: "https://provider.invalid/openapi.json", Location: `paths["/api/v1/widgets"].get`},
+		Request: sourceRequestDescriptor{Query: []sourceParameterDescriptor{
+			{Name: "not[archived]", Schema: map[string]any{"type": "string"}},
+		}},
+		Output:  sourceOutputDescriptor{Class: sourceOutputJSON, Success: []sourceOutputVariant{{Status: "200", MediaType: "application/json", Class: sourceOutputJSON}}},
+		Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{Foundation: sourceOperationExecutionFoundation, Location: "source operation getFilteredWidgets"}}},
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{operation}}
+	if changed := sourceProjectionApplyUnsafeProviderQueryParameterGaps(engine.Bundle{}, &result); changed != 1 {
+		t.Fatalf("unsafe provider query gap changes = %d, want 1", changed)
+	}
+	if changed := sourceProjectionApplyUnsafeProviderQueryParameterGaps(engine.Bundle{}, &result); changed != 0 {
+		t.Fatalf("unsafe provider query gap was not idempotent: changes = %d", changed)
+	}
+	projected := result.Operations[0]
+	if len(projected.Runtime.Gaps) != 2 {
+		t.Fatalf("unsafe provider query gaps = %+v, want existing execution and alias gaps", projected.Runtime.Gaps)
+	}
+	aliasGap := projected.Runtime.Gaps[1]
+	if aliasGap.Foundation != sourceProviderParameterAliasFoundation || aliasGap.Phase != "request" || aliasGap.Location != "query parameter not[archived]" {
+		t.Fatalf("unsafe provider query gap = %+v, want exact Atlas candidate disposition", aliasGap)
+	}
+	if sourceProjectionGeneratedDirectReadEligible(projected) {
+		t.Fatal("generated direct read admitted an unsafe provider query key before the reversible alias foundation is approved")
+	}
+}
+
+func TestSourceProjectionPrunesUnsafeGeneratedDirectReadToCitedBlockedSurface(t *testing.T) {
+	bundleDir := t.TempDir()
+	writeProjectionFixture(t, filepath.Join(bundleDir, "metadata.json"), `{"name":"alpha","capabilities":{"read":false,"write":false}}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), `{"schema_version":1,"commands":[]}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "streams.json"), `{"schema_version":1,"base":{"pagination":{"type":"none"}},"streams":[]}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"), `{"api":"alpha","endpoints":[{"method":"GET","path":"/widgets"}]}`)
+
+	operation := sourceOperationDescriptor{
+		Connector: "alpha", Protocol: "rest", SourceID: "getWidgets", ProviderOperationID: "getWidgets",
+		Method: "GET", Path: "/api/v1/widgets", MappingPath: "/widgets",
+		Source:  sourceImportSource{URL: "https://provider.invalid/openapi.json", Location: `paths["/api/v1/widgets"].get`},
+		Request: sourceRequestDescriptor{Query: []sourceParameterDescriptor{{Name: "visibility", Schema: map[string]any{"type": "string"}}}},
+		Output:  sourceOutputDescriptor{Class: sourceOutputJSON, Success: []sourceOutputVariant{{Status: "200", MediaType: "application/json", Class: sourceOutputJSON}}},
+		Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{Foundation: sourceOperationExecutionFoundation, Location: "source operation getWidgets"}}},
+	}
+	if _, err := projectEligibleSourceLockLanesToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{operation}}, false); err != nil {
+		t.Fatalf("materialize safe source operation: %v", err)
+	}
+
+	operation.Request.Query = []sourceParameterDescriptor{{Name: "not[visibility]", Schema: map[string]any{"type": "string"}}}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{operation}}
+	if changed := sourceProjectionApplyUnsafeProviderQueryParameterGaps(engine.Bundle{}, &result); changed != 1 {
+		t.Fatalf("unsafe provider query gap changes = %d, want 1", changed)
+	}
+	stats, err := projectEligibleSourceLockLanesToBundle(bundleDir, result, false)
+	if err != nil {
+		t.Fatalf("reconcile unsafe source operation: %v", err)
+	}
+	if stats.Operations != 1 || stats.CLI != 1 || stats.Surface != 1 {
+		t.Fatalf("unsafe source projection stats = %+v, want generated operation/command retracted and source surface blocked", stats)
+	}
+	var operations struct {
+		Operations []json.RawMessage `json:"operations"`
+	}
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, filepath.Join(bundleDir, "operations.json"))), &operations); err != nil {
+		t.Fatalf("decode pruned operations: %v", err)
+	}
+	if len(operations.Operations) != 0 {
+		t.Fatalf("unsafe provider query retained generated operation: %s", operations.Operations)
+	}
+	var cli struct {
+		Commands []json.RawMessage `json:"commands"`
+	}
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"))), &cli); err != nil {
+		t.Fatalf("decode pruned CLI surface: %v", err)
+	}
+	if len(cli.Commands) != 0 {
+		t.Fatalf("unsafe provider query retained generated command: %s", cli.Commands)
+	}
+	var surface struct {
+		Endpoints []struct {
+			Operation struct {
+				Status string `json:"status"`
+				Reason string `json:"reason"`
+			} `json:"operation"`
+		} `json:"endpoints"`
+	}
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"))), &surface); err != nil {
+		t.Fatalf("decode pruned API surface: %v", err)
+	}
+	if len(surface.Endpoints) != 1 || surface.Endpoints[0].Operation.Status != "blocked" || !strings.Contains(surface.Endpoints[0].Operation.Reason, sourceProviderParameterAliasFoundation) {
+		t.Fatalf("unsafe provider query lost cited blocked API surface: %+v", surface.Endpoints)
+	}
+}
+
+func TestGitLabSourceLockSurfaceStatesCurrentEligibleLaneDisposition(t *testing.T) {
+	metadataRaw, err := os.ReadFile("../../internal/connectors/defs/gitlab/metadata.json")
+	if err != nil {
+		t.Fatalf("read GitLab metadata: %v", err)
+	}
+	var metadata struct {
+		Description string `json:"description"`
+	}
+	if err := json.Unmarshal(metadataRaw, &metadata); err != nil {
+		t.Fatalf("decode GitLab metadata: %v", err)
+	}
+	if !strings.Contains(metadata.Description, "582 source-bound direct reads") || !strings.Contains(metadata.Description, "147 approval-gated reverse-ETL actions") || strings.Contains(metadata.Description, "no write command") {
+		t.Fatalf("GitLab metadata description = %q, want current source-lock lane disposition", metadata.Description)
+	}
+
+	cliRaw, err := os.ReadFile("../../internal/connectors/defs/gitlab/cli_surface.json")
+	if err != nil {
+		t.Fatalf("read GitLab CLI surface: %v", err)
+	}
+	var surface struct {
+		Tagline    string `json:"tagline"`
+		HelpTopics []struct {
+			Name    string `json:"name"`
+			Summary string `json:"summary"`
+		} `json:"help_topics"`
+	}
+	if err := json.Unmarshal(cliRaw, &surface); err != nil {
+		t.Fatalf("decode GitLab CLI surface: %v", err)
+	}
+	if !strings.Contains(surface.Tagline, "582 source-bound direct reads") || !strings.Contains(surface.Tagline, "147 approval-gated reverse-ETL actions") {
+		t.Fatalf("GitLab CLI tagline = %q, want current source-lock lane disposition", surface.Tagline)
+	}
+	topics := strings.Join(func() []string {
+		values := make([]string, 0, len(surface.HelpTopics))
+		for _, topic := range surface.HelpTopics {
+			values = append(values, topic.Name+": "+topic.Summary)
+		}
+		return values
+	}(), "\n")
+	if !strings.Contains(topics, "1,752") || !strings.Contains(topics, "1,019") || strings.Contains(topics, "only the four existing stream reads") {
+		t.Fatalf("GitLab CLI help topics = %q, want source-lock counts and no stale four-stream-only claim", topics)
+	}
+
+	docsRaw, err := os.ReadFile("../../internal/connectors/defs/gitlab/docs.md")
+	if err != nil {
+		t.Fatalf("read GitLab connector docs: %v", err)
+	}
+	docs := string(docsRaw)
+	if !strings.Contains(docs, "582 source-bound direct reads") || !strings.Contains(docs, "147 approval-gated reverse-ETL actions") || !strings.Contains(docs, "1,019") || strings.Contains(docs, "only the four existing stream reads executable") {
+		t.Fatalf("GitLab connector docs have stale source-lock lane disposition")
+	}
+}
+
 func sourceProjectionTestLegacyGeneratedCommandPath(operation sourceOperationDescriptor) string {
 	path := strings.NewReplacer("/", " ", "_", "-").Replace(operation.SourceID)
 	return "api " + path

@@ -81,6 +81,8 @@ func TestOperationEvidenceGitLabSourceLockBridge(t *testing.T) {
 		t.Fatalf("GitLab operation-evidence rows = %d, want 1752 locked source identities", len(artifact.Rows))
 	}
 	seen := make(map[string]bool, len(artifact.Rows))
+	runtimeEnabled := 0
+	providerParameterAliasGaps := 0
 	for _, row := range artifact.Rows {
 		if row.Connector != "gitlab" {
 			t.Fatalf("GitLab operation-evidence contains unrelated connector %q", row.Connector)
@@ -92,14 +94,32 @@ func TestOperationEvidenceGitLabSourceLockBridge(t *testing.T) {
 		if row.Source.Lock != "sources/gitlab-operation-source-lock.json" || row.Source.URL == "" || row.Source.SHA256 == "" || row.Source.Bytes <= 0 || row.Source.Location == "" {
 			t.Fatalf("GitLab source trace for %q = %+v, want complete locked citation", row.SourceID, row.Source)
 		}
-		if !operationEvidenceRowHasFoundationGap(row, operationEvidenceFoundationSourceRetention) || row.Runtime.Enabled {
-			t.Fatalf("GitLab source identity %q did not retain its non-executable source-import gap: %+v", row.SourceID, row)
+		if row.Runtime.Enabled {
+			runtimeEnabled++
+		}
+		for _, gap := range row.Gaps {
+			if gap.Foundation != sourceProviderParameterAliasFoundation {
+				continue
+			}
+			providerParameterAliasGaps++
+			if gap.Kind != operationEvidenceGapSourceContract || gap.Phase != "request" || !strings.HasPrefix(gap.Location, "query parameter ") || !strings.Contains(gap.Evidence, "reversible CLI-to-provider parameter alias") {
+				t.Fatalf("GitLab source identity %q alias gap = %+v, want retained typed source-contract gap", row.SourceID, gap)
+			}
+			if row.Runtime.Enabled {
+				t.Fatalf("GitLab source identity %q alias gap was incorrectly executable: %+v", row.SourceID, row)
+			}
 		}
 		if len(row.CLI.Paths) == 0 && !slices.ContainsFunc(row.Gaps, func(gap operationEvidenceGap) bool {
 			return gap.Kind == operationEvidenceGapCLICommand
 		}) {
 			t.Fatalf("GitLab source identity %q has no CLI command and no explicit CLI gap", row.SourceID)
 		}
+	}
+	if runtimeEnabled != 733 {
+		t.Fatalf("GitLab runtime-enabled source identities = %d, want 733 source-backed lane rows", runtimeEnabled)
+	}
+	if providerParameterAliasGaps != 15 {
+		t.Fatalf("GitLab provider-parameter-alias source gaps = %d, want 15 retained candidate rows", providerParameterAliasGaps)
 	}
 }
 

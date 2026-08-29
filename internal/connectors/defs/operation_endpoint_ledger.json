@@ -2755,7 +2755,3500 @@
       "max_bytes": 1048576
     }
   ],
-  "gitlab": [],
+  "gitlab": [
+    {
+      "method": "GET",
+      "path": "/admin/active_context/connections",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/admin/batched_background_migrations",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/admin/batched_background_migrations/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/admin/batched_background_operations",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/admin/batched_background_operations/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/admin/ci/variables",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/admin/ci/variables/{key}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/admin/clusters",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/admin/clusters/{cluster_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/admin/data_management/{model_name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/admin/data_management/{model_name}/{record_identifier}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/admin/databases/{database_name}/dictionary/tables/{table_name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/admin/knowledge_graph/namespaces",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/admin/search/migrations/{migration_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/admin/security/compliance_policy_settings",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/admin/zoekt/shards",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/admin/zoekt/shards/{node_id}/indexed_namespaces",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/admin_member_roles",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/ai/duo_workflows/flow_callbacks",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/ai/duo_workflows/flow_callbacks/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/group_activity/issues_count",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/group_activity/merge_requests_count",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/group_activity/new_members_count",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/application/appearance",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/application/plan_limits",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/application/settings",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/application/statistics",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/applications",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/audit_events",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/audit_events/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/avatar",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/broadcast_messages",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/broadcast_messages/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/bulk_imports",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/bulk_imports/entities",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/bulk_imports/{import_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/bulk_imports/{import_id}/entities",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/bulk_imports/{import_id}/entities/{entity_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/bulk_imports/{import_id}/entities/{entity_id}/failures",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/databases/{database_name}/dictionary/tables",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/deploy_keys",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/deploy_tokens",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/discover-cert-based-clusters",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/experiments",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/experiments/{experiment_name}/assignments",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/features",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/features/definitions",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/geo/repositories/{gl_repository}/pipeline_refs",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/geo_nodes",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/geo_nodes/status",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/geo_nodes/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/geo_nodes/{id}/status",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/geo_sites",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/geo_sites/status",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/geo_sites/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/geo_sites/{id}/status",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/group_repository_storage_moves",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/group_repository_storage_moves/{repository_storage_move_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/(-/)epics/{epic_iid}/epics",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/-/debian_distributions",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/-/debian_distributions/{codename}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/-/debian_distributions/{codename}/key.asc",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/-/epics/{epic_iid}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/-/epics/{epic_iid}/issues",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/-/packages/nuget/index",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/-/packages/nuget/query",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/access_requests",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/access_tokens",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/access_tokens/{token_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/approval_rules",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/audit_events",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/audit_events/{audit_event_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/badges",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/badges/render",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/badges/{badge_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/billable_members",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/billable_members/{user_id}/indirect",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/billable_members/{user_id}/memberships",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/boards",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/boards/{board_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/boards/{board_id}/lists",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/boards/{board_id}/lists/{list_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/clusters",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/clusters/{cluster_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/custom_attributes",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/custom_attributes/{key}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/deploy_tokens",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/deploy_tokens/{token_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/descendant_groups",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/enterprise_users",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/enterprise_users/{user_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epic_boards",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epic_boards/{board_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epic_boards/{board_id}/lists",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epic_boards/{board_id}/lists/{list_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epics/{epic_iid}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epics/{epic_iid}/award_emoji",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epics/{epic_iid}/award_emoji/{award_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epics/{epic_iid}/issues",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epics/{epic_iid}/notes/{note_id}/award_emoji",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epics/{epic_iid}/notes/{note_id}/award_emoji/{award_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epics/{epic_iid}/related_epics",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epics/{eventable_id}/resource_label_events",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epics/{eventable_id}/resource_label_events/{event_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epics/{eventable_id}/resource_state_events",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epics/{eventable_id}/resource_state_events/{event_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epics/{noteable_id}/discussions",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epics/{noteable_id}/discussions/{discussion_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epics/{noteable_id}/discussions/{discussion_id}/notes",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epics/{noteable_id}/discussions/{discussion_id}/notes/{note_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epics/{noteable_id}/notes",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/epics/{noteable_id}/notes/{note_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/export_relations/status",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/groups/shared",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/hooks",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/hooks/{hook_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/integrations",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/integrations/{slug}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/invitations",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/invited_groups",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/iterations",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/labels",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/labels/{name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/ldap_group_links",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/manage/ssh_keys",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/member_roles",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/members",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/members/all",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/members/all/{user_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/members/{user_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/merge_request_approval_setting",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/milestones",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/milestones/{milestone_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/milestones/{milestone_id}/issues",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/milestones/{milestone_id}/merge_requests",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/notification_settings",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/packages",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/projects",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/projects/shared",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/protected_branches",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/protected_branches/{name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/protected_environments",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/protected_environments/{name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/provisioned_users",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/push_rule",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/registry/repositories",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/related_epic_links",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/releases",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/repository_storage_moves",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/repository_storage_moves/{repository_storage_move_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/runners",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/saml/identities",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/saml/{uid}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/saml_group_links",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/saml_group_links/{saml_group_name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/saml_users",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/scim/identities",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/scim/{uid}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/service_accounts",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/service_accounts/{user_id}/personal_access_tokens",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/ssh_certificates",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/subgroups",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/transfer_locations",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/uploads",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/variables",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/variables/{key}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/wiki_pages/{noteable_id}/notes",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/wiki_pages/{noteable_id}/notes/{note_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/wikis",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/wikis/{slug}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/hooks",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/hooks/{hook_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/jira_forge/subscriptions",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/internal/gitlab_subscriptions/namespaces/{id}/projects",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/issues/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/job",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/job/allowed_agents",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/keys",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/keys/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/ldap/groups",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/ldap/{provider}/groups",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/license",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/license/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/licenses",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/member_roles",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/metadata",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/namespaces",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/namespaces/storage/limit_exclusions",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/namespaces/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/namespaces/{id}/exists",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/namespaces/{id}/gitlab_subscription",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/namespaces/{id}/subscription_add_on_purchase/{add_on_name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/notification_settings",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/digest",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/download_urls",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/digest",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/download_urls",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/versions",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/pages/domains",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/personal_access_tokens",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/personal_access_tokens/self",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/personal_access_tokens/self/associations",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/personal_access_tokens/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/project_aliases",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/project_aliases/{name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/project_repository_storage_moves",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/project_repository_storage_moves/{repository_storage_move_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/(-/)search/semantic",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/access_requests",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/access_tokens",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/access_tokens/{token_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/ai_agent/sessions",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/alert_management_alerts/{alert_iid}/metric_images",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/analytics/deployment_frequency",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/approval_rules",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/approval_rules/{approval_rule_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/approval_settings",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/approvals",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/attestations/{subject_digest}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/audit_events",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/audit_events/{audit_event_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/badges",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/badges/render",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/badges/{badge_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/boards",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/boards/{board_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/boards/{board_id}/lists",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/boards/{board_id}/lists/{list_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/ci/lint",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/cluster_agents",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/cluster_agents/{agent_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/cluster_agents/{agent_id}/tokens",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/cluster_agents/{agent_id}/tokens/{token_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/cluster_agents/{agent_id}/url_configurations",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/cluster_agents/{agent_id}/url_configurations/{url_configuration_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/clusters",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/clusters/{cluster_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/custom_attributes",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/custom_attributes/{key}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/debian_distributions",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/debian_distributions/{codename}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/debian_distributions/{codename}/key.asc",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/dependencies",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/deploy_keys",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/deploy_keys/{key_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/deploy_tokens",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/deploy_tokens/{token_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/deployments",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/deployments/{deployment_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/environments",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/environments/{environment_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/error_tracking/client_keys",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/error_tracking/settings",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/events",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/export",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/export_relations/status",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/external_status_checks",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/feature_flags",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/feature_flags/{feature_flag_name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/feature_flags_user_lists",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/feature_flags_user_lists/{iid}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/forks",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/freeze_periods",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/freeze_periods/{freeze_period_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/groups",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/hooks",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/hooks/{hook_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/import",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/integrations",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/integrations/{slug}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/invitations",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/invited_groups",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{eventable_id}/resource_iteration_events",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{eventable_id}/resource_iteration_events/{event_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{eventable_id}/resource_label_events",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{eventable_id}/resource_label_events/{event_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{eventable_id}/resource_milestone_events",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{eventable_id}/resource_milestone_events/{event_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{eventable_id}/resource_state_events",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{eventable_id}/resource_state_events/{event_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{eventable_id}/resource_weight_events",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{eventable_id}/resource_weight_events/{event_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{issue_iid}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{issue_iid}/award_emoji",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{issue_iid}/award_emoji/{award_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{issue_iid}/closed_by",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{issue_iid}/links",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{issue_iid}/links/{issue_link_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{issue_iid}/metric_images",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{issue_iid}/notes/{note_id}/award_emoji",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{issue_iid}/notes/{note_id}/award_emoji/{award_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{issue_iid}/participants",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{issue_iid}/related_merge_requests",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{issue_iid}/time_stats",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{issue_iid}/user_agent_detail",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{noteable_id}/discussions",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{noteable_id}/discussions/{discussion_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{noteable_id}/discussions/{discussion_id}/notes",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{noteable_id}/discussions/{discussion_id}/notes/{note_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{noteable_id}/notes",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues/{noteable_id}/notes/{note_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/iterations",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/job_token_scope",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/job_token_scope/allowlist",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/job_token_scope/groups_allowlist",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/jobs",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/jobs/{job_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/jobs/{job_id}/artifacts/tree",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/jobs/{job_id}/trace",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/labels",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/labels/{name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/managed_licenses",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/managed_licenses/{managed_license_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/members",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/members/all",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/members/all/{user_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/members/{user_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_request_approval_setting",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{eventable_id}/resource_label_events",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{eventable_id}/resource_label_events/{event_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{eventable_id}/resource_milestone_events",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{eventable_id}/resource_milestone_events/{event_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{eventable_id}/resource_state_events",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{eventable_id}/resource_state_events/{event_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/approval_rules",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/approval_rules/{approval_rule_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/approval_state",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/approvals",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/award_emoji",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/award_emoji/{award_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/blockees",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/blocks",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/changes",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/closes_issues",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/commits",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/context_commits",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/diffs",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/draft_notes",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/draft_notes/{draft_note_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/notes/{note_id}/award_emoji",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/notes/{note_id}/award_emoji/{award_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/participants",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/pipelines",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/reviewers",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/status_checks",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/time_stats",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/versions",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{merge_request_iid}/versions/{version_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{noteable_id}/discussions",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{noteable_id}/discussions/{discussion_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{noteable_id}/discussions/{discussion_id}/notes",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{noteable_id}/discussions/{discussion_id}/notes/{note_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{noteable_id}/notes",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests/{noteable_id}/notes/{note_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_trains",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_trains/merge_requests/{merge_request_iid}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_trains/{target_branch}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/milestones",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/milestones/{milestone_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/milestones/{milestone_id}/issues",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/milestones/{milestone_id}/merge_requests",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/mirror/pull",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/ml/mlflow/api/2.0/mlflow/experiments/get",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/ml/mlflow/api/2.0/mlflow/experiments/get-by-name",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/ml/mlflow/api/2.0/mlflow/experiments/list",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/ml/mlflow/api/2.0/mlflow/metrics/get-history",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/ml/mlflow/api/2.0/mlflow/model-versions/get",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/ml/mlflow/api/2.0/mlflow/model-versions/get-download-uri",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/ml/mlflow/api/2.0/mlflow/registered-models/get",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/ml/mlflow/api/2.0/mlflow/registered-models/search",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/ml/mlflow/api/2.0/mlflow/runs/get",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/notification_settings",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/packages",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/digest",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/download_urls",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/digest",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/download_urls",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/latest",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/files",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/packages/{conan_package_reference}/latest",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/packages/{conan_package_reference}/revisions",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/packages/{conan_package_reference}/revisions/{package_revision}/files",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/packages/nuget/index",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/packages/nuget/query",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/packages/protection/rules",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/packages/{package_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/packages/{package_id}/package_files",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/packages/{package_id}/pipelines",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/pages/domains",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/pages/domains/{domain}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/pipeline_schedules",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/pipeline_schedules/{pipeline_schedule_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/pipeline_schedules/{pipeline_schedule_id}/pipelines",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/pipeline_schedules/{pipeline_schedule_id}/variables/{key}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/pipelines",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/pipelines/latest",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/pipelines/{pipeline_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/pipelines/{pipeline_id}/bridges",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/pipelines/{pipeline_id}/jobs",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/pipelines/{pipeline_id}/test_report",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/pipelines/{pipeline_id}/test_report_summary",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/pipelines/{pipeline_id}/trigger_jobs",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/pipelines/{pipeline_id}/variables",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/protected_branches",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/protected_branches/{name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/protected_environments",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/protected_environments/{name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/protected_tags",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/protected_tags/{name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/push_rule",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/registry/protection/repository/rules",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/registry/protection/tag/rules",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/registry/repositories",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/registry/repositories/{repository_id}/tags",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/registry/repositories/{repository_id}/tags/{tag_name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/relation-imports",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/releases",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/releases/{tag_name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/releases/{tag_name}/assets/links",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/releases/{tag_name}/assets/links/{link_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/remote_mirrors",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/remote_mirrors/{mirror_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/branches",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/branches/{branch}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/changelog",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/commits",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/commits/{noteable_id}/discussions",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/commits/{noteable_id}/discussions/{discussion_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/commits/{noteable_id}/discussions/{discussion_id}/notes",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/commits/{noteable_id}/discussions/{discussion_id}/notes/{note_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/commits/{sha}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/commits/{sha}/comments",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/commits/{sha}/diff",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/commits/{sha}/merge_requests",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/commits/{sha}/refs",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/commits/{sha}/sequence",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/commits/{sha}/signature",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/commits/{sha}/statuses",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/compare",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/contributors",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/diverging_commits",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/health",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/tags",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/tags/{tag_name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/tags/{tag_name}/signature",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository/tree",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository_storage_moves",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/repository_storage_moves/{repository_storage_move_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/resource_groups",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/resource_groups/{key}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/resource_groups/{key}/current_job",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/resource_groups/{key}/upcoming_jobs",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/runners",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/secure_files",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/secure_files/{secure_file_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/service_accounts",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/service_accounts/{user_id}/personal_access_tokens",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/services",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/services/{slug}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/share_locations",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/snippets",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/snippets/{noteable_id}/discussions",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/snippets/{noteable_id}/discussions/{discussion_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/snippets/{noteable_id}/discussions/{discussion_id}/notes",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/snippets/{noteable_id}/discussions/{discussion_id}/notes/{note_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/snippets/{noteable_id}/notes",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/snippets/{noteable_id}/notes/{note_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/snippets/{snippet_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/snippets/{snippet_id}/award_emoji",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/snippets/{snippet_id}/award_emoji/{award_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/snippets/{snippet_id}/files/{ref}/{file_path}/raw",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/snippets/{snippet_id}/notes/{note_id}/award_emoji",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/snippets/{snippet_id}/notes/{note_id}/award_emoji/{award_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/snippets/{snippet_id}/raw",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/snippets/{snippet_id}/user_agent_detail",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/starrers",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/statistics",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/storage",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/templates/{type}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/templates/{type}/{name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/terraform/state_protection_rules",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/transfer_locations",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/triggers",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/triggers/{trigger_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/uploads",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/users",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/variables",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/vulnerabilities",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/vulnerabilities/{noteable_id}/notes",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/vulnerabilities/{noteable_id}/notes/{note_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/vulnerability_findings",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/wiki_pages/{noteable_id}/notes",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/wiki_pages/{noteable_id}/notes/{note_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/wikis",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/wikis/{slug}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/registry/repositories/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/runner_controllers",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/runner_controllers/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/runner_controllers/{runner_controller_id}/tokens",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/runner_controllers/{runner_controller_id}/tokens/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/runners",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/runners/all",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/runners/router/discovery",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/runners/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/runners/{id}/jobs",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/runners/{id}/managers",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/runners/{id}/projects",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/security/vulnerability_archive_exports/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/security/vulnerability_exports/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/service_accounts",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/snippet_repository_storage_moves",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/snippet_repository_storage_moves/{repository_storage_move_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/snippets",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/all",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/public",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{id}/repository_storage_moves",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{id}/repository_storage_moves/{repository_storage_move_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{id}/user_agent_detail",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/templates/dockerfiles",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/templates/dockerfiles/{name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/templates/gitignores",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/templates/gitignores/{name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/templates/gitlab_ci_ymls",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/templates/gitlab_ci_ymls/{name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/templates/licenses",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/templates/licenses/{name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/todos",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/topics",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/topics/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/user",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/user/activities",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/user/applications",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/user/applications/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/user/emails",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/user/emails/{email_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/user/gpg_keys",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/user/gpg_keys/{key_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/user/keys",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/user/keys/{key_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/user/preferences",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/user/status",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/user/support_pin",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/user_counts",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}/associations_count",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}/custom_attributes",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}/custom_attributes/{key}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}/emails",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}/events",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}/followers",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}/following",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}/gpg_keys",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}/gpg_keys/{key_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}/keys/{key_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}/support_pin",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/contributed_projects",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/impersonation_tokens",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/impersonation_tokens/{impersonation_token_id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/keys",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/memberships",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/project_deploy_keys",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/projects",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/starred_projects",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}/status",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/version",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/vscode/settings_sync/v1/manifest",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/vscode/settings_sync/v1/resource/{resource_name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/vscode/settings_sync/{settings_context_hash}/v1/manifest",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/vscode/settings_sync/{settings_context_hash}/v1/resource/{resource_name}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/vulnerabilities/{id}",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/vulnerabilities/{id}/issue_links",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    }
+  ],
   "glassfrog": [],
   "gmail": [],
   "gnews": [],

@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 6,
+  "catalog_revision": 8,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -17,7 +17,7 @@
       "layer": "source_retention_import",
       "status": "available",
       "kind": "generic",
-      "summary": "Retains verified provider artifacts and imports locked OpenAPI, rendered-reference, bundle, and GraphQL sources into closed canonical operation descriptors and source-selected event/batch inventories while preserving unresolved evidence as explicit gaps. Legacy v1/v2 source_contract and source_operation provider fragments are retained as object-validated, non-executable source evidence without flattening dialect facts or extensions. When operation accounting cannot obtain required retained-source input, it keeps each locked identity as a non-executable source-retention gap. Source-lock v4 materialization consumes cited descriptors and fails closed when the current runtime cannot faithfully represent a retained contract.",
+      "summary": "Retains verified provider artifacts and imports locked OpenAPI, rendered-reference, bundle, and GraphQL sources into closed canonical operation descriptors and source-selected event/batch inventories while preserving unresolved evidence as explicit gaps. Legacy v1/v2 source_contract and source_operation provider fragments remain object-validated source evidence without flattening dialect facts or extensions; only an explicit canonical_evidence lock may reconstruct that closed provider contract for descriptor mapping after exact inventory reconciliation. When operation accounting cannot obtain required retained-source input, it keeps each locked identity as a non-executable source-retention gap. Source-lock v4 materialization consumes cited descriptors and fails closed when the current runtime cannot faithfully represent a retained contract.",
       "owner": {
         "primary_package": "polymetrics.ai/cmd/connectorgen",
         "supporting_packages": [],
@@ -43,10 +43,18 @@
             "file": "cmd/connectorgen/sourceimport.go",
             "name": "sourceImportProviderObject"
           },
-          {
-            "file": "cmd/connectorgen/sourceimport.go",
-            "name": "sourceImportLockFromLegacy"
-          },
+      {
+        "file": "cmd/connectorgen/sourceimport.go",
+        "name": "sourceImportLockFromLegacy"
+      },
+      {
+        "file": "cmd/connectorgen/sourceimport.go",
+        "name": "sourceImportLockHasCanonicalEvidenceContract"
+      },
+      {
+        "file": "cmd/connectorgen/sourceimport.go",
+        "name": "importSourceLockCanonicalEvidence"
+      },
           {
             "file": "cmd/connectorgen/sourceimport.go",
             "name": "sourceBuildReferenceIndex"
@@ -103,7 +111,8 @@
           "retained artifact bundle",
           "source-lock v4 explicit materialization plan",
           "source_reference",
-          "legacy v1/v2 source_contract and source_operation provider-evidence fragments"
+      "legacy v1/v2 source_contract and source_operation provider-evidence fragments",
+      "explicit canonical_evidence legacy operation inventory"
         ],
         "request_response_shapes": [
           "callbacks and webhooks retained as inbound event descriptors",
@@ -122,7 +131,8 @@
           "bounded fetch and parse budgets",
           "canonical source identity and digest verification",
           "citation retention",
-          "legacy source-contract and operation fragments retain provider bytes after object validation without becoming executable input",
+      "ordinary legacy source-contract and operation fragments retain provider bytes after object validation without becoming executable input",
+      "an explicit canonical_evidence legacy lock reconstructs only a closed descriptor mapping after exact inventory reconciliation; it does not admit a runtime lane or weaken retained-artifact hash verification for ordinary locks",
           "materialized source-lock rows fail closed when retained runtime reachability, routing, input wire semantics, media, scope, pagination, byte constraints, or exact response-status execution cannot be represented",
           "malformed, unavailable, or unresolved contracts remain explicit gaps"
         ]
@@ -146,7 +156,7 @@
         "Only contracts stated by retained provider evidence may be imported.",
         "A batch inventory may name only one locked provider operation, canonical schema selectors, a provider-proven maximum, and closed provider envelope/method/response fields; it cannot carry raw executable HTTP.",
         "Reference cycles and unsupported dialect details must remain explicit rather than being guessed or flattened.",
-        "Legacy source_contract and source_operation fragments are source-evidence only; they may retain provider-standard and provider-extension members but cannot supply runtime routing, request, response, credential, or approval behavior.",
+    "Ordinary legacy source_contract and source_operation fragments are source-evidence only; they may retain provider-standard and provider-extension members but cannot supply runtime routing, request, response, credential, or approval behavior. A lock with explicit canonical_evidence may use its closed provider fragments only for deterministic descriptor mapping after inventory reconciliation; it still cannot admit runtime routing, request, response, credential, or approval behavior.",
         "Retained bytes, URLs, and hashes prove provenance, not runtime behavior.",
         "A v4 materialized row must preserve every retained runtime-relevant contract exactly or be represented as cited blocked/unsupported accounting; the materializer does not synthesize a transport escape.",
         "Raw provider response-status spellings remain cited evidence. Unambiguous numeric HTTP values from 100 through 599 are validated without rewriting their source facts; only values that normalize to exact 2xx runtime statuses are materialized. A status range/class or an exact non-2xx contract remains cited blocked with its named runtime gap."
@@ -203,11 +213,21 @@
           "file": "cmd/connectorgen/sourceimport_source_operation_test.go",
           "name": "TestParseSourceImportLockRetainsSingularMediaExamples"
         },
-        {
-          "package": "./cmd/connectorgen",
-          "file": "cmd/connectorgen/sourceimport_source_operation_test.go",
-          "name": "TestParseSourceImportLockProviderFragmentsKeepRootClosed"
-        },
+    {
+      "package": "./cmd/connectorgen",
+      "file": "cmd/connectorgen/sourceimport_source_operation_test.go",
+      "name": "TestParseSourceImportLockProviderFragmentsKeepRootClosed"
+    },
+    {
+      "package": "./cmd/connectorgen",
+      "file": "cmd/connectorgen/sourceimport_source_operation_test.go",
+      "name": "TestSourceOperationEnrichmentCannotRelaxRetainedArtifactHash"
+    },
+    {
+      "package": "./cmd/connectorgen",
+      "file": "cmd/connectorgen/sourceimport_source_reference_test.go",
+      "name": "TestSourceImportGitLabCanonicalEvidenceProjectsLockedInventoryWithoutFetcher"
+    },
         {
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/sourceimport_rendered_reference_test.go",
@@ -243,7 +263,7 @@
       ],
       "update_conditions": [
         "A supported source form, dialect, schema keyword, parameter binding, media encoding, or response descriptor changes.",
-        "Legacy source-fragment retention, object validation, or its evidence-only boundary changes.",
+    "Legacy source-fragment retention, canonical_evidence opt-in, object validation, or its evidence-only boundary changes.",
         "Artifact identity, citation, fetch-bound, or unresolved-reference behavior changes.",
         "An owner symbol or proof test is moved, replaced, or narrowed.",
         "Source-lock v4 materialization accounting or fail-closed descriptor-mapping behavior changes."
@@ -255,7 +275,7 @@
       "layer": "source_projection_admission",
       "status": "available",
       "kind": "generic",
-      "summary": "Projects canonical source operations into connector definitions and global operation ledgers, derives command bindings and flags, and accounts every source operation through declaration admission without treating projection as execution proof.",
+      "summary": "Projects canonical source operations into connector definitions and global operation ledgers, derives command bindings and flags, and accounts every source operation through declaration admission without treating projection as execution proof. The existing closed-name admission seam retains source parameter spelling in the descriptor and blocks an unsafe provider spelling rather than creating an ad-hoc alias or raw transport escape.",
       "owner": {
         "primary_package": "polymetrics.ai/cmd/connectorgen",
         "supporting_packages": [],
@@ -295,6 +315,10 @@
           },
           {
             "file": "cmd/connectorgen/surfacesync.go",
+            "name": "syncRuntimeOperationEndpointLedgerConnector"
+          },
+          {
+            "file": "cmd/connectorgen/surfacesync.go",
             "name": "deriveCommandParameterFlags"
           },
           {
@@ -308,6 +332,10 @@
           {
             "file": "cmd/connectorgen/sourceprojection.go",
             "name": "sourceProjectionSchema"
+          },
+          {
+            "file": "cmd/connectorgen/sourceprojection.go",
+            "name": "sourceProjectionReadParameterAdmitted"
           },
           {
             "file": "cmd/connectorgen/sourceprojection.go",
@@ -358,6 +386,7 @@
           "independent saved-target and interactive-command lane evidence",
           "operation, stream, and write projections",
           "runtime operation endpoint ledger rows",
+          "source-selected runtime endpoint-ledger refreshes that retain unselected connector rows",
           "source-backed deferred and unsupported dispositions"
         ],
         "sync_modes": [],
@@ -368,6 +397,7 @@
           "source-projected read-only fields are rejected as request input before provider I/O",
           "source-backed batch coverage validates the retained provider inventory, definition-owned action allow-list, closed record schema, query encoding, and runtime action binding without admitting raw HTTP",
           "projection gaps remain explicit and source-bound",
+          "a source-selected endpoint-ledger refresh changes only that connector's runtime row and retains unselected rows",
           "mapping admission and projection are independent of certification overlays and retained hash, byte, and capture representation while preserving version- and document-kind-specific source-reference, unavailable-document, v3 envelope, and closed event-schema-selector structure",
           "unavailable retained-source, certification-subject, or generated-surface evidence remains a per-source typed foundation gap and cannot suppress a source identity or fabricate an executable lane"
         ]
@@ -392,18 +422,21 @@
           "connectorgen declaration-admission",
           "connectorgen operation-evidence --connector <name>",
           "connectorgen surface-reconcile",
-          "connectorgen surface-sync"
+          "connectorgen surface-sync",
+          "connectorgen surface-sync --connector <name>"
         ],
-        "notes": "Source identities and declaration bindings select projections; generated availability remains subject to real runtime preflight."
+        "notes": "Source identities and declaration bindings select projections; a selected surface sync preserves every unselected runtime endpoint-ledger row. Generated availability remains subject to real runtime preflight."
       },
       "constraints": [
         "Projection must not invent a stream, write action, request field, response policy, or lane absent from the source-backed contract.",
+        "A generated direct-read parameter name must satisfy the existing closed engine identifier rule. The source descriptor retains an unsafe provider spelling and the operation remains a cited typed blocked disposition until a separately approved reversible provider-parameter alias foundation exists; projection must not silently omit it.",
         "OpenAPI request projection excludes readOnly properties recursively, including resolved allOf arms, and removes excluded names from required.",
         "Array query encoding must retain the source-declared style, explode behavior, and delimiter; generic value stringification is not source projection.",
         "A required requestBody with one data envelope makes that record field required; an optional requestBody remains optional.",
         "A declared batch is projectable only when a closed v3 batch_action_inventory resolves against retained provider bytes and the definition keeps a typed action allow-list; optional outer query fields remain source-projected while caller-authored subrequest HTTP stays forbidden.",
         "Aliases and multiple lane bindings must not inflate the provider-operation count.",
         "A projected implemented label is incomplete until the selected runtime path passes preflight.",
+        "A selected runtime endpoint-ledger refresh may replace only its named connector entry and must preserve every unselected entry; it must not make an unrelated missing source descriptor an admission gate.",
         "The mapping-only lock view still fails closed on connector ownership, stable identity, citation, location, method, route, counts, source-reference method/identity/location/source-form and legacy supplement binding/count, unavailable reason/source URL, v3 envelope coherence, and the exact source_contract_unavailable disposition.",
         "Schema-version and document-kind selection is presence-aware and closed: foreign, empty, or null variant fields cannot select another wire shape through Go zero values.",
         "A v3 event_schema_inventory is a closed source-selector envelope. Mapping projection ignores it only after rejecting unknown inventory or selector members; source-import alone resolves its canonical selectors against retained provider bytes.",
@@ -445,6 +478,21 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/sourceprojection_test.go",
           "name": "TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/surfacesync_test.go",
+          "name": "TestSyncRuntimeOperationEndpointLedgerConnectorPreservesUnselectedEntries"
+        },
+        {
+          "package": "./internal/cli",
+          "file": "internal/cli/gitlab_cli_test.go",
+          "name": "TestGitLabGeneratedDirectReadReachesCredentialBoundary"
+        },
+        {
+          "package": "./internal/cli",
+          "file": "internal/cli/gitlab_cli_test.go",
+          "name": "TestGitLabSourceLockedCommandsPassRuntimePreflight"
         },
         {
           "package": "./cmd/connectorgen",
@@ -588,6 +636,121 @@
         "Projection rules, declaration states, lane bindings, or operation identity semantics change.",
         "A global admission or endpoint-ledger artifact changes shape or ownership.",
         "Surface derivation, runtime-preflight handoff, or proof tests change."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "runtime.provider-parameter-alias.v1",
+      "layer": "direct_execution",
+      "status": "investigating",
+      "kind": "generic",
+      "summary": "Candidate for a closed, injective, reversible mapping between a safe CLI flag spelling and the source-declared REST query parameter key. It would retain the exact provider key for request encoding while refusing unsafe raw flags and alias collisions.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "supporting_packages": [
+          "polymetrics.ai/cmd/connectorgen"
+        ],
+        "files": [
+          "internal/connectors/engine/operation_headers.go",
+          "internal/connectors/engine/operation_parameters.go",
+          "internal/connectors/engine/direct_read.go",
+          "cmd/connectorgen/sourceprojection.go"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/operation_headers.go",
+            "name": "validateOperationParameterCLIName"
+          },
+          {
+            "file": "internal/connectors/engine/operation_parameters.go",
+            "name": "operationParametersForLocation"
+          },
+          {
+            "file": "cmd/connectorgen/sourceprojection.go",
+            "name": "sourceProjectionSyncReadParameters"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "direct_read"
+        ],
+        "protocols": [
+          "HTTP/REST"
+        ],
+        "source_forms": [
+          "canonical locked source-operation descriptors"
+        ],
+        "request_response_shapes": [
+          "scalar path and query parameter source keys with punctuation"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "the encoded provider request key exactly equals the source-declared key",
+          "the CLI spelling is safe, deterministic, injective, and reversible",
+          "a collision is rejected before provider I/O"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field",
+          "authoring_command",
+          "verification_command"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/operations.json",
+          "internal/connectors/defs/<connector>/cli_surface.json"
+        ],
+        "selectors": [
+          "operation REST parameter cli_name",
+          "CLI command flag maps_to query.<provider-key>",
+          "connectorgen source-import --materialize-eligible-lanes"
+        ],
+        "notes": "Investigating only: no unsafe provider key is admitted by this candidate until its exact safe alias grammar and runtime encoding proof are implemented and approved."
+      },
+      "constraints": [
+        "No raw CLI flag may contain an unsafe provider punctuation character.",
+        "The mapping must be one-to-one and reversible for brackets, underscores, plus, percent, and other source-declared punctuation without normalization collisions.",
+        "The original provider key remains the operation parameter identity and the exact request query key.",
+        "The candidate cannot use connector-name branching, generic raw HTTP, or a lossy fallback."
+      ],
+      "non_goals": [
+        "Weakening safety.ValidateIdentifier for arbitrary command inputs.",
+        "Changing source operation membership or suppressing a cited source row.",
+        "Providing array, object, form, or media serialization beyond the source-declared scalar query contract."
+      ],
+      "consumer_examples": [
+        {
+          "name": "GitLab bracketed query filters",
+          "files": [
+            "internal/connectors/defs/gitlab/sources/gitlab-operation-descriptor.json"
+          ],
+          "notes": "The provider source retains query keys such as not[milestone_title]; this candidate may only project a safe reversible spelling after approval and proof."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/operation_parameter_alias_test.go",
+          "name": "TestOperationParameterAliasPreservesPunctuatedProviderQueryKey"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/sourceprojection_test.go",
+          "name": "TestSourceProjectionMaterializesReversibleProviderQueryAliases"
+        }
+      ],
+      "known_gap_refs": [
+        {
+          "id": "runtime-provider-parameter-alias-investigating-r1",
+          "reference": "docs/connector-canon/foundations/catalog.json#runtime.provider-parameter-alias.v1",
+          "notes": "Existing engine validation permits cli_name only for path parameters and rejects punctuated query names, so no implemented direct-read contract can claim this behavior yet."
+        }
+      ],
+      "update_conditions": [
+        "The safe alias grammar, collision rule, wire encoding, or proof changes.",
+        "The owner symbols or affected direct execution lanes change.",
+        "Captain approval or the status of the candidate changes."
       ],
       "supersedes": []
     },

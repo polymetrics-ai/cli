@@ -35,7 +35,7 @@ import (
 // intermediate descriptor. It intentionally owns no execution controls: a
 // connector name selects its checked-in lock, and that lock alone supplies the
 // byte-backed artifact identity or an explicit declaration-only citation.
-const sourceImportUsage = `connectorgen source-import <connector> [--out <path>] [--defs <dir>] [--check] [--read-projection-only]
+const sourceImportUsage = `connectorgen source-import <connector> [--out <path>] [--defs <dir>] [--check] [--read-projection-only] [--materialize-eligible-lanes]
 
 Verifies a byte-backed connector-owned source lock against its tracked retained
 artifact copy, or projects an explicit declaration-only source reference, and
@@ -49,6 +49,9 @@ generators. It never contacts a provider or a local cache.
   --read-projection-only
                   verify or materialize only source-bound read declarations;
                   preserve existing write contracts unchanged
+  --materialize-eligible-lanes
+                  materialize only source-complete fixed JSON GET and no-body
+                  scalar-path reverse-ETL contracts through existing runtimes
 
 The source lock is authoritative. A mismatch against its selected byte or
 canonical-JSON identity requires a source-lock refresh; this command never
@@ -192,11 +195,13 @@ func (enrichment *sourceImportOperationEnrichment) UnmarshalJSON(raw []byte) err
 	return nil
 }
 
-// sourceImportSourceContractEnrichment retains an exact provider-owned
-// source-contract fragment alongside a byte-backed legacy source lock. It is
-// mapping evidence only. Components and server variables are provider grammar,
-// not runtime input, so their bytes are retained rather than flattened into a
-// partial local model.
+// sourceImportSourceContractEnrichment retains an exact provider-owned source
+// contract alongside a legacy source lock. A structurally sufficient retained
+// contract is canonical mapping evidence: source import may parse it only after
+// the lock's exact identity inventory has been checked. Its source hash and raw
+// artifact remain provenance and verification evidence, not an admission gate.
+// Components and server variables remain provider grammar; they are carried
+// through the closed importer rather than flattened into a partial local model.
 type sourceImportSourceContractEnrichment struct {
 	Raw json.RawMessage `json:"-"`
 }
@@ -238,11 +243,25 @@ type sourceImportRESTOperation struct {
 	SourceOperation *sourceImportOperationEnrichment              `json:"source_operation,omitempty"`
 }
 
+// sourceImportPathBridge is a closed source-to-declaration mapping rule. It
+// preserves the provider path on the descriptor while naming the exact
+// connector-relative route an already-declared runtime uses. It cannot accept
+// arbitrary substitutions, templates, queries, or per-call values.
+type sourceImportPathBridge struct {
+	SourcePrefix    string `json:"source_prefix"`
+	ConnectorPrefix string `json:"connector_prefix"`
+}
+
 type sourceImportREST struct {
 	sourceImportArtifact
 	Commit      string                      `json:"commit,omitempty"`
 	InfoVersion string                      `json:"info_version,omitempty"`
 	Operations  []sourceImportRESTOperation `json:"operations,omitempty"`
+	PathBridge  *sourceImportPathBridge     `json:"path_bridge,omitempty"`
+	// CanonicalEvidence explicitly opts this legacy lock into source-contract
+	// reconstruction. Ordinary source-operation enrichment remains tied to the
+	// byte-pinned artifact and must not change that hash-verification path.
+	CanonicalEvidence bool `json:"canonical_evidence,omitempty"`
 	// These fields are internal projections of the separately decoded legacy
 	// cited-only contract. They must not widen ordinary v1/v2 byte-backed wire
 	// decoding.
@@ -861,6 +880,7 @@ type sourceOperationDescriptor struct {
 	Source              sourceImportSource                `json:"source"`
 	Method              string                            `json:"method"`
 	Path                string                            `json:"path"`
+	MappingPath         string                            `json:"mapping_path,omitempty"`
 	Request             sourceRequestDescriptor           `json:"request"`
 	Responses           []sourceResponseDescriptor        `json:"responses"`
 	Output              sourceOutputDescriptor            `json:"output"`
@@ -2297,9 +2317,6 @@ func importSourceLockResultWithBudget(ctx context.Context, lock sourceImportLock
 	if err := validateSourceImportLimits(limits); err != nil {
 		return sourceImportResult{}, err
 	}
-	if fetcher == nil && !sourceImportLockIsReferenceOnly(lock) {
-		return sourceImportResult{}, fmt.Errorf("source importer has no fetcher")
-	}
 	if budget == nil {
 		return sourceImportResult{}, fmt.Errorf("source importer has no descriptor budget")
 	}
@@ -2308,6 +2325,15 @@ func importSourceLockResultWithBudget(ctx context.Context, lock sourceImportLock
 	}
 	if err := validateSourceImportConnector(lock.Connector); err != nil {
 		return sourceImportResult{}, err
+	}
+	if err := validateSourceImportPathBridge(lock.Rest.PathBridge); err != nil {
+		return sourceImportResult{}, err
+	}
+	if sourceImportLockHasCanonicalEvidenceContract(lock) {
+		return importSourceLockCanonicalEvidence(ctx, lock, fetcher, limits, budget)
+	}
+	if fetcher == nil && !sourceImportLockIsReferenceOnly(lock) {
+		return sourceImportResult{}, fmt.Errorf("source importer has no fetcher")
 	}
 	if lock.SchemaVersion >= 3 {
 		return importSourceLockResultV3(ctx, lock, fetcher, limits, budget)
@@ -2363,6 +2389,200 @@ func importSourceLockResultWithBudget(ctx context.Context, lock sourceImportLock
 		return sourceImportResult{}, err
 	}
 	return result, nil
+}
+
+// sourceImportLockHasCanonicalEvidenceContract identifies the closed legacy
+// mapping form that can replace a separately retained source artifact. The
+// provider object is only eligible when the lock still owns a complete REST
+// inventory; source import validates the parsed result against that inventory
+// before it is admitted to descriptor mapping. Legacy source references remain
+// their own deliberately non-executable wire form.
+func sourceImportLockHasCanonicalEvidenceContract(lock sourceImportLock) bool {
+	return lock.SchemaVersion < 3 && !lock.isLegacySourceReference() && lock.Rest.CanonicalEvidence && lock.SourceContract != nil && len(bytes.TrimSpace(lock.SourceContract.Raw)) > 0 && len(lock.Rest.Operations) > 0
+}
+
+// importSourceLockCanonicalEvidence imports a provider contract already
+// retained in the source lock. It never fetches the provider URL and it never
+// validates the lock's raw-artifact hash against a duplicate local file: those
+// are provenance overlays. Closed parsing, bounded reference resolution, and
+// exact lock-to-contract identity reconciliation still apply before any
+// descriptor is returned.
+func importSourceLockCanonicalEvidence(ctx context.Context, lock sourceImportLock, fetcher sourceImportFetcher, limits sourceImportLimits, budget *sourceImportBudget) (sourceImportResult, error) {
+	if err := validateSourceImportArtifact(lock.Rest.sourceImportArtifact); err != nil {
+		return sourceImportResult{}, err
+	}
+	if lock.SourceContract == nil || len(bytes.TrimSpace(lock.SourceContract.Raw)) == 0 {
+		return sourceImportResult{}, fmt.Errorf("source lock has no retained canonical source contract")
+	}
+	if int64(len(lock.SourceContract.Raw)) > limits.MaxArtifactBytes {
+		return sourceImportResult{}, fmt.Errorf("canonical source contract byte limit exceeded")
+	}
+	doc, form, err := sourceImportCanonicalEvidenceDocument(lock)
+	if err != nil {
+		return sourceImportResult{}, fmt.Errorf("assemble retained canonical source contract: %w", err)
+	}
+	if err := validateSourceImportArtifactForm(lock.Rest.sourceImportArtifact, form); err != nil {
+		return sourceImportResult{}, fmt.Errorf("retained canonical source contract form: %w", err)
+	}
+	// Version 2 locks are provider-authoritative inventories. Preserve an exact
+	// descriptor and attach gaps only where the current closed runtime cannot
+	// faithfully express an otherwise locked provider contract.
+	limits.AllowSourceContractGaps = true
+	resolver := sourceReferenceResolver{root: doc, limits: limits, form: form}
+	result, err := importSourceDocumentResult(sourceImportDocumentContext{Lock: lock, Artifact: lock.Rest.sourceImportArtifact}, doc, form, &resolver, limits, budget)
+	if err != nil {
+		return sourceImportResult{}, err
+	}
+	result.DescriptorSchemaVersion = 2
+	if err := sourceImportApplyPathBridge(lock.Rest.PathBridge, &result); err != nil {
+		return sourceImportResult{}, err
+	}
+	if err := validateLockedRESTProjection(lock, result.Operations); err != nil {
+		return sourceImportResult{}, fmt.Errorf("retained canonical source contract: %w", err)
+	}
+	if err := appendLockedGraphQLProjection(ctx, lock, fetcher, limits, budget, &result); err != nil {
+		return sourceImportResult{}, err
+	}
+	sortSourceOperationDescriptors(result.Operations)
+	sortSourceInboundEventDescriptors(result.InboundEvents)
+	sortSourceExtensions(result.Extensions)
+	if err := validateSourceImportResultIdentities(result); err != nil {
+		return sourceImportResult{}, err
+	}
+	return result, nil
+}
+
+// sourceImportCanonicalEvidenceDocument reassembles the provider document from
+// the two exact legacy source-lock evidence channels: source_contract owns the
+// shared OpenAPI grammar, while source_operation owns each cited operation
+// fragment. Some providers retain a complete paths object in source_contract;
+// others, such as an OpenAPI document whose shared components are far larger
+// than a single operation, retain the paths as closed operation fragments. The
+// merge is structural and fails on conflicts, unknown shapes, or missing
+// operation evidence. It never uses a connector name or a provider URL branch.
+func sourceImportCanonicalEvidenceDocument(lock sourceImportLock) (map[string]any, sourceDocumentForm, error) {
+	if lock.SourceContract == nil {
+		return nil, sourceDocumentForm{}, fmt.Errorf("source lock has no retained canonical source contract")
+	}
+	doc, form, err := parseSourceImportDocument(lock.SourceContract.Raw)
+	if err != nil {
+		return nil, sourceDocumentForm{}, err
+	}
+	paths := map[string]any{}
+	if rawPaths, exists := doc["paths"]; exists {
+		declaredPaths, ok := rawPaths.(map[string]any)
+		if !ok {
+			return nil, sourceDocumentForm{}, fmt.Errorf("retained canonical source contract paths must be an object")
+		}
+		for path, item := range declaredPaths {
+			paths[path] = sourceCloneLiteral(item)
+		}
+	}
+	for _, locked := range lock.Rest.Operations {
+		if locked.SourceOperation == nil || len(bytes.TrimSpace(locked.SourceOperation.Raw)) == 0 {
+			continue
+		}
+		var rawOperation any
+		if err := decodeSourceJSON(locked.SourceOperation.Raw, &rawOperation); err != nil {
+			return nil, sourceDocumentForm{}, fmt.Errorf("source operation %q: %w", locked.ID, err)
+		}
+		operation, ok := rawOperation.(map[string]any)
+		if !ok {
+			return nil, sourceDocumentForm{}, fmt.Errorf("source operation %q must be an object", locked.ID)
+		}
+		// Legacy locks retain operation identity separately so provider operation
+		// fragments can omit the duplicated OpenAPI operationId member. Reinsert
+		// only that exact locked value; a conflicting provider fragment is source
+		// drift rather than a value the importer may choose.
+		if locked.OperationID != "" {
+			if existing, exists := operation["operationId"]; exists {
+				operationID, ok := existing.(string)
+				if !ok || operationID != locked.OperationID {
+					return nil, sourceDocumentForm{}, fmt.Errorf("source operation %q operationId conflicts with source lock", locked.ID)
+				}
+			} else {
+				operation["operationId"] = locked.OperationID
+			}
+		}
+		pathItem, exists := paths[locked.Path]
+		if !exists {
+			pathItem = map[string]any{}
+			paths[locked.Path] = pathItem
+		}
+		item, ok := pathItem.(map[string]any)
+		if !ok {
+			return nil, sourceDocumentForm{}, fmt.Errorf("source operation %q path item %q must be an object", locked.ID, locked.Path)
+		}
+		method := strings.ToLower(locked.Method)
+		if existing, exists := item[method]; exists {
+			if !reflect.DeepEqual(existing, operation) {
+				return nil, sourceDocumentForm{}, fmt.Errorf("source operation %q conflicts with retained canonical source contract", locked.ID)
+			}
+			continue
+		}
+		item[method] = operation
+	}
+	doc["paths"] = paths
+	return doc, form, nil
+}
+
+func validateSourceImportPathBridge(bridge *sourceImportPathBridge) error {
+	if bridge == nil {
+		return nil
+	}
+	if !sourceImportBridgePrefix(bridge.SourcePrefix, false) {
+		return errors.New("source path bridge has an invalid source_prefix")
+	}
+	if !sourceImportBridgePrefix(bridge.ConnectorPrefix, true) {
+		return errors.New("source path bridge has an invalid connector_prefix")
+	}
+	return nil
+}
+
+func sourceImportBridgePrefix(value string, allowEmpty bool) bool {
+	if value == "" {
+		return allowEmpty
+	}
+	if !strings.HasPrefix(value, "/") || value != strings.TrimSpace(value) || strings.ContainsAny(value, "?#{}\r\n") {
+		return false
+	}
+	return value == "/" || !strings.HasSuffix(value, "/")
+}
+
+func sourceImportApplyPathBridge(bridge *sourceImportPathBridge, result *sourceImportResult) error {
+	if result == nil || bridge == nil {
+		return nil
+	}
+	if err := validateSourceImportPathBridge(bridge); err != nil {
+		return err
+	}
+	for index := range result.Operations {
+		operation := &result.Operations[index]
+		if operation.Protocol != "rest" {
+			continue
+		}
+		mapped, err := sourceImportBridgePathForOperation(*bridge, operation.Path)
+		if err != nil {
+			return fmt.Errorf("source operation %q: %w", operation.SourceID, err)
+		}
+		operation.MappingPath = mapped
+	}
+	return nil
+}
+
+func sourceImportBridgePathForOperation(bridge sourceImportPathBridge, sourcePath string) (string, error) {
+	if sourcePath != bridge.SourcePrefix && !strings.HasPrefix(sourcePath, bridge.SourcePrefix+"/") {
+		return "", fmt.Errorf("source path %q does not begin with bridge prefix %q", sourcePath, bridge.SourcePrefix)
+	}
+	suffix := strings.TrimPrefix(sourcePath, bridge.SourcePrefix)
+	mapped := bridge.ConnectorPrefix + suffix
+	if mapped == "" {
+		mapped = "/"
+	}
+	if validateSourceImportPath(mapped) != nil {
+		return "", fmt.Errorf("mapped connector path %q is invalid", mapped)
+	}
+	return mapped, nil
 }
 
 type sourceImportDocumentContext struct {
@@ -9659,12 +9879,13 @@ func marshalSourceImportResult(result sourceImportResult) ([]byte, error) {
 }
 
 type sourceImportOptions struct {
-	Connector          string
-	DefsDir            string
-	Output             string
-	CacheDir           string
-	Check              bool
-	ReadProjectionOnly bool
+	Connector                string
+	DefsDir                  string
+	Output                   string
+	CacheDir                 string
+	Check                    bool
+	ReadProjectionOnly       bool
+	MaterializeEligibleLanes bool
 }
 
 func runSourceImport(args []string, stdout, stderr io.Writer) int {
@@ -9733,6 +9954,7 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 		return 1
 	}
 	sourceProjectionNormalizeNonBlockingReadGaps(&result)
+	sourceProjectionApplyUnsafeProviderQueryParameterGaps(surface, &result)
 	sourceProjectionRestoreSourceBoundDirectReadPathFlags(&surface, result)
 	sourceProjectionAnnotateUnreachableReadGaps(surface, &result)
 	if err := sourceProjectionApplyNonExecutableMutationDispositions(surface, &result, mutationDispositions); err != nil {
@@ -9744,6 +9966,21 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 		return 1
 	}
 	sourceProjectionApplyWriteDisabledMutationArtifacts(surface, &result)
+	if opts.MaterializeEligibleLanes {
+		// A write-capable bundle can still cover only a subset of its locked
+		// mutations. Keep every non-selected identity in the same cited typed
+		// state used by an explicitly write-disabled connector.
+		sourceProjectionApplyUnmappedMutationArtifacts(surface, &result)
+		projection, projectionErr := projectEligibleSourceLockLanesToBundle(filepath.Join(opts.DefsDir, opts.Connector), result, opts.Check)
+		if projectionErr != nil {
+			logln(stderr, "connectorgen source-import: materialize eligible source-lock lanes:", projectionErr)
+			return 1
+		}
+		if opts.Check && projection.Changed() {
+			logln(stderr, fmt.Sprintf("connectorgen source-import: eligible source-lock lane projection has drifted (writes=%d operations=%d cli=%d metadata=%d); rerun without --check", projection.Writes, projection.Operations, projection.CLI, projection.Metadata))
+			return 1
+		}
+	}
 	raw, err := marshalSourceImportResult(result)
 	if err != nil {
 		logln(stderr, "connectorgen source-import: encode descriptors:", err)
@@ -9751,6 +9988,14 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 	}
 	existing, readErr := os.ReadFile(opts.Output)
 	if opts.Check {
+		if opts.MaterializeEligibleLanes {
+			if readErr != nil || !bytes.Equal(existing, raw) {
+				logln(stderr, "connectorgen source-import: descriptor or eligible source-lock lane projection has drifted; rerun without --check after source-lock verification")
+				return 1
+			}
+			logln(stdout, fmt.Sprintf("connectorgen source-import: %s, %d operation(s), %d inbound event(s) verified", opts.Connector, len(result.Operations), len(result.InboundEvents)))
+			return 0
+		}
 		projection, projectionErr := projectSourceDescriptorToBundle(filepath.Join(opts.DefsDir, opts.Connector), result, true)
 		if projectionErr != nil {
 			logln(stderr, "connectorgen source-import: check source-derived bundle projection:", projectionErr)
@@ -9766,6 +10011,10 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 	if err := os.WriteFile(opts.Output, raw, 0o644); err != nil {
 		logln(stderr, "connectorgen source-import: write descriptors:", err)
 		return 1
+	}
+	if opts.MaterializeEligibleLanes {
+		logln(stdout, fmt.Sprintf("connectorgen source-import: %s, %d operation(s), %d inbound event(s) imported; eligible source-lock lanes materialized", opts.Connector, len(result.Operations), len(result.InboundEvents)))
+		return 0
 	}
 	projection, err := projectSourceDescriptorToBundle(filepath.Join(opts.DefsDir, opts.Connector), result, false)
 	if err != nil {
@@ -9784,6 +10033,12 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 func runSourceImportReadProjection(opts sourceImportOptions, result sourceImportResult, stdout, stderr io.Writer) int {
 	bundleDir := filepath.Join(opts.DefsDir, opts.Connector)
 	sourceProjectionNormalizeNonBlockingReadGaps(&result)
+	surface, err := sourceProjectionExecutionSurface(bundleDir, opts.Connector)
+	if err != nil {
+		logln(stderr, "connectorgen source-import: load declaration-owned execution surface:", err)
+		return 1
+	}
+	sourceProjectionApplyUnsafeProviderQueryParameterGaps(surface, &result)
 	projectionResult, err := sourceProjectionReadOnlyResult(bundleDir, result)
 	if err != nil {
 		logln(stderr, "connectorgen source-import: select materialized source-bound reads:", err)
@@ -9799,11 +10054,6 @@ func runSourceImportReadProjection(opts sourceImportOptions, result sourceImport
 		return 1
 	}
 
-	surface, err := sourceProjectionExecutionSurface(bundleDir, opts.Connector)
-	if err != nil {
-		logln(stderr, "connectorgen source-import: load declaration-owned execution surface:", err)
-		return 1
-	}
 	sourceProjectionAnnotateUnreachableReadGaps(surface, &result)
 	mutationDispositions, err := sourceProjectionReadNonExecutableMutationDispositions(bundleDir)
 	if err != nil {
@@ -9854,6 +10104,13 @@ func sourceImportLockRequiresRetainedArtifact(lock sourceImportLock) bool {
 	if lock.isLegacySourceReference() {
 		return false
 	}
+	// A retained canonical source contract supplies the complete REST mapping
+	// input itself. Its artifact digest remains a provenance overlay, so a
+	// duplicate local artifact is required only for any separate GraphQL source
+	// that cannot be reconstructed from the REST lock evidence.
+	if sourceImportLockHasCanonicalEvidenceContract(lock) {
+		return len(lock.GraphQL.QueryFields)+len(lock.GraphQL.MutationFields) > 0
+	}
 	if lock.SchemaVersion < 3 {
 		return true
 	}
@@ -9877,6 +10134,8 @@ func parseSourceImportOptions(args []string) (sourceImportOptions, error) {
 			opts.Check = true
 		case "--read-projection-only":
 			opts.ReadProjectionOnly = true
+		case "--materialize-eligible-lanes":
+			opts.MaterializeEligibleLanes = true
 		case "--defs", "--out", "--cache-dir":
 			if i+1 >= len(args) {
 				return sourceImportOptions{}, fmt.Errorf("%s requires a value", arg)
@@ -9902,6 +10161,9 @@ func parseSourceImportOptions(args []string) (sourceImportOptions, error) {
 	}
 	if opts.Connector == "" {
 		return sourceImportOptions{}, fmt.Errorf("a connector name is required")
+	}
+	if opts.ReadProjectionOnly && opts.MaterializeEligibleLanes {
+		return sourceImportOptions{}, fmt.Errorf("--read-projection-only and --materialize-eligible-lanes cannot be combined")
 	}
 	if err := validateSourceImportConnector(opts.Connector); err != nil {
 		return sourceImportOptions{}, err

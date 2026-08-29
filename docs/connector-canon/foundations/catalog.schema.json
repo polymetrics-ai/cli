@@ -331,6 +331,7 @@
         },
         "status": {
           "enum": [
+            "investigating",
             "available",
             "partial",
             "planned",

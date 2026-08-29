@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"reflect"
 	"regexp"
 	"slices"
 	"sort"
@@ -31,6 +32,7 @@ const (
 	operationEvidenceGapConformanceProof      = "conformance_proof"
 	operationEvidenceGapReadOnlyConflict      = "read_only_conflict"
 	operationEvidenceGapSourceImportEvidence  = "source_import_evidence"
+	operationEvidenceGapSourceContract        = "source_contract"
 	operationEvidenceGapCertificationEvidence = "certification_evidence"
 	operationEvidenceGapWebsiteArtifact       = "website_artifact"
 
@@ -143,6 +145,8 @@ type operationEvidenceFoundation struct {
 type operationEvidenceGap struct {
 	Kind       string `json:"kind"`
 	Foundation string `json:"foundation,omitempty"`
+	Phase      string `json:"phase,omitempty"`
+	Location   string `json:"location,omitempty"`
 	Evidence   string `json:"evidence"`
 }
 
@@ -398,6 +402,16 @@ func buildOperationEvidenceForConnectors(root string, selectedConnectors []strin
 		if err != nil {
 			return operationEvidenceArtifact{}, err
 		}
+		if input.CanonicalEvidence {
+			descriptorPath := filepath.Join(defsRoot, connector, "sources", connector+"-operation-descriptor.json")
+			runtimeGaps, err := readOperationEvidenceDescriptorRuntimeGaps(descriptorPath)
+			if err != nil {
+				return operationEvidenceArtifact{}, fmt.Errorf("read source descriptor for %q: %w", connector, err)
+			}
+			if err := operationEvidenceAttachDescriptorRuntimeGaps(&input, runtimeGaps); err != nil {
+				return operationEvidenceArtifact{}, fmt.Errorf("reconcile source descriptor for %q: %w", connector, err)
+			}
+		}
 		if input.Absence == nil {
 			operationEvidenceApplySourceImportEvidenceFailure(&input, defsRoot)
 		}
@@ -416,7 +430,7 @@ func buildOperationEvidenceForConnectors(root string, selectedConnectors []strin
 		for _, source := range input.Operations {
 			identity := connector + "\x00" + source.ID
 			if previous, found := seenSources[identity]; found {
-				if previous != source {
+				if !reflect.DeepEqual(previous, source) {
 					return operationEvidenceArtifact{}, fmt.Errorf("source lock for %q repeats source operation %q with conflicting evidence", connector, source.ID)
 				}
 				continue
@@ -514,10 +528,11 @@ func readOperationEvidenceProvenance(root string) (operationEvidenceProvenance, 
 }
 
 type operationEvidenceSourceInput struct {
-	Connector  string
-	LockPath   string
-	Operations []operationEvidenceSourceOperation
-	Absence    *operationEvidenceAbsence
+	Connector         string
+	LockPath          string
+	Operations        []operationEvidenceSourceOperation
+	Absence           *operationEvidenceAbsence
+	CanonicalEvidence bool
 }
 
 type operationEvidenceSourceOperation struct {
@@ -525,9 +540,62 @@ type operationEvidenceSourceOperation struct {
 	Protocol                  string
 	Method                    string
 	Path                      string
+	MappingPath               string
 	Trace                     operationEvidenceSourceTrace
 	SourceContractUnavailable bool
 	SourceImportEvidence      string
+	RuntimeGaps               []sourceContractGap
+}
+
+// readOperationEvidenceDescriptorRuntimeGaps retains operation-local source
+// gaps in the evidence artifact without making the descriptor an admission
+// input. A missing descriptor is normal for pre-projection connectors. Older
+// connector descriptors may contain a broader historical inventory, so only
+// source IDs in the current lock denominator are eligible for attachment.
+func readOperationEvidenceDescriptorRuntimeGaps(path string) (map[string][]sourceContractGap, error) {
+	raw, err := os.ReadFile(path)
+	if errors.Is(err, os.ErrNotExist) {
+		return map[string][]sourceContractGap{}, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	var descriptor sourceImportDescriptorDocument
+	if err := decodeSourceStrictJSON(raw, &descriptor); err != nil {
+		return nil, fmt.Errorf("parse descriptor: %w", err)
+	}
+	if descriptor.SchemaVersion != 2 && descriptor.SchemaVersion != 3 {
+		return nil, fmt.Errorf("unsupported descriptor schema_version %d", descriptor.SchemaVersion)
+	}
+	values := make(map[string][]sourceContractGap, len(descriptor.Operations))
+	for _, operation := range descriptor.Operations {
+		if operation.SourceID == "" {
+			return nil, errors.New("descriptor operation has no source_id")
+		}
+		if _, duplicate := values[operation.SourceID]; duplicate {
+			return nil, fmt.Errorf("descriptor repeats source operation %q", operation.SourceID)
+		}
+		values[operation.SourceID] = append([]sourceContractGap(nil), operation.Runtime.Gaps...)
+	}
+	return values, nil
+}
+
+func operationEvidenceAttachDescriptorRuntimeGaps(input *operationEvidenceSourceInput, runtimeGaps map[string][]sourceContractGap) error {
+	if input == nil || len(runtimeGaps) == 0 {
+		return nil
+	}
+	indexes := make(map[string]int, len(input.Operations))
+	for index, operation := range input.Operations {
+		indexes[operation.ID] = index
+	}
+	for sourceID, gaps := range runtimeGaps {
+		index, found := indexes[sourceID]
+		if !found {
+			continue
+		}
+		input.Operations[index].RuntimeGaps = append([]sourceContractGap(nil), gaps...)
+	}
+	return nil
 }
 
 type operationEvidenceRawLock struct {
@@ -544,11 +612,13 @@ type operationEvidenceRawLock struct {
 		Detail string `json:"detail"`
 	} `json:"dynamic"`
 	Rest struct {
-		SourceURL   string `json:"source_url"`
-		SHA256      string `json:"sha256"`
-		Bytes       int64  `json:"bytes"`
-		SourceKind  string `json:"source_kind"`
-		Supplements []struct {
+		SourceURL         string                  `json:"source_url"`
+		SHA256            string                  `json:"sha256"`
+		Bytes             int64                   `json:"bytes"`
+		SourceKind        string                  `json:"source_kind"`
+		PathBridge        *sourceImportPathBridge `json:"path_bridge"`
+		CanonicalEvidence bool                    `json:"canonical_evidence"`
+		Supplements       []struct {
 			SourceURL string `json:"source_url"`
 			SHA256    string `json:"sha256"`
 			Bytes     int64  `json:"bytes"`
@@ -607,7 +677,11 @@ func readOperationEvidenceSourceLock(path, connector string) (operationEvidenceS
 	if lock.Connector != connector {
 		return operationEvidenceSourceInput{}, fmt.Errorf("source lock connector %q does not match directory %q", lock.Connector, connector)
 	}
-	input := operationEvidenceSourceInput{Connector: connector, LockPath: filepath.ToSlash(filepath.Join("sources", filepath.Base(path)))}
+	input := operationEvidenceSourceInput{
+		Connector:         connector,
+		LockPath:          filepath.ToSlash(filepath.Join("sources", filepath.Base(path))),
+		CanonicalEvidence: lock.Rest.CanonicalEvidence,
+	}
 	// Validate the v2 wire before any provider-absence projection. Otherwise a
 	// skipped or dynamic state could suppress the presence check and let a
 	// reference-only field (including source_kind:null) hide in a byte-backed
@@ -646,6 +720,13 @@ func readOperationEvidenceSourceLock(path, connector string) (operationEvidenceS
 		strictLock, err := parseSourceImportLock(raw, connector)
 		if err != nil {
 			return operationEvidenceSourceInput{}, fmt.Errorf("parse source lock for %q through source-import schema: %w", connector, err)
+		}
+		return operationEvidenceSourceInputFromImportLock(input, strictLock)
+	}
+	if lock.Rest.PathBridge != nil {
+		strictLock, err := parseSourceImportLock(raw, connector)
+		if err != nil {
+			return operationEvidenceSourceInput{}, fmt.Errorf("parse source lock for %q through source-import path bridge: %w", connector, err)
 		}
 		return operationEvidenceSourceInputFromImportLock(input, strictLock)
 	}
@@ -734,7 +815,9 @@ func operationEvidenceSourceInputFromLegacyLock(input operationEvidenceSourceInp
 func operationEvidenceSourceInputFromImportLock(input operationEvidenceSourceInput, lock sourceImportLock) (operationEvidenceSourceInput, error) {
 	if lock.SchemaVersion == 3 {
 		for _, document := range lock.Rest.SourceDocuments {
-			operationEvidenceAppendRESTOperations(&input, document.Operations, document.sourceArtifact(), document.isSourceReference())
+			if err := operationEvidenceAppendRESTOperations(&input, document.Operations, document.sourceArtifact(), document.isSourceReference(), nil); err != nil {
+				return operationEvidenceSourceInput{}, err
+			}
 		}
 	} else if lock.isLegacySourceReference() {
 		artifacts, err := sourceImportLegacyReferenceArtifacts(lock)
@@ -746,10 +829,14 @@ func operationEvidenceSourceInputFromImportLock(input operationEvidenceSourceInp
 			if !found {
 				return operationEvidenceSourceInput{}, fmt.Errorf("source-reference operation %q cites an undeclared source URL", operation.ID)
 			}
-			operationEvidenceAppendRESTOperations(&input, []sourceImportRESTOperation{operation}, artifact, true)
+			if err := operationEvidenceAppendRESTOperations(&input, []sourceImportRESTOperation{operation}, artifact, true, nil); err != nil {
+				return operationEvidenceSourceInput{}, err
+			}
 		}
 	} else {
-		operationEvidenceAppendRESTOperations(&input, lock.Rest.Operations, lock.Rest.sourceImportArtifact, false)
+		if err := operationEvidenceAppendRESTOperations(&input, lock.Rest.Operations, lock.Rest.sourceImportArtifact, false, lock.Rest.PathBridge); err != nil {
+			return operationEvidenceSourceInput{}, err
+		}
 	}
 	graphqlSHA := firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)
 	graphqlBytes := lock.GraphQL.ProjectionBytes
@@ -768,13 +855,22 @@ func operationEvidenceSourceInputFromImportLock(input operationEvidenceSourceInp
 	return input, nil
 }
 
-func operationEvidenceAppendRESTOperations(input *operationEvidenceSourceInput, operations []sourceImportRESTOperation, artifact sourceImportArtifact, sourceContractUnavailable bool) {
+func operationEvidenceAppendRESTOperations(input *operationEvidenceSourceInput, operations []sourceImportRESTOperation, artifact sourceImportArtifact, sourceContractUnavailable bool, bridge *sourceImportPathBridge) error {
 	for _, operation := range operations {
+		mappingPath := ""
+		if bridge != nil {
+			mapped, err := sourceImportBridgePathForOperation(*bridge, operation.Path)
+			if err != nil {
+				return fmt.Errorf("source operation %q: %w", operation.ID, err)
+			}
+			mappingPath = mapped
+		}
 		input.Operations = append(input.Operations, operationEvidenceSourceOperation{
-			ID:       operation.ID,
-			Protocol: firstNonEmpty(operation.Protocol, "rest"),
-			Method:   strings.ToUpper(operation.Method),
-			Path:     operation.Path,
+			ID:          operation.ID,
+			Protocol:    firstNonEmpty(operation.Protocol, "rest"),
+			Method:      strings.ToUpper(operation.Method),
+			Path:        operation.Path,
+			MappingPath: mappingPath,
 			Trace: operationEvidenceSourceTrace{
 				Lock:     input.LockPath,
 				URL:      artifact.SourceURL,
@@ -785,6 +881,7 @@ func operationEvidenceAppendRESTOperations(input *operationEvidenceSourceInput, 
 			SourceContractUnavailable: sourceContractUnavailable,
 		})
 	}
+	return nil
 }
 
 type operationEvidenceCrosswalk struct {
@@ -964,6 +1061,7 @@ func projectOperationEvidenceRow(root, connector string, source operationEvidenc
 	if source.SourceImportEvidence != "" {
 		row.addFoundationGap(operationEvidenceGapSourceImportEvidence, operationEvidenceFoundationSourceRetention, source.SourceImportEvidence)
 	}
+	row.addSourceContractGaps(source.RuntimeGaps)
 	var endpoint *engine.SurfaceEndpoint
 	if loadErr == nil {
 		endpoint = operationEvidenceSurfaceEndpoint(bundle, source)
@@ -1056,9 +1154,25 @@ func (row *operationEvidenceRow) addFoundationGap(kind, foundation, evidence str
 	row.addEvidenceGap(operationEvidenceGap{Kind: kind, Foundation: foundation, Evidence: evidence})
 }
 
+func (row *operationEvidenceRow) addSourceContractGaps(gaps []sourceContractGap) {
+	for _, gap := range gaps {
+		if gap.Foundation == "" || gap.Location == "" || gap.Reason == "" {
+			row.addGap(operationEvidenceGapSourceContract, "source descriptor has an incomplete operation-local runtime gap")
+			continue
+		}
+		row.addEvidenceGap(operationEvidenceGap{
+			Kind:       operationEvidenceGapSourceContract,
+			Foundation: gap.Foundation,
+			Phase:      gap.Phase,
+			Location:   gap.Location,
+			Evidence:   gap.Reason,
+		})
+	}
+}
+
 func (row *operationEvidenceRow) addEvidenceGap(candidate operationEvidenceGap) {
 	for _, gap := range row.Gaps {
-		if gap.Kind == candidate.Kind && gap.Foundation == candidate.Foundation && gap.Evidence == candidate.Evidence {
+		if gap.Kind == candidate.Kind && gap.Foundation == candidate.Foundation && gap.Phase == candidate.Phase && gap.Location == candidate.Location && gap.Evidence == candidate.Evidence {
 			return
 		}
 	}
@@ -1079,6 +1193,15 @@ func (row operationEvidenceRow) finalize() operationEvidenceRow {
 		if row.Gaps[i].Kind != row.Gaps[j].Kind {
 			return row.Gaps[i].Kind < row.Gaps[j].Kind
 		}
+		if row.Gaps[i].Foundation != row.Gaps[j].Foundation {
+			return row.Gaps[i].Foundation < row.Gaps[j].Foundation
+		}
+		if row.Gaps[i].Phase != row.Gaps[j].Phase {
+			return row.Gaps[i].Phase < row.Gaps[j].Phase
+		}
+		if row.Gaps[i].Location != row.Gaps[j].Location {
+			return row.Gaps[i].Location < row.Gaps[j].Location
+		}
 		return row.Gaps[i].Evidence < row.Gaps[j].Evidence
 	})
 	return row
@@ -1090,7 +1213,11 @@ func operationEvidenceSurfaceEndpoint(bundle engine.Bundle, source operationEvid
 	}
 	for index := range bundle.Surface.Endpoints {
 		endpoint := &bundle.Surface.Endpoints[index]
-		if strings.EqualFold(endpoint.Method, source.Method) && endpoint.Path == source.Path {
+		path := source.Path
+		if source.MappingPath != "" {
+			path = source.MappingPath
+		}
+		if strings.EqualFold(endpoint.Method, source.Method) && endpoint.Path == path {
 			return endpoint
 		}
 	}
@@ -1140,13 +1267,21 @@ func operationEvidenceOperationMatchesSource(operation engine.OperationSpec, sou
 	if source.Protocol == "graphql" {
 		return operationEvidenceGraphQLSourceField(source.ID) == operationEvidenceGraphQLRootFieldForOperation(operation)
 	}
-	if operation.REST != nil && strings.EqualFold(operation.REST.Method, source.Method) && operation.REST.Path == source.Path {
+	path := operationEvidenceDeclaredPath(source)
+	if operation.REST != nil && strings.EqualFold(operation.REST.Method, source.Method) && operation.REST.Path == path {
 		return true
 	}
-	if operation.Binary != nil && strings.EqualFold(operation.Binary.Method, source.Method) && operation.Binary.Path == source.Path {
+	if operation.Binary != nil && strings.EqualFold(operation.Binary.Method, source.Method) && operation.Binary.Path == path {
 		return true
 	}
 	return false
+}
+
+func operationEvidenceDeclaredPath(source operationEvidenceSourceOperation) string {
+	if source.MappingPath != "" {
+		return source.MappingPath
+	}
+	return source.Path
 }
 
 func operationEvidenceMatchingCommands(bundle engine.Bundle, source operationEvidenceSourceOperation, endpoint *engine.SurfaceEndpoint, targets operationEvidenceTargets) []engine.CLICommand {
@@ -1177,7 +1312,7 @@ func operationEvidenceCommandMatches(command engine.CLICommand, source operation
 		return false
 	}
 	for _, reference := range command.APISurface {
-		if strings.EqualFold(reference.Method, source.Method) && reference.Path == source.Path {
+		if strings.EqualFold(reference.Method, source.Method) && reference.Path == operationEvidenceDeclaredPath(source) {
 			return true
 		}
 	}
@@ -1208,7 +1343,7 @@ func operationEvidenceMatchingWebsiteCommands(website operationEvidenceWebsiteRo
 			continue
 		}
 		for _, reference := range command.APISurface {
-			if strings.EqualFold(reference.Method, source.Method) && reference.Path == source.Path {
+			if strings.EqualFold(reference.Method, source.Method) && reference.Path == operationEvidenceDeclaredPath(source) {
 				matched = append(matched, command)
 				break
 			}

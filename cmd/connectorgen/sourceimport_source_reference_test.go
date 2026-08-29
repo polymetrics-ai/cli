@@ -8,9 +8,11 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strconv"
 	"strings"
 	"testing"
@@ -26,6 +28,112 @@ const (
 	outreachCustomSHA256        = "2e74714a933b74cb9a83ddbdb18eeb0b9d045115102ed7465021a45db19e3dda"
 	outreachReferenceLockSHA256 = "f733248bfd484625b8f2bae3490b3211f7e158ab375d3c8de5ede83b1f369f89"
 )
+
+// TestSourceImportGitLabCanonicalEvidenceProjectsLockedInventoryWithoutFetcher
+// proves that a structurally sufficient retained source lock is canonical
+// mapping evidence. The source hash remains provenance, but an absent duplicate
+// raw artifact must not discard the locked provider operation inventory or cause
+// the importer to fetch a provider URL.
+func TestSourceImportGitLabCanonicalEvidenceProjectsLockedInventoryWithoutFetcher(t *testing.T) {
+	t.Parallel()
+	raw, err := os.ReadFile("../../internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json")
+	if err != nil {
+		t.Fatalf("read GitLab source lock: %v", err)
+	}
+	lock, err := parseSourceImportLock(raw, "gitlab")
+	if err != nil {
+		t.Fatalf("parse GitLab source lock: %v", err)
+	}
+	called := false
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		called = true
+		return nil, fmt.Errorf("canonical-evidence import must not fetch a provider source")
+	}), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import GitLab canonical evidence: %v", err)
+	}
+	if called {
+		t.Fatal("GitLab canonical-evidence import fetched a provider source")
+	}
+	if result.DescriptorSchemaVersion != 2 || len(result.Operations) != 1752 {
+		t.Fatalf("GitLab canonical descriptor = version %d operations %d, want version 2 and 1752", result.DescriptorSchemaVersion, len(result.Operations))
+	}
+	methods := map[string]int{}
+	for _, operation := range result.Operations {
+		methods[strings.ToUpper(operation.Method)]++
+		if operation.Connector != "gitlab" || operation.Source.URL != lock.Rest.SourceURL || operation.Source.Location == "" || operation.SourceID == "" {
+			t.Fatalf("GitLab canonical descriptor has incomplete locked provenance: %#v", operation)
+		}
+	}
+	wantMethods := map[string]int{"GET": 746, "POST": 435, "PUT": 329, "DELETE": 212, "PATCH": 27, "HEAD": 3}
+	if !reflect.DeepEqual(methods, wantMethods) {
+		t.Fatalf("GitLab canonical descriptor methods = %#v, want %#v", methods, wantMethods)
+	}
+	executionSurface, err := sourceProjectionExecutionSurface("../../internal/connectors/defs/gitlab", "gitlab")
+	if err != nil {
+		t.Fatalf("load GitLab declaration-owned execution surface: %v", err)
+	}
+	wantETL := map[string]string{
+		"getApiV4Projects": "/projects",
+		"getApiV4Groups":   "/groups",
+		"getApiV4Users":    "/users",
+		"getApiV4Issues":   "/issues",
+	}
+	for _, operation := range result.Operations {
+		mappingPath, selected := wantETL[operation.SourceID]
+		if !selected {
+			continue
+		}
+		if operation.Path == operation.MappingPath || operation.MappingPath != mappingPath {
+			t.Fatalf("GitLab source operation %q path bridge = source %q mapping %q, want retained source route and %q", operation.SourceID, operation.Path, operation.MappingPath, mappingPath)
+		}
+		if !sourceRESTOperationIsDeclaredReachable(executionSurface, operation, false) {
+			t.Fatalf("GitLab source operation %q did not reach its existing declared ETL lane", operation.SourceID)
+		}
+	}
+	encoded, err := marshalSourceImportResult(result)
+	if err != nil {
+		t.Fatalf("marshal GitLab canonical descriptor: %v", err)
+	}
+	var descriptor sourceImportDescriptorDocument
+	if err := decodeSourceStrictJSON(encoded, &descriptor); err != nil {
+		t.Fatalf("decode GitLab canonical descriptor: %v", err)
+	}
+	reviewed, err := parseDeclarationAdmissionSourceLock(raw, "gitlab")
+	if err != nil {
+		t.Fatalf("review GitLab source lock: %v", err)
+	}
+	if findings := validateSourceDescriptorAgainstMappingLock("gitlab", "sources/gitlab-operation-descriptor.json", reviewed, descriptor); len(findings) != 0 {
+		t.Fatalf("GitLab canonical descriptor mapping findings = %#v", findings)
+	}
+}
+
+// TestSourceImportCanonicalEvidenceRejectsInsufficientContract makes the
+// source-contract path fail closed: a retained provider object is admissible
+// only when it actually reproduces the lock's exact operation inventory.
+func TestSourceImportCanonicalEvidenceRejectsInsufficientContract(t *testing.T) {
+	t.Parallel()
+	raw, err := os.ReadFile("../../internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json")
+	if err != nil {
+		t.Fatalf("read GitLab source lock: %v", err)
+	}
+	lock, err := parseSourceImportLock(raw, "gitlab")
+	if err != nil {
+		t.Fatalf("parse GitLab source lock: %v", err)
+	}
+	lock.Rest.Operations[0].SourceOperation = &sourceImportOperationEnrichment{Raw: json.RawMessage(`[]`)}
+	called := false
+	_, err = importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		called = true
+		return nil, fmt.Errorf("insufficient canonical evidence must not fetch a provider source")
+	}), defaultSourceImportLimits())
+	if err == nil {
+		t.Fatal("insufficient canonical evidence imported successfully")
+	}
+	if called {
+		t.Fatal("insufficient canonical evidence fetched a provider source")
+	}
+}
 
 // outreachReferenceLockCompressed is gzip+base64 of the exact 100124-byte
 // Outreach lock from candidate commit

@@ -313,6 +313,7 @@ type declarationAdmissionReviewedOperation struct {
 	ProviderOperationID string
 	Method              string
 	Path                string
+	MappingPath         string
 	SourceReference     bool
 }
 
@@ -358,12 +359,14 @@ type declarationAdmissionSourceArtifactWire struct {
 
 type declarationAdmissionLegacyRESTWire struct {
 	declarationAdmissionSourceArtifactWire
-	Commit          json.RawMessage                          `json:"commit,omitempty"`
-	InfoVersion     json.RawMessage                          `json:"info_version,omitempty"`
-	SourceKind      string                                   `json:"source_kind,omitempty"`
-	OperationCounts json.RawMessage                          `json:"operation_counts,omitempty"`
-	Supplements     []declarationAdmissionRESTSupplementWire `json:"supplements,omitempty"`
-	Operations      []declarationAdmissionRESTOperationWire  `json:"operations,omitempty"`
+	Commit            json.RawMessage                          `json:"commit,omitempty"`
+	InfoVersion       json.RawMessage                          `json:"info_version,omitempty"`
+	SourceKind        string                                   `json:"source_kind,omitempty"`
+	OperationCounts   json.RawMessage                          `json:"operation_counts,omitempty"`
+	Supplements       []declarationAdmissionRESTSupplementWire `json:"supplements,omitempty"`
+	Operations        []declarationAdmissionRESTOperationWire  `json:"operations,omitempty"`
+	PathBridge        *sourceImportPathBridge                  `json:"path_bridge,omitempty"`
+	CanonicalEvidence bool                                     `json:"canonical_evidence,omitempty"`
 }
 
 type declarationAdmissionRESTSupplementWire struct {
@@ -507,9 +510,11 @@ type declarationAdmissionMappingLegacyReferenceRESTOperationWire struct {
 
 type declarationAdmissionMappingLegacyOrdinaryRESTWire struct {
 	declarationAdmissionSourceArtifactWire
-	Commit      json.RawMessage                                              `json:"commit,omitempty"`
-	InfoVersion json.RawMessage                                              `json:"info_version,omitempty"`
-	Operations  []declarationAdmissionMappingLegacyOrdinaryRESTOperationWire `json:"operations,omitempty"`
+	Commit            json.RawMessage                                              `json:"commit,omitempty"`
+	InfoVersion       json.RawMessage                                              `json:"info_version,omitempty"`
+	Operations        []declarationAdmissionMappingLegacyOrdinaryRESTOperationWire `json:"operations,omitempty"`
+	PathBridge        *sourceImportPathBridge                                      `json:"path_bridge,omitempty"`
+	CanonicalEvidence bool                                                         `json:"canonical_evidence,omitempty"`
 }
 
 type declarationAdmissionMappingLegacyReferenceRESTWire struct {
@@ -837,6 +842,9 @@ func parseDeclarationAdmissionSourceLock(raw []byte, expectedConnector string) (
 				return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock has invalid REST source URL: %w", err)
 			}
 		}
+		if err := validateSourceImportPathBridge(rest.PathBridge); err != nil {
+			return declarationAdmissionReviewedSourceLock{}, err
+		}
 		referenceSources := map[string]struct{}{}
 		if rest.SourceKind != "" {
 			if wire.SchemaVersion != 2 {
@@ -896,10 +904,19 @@ func parseDeclarationAdmissionSourceLock(raw []byte, expectedConnector string) (
 			} else if operation.SourceURL != "" {
 				return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock REST operation %q declares a reference-only source URL", operation.ID)
 			}
+			mappingPath := ""
+			if rest.PathBridge != nil {
+				mapped, err := sourceImportBridgePathForOperation(*rest.PathBridge, operation.Path)
+				if err != nil {
+					return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock REST operation %q: %w", operation.ID, err)
+				}
+				mappingPath = mapped
+			}
 			restCount++
 			if err := addOperation(operation.ID, declarationAdmissionReviewedOperation{
 				Protocol: operation.Protocol, SourceURL: sourceURL, Location: operation.SourceLocation,
 				ProviderOperationID: operation.OperationID, Method: operation.Method, Path: operation.Path,
+				MappingPath:     mappingPath,
 				SourceReference: sourceReference,
 			}); err != nil {
 				return declarationAdmissionReviewedSourceLock{}, err

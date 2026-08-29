@@ -63961,7 +63961,7 @@
   {
     "name": "gitlab",
     "display_name": "GitLab",
-    "description": "Reads GitLab projects, groups, users, and issues through existing GitLab REST API v4 ETL streams; its provider-owned ledger records the full published surface, but G1 declares no write command.",
+    "description": "Runs 582 source-bound direct reads, four GitLab REST ETL streams, and 147 approval-gated reverse-ETL actions; its 1,752-row provider ledger retains a cited named-foundation outcome for every remaining source operation.",
     "integration_type": "api",
     "docs_url": "https://docs.gitlab.com/ee/api/rest/",
     "release_stage": "ga",
@@ -63969,7 +63969,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -64057,10 +64057,1188 @@
         ]
       }
     ],
+    "write_actions": [
+      {
+        "name": "source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/admin/ci/variables/{{ record.key }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f61646d696e2f636c7573746572732f7b636c75737465725f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/admin/clusters/{{ record.cluster_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f61646d696e2f7a6f656b742f7368617264732f7b6e6f64655f69647d2f696e64657865645f6e616d657370616365732f7b6e616d6573706163655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/admin/zoekt/shards/{{ record.node_id }}/indexed_namespaces/{{ record.namespace_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f61646d696e5f6d656d6265725f726f6c65732f7b6d656d6265725f726f6c655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/admin_member_roles/{{ record.member_role_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f61692f64756f5f776f726b666c6f77732f666c6f775f63616c6c6261636b732f7b69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/ai/duo_workflows/flow_callbacks/{{ record.id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f6170706c69636174696f6e732f7b69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/applications/{{ record.id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f62726f6164636173745f6d657373616765732f7b69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/broadcast_messages/{{ record.id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f6578706572696d656e74732f7b6e616d657d2f6361636865",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/experiments/{{ record.name }}/cache",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f66656174757265732f7b6e616d657d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/features/{{ record.name }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67656f5f6e6f6465732f7b69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/geo_nodes/{{ record.id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67656f5f73697465732f7b69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/geo_sites/{{ record.id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f282d2f2965706963732f7b657069635f6969647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/(-/)epics/{{ record.epic_iid }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f282d2f2965706963732f7b657069635f6969647d2f65706963732f7b6368696c645f657069635f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/(-/)epics/{{ record.epic_iid }}/epics/{{ record.child_epic_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f6163636573735f72657175657374732f7b757365725f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/access_requests/{{ record.user_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f6163636573735f746f6b656e732f7b746f6b656e5f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/access_tokens/{{ record.token_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f6261646765732f7b62616467655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/badges/{{ record.badge_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f62696c6c61626c655f6d656d626572732f7b757365725f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/billable_members/{{ record.user_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f626f617264732f7b626f6172645f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/boards/{{ record.board_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f626f617264732f7b626f6172645f69647d2f6c697374732f7b6c6973745f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/boards/{{ record.board_id }}/lists/{{ record.list_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f636c7573746572732f7b636c75737465725f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/clusters/{{ record.cluster_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f65706963732f7b657069635f6969647d2f72656c617465645f65706963732f7b72656c617465645f657069635f6c696e6b5f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/epics/{{ record.epic_iid }}/related_epics/{{ record.related_epic_link_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f65706963732f7b6e6f746561626c655f69647d2f64697363757373696f6e732f7b64697363757373696f6e5f69647d2f6e6f7465732f7b6e6f74655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/epics/{{ record.noteable_id }}/discussions/{{ record.discussion_id }}/notes/{{ record.note_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f65706963732f7b6e6f746561626c655f69647d2f6e6f7465732f7b6e6f74655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/epics/{{ record.noteable_id }}/notes/{{ record.note_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f696e7669746174696f6e732f7b656d61696c7d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/invitations/{{ record.email }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f6c6162656c732f7b6e616d657d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/labels/{{ record.name }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f6d616e6167652f706572736f6e616c5f6163636573735f746f6b656e732f7b7061745f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/manage/personal_access_tokens/{{ record.pat_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f6d656d626572732f7b757365725f69647d2f6f76657272696465",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/members/{{ record.user_id }}/override",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f6d696c6573746f6e65732f7b6d696c6573746f6e655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/milestones/{{ record.milestone_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f70726f7465637465645f6272616e636865732f7b6e616d657d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/protected_branches/{{ record.name }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f707573685f72756c65",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/push_rule",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f73616d6c2f7b7569647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/saml/{{ record.uid }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f7363696d2f7b7569647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/scim/{{ record.uid }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f73686172652f7b67726f75705f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/share/{{ record.group_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f7368617265645f70726f6a656374732f7b70726f6a6563745f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/shared_projects/{{ record.project_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f7661726961626c65732f7b6b65797d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/variables/{{ record.key }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f67726f7570732f7b69647d2f77696b695f70616765732f7b6e6f746561626c655f69647d2f6e6f7465732f7b6e6f74655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/groups/{{ record.id }}/wiki_pages/{{ record.noteable_id }}/notes/{{ record.note_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f686f6f6b732f7b686f6f6b5f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/hooks/{{ record.hook_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f686f6f6b732f7b686f6f6b5f69647d2f637573746f6d5f686561646572732f7b6b65797d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/hooks/{{ record.hook_id }}/custom_headers/{{ record.key }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f686f6f6b732f7b686f6f6b5f69647d2f75726c5f7661726961626c65732f7b6b65797d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/hooks/{{ record.hook_id }}/url_variables/{{ record.key }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f696e746567726174696f6e732f6a6972615f666f7267652f737562736372697074696f6e732f7b69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/integrations/jira_forge/subscriptions/{{ record.id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f6c6963656e73652f7b69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/license/{{ record.id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f6d656d6265725f726f6c65732f7b6d656d6265725f726f6c655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/member_roles/{{ record.member_role_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f6f7267616e697a6174696f6e732f7b69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/organizations/{{ record.id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/packages/conan/v1/conans/{{ record.package_name }}/{{ record.package_version }}/{{ record.package_username }}/{{ record.package_channel }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f706572736f6e616c5f6163636573735f746f6b656e732f7b69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/personal_access_tokens/{{ record.id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f70726f6a6563745f616c69617365732f7b6e616d657d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/project_aliases/{{ record.name }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f70726f6a656374732f7b69647d2f6163636573735f72657175657374732f7b757365725f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.id }}/access_requests/{{ record.user_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f70726f6a656374732f7b69647d2f6163636573735f746f6b656e732f7b746f6b656e5f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.id }}/access_tokens/{{ record.token_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f70726f6a656374732f7b69647d2f6261646765732f7b62616467655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.id }}/badges/{{ record.badge_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f70726f6a656374732f7b69647d2f696e7669746174696f6e732f7b656d61696c7d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.id }}/invitations/{{ record.email }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f70726f6a656374732f7b69647d2f6973737565732f7b6e6f746561626c655f69647d2f64697363757373696f6e732f7b64697363757373696f6e5f69647d2f6e6f7465732f7b6e6f74655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.id }}/issues/{{ record.noteable_id }}/discussions/{{ record.discussion_id }}/notes/{{ record.note_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f70726f6a656374732f7b69647d2f6973737565732f7b6e6f746561626c655f69647d2f6e6f7465732f7b6e6f74655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.id }}/issues/{{ record.noteable_id }}/notes/{{ record.note_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f70726f6a656374732f7b69647d2f6a6f625f746f6b656e5f73636f70652f616c6c6f776c6973742f7b7461726765745f70726f6a6563745f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.id }}/job_token_scope/allowlist/{{ record.target_project_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f70726f6a656374732f7b69647d2f6a6f625f746f6b656e5f73636f70652f67726f7570735f616c6c6f776c6973742f7b7461726765745f67726f75705f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.id }}/job_token_scope/groups_allowlist/{{ record.target_group_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f70726f6a656374732f7b69647d2f6d657267655f72657175657374732f7b6d657267655f726571756573745f6969647d2f64726166745f6e6f7465732f7b64726166745f6e6f74655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.id }}/merge_requests/{{ record.merge_request_iid }}/draft_notes/{{ record.draft_note_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f70726f6a656374732f7b69647d2f6d657267655f72657175657374732f7b6e6f746561626c655f69647d2f64697363757373696f6e732f7b64697363757373696f6e5f69647d2f6e6f7465732f7b6e6f74655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.id }}/merge_requests/{{ record.noteable_id }}/discussions/{{ record.discussion_id }}/notes/{{ record.note_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f70726f6a656374732f7b69647d2f6d657267655f72657175657374732f7b6e6f746561626c655f69647d2f6e6f7465732f7b6e6f74655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.id }}/merge_requests/{{ record.noteable_id }}/notes/{{ record.note_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f70726f6a656374732f7b69647d2f706970656c696e65732f7b706970656c696e655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.id }}/pipelines/{{ record.pipeline_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f70726f6a656374732f7b69647d2f7265706f7369746f72792f636f6d6d6974732f7b6e6f746561626c655f69647d2f64697363757373696f6e732f7b64697363757373696f6e5f69647d2f6e6f7465732f7b6e6f74655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.id }}/repository/commits/{{ record.noteable_id }}/discussions/{{ record.discussion_id }}/notes/{{ record.note_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f70726f6a656374732f7b69647d2f736e6970706574732f7b6e6f746561626c655f69647d2f64697363757373696f6e732f7b64697363757373696f6e5f69647d2f6e6f7465732f7b6e6f74655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.id }}/snippets/{{ record.noteable_id }}/discussions/{{ record.discussion_id }}/notes/{{ record.note_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f70726f6a656374732f7b69647d2f736e6970706574732f7b6e6f746561626c655f69647d2f6e6f7465732f7b6e6f74655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.id }}/snippets/{{ record.noteable_id }}/notes/{{ record.note_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f70726f6a656374732f7b69647d2f76756c6e65726162696c69746965732f7b6e6f746561626c655f69647d2f6e6f7465732f7b6e6f74655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.id }}/vulnerabilities/{{ record.noteable_id }}/notes/{{ record.note_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f70726f6a656374732f7b69647d2f77696b695f70616765732f7b6e6f746561626c655f69647d2f6e6f7465732f7b6e6f74655f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.id }}/wiki_pages/{{ record.noteable_id }}/notes/{{ record.note_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f72756e6e65725f636f6e74726f6c6c6572732f7b69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/runner_controllers/{{ record.id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f72756e6e65725f636f6e74726f6c6c6572732f7b69647d2f73636f7065732f696e7374616e6365",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/runner_controllers/{{ record.id }}/scopes/instance",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f72756e6e65725f636f6e74726f6c6c6572732f7b69647d2f73636f7065732f72756e6e6572732f7b72756e6e65725f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/runner_controllers/{{ record.id }}/scopes/runners/{{ record.runner_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f72756e6e65725f636f6e74726f6c6c6572732f7b72756e6e65725f636f6e74726f6c6c65725f69647d2f746f6b656e732f7b69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/runner_controllers/{{ record.runner_controller_id }}/tokens/{{ record.id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f72756e6e6572732f7b69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/runners/{{ record.id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f736e6970706574732f7b69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/snippets/{{ record.id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f746f706963732f7b69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/topics/{{ record.id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f757365722f6170706c69636174696f6e732f7b69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/applications/{{ record.id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f757365722f656d61696c732f7b656d61696c5f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/emails/{{ record.email_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f757365722f6770675f6b6579732f7b6b65795f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/gpg_keys/{{ record.key_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f757365722f6b6579732f7b6b65795f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/keys/{{ record.key_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f75736572732f7b69647d2f656d61696c732f7b656d61696c5f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/{{ record.id }}/emails/{{ record.email_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f75736572732f7b69647d2f6770675f6b6579732f7b6b65795f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/{{ record.id }}/gpg_keys/{{ record.key_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f75736572732f7b69647d2f6964656e7469746965732f7b70726f76696465727d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/{{ record.id }}/identities/{{ record.provider }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f75736572732f7b69647d2f6b6579732f7b6b65795f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/{{ record.id }}/keys/{{ record.key_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f75736572732f7b757365725f69647d2f696d706572736f6e6174696f6e5f746f6b656e732f7b696d706572736f6e6174696f6e5f746f6b656e5f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/{{ record.user_id }}/impersonation_tokens/{{ record.impersonation_token_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f7673636f64652f73657474696e67735f73796e632f7b73657474696e67735f636f6e746578745f686173687d2f76312f636f6c6c656374696f6e",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/vscode/settings_sync/{{ record.settings_context_hash }}/v1/collection",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_44454c455445202f76756c6e65726162696c69746965732f7b69647d2f69737375655f6c696e6b732f7b69737375655f6c696e6b5f69647d",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/vulnerabilities/{{ record.id }}/issue_links/{{ record.issue_link_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_5041544348202f6e616d657370616365732f7b69647d2f6d696e757465732f6d6f76652f7b7461726765745f69647d",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/namespaces/{{ record.id }}/minutes/move/{{ record.target_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_5041544348202f75736572732f7b69647d2f64697361626c655f74776f5f666163746f72",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/users/{{ record.id }}/disable_two_factor",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f6170706c69636174696f6e732f7b69647d2f72656e65772d736563726574",
+        "kind": "create",
+        "method": "POST",
+        "path": "/applications/{{ record.id }}/renew-secret",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f62756c6b5f696d706f7274732f7b696d706f72745f69647d2f63616e63656c",
+        "kind": "create",
+        "method": "POST",
+        "path": "/bulk_imports/{{ record.import_id }}/cancel",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f67656f2f6e6f64655f70726f78792f7b69647d2f6772617068716c",
+        "kind": "create",
+        "method": "POST",
+        "path": "/geo/node_proxy/{{ record.id }}/graphql",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f67656f5f6e6f6465732f7b69647d2f726570616972",
+        "kind": "create",
+        "method": "POST",
+        "path": "/geo_nodes/{{ record.id }}/repair",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f67656f5f73697465732f7b69647d2f726570616972",
+        "kind": "create",
+        "method": "POST",
+        "path": "/geo_sites/{{ record.id }}/repair",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f67726f7570732f7b69647d2f282d2f2965706963732f7b657069635f6969647d2f65706963732f7b6368696c645f657069635f69647d",
+        "kind": "create",
+        "method": "POST",
+        "path": "/groups/{{ record.id }}/(-/)epics/{{ record.epic_iid }}/epics/{{ record.child_epic_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f67726f7570732f7b69647d2f6163636573735f7265717565737473",
+        "kind": "create",
+        "method": "POST",
+        "path": "/groups/{{ record.id }}/access_requests",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f67726f7570732f7b69647d2f61726368697665",
+        "kind": "create",
+        "method": "POST",
+        "path": "/groups/{{ record.id }}/archive",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f67726f7570732f7b69647d2f65706963732f7b657069635f6969647d2f746f646f",
+        "kind": "create",
+        "method": "POST",
+        "path": "/groups/{{ record.id }}/epics/{{ record.epic_iid }}/todo",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f67726f7570732f7b69647d2f6578706f7274",
+        "kind": "create",
+        "method": "POST",
+        "path": "/groups/{{ record.id }}/export",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f67726f7570732f7b69647d2f6c6162656c732f7b737562736372696261626c655f69647d2f737562736372696265",
+        "kind": "create",
+        "method": "POST",
+        "path": "/groups/{{ record.id }}/labels/{{ record.subscribable_id }}/subscribe",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f67726f7570732f7b69647d2f6c6162656c732f7b737562736372696261626c655f69647d2f756e737562736372696265",
+        "kind": "create",
+        "method": "POST",
+        "path": "/groups/{{ record.id }}/labels/{{ record.subscribable_id }}/unsubscribe",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f67726f7570732f7b69647d2f6d656d626572732f617070726f76655f616c6c",
+        "kind": "create",
+        "method": "POST",
+        "path": "/groups/{{ record.id }}/members/approve_all",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f67726f7570732f7b69647d2f6d656d626572732f7b757365725f69647d2f6f76657272696465",
+        "kind": "create",
+        "method": "POST",
+        "path": "/groups/{{ record.id }}/members/{{ record.user_id }}/override",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f67726f7570732f7b69647d2f706c616365686f6c6465725f726561737369676e6d656e74732f617574686f72697a65",
+        "kind": "create",
+        "method": "POST",
+        "path": "/groups/{{ record.id }}/placeholder_reassignments/authorize",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f67726f7570732f7b69647d2f70726f6a656374732f7b70726f6a6563745f69647d",
+        "kind": "create",
+        "method": "POST",
+        "path": "/groups/{{ record.id }}/projects/{{ record.project_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f67726f7570732f7b69647d2f726573746f7265",
+        "kind": "create",
+        "method": "POST",
+        "path": "/groups/{{ record.id }}/restore",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f67726f7570732f7b69647d2f72756e6e6572732f72657365745f726567697374726174696f6e5f746f6b656e",
+        "kind": "create",
+        "method": "POST",
+        "path": "/groups/{{ record.id }}/runners/reset_registration_token",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f67726f7570732f7b69647d2f756e61726368697665",
+        "kind": "create",
+        "method": "POST",
+        "path": "/groups/{{ record.id }}/unarchive",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f686f6f6b732f7b686f6f6b5f69647d",
+        "kind": "create",
+        "method": "POST",
+        "path": "/hooks/{{ record.hook_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7061636b616765732f7b636f6e616e5f7061636b6167655f7265666572656e63657d2f75706c6f61645f75726c73",
+        "kind": "create",
+        "method": "POST",
+        "path": "/packages/conan/v1/conans/{{ record.package_name }}/{{ record.package_version }}/{{ record.package_username }}/{{ record.package_channel }}/packages/{{ record.conan_package_reference }}/upload_urls",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f75706c6f61645f75726c73",
+        "kind": "create",
+        "method": "POST",
+        "path": "/packages/conan/v1/conans/{{ record.package_name }}/{{ record.package_version }}/{{ record.package_username }}/{{ record.package_channel }}/upload_urls",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f70726f6a656374732f7b69647d2f6163636573735f7265717565737473",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.id }}/access_requests",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f70726f6a656374732f7b69647d2f6973737565732f7b69737375655f6969647d2f746f646f",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.id }}/issues/{{ record.issue_iid }}/todo",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f70726f6a656374732f7b69647d2f6973737565732f7b737562736372696261626c655f69647d2f737562736372696265",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.id }}/issues/{{ record.subscribable_id }}/subscribe",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f70726f6a656374732f7b69647d2f6973737565732f7b737562736372696261626c655f69647d2f756e737562736372696265",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.id }}/issues/{{ record.subscribable_id }}/unsubscribe",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f70726f6a656374732f7b69647d2f6c6162656c732f7b737562736372696261626c655f69647d2f737562736372696265",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.id }}/labels/{{ record.subscribable_id }}/subscribe",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f70726f6a656374732f7b69647d2f6c6162656c732f7b737562736372696261626c655f69647d2f756e737562736372696265",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.id }}/labels/{{ record.subscribable_id }}/unsubscribe",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f70726f6a656374732f7b69647d2f6d657267655f72657175657374732f7b6d657267655f726571756573745f6969647d2f7374617475735f636865636b732f7b65787465726e616c5f7374617475735f636865636b5f69647d2f7265747279",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.id }}/merge_requests/{{ record.merge_request_iid }}/status_checks/{{ record.external_status_check_id }}/retry",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f70726f6a656374732f7b69647d2f6d657267655f72657175657374732f7b6d657267655f726571756573745f6969647d2f746f646f",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.id }}/merge_requests/{{ record.merge_request_iid }}/todo",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f70726f6a656374732f7b69647d2f6d657267655f72657175657374732f7b737562736372696261626c655f69647d2f737562736372696265",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.id }}/merge_requests/{{ record.subscribable_id }}/subscribe",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f70726f6a656374732f7b69647d2f6d657267655f72657175657374732f7b737562736372696261626c655f69647d2f756e737562736372696265",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.id }}/merge_requests/{{ record.subscribable_id }}/unsubscribe",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f70726f6a656374732f7b69647d2f706970656c696e65732f7b706970656c696e655f69647d2f63616e63656c",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.id }}/pipelines/{{ record.pipeline_id }}/cancel",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f70726f6a656374732f7b69647d2f706970656c696e65732f7b706970656c696e655f69647d2f7265747279",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.id }}/pipelines/{{ record.pipeline_id }}/retry",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f70726f6a656374732f7b69647d2f72756e6e6572732f72657365745f726567697374726174696f6e5f746f6b656e",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.id }}/runners/reset_registration_token",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f72756e6e65725f636f6e74726f6c6c6572732f7b69647d2f73636f7065732f696e7374616e6365",
+        "kind": "create",
+        "method": "POST",
+        "path": "/runner_controllers/{{ record.id }}/scopes/instance",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f72756e6e65725f636f6e74726f6c6c6572732f7b69647d2f73636f7065732f72756e6e6572732f7b72756e6e65725f69647d",
+        "kind": "create",
+        "method": "POST",
+        "path": "/runner_controllers/{{ record.id }}/scopes/runners/{{ record.runner_id }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f72756e6e65725f636f6e74726f6c6c6572732f7b72756e6e65725f636f6e74726f6c6c65725f69647d2f746f6b656e732f7b69647d2f726f74617465",
+        "kind": "create",
+        "method": "POST",
+        "path": "/runner_controllers/{{ record.runner_controller_id }}/tokens/{{ record.id }}/rotate",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f72756e6e6572732f7b69647d2f72657365745f61757468656e7469636174696f6e5f746f6b656e",
+        "kind": "create",
+        "method": "POST",
+        "path": "/runners/{{ record.id }}/reset_authentication_token",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f746f646f732f7b69647d2f6d61726b5f61735f646f6e65",
+        "kind": "create",
+        "method": "POST",
+        "path": "/todos/{{ record.id }}/mark_as_done",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f757365722f6770675f6b6579732f7b6b65795f69647d2f7265766f6b65",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/gpg_keys/{{ record.key_id }}/revoke",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f75736572732f7b69647d2f6163746976617465",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.id }}/activate",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f75736572732f7b69647d2f617070726f7665",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.id }}/approve",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f75736572732f7b69647d2f62616e",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.id }}/ban",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f75736572732f7b69647d2f626c6f636b",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.id }}/block",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f75736572732f7b69647d2f64656163746976617465",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.id }}/deactivate",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f75736572732f7b69647d2f666f6c6c6f77",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.id }}/follow",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f75736572732f7b69647d2f6770675f6b6579732f7b6b65795f69647d2f7265766f6b65",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.id }}/gpg_keys/{{ record.key_id }}/revoke",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f75736572732f7b69647d2f72656a656374",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.id }}/reject",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f75736572732f7b69647d2f737570706f72745f70696e2f7265766f6b65",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.id }}/support_pin/revoke",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f75736572732f7b69647d2f756e62616e",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.id }}/unban",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f75736572732f7b69647d2f756e626c6f636b",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.id }}/unblock",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f75736572732f7b69647d2f756e666f6c6c6f77",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/{{ record.id }}/unfollow",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f7673636f64652f73657474696e67735f73796e632f76312f7265736f757263652f7b7265736f757263655f6e616d657d",
+        "kind": "create",
+        "method": "POST",
+        "path": "/vscode/settings_sync/v1/resource/{{ record.resource_name }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f7673636f64652f73657474696e67735f73796e632f7b73657474696e67735f636f6e746578745f686173687d2f76312f7265736f757263652f7b7265736f757263655f6e616d657d",
+        "kind": "create",
+        "method": "POST",
+        "path": "/vscode/settings_sync/{{ record.settings_context_hash }}/v1/resource/{{ record.resource_name }}",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_504f5354202f76756c6e65726162696c69746965732f7b69647d2f6469736d697373",
+        "kind": "create",
+        "method": "POST",
+        "path": "/vulnerabilities/{{ record.id }}/dismiss",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_505554202f61646d696e2f646174615f6d616e6167656d656e742f7b6d6f64656c5f6e616d657d2f7b7265636f72645f6964656e7469666965727d2f636865636b73756d",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/admin/data_management/{{ record.model_name }}/{{ record.record_identifier }}/checksum",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_505554202f61646d696e2f7a6f656b742f70726f6a656374732f7b70726f6a6563745f69647d2f696e646578",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/admin/zoekt/projects/{{ record.project_id }}/index",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_505554202f67726f7570732f7b69647d2f6d656d626572732f7b6d656d6265725f69647d2f617070726f7665",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/groups/{{ record.id }}/members/{{ record.member_id }}/approve",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_505554202f6c6963656e73652f7b69647d2f726566726573685f62696c6c61626c655f7573657273",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/license/{{ record.id }}/refresh_billable_users",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_505554202f7061636b616765732f636f6e616e2f76312f66696c65732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7b7265636970655f7265766973696f6e7d2f6578706f72742f7b66696c655f6e616d657d2f617574686f72697a65",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/packages/conan/v1/files/{{ record.package_name }}/{{ record.package_version }}/{{ record.package_username }}/{{ record.package_channel }}/{{ record.recipe_revision }}/export/{{ record.file_name }}/authorize",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_505554202f7061636b616765732f636f6e616e2f76312f66696c65732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7b7265636970655f7265766973696f6e7d2f7061636b6167652f7b636f6e616e5f7061636b6167655f7265666572656e63657d2f7b7061636b6167655f7265766973696f6e7d2f7b66696c655f6e616d657d2f617574686f72697a65",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/packages/conan/v1/files/{{ record.package_name }}/{{ record.package_version }}/{{ record.package_username }}/{{ record.package_channel }}/{{ record.recipe_revision }}/package/{{ record.conan_package_reference }}/{{ record.package_revision }}/{{ record.file_name }}/authorize",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "source_write_505554202f70726f6a656374732f7b69647d2f6d657267655f72657175657374732f7b6d657267655f726571756573745f6969647d2f64726166745f6e6f7465732f7b64726166745f6e6f74655f69647d2f7075626c697368",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/projects/{{ record.id }}/merge_requests/{{ record.merge_request_iid }}/draft_notes/{{ record.draft_note_id }}/publish",
+        "risk": "source-bound mutation; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirmation",
+        "confirm": "destructive"
+      }
+    ],
     "risk": {
       "read": "external GitLab API read of projects, groups, users, and issues",
-      "write": "GitLab publishes mutation endpoints, but this G1 bundle declares no executable write actions.",
-      "approval": "Any future GitLab write must use the standard plan, preview, explicit approval, and execute flow; no GitLab writes are executable in this wave."
+      "write": "147 source-bound GitLab reverse-ETL actions are executable only through the standard plan, preview, explicit approval, and execute flow; all other provider mutations retain cited named-foundation outcomes.",
+      "approval": "Every GitLab reverse-ETL action requires the standard plan, preview, explicit approval, and execute flow."
     },
     "icon": {
       "id": "gitlab",

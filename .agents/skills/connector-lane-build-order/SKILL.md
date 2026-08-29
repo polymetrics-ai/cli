@@ -115,6 +115,15 @@ under the Atlas README's procedure. Keep provider-specific execution behind a
 closed connector-definition reference; shared owners must not branch on
 connector name.
 
+For a possible shared runtime gap, first add only an Atlas `investigating`
+entry with the owner symbols, closed contract mismatch, affected source rows,
+and proof-test plan. Re-check existing foundations and declared extension seams
+before asking the captain for approval. While it is investigating, retain every
+affected operation as a typed source-cited gap and continue materializing
+unaffected existing-runtime lanes. Do not call the candidate planned or
+available, add a connector-specific hook, or implement an engine/CLI path until
+the captain explicitly approves that named foundation.
+
 ## 3. Declare only source-backed operations
 
 Declare an operation, field, media type, and schema constraint only when the

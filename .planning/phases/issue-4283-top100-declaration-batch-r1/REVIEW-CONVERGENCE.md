@@ -69,3 +69,28 @@ not a coverage or usability claim.
 | Full package check did not complete within the local command boundary | The local harness cut it off while the suite was active. | CI required; no local green claim. |
 
 This checkpoint has **no zero-blocker or merge-ready verdict**. It records a reviewed incremental commit only; the final exact-SHA review must include all remaining foundations, source dispositions, command/help/docs reachability, PR checks, and green CI.
+
+## GitLab canonical-evidence projection — pre-commit Codex-only audit
+
+- Review candidate parent: `56cd817d616a423a3f4b84fc9ce2fd0216bf5929` on `origin/fm/cli-top100-declaration-batch-r1`.
+- Review route: captain-approved Codex-only audit exception. No Claude dependency was used; the repository's single-worker contract forbids spawning a separate reviewer role. This is an inline independent pass over the final uncommitted GitLab slice, followed by an exact-SHA re-review after the code commit.
+- Scope: generic source-lock import/projection/evidence and selected runtime-ledger propagation only as consumed by GitLab; generated GitLab definitions/docs/skill/transcript output; Atlas and GSD evidence. No provider-live request, credential value, runtime executor, raw transport, approval-policy, destructive-operation-policy, or non-GitLab definition change is admitted.
+
+### Audit evidence
+
+- Source reconciliation: `operation-evidence --connector gitlab` reports all 1,752 source identities exactly once: 733 runtime-enabled (582 direct-read, 4 ETL, 147 reverse-ETL), 1,019 named-foundation blocked, 0 unnamed blocked, and 0 evidence defects. The overlapping source-contract foundation-entry counts are retained in `VERIFICATION.md`; they are not a second denominator.
+- Real preflight: a newly generated direct read initially failed with no runtime endpoint-ledger row, before credential acquisition. The Atlas-first classification found the existing owners `source.projection-admission.v1` and `runtime.direct-execution.v1`; `surface-sync --connector gitlab` now refreshes exactly GitLab's 582 compact `rest_read` rows while preserving all unselected rows. `TestGitLabSourceLockedCommandsPassRuntimePreflight` passes all 733 executable lane commands, and a built `pm` reaches `error: missing --credential` with zero provider I/O.
+- Closed behavior review: `sourceimport.go` admits only explicit `canonical_evidence` locks and cross-checks their retained contract; `operationevidence.go` attaches descriptor gaps only to that explicit lock form; `sourceprojection.go` materializes only exact JSON GET/no-body reverse-ETL shapes and leaves unsafe parameter spellings as the 15 cited alias-foundation rows. `surfacesync.go` adds a selected ledger projection without adding an executor or connector-name runtime branch.
+- Documentation/scope review: generated GitLab command/help/manual/skill and root transcript now expose the same source counts and lane states. The global catalog/README and endpoint ledger contain the GitLab-only derived entry. The temporary generator delta for `docs/skills/pm-asana/SKILL.md` was restored exactly and no other Asana definition/source/docs file is changed.
+- Local proofs: focused generator tests, GitLab CLI preflight/credential-boundary tests, `go vet ./cmd/connectorgen`, `make docs-check`, agent-contract validation, selected surface sync/check, source-import/check, GitLab declaration validation, Atlas JSON parsing, and `git diff --check` pass. A serialized fresh complete `./cmd/connectorgen` suite passes in 287.043s.
+
+### Findings and disposition
+
+| Finding | Disposition |
+| --- | --- |
+| Newly generated direct-read command stopped at endpoint-ledger preflight rather than the credential boundary. | Fixed by the existing source-projection endpoint-ledger owner and covered by red/green GitLab tests; no new runtime foundation. |
+| GitLab docs still described the old four-stream-only surface. | Fixed in generated/manual/catalog/root-help outputs, with targeted transcript output retained. |
+| Ordinary-parallel `./cmd/connectorgen` fails in unchanged v4 source-materialization test fixture (`reflect.DeepEqual` panic at line 67). | External baseline blocker recorded per captain instruction `039.msg`; no test/fixture change here. Isolated, `-race`, and 20-repeat runs pass; serialized full suite passes. |
+| Normal generated-skill/transcript sweep sees existing Asana drift. | External scope-separated blocker; Asana files remain untouched per captain instructions `035.msg`–`036.msg`. |
+
+**Pre-commit verdict:** zero GitLab-slice code blockers found. This is **not** a zero-blocker/global-green or merge-ready verdict; the exact code SHA and then the final evidence-only SHA still require re-review, and both external baseline blockers remain visible.

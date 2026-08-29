@@ -132,10 +132,23 @@ func (s surfaceSyncStats) opsFieldTotal() int {
 func runSurfaceSync(args []string, stdout, stderr io.Writer) int {
 	dir := filepath.Join("internal", "connectors", "defs")
 	check := false
-	for _, arg := range args[1:] {
+	connector := ""
+	for index := 1; index < len(args); index++ {
+		arg := args[index]
 		switch {
 		case arg == "--check":
 			check = true
+		case arg == "--connector":
+			if index+1 >= len(args) || strings.HasPrefix(args[index+1], "-") {
+				logf(stderr, "connectorgen surface-sync: --connector requires one connector name\n")
+				return 2
+			}
+			if connector != "" {
+				logf(stderr, "connectorgen surface-sync: --connector may be specified once\n")
+				return 2
+			}
+			index++
+			connector = args[index]
 		case strings.HasPrefix(arg, "-"):
 			logf(stderr, "connectorgen surface-sync: unknown flag %q\n", arg)
 			return 2
@@ -144,19 +157,11 @@ func runSurfaceSync(args []string, stdout, stderr io.Writer) int {
 		}
 	}
 
-	entries, err := os.ReadDir(dir)
+	names, err := surfaceSyncConnectorNames(dir, connector)
 	if err != nil {
 		logf(stderr, "connectorgen surface-sync: %v\n", err)
 		return 1
 	}
-
-	var names []string
-	for _, entry := range entries {
-		if entry.IsDir() {
-			names = append(names, entry.Name())
-		}
-	}
-	sort.Strings(names)
 
 	total := surfaceSyncStats{}
 	changed := 0
@@ -192,7 +197,12 @@ func runSurfaceSync(args []string, stdout, stderr io.Writer) int {
 		}
 		logf(stdout, "%s: %s filled %s; corrected %s\n", name, verb, stats.Filled, stats.Corrected)
 	}
-	ledgerStats, err := syncRuntimeOperationEndpointLedger(dir, check)
+	var ledgerStats runtimeOperationEndpointLedgerStats
+	if connector == "" {
+		ledgerStats, err = syncRuntimeOperationEndpointLedger(dir, check)
+	} else {
+		ledgerStats, err = syncRuntimeOperationEndpointLedgerConnector(dir, connector, check)
+	}
 	if err != nil {
 		logf(stderr, "connectorgen surface-sync: runtime operation endpoint ledger: %v\n", err)
 		return 1
@@ -213,6 +223,32 @@ func runSurfaceSync(args []string, stdout, stderr io.Writer) int {
 	logf(stdout, "connectorgen surface-sync: %d connector(s) scanned, %d field(s) filled and %d field(s) corrected across %d connector(s)\n",
 		len(names), total.Filled.total(), total.Corrected.total(), changed)
 	return 0
+}
+
+func surfaceSyncConnectorNames(dir, connector string) ([]string, error) {
+	if connector != "" {
+		info, err := os.Stat(filepath.Join(dir, connector))
+		if err != nil {
+			return nil, fmt.Errorf("connector %q: %w", connector, err)
+		}
+		if !info.IsDir() {
+			return nil, fmt.Errorf("connector %q is not a definition directory", connector)
+		}
+		return []string{connector}, nil
+	}
+
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return nil, err
+	}
+	names := make([]string, 0, len(entries))
+	for _, entry := range entries {
+		if entry.IsDir() {
+			names = append(names, entry.Name())
+		}
+	}
+	sort.Strings(names)
+	return names, nil
 }
 
 func syncCheckedInSourceProjection(bundleDir, connector string, check bool) (sourceProjectionStats, error) {
@@ -301,6 +337,53 @@ func syncRuntimeOperationEndpointLedger(dir string, check bool) (runtimeOperatio
 	}
 	if err != nil && !os.IsNotExist(err) {
 		return stats, err
+	}
+	stats.Changed = true
+	if check {
+		return stats, nil
+	}
+	if err := os.WriteFile(path, raw, 0o644); err != nil {
+		return stats, err
+	}
+	return stats, nil
+}
+
+// syncRuntimeOperationEndpointLedgerConnector refreshes one source-selected
+// connector in the compact runtime ledger while retaining every unselected
+// connector's existing closed endpoint metadata byte-for-byte semantically.
+// It lets a bounded materialization slice repair its own runtime projection
+// without making unrelated incomplete source projections an admission gate.
+func syncRuntimeOperationEndpointLedgerConnector(dir, connector string, check bool) (runtimeOperationEndpointLedgerStats, error) {
+	path := filepath.Join(dir, engine.RuntimeOperationEndpointLedgerFile)
+	ledger := make(map[string][]engine.OperationEndpointLedgerEntry)
+	existing, err := os.ReadFile(path)
+	if err == nil {
+		if err := json.Unmarshal(existing, &ledger); err != nil {
+			return runtimeOperationEndpointLedgerStats{}, fmt.Errorf("parse existing runtime operation endpoint ledger: %w", err)
+		}
+	} else if !os.IsNotExist(err) {
+		return runtimeOperationEndpointLedgerStats{}, err
+	}
+
+	sourceFS := withoutRuntimeOperationEndpointLedgerFS{FS: os.DirFS(dir)}
+	bundle, err := engine.Load(withoutCertificationOverlayFS{FS: sourceFS, connector: connector}, connector)
+	if err != nil {
+		return runtimeOperationEndpointLedgerStats{}, fmt.Errorf("load %s: %w", connector, err)
+	}
+	if bundle.Surface == nil {
+		return runtimeOperationEndpointLedgerStats{}, fmt.Errorf("bundle %s has no api_surface.json", connector)
+	}
+	entries := engine.OperationDirectReadEndpointLedgerEntries(bundle)
+	ledger[connector] = entries
+
+	raw, err := json.MarshalIndent(ledger, "", "  ")
+	if err != nil {
+		return runtimeOperationEndpointLedgerStats{}, err
+	}
+	raw = append(raw, '\n')
+	stats := runtimeOperationEndpointLedgerStats{Entries: len(entries)}
+	if bytes.Equal(existing, raw) {
+		return stats, nil
 	}
 	stats.Changed = true
 	if check {

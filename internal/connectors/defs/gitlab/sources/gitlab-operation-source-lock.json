@@ -4,6 +4,11 @@
   "captured_at": "2026-08-19T11:28:09Z",
   "rest": {
     "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml",
+    "path_bridge": {
+      "source_prefix": "/api/v4",
+      "connector_prefix": ""
+    },
+    "canonical_evidence": true,
     "sha256": "b33e80759af3a529d71a0bb58c8c76d65c9f0b20774a042196c6d3c0c57310bd",
     "bytes": 3611238,
     "openapi": "3.0.0",
