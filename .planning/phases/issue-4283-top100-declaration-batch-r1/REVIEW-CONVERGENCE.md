@@ -112,3 +112,9 @@ This checkpoint has **no zero-blocker or merge-ready verdict**. It records a rev
 ### Verdict and residual blockers
 
 No GitLab-slice blocker was found in the fresh exact-code-SHA review. The only follow-up change is this review record; it does not modify production or generated behavior. This is still **not merge-ready and not globally green**: the unchanged ordinary-parallel source-materialization fixture panic, existing Asana generated-output drift, and pre-existing global Bitbucket descriptor absence remain externally recorded blockers, and the other nine Batch-1 connectors are not yet delivered.
+
+## Post-push PR-check ownership
+
+- Published GitLab review SHA: `da18c9a621a6aa60c5c6882131c162c442c4f8fc`, verified equal to `origin/fm/cli-top100-declaration-batch-r1` before this record update.
+- PR #4294 check read-back immediately after publication: 16 checks pending and 4 skipped; `verify`, `Website generated data`, and `CodeQL` were pending, not passed or failed.
+- The existing CodeQL review comment is **not owned by this GitLab slice**: it identifies `cmd/connectorgen/sourceprojection.go:4510`, whose `git blame` commit `ca44eec8fb` is an ancestor of the GitLab reviewed parent `56cd817d616a423a3f4b84fc9ce2fd0216bf5929`. It is therefore recorded as a historical PR finding and intentionally receives no unrelated change in this delivery.
