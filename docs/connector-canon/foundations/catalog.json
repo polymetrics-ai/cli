@@ -277,7 +277,7 @@
           "provider operations retain every executable saved and interactive lane without duplicating source identity",
           "source-projected read-only fields are rejected as request input before provider I/O",
           "projection gaps remain explicit and source-bound",
-          "mapping admission and projection are independent of certification overlays and retained hash, byte, and capture representation while preserving version- and document-kind-specific source-reference, unavailable-document, and v3 envelope structure"
+          "mapping admission and projection are independent of certification overlays and retained hash, byte, and capture representation while preserving version- and document-kind-specific source-reference, unavailable-document, v3 envelope, and closed event-schema-selector structure"
         ]
       },
       "selection": {
@@ -311,6 +311,7 @@
         "A projected implemented label is incomplete until the selected runtime path passes preflight.",
         "The mapping-only lock view still fails closed on connector ownership, stable identity, citation, location, method, route, counts, source-reference method/identity/location/source-form and legacy supplement binding/count, unavailable reason/source URL, v3 envelope coherence, and the exact source_contract_unavailable disposition.",
         "Schema-version and document-kind selection is presence-aware and closed: foreign, empty, or null variant fields cannot select another wire shape through Go zero values.",
+        "A v3 event_schema_inventory is a closed source-selector envelope. Mapping projection ignores it only after rejecting unknown inventory or selector members; source-import alone resolves its canonical selectors against retained provider bytes.",
         "Strict retained-byte and digest validation remains owned by source-import rather than declaration projection."
       ],
       "non_goals": [
@@ -428,6 +429,16 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/declarationadmission_mapping_structural_r3_test.go",
           "name": "TestDeclarationAdmissionMappingReaderR3AcceptsClosedVariants"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/declarationadmission_test.go",
+          "name": "TestDeclarationAdmissionMappingV3EventSchemaInventoryIsClosedAndIgnored"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/declarationadmission_test.go",
+          "name": "TestDeclarationAdmissionMappingReaderAcceptsRetainedAsanaV3EventSchemaInventory"
         }
       ],
       "known_gap_refs": [
