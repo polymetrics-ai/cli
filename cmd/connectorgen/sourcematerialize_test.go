@@ -204,6 +204,48 @@ func TestSourceMaterializeWrite_EdgeNamesExactDeclared404RuntimeGap(t *testing.T
 	}
 }
 
+func TestSourceMaterializeWrite_EdgeAccountsForExactDeclared404AsBlocked(t *testing.T) {
+	defsRoot, _, fetcher := sourceMaterializeFixture(t, sourceMaterializeFixtureOptions{PostSuccessStatus: "404", BlockPostForExactNon2xx: true})
+	stderr := new(bytes.Buffer)
+	if code := runSourceMaterializeWithFetcher([]string{"source-materialize", "alpha", "--defs", defsRoot}, new(bytes.Buffer), stderr, fetcher); code != 0 {
+		t.Fatalf("blocked exact declared 404 materialization = %d stderr=%s", code, stderr.String())
+	}
+	var report struct {
+		Operations []sourceMaterializeFoundationRow `json:"operations"`
+	}
+	reportBytes, err := os.ReadFile(filepath.Join(defsRoot, "alpha", "missing-foundation.json"))
+	if err != nil {
+		t.Fatalf("read missing-foundation report: %v", err)
+	}
+	if err := json.Unmarshal(reportBytes, &report); err != nil {
+		t.Fatalf("decode missing-foundation report: %v", err)
+	}
+	var blocked *sourceMaterializeFoundationRow
+	for i := range report.Operations {
+		if report.Operations[i].SourceID == "alpha.rest.post.shared" {
+			blocked = &report.Operations[i]
+			break
+		}
+	}
+	if blocked == nil || blocked.State != "blocked" || !strings.Contains(blocked.Reason, "runtime gap: exact response-status non-2xx execution") {
+		t.Fatalf("404 source accounting = %#v, want named blocked runtime gap", blocked)
+	}
+	descriptor, err := os.ReadFile(filepath.Join(defsRoot, "alpha", "sources", "alpha-operation-descriptor.json"))
+	if err != nil {
+		t.Fatalf("read source descriptor: %v", err)
+	}
+	if !bytes.Contains(descriptor, []byte(`"status": "404"`)) {
+		t.Fatalf("source descriptor did not retain 404 provider spelling: %s", descriptor)
+	}
+	writes, err := os.ReadFile(filepath.Join(defsRoot, "alpha", "writes.json"))
+	if err != nil {
+		t.Fatalf("read writes: %v", err)
+	}
+	if bytes.Contains(writes, []byte("create_widget")) {
+		t.Fatalf("404 source operation was widened into an executable write: %s", writes)
+	}
+}
+
 func TestSourceMaterialize_BadUninterpretableRetainedResponseIsValidationError(t *testing.T) {
 	defsRoot, _, fetcher := sourceMaterializeFixture(t, sourceMaterializeFixtureOptions{GetAdditionalSuccessStatus: []string{"provider-status"}})
 	stderr := new(bytes.Buffer)
@@ -890,6 +932,7 @@ type sourceMaterializeFixtureOptions struct {
 	GetBindingSuccessStatuses   []string
 	PostSuccessStatus           string
 	BlockPostForStatusRange     bool
+	BlockPostForExactNon2xx     bool
 	OutputSymlink               bool
 }
 
@@ -1020,6 +1063,13 @@ func sourceMaterializeFixture(t *testing.T, options sourceMaterializeFixtureOpti
 		postOperation := plan["operations"].([]any)[1].(map[string]any)
 		postOperation["state"] = "blocked"
 		postOperation["reason"] = "runtime gap: exact response-status range execution"
+		delete(postOperation, "binding")
+		delete(postOperation, "inputs")
+	}
+	if options.BlockPostForExactNon2xx {
+		postOperation := plan["operations"].([]any)[1].(map[string]any)
+		postOperation["state"] = "blocked"
+		postOperation["reason"] = "runtime gap: exact response-status non-2xx execution"
 		delete(postOperation, "binding")
 		delete(postOperation, "inputs")
 	}
