@@ -39,10 +39,15 @@ mapping-only lock projection. They therefore do not load `certification.json`
 and do not require retention hashes or byte counts to materialize an already
 checked-in canonical descriptor. This separation does not make the projection
 permissive: stable identity, citation, document location, method, route, and
-counts still fail closed, and a citation-only `source_reference` must retain
-its exact `source_contract_unavailable` disposition. `source-import` alone
-validates retained bytes and hashes; certification alone validates fixture or
-live-provider proof and credentials.
+counts still fail closed. A citation-only `source_reference` also keeps its
+uppercase supported method, bounded control-free identity/location/provider-ID,
+source form, and legacy supplement bindings/counts; unavailable documents keep
+a non-empty control-free reason and optional canonical source URL; and v3
+documents keep retrieval, source-document inventory/form/version, zero-operation,
+and coverage-confidence coherence. A `source_reference` must retain its exact
+`source_contract_unavailable` disposition. `source-import` alone validates
+retained bytes and hashes; certification alone validates fixture or live-provider
+proof and credentials.
 
 Each source row records a stable source ID, protocol, provider HTTPS URL,
 exact document location, optional raw provider operation ID, method/base/path,

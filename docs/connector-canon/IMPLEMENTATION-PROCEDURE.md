@@ -111,7 +111,10 @@ filename.
    Mapping and projection read the source lock's identity/citation view, not
    `certification.json`, credentials, or retention digest fields. Validate
    retained bytes separately with `source-import`, and validate live proof
-   separately through certification; neither is an admission label.
+   separately through certification; neither is an admission label. The
+   mapping view still validates source-reference identity and supplement
+   bindings, unavailable reason/source URL, and the v3 document envelope
+   before it materializes a command surface.
 3. Project request direction, not the whole response schema. Exclude OpenAPI
    `readOnly` fields recursively, including resolved `allOf` arms, remove those
    names from `required`, and reject them before provider I/O. Do not use a

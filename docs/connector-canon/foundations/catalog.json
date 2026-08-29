@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 1,
+  "catalog_revision": 2,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -277,7 +277,7 @@
           "provider operations retain every executable saved and interactive lane without duplicating source identity",
           "source-projected read-only fields are rejected as request input before provider I/O",
           "projection gaps remain explicit and source-bound",
-          "mapping admission and projection are independent of certification overlays and retention hash or byte representation"
+          "mapping admission and projection are independent of certification overlays and retained hash, byte, and capture representation while preserving source-reference, unavailable-document, and v3 envelope structure"
         ]
       },
       "selection": {
@@ -309,7 +309,7 @@
         "Array query encoding must retain the source-declared style, explode behavior, and delimiter; generic value stringification is not source projection.",
         "Aliases and multiple lane bindings must not inflate the provider-operation count.",
         "A projected implemented label is incomplete until the selected runtime path passes preflight.",
-        "The mapping-only lock view still fails closed on connector ownership, stable identity, citation, location, method, route, counts, and the exact source_contract_unavailable disposition.",
+        "The mapping-only lock view still fails closed on connector ownership, stable identity, citation, location, method, route, counts, source-reference method/identity/location/source-form and legacy supplement binding/count, unavailable reason/source URL, v3 envelope coherence, and the exact source_contract_unavailable disposition.",
         "Strict retained-byte and digest validation remains owned by source-import rather than declaration projection."
       ],
       "non_goals": [
@@ -392,6 +392,11 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/sourceprojection_test.go",
           "name": "TestSourceProjectionSourceReferenceIgnoresRetentionButPreservesClosedGap"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/declarationadmission_mapping_structural_r2_test.go",
+          "name": "TestDeclarationAdmissionMappingReaderR2SourceReferenceStructure"
         }
       ],
       "known_gap_refs": [

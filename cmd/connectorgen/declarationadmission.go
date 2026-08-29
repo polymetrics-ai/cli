@@ -346,12 +346,14 @@ type declarationAdmissionSourceLockWire struct {
 }
 
 type declarationAdmissionSourceArtifactWire struct {
-	SourceURL     string          `json:"source_url"`
-	SHA256        json.RawMessage `json:"sha256"`
-	Bytes         json.RawMessage `json:"bytes"`
-	OpenAPI       json.RawMessage `json:"openapi,omitempty"`
-	Swagger       json.RawMessage `json:"swagger,omitempty"`
-	IdentityQuery json.RawMessage `json:"identity_query,omitempty"`
+	SourceURL       string          `json:"source_url"`
+	SHA256          json.RawMessage `json:"sha256"`
+	Bytes           json.RawMessage `json:"bytes"`
+	OpenAPI         json.RawMessage `json:"openapi,omitempty"`
+	Swagger         json.RawMessage `json:"swagger,omitempty"`
+	IdentityQuery   json.RawMessage `json:"identity_query,omitempty"`
+	Identity        json.RawMessage `json:"identity,omitempty"`
+	CanonicalSHA256 json.RawMessage `json:"canonical_sha256,omitempty"`
 }
 
 type declarationAdmissionLegacyRESTWire struct {
@@ -395,12 +397,14 @@ type declarationAdmissionRenderedReferenceCitationBindingWire struct {
 }
 
 type declarationAdmissionIgnoredArtifactWire struct {
-	SourceURL     json.RawMessage `json:"source_url"`
-	SHA256        json.RawMessage `json:"sha256"`
-	Bytes         json.RawMessage `json:"bytes"`
-	OpenAPI       json.RawMessage `json:"openapi,omitempty"`
-	Swagger       json.RawMessage `json:"swagger,omitempty"`
-	IdentityQuery json.RawMessage `json:"identity_query,omitempty"`
+	SourceURL       json.RawMessage `json:"source_url"`
+	SHA256          json.RawMessage `json:"sha256"`
+	Bytes           json.RawMessage `json:"bytes"`
+	OpenAPI         json.RawMessage `json:"openapi,omitempty"`
+	Swagger         json.RawMessage `json:"swagger,omitempty"`
+	IdentityQuery   json.RawMessage `json:"identity_query,omitempty"`
+	Identity        json.RawMessage `json:"identity,omitempty"`
+	CanonicalSHA256 json.RawMessage `json:"canonical_sha256,omitempty"`
 }
 
 type declarationAdmissionPublishedSourceWire struct {
@@ -485,6 +489,7 @@ func parseDeclarationAdmissionSourceLock(raw []byte, expectedConnector string) (
 	}
 
 	restCount := 0
+	var legacyReference *declarationAdmissionLegacyRESTWire
 	if wire.SchemaVersion < 3 {
 		var rest declarationAdmissionLegacyRESTWire
 		if len(wire.Rest) != 0 {
@@ -499,6 +504,9 @@ func parseDeclarationAdmissionSourceLock(raw []byte, expectedConnector string) (
 		}
 		referenceSources := map[string]struct{}{}
 		if rest.SourceKind != "" {
+			if wire.SchemaVersion != 2 {
+				return declarationAdmissionReviewedSourceLock{}, errors.New("source-reference locks require schema version 2")
+			}
 			if rest.SourceKind != sourceImportLegacySourceReferenceKind {
 				return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock has unsupported legacy REST source kind %q", rest.SourceKind)
 			}
@@ -510,7 +518,7 @@ func parseDeclarationAdmissionSourceLock(raw []byte, expectedConnector string) (
 				if err := validateDeclarationAdmissionMappingSourceURL(supplement.SourceURL); err != nil {
 					return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source-reference supplement has invalid source URL: %w", err)
 				}
-				if supplement.SourceLocation == "" || supplement.SourceLocation != strings.TrimSpace(supplement.SourceLocation) || supplement.OperationCount <= 0 {
+				if !sourceImportReferenceText(supplement.SourceLocation, 4096) || supplement.OperationCount <= 0 {
 					return declarationAdmissionReviewedSourceLock{}, errors.New("source-reference supplement has invalid mapping evidence")
 				}
 				if _, duplicate := referenceSources[supplement.SourceURL]; duplicate {
@@ -522,11 +530,19 @@ func parseDeclarationAdmissionSourceLock(raw []byte, expectedConnector string) (
 			return declarationAdmissionReviewedSourceLock{}, errors.New("source lock supplements require an explicit source-reference kind")
 		}
 		for _, operation := range rest.Operations {
-			if err := validateDeclarationAdmissionMappingRESTOperation(operation); err != nil {
+			sourceReference := rest.SourceKind != ""
+			validateOperation := validateDeclarationAdmissionMappingRESTOperation
+			if sourceReference {
+				validateOperation = validateDeclarationAdmissionMappingReferenceRESTOperation
+			}
+			if err := validateOperation(operation); err != nil {
 				return declarationAdmissionReviewedSourceLock{}, err
 			}
 			if operation.CitationBinding != nil {
 				return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock legacy REST operation %q declares a rendered-reference citation binding", operation.ID)
+			}
+			if sourceReference && operation.CitationURL != "" {
+				return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source-reference operation %q must not declare a citation URL", operation.ID)
 			}
 			if operation.CitationURL != "" {
 				if err := validateDeclarationAdmissionMappingSourceURL(operation.CitationURL); err != nil {
@@ -534,7 +550,6 @@ func parseDeclarationAdmissionSourceLock(raw []byte, expectedConnector string) (
 				}
 			}
 			sourceURL := rest.SourceURL
-			sourceReference := rest.SourceKind != ""
 			if sourceReference {
 				if operation.SourceURL == "" {
 					return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source-reference operation %q has no source URL", operation.ID)
@@ -555,6 +570,9 @@ func parseDeclarationAdmissionSourceLock(raw []byte, expectedConnector string) (
 				return declarationAdmissionReviewedSourceLock{}, err
 			}
 		}
+		if rest.SourceKind != "" {
+			legacyReference = &rest
+		}
 	} else {
 		var rest declarationAdmissionV3RESTWire
 		if len(wire.Rest) != 0 {
@@ -562,8 +580,14 @@ func parseDeclarationAdmissionSourceLock(raw []byte, expectedConnector string) (
 				return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("parse source lock v3 REST mapping evidence: %w", err)
 			}
 		}
+		openAPIVersions, err := validateDeclarationAdmissionMappingV3Envelope(rest)
+		if err != nil {
+			return declarationAdmissionReviewedSourceLock{}, err
+		}
 		seenDocuments := map[string]struct{}{}
 		seenRoutes := map[string]string{}
+		openAPIDocuments := 0
+		requiresCoverageConfidence := false
 		for index, document := range rest.SourceDocuments {
 			if document.ID == "" || document.ID != strings.TrimSpace(document.ID) || document.ID != strings.ToLower(document.ID) || !sourceImportDocumentID(document.ID) {
 				return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock has invalid v3 REST document ID %q", document.ID)
@@ -584,27 +608,54 @@ func parseDeclarationAdmissionSourceLock(raw []byte, expectedConnector string) (
 				if document.SourceReference != nil {
 					return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 REST document %q kind %q declares a source reference", document.ID, kind)
 				}
-			case sourceImportDocumentKindSourceReference:
-				if document.SourceReference == nil {
-					return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 source-reference document %q has no source reference", document.ID)
+				form, err := declarationAdmissionMappingArtifactForm(document.Artifact.OpenAPI, document.Artifact.Swagger)
+				if err != nil {
+					return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 REST document %q has invalid source form: %w", document.ID, err)
 				}
-				if err := validateDeclarationAdmissionMappingSourceURL(document.SourceReference.SourceURL); err != nil {
-					return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 source-reference document %q has invalid source URL: %w", document.ID, err)
+				switch kind {
+				case sourceImportDocumentKindOpenAPI:
+					if !form.isSwagger2() {
+						openAPIDocuments++
+						if !form.isOpenAPI() || !openAPIVersions[form.Version] {
+							return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 REST document %q has an OpenAPI version outside the aggregate inventory", document.ID)
+						}
+					}
+				case sourceImportDocumentKindRenderedReference, sourceImportDocumentKindBundle:
+					requiresCoverageConfidence = true
+					if form.Family != "" {
+						return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 REST document %q kind %q must not declare an OpenAPI or Swagger version", document.ID, kind)
+					}
+					contentType, err := declarationAdmissionMappingString(document.ContentType)
+					if err != nil || validateSourceImportDocumentContentType(contentType) != nil {
+						return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 REST document %q has invalid content type", document.ID)
+					}
+					if kind == sourceImportDocumentKindBundle && !sourceImportBundleContentType(contentType) {
+						return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 REST bundle document %q must declare an archive content type", document.ID)
+					}
+				}
+			case sourceImportDocumentKindSourceReference:
+				requiresCoverageConfidence = true
+				if err := validateDeclarationAdmissionMappingSourceReferenceDocument(document); err != nil {
+					return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 source-reference document %q: %w", document.ID, err)
 				}
 				if len(document.Operations) == 0 {
 					return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 source-reference document %q has no operations", document.ID)
 				}
 			case sourceImportDocumentKindUnavailable:
+				requiresCoverageConfidence = true
 				if document.SourceReference != nil {
 					return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 unavailable document %q declares a source reference", document.ID)
 				}
 				if len(document.Operations) != 0 {
 					return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 unavailable document %q must not declare operations", document.ID)
 				}
-				var reason string
-				if len(document.UnavailableReason) != 0 {
-					if err := json.Unmarshal(document.UnavailableReason, &reason); err != nil {
-						reason = ""
+				reason, err := declarationAdmissionMappingString(document.UnavailableReason)
+				if err != nil || !sourceImportReferenceText(reason, 1024) {
+					return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 unavailable document %q has invalid reason", document.ID)
+				}
+				if document.PublishedSource.SourceURL != "" {
+					if err := validateDeclarationAdmissionMappingSourceURL(document.PublishedSource.SourceURL); err != nil {
+						return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 unavailable document %q has invalid source URL: %w", document.ID, err)
 					}
 				}
 				lock.Unavailable = append(lock.Unavailable, declarationAdmissionReviewedUnavailableDocument{
@@ -616,11 +667,18 @@ func parseDeclarationAdmissionSourceLock(raw []byte, expectedConnector string) (
 			default:
 				return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 REST document %q has unsupported kind %q", document.ID, kind)
 			}
+			if len(document.Operations) == 0 && kind == sourceImportDocumentKindOpenAPI {
+				return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock v3 REST document %q has no operations", document.ID)
+			}
 			for _, operation := range document.Operations {
-				if err := validateDeclarationAdmissionMappingRESTOperation(operation); err != nil {
+				sourceReference := kind == sourceImportDocumentKindSourceReference
+				validateOperation := validateDeclarationAdmissionMappingRESTOperation
+				if sourceReference {
+					validateOperation = validateDeclarationAdmissionMappingReferenceRESTOperation
+				}
+				if err := validateOperation(operation); err != nil {
 					return declarationAdmissionReviewedSourceLock{}, err
 				}
-				sourceReference := kind == sourceImportDocumentKindSourceReference
 				sourceURL := ""
 				citationURL := ""
 				publishedSourceURL := ""
@@ -677,11 +735,34 @@ func parseDeclarationAdmissionSourceLock(raw []byte, expectedConnector string) (
 				}
 			}
 		}
+		if openAPIDocuments > 0 && len(openAPIVersions) == 0 {
+			return declarationAdmissionReviewedSourceLock{}, errors.New("source lock has no v3 REST OpenAPI versions")
+		}
+		if openAPIDocuments == 0 && len(openAPIVersions) > 0 {
+			return declarationAdmissionReviewedSourceLock{}, errors.New("source lock v3 REST OpenAPI versions require an OpenAPI document")
+		}
+		coverageConfidence, err := declarationAdmissionMappingCoverageConfidence(rest.CoverageConfidence)
+		if err != nil {
+			return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock has invalid v3 REST coverage confidence: %w", err)
+		}
+		if requiresCoverageConfidence && coverageConfidence == nil {
+			return declarationAdmissionReviewedSourceLock{}, errors.New("source lock v3 REST non-OpenAPI documents require coverage confidence")
+		}
+		if coverageConfidence != nil {
+			if err := validateSourceImportCoverageConfidence(*coverageConfidence); err != nil {
+				return declarationAdmissionReviewedSourceLock{}, fmt.Errorf("source lock has invalid v3 REST coverage confidence: %w", err)
+			}
+		}
 	}
 
 	graphqlQueryCount, graphqlMutationCount, err := declarationAdmissionMappingGraphQLOperations(wire.GraphQL, wire.Connector, addOperation)
 	if err != nil {
 		return declarationAdmissionReviewedSourceLock{}, err
+	}
+	if legacyReference != nil {
+		if err := validateDeclarationAdmissionMappingLegacySourceReference(*legacyReference, wire, graphqlQueryCount, graphqlMutationCount); err != nil {
+			return declarationAdmissionReviewedSourceLock{}, err
+		}
 	}
 	if wire.Counts.REST != restCount || wire.Counts.GraphQLQuery != graphqlQueryCount || wire.Counts.GraphQLMutation != graphqlMutationCount || wire.Counts.Total != restCount+graphqlQueryCount+graphqlMutationCount {
 		return declarationAdmissionReviewedSourceLock{}, errors.New("source lock counts do not match mapping operation inventories")
@@ -708,6 +789,238 @@ func validateDeclarationAdmissionMappingRESTOperation(operation declarationAdmis
 		return fmt.Errorf("source lock REST operation %q has invalid path: %w", operation.ID, err)
 	}
 	return nil
+}
+
+// validateDeclarationAdmissionMappingReferenceRESTOperation deliberately keeps
+// the closed identity contract for cited-only source references. Mapping may
+// ignore retained bytes and hashes, but a reference has no later request
+// schema from which to repair an ambiguous method, route, ID, or location.
+func validateDeclarationAdmissionMappingReferenceRESTOperation(operation declarationAdmissionRESTOperationWire) error {
+	reference := sourceImportRESTOperation{
+		ID:             operation.ID,
+		Protocol:       operation.Protocol,
+		Method:         operation.Method,
+		Path:           operation.Path,
+		OperationID:    operation.OperationID,
+		SourceLocation: operation.SourceLocation,
+	}
+	if err := validateSourceImportReferenceOperation(reference); err != nil {
+		return fmt.Errorf("source-reference operation %q %w", operation.ID, err)
+	}
+	return nil
+}
+
+func validateDeclarationAdmissionMappingLegacySourceReference(rest declarationAdmissionLegacyRESTWire, wire declarationAdmissionSourceLockWire, graphqlQueryCount, graphqlMutationCount int) error {
+	if rest.SourceKind != sourceImportLegacySourceReferenceKind {
+		return fmt.Errorf("source lock has unsupported legacy REST source kind %q", rest.SourceKind)
+	}
+	if len(rest.Operations) == 0 {
+		return errors.New("source-reference lock has no operation inventory")
+	}
+	if graphqlQueryCount != 0 || graphqlMutationCount != 0 || wire.Counts.GraphQLQuery != 0 || wire.Counts.GraphQLMutation != 0 {
+		return errors.New("source-reference lock cannot declare a GraphQL inventory")
+	}
+	confidence, err := declarationAdmissionMappingCoverageConfidence(wire.CoverageConfidence)
+	if err != nil || confidence == nil || confidence.Level != rest.SourceKind {
+		return errors.New("source-reference lock coverage confidence must repeat its source kind")
+	}
+	if err := validateSourceImportCoverageConfidence(*confidence); err != nil {
+		return fmt.Errorf("source-reference lock has invalid coverage confidence: %w", err)
+	}
+	operationsFound, err := declarationAdmissionMappingCounts(wire.OperationsFound)
+	if err != nil || operationsFound != wire.Counts {
+		return errors.New("source-reference lock operations_found does not match counts")
+	}
+	operationCounts, err := declarationAdmissionMappingOperationCounts(rest.OperationCounts)
+	if err != nil || len(operationCounts) == 0 {
+		return errors.New("source-reference lock has no operation counts")
+	}
+	if wire.Counts.REST != len(rest.Operations) || wire.Counts.Total != wire.Counts.REST {
+		return errors.New("source-reference lock counts do not match REST operation inventory")
+	}
+
+	actualCounts := make(map[string]int, len(operationCounts))
+	seenRoutes := make(map[string]struct{}, len(rest.Operations))
+	for _, operation := range rest.Operations {
+		actualCounts[operation.Method]++
+		route := operation.Method + "\x00" + operation.Path
+		if _, duplicate := seenRoutes[route]; duplicate {
+			return fmt.Errorf("source-reference lock duplicates REST route %s %s", operation.Method, operation.Path)
+		}
+		seenRoutes[route] = struct{}{}
+	}
+	for _, supplement := range rest.Supplements {
+		bound := 0
+		for _, operation := range rest.Operations {
+			if operation.SourceURL != supplement.SourceURL {
+				continue
+			}
+			if operation.SourceLocation != supplement.SourceLocation {
+				return fmt.Errorf("source-reference operation %q citation location %q does not match supplement %q location %q", operation.ID, operation.SourceLocation, supplement.SourceURL, supplement.SourceLocation)
+			}
+			bound++
+		}
+		if bound != supplement.OperationCount {
+			return fmt.Errorf("source-reference supplement %q operation count %d does not match %d operations", supplement.SourceURL, supplement.OperationCount, bound)
+		}
+	}
+	if len(actualCounts) != len(operationCounts) {
+		return errors.New("source-reference lock operation counts do not match operation inventory")
+	}
+	for method, count := range operationCounts {
+		if !sourceImportReferenceHTTPMethod(method) || count <= 0 || actualCounts[method] != count {
+			return fmt.Errorf("source-reference lock operation count for %q does not match operation inventory", method)
+		}
+	}
+	return nil
+}
+
+func validateDeclarationAdmissionMappingV3Envelope(rest declarationAdmissionV3RESTWire) (map[string]bool, error) {
+	retrieval, err := declarationAdmissionMappingString(rest.Retrieval)
+	if err != nil || retrieval == "" || retrieval != strings.TrimSpace(retrieval) || len(retrieval) > 1024 || strings.ContainsAny(retrieval, "\r\n") {
+		return nil, errors.New("source lock has invalid v3 REST retrieval metadata")
+	}
+	if len(rest.SourceDocuments) == 0 {
+		return nil, errors.New("source lock has no v3 REST source documents")
+	}
+	if len(rest.SourceDocuments) > defaultSourceImportDocuments {
+		return nil, fmt.Errorf("source lock v3 document count exceeds %d", defaultSourceImportDocuments)
+	}
+	versions, err := declarationAdmissionMappingStringSlice(rest.OpenAPIVersions)
+	if err != nil {
+		return nil, fmt.Errorf("source lock has invalid v3 REST OpenAPI versions: %w", err)
+	}
+	if len(versions) > 0 && !sort.StringsAreSorted(versions) {
+		return nil, errors.New("source lock v3 REST OpenAPI versions are not sorted")
+	}
+	seen := make(map[string]bool, len(versions))
+	for _, version := range versions {
+		major, minor, ok := sourceOpenAPIMajorMinor(version)
+		if !ok || major != 3 || (minor != 0 && minor != 1) || seen[version] {
+			return nil, fmt.Errorf("source lock has invalid or duplicate v3 REST OpenAPI version %q", version)
+		}
+		seen[version] = true
+	}
+	return seen, nil
+}
+
+func validateDeclarationAdmissionMappingSourceReferenceDocument(document declarationAdmissionRESTDocumentWire) error {
+	if document.SourceReference == nil {
+		return errors.New("source reference is required")
+	}
+	contentType, contentTypeErr := declarationAdmissionMappingString(document.ContentType)
+	unavailableReason, unavailableReasonErr := declarationAdmissionMappingString(document.UnavailableReason)
+	if declarationAdmissionMappingArtifactDeclaresSourceForm(document.Artifact) || declarationAdmissionMappingPublishedSourceDeclaresPublication(document.PublishedSource) || contentTypeErr != nil || unavailableReasonErr != nil || contentType != "" || unavailableReason != "" {
+		return errors.New("source reference cannot mix with retained artifact, publication, content type, or unavailable capture fields")
+	}
+	if err := validateDeclarationAdmissionMappingSourceURL(document.SourceReference.SourceURL); err != nil {
+		return fmt.Errorf("has invalid source URL: %w", err)
+	}
+	if _, err := declarationAdmissionMappingArtifactForm(document.SourceReference.OpenAPI, document.SourceReference.Swagger); err != nil {
+		return fmt.Errorf("has invalid source form: %w", err)
+	}
+	return nil
+}
+
+// declarationAdmissionMappingArtifactDeclaresSourceForm distinguishes a
+// second source form from malformed retention representation. A cited-only
+// document cannot also declare an artifact URL or form pin, but mapping does
+// not reject an otherwise-empty sibling merely because its hash/byte capture
+// fields are absent or malformed.
+func declarationAdmissionMappingArtifactDeclaresSourceForm(artifact declarationAdmissionIgnoredArtifactWire) bool {
+	sourceURL, sourceURLErr := declarationAdmissionMappingString(artifact.SourceURL)
+	if sourceURLErr != nil || sourceURL != "" {
+		return true
+	}
+	form, formErr := declarationAdmissionMappingArtifactForm(artifact.OpenAPI, artifact.Swagger)
+	return formErr != nil || form.Family != ""
+}
+
+func declarationAdmissionMappingPublishedSourceDeclaresPublication(source declarationAdmissionPublishedSourceWire) bool {
+	return source.SourceURL != ""
+}
+
+func declarationAdmissionMappingArtifactForm(openAPIRaw, swaggerRaw json.RawMessage) (sourceDocumentForm, error) {
+	openAPI, err := declarationAdmissionMappingString(openAPIRaw)
+	if err != nil {
+		return sourceDocumentForm{}, err
+	}
+	swagger, err := declarationAdmissionMappingString(swaggerRaw)
+	if err != nil {
+		return sourceDocumentForm{}, err
+	}
+	if openAPI != "" && swagger != "" {
+		return sourceDocumentForm{}, errors.New("source lock has ambiguous OpenAPI and Swagger form pins")
+	}
+	if openAPI != "" {
+		major, minor, ok := sourceOpenAPIMajorMinor(openAPI)
+		if !ok || major != 3 || (minor != 0 && minor != 1) {
+			return sourceDocumentForm{}, fmt.Errorf("source lock has unsupported OpenAPI form pin %q", openAPI)
+		}
+		return sourceDocumentForm{Family: sourceImportDocumentKindOpenAPI, Version: openAPI}, nil
+	}
+	if swagger != "" {
+		if swagger != "2.0" {
+			return sourceDocumentForm{}, fmt.Errorf("source lock has unsupported Swagger form pin %q", swagger)
+		}
+		return sourceDocumentForm{Family: "swagger", Version: swagger}, nil
+	}
+	return sourceDocumentForm{}, nil
+}
+
+func declarationAdmissionMappingString(raw json.RawMessage) (string, error) {
+	if len(raw) == 0 || strings.TrimSpace(string(raw)) == "null" {
+		return "", nil
+	}
+	var value string
+	if err := decodeSourceStrictJSON(raw, &value); err != nil {
+		return "", err
+	}
+	return value, nil
+}
+
+func declarationAdmissionMappingStringSlice(raw json.RawMessage) ([]string, error) {
+	if len(raw) == 0 || strings.TrimSpace(string(raw)) == "null" {
+		return nil, nil
+	}
+	var values []string
+	if err := decodeSourceStrictJSON(raw, &values); err != nil {
+		return nil, err
+	}
+	return values, nil
+}
+
+func declarationAdmissionMappingCoverageConfidence(raw json.RawMessage) (*sourceImportCoverageConfidence, error) {
+	if len(raw) == 0 || strings.TrimSpace(string(raw)) == "null" {
+		return nil, nil
+	}
+	var confidence sourceImportCoverageConfidence
+	if err := decodeSourceStrictJSON(raw, &confidence); err != nil {
+		return nil, err
+	}
+	return &confidence, nil
+}
+
+func declarationAdmissionMappingCounts(raw json.RawMessage) (sourceImportCounts, error) {
+	if len(raw) == 0 || strings.TrimSpace(string(raw)) == "null" {
+		return sourceImportCounts{}, errors.New("missing counts")
+	}
+	var counts sourceImportCounts
+	if err := decodeSourceStrictJSON(raw, &counts); err != nil {
+		return sourceImportCounts{}, err
+	}
+	return counts, nil
+}
+
+func declarationAdmissionMappingOperationCounts(raw json.RawMessage) (map[string]int, error) {
+	if len(raw) == 0 || strings.TrimSpace(string(raw)) == "null" {
+		return nil, errors.New("missing operation counts")
+	}
+	var counts map[string]int
+	if err := decodeSourceStrictJSON(raw, &counts); err != nil {
+		return nil, err
+	}
+	return counts, nil
 }
 
 func validateDeclarationAdmissionRenderedReferenceCitation(operation declarationAdmissionRESTOperationWire, document declarationAdmissionRESTDocumentWire) (string, error) {
