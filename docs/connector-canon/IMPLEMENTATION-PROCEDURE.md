@@ -121,7 +121,12 @@ filename.
 3. Project request direction, not the whole response schema. Exclude OpenAPI
    `readOnly` fields recursively, including resolved `allOf` arms, remove those
    names from `required`, and reject them before provider I/O. Do not use a
-   permissive named-object fallback to reintroduce read-only fields.
+   permissive named-object fallback to reintroduce read-only fields. Preserve
+   `requestBody.required`: when the provider requires a single `data` envelope,
+   that record field is required; an optional request body remains optional.
+   Keep unresolved request and response reference evidence phase-qualified so
+   a response-only schema diagnostic cannot block an otherwise complete bounded
+   request route.
 4. Encode query arrays from the locked parameter contract. For OpenAPI form
    parameters with `explode: false`, emit the declared delimiter (normally a
    comma), omit absent values, and avoid double encoding. Never stringify a Go
@@ -134,10 +139,13 @@ filename.
    path-confined, byte-bounded, digest-bound, previewed, and approval-gated;
    absence of an allow-list is not unrestricted-media evidence.
 7. A provider batch endpoint must remain a closed declared-action adapter. Its
-   bundle allow-lists existing named actions and methods; the engine derives
-   each subrequest's method, relative path, and typed body. Do not accept raw
-   caller-authored HTTP, query-bearing subrequests, nested batches, or actions
-   outside the allow-list.
+   source lock must bind the provider operation, canonical request/action/
+   response schema selectors, provider-proven maximum, method enum, and
+   envelope fields to retained provider bytes. Its bundle allow-lists existing
+   named actions and methods; the engine derives each subrequest's method,
+   relative path, and typed body. Source-backed outer query fields may still be
+   projected normally. Do not accept raw caller-authored HTTP, query-bearing
+   subrequests, nested batches, or actions outside the allow-list.
 8. Direct reads follow the declared paginator. Callers navigate through
    `--page` or `--page-cursor`; raw opaque provider cursors are not a second
    navigation channel. Returned page metadata must describe what reached the

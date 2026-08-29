@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 3,
+  "catalog_revision": 4,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -17,7 +17,7 @@
       "layer": "source_retention_import",
       "status": "available",
       "kind": "generic",
-      "summary": "Retains verified provider artifacts and imports locked OpenAPI, rendered-reference, bundle, and GraphQL sources into closed canonical operation descriptors while preserving unresolved evidence as explicit gaps.",
+      "summary": "Retains verified provider artifacts and imports locked OpenAPI, rendered-reference, bundle, and GraphQL sources into closed canonical operation descriptors and source-selected event/batch inventories while preserving unresolved evidence as explicit gaps.",
       "owner": {
         "primary_package": "polymetrics.ai/cmd/connectorgen",
         "supporting_packages": [],
@@ -52,6 +52,14 @@
           },
           {
             "file": "cmd/connectorgen/sourceimport.go",
+            "name": "validateSourceImportV3BatchActionInventory"
+          },
+          {
+            "file": "cmd/connectorgen/sourceimport.go",
+            "name": "sourceImportApplyV3BatchActionInventory"
+          },
+          {
+            "file": "cmd/connectorgen/sourceimport.go",
             "name": "appendLockedGraphQLProjection"
           }
         ]
@@ -81,9 +89,12 @@
         "request_response_shapes": [
           "callbacks and webhooks retained as inbound event descriptors",
           "parameters by path, query, header, cookie, form, and content binding",
+          "requestBody presence and requiredness",
           "recursive and sibling references retained without unsafe expansion",
+          "request- versus response-phase unresolved reference evidence",
           "request body media types and encodings",
           "response status, media, headers, and schema descriptors",
+          "closed event-schema and declared-batch selector inventories resolved against retained provider bytes",
           "server and path overrides"
         ],
         "sync_modes": [],
@@ -110,6 +121,7 @@
       },
       "constraints": [
         "Only contracts stated by retained provider evidence may be imported.",
+        "A batch inventory may name only one locked provider operation, canonical schema selectors, a provider-proven maximum, and closed provider envelope/method/response fields; it cannot carry raw executable HTTP.",
         "Reference cycles and unsupported dialect details must remain explicit rather than being guessed or flattened.",
         "Retained bytes, URLs, and hashes prove provenance, not runtime behavior."
       ],
@@ -154,6 +166,16 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/sourceimport_rendered_reference_test.go",
           "name": "TestSourceImportVersion3RenderedReferenceProjectsCapturedCitation"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/sourceimport_batch_action_inventory_test.go",
+          "name": "TestSourceImportV3BatchActionInventoryResolvesClosedProviderContract"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/sourceimport_batch_action_inventory_test.go",
+          "name": "TestSourceImportV3BatchActionInventoryRejectsUnboundOrOpenContracts"
         }
       ],
       "known_gap_refs": [
@@ -235,6 +257,14 @@
             "name": "sourceProjectionSchema"
           },
           {
+            "file": "cmd/connectorgen/sourceprojection.go",
+            "name": "sourceContractForDeclaredBatchAction"
+          },
+          {
+            "file": "cmd/connectorgen/sourceprojection.go",
+            "name": "sourceActionCoversOperation"
+          },
+          {
             "file": "cmd/connectorgen/operationevidence.go",
             "name": "operationEvidenceClassify"
           },
@@ -265,6 +295,9 @@
           "API and CLI endpoint bindings",
           "derived command parameters and maps_to bindings",
           "direction-aware closed request schemas that exclude source read-only fields",
+          "single-data-envelope requestBody requiredness",
+          "source-aware form/explode query-array encoding",
+          "source-selected closed declared-batch actions and outer query fields",
           "independent saved-target and interactive-command lane evidence",
           "operation, stream, and write projections",
           "runtime operation endpoint ledger rows",
@@ -276,6 +309,7 @@
           "generated surfaces retain exact provider-operation identity",
           "provider operations retain every executable saved and interactive lane without duplicating source identity",
           "source-projected read-only fields are rejected as request input before provider I/O",
+          "source-backed batch coverage validates the retained provider inventory, definition-owned action allow-list, closed record schema, query encoding, and runtime action binding without admitting raw HTTP",
           "projection gaps remain explicit and source-bound",
           "mapping admission and projection are independent of certification overlays and retained hash, byte, and capture representation while preserving version- and document-kind-specific source-reference, unavailable-document, v3 envelope, and closed event-schema-selector structure"
         ]
@@ -307,11 +341,14 @@
         "Projection must not invent a stream, write action, request field, response policy, or lane absent from the source-backed contract.",
         "OpenAPI request projection excludes readOnly properties recursively, including resolved allOf arms, and removes excluded names from required.",
         "Array query encoding must retain the source-declared style, explode behavior, and delimiter; generic value stringification is not source projection.",
+        "A required requestBody with one data envelope makes that record field required; an optional requestBody remains optional.",
+        "A declared batch is projectable only when a closed v3 batch_action_inventory resolves against retained provider bytes and the definition keeps a typed action allow-list; optional outer query fields remain source-projected while caller-authored subrequest HTTP stays forbidden.",
         "Aliases and multiple lane bindings must not inflate the provider-operation count.",
         "A projected implemented label is incomplete until the selected runtime path passes preflight.",
         "The mapping-only lock view still fails closed on connector ownership, stable identity, citation, location, method, route, counts, source-reference method/identity/location/source-form and legacy supplement binding/count, unavailable reason/source URL, v3 envelope coherence, and the exact source_contract_unavailable disposition.",
         "Schema-version and document-kind selection is presence-aware and closed: foreign, empty, or null variant fields cannot select another wire shape through Go zero values.",
         "A v3 event_schema_inventory is a closed source-selector envelope. Mapping projection ignores it only after rejecting unknown inventory or selector members; source-import alone resolves its canonical selectors against retained provider bytes.",
+        "A v3 batch_action_inventory is likewise a closed source-selector envelope. Mapping admission rejects unknown members, source-import resolves its operation/schema/tag facts, and projection preserves only a matching declared_batch definition.",
         "Strict retained-byte and digest validation remains owned by source-import rather than declaration projection."
       ],
       "non_goals": [
@@ -439,6 +476,21 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/declarationadmission_test.go",
           "name": "TestDeclarationAdmissionMappingReaderAcceptsRetainedAsanaV3EventSchemaInventory"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/sourceprojection_test.go",
+          "name": "TestSourceProjectionSingleDataEnvelopeUsesRequestBodyRequiredness"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/sourceprojection_test.go",
+          "name": "TestSourceProjectionQueryArrayUsesSourceFormEncoding"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/sourceprojection_test.go",
+          "name": "TestSourceProjectionPreservesOnlySourceBackedDeclaredBatch"
         }
       ],
       "known_gap_refs": [

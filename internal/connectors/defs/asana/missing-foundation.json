@@ -199,13 +199,18 @@
     },
     {
       "id": "asana_enriched_source_lock_projection_parser",
-      "state": "existing_mapping_validator_gap",
+      "state": "resolved_authoring_mapping",
       "affected_lane": "all_source_mapped_lanes",
       "source": {
         "path": "sources/asana-operation-source-lock.json",
-        "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56"
+        "sha256": "eb5517f0f1456e4cacb03d4f705fd2244a1ccf6113a9c0d67e29ed2417e407c4"
       },
-      "reason": "The current connectorgen source-projection parser rejects the enriched per-operation `source_operation` field with `json: unknown field source_operation`. This does not affect the embedded runtime bundle or the declared attachment commands; it only prevents the older source-projection validator from validating this richer lock format."
+      "reason": "The strict schema-v3 source-import and mapping readers now accept the closed per-operation source_operation identity plus the retained event-schema and batch-action inventories, while rejecting unknown inventory fields/selectors. Normal and read-projection-only check modes both verify all 249 operations with zero drift.",
+      "does_not_block": [
+        "source-lock mapping or projection",
+        "runtime lane admission",
+        "certification evidence"
+      ]
     }
   ],
   "non_binding_files": [
