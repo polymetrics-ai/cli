@@ -1,0 +1,4 @@
+{
+  "record": { "time_tracking_category_gid": "fixture-category", "data": { "name": "Updated fixture category" } },
+  "expect": { "method": "PUT", "path": "/time_tracking_categories/fixture-category", "body": { "data": { "name": "Updated fixture category" } } }
+}

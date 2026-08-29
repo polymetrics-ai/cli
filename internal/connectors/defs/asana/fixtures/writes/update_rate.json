@@ -1,0 +1,4 @@
+{
+  "record": { "rate_gid": "fixture-rate", "data": { "rate": 150 } },
+  "expect": { "method": "PUT", "path": "/rates/fixture-rate", "body": { "data": { "rate": 150 } } }
+}

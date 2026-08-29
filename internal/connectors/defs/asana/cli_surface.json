@@ -447,26 +447,21 @@
     },
     {
       "path": "access-requests create-access-request",
-      "summary": "Unavailable source-bound Asana mutation: Create an access request.",
+      "summary": "Source-bound Asana mutation: Create an access request.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "create_access_request",
+      "availability": "implemented",
+      "write": "create_access_request",
       "source_cli_path": "POST /access_requests",
       "source_url": "https://developers.asana.com/reference/createaccessrequest",
+      "source_operation": "asana.rest.createAccessRequest",
       "flags": [
         {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
-        },
-        {
-          "name": "confirm",
-          "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         }
       ],
       "api_surface": [
@@ -477,7 +472,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAccessRequest"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "access-requests approve-access-request",
@@ -711,33 +706,29 @@
     },
     {
       "path": "allocations update-allocation",
-      "summary": "Unavailable source-bound Asana mutation: Update an allocation.",
+      "summary": "Source-bound Asana mutation: Update an allocation.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "update_allocation",
+      "availability": "implemented",
+      "write": "update_allocation",
       "source_cli_path": "PUT /allocations/{allocation_gid}",
       "source_url": "https://developers.asana.com/reference/updateallocation",
+      "source_operation": "asana.rest.updateAllocation",
       "flags": [
         {
           "name": "allocation-gid",
-          "type": "string",
           "summary": "Asana path parameter `allocation_gid`.",
+          "type": "string",
           "maps_to": "record.allocation_gid",
-          "allow_empty": false
+          "required": true,
+          "max_bytes": 32768
         },
         {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
-        },
-        {
-          "name": "confirm",
-          "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         }
       ],
       "api_surface": [
@@ -748,7 +739,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateAllocation"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "allocations delete-allocation",
@@ -824,26 +815,21 @@
     },
     {
       "path": "allocations create-allocation",
-      "summary": "Unavailable source-bound Asana mutation: Create an allocation.",
+      "summary": "Source-bound Asana mutation: Create an allocation.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "create_allocation",
+      "availability": "implemented",
+      "write": "create_allocation",
       "source_cli_path": "POST /allocations",
       "source_url": "https://developers.asana.com/reference/createallocation",
+      "source_operation": "asana.rest.createAllocation",
       "flags": [
         {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
-        },
-        {
-          "name": "confirm",
-          "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         }
       ],
       "api_surface": [
@@ -854,7 +840,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAllocation"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "attachments get-attachment",
@@ -1231,26 +1217,21 @@
     },
     {
       "path": "budgets create-budget",
-      "summary": "Unavailable source-bound Asana mutation: Create a budget.",
+      "summary": "Source-bound Asana mutation: Create a budget.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "create_budget",
+      "availability": "implemented",
+      "write": "create_budget",
       "source_cli_path": "POST /budgets",
       "source_url": "https://developers.asana.com/reference/createbudget",
+      "source_operation": "asana.rest.createBudget",
       "flags": [
         {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
-        },
-        {
-          "name": "confirm",
-          "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         }
       ],
       "api_surface": [
@@ -1261,7 +1242,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createBudget"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "budgets get-budget",
@@ -1296,33 +1277,29 @@
     },
     {
       "path": "budgets update-budget",
-      "summary": "Unavailable source-bound Asana mutation: Update a budget.",
+      "summary": "Source-bound Asana mutation: Update a budget.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "update_budget",
+      "availability": "implemented",
+      "write": "update_budget",
       "source_cli_path": "PUT /budgets/{budget_gid}",
       "source_url": "https://developers.asana.com/reference/updatebudget",
+      "source_operation": "asana.rest.updateBudget",
       "flags": [
         {
           "name": "budget-gid",
-          "type": "string",
           "summary": "Asana path parameter `budget_gid`.",
+          "type": "string",
           "maps_to": "record.budget_gid",
-          "allow_empty": false
+          "required": true,
+          "max_bytes": 32768
         },
         {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
-        },
-        {
-          "name": "confirm",
-          "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         }
       ],
       "api_surface": [
@@ -1333,7 +1310,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateBudget"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "budgets delete-budget",
@@ -2452,33 +2429,34 @@
     },
     {
       "path": "goal-relationships remove-supporting-relationship",
-      "summary": "Unavailable source-bound Asana mutation: Removes a supporting goal relationship.",
+      "summary": "Source-bound Asana mutation: Removes a supporting goal relationship.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "remove_supporting_relationship",
+      "availability": "implemented",
+      "write": "remove_supporting_relationship",
       "source_cli_path": "POST /goals/{goal_gid}/removeSupportingRelationship",
       "source_url": "https://developers.asana.com/reference/removesupportingrelationship",
+      "source_operation": "asana.rest.removeSupportingRelationship",
       "flags": [
         {
-          "name": "goal-gid",
-          "type": "string",
-          "summary": "Asana path parameter `goal_gid`.",
-          "maps_to": "record.goal_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "goal-gid",
+          "summary": "Asana path parameter `goal_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.goal_gid",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -2489,7 +2467,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeSupportingRelationship"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "goals get-goal",
@@ -2969,33 +2947,40 @@
     },
     {
       "path": "goals remove-followers",
-      "summary": "Unavailable source-bound Asana mutation: Remove a collaborator from a goal.",
+      "summary": "Source-bound Asana mutation: Remove a collaborator from a goal.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "remove_followers",
+      "availability": "implemented",
+      "write": "remove_followers",
       "source_cli_path": "POST /goals/{goal_gid}/removeFollowers",
       "source_url": "https://developers.asana.com/reference/removefollowers",
+      "source_operation": "asana.rest.removeFollowers",
       "flags": [
         {
-          "name": "goal-gid",
-          "type": "string",
-          "summary": "Asana path parameter `goal_gid`.",
-          "maps_to": "record.goal_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "goal-gid",
+          "summary": "Asana path parameter `goal_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.goal_gid",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -3006,7 +2991,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowers"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "goals get-parent-goals-for-goal",
@@ -3089,33 +3074,34 @@
     },
     {
       "path": "goals remove-custom-field-setting-for-goal",
-      "summary": "Unavailable source-bound Asana mutation: Remove a custom field from a goal.",
+      "summary": "Source-bound Asana mutation: Remove a custom field from a goal.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "remove_custom_field_setting_for_goal",
+      "availability": "implemented",
+      "write": "remove_custom_field_setting_for_goal",
       "source_cli_path": "POST /goals/{goal_gid}/removeCustomFieldSetting",
       "source_url": "https://developers.asana.com/reference/removecustomfieldsettingforgoal",
+      "source_operation": "asana.rest.removeCustomFieldSettingForGoal",
       "flags": [
         {
-          "name": "goal-gid",
-          "type": "string",
-          "summary": "Asana path parameter `goal_gid`.",
-          "maps_to": "record.goal_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "goal-gid",
+          "summary": "Asana path parameter `goal_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.goal_gid",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -3126,7 +3112,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForGoal"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "jobs get-job",
@@ -3203,26 +3189,20 @@
     },
     {
       "path": "memberships create-membership",
-      "summary": "Unavailable source-bound Asana mutation: Create a membership.",
+      "summary": "Source-bound Asana mutation: Create a membership.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "create_membership",
+      "availability": "implemented",
+      "write": "create_membership",
       "source_cli_path": "POST /memberships",
       "source_url": "https://developers.asana.com/reference/createmembership",
+      "source_operation": "asana.rest.createMembership",
       "flags": [
         {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
-        },
-        {
-          "name": "confirm",
-          "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "max_bytes": 1048576
         }
       ],
       "api_surface": [
@@ -3233,7 +3213,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-openapi30-reference-sibling-foundation-r1; missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createMembership"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "memberships get-membership",
@@ -3268,33 +3248,34 @@
     },
     {
       "path": "memberships update-membership",
-      "summary": "Unavailable source-bound Asana mutation: Update a membership.",
+      "summary": "Source-bound Asana mutation: Update a membership.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "update_membership",
+      "availability": "implemented",
+      "write": "update_membership",
       "source_cli_path": "PUT /memberships/{membership_gid}",
       "source_url": "https://developers.asana.com/reference/updatemembership",
+      "source_operation": "asana.rest.updateMembership",
       "flags": [
         {
-          "name": "membership-gid",
-          "type": "string",
-          "summary": "Asana path parameter `membership_gid`.",
-          "maps_to": "record.membership_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "membership-gid",
+          "summary": "Asana path parameter `membership_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.membership_gid",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -3305,7 +3286,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateMembership"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "memberships delete-membership",
@@ -3542,26 +3523,32 @@
     },
     {
       "path": "organization-exports create-organization-export",
-      "summary": "Unavailable source-bound Asana mutation: Create an organization export request.",
+      "summary": "Source-bound Asana mutation: Create an organization export request.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "create_organization_export",
+      "availability": "implemented",
+      "write": "create_organization_export",
       "source_cli_path": "POST /organization_exports",
       "source_url": "https://developers.asana.com/reference/createorganizationexport",
+      "source_operation": "asana.rest.createOrganizationExport",
       "flags": [
         {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
-          "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -3572,7 +3559,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createOrganizationExport"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "organization-exports get-organization-export",
@@ -4035,33 +4022,34 @@
     },
     {
       "path": "portfolios remove-item-for-portfolio",
-      "summary": "Unavailable source-bound Asana mutation: Remove a portfolio item.",
+      "summary": "Source-bound Asana mutation: Remove a portfolio item.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "remove_item_for_portfolio",
+      "availability": "implemented",
+      "write": "remove_item_for_portfolio",
       "source_cli_path": "POST /portfolios/{portfolio_gid}/removeItem",
       "source_url": "https://developers.asana.com/reference/removeitemforportfolio",
+      "source_operation": "asana.rest.removeItemForPortfolio",
       "flags": [
         {
-          "name": "portfolio-gid",
-          "type": "string",
-          "summary": "Asana path parameter `portfolio_gid`.",
-          "maps_to": "record.portfolio_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "portfolio-gid",
+          "summary": "Asana path parameter `portfolio_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.portfolio_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -4072,7 +4060,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeItemForPortfolio"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "portfolios add-custom-field-setting-for-portfolio",
@@ -4124,33 +4112,34 @@
     },
     {
       "path": "portfolios remove-custom-field-setting-for-portfolio",
-      "summary": "Unavailable source-bound Asana mutation: Remove a custom field from a portfolio.",
+      "summary": "Source-bound Asana mutation: Remove a custom field from a portfolio.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "remove_custom_field_setting_for_portfolio",
+      "availability": "implemented",
+      "write": "remove_custom_field_setting_for_portfolio",
       "source_cli_path": "POST /portfolios/{portfolio_gid}/removeCustomFieldSetting",
       "source_url": "https://developers.asana.com/reference/removecustomfieldsettingforportfolio",
+      "source_operation": "asana.rest.removeCustomFieldSettingForPortfolio",
       "flags": [
         {
-          "name": "portfolio-gid",
-          "type": "string",
-          "summary": "Asana path parameter `portfolio_gid`.",
-          "maps_to": "record.portfolio_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "portfolio-gid",
+          "summary": "Asana path parameter `portfolio_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.portfolio_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -4161,7 +4150,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForPortfolio"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "portfolios add-members-for-portfolio",
@@ -4200,33 +4189,40 @@
     },
     {
       "path": "portfolios remove-members-for-portfolio",
-      "summary": "Unavailable source-bound Asana mutation: Remove users from a portfolio.",
+      "summary": "Source-bound Asana mutation: Remove users from a portfolio.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "remove_members_for_portfolio",
+      "availability": "implemented",
+      "write": "remove_members_for_portfolio",
       "source_cli_path": "POST /portfolios/{portfolio_gid}/removeMembers",
       "source_url": "https://developers.asana.com/reference/removemembersforportfolio",
+      "source_operation": "asana.rest.removeMembersForPortfolio",
       "flags": [
         {
-          "name": "portfolio-gid",
-          "type": "string",
-          "summary": "Asana path parameter `portfolio_gid`.",
-          "maps_to": "record.portfolio_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "portfolio-gid",
+          "summary": "Asana path parameter `portfolio_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.portfolio_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -4237,7 +4233,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeMembersForPortfolio"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "portfolios duplicate-portfolio",
@@ -5911,33 +5907,34 @@
     },
     {
       "path": "projects remove-custom-field-setting-for-project",
-      "summary": "Unavailable source-bound Asana mutation: Remove a custom field from a project.",
+      "summary": "Source-bound Asana mutation: Remove a custom field from a project.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "remove_custom_field_setting_for_project",
+      "availability": "implemented",
+      "write": "remove_custom_field_setting_for_project",
       "source_cli_path": "POST /projects/{project_gid}/removeCustomFieldSetting",
       "source_url": "https://developers.asana.com/reference/removecustomfieldsettingforproject",
+      "source_operation": "asana.rest.removeCustomFieldSettingForProject",
       "flags": [
         {
-          "name": "project-gid",
-          "type": "string",
-          "summary": "Asana path parameter `project_gid`.",
-          "maps_to": "record.project_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "project-gid",
+          "summary": "Asana path parameter `project_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.project_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -5948,7 +5945,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForProject"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "projects get-task-counts-for-project",
@@ -6018,33 +6015,40 @@
     },
     {
       "path": "projects remove-members-for-project",
-      "summary": "Unavailable source-bound Asana mutation: Remove users from a project.",
+      "summary": "Source-bound Asana mutation: Remove users from a project.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "remove_members_for_project",
+      "availability": "implemented",
+      "write": "remove_members_for_project",
       "source_cli_path": "POST /projects/{project_gid}/removeMembers",
       "source_url": "https://developers.asana.com/reference/removemembersforproject",
+      "source_operation": "asana.rest.removeMembersForProject",
       "flags": [
         {
-          "name": "project-gid",
-          "type": "string",
-          "summary": "Asana path parameter `project_gid`.",
-          "maps_to": "record.project_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "project-gid",
+          "summary": "Asana path parameter `project_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.project_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -6055,7 +6059,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeMembersForProject"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "projects add-followers-for-project",
@@ -6094,33 +6098,40 @@
     },
     {
       "path": "projects remove-followers-for-project",
-      "summary": "Unavailable source-bound Asana mutation: Remove followers from a project.",
+      "summary": "Source-bound Asana mutation: Remove followers from a project.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "remove_followers_for_project",
+      "availability": "implemented",
+      "write": "remove_followers_for_project",
       "source_cli_path": "POST /projects/{project_gid}/removeFollowers",
       "source_url": "https://developers.asana.com/reference/removefollowersforproject",
+      "source_operation": "asana.rest.removeFollowersForProject",
       "flags": [
         {
-          "name": "project-gid",
-          "type": "string",
-          "summary": "Asana path parameter `project_gid`.",
-          "maps_to": "record.project_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "project-gid",
+          "summary": "Asana path parameter `project_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.project_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -6131,7 +6142,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowersForProject"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "projects save-as-template",
@@ -6224,26 +6235,32 @@
     },
     {
       "path": "rates create-rate",
-      "summary": "Unavailable source-bound Asana mutation: Create a rate.",
+      "summary": "Source-bound Asana mutation: Create a rate.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "create_rate",
+      "availability": "implemented",
+      "write": "create_rate",
       "source_cli_path": "POST /rates",
       "source_url": "https://developers.asana.com/reference/createrate",
+      "source_operation": "asana.rest.createRate",
       "flags": [
         {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
-          "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -6254,7 +6271,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createRate"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "rates get-rate",
@@ -6289,33 +6306,40 @@
     },
     {
       "path": "rates update-rate",
-      "summary": "Unavailable source-bound Asana mutation: Update a rate.",
+      "summary": "Source-bound Asana mutation: Update a rate.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "update_rate",
+      "availability": "implemented",
+      "write": "update_rate",
       "source_cli_path": "PUT /rates/{rate_gid}",
       "source_url": "https://developers.asana.com/reference/updaterate",
+      "source_operation": "asana.rest.updateRate",
       "flags": [
         {
-          "name": "rate-gid",
-          "type": "string",
-          "summary": "Asana path parameter `rate_gid`.",
-          "maps_to": "record.rate_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "rate-gid",
+          "summary": "Asana path parameter `rate_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.rate_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -6326,7 +6350,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateRate"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "rates delete-rate",
@@ -6433,26 +6457,21 @@
     },
     {
       "path": "roles create-role",
-      "summary": "Unavailable source-bound Asana mutation: Create a role.",
+      "summary": "Source-bound Asana mutation: Create a role.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "create_role",
+      "availability": "implemented",
+      "write": "create_role",
       "source_cli_path": "POST /roles",
       "source_url": "https://developers.asana.com/reference/createrole",
+      "source_operation": "asana.rest.createRole",
       "flags": [
         {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
-        },
-        {
-          "name": "confirm",
-          "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         }
       ],
       "api_surface": [
@@ -6463,7 +6482,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createRole"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "roles get-role",
@@ -6498,33 +6517,29 @@
     },
     {
       "path": "roles update-role",
-      "summary": "Unavailable source-bound Asana mutation: Update a role.",
+      "summary": "Source-bound Asana mutation: Update a role.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "update_role",
+      "availability": "implemented",
+      "write": "update_role",
       "source_cli_path": "PUT /roles/{role_gid}",
       "source_url": "https://developers.asana.com/reference/updaterole",
+      "source_operation": "asana.rest.updateRole",
       "flags": [
         {
-          "name": "role-gid",
-          "type": "string",
-          "summary": "Asana path parameter `role_gid`.",
-          "maps_to": "record.role_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "role-gid",
+          "summary": "Asana path parameter `role_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.role_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -6535,7 +6550,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateRole"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "roles delete-role",
@@ -8315,33 +8330,34 @@
     },
     {
       "path": "tasks remove-dependencies-for-task",
-      "summary": "Unavailable source-bound Asana mutation: Unlink dependencies from a task.",
+      "summary": "Source-bound Asana mutation: Unlink dependencies from a task.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "remove_dependencies_for_task",
+      "availability": "implemented",
+      "write": "remove_dependencies_for_task",
       "source_cli_path": "POST /tasks/{task_gid}/removeDependencies",
       "source_url": "https://developers.asana.com/reference/removedependenciesfortask",
+      "source_operation": "asana.rest.removeDependenciesForTask",
       "flags": [
         {
-          "name": "task-gid",
-          "type": "string",
-          "summary": "Asana path parameter `task_gid`.",
-          "maps_to": "record.task_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "task-gid",
+          "summary": "Asana path parameter `task_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.task_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -8352,7 +8368,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeDependenciesForTask"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "tasks get-dependents-for-task",
@@ -8421,33 +8437,34 @@
     },
     {
       "path": "tasks remove-dependents-for-task",
-      "summary": "Unavailable source-bound Asana mutation: Unlink dependents from a task.",
+      "summary": "Source-bound Asana mutation: Unlink dependents from a task.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "remove_dependents_for_task",
+      "availability": "implemented",
+      "write": "remove_dependents_for_task",
       "source_cli_path": "POST /tasks/{task_gid}/removeDependents",
       "source_url": "https://developers.asana.com/reference/removedependentsfortask",
+      "source_operation": "asana.rest.removeDependentsForTask",
       "flags": [
         {
-          "name": "task-gid",
-          "type": "string",
-          "summary": "Asana path parameter `task_gid`.",
-          "maps_to": "record.task_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "task-gid",
+          "summary": "Asana path parameter `task_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.task_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -8458,7 +8475,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeDependentsForTask"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "tasks add-project-for-task",
@@ -8518,33 +8535,34 @@
     },
     {
       "path": "tasks remove-project-for-task",
-      "summary": "Unavailable source-bound Asana mutation: Remove a project from a task.",
+      "summary": "Source-bound Asana mutation: Remove a project from a task.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "remove_project_for_task",
+      "availability": "implemented",
+      "write": "remove_project_for_task",
       "source_cli_path": "POST /tasks/{task_gid}/removeProject",
       "source_url": "https://developers.asana.com/reference/removeprojectfortask",
+      "source_operation": "asana.rest.removeProjectForTask",
       "flags": [
         {
-          "name": "task-gid",
-          "type": "string",
-          "summary": "Asana path parameter `task_gid`.",
-          "maps_to": "record.task_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "task-gid",
+          "summary": "Asana path parameter `task_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.task_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -8555,7 +8573,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeProjectForTask"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "tasks add-tag-for-task",
@@ -8594,33 +8612,34 @@
     },
     {
       "path": "tasks remove-tag-for-task",
-      "summary": "Unavailable source-bound Asana mutation: Remove a tag from a task.",
+      "summary": "Source-bound Asana mutation: Remove a tag from a task.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "remove_tag_for_task",
+      "availability": "implemented",
+      "write": "remove_tag_for_task",
       "source_cli_path": "POST /tasks/{task_gid}/removeTag",
       "source_url": "https://developers.asana.com/reference/removetagfortask",
+      "source_operation": "asana.rest.removeTagForTask",
       "flags": [
         {
-          "name": "task-gid",
-          "type": "string",
-          "summary": "Asana path parameter `task_gid`.",
-          "maps_to": "record.task_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "task-gid",
+          "summary": "Asana path parameter `task_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.task_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -8631,7 +8650,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeTagForTask"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "tasks add-followers-for-task",
@@ -8669,33 +8688,40 @@
     },
     {
       "path": "tasks remove-follower-for-task",
-      "summary": "Unavailable source-bound Asana mutation: Remove followers from a task.",
+      "summary": "Source-bound Asana mutation: Remove followers from a task.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "remove_follower_for_task",
+      "availability": "implemented",
+      "write": "remove_follower_for_task",
       "source_cli_path": "POST /tasks/{task_gid}/removeFollowers",
       "source_url": "https://developers.asana.com/reference/removefollowerfortask",
+      "source_operation": "asana.rest.removeFollowerForTask",
       "flags": [
         {
-          "name": "task-gid",
-          "type": "string",
-          "summary": "Asana path parameter `task_gid`.",
-          "maps_to": "record.task_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "task-gid",
+          "summary": "Asana path parameter `task_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.task_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -8706,7 +8732,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowerForTask"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "tasks get-task-for-custom-id",
@@ -9515,33 +9541,34 @@
     },
     {
       "path": "teams remove-user-for-team",
-      "summary": "Unavailable source-bound Asana mutation: Remove a user from a team.",
+      "summary": "Source-bound Asana mutation: Remove a user from a team.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "remove_user_for_team",
+      "availability": "implemented",
+      "write": "remove_user_for_team",
       "source_cli_path": "POST /teams/{team_gid}/removeUser",
       "source_url": "https://developers.asana.com/reference/removeuserforteam",
+      "source_operation": "asana.rest.removeUserForTeam",
       "flags": [
         {
-          "name": "team-gid",
-          "type": "string",
-          "summary": "Asana path parameter `team_gid`.",
-          "maps_to": "record.team_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "team-gid",
+          "summary": "Asana path parameter `team_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.team_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -9552,7 +9579,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeUserForTeam"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "time-periods get-time-period",
@@ -9658,33 +9685,29 @@
     },
     {
       "path": "time-tracking-categories update-time-tracking-category",
-      "summary": "Unavailable source-bound Asana mutation: Update a time tracking category.",
+      "summary": "Source-bound Asana mutation: Update a time tracking category.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "update_time_tracking_category",
+      "availability": "implemented",
+      "write": "update_time_tracking_category",
       "source_cli_path": "PUT /time_tracking_categories/{time_tracking_category_gid}",
       "source_url": "https://developers.asana.com/reference/updatetimetrackingcategory",
+      "source_operation": "asana.rest.updateTimeTrackingCategory",
       "flags": [
         {
-          "name": "time-tracking-category-gid",
-          "type": "string",
-          "summary": "Asana path parameter `time_tracking_category_gid`.",
-          "maps_to": "record.time_tracking_category_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "time-tracking-category-gid",
+          "summary": "Asana path parameter `time_tracking_category_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.time_tracking_category_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -9695,7 +9718,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateTimeTrackingCategory"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "time-tracking-categories delete-time-tracking-category",
@@ -9808,26 +9831,21 @@
     },
     {
       "path": "time-tracking-categories create-time-tracking-category",
-      "summary": "Unavailable source-bound Asana mutation: Create a time tracking category.",
+      "summary": "Source-bound Asana mutation: Create a time tracking category.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "create_time_tracking_category",
+      "availability": "implemented",
+      "write": "create_time_tracking_category",
       "source_cli_path": "POST /time_tracking_categories",
       "source_url": "https://developers.asana.com/reference/createtimetrackingcategory",
+      "source_operation": "asana.rest.createTimeTrackingCategory",
       "flags": [
         {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
-        },
-        {
-          "name": "confirm",
-          "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         }
       ],
       "api_surface": [
@@ -9838,7 +9856,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createTimeTrackingCategory"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "time-tracking-entries get-time-tracking-entries-for-task",
@@ -10168,33 +10186,40 @@
     },
     {
       "path": "timesheet-approval-statuses update-timesheet-approval-status",
-      "summary": "Unavailable source-bound Asana mutation: Update a timesheet approval status.",
+      "summary": "Source-bound Asana mutation: Update a timesheet approval status.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "update_timesheet_approval_status",
+      "availability": "implemented",
+      "write": "update_timesheet_approval_status",
       "source_cli_path": "PUT /timesheet_approval_statuses/{timesheet_approval_status_gid}",
       "source_url": "https://developers.asana.com/reference/updatetimesheetapprovalstatus",
+      "source_operation": "asana.rest.updateTimesheetApprovalStatus",
       "flags": [
         {
-          "name": "timesheet-approval-status-gid",
-          "type": "string",
-          "summary": "Asana path parameter `timesheet_approval_status_gid`.",
-          "maps_to": "record.timesheet_approval_status_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "timesheet-approval-status-gid",
+          "summary": "Asana path parameter `timesheet_approval_status_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.timesheet_approval_status_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -10205,7 +10230,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateTimesheetApprovalStatus"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "timesheet-approval-statuses get-timesheet-approval-statuses",
@@ -10259,26 +10284,32 @@
     },
     {
       "path": "timesheet-approval-statuses create-timesheet-approval-status",
-      "summary": "Unavailable source-bound Asana mutation: Create a timesheet approval status.",
+      "summary": "Source-bound Asana mutation: Create a timesheet approval status.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "create_timesheet_approval_status",
+      "availability": "implemented",
+      "write": "create_timesheet_approval_status",
       "source_cli_path": "POST /timesheet_approval_statuses",
       "source_url": "https://developers.asana.com/reference/createtimesheetapprovalstatus",
+      "source_operation": "asana.rest.createTimesheetApprovalStatus",
       "flags": [
         {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
-          "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -10289,7 +10320,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createTimesheetApprovalStatus"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "typeahead for-workspace",
@@ -10750,19 +10781,32 @@
     },
     {
       "path": "webhooks create-webhook",
-      "summary": "Unavailable source-bound Asana mutation: Establish a webhook.",
+      "summary": "Source-bound Asana mutation: Establish a webhook.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "create_webhook",
+      "availability": "implemented",
+      "write": "create_webhook",
       "source_cli_path": "POST /webhooks",
       "source_url": "https://developers.asana.com/reference/createwebhook",
+      "source_operation": "asana.rest.createWebhook",
       "flags": [
         {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -10773,7 +10817,7 @@
       ],
       "risk": "medium",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createWebhook"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "webhooks get-webhook",
@@ -10808,26 +10852,40 @@
     },
     {
       "path": "webhooks update-webhook",
-      "summary": "Unavailable source-bound Asana mutation: Update a webhook.",
+      "summary": "Source-bound Asana mutation: Update a webhook.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "update_webhook",
+      "availability": "implemented",
+      "write": "update_webhook",
       "source_cli_path": "PUT /webhooks/{webhook_gid}",
       "source_url": "https://developers.asana.com/reference/updatewebhook",
+      "source_operation": "asana.rest.updateWebhook",
       "flags": [
         {
-          "name": "webhook-gid",
-          "type": "string",
-          "summary": "Asana path parameter `webhook_gid`.",
-          "maps_to": "record.webhook_gid",
-          "allow_empty": false
+          "name": "data",
+          "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "data-json",
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "webhook-gid",
+          "summary": "Asana path parameter `webhook_gid`.",
           "type": "string",
-          "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
-          "maps_to": "record.data",
-          "allow_empty": false
+          "maps_to": "record.webhook_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -10838,7 +10896,7 @@
       ],
       "risk": "medium",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateWebhook"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "webhooks delete-webhook",
@@ -11070,33 +11128,34 @@
     },
     {
       "path": "workspaces remove-user-for-workspace",
-      "summary": "Unavailable source-bound Asana mutation: Remove a user from a workspace or organization.",
+      "summary": "Source-bound Asana mutation: Remove a user from a workspace or organization.",
       "intent": "direct_write",
-      "availability": "planned",
-      "operation": "remove_user_for_workspace",
+      "availability": "implemented",
+      "write": "remove_user_for_workspace",
       "source_cli_path": "POST /workspaces/{workspace_gid}/removeUser",
       "source_url": "https://developers.asana.com/reference/removeuserforworkspace",
+      "source_operation": "asana.rest.removeUserForWorkspace",
       "flags": [
         {
-          "name": "workspace-gid",
-          "type": "string",
-          "summary": "Asana path parameter `workspace_gid`.",
-          "maps_to": "record.workspace_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-json",
-          "type": "string",
+          "name": "data",
           "summary": "JSON object for the documented Asana `data` envelope; accepted only by the named typed operation, not a raw API body.",
+          "type": "json",
           "maps_to": "record.data",
-          "allow_empty": false
+          "max_bytes": 1048576,
+          "required": true
         },
         {
-          "name": "confirm",
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "workspace-gid",
+          "summary": "Asana path parameter `workspace_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.workspace_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -11107,7 +11166,7 @@
       ],
       "risk": "high",
       "approval": "direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeUserForWorkspace"
+      "notes": "Implemented source-bound provider mutation through the declared one-record write action."
     },
     {
       "path": "workspaces get-workspace-events",

@@ -1,0 +1,4 @@
+{
+  "record": { "data": { "base_role_type": "member", "description": "Fixture role", "name": "Fixture role", "workspace": "fixture-workspace" } },
+  "expect": { "method": "POST", "path": "/roles", "body": { "data": { "base_role_type": "member", "description": "Fixture role", "name": "Fixture role", "workspace": "fixture-workspace" } } }
+}

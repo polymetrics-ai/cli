@@ -1,0 +1,4 @@
+{
+  "record": { "timesheet_approval_status_gid": "fixture-timesheet-status", "data": { "approval_status": "approved" } },
+  "expect": { "method": "PUT", "path": "/timesheet_approval_statuses/fixture-timesheet-status", "body": { "data": { "approval_status": "approved" } } }
+}

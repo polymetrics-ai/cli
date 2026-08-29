@@ -1,0 +1,4 @@
+{
+  "record": { "data": { "assignee": "fixture-assignee", "end_date": "2026-01-03", "parent": "fixture-project", "start_date": "2026-01-02" } },
+  "expect": { "method": "POST", "path": "/allocations", "body": { "data": { "assignee": "fixture-assignee", "end_date": "2026-01-03", "parent": "fixture-project", "start_date": "2026-01-02" } } }
+}

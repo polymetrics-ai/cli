@@ -3,7 +3,7 @@
   "docs": "https://developers.asana.com/reference/rest-api-reference (pinned source: https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml)",
   "reviewed_at": "2026-07-31",
   "operation_ledger_version": 1,
-  "scope": "Every HTTP operation in the pinned official Asana OpenAPI paths map is represented exactly once: 214 executable routes use covered_by, 34 source-backed operations name their exact incomplete foundation, and /batch is the sole not-applicable generic wrapper. Destructive/admin/delete operations are exposed only through named reverse-ETL actions with typed destructive confirmation and plan -> preview -> explicit approval -> execute. The /batch raw subrequest wrapper is disallowed because every underlying documented operation is represented individually.",
+  "scope": "Every HTTP operation in the pinned official Asana OpenAPI paths map is represented exactly once: 248 executable routes use covered_by and /batch is the sole not-applicable generic wrapper. Destructive/admin/delete operations are exposed only through named write actions with typed destructive confirmation and plan -> preview -> explicit approval -> execute. The /batch raw subrequest wrapper is disallowed because every underlying documented operation is represented individually.",
   "endpoints": [
     {
       "method": "GET",
@@ -15,14 +15,8 @@
     {
       "method": "POST",
       "path": "/access_requests",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAccessRequest",
-        "source_url": "https://developers.asana.com/reference/createaccessrequest",
-        "notes": "source_operation=asana.rest.createAccessRequest"
+      "covered_by": {
+        "write": "create_access_request"
       }
     },
     {
@@ -77,14 +71,8 @@
     {
       "method": "PUT",
       "path": "/allocations/{allocation_gid}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateAllocation",
-        "source_url": "https://developers.asana.com/reference/updateallocation",
-        "notes": "source_operation=asana.rest.updateAllocation"
+      "covered_by": {
+        "write": "update_allocation"
       }
     },
     {
@@ -104,14 +92,8 @@
     {
       "method": "POST",
       "path": "/allocations",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAllocation",
-        "source_url": "https://developers.asana.com/reference/createallocation",
-        "notes": "source_operation=asana.rest.createAllocation"
+      "covered_by": {
+        "write": "create_allocation"
       }
     },
     {
@@ -175,14 +157,8 @@
     {
       "method": "POST",
       "path": "/budgets",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createBudget",
-        "source_url": "https://developers.asana.com/reference/createbudget",
-        "notes": "source_operation=asana.rest.createBudget"
+      "covered_by": {
+        "write": "create_budget"
       }
     },
     {
@@ -195,14 +171,8 @@
     {
       "method": "PUT",
       "path": "/budgets/{budget_gid}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateBudget",
-        "source_url": "https://developers.asana.com/reference/updatebudget",
-        "notes": "source_operation=asana.rest.updateBudget"
+      "covered_by": {
+        "write": "update_budget"
       }
     },
     {
@@ -362,14 +332,8 @@
     {
       "method": "POST",
       "path": "/goals/{goal_gid}/removeSupportingRelationship",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeSupportingRelationship",
-        "source_url": "https://developers.asana.com/reference/removesupportingrelationship",
-        "notes": "source_operation=asana.rest.removeSupportingRelationship"
+      "covered_by": {
+        "write": "remove_supporting_relationship"
       }
     },
     {
@@ -431,14 +395,8 @@
     {
       "method": "POST",
       "path": "/goals/{goal_gid}/removeFollowers",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowers",
-        "source_url": "https://developers.asana.com/reference/removefollowers",
-        "notes": "source_operation=asana.rest.removeFollowers"
+      "covered_by": {
+        "write": "remove_followers"
       }
     },
     {
@@ -458,14 +416,8 @@
     {
       "method": "POST",
       "path": "/goals/{goal_gid}/removeCustomFieldSetting",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForGoal",
-        "source_url": "https://developers.asana.com/reference/removecustomfieldsettingforgoal",
-        "notes": "source_operation=asana.rest.removeCustomFieldSettingForGoal"
+      "covered_by": {
+        "write": "remove_custom_field_setting_for_goal"
       }
     },
     {
@@ -485,14 +437,8 @@
     {
       "method": "POST",
       "path": "/memberships",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-openapi30-reference-sibling-foundation-r1; missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createMembership",
-        "source_url": "https://developers.asana.com/reference/createmembership",
-        "notes": "source_operation=asana.rest.createMembership"
+      "covered_by": {
+        "write": "create_membership"
       }
     },
     {
@@ -505,14 +451,8 @@
     {
       "method": "PUT",
       "path": "/memberships/{membership_gid}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateMembership",
-        "source_url": "https://developers.asana.com/reference/updatemembership",
-        "notes": "source_operation=asana.rest.updateMembership"
+      "covered_by": {
+        "write": "update_membership"
       }
     },
     {
@@ -560,14 +500,8 @@
     {
       "method": "POST",
       "path": "/organization_exports",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createOrganizationExport",
-        "source_url": "https://developers.asana.com/reference/createorganizationexport",
-        "notes": "source_operation=asana.rest.createOrganizationExport"
+      "covered_by": {
+        "write": "create_organization_export"
       }
     },
     {
@@ -650,14 +584,8 @@
     {
       "method": "POST",
       "path": "/portfolios/{portfolio_gid}/removeItem",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeItemForPortfolio",
-        "source_url": "https://developers.asana.com/reference/removeitemforportfolio",
-        "notes": "source_operation=asana.rest.removeItemForPortfolio"
+      "covered_by": {
+        "write": "remove_item_for_portfolio"
       }
     },
     {
@@ -670,14 +598,8 @@
     {
       "method": "POST",
       "path": "/portfolios/{portfolio_gid}/removeCustomFieldSetting",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForPortfolio",
-        "source_url": "https://developers.asana.com/reference/removecustomfieldsettingforportfolio",
-        "notes": "source_operation=asana.rest.removeCustomFieldSettingForPortfolio"
+      "covered_by": {
+        "write": "remove_custom_field_setting_for_portfolio"
       }
     },
     {
@@ -690,14 +612,8 @@
     {
       "method": "POST",
       "path": "/portfolios/{portfolio_gid}/removeMembers",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeMembersForPortfolio",
-        "source_url": "https://developers.asana.com/reference/removemembersforportfolio",
-        "notes": "source_operation=asana.rest.removeMembersForPortfolio"
+      "covered_by": {
+        "write": "remove_members_for_portfolio"
       }
     },
     {
@@ -934,14 +850,8 @@
     {
       "method": "POST",
       "path": "/projects/{project_gid}/removeCustomFieldSetting",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeCustomFieldSettingForProject",
-        "source_url": "https://developers.asana.com/reference/removecustomfieldsettingforproject",
-        "notes": "source_operation=asana.rest.removeCustomFieldSettingForProject"
+      "covered_by": {
+        "write": "remove_custom_field_setting_for_project"
       }
     },
     {
@@ -961,14 +871,8 @@
     {
       "method": "POST",
       "path": "/projects/{project_gid}/removeMembers",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeMembersForProject",
-        "source_url": "https://developers.asana.com/reference/removemembersforproject",
-        "notes": "source_operation=asana.rest.removeMembersForProject"
+      "covered_by": {
+        "write": "remove_members_for_project"
       }
     },
     {
@@ -981,14 +885,8 @@
     {
       "method": "POST",
       "path": "/projects/{project_gid}/removeFollowers",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowersForProject",
-        "source_url": "https://developers.asana.com/reference/removefollowersforproject",
-        "notes": "source_operation=asana.rest.removeFollowersForProject"
+      "covered_by": {
+        "write": "remove_followers_for_project"
       }
     },
     {
@@ -1008,14 +906,8 @@
     {
       "method": "POST",
       "path": "/rates",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createRate",
-        "source_url": "https://developers.asana.com/reference/createrate",
-        "notes": "source_operation=asana.rest.createRate"
+      "covered_by": {
+        "write": "create_rate"
       }
     },
     {
@@ -1028,14 +920,8 @@
     {
       "method": "PUT",
       "path": "/rates/{rate_gid}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateRate",
-        "source_url": "https://developers.asana.com/reference/updaterate",
-        "notes": "source_operation=asana.rest.updateRate"
+      "covered_by": {
+        "write": "update_rate"
       }
     },
     {
@@ -1062,14 +948,8 @@
     {
       "method": "POST",
       "path": "/roles",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createRole",
-        "source_url": "https://developers.asana.com/reference/createrole",
-        "notes": "source_operation=asana.rest.createRole"
+      "covered_by": {
+        "write": "create_role"
       }
     },
     {
@@ -1082,14 +962,8 @@
     {
       "method": "PUT",
       "path": "/roles/{role_gid}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateRole",
-        "source_url": "https://developers.asana.com/reference/updaterole",
-        "notes": "source_operation=asana.rest.updateRole"
+      "covered_by": {
+        "write": "update_role"
       }
     },
     {
@@ -1424,14 +1298,8 @@
     {
       "method": "POST",
       "path": "/tasks/{task_gid}/removeDependencies",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeDependenciesForTask",
-        "source_url": "https://developers.asana.com/reference/removedependenciesfortask",
-        "notes": "source_operation=asana.rest.removeDependenciesForTask"
+      "covered_by": {
+        "write": "remove_dependencies_for_task"
       }
     },
     {
@@ -1451,14 +1319,8 @@
     {
       "method": "POST",
       "path": "/tasks/{task_gid}/removeDependents",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeDependentsForTask",
-        "source_url": "https://developers.asana.com/reference/removedependentsfortask",
-        "notes": "source_operation=asana.rest.removeDependentsForTask"
+      "covered_by": {
+        "write": "remove_dependents_for_task"
       }
     },
     {
@@ -1471,14 +1333,8 @@
     {
       "method": "POST",
       "path": "/tasks/{task_gid}/removeProject",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeProjectForTask",
-        "source_url": "https://developers.asana.com/reference/removeprojectfortask",
-        "notes": "source_operation=asana.rest.removeProjectForTask"
+      "covered_by": {
+        "write": "remove_project_for_task"
       }
     },
     {
@@ -1491,14 +1347,8 @@
     {
       "method": "POST",
       "path": "/tasks/{task_gid}/removeTag",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeTagForTask",
-        "source_url": "https://developers.asana.com/reference/removetagfortask",
-        "notes": "source_operation=asana.rest.removeTagForTask"
+      "covered_by": {
+        "write": "remove_tag_for_task"
       }
     },
     {
@@ -1511,14 +1361,8 @@
     {
       "method": "POST",
       "path": "/tasks/{task_gid}/removeFollowers",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeFollowerForTask",
-        "source_url": "https://developers.asana.com/reference/removefollowerfortask",
-        "notes": "source_operation=asana.rest.removeFollowerForTask"
+      "covered_by": {
+        "write": "remove_follower_for_task"
       }
     },
     {
@@ -1608,14 +1452,8 @@
     {
       "method": "POST",
       "path": "/teams/{team_gid}/removeUser",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeUserForTeam",
-        "source_url": "https://developers.asana.com/reference/removeuserforteam",
-        "notes": "source_operation=asana.rest.removeUserForTeam"
+      "covered_by": {
+        "write": "remove_user_for_team"
       }
     },
     {
@@ -1642,14 +1480,8 @@
     {
       "method": "PUT",
       "path": "/time_tracking_categories/{time_tracking_category_gid}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateTimeTrackingCategory",
-        "source_url": "https://developers.asana.com/reference/updatetimetrackingcategory",
-        "notes": "source_operation=asana.rest.updateTimeTrackingCategory"
+      "covered_by": {
+        "write": "update_time_tracking_category"
       }
     },
     {
@@ -1676,14 +1508,8 @@
     {
       "method": "POST",
       "path": "/time_tracking_categories",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createTimeTrackingCategory",
-        "source_url": "https://developers.asana.com/reference/createtimetrackingcategory",
-        "notes": "source_operation=asana.rest.createTimeTrackingCategory"
+      "covered_by": {
+        "write": "create_time_tracking_category"
       }
     },
     {
@@ -1738,14 +1564,8 @@
     {
       "method": "PUT",
       "path": "/timesheet_approval_statuses/{timesheet_approval_status_gid}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateTimesheetApprovalStatus",
-        "source_url": "https://developers.asana.com/reference/updatetimesheetapprovalstatus",
-        "notes": "source_operation=asana.rest.updateTimesheetApprovalStatus"
+      "covered_by": {
+        "write": "update_timesheet_approval_status"
       }
     },
     {
@@ -1758,14 +1578,8 @@
     {
       "method": "POST",
       "path": "/timesheet_approval_statuses",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createTimesheetApprovalStatus",
-        "source_url": "https://developers.asana.com/reference/createtimesheetapprovalstatus",
-        "notes": "source_operation=asana.rest.createTimesheetApprovalStatus"
+      "covered_by": {
+        "write": "create_timesheet_approval_status"
       }
     },
     {
@@ -1855,14 +1669,8 @@
     {
       "method": "POST",
       "path": "/webhooks",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createWebhook",
-        "source_url": "https://developers.asana.com/reference/createwebhook",
-        "notes": "source_operation=asana.rest.createWebhook"
+      "covered_by": {
+        "write": "create_webhook"
       }
     },
     {
@@ -1875,14 +1683,8 @@
     {
       "method": "PUT",
       "path": "/webhooks/{webhook_gid}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.updateWebhook",
-        "source_url": "https://developers.asana.com/reference/updatewebhook",
-        "notes": "source_operation=asana.rest.updateWebhook"
+      "covered_by": {
+        "write": "update_webhook"
       }
     },
     {
@@ -1944,14 +1746,8 @@
     {
       "method": "POST",
       "path": "/workspaces/{workspace_gid}/removeUser",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.removeUserForWorkspace",
-        "source_url": "https://developers.asana.com/reference/removeuserforworkspace",
-        "notes": "source_operation=asana.rest.removeUserForWorkspace"
+      "covered_by": {
+        "write": "remove_user_for_workspace"
       }
     },
     {

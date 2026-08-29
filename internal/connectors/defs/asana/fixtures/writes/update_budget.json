@@ -1,0 +1,4 @@
+{
+  "record": { "budget_gid": "fixture-budget", "data": { "budget_type": "time" } },
+  "expect": { "method": "PUT", "path": "/budgets/fixture-budget", "body": { "data": { "budget_type": "time" } } }
+}

@@ -1,7 +1,7 @@
 {
   "name": "asana",
   "display_name": "Asana",
-  "description": "Maps 107 bounded operation-backed direct reads, 12 stream-backed interactive read commands that still need a one-provider-request bound, and 96 approval-gated one-record direct writes. All 12 streams support saved full-refresh ETL; project-scoped tasks additionally support source-backed event-token incremental modes; all 96 write actions support warehouse-table reverse ETL. The pinned OpenAPI ledger accounts for every official operation as an executable covered_by route, an exact named foundation gap, or the one not-applicable generic batch wrapper.",
+  "description": "Maps 107 bounded operation-backed direct reads, 12 stream-backed interactive read commands that still need a one-provider-request bound, and 130 approval-gated one-record direct writes. All 12 streams support saved full-refresh ETL; project-scoped tasks additionally support source-backed event-token incremental modes; all 130 write actions support warehouse-table reverse ETL. The pinned OpenAPI ledger accounts for every official operation as an executable covered_by route or the one not-applicable generic batch wrapper.",
   "integration_type": "api",
   "docs_url": "https://developers.asana.com/reference/rest-api-reference",
   "release_stage": "ga",

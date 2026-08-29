@@ -1,0 +1,4 @@
+{
+  "record": { "data": { "end_date": "2026-01-07", "start_date": "2026-01-01", "user": "fixture-user", "workspace": "fixture-workspace" } },
+  "expect": { "method": "POST", "path": "/timesheet_approval_statuses", "body": { "data": { "end_date": "2026-01-07", "start_date": "2026-01-01", "user": "fixture-user", "workspace": "fixture-workspace" } } }
+}

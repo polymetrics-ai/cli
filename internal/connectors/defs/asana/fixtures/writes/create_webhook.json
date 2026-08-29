@@ -1,0 +1,4 @@
+{
+  "record": { "data": { "resource": "fixture-project", "target": "https://example.invalid/asana-webhook" } },
+  "expect": { "method": "POST", "path": "/webhooks", "body": { "data": { "resource": "fixture-project", "target": "https://example.invalid/asana-webhook" } } }
+}

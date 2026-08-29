@@ -1,0 +1,4 @@
+{
+  "record": { "role_gid": "fixture-role", "data": { "name": "Updated fixture role" } },
+  "expect": { "method": "PUT", "path": "/roles/fixture-role", "body": { "data": { "name": "Updated fixture role" } } }
+}

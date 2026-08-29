@@ -1,0 +1,4 @@
+{
+  "record": { "portfolio_gid": "fixture-portfolio", "data": { "members": "fixture-user" } },
+  "expect": { "method": "POST", "path": "/portfolios/fixture-portfolio/removeMembers", "body": { "data": { "members": "fixture-user" } } }
+}

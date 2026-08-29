@@ -1,0 +1,4 @@
+{
+  "record": { "data": { "organization": "fixture-workspace" } },
+  "expect": { "method": "POST", "path": "/organization_exports", "body": { "data": { "organization": "fixture-workspace" } } }
+}

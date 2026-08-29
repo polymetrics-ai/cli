@@ -1,0 +1,4 @@
+{
+  "record": { "allocation_gid": "fixture-allocation", "data": { "start_date": "2026-01-02" } },
+  "expect": { "method": "PUT", "path": "/allocations/fixture-allocation", "body": { "data": { "start_date": "2026-01-02" } } }
+}

@@ -1,0 +1,4 @@
+{
+  "record": { "goal_gid": "fixture-goal", "data": { "followers": ["fixture-user"] } },
+  "expect": { "method": "POST", "path": "/goals/fixture-goal/removeFollowers", "body": { "data": { "followers": ["fixture-user"] } } }
+}

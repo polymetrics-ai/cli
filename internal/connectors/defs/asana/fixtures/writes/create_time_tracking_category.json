@@ -1,0 +1,4 @@
+{
+  "record": { "data": { "name": "Fixture category", "workspace": "fixture-workspace" } },
+  "expect": { "method": "POST", "path": "/time_tracking_categories", "body": { "data": { "name": "Fixture category", "workspace": "fixture-workspace" } } }
+}

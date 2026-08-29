@@ -1,0 +1,4 @@
+{
+  "record": { "webhook_gid": "fixture-webhook", "data": { "filters": [{ "action": "changed", "fields": ["due_on"], "resource_type": "task" }] } },
+  "expect": { "method": "PUT", "path": "/webhooks/fixture-webhook", "body": { "data": { "filters": [{ "action": "changed", "fields": ["due_on"], "resource_type": "task" }] } } }
+}

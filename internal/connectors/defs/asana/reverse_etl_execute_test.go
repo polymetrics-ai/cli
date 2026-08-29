@@ -14,6 +14,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -57,12 +58,12 @@ const (
 	// bound to a real write action. It includes the source-complete no-body
 	// DELETE/POST promotions, so their source coverage cannot drift back to a
 	// blocked ledger row while the command remains executable.
-	reverseETLBoundEndpoints = 94
+	reverseETLBoundEndpoints = 128
 
-	// blockedDestructiveOperations names only the remaining source-incomplete
-	// destructive rows. The 19 source-complete DELETEs are implemented actions,
-	// not blanket deferrals.
-	blockedDestructiveOperations = 16
+	// blockedDestructiveOperations must remain zero now that every source-locked
+	// destructive mutation is bound to a typed action. The generic /batch
+	// wrapper is unsupported_api, not an unbound destructive operation.
+	blockedDestructiveOperations = 0
 )
 
 type asanaOperationSourceLock struct {
@@ -78,6 +79,11 @@ type asanaLockedOperation struct {
 	ID     string `json:"id"`
 	Method string `json:"method"`
 	Path   string `json:"path"`
+	Source struct {
+		RequestBody *struct {
+			Required bool `json:"required"`
+		} `json:"requestBody"`
+	} `json:"source_operation"`
 }
 
 func loadBundle(t *testing.T) engine.Bundle {
@@ -229,10 +235,134 @@ func TestExecutableCommandsAreAccountedForByPinnedSourceLock(t *testing.T) {
 	if directReads != 119 {
 		t.Fatalf("source-locked implemented direct reads = %d, want 119", directReads)
 	}
-	if directWrites != 96 || len(writeEndpoints) != 95 {
-		t.Fatalf("source-accounted implemented direct writes = %d across %d provider endpoints, want 96 across 95",
+	if directWrites != 130 || len(writeEndpoints) != 129 {
+		t.Fatalf("source-accounted implemented direct writes = %d across %d provider endpoints, want 130 across 129",
 			directWrites, len(writeEndpoints))
 	}
+}
+
+// TestSourceLockedDeferredOperationsAreMaterialized pins the final 34 real
+// provider mutations that were previously represented only by planned CLI
+// rows. The legacy attachment command aliases are deliberately absent from
+// this table: they are additional names for createAttachmentForObject, not
+// provider operations that may inflate the immutable 249-operation census.
+func TestSourceLockedDeferredOperationsAreMaterialized(t *testing.T) {
+	type mutationBinding struct {
+		sourceID string
+		method   string
+		path     string
+		command  string
+		action   string
+	}
+	mutations := []mutationBinding{
+		{sourceID: "asana.rest.createAccessRequest", method: "POST", path: "/access_requests", command: "access-requests create-access-request", action: "create_access_request"},
+		{sourceID: "asana.rest.updateAllocation", method: "PUT", path: "/allocations/{allocation_gid}", command: "allocations update-allocation", action: "update_allocation"},
+		{sourceID: "asana.rest.createAllocation", method: "POST", path: "/allocations", command: "allocations create-allocation", action: "create_allocation"},
+		{sourceID: "asana.rest.createBudget", method: "POST", path: "/budgets", command: "budgets create-budget", action: "create_budget"},
+		{sourceID: "asana.rest.updateBudget", method: "PUT", path: "/budgets/{budget_gid}", command: "budgets update-budget", action: "update_budget"},
+		{sourceID: "asana.rest.removeSupportingRelationship", method: "POST", path: "/goals/{goal_gid}/removeSupportingRelationship", command: "goal-relationships remove-supporting-relationship", action: "remove_supporting_relationship"},
+		{sourceID: "asana.rest.removeFollowers", method: "POST", path: "/goals/{goal_gid}/removeFollowers", command: "goals remove-followers", action: "remove_followers"},
+		{sourceID: "asana.rest.removeCustomFieldSettingForGoal", method: "POST", path: "/goals/{goal_gid}/removeCustomFieldSetting", command: "goals remove-custom-field-setting-for-goal", action: "remove_custom_field_setting_for_goal"},
+		{sourceID: "asana.rest.createMembership", method: "POST", path: "/memberships", command: "memberships create-membership", action: "create_membership"},
+		{sourceID: "asana.rest.updateMembership", method: "PUT", path: "/memberships/{membership_gid}", command: "memberships update-membership", action: "update_membership"},
+		{sourceID: "asana.rest.createOrganizationExport", method: "POST", path: "/organization_exports", command: "organization-exports create-organization-export", action: "create_organization_export"},
+		{sourceID: "asana.rest.removeItemForPortfolio", method: "POST", path: "/portfolios/{portfolio_gid}/removeItem", command: "portfolios remove-item-for-portfolio", action: "remove_item_for_portfolio"},
+		{sourceID: "asana.rest.removeCustomFieldSettingForPortfolio", method: "POST", path: "/portfolios/{portfolio_gid}/removeCustomFieldSetting", command: "portfolios remove-custom-field-setting-for-portfolio", action: "remove_custom_field_setting_for_portfolio"},
+		{sourceID: "asana.rest.removeMembersForPortfolio", method: "POST", path: "/portfolios/{portfolio_gid}/removeMembers", command: "portfolios remove-members-for-portfolio", action: "remove_members_for_portfolio"},
+		{sourceID: "asana.rest.removeCustomFieldSettingForProject", method: "POST", path: "/projects/{project_gid}/removeCustomFieldSetting", command: "projects remove-custom-field-setting-for-project", action: "remove_custom_field_setting_for_project"},
+		{sourceID: "asana.rest.removeMembersForProject", method: "POST", path: "/projects/{project_gid}/removeMembers", command: "projects remove-members-for-project", action: "remove_members_for_project"},
+		{sourceID: "asana.rest.removeFollowersForProject", method: "POST", path: "/projects/{project_gid}/removeFollowers", command: "projects remove-followers-for-project", action: "remove_followers_for_project"},
+		{sourceID: "asana.rest.createRate", method: "POST", path: "/rates", command: "rates create-rate", action: "create_rate"},
+		{sourceID: "asana.rest.updateRate", method: "PUT", path: "/rates/{rate_gid}", command: "rates update-rate", action: "update_rate"},
+		{sourceID: "asana.rest.createRole", method: "POST", path: "/roles", command: "roles create-role", action: "create_role"},
+		{sourceID: "asana.rest.updateRole", method: "PUT", path: "/roles/{role_gid}", command: "roles update-role", action: "update_role"},
+		{sourceID: "asana.rest.removeDependenciesForTask", method: "POST", path: "/tasks/{task_gid}/removeDependencies", command: "tasks remove-dependencies-for-task", action: "remove_dependencies_for_task"},
+		{sourceID: "asana.rest.removeDependentsForTask", method: "POST", path: "/tasks/{task_gid}/removeDependents", command: "tasks remove-dependents-for-task", action: "remove_dependents_for_task"},
+		{sourceID: "asana.rest.removeProjectForTask", method: "POST", path: "/tasks/{task_gid}/removeProject", command: "tasks remove-project-for-task", action: "remove_project_for_task"},
+		{sourceID: "asana.rest.removeTagForTask", method: "POST", path: "/tasks/{task_gid}/removeTag", command: "tasks remove-tag-for-task", action: "remove_tag_for_task"},
+		{sourceID: "asana.rest.removeFollowerForTask", method: "POST", path: "/tasks/{task_gid}/removeFollowers", command: "tasks remove-follower-for-task", action: "remove_follower_for_task"},
+		{sourceID: "asana.rest.removeUserForTeam", method: "POST", path: "/teams/{team_gid}/removeUser", command: "teams remove-user-for-team", action: "remove_user_for_team"},
+		{sourceID: "asana.rest.updateTimeTrackingCategory", method: "PUT", path: "/time_tracking_categories/{time_tracking_category_gid}", command: "time-tracking-categories update-time-tracking-category", action: "update_time_tracking_category"},
+		{sourceID: "asana.rest.createTimeTrackingCategory", method: "POST", path: "/time_tracking_categories", command: "time-tracking-categories create-time-tracking-category", action: "create_time_tracking_category"},
+		{sourceID: "asana.rest.updateTimesheetApprovalStatus", method: "PUT", path: "/timesheet_approval_statuses/{timesheet_approval_status_gid}", command: "timesheet-approval-statuses update-timesheet-approval-status", action: "update_timesheet_approval_status"},
+		{sourceID: "asana.rest.createTimesheetApprovalStatus", method: "POST", path: "/timesheet_approval_statuses", command: "timesheet-approval-statuses create-timesheet-approval-status", action: "create_timesheet_approval_status"},
+		{sourceID: "asana.rest.createWebhook", method: "POST", path: "/webhooks", command: "webhooks create-webhook", action: "create_webhook"},
+		{sourceID: "asana.rest.updateWebhook", method: "PUT", path: "/webhooks/{webhook_gid}", command: "webhooks update-webhook", action: "update_webhook"},
+		{sourceID: "asana.rest.removeUserForWorkspace", method: "POST", path: "/workspaces/{workspace_gid}/removeUser", command: "workspaces remove-user-for-workspace", action: "remove_user_for_workspace"},
+	}
+
+	bundle := loadBundle(t)
+	lock := loadOperationSourceLock(t)
+	lockedByID := make(map[string]asanaLockedOperation, len(lock.REST.Operations))
+	for _, operation := range lock.REST.Operations {
+		lockedByID[operation.ID] = operation
+	}
+	commandsByPath := make(map[string]engine.CLICommand, len(bundle.CLISurface.Commands))
+	for _, command := range bundle.CLISurface.Commands {
+		commandsByPath[command.Path] = command
+	}
+	actionsByName := make(map[string]engine.WriteAction, len(bundle.Writes))
+	for _, action := range bundle.Writes {
+		actionsByName[action.Name] = action
+	}
+	apiByEndpoint := make(map[string]engine.SurfaceEndpoint, len(bundle.Surface.Endpoints))
+	for _, endpoint := range bundle.Surface.Endpoints {
+		apiByEndpoint[strings.ToUpper(endpoint.Method)+" "+endpoint.Path] = endpoint
+	}
+
+	for _, binding := range mutations {
+		t.Run(binding.action, func(t *testing.T) {
+			locked, ok := lockedByID[binding.sourceID]
+			if !ok || !strings.EqualFold(locked.Method, binding.method) || locked.Path != binding.path {
+				t.Fatalf("source lock %q = %+v, want %s %s", binding.sourceID, locked, binding.method, binding.path)
+			}
+			command, ok := commandsByPath[binding.command]
+			if !ok || command.Availability != "implemented" || command.Intent != "direct_write" || command.Write != binding.action || command.SourceOperation != binding.sourceID {
+				t.Fatalf("command %q = %+v, want implemented source-bound direct_write %q", binding.command, command, binding.action)
+			}
+			if len(command.APISurface) != 1 || !strings.EqualFold(command.APISurface[0].Method, binding.method) || command.APISurface[0].Path != binding.path {
+				t.Fatalf("command %q api surface = %+v, want %s %s", binding.command, command.APISurface, binding.method, binding.path)
+			}
+			bodyRequired := binding.sourceID != "asana.rest.createMembership"
+			if locked.Source.RequestBody == nil || locked.Source.RequestBody.Required != bodyRequired {
+				t.Fatalf("source lock %q request body = %+v, want required=%t", binding.sourceID, locked.Source.RequestBody, bodyRequired)
+			}
+			var dataFlag *engine.CLIFlag
+			for index := range command.Flags {
+				if command.Flags[index].MapsTo == "record.data" {
+					dataFlag = &command.Flags[index]
+					break
+				}
+			}
+			if dataFlag == nil || dataFlag.Type != "json" || dataFlag.Required != bodyRequired {
+				t.Fatalf("command %q data flag = %+v, want source-required typed JSON=%t", binding.command, dataFlag, bodyRequired)
+			}
+			action, ok := actionsByName[binding.action]
+			if !ok || !strings.EqualFold(action.Method, binding.method) {
+				t.Fatalf("write action %q = %+v, want method %s", binding.action, action, binding.method)
+			}
+			var recordSchema struct {
+				Required []string `json:"required"`
+			}
+			if err := json.Unmarshal(action.RecordSchema, &recordSchema); err != nil {
+				t.Fatalf("decode write action %q record schema: %v", binding.action, err)
+			}
+			if got := slices.Contains(recordSchema.Required, "data"); got != bodyRequired {
+				t.Fatalf("write action %q required data = %t, want source request body required=%t", binding.action, got, bodyRequired)
+			}
+			if action.BodyType != "json" || !reflect.DeepEqual(action.BodyFields, []string{"data"}) {
+				t.Fatalf("write action %q body = type %q fields %v, want source JSON data envelope", binding.action, action.BodyType, action.BodyFields)
+			}
+			endpoint := apiByEndpoint[binding.method+" "+binding.path]
+			if endpoint.CoveredBy == nil || endpoint.CoveredBy.Write != binding.action {
+				t.Fatalf("api surface %s %s = %+v, want write %q", binding.method, binding.path, endpoint, binding.action)
+			}
+			if _, err := os.Stat(filepath.Join("fixtures", "writes", binding.action+".json")); err != nil {
+				t.Fatalf("sanitized fixture for %q: %v", binding.action, err)
+			}
+		})
+	}
+
 }
 
 func TestGetMembershipExecutesItsSourceLockedPathBinding(t *testing.T) {
@@ -353,8 +483,7 @@ func TestEveryLockedOperationHasOneAccountedCommandLane(t *testing.T) {
 	wantStates := map[string]int{
 		"implemented_direct_read":              107,
 		"implemented_stream_read_etl":          12,
-		"implemented_direct_write_reverse_etl": 95,
-		"planned_direct_write":                 34,
+		"implemented_direct_write_reverse_etl": 129,
 		"unsupported_api":                      1,
 	}
 	if !reflect.DeepEqual(states, wantStates) {
@@ -587,7 +716,7 @@ func TestDirectWriteActionsExecute(t *testing.T) {
 				}
 				built, err := commandrunner.BuildWriteCommand(context.Background(), conn, commandrunner.Request{
 					Path:    path,
-					Flags:   flagsFromRecord(cmd, fixture.Record),
+					Flags:   flagsFromRecord(t, cmd, fixture.Record),
 					Config:  cfg,
 					Preview: true,
 				})
@@ -614,7 +743,7 @@ func TestDirectWriteActionsExecute(t *testing.T) {
 			if engine.DestructiveTargetForWrite(b.Name, action).RequiresApproval() {
 				plan, preview, err := application.PlanConnectorCommand(context.Background(), app.PlanConnectorCommandRequest{
 					Name: action.Name, Connector: b.Name, Credential: b.Name + "-fixture", Path: path,
-					Flags: flagsFromRecord(cmd, fixture.Record), Preview: true,
+					Flags: flagsFromRecord(t, cmd, fixture.Record), Preview: true,
 				})
 				if err != nil {
 					t.Fatalf("PlanConnectorCommand(%q) = %v", action.Name, err)
@@ -625,7 +754,7 @@ func TestDirectWriteActionsExecute(t *testing.T) {
 				run, err := application.RunReverseETL(context.Background(), app.RunReverseETLRequest{
 					PlanID: plan.ID, ApprovalToken: plan.ApprovalToken,
 					Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
-					WithheldFlags: flagsFromRecord(cmd, fixture.Record),
+					WithheldFlags: flagsFromRecord(t, cmd, fixture.Record),
 				})
 				if err != nil {
 					t.Fatalf("RunReverseETL(%q) = %v", action.Name, err)
@@ -1028,7 +1157,8 @@ func identityMappings(record map[string]any) map[string]string {
 
 // flagsFromRecord reverse-maps a fixture record onto the command's declared
 // flags, so BuildWriteCommand exercises the same flag plumbing the CLI uses.
-func flagsFromRecord(cmd connectors.CommandSurfaceCommand, record map[string]any) map[string][]string {
+func flagsFromRecord(t *testing.T, cmd connectors.CommandSurfaceCommand, record map[string]any) map[string][]string {
+	t.Helper()
 	flags := map[string][]string{}
 	for _, flag := range cmd.Flags {
 		target, ok := strings.CutPrefix(flag.MapsTo, "record.")
@@ -1037,6 +1167,14 @@ func flagsFromRecord(cmd connectors.CommandSurfaceCommand, record map[string]any
 		}
 		value, found := lookupRecordPath(record, strings.Split(target, "."))
 		if !found || value == nil {
+			continue
+		}
+		if flag.Type == "json" {
+			encoded, err := json.Marshal(value)
+			if err != nil {
+				t.Fatalf("marshal fixture field %q for command %q: %v", target, cmd.Path, err)
+			}
+			flags[flag.Name] = []string{string(encoded)}
 			continue
 		}
 		switch typed := value.(type) {
@@ -1053,7 +1191,7 @@ func flagsFromRecord(cmd connectors.CommandSurfaceCommand, record map[string]any
 				flags[flag.Name] = []string{strings.Join(parts, ",")}
 			}
 		case map[string]any:
-			// Objects have no flag representation; the record carries them.
+			t.Fatalf("command %q maps object field %q through non-JSON flag %q", cmd.Path, target, flag.Name)
 		default:
 			flags[flag.Name] = []string{fmt.Sprint(typed)}
 		}

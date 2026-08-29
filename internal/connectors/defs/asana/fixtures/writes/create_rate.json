@@ -1,0 +1,4 @@
+{
+  "record": { "data": { "parent": "fixture-project", "rate": 125, "resource": "fixture-user" } },
+  "expect": { "method": "POST", "path": "/rates", "body": { "data": { "parent": "fixture-project", "rate": 125, "resource": "fixture-user" } } }
+}

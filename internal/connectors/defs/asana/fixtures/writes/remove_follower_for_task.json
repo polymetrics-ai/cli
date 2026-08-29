@@ -1,0 +1,4 @@
+{
+  "record": { "task_gid": "fixture-task", "data": { "followers": ["fixture-user"] } },
+  "expect": { "method": "POST", "path": "/tasks/fixture-task/removeFollowers", "body": { "data": { "followers": ["fixture-user"] } } }
+}

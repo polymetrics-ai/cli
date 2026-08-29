@@ -95,9 +95,9 @@
     },
     "direct_write": {
       "status": "mapped",
-      "implementation": "cli_surface.json binds 96 implemented one-record commands to writes.json; plan -> preview -> approval -> execute is preserved",
-      "implemented_command_count": 96,
-      "planned_command_count": 35,
+      "implementation": "cli_surface.json binds 130 implemented one-record commands to writes.json; plan -> preview -> approval -> execute is preserved",
+      "implemented_command_count": 130,
+      "planned_command_count": 1,
       "unsupported_command_count": 1,
       "named_operation_runtime_gap": {
         "command": "attachments create-attachment-for-object",
@@ -180,21 +180,21 @@
       ]
     },
     {
-      "id": "legacy_asana_request_schema_rows",
-      "state": "existing_connector_backlog",
+      "id": "asana_action_scoped_request_schema_projection",
+      "state": "resolved_runtime_mapping",
       "affected_lane": "reverse_etl_and_direct_write",
-      "reason": "Other currently planned Asana mutations still name cli-request-schema-foundation-r1 in their own existing JSON. Their source operations remain mapped; each needs its own closed write or operation request declaration before it can be executable.",
+      "reason": "The 34 formerly planned Asana mutations now use named write actions with closed record roots. Exactly documented fields are projected recursively where representable; source-owned allOf containers remain one named, byte- and property-bounded JSON field rather than a generic HTTP body.",
       "does_not_block": [
-        "the attachment mappings in this change",
+        "all 130 declared write actions",
         "source lock provenance",
         "ETL and direct-read mappings"
       ]
     },
     {
       "id": "legacy_asana_openapi_reference_sibling_rows",
-      "state": "existing_connector_backlog",
+      "state": "resolved_runtime_mapping_with_authoring_gap",
       "affected_lane": "reverse_etl_and_direct_write",
-      "reason": "One existing Asana mutation row names cli-openapi30-reference-sibling-foundation-r1. This is an importer/runtime declaration gap, not a reason to omit the source operation from mapping."
+      "reason": "createMembership is executable through its source-bound named write action. The retained descriptor still records the OpenAPI 3.0 response-schema reference sibling as an authoring/import diagnostic; it does not alter the action request or runtime route."
     },
     {
       "id": "asana_enriched_source_lock_projection_parser",
