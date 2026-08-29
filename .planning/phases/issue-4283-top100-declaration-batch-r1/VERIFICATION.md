@@ -13,6 +13,9 @@
 - [x] Processed Firstmate inbox message `006.msg`: commit `924197b49adc516ec7bdb3b6d928c9701cfab946` was normal-fast-forward pushed and remote verified, then `006.msg` was moved to `handled/`.
 - [x] Processed Firstmate inbox messages `007.msg` through `010.msg`: narrowed policy scope to the three named direct clauses, completed focused validation, and moved each message to `handled/`. Message `010.msg` additionally prohibits installing ad hoc tooling or scripts.
 - [x] Committed immutable Batch-1 discovery denominator: `data/connector-canon/batch1-source-rigidity-r2-cohort-ledger.json` pins all ten source locks, schema forms, identity locations, source-lock SHA-256 values, and the 4,341-identity total. It expressly has zero projected cells and makes no reachability claim.
+- [x] P1 red/green: `go test -timeout 20m ./cmd/connectorgen -run 'TestParseSourceImportLock(RetainsBatchOneLegacyProviderFacts|RetainsSingularMediaExamples)$' -count=1` first failed on retained provider fields, then the focused parser suite passed after source-only object-fragment retention. The tests cover the named representative Batch-1 locks (Asana, Bitbucket, GitLab, Jira, Stripe, and Vercel among the ten), happy provider facts, malformed fragment rejection, explicit `null` media example preservation, and strict outer-lock rejection.
+- [x] P1 scoped green checks: `go test -timeout 20m ./cmd/connectorgen` passed (`195.891s`); `go vet ./cmd/connectorgen`, `make docs-check`, Ruby JSON parsing of the Atlas and cohort ledger, and `git diff --check` passed. The Atlas was updated as the `source.retention-import.v1` constrained extension, including owner symbols and proof tests.
+- [x] P2 red remains explicit: `go run ./cmd/connectorgen source-materialize gitlab --check` now reaches the documented v4-only bridge guard and exits 1. It makes no provider request and does not alter the P1 source-evidence result.
 
 ## Not run by design
 

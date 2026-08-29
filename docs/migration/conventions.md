@@ -1652,6 +1652,27 @@ go run ./cmd/connectorgen source-import <connector> --out <reviewed-descriptor-p
 go run ./cmd/connectorgen source-import <connector> --out <reviewed-descriptor-path> --check
 ```
 
+Before changing a named connector cohort, commit a machine-checkable immutable
+source-lock ledger (lock path, identity digest, schema form, and source
+denominator). Its reconciliation report must keep one row for every locked
+source identity: either `implemented`, `blocked_with_named_foundation`, or
+`unsupported_with_provider_evidence`, together with its citation, projected
+lane cell, command/help reachability, and any named gap. Certification and
+credential availability are verification overlays only; neither may remove an
+identity or decide membership. Consult the Foundation Atlas before recording a
+missing foundation. A genuinely unsupported source contract remains a cited,
+discoverable non-executable row rather than an invented REST, GraphQL, or
+success contract.
+
+For legacy v1/v2 locks, `source_contract` and each `source_operation` are
+identity-attached provider evidence. The importer accepts them only as JSON
+objects and retains their provider-owned bytes, including standard-dialect
+members and provider extensions such as media examples, form encodings,
+response headers, or server variables. Those fragments are not runtime input:
+they cannot select a transport, admit a command, alter approval/credential
+policy, or replace the hash-pinned source artifact. Unknown members outside
+those two provider-fragment fields remain a strict source-lock error.
+
 The only command allowed to obtain a retained copy is the explicit maintenance
 operation below. It accepts the connector-owned operation lock or the
 connector-owned parity lock, fetches only the URL already named by that lock,

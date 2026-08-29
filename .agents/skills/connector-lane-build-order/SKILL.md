@@ -54,6 +54,17 @@ operation, field, schema constraint, media type, and response shape needs a
 source-lock citation. Documentation-derived mapping never permits inferring a
 contract the documentation does not state.
 
+For a named connector cohort, freeze and commit one machine-checkable
+source-lock denominator before mapping. Reconcile every source identity to one
+of `implemented`, `blocked_with_named_foundation`, or
+`unsupported_with_provider_evidence`, and retain its citation, projected lane
+cell, command/help reachability, and named gap. Certification, credentials,
+and importer limitations are overlays; they cannot erase a source identity or
+decide cohort membership. Consult the Foundation Atlas before recording a
+missing foundation. Provider-only legacy source fragments may be retained as
+non-executable evidence, but they never become a generic transport or a reason
+to infer an undocumented provider contract.
+
 The mandatory authoring path is source lock → mapping/projection → connector
 definition artifacts → lane-specific execution witness. Do not skip from source
 documentation to certification, and do not use certification output as an

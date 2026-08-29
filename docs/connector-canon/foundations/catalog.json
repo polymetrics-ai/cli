@@ -17,7 +17,7 @@
       "layer": "source_retention_import",
       "status": "available",
       "kind": "generic",
-      "summary": "Retains verified provider artifacts and imports locked OpenAPI, rendered-reference, bundle, and GraphQL sources into closed canonical operation descriptors and source-selected event/batch inventories while preserving unresolved evidence as explicit gaps. Source-lock v4 materialization consumes these cited descriptors and fails closed when the current runtime cannot faithfully represent a retained contract.",
+      "summary": "Retains verified provider artifacts and imports locked OpenAPI, rendered-reference, bundle, and GraphQL sources into closed canonical operation descriptors and source-selected event/batch inventories while preserving unresolved evidence as explicit gaps. Legacy v1/v2 source_contract and source_operation provider fragments are retained as object-validated, non-executable source evidence without flattening dialect facts or extensions. Source-lock v4 materialization consumes cited descriptors and fails closed when the current runtime cannot faithfully represent a retained contract.",
       "owner": {
         "primary_package": "polymetrics.ai/cmd/connectorgen",
         "supporting_packages": [],
@@ -38,6 +38,14 @@
           {
             "file": "cmd/connectorgen/sourceimport.go",
             "name": "sourceOperationDescriptor"
+          },
+          {
+            "file": "cmd/connectorgen/sourceimport.go",
+            "name": "sourceImportProviderObject"
+          },
+          {
+            "file": "cmd/connectorgen/sourceimport.go",
+            "name": "sourceImportLockFromLegacy"
           },
           {
             "file": "cmd/connectorgen/sourceimport.go",
@@ -94,7 +102,8 @@
           "rendered_reference",
           "retained artifact bundle",
           "source-lock v4 explicit materialization plan",
-          "source_reference"
+          "source_reference",
+          "legacy v1/v2 source_contract and source_operation provider-evidence fragments"
         ],
         "request_response_shapes": [
           "callbacks and webhooks retained as inbound event descriptors",
@@ -113,6 +122,7 @@
           "bounded fetch and parse budgets",
           "canonical source identity and digest verification",
           "citation retention",
+          "legacy source-contract and operation fragments retain provider bytes after object validation without becoming executable input",
           "materialized source-lock rows fail closed when retained runtime reachability, routing, input wire semantics, media, scope, pagination, byte constraints, or exact response-status execution cannot be represented",
           "malformed, unavailable, or unresolved contracts remain explicit gaps"
         ]
@@ -136,6 +146,7 @@
         "Only contracts stated by retained provider evidence may be imported.",
         "A batch inventory may name only one locked provider operation, canonical schema selectors, a provider-proven maximum, and closed provider envelope/method/response fields; it cannot carry raw executable HTTP.",
         "Reference cycles and unsupported dialect details must remain explicit rather than being guessed or flattened.",
+        "Legacy source_contract and source_operation fragments are source-evidence only; they may retain provider-standard and provider-extension members but cannot supply runtime routing, request, response, credential, or approval behavior.",
         "Retained bytes, URLs, and hashes prove provenance, not runtime behavior.",
         "A v4 materialized row must preserve every retained runtime-relevant contract exactly or be represented as cited blocked/unsupported accounting; the materializer does not synthesize a transport escape.",
         "Raw provider response-status spellings remain cited evidence. Unambiguous numeric HTTP values from 100 through 599 are validated without rewriting their source facts; only values that normalize to exact 2xx runtime statuses are materialized. A status range/class or an exact non-2xx contract remains cited blocked with its named runtime gap."
@@ -179,6 +190,21 @@
         },
         {
           "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/sourceimport_source_operation_test.go",
+          "name": "TestParseSourceImportLockRetainsBatchOneLegacyProviderFacts"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/sourceimport_source_operation_test.go",
+          "name": "TestParseSourceImportLockRetainsSingularMediaExamples"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/sourceimport_source_operation_test.go",
+          "name": "TestParseSourceImportLockProviderFragmentsKeepRootClosed"
+        },
+        {
+          "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/sourceimport_rendered_reference_test.go",
           "name": "TestSourceImportVersion3RenderedReferenceProjectsCapturedCitation"
         },
@@ -212,6 +238,7 @@
       ],
       "update_conditions": [
         "A supported source form, dialect, schema keyword, parameter binding, media encoding, or response descriptor changes.",
+        "Legacy source-fragment retention, object validation, or its evidence-only boundary changes.",
         "Artifact identity, citation, fetch-bound, or unresolved-reference behavior changes.",
         "An owner symbol or proof test is moved, replaced, or narrowed.",
         "Source-lock v4 materialization accounting or fail-closed descriptor-mapping behavior changes."

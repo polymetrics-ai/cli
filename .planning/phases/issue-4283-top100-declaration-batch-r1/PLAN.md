@@ -11,6 +11,12 @@
 3. Reconcile each source identity to exactly one `implemented`, `blocked_with_named_foundation`, or `unsupported_with_provider_evidence` disposition; certification is overlay evidence only.
 4. Consult the Foundation Atlas before every shared foundation change and update it in the same change when its real contract changes.
 
+## Foundation Atlas dispositions
+
+| Slice | Atlas ID | Classification | Bounded contract |
+| --- | --- | --- | --- |
+| P1 legacy enrichment retention | `source.retention-import.v1` | `constrained_extension` | Retain v1/v2 `source_contract` and `source_operation` object fragments as identity-attached, non-executable source evidence. The existing source-import owner remains the only implementation; no connector branch, raw request transport, or runtime admission is added. |
+
 ## Planned TDD sequence once scope is valid
 
 | Slice | Red | Green | Edge/refactor proof |
