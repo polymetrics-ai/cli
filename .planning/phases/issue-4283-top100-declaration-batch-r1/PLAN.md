@@ -9,6 +9,7 @@
 - Working branch: `fm/cli-top100-declaration-batch-r1` (detached assigned worktree, remote tracked explicitly).
 - Task: Preserve all ten Batch-1 source-lock identities through bounded mapping, generated surfaces, and typed truthful dispositions; no provider I/O or generic transport.
 - Verification: Focused red/green Go tests, connector-scoped reconciliation report, real no-I/O preflight where a row is implemented, documentation/Atlas validation, exact-SHA review, and relevant local CI gates.
+- Skills: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, and `connector-lane-build-order`.
 
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
@@ -32,6 +33,7 @@
 | --- | --- | --- | --- |
 | P1 legacy enrichment retention | `source.retention-import.v1` | `constrained_extension` | Retain v1/v2 `source_contract` and `source_operation` object fragments as identity-attached, non-executable source evidence. The existing source-import owner remains the only implementation; no connector branch, raw request transport, or runtime admission is added. |
 | P2 scoped source-lock mapping report | `source.projection-admission.v1` | `constrained_extension` | Select an explicit connector set when emitting the operation evidence bridge. It reads only their locks, rejects any selected connector without a lock, requires a non-global output, and does not alter the global fixed-100 contract or claim execution. |
+| P2 non-binding evidence resilience | `source.retention-import.v1`, `source.projection-admission.v1`, `verification.conformance-certification.v1` | `reuse` | Valid v2/v3 source identities remain in operation evidence when retained-source, certification-subject, or generated website evidence is unavailable. Each affected row receives a named typed gap; no command, executor, credential behavior, or certification-based promotion is created. |
 
 ## Planned TDD sequence once scope is valid
 
@@ -39,6 +41,7 @@
 | --- | --- | --- | --- |
 | Source-normalization foundation (F1/F2) | Representative locked aliases/numeric/default/duplicate/range cases fail. | Presence-aware canonical source facts retain raw evidence and exact semantic status behavior. | `default` alone remains blocked; declared 404/non-2xx never become executable. |
 | Retention and bridge foundation (P1–P3) | Legacy v2/v3 locked enrichment and cross-document references cannot map. | Source-contract fragments, citations, and non-binding byte/hash evidence survive deterministic bridging. | Unavailable/zero-operation documents remain accounted without blocking unaffected operations. |
+| Non-binding evidence resilience | Removing valid v2/v3 retained-source, certification-subject, or website evidence aborts accounting or leaves an identity executable. | Every identity remains in lane accounting with the matching named source-retention, projection, or certification gap. | Existing declarations stay visible; missing retained-source input disables only the affected mapping row, while certification/website gaps remain overlays. No provider I/O or connector-specific branch. |
 | Existing-lane projection foundation (P4–P6) | Cited scalar/pagination/form/multipart/binary/no-body/GraphQL lanes and blocked rows are omitted. | Existing closed lanes are selected by evidence; commands/docs expose an implemented or typed nonimplemented result. | Method alone cannot select a lane; destructive/reverse-ETL surfaces preserve approval semantics. |
 | Serialization/media/schema/response foundations (R1–R4) | Exact source-shaped query/cookie/media/union/recursive/response-variant fixtures fail. | Closed source-cited contracts route only to exact encoders/selectors. | Unknown/open/raw transport remains refused before I/O; provider defaults are not guessed. |
 | Bounded Batch-1 cohort | The cohort matrix lacks a one-to-one source identity disposition/reachability record. | Definitions and generated surface reconcile every cited identity across the ten named connectors. | Built binary reaches `missing --credential` for implemented dispatch; blocked/unsupported rows show typed cited outcomes. |

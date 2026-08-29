@@ -230,7 +230,7 @@ func TestSourceImportReferenceEncodesEveryDeclaredLaneWithoutPromotion(t *testin
 		})
 	}
 	bundle := engine.Bundle{Name: "outreach", CLISurface: &engine.CLISurface{Commands: commands}}
-	row := projectOperationEvidenceRow(root, "outreach", prospects, bundle, nil, operationEvidenceWebsiteRow{}, conformance.Report{}, operationEvidenceCrosswalk{}, operationEvidenceDisposition{})
+	row := projectOperationEvidenceRow(root, "outreach", prospects, bundle, nil, operationEvidenceWebsiteRow{}, conformance.Report{}, operationEvidenceCrosswalk{}, operationEvidenceDisposition{}, nil)
 	if !row.hasGap("source_contract_unavailable") {
 		t.Fatalf("source-reference operation evidence omitted source_contract_unavailable: %#v", row)
 	}
@@ -399,7 +399,7 @@ func TestExactOutreachReferenceProjectsAgainstCurrentMainBundle(t *testing.T) {
 	if err != nil {
 		t.Fatalf("load current Outreach bundle: %v", err)
 	}
-	row := projectOperationEvidenceRow(filepath.Join("..", ".."), "outreach", prospects, bundle, nil, operationEvidenceWebsiteRow{}, conformance.Report{}, operationEvidenceCrosswalk{}, operationEvidenceDisposition{})
+	row := projectOperationEvidenceRow(filepath.Join("..", ".."), "outreach", prospects, bundle, nil, operationEvidenceWebsiteRow{}, conformance.Report{}, operationEvidenceCrosswalk{}, operationEvidenceDisposition{}, nil)
 	if row.Canonical.State != "mapped" || row.Canonical.Method != "GET" || row.Canonical.Path != "/api/v2/prospects" {
 		t.Fatalf("exact Outreach canonical mapping = %#v", row.Canonical)
 	}

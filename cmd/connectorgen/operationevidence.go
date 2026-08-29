@@ -22,14 +22,21 @@ const (
 	operationEvidenceArtifactPath  = "internal/connectors/operation-evidence.json"
 	operationEvidenceFixed100Path  = "internal/connectors/operation-evidence-fixed-100.json"
 
-	operationEvidenceGapSourceTrace         = "source_trace"
-	operationEvidenceGapCanonicalMapping    = "canonical_mapping"
-	operationEvidenceGapRuntimeReachability = "runtime_reachability"
-	operationEvidenceGapCLICommand          = "cli_command"
-	operationEvidenceGapWebsiteRow          = "website_row"
-	operationEvidenceGapFixtureProof        = "fixture_proof"
-	operationEvidenceGapConformanceProof    = "conformance_proof"
-	operationEvidenceGapReadOnlyConflict    = "read_only_conflict"
+	operationEvidenceGapSourceTrace           = "source_trace"
+	operationEvidenceGapCanonicalMapping      = "canonical_mapping"
+	operationEvidenceGapRuntimeReachability   = "runtime_reachability"
+	operationEvidenceGapCLICommand            = "cli_command"
+	operationEvidenceGapWebsiteRow            = "website_row"
+	operationEvidenceGapFixtureProof          = "fixture_proof"
+	operationEvidenceGapConformanceProof      = "conformance_proof"
+	operationEvidenceGapReadOnlyConflict      = "read_only_conflict"
+	operationEvidenceGapSourceImportEvidence  = "source_import_evidence"
+	operationEvidenceGapCertificationEvidence = "certification_evidence"
+	operationEvidenceGapWebsiteArtifact       = "website_artifact"
+
+	operationEvidenceFoundationSourceRetention = "source.retention-import.v1"
+	operationEvidenceFoundationProjection      = "source.projection-admission.v1"
+	operationEvidenceFoundationCertification   = "verification.conformance-certification.v1"
 
 	operationEvidenceClassETL            = "etl"
 	operationEvidenceClassReverseETL     = "reverse_etl"
@@ -354,14 +361,10 @@ func buildOperationEvidence(root string) (operationEvidenceArtifact, error) {
 
 func buildOperationEvidenceForConnectors(root string, selectedConnectors []string) (operationEvidenceArtifact, error) {
 	defsRoot := filepath.Join(root, "internal", "connectors", "defs")
-	provenance, err := readOperationEvidenceProvenance(root)
-	if err != nil {
-		return operationEvidenceArtifact{}, err
-	}
-	websiteRows, err := readOperationEvidenceWebsiteRows(filepath.Join(root, "website", "data", "connectors.generated.json"))
-	if err != nil {
-		return operationEvidenceArtifact{}, err
-	}
+	provenance, certificationEvidenceGap := readOperationEvidenceProvenance(root)
+	websiteRows, websiteEvidenceGap := readOperationEvidenceWebsiteRows(filepath.Join(root, "website", "data", "connectors.generated.json"))
+	globalGaps := operationEvidenceNonNilGaps(certificationEvidenceGap, websiteEvidenceGap)
+	var err error
 	entries, err := os.ReadDir(defsRoot)
 	if err != nil {
 		return operationEvidenceArtifact{}, fmt.Errorf("read connector definitions: %w", err)
@@ -395,8 +398,11 @@ func buildOperationEvidenceForConnectors(root string, selectedConnectors []strin
 		if err != nil {
 			return operationEvidenceArtifact{}, err
 		}
+		if input.Absence == nil {
+			operationEvidenceApplySourceImportEvidenceFailure(&input, defsRoot)
+		}
 		if input.Absence != nil {
-			rows = append(rows, operationEvidenceAbsentRow(input))
+			rows = append(rows, operationEvidenceAbsentRow(input, globalGaps))
 			continue
 		}
 		bundle, loadErr := engine.Load(os.DirFS(defsRoot), connector)
@@ -416,7 +422,7 @@ func buildOperationEvidenceForConnectors(root string, selectedConnectors []strin
 				continue
 			}
 			seenSources[identity] = source
-			rows = append(rows, projectOperationEvidenceRow(root, connector, source, bundle, loadErr, website, report, crosswalk[source.ID], dispositions[source.ID]))
+			rows = append(rows, projectOperationEvidenceRow(root, connector, source, bundle, loadErr, website, report, crosswalk[source.ID], dispositions[source.ID], globalGaps))
 		}
 	}
 	if missing := operationEvidenceMissingSelectedConnectors(selected); len(missing) != 0 {
@@ -445,6 +451,39 @@ func buildOperationEvidenceForConnectors(root string, selectedConnectors []strin
 	}, nil
 }
 
+func operationEvidenceNonNilGaps(gaps ...*operationEvidenceGap) []operationEvidenceGap {
+	result := make([]operationEvidenceGap, 0, len(gaps))
+	for _, gap := range gaps {
+		if gap != nil {
+			result = append(result, *gap)
+		}
+	}
+	return result
+}
+
+// operationEvidenceApplySourceImportEvidenceFailure deliberately checks only
+// whether the importer has its connector-owned retained-evidence input. It
+// neither reads provider bytes nor uses a digest or certification overlay to
+// select a lane. Mapping remains source-lock-first; an unavailable importer
+// input makes every affected row a visible non-executable gap.
+func operationEvidenceApplySourceImportEvidenceFailure(input *operationEvidenceSourceInput, defsRoot string) {
+	raw, err := os.ReadFile(filepath.Join(defsRoot, input.Connector, "sources", input.Connector+"-operation-source-lock.json"))
+	if err == nil {
+		var lock sourceImportLock
+		lock, err = parseSourceImportLock(raw, input.Connector)
+		if err == nil && sourceImportLockRequiresRetainedArtifact(lock) {
+			_, err = newConnectorSourceImportRetainedArtifactFetcher(defsRoot, input.Connector, defaultSourceImportLimits())
+		}
+	}
+	if err == nil {
+		return
+	}
+	evidence := "source-import retained evidence is unavailable: " + err.Error()
+	for index := range input.Operations {
+		input.Operations[index].SourceImportEvidence = evidence
+	}
+}
+
 func operationEvidenceMissingSelectedConnectors(selected map[string]bool) []string {
 	missing := make([]string, 0)
 	for connector, found := range selected {
@@ -456,17 +495,17 @@ func operationEvidenceMissingSelectedConnectors(selected map[string]bool) []stri
 	return missing
 }
 
-func readOperationEvidenceProvenance(root string) (operationEvidenceProvenance, error) {
+func readOperationEvidenceProvenance(root string) (operationEvidenceProvenance, *operationEvidenceGap) {
 	raw, err := os.ReadFile(filepath.Join(root, filepath.FromSlash(certificationSubjectArtifactPath)))
 	if err != nil {
-		return operationEvidenceProvenance{}, fmt.Errorf("read certification source provenance: %w", err)
+		return operationEvidenceProvenance{}, operationEvidenceFoundationGap(operationEvidenceGapCertificationEvidence, operationEvidenceFoundationCertification, "read certification source provenance: "+err.Error())
 	}
 	var artifact currentCertificationSubjectArtifact
 	if err := json.Unmarshal(raw, &artifact); err != nil {
-		return operationEvidenceProvenance{}, fmt.Errorf("parse certification source provenance: %w", err)
+		return operationEvidenceProvenance{}, operationEvidenceFoundationGap(operationEvidenceGapCertificationEvidence, operationEvidenceFoundationCertification, "parse certification source provenance: "+err.Error())
 	}
 	if err := validateCertificationSubject(artifact.Subject); err != nil {
-		return operationEvidenceProvenance{}, fmt.Errorf("validate certification source provenance: %w", err)
+		return operationEvidenceProvenance{}, operationEvidenceFoundationGap(operationEvidenceGapCertificationEvidence, operationEvidenceFoundationCertification, "validate certification source provenance: "+err.Error())
 	}
 	return operationEvidenceProvenance{
 		SourceProjectionSHA256: artifact.Subject.SourceProjectionSHA256,
@@ -488,6 +527,7 @@ type operationEvidenceSourceOperation struct {
 	Path                      string
 	Trace                     operationEvidenceSourceTrace
 	SourceContractUnavailable bool
+	SourceImportEvidence      string
 }
 
 type operationEvidenceRawLock struct {
@@ -848,10 +888,10 @@ type operationEvidenceWebsiteCommand struct {
 	} `json:"api_surface"`
 }
 
-func readOperationEvidenceWebsiteRows(path string) (map[string]operationEvidenceWebsiteRow, error) {
+func readOperationEvidenceWebsiteRows(path string) (map[string]operationEvidenceWebsiteRow, *operationEvidenceGap) {
 	raw, err := os.ReadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("read generated website connector data: %w", err)
+		return map[string]operationEvidenceWebsiteRow{}, operationEvidenceFoundationGap(operationEvidenceGapWebsiteArtifact, operationEvidenceFoundationProjection, "read generated website connector data: "+err.Error())
 	}
 	var rows []struct {
 		Slug       string                       `json:"slug"`
@@ -865,7 +905,7 @@ func readOperationEvidenceWebsiteRows(path string) (map[string]operationEvidence
 			} `json:"rows"`
 		}
 		if envelopeErr := json.Unmarshal(raw, &envelope); envelopeErr != nil {
-			return nil, fmt.Errorf("parse generated website connector data: %w", err)
+			return map[string]operationEvidenceWebsiteRow{}, operationEvidenceFoundationGap(operationEvidenceGapWebsiteArtifact, operationEvidenceFoundationProjection, "parse generated website connector data: "+envelopeErr.Error())
 		}
 		rows = envelope.Rows
 	}
@@ -878,7 +918,7 @@ func readOperationEvidenceWebsiteRows(path string) (map[string]operationEvidence
 	return result, nil
 }
 
-func operationEvidenceAbsentRow(input operationEvidenceSourceInput) operationEvidenceRow {
+func operationEvidenceAbsentRow(input operationEvidenceSourceInput, globalGaps []operationEvidenceGap) operationEvidenceRow {
 	return operationEvidenceRow{
 		Connector:       input.Connector,
 		SourceID:        input.Connector + ".provider-surface",
@@ -892,12 +932,12 @@ func operationEvidenceAbsentRow(input operationEvidenceSourceInput) operationEvi
 		Conformance:     operationEvidenceConformance{},
 		Classifications: operationEvidenceEmptyClassifications(),
 		Foundations:     []operationEvidenceFoundation{},
-		Gaps:            []operationEvidenceGap{},
+		Gaps:            append([]operationEvidenceGap(nil), globalGaps...),
 		Absence:         input.Absence,
 	}
 }
 
-func projectOperationEvidenceRow(root, connector string, source operationEvidenceSourceOperation, bundle engine.Bundle, loadErr error, website operationEvidenceWebsiteRow, report conformance.Report, crosswalk operationEvidenceCrosswalk, disposition operationEvidenceDisposition) operationEvidenceRow {
+func projectOperationEvidenceRow(root, connector string, source operationEvidenceSourceOperation, bundle engine.Bundle, loadErr error, website operationEvidenceWebsiteRow, report conformance.Report, crosswalk operationEvidenceCrosswalk, disposition operationEvidenceDisposition, globalGaps []operationEvidenceGap) operationEvidenceRow {
 	row := operationEvidenceRow{
 		Connector:       connector,
 		SourceID:        source.ID,
@@ -913,13 +953,16 @@ func projectOperationEvidenceRow(root, connector string, source operationEvidenc
 		Conformance:     operationEvidenceConformance{},
 		Classifications: operationEvidenceEmptyClassifications(),
 		Foundations:     append([]operationEvidenceFoundation(nil), disposition.Foundations...),
-		Gaps:            []operationEvidenceGap{},
+		Gaps:            append([]operationEvidenceGap(nil), globalGaps...),
 	}
 	if row.Source.URL == "" || row.Source.SHA256 == "" || row.Source.Bytes <= 0 || row.Source.Location == "" {
 		row.addGap(operationEvidenceGapSourceTrace, "source lock lacks a complete provider trace")
 	}
 	if source.SourceContractUnavailable {
-		row.addGap(sourceContractUnavailableFoundation, "provider operation is cited by a closed source reference, but retained source bytes and execution-contract detail are source_contract_unavailable")
+		row.addFoundationGap(sourceContractUnavailableFoundation, operationEvidenceFoundationSourceRetention, "provider operation is cited by a closed source reference, but retained source bytes and execution-contract detail are source_contract_unavailable")
+	}
+	if source.SourceImportEvidence != "" {
+		row.addFoundationGap(operationEvidenceGapSourceImportEvidence, operationEvidenceFoundationSourceRetention, source.SourceImportEvidence)
 	}
 	var endpoint *engine.SurfaceEndpoint
 	if loadErr == nil {
@@ -963,7 +1006,7 @@ func projectOperationEvidenceRow(root, connector string, source operationEvidenc
 		return row.finalize()
 	}
 	operationEvidenceClassify(&row, targets, commands, disposition.ParityClass)
-	if source.SourceContractUnavailable {
+	if source.SourceContractUnavailable || source.SourceImportEvidence != "" {
 		for _, class := range operationEvidenceClasses {
 			value := row.Classifications[class]
 			value.Enabled = false
@@ -976,11 +1019,13 @@ func projectOperationEvidenceRow(root, connector string, source operationEvidenc
 	if len(websiteCommands) == 0 {
 		row.addGap(operationEvidenceGapWebsiteRow, "canonical operation has no generated website command row")
 	}
-	row.Runtime.Enabled = !source.SourceContractUnavailable && len(targets.names()) > 0 && operationEvidenceHasEnabledCommand(commands)
+	row.Runtime.Enabled = !source.SourceContractUnavailable && source.SourceImportEvidence == "" && len(targets.names()) > 0 && operationEvidenceHasEnabledCommand(commands)
 	if !row.Runtime.Enabled {
 		evidence := "canonical operation has no enabled declaration-owned runtime command"
 		if source.SourceContractUnavailable {
 			evidence = "canonical declaration cannot become source-backed runtime evidence while the operation contract is source_contract_unavailable"
+		} else if source.SourceImportEvidence != "" {
+			evidence = "canonical declaration cannot become source-backed runtime evidence while source-import retained evidence is unavailable"
 		}
 		row.addGap(operationEvidenceGapRuntimeReachability, evidence)
 	}
@@ -1004,12 +1049,24 @@ func operationEvidenceEmptyClassifications() map[string]operationEvidenceClassif
 }
 
 func (row *operationEvidenceRow) addGap(kind, evidence string) {
+	row.addEvidenceGap(operationEvidenceGap{Kind: kind, Evidence: evidence})
+}
+
+func (row *operationEvidenceRow) addFoundationGap(kind, foundation, evidence string) {
+	row.addEvidenceGap(operationEvidenceGap{Kind: kind, Foundation: foundation, Evidence: evidence})
+}
+
+func (row *operationEvidenceRow) addEvidenceGap(candidate operationEvidenceGap) {
 	for _, gap := range row.Gaps {
-		if gap.Kind == kind && gap.Evidence == evidence {
+		if gap.Kind == candidate.Kind && gap.Foundation == candidate.Foundation && gap.Evidence == candidate.Evidence {
 			return
 		}
 	}
-	row.Gaps = append(row.Gaps, operationEvidenceGap{Kind: kind, Evidence: evidence})
+	row.Gaps = append(row.Gaps, candidate)
+}
+
+func operationEvidenceFoundationGap(kind, foundation, evidence string) *operationEvidenceGap {
+	return &operationEvidenceGap{Kind: kind, Foundation: foundation, Evidence: evidence}
 }
 
 func (row operationEvidenceRow) finalize() operationEvidenceRow {

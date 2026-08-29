@@ -17,7 +17,7 @@
       "layer": "source_retention_import",
       "status": "available",
       "kind": "generic",
-      "summary": "Retains verified provider artifacts and imports locked OpenAPI, rendered-reference, bundle, and GraphQL sources into closed canonical operation descriptors and source-selected event/batch inventories while preserving unresolved evidence as explicit gaps. Legacy v1/v2 source_contract and source_operation provider fragments are retained as object-validated, non-executable source evidence without flattening dialect facts or extensions. Source-lock v4 materialization consumes cited descriptors and fails closed when the current runtime cannot faithfully represent a retained contract.",
+      "summary": "Retains verified provider artifacts and imports locked OpenAPI, rendered-reference, bundle, and GraphQL sources into closed canonical operation descriptors and source-selected event/batch inventories while preserving unresolved evidence as explicit gaps. Legacy v1/v2 source_contract and source_operation provider fragments are retained as object-validated, non-executable source evidence without flattening dialect facts or extensions. When operation accounting cannot obtain required retained-source input, it keeps each locked identity as a non-executable source-retention gap. Source-lock v4 materialization consumes cited descriptors and fails closed when the current runtime cannot faithfully represent a retained contract.",
       "owner": {
         "primary_package": "polymetrics.ai/cmd/connectorgen",
         "supporting_packages": [],
@@ -187,6 +187,11 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/sourceimport_test.go",
           "name": "TestSourceImportRetainsRecursiveSchemaReferencesAsSourceBoundGaps"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/operationevidence_test.go",
+          "name": "TestOperationEvidenceRetainsV2AndV3RowsWhenSourceImportEvidenceIsUnavailable"
         },
         {
           "package": "./cmd/connectorgen",
@@ -363,7 +368,8 @@
           "source-projected read-only fields are rejected as request input before provider I/O",
           "source-backed batch coverage validates the retained provider inventory, definition-owned action allow-list, closed record schema, query encoding, and runtime action binding without admitting raw HTTP",
           "projection gaps remain explicit and source-bound",
-          "mapping admission and projection are independent of certification overlays and retained hash, byte, and capture representation while preserving version- and document-kind-specific source-reference, unavailable-document, v3 envelope, and closed event-schema-selector structure"
+          "mapping admission and projection are independent of certification overlays and retained hash, byte, and capture representation while preserving version- and document-kind-specific source-reference, unavailable-document, v3 envelope, and closed event-schema-selector structure",
+          "unavailable retained-source, certification-subject, or generated-surface evidence remains a per-source typed foundation gap and cannot suppress a source identity or fabricate an executable lane"
         ]
       },
       "selection": {
@@ -459,6 +465,16 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/operationevidence_test.go",
           "name": "TestOperationEvidencePreservesSavedAndInteractiveLanes"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/operationevidence_test.go",
+          "name": "TestOperationEvidenceRetainsV2AndV3RowsWhenSourceImportEvidenceIsUnavailable"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/operationevidence_test.go",
+          "name": "TestOperationEvidenceRetainsRowsWhenCertificationAndWebsiteArtifactsAreUnavailable"
         },
         {
           "package": "./cmd/connectorgen",
@@ -2160,6 +2176,11 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/certificationmatrix_test.go",
           "name": "TestCertificationApplicableCellWithoutLiveEvidencePreventsCompletion"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/operationevidence_test.go",
+          "name": "TestOperationEvidenceRetainsRowsWhenCertificationAndWebsiteArtifactsAreUnavailable"
         }
       ],
       "known_gap_refs": [],

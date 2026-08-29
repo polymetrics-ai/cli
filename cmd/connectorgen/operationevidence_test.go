@@ -92,12 +92,81 @@ func TestOperationEvidenceGitLabSourceLockBridge(t *testing.T) {
 		if row.Source.Lock != "sources/gitlab-operation-source-lock.json" || row.Source.URL == "" || row.Source.SHA256 == "" || row.Source.Bytes <= 0 || row.Source.Location == "" {
 			t.Fatalf("GitLab source trace for %q = %+v, want complete locked citation", row.SourceID, row.Source)
 		}
+		if !operationEvidenceRowHasFoundationGap(row, operationEvidenceFoundationSourceRetention) || row.Runtime.Enabled {
+			t.Fatalf("GitLab source identity %q did not retain its non-executable source-import gap: %+v", row.SourceID, row)
+		}
 		if len(row.CLI.Paths) == 0 && !slices.ContainsFunc(row.Gaps, func(gap operationEvidenceGap) bool {
 			return gap.Kind == operationEvidenceGapCLICommand
 		}) {
 			t.Fatalf("GitLab source identity %q has no CLI command and no explicit CLI gap", row.SourceID)
 		}
 	}
+}
+
+func TestOperationEvidenceRetainsV2AndV3RowsWhenSourceImportEvidenceIsUnavailable(t *testing.T) {
+	root := operationEvidenceWorkspace(t)
+	defsDir := filepath.Join(root, "internal", "connectors", "defs")
+	for _, connector := range []string{"github", "asana"} {
+		manifest := filepath.Join(defsDir, connector, "sources", connector+sourceImportRetainedArtifactManifest)
+		if err := os.Remove(manifest); err != nil {
+			t.Fatalf("remove %s retained-artifact manifest: %v", connector, err)
+		}
+		var stdout, stderr bytes.Buffer
+		output := filepath.Join(t.TempDir(), connector+"-operation-descriptor.json")
+		if code := run([]string{"source-import", connector, "--defs", defsDir, "--out", output}, &stdout, &stderr); code == 0 {
+			t.Fatalf("source-import %s succeeded without required retained evidence", connector)
+		}
+	}
+
+	artifact, _, _ := runOperationEvidenceForTest(t, root, "")
+	for _, sourceID := range []string{githubIssuesSourceID, "asana.rest.getAccessRequests"} {
+		row, found := artifact.row(sourceID)
+		if !found {
+			t.Fatalf("source identity %q was omitted after source-import evidence failure", sourceID)
+		}
+		if !operationEvidenceRowHasFoundationGap(row, "source.retention-import.v1") {
+			t.Fatalf("source identity %q gaps = %+v, want source-retention named gap", sourceID, row.Gaps)
+		}
+		if row.Runtime.Enabled {
+			t.Fatalf("source identity %q remained runtime-enabled without retained source evidence: %+v", sourceID, row)
+		}
+		for class, value := range row.Classifications {
+			if value.Enabled {
+				t.Fatalf("source identity %q classification %q remained enabled without retained source evidence: %+v", sourceID, class, value)
+			}
+		}
+	}
+}
+
+func TestOperationEvidenceRetainsRowsWhenCertificationAndWebsiteArtifactsAreUnavailable(t *testing.T) {
+	root := operationEvidenceWorkspace(t)
+	for _, path := range []string{
+		filepath.Join(root, filepath.FromSlash(certificationSubjectArtifactPath)),
+		filepath.Join(root, "website", "data", "connectors.generated.json"),
+	} {
+		if err := os.Remove(path); err != nil {
+			t.Fatalf("remove required evidence artifact %s: %v", path, err)
+		}
+	}
+
+	artifact, _, _ := runOperationEvidenceForTest(t, root, "")
+	for _, sourceID := range []string{githubIssuesSourceID, "asana.rest.getAccessRequests"} {
+		row, found := artifact.row(sourceID)
+		if !found {
+			t.Fatalf("source identity %q was omitted after certification/website evidence failure", sourceID)
+		}
+		for _, foundation := range []string{"verification.conformance-certification.v1", "source.projection-admission.v1"} {
+			if !operationEvidenceRowHasFoundationGap(row, foundation) {
+				t.Fatalf("source identity %q gaps = %+v, want %s named gap", sourceID, row.Gaps, foundation)
+			}
+		}
+	}
+}
+
+func operationEvidenceRowHasFoundationGap(row operationEvidenceRow, foundation string) bool {
+	return slices.ContainsFunc(row.Gaps, func(gap operationEvidenceGap) bool {
+		return gap.Foundation == foundation
+	})
 }
 
 func TestOperationEvidenceClassForCommandUsesIntentNotOperationName(t *testing.T) {
