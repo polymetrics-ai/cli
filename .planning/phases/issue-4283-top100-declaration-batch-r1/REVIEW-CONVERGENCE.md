@@ -10,6 +10,13 @@
 
 ## Discovery ledger
 
+The committed machine-checkable discovery input is
+`data/connector-canon/batch1-source-rigidity-r2-cohort-ledger.json`. It pins
+each cohort's source-lock path, whole-file SHA-256, schema form, identity
+location, and source denominator. It intentionally has zero projected cells:
+it is the immutable denominator for the later source-operation-to-lane report,
+not a coverage or usability claim.
+
 | Cohort | Source identities | Requested classification/reachability state |
 | --- | ---: | --- |
 | Asana | 249 | Pending cohort matrix and fresh review. |
