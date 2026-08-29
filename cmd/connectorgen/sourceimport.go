@@ -515,6 +515,7 @@ type sourceImportLock struct {
 	Rest               sourceImportREST                `json:"rest"`
 	GraphQL            sourceImportGraphQL             `json:"graphql,omitempty"`
 	Counts             sourceImportCounts              `json:"counts,omitempty"`
+	Materialization    *sourceMaterialization          `json:"-"`
 	OperationsFound    sourceImportCounts              `json:"-"`
 	CoverageConfidence *sourceImportCoverageConfidence `json:"-"`
 }
@@ -559,6 +560,21 @@ type sourceImportLockV3 struct {
 	Rest          sourceImportRESTV3  `json:"rest"`
 	GraphQL       sourceImportGraphQL `json:"graphql,omitempty"`
 	Counts        sourceImportCounts  `json:"counts,omitempty"`
+}
+
+// sourceImportLockV4 deliberately keeps the verified source inventory wire
+// compatible with v3 and adds one closed materialization plan.  The plan is
+// decoded here (rather than as an untyped map in source-materialize) so a v4
+// lock cannot silently accept a future spelling or an accidental free-form
+// request field.
+type sourceImportLockV4 struct {
+	SchemaVersion   int                    `json:"schema_version"`
+	Connector       string                 `json:"connector"`
+	CapturedAt      string                 `json:"captured_at,omitempty"`
+	Rest            sourceImportRESTV3     `json:"rest"`
+	GraphQL         sourceImportGraphQL    `json:"graphql,omitempty"`
+	Counts          sourceImportCounts     `json:"counts,omitempty"`
+	Materialization *sourceMaterialization `json:"materialization"`
 }
 
 func (lock *sourceImportLock) UnmarshalJSON(raw []byte) error {
@@ -613,6 +629,35 @@ func (lock *sourceImportLock) UnmarshalJSON(raw []byte) error {
 			},
 			GraphQL: v3.GraphQL,
 			Counts:  v3.Counts,
+		}
+		return nil
+	case 4:
+		materializationCount, err := sourceImportTopLevelFieldCount(raw, "materialization")
+		if err != nil {
+			return err
+		}
+		if materializationCount != 1 {
+			return fmt.Errorf("source lock v4 requires exactly one materialization block")
+		}
+		var v4 sourceImportLockV4
+		if err := decodeSourceStrictJSON(raw, &v4); err != nil {
+			return err
+		}
+		*lock = sourceImportLock{
+			SchemaVersion: v4.SchemaVersion,
+			Connector:     v4.Connector,
+			CapturedAt:    v4.CapturedAt,
+			Rest: sourceImportREST{
+				Retrieval:            v4.Rest.Retrieval,
+				OpenAPIVersions:      v4.Rest.OpenAPIVersions,
+				CoverageConfidence:   v4.Rest.CoverageConfidence,
+				SourceDocuments:      v4.Rest.SourceDocuments,
+				EventSchemaInventory: v4.Rest.EventSchemaInventory,
+				BatchActionInventory: v4.Rest.BatchActionInventory,
+			},
+			GraphQL:         v4.GraphQL,
+			Counts:          v4.Counts,
+			Materialization: v4.Materialization,
 		}
 		return nil
 	default:
@@ -988,7 +1033,7 @@ func parseSourceImportLock(raw []byte, expectedConnector string) (sourceImportLo
 	if err := decodeSourceStrictJSON(raw, &lock); err != nil {
 		return sourceImportLock{}, fmt.Errorf("parse source lock: %w", err)
 	}
-	if lock.SchemaVersion != 1 && lock.SchemaVersion != 2 && lock.SchemaVersion != 3 {
+	if lock.SchemaVersion != 1 && lock.SchemaVersion != 2 && lock.SchemaVersion != 3 && lock.SchemaVersion != 4 {
 		return sourceImportLock{}, fmt.Errorf("source lock has unsupported schema version %d", lock.SchemaVersion)
 	}
 	if lock.Connector == "" {
@@ -1029,9 +1074,58 @@ func decodeSourceStrictJSON(raw []byte, target any) error {
 	return sourceJSONEOF(decoder)
 }
 
+// sourceImportTopLevelFieldCount closes a JSON decoder edge where duplicate
+// object keys otherwise overwrite earlier values. V4 has one plan-bearing
+// materialization block, so accepting two would make its provenance unclear.
+func sourceImportTopLevelFieldCount(raw []byte, field string) (int, error) {
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	token, err := decoder.Token()
+	if err != nil {
+		return 0, err
+	}
+	if delimiter, ok := token.(json.Delim); !ok || delimiter != '{' {
+		return 0, fmt.Errorf("source lock must be a JSON object")
+	}
+	count := 0
+	for decoder.More() {
+		token, err := decoder.Token()
+		if err != nil {
+			return 0, err
+		}
+		key, ok := token.(string)
+		if !ok {
+			return 0, fmt.Errorf("source lock has non-string object key")
+		}
+		var value json.RawMessage
+		if err := decoder.Decode(&value); err != nil {
+			return 0, err
+		}
+		if key == field {
+			count++
+		}
+	}
+	if _, err := decoder.Token(); err != nil {
+		return 0, err
+	}
+	var trailing any
+	if err := decoder.Decode(&trailing); err != io.EOF {
+		if err == nil {
+			return 0, fmt.Errorf("invalid JSON: multiple top-level values")
+		}
+		return 0, err
+	}
+	return count, nil
+}
+
 func validateSourceImportLockInventory(lock sourceImportLock) error {
-	if lock.SchemaVersion == 3 {
-		return validateSourceImportV3LockInventory(lock)
+	if lock.SchemaVersion >= 3 {
+		if err := validateSourceImportV3LockInventory(lock); err != nil {
+			return err
+		}
+		if lock.SchemaVersion == 4 {
+			return validateSourceMaterializationWire(lock)
+		}
+		return nil
 	}
 	if lock.isLegacySourceReference() {
 		return validateSourceImportLegacySourceReferenceInventory(lock)
@@ -2219,13 +2313,13 @@ func importSourceLockResultWithBudget(ctx context.Context, lock sourceImportLock
 	if budget == nil {
 		return sourceImportResult{}, fmt.Errorf("source importer has no descriptor budget")
 	}
-	if lock.SchemaVersion != 1 && lock.SchemaVersion != 2 && lock.SchemaVersion != 3 {
+	if lock.SchemaVersion != 1 && lock.SchemaVersion != 2 && lock.SchemaVersion != 3 && lock.SchemaVersion != 4 {
 		return sourceImportResult{}, fmt.Errorf("source lock has unsupported schema version %d", lock.SchemaVersion)
 	}
 	if err := validateSourceImportConnector(lock.Connector); err != nil {
 		return sourceImportResult{}, err
 	}
-	if lock.SchemaVersion == 3 {
+	if lock.SchemaVersion >= 3 {
 		return importSourceLockResultV3(ctx, lock, fetcher, limits, budget)
 	}
 	if lock.isLegacySourceReference() {
