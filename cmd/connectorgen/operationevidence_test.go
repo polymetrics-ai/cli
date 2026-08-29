@@ -15,6 +15,91 @@ import (
 
 const githubIssuesSourceID = "github.rest.issues/list-for-repo"
 
+func TestOperationEvidenceConnectorFilterIsBounded(t *testing.T) {
+	root := operationEvidenceWorkspace(t)
+	output := filepath.Join(root, "batch1-operation-evidence.json")
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"operation-evidence", root, "--connector", "asana", "--output", output}, &stdout, &stderr); code != 0 {
+		t.Fatalf("selected operation-evidence exit=%d stdout=%q stderr=%q", code, stdout.String(), stderr.String())
+	}
+	raw, err := os.ReadFile(output)
+	if err != nil {
+		t.Fatalf("read selected operation evidence: %v", err)
+	}
+	var artifact operationEvidenceArtifact
+	if err := json.Unmarshal(raw, &artifact); err != nil {
+		t.Fatalf("decode selected operation evidence: %v", err)
+	}
+	if len(artifact.Rows) != 249 {
+		t.Fatalf("selected operation-evidence rows = %d, want Asana's 249 source identities", len(artifact.Rows))
+	}
+	for _, row := range artifact.Rows {
+		if row.Connector != "asana" {
+			t.Fatalf("selected operation-evidence contains unrelated connector %q", row.Connector)
+		}
+	}
+
+	for _, test := range []struct {
+		args    []string
+		wantErr string
+	}{
+		{args: []string{"operation-evidence", root, "--connector", "asana"}, wantErr: "--connector requires an explicit --output path"},
+		{args: []string{"operation-evidence", root, "--connector", "asana", "--connector", "asana", "--output", output}, wantErr: `--connector "asana" may be specified only once`},
+		{args: []string{"operation-evidence", root, "--connector", "missing", "--output", output}, wantErr: "selected connector(s) have no connector-owned source lock: missing"},
+		{args: []string{"operation-evidence", root, "--connector", "asana", "--connector", "missing", "--output", output}, wantErr: "selected connector(s) have no connector-owned source lock: missing"},
+	} {
+		stdout.Reset()
+		stderr.Reset()
+		if code := run(test.args, &stdout, &stderr); code == 0 || !strings.Contains(stderr.String(), test.wantErr) {
+			t.Fatalf("invalid selected operation-evidence args %q = code %d stderr=%q, want %q", test.args, code, stderr.String(), test.wantErr)
+		}
+	}
+}
+
+func TestOperationEvidenceGitLabSourceLockBridge(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatalf("resolve repository root: %v", err)
+	}
+	output := filepath.Join(t.TempDir(), "gitlab-operation-evidence.json")
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"operation-evidence", root, "--connector", "gitlab", "--output", output}, &stdout, &stderr); code != 0 {
+		t.Fatalf("GitLab operation-evidence exit=%d stdout=%q stderr=%q", code, stdout.String(), stderr.String())
+	}
+	raw, err := os.ReadFile(output)
+	if err != nil {
+		t.Fatalf("read GitLab operation evidence: %v", err)
+	}
+	var artifact operationEvidenceArtifact
+	if err := json.Unmarshal(raw, &artifact); err != nil {
+		t.Fatalf("decode GitLab operation evidence: %v", err)
+	}
+	if artifact.GeneratedCommand != "go run ./cmd/connectorgen operation-evidence --connector gitlab" {
+		t.Fatalf("GitLab generated command = %q", artifact.GeneratedCommand)
+	}
+	if len(artifact.Rows) != 1752 {
+		t.Fatalf("GitLab operation-evidence rows = %d, want 1752 locked source identities", len(artifact.Rows))
+	}
+	seen := make(map[string]bool, len(artifact.Rows))
+	for _, row := range artifact.Rows {
+		if row.Connector != "gitlab" {
+			t.Fatalf("GitLab operation-evidence contains unrelated connector %q", row.Connector)
+		}
+		if row.SourceID == "" || seen[row.SourceID] {
+			t.Fatalf("GitLab source identity = %q, want one unique non-empty identity", row.SourceID)
+		}
+		seen[row.SourceID] = true
+		if row.Source.Lock != "sources/gitlab-operation-source-lock.json" || row.Source.URL == "" || row.Source.SHA256 == "" || row.Source.Bytes <= 0 || row.Source.Location == "" {
+			t.Fatalf("GitLab source trace for %q = %+v, want complete locked citation", row.SourceID, row.Source)
+		}
+		if len(row.CLI.Paths) == 0 && !slices.ContainsFunc(row.Gaps, func(gap operationEvidenceGap) bool {
+			return gap.Kind == operationEvidenceGapCLICommand
+		}) {
+			t.Fatalf("GitLab source identity %q has no CLI command and no explicit CLI gap", row.SourceID)
+		}
+	}
+}
+
 func TestOperationEvidenceClassForCommandUsesIntentNotOperationName(t *testing.T) {
 	if got := operationEvidenceClassForCommand("binary_upload", "releases_upload_asset"); got != operationEvidenceClassBinaryUpload {
 		t.Fatalf("binary_upload classification = %q, want %q", got, operationEvidenceClassBinaryUpload)

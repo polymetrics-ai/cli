@@ -27,6 +27,23 @@ Run the generator after a reviewed source-lock or connector-surface change:
 go run ./cmd/connectorgen operation-evidence --write-fixed-100
 ```
 
+For a reviewed bounded cohort, repeat `--connector` and supply an explicit
+report path. The selector reads only the named connectors' source locks and
+never replaces the repository-wide artifact or its fixed-100 reference:
+
+```bash
+go run ./cmd/connectorgen operation-evidence \
+  --connector asana --connector bitbucket --output data/connector-canon/batch1-operation-evidence.json
+```
+
+The scoped report is an identity-preserving source-lock-to-mapping bridge: it
+records the current canonical, runtime, command, website, proof, and named-gap
+cells for every selected source identity. `mapped` is not an execution claim;
+only the declaration-admission and runtime-preflight path can mark a command
+implemented. A source row with no current command therefore remains visible
+with its citation and gap instead of being omitted. A scoped report must not be
+used to replace the global fixed-100 contract.
+
 `make verify` runs `connectorgen-operation-evidence`, equivalent to:
 
 ```bash

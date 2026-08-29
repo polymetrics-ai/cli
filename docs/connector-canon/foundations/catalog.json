@@ -317,6 +317,10 @@
             "name": "operationEvidenceClassify"
           },
           {
+            "file": "cmd/connectorgen/operationevidence.go",
+            "name": "buildOperationEvidenceForConnectors"
+          },
+          {
             "file": "cmd/connectorgen/validate.go",
             "name": "checkCLISurfaceWriteFlags"
           }
@@ -380,6 +384,7 @@
         ],
         "selectors": [
           "connectorgen declaration-admission",
+          "connectorgen operation-evidence --connector <name>",
           "connectorgen surface-reconcile",
           "connectorgen surface-sync"
         ],
@@ -454,6 +459,16 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/operationevidence_test.go",
           "name": "TestOperationEvidencePreservesSavedAndInteractiveLanes"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/operationevidence_test.go",
+          "name": "TestOperationEvidenceConnectorFilterIsBounded"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/operationevidence_test.go",
+          "name": "TestOperationEvidenceGitLabSourceLockBridge"
         },
         {
           "package": "./cmd/connectorgen",

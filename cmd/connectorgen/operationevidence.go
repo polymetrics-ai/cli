@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"sort"
 	"strings"
 
@@ -181,7 +182,9 @@ type operationEvidenceFixedRow struct {
 type operationEvidenceOptions struct {
 	repoRoot      string
 	output        string
+	outputSet     bool
 	fixed100      string
+	connectors    []string
 	check         bool
 	writeFixed100 bool
 }
@@ -195,7 +198,7 @@ func runOperationEvidence(args []string, stdout, stderr io.Writer) int {
 		logf(stderr, "connectorgen operation-evidence: %v\n", err)
 		return 2
 	}
-	artifact, err := buildOperationEvidence(options.repoRoot)
+	artifact, err := buildOperationEvidenceForConnectors(options.repoRoot, options.connectors)
 	if err != nil {
 		logf(stderr, "connectorgen operation-evidence: %v\n", err)
 		return 1
@@ -206,6 +209,10 @@ func runOperationEvidence(args []string, stdout, stderr io.Writer) int {
 		return 1
 	}
 	if options.writeFixed100 {
+		if len(options.connectors) != 0 {
+			logf(stderr, "connectorgen operation-evidence: --write-fixed-100 does not support a connector filter\n")
+			return 2
+		}
 		fixed, err := buildOperationEvidenceFixed100(artifact)
 		if err != nil {
 			logf(stderr, "connectorgen operation-evidence: build fixed-100 reference: %v\n", err)
@@ -231,16 +238,20 @@ func runOperationEvidence(args []string, stdout, stderr io.Writer) int {
 			logf(stderr, "connectorgen operation-evidence: generated artifact %q has drift; rerun `go run ./cmd/connectorgen operation-evidence --write-fixed-100`\n", filepath.ToSlash(options.output))
 			return 1
 		}
-		fixed, err := readOperationEvidenceFixed100(options.fixed100)
-		if err != nil {
-			logf(stderr, "connectorgen operation-evidence: read fixed-100 reference: %v\n", err)
-			return 1
+		if len(options.connectors) == 0 {
+			fixed, err := readOperationEvidenceFixed100(options.fixed100)
+			if err != nil {
+				logf(stderr, "connectorgen operation-evidence: read fixed-100 reference: %v\n", err)
+				return 1
+			}
+			if err := validateOperationEvidenceFixed100(artifact, fixed); err != nil {
+				logf(stderr, "connectorgen operation-evidence: fixed-100 validation failed: %v\n", err)
+				return 1
+			}
+			logf(stdout, "connectorgen operation-evidence: %s is current (%d rows; %d rollups; fixed-100 passed)\n", filepath.ToSlash(options.output), len(artifact.Rows), len(artifact.MissingFoundations))
+			return 0
 		}
-		if err := validateOperationEvidenceFixed100(artifact, fixed); err != nil {
-			logf(stderr, "connectorgen operation-evidence: fixed-100 validation failed: %v\n", err)
-			return 1
-		}
-		logf(stdout, "connectorgen operation-evidence: %s is current (%d rows; %d rollups; fixed-100 passed)\n", filepath.ToSlash(options.output), len(artifact.Rows), len(artifact.MissingFoundations))
+		logf(stdout, "connectorgen operation-evidence: %s is current (%d selected rows; %d rollups)\n", filepath.ToSlash(options.output), len(artifact.Rows), len(artifact.MissingFoundations))
 		return 0
 	}
 	if err := writeGeneratedArtifact(options.output, raw); err != nil {
@@ -262,17 +273,32 @@ func parseOperationEvidenceOptions(args []string) (operationEvidenceOptions, err
 			}
 			index++
 			options.output = args[index]
+			options.outputSet = true
 		case "--fixed-100":
 			if index+1 >= len(args) {
 				return operationEvidenceOptions{}, errors.New("--fixed-100 requires a path")
 			}
 			index++
 			options.fixed100 = args[index]
+		case "--connector":
+			if index+1 >= len(args) {
+				return operationEvidenceOptions{}, errors.New("--connector requires one connector name")
+			}
+			index++
+			if err := operationEvidenceAddConnector(&options, args[index]); err != nil {
+				return operationEvidenceOptions{}, err
+			}
 		case "--check":
 			options.check = true
 		case "--write-fixed-100":
 			options.writeFixed100 = true
 		default:
+			if strings.HasPrefix(arg, "--connector=") {
+				if err := operationEvidenceAddConnector(&options, strings.TrimPrefix(arg, "--connector=")); err != nil {
+					return operationEvidenceOptions{}, err
+				}
+				continue
+			}
 			if strings.HasPrefix(arg, "-") || options.repoRoot != "" {
 				return operationEvidenceOptions{}, fmt.Errorf("unexpected argument %q", arg)
 			}
@@ -291,6 +317,9 @@ func parseOperationEvidenceOptions(args []string) (operationEvidenceOptions, err
 		return operationEvidenceOptions{}, fmt.Errorf("resolve repository root: %w", err)
 	}
 	options.repoRoot = root
+	if len(options.connectors) != 0 && !options.outputSet {
+		return operationEvidenceOptions{}, errors.New("--connector requires an explicit --output path so a scoped report cannot replace the global artifact")
+	}
 	if options.output == "" {
 		options.output = filepath.Join(root, filepath.FromSlash(operationEvidenceArtifactPath))
 	} else if !filepath.IsAbs(options.output) {
@@ -304,7 +333,26 @@ func parseOperationEvidenceOptions(args []string) (operationEvidenceOptions, err
 	return options, nil
 }
 
+func operationEvidenceAddConnector(options *operationEvidenceOptions, connector string) error {
+	if options == nil {
+		return errors.New("operation-evidence options are required")
+	}
+	if err := validateSourceImportConnector(connector); err != nil {
+		return err
+	}
+	if slices.Contains(options.connectors, connector) {
+		return fmt.Errorf("--connector %q may be specified only once", connector)
+	}
+	options.connectors = append(options.connectors, connector)
+	slices.Sort(options.connectors)
+	return nil
+}
+
 func buildOperationEvidence(root string) (operationEvidenceArtifact, error) {
+	return buildOperationEvidenceForConnectors(root, nil)
+}
+
+func buildOperationEvidenceForConnectors(root string, selectedConnectors []string) (operationEvidenceArtifact, error) {
 	defsRoot := filepath.Join(root, "internal", "connectors", "defs")
 	provenance, err := readOperationEvidenceProvenance(root)
 	if err != nil {
@@ -318,6 +366,10 @@ func buildOperationEvidence(root string) (operationEvidenceArtifact, error) {
 	if err != nil {
 		return operationEvidenceArtifact{}, fmt.Errorf("read connector definitions: %w", err)
 	}
+	selected := make(map[string]bool, len(selectedConnectors))
+	for _, connector := range selectedConnectors {
+		selected[connector] = false
+	}
 	rows := make([]operationEvidenceRow, 0)
 	seenSources := make(map[string]operationEvidenceSourceOperation)
 	for _, entry := range entries {
@@ -325,11 +377,19 @@ func buildOperationEvidence(root string) (operationEvidenceArtifact, error) {
 			continue
 		}
 		connector := entry.Name()
+		if len(selected) != 0 {
+			if _, wanted := selected[connector]; !wanted {
+				continue
+			}
+		}
 		lockPath := filepath.Join(defsRoot, connector, "sources", connector+"-operation-source-lock.json")
 		if _, err := os.Stat(lockPath); errors.Is(err, os.ErrNotExist) {
 			continue
 		} else if err != nil {
 			return operationEvidenceArtifact{}, fmt.Errorf("stat source lock for %q: %w", connector, err)
+		}
+		if len(selected) != 0 {
+			selected[connector] = true
 		}
 		input, err := readOperationEvidenceSourceLock(lockPath, connector)
 		if err != nil {
@@ -359,6 +419,9 @@ func buildOperationEvidence(root string) (operationEvidenceArtifact, error) {
 			rows = append(rows, projectOperationEvidenceRow(root, connector, source, bundle, loadErr, website, report, crosswalk[source.ID], dispositions[source.ID]))
 		}
 	}
+	if missing := operationEvidenceMissingSelectedConnectors(selected); len(missing) != 0 {
+		return operationEvidenceArtifact{}, fmt.Errorf("selected connector(s) have no connector-owned source lock: %s", strings.Join(missing, ", "))
+	}
 	if len(rows) == 0 {
 		return operationEvidenceArtifact{}, errors.New("no connector-owned operation source locks found")
 	}
@@ -368,14 +431,29 @@ func buildOperationEvidence(root string) (operationEvidenceArtifact, error) {
 		}
 		return rows[i].SourceID < rows[j].SourceID
 	})
+	generatedCommand := "go run ./cmd/connectorgen operation-evidence"
+	for _, connector := range selectedConnectors {
+		generatedCommand += " --connector " + connector
+	}
 	return operationEvidenceArtifact{
 		SchemaVersion:         operationEvidenceSchemaVersion,
-		GeneratedCommand:      "go run ./cmd/connectorgen operation-evidence",
+		GeneratedCommand:      generatedCommand,
 		Provenance:            provenance,
 		Rows:                  rows,
 		MissingFoundations:    operationEvidenceRollups(rows),
 		IntentionallyReadOnly: operationEvidenceReadOnlyRollups(rows),
 	}, nil
+}
+
+func operationEvidenceMissingSelectedConnectors(selected map[string]bool) []string {
+	missing := make([]string, 0)
+	for connector, found := range selected {
+		if !found {
+			missing = append(missing, connector)
+		}
+	}
+	sort.Strings(missing)
+	return missing
 }
 
 func readOperationEvidenceProvenance(root string) (operationEvidenceProvenance, error) {

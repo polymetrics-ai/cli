@@ -1,5 +1,20 @@
 # Issue #4283: Batch-1 source-rigidity R2 plan
 
+## Task Delivery Header
+
+- Issue: Refs #4283 — Batch-1 source-rigidity R2.
+- Base branch: `main`.
+- Merges into: `fm/cli-top100-declaration-batch-r1` → `main`.
+- Delivery: Extend existing PR #4294 only; exact reviewed SHA is normal-fast-forward pushed to `fm/cli-top100-declaration-batch-r1`, without merge or new PR.
+- Working branch: `fm/cli-top100-declaration-batch-r1` (detached assigned worktree, remote tracked explicitly).
+- Task: Preserve all ten Batch-1 source-lock identities through bounded mapping, generated surfaces, and typed truthful dispositions; no provider I/O or generic transport.
+- Verification: Focused red/green Go tests, connector-scoped reconciliation report, real no-I/O preflight where a row is implemented, documentation/Atlas validation, exact-SHA review, and relevant local CI gates.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| A scoped evidence bridge cannot omit or add connectors outside its selected source locks | live | `TestOperationEvidenceConnectorFilterIsBounded` checks all 249 Asana source identities and rejects a missing connector even when a valid connector is selected. |
+| Legacy provider facts remain retained but non-executable | live | Source-import parser tests assert retained object fragments and reject unknown outer members/non-object fragments before any provider I/O. |
+
 ## Scope decision
 
 **Authorized bounded cohort.** Captain instruction `006.msg` changes the obsolete delivery policy rather than waiving it. PR #4294 may contain the ten named Batch-1 connectors and only the shared foundations required to preserve their source-lock identities. Every shared change needs an Atlas `reuse`, `constrained_extension`, or captain-approved `actual_gap` disposition. The scope never authorizes unrelated connectors, generic raw transport, credential handling, destructive-operation policy, approval-policy changes, provider-live I/O, or a merge.
@@ -16,6 +31,7 @@
 | Slice | Atlas ID | Classification | Bounded contract |
 | --- | --- | --- | --- |
 | P1 legacy enrichment retention | `source.retention-import.v1` | `constrained_extension` | Retain v1/v2 `source_contract` and `source_operation` object fragments as identity-attached, non-executable source evidence. The existing source-import owner remains the only implementation; no connector branch, raw request transport, or runtime admission is added. |
+| P2 scoped source-lock mapping report | `source.projection-admission.v1` | `constrained_extension` | Select an explicit connector set when emitting the operation evidence bridge. It reads only their locks, rejects any selected connector without a lock, requires a non-global output, and does not alter the global fixed-100 contract or claim execution. |
 
 ## Planned TDD sequence once scope is valid
 
