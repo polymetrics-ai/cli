@@ -5029,9 +5029,46 @@
             "maxLength": 8192
           },
           "data": {
-            "type": "object",
-            "maxProperties": 256,
-            "additionalProperties": true
+            "additionalProperties": false,
+            "properties": {
+              "assignee": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "effort": {
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "hours",
+                      "percent"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "type": [
+                  "object",
+                  "null"
+                ]
+              },
+              "end_date": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "parent": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "start_date": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "type": "object"
           },
           "opt_fields": {
             "items": {
@@ -5091,9 +5128,52 @@
         ],
         "properties": {
           "data": {
-            "type": "object",
-            "maxProperties": 256,
-            "additionalProperties": true
+            "additionalProperties": false,
+            "properties": {
+              "assignee": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "effort": {
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "hours",
+                      "percent"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "type": [
+                  "object",
+                  "null"
+                ]
+              },
+              "end_date": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "parent": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "start_date": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "assignee",
+              "end_date",
+              "parent",
+              "start_date"
+            ],
+            "type": "object"
           },
           "opt_fields": {
             "items": {
@@ -5153,9 +5233,76 @@
         ],
         "properties": {
           "data": {
-            "type": "object",
-            "maxProperties": 256,
-            "additionalProperties": true
+            "additionalProperties": false,
+            "properties": {
+              "actual": {
+                "additionalProperties": false,
+                "properties": {
+                  "billable_status_filter": {
+                    "enum": [
+                      "billable",
+                      "non_billable",
+                      "any"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "budget_type": {
+                "enum": [
+                  "cost",
+                  "time"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "estimate": {
+                "additionalProperties": false,
+                "properties": {
+                  "billable_status_filter": {
+                    "enum": [
+                      "billable",
+                      "non_billable",
+                      "any"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "source": {
+                    "enum": [
+                      "none",
+                      "tasks",
+                      "capacity_plans"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "parent": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "total": {
+                "additionalProperties": false,
+                "properties": {
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
           },
           "opt_pretty": {
             "type": "boolean"
@@ -5197,9 +5344,76 @@
             "maxLength": 8192
           },
           "data": {
-            "type": "object",
-            "maxProperties": 256,
-            "additionalProperties": true
+            "additionalProperties": false,
+            "properties": {
+              "actual": {
+                "additionalProperties": false,
+                "properties": {
+                  "billable_status_filter": {
+                    "enum": [
+                      "billable",
+                      "non_billable",
+                      "any"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "budget_type": {
+                "enum": [
+                  "cost",
+                  "time"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "estimate": {
+                "additionalProperties": false,
+                "properties": {
+                  "billable_status_filter": {
+                    "enum": [
+                      "billable",
+                      "non_billable",
+                      "any"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "source": {
+                    "enum": [
+                      "none",
+                      "tasks",
+                      "capacity_plans"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "parent": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "total": {
+                "additionalProperties": false,
+                "properties": {
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
           },
           "opt_fields": {
             "items": {
@@ -6408,10 +6622,6 @@
           "data": {
             "additionalProperties": false,
             "properties": {
-              "gid": {
-                "maxLength": 8192,
-                "type": "string"
-              },
               "parent": {
                 "maxLength": 8192,
                 "type": "string"
@@ -6420,10 +6630,6 @@
                 "type": "number"
               },
               "resource": {
-                "maxLength": 8192,
-                "type": "string"
-              },
-              "resource_type": {
                 "maxLength": 8192,
                 "type": "string"
               }
@@ -6492,16 +6698,8 @@
           "data": {
             "additionalProperties": false,
             "properties": {
-              "gid": {
-                "maxLength": 8192,
-                "type": "string"
-              },
               "rate": {
                 "type": "number"
-              },
-              "resource_type": {
-                "maxLength": 8192,
-                "type": "string"
               }
             },
             "type": "object"
@@ -6569,9 +6767,139 @@
         ],
         "properties": {
           "data": {
-            "type": "object",
-            "maxProperties": 256,
-            "additionalProperties": true
+            "additionalProperties": false,
+            "properties": {
+              "base_role_type": {
+                "enum": [
+                  "guest",
+                  "member",
+                  "admin",
+                  "super_admin"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "description": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "is_standard_role": {
+                "type": "boolean"
+              },
+              "name": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "permissions": {
+                "additionalProperties": false,
+                "properties": {
+                  "allowed_guest_invites": {
+                    "enum": [
+                      "all",
+                      "none"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "assign_roles": {
+                    "type": "boolean"
+                  },
+                  "create_and_edit_ai_automations": {
+                    "type": "boolean"
+                  },
+                  "create_and_edit_ai_teammates": {
+                    "type": "boolean"
+                  },
+                  "create_app_authorization": {
+                    "type": "boolean"
+                  },
+                  "create_global_custom_fields": {
+                    "type": "boolean"
+                  },
+                  "create_goal": {
+                    "type": "boolean"
+                  },
+                  "create_pat_authorization": {
+                    "type": "boolean"
+                  },
+                  "create_portfolio": {
+                    "type": "boolean"
+                  },
+                  "create_project": {
+                    "type": "boolean"
+                  },
+                  "create_read_only_link": {
+                    "type": "boolean"
+                  },
+                  "create_team": {
+                    "type": "boolean"
+                  },
+                  "download_mobile_attachments": {
+                    "type": "boolean"
+                  },
+                  "export_project_data": {
+                    "type": "boolean"
+                  },
+                  "import_data": {
+                    "type": "boolean"
+                  },
+                  "manage_roles": {
+                    "type": "boolean"
+                  },
+                  "proactive_ai": {
+                    "type": "boolean"
+                  },
+                  "share_goal_with_domain": {
+                    "type": "boolean"
+                  },
+                  "share_portfolios_with_org": {
+                    "type": "boolean"
+                  },
+                  "share_teams_with_org": {
+                    "type": "boolean"
+                  },
+                  "standard_ai": {
+                    "type": "boolean"
+                  },
+                  "task_deletion_policy": {
+                    "enum": [
+                      "all",
+                      "owned",
+                      "none"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "upload_attachments": {
+                    "type": "boolean"
+                  },
+                  "view_public_teams": {
+                    "type": "boolean"
+                  },
+                  "view_shared_with_org_portfolios": {
+                    "type": "boolean"
+                  },
+                  "view_shared_with_org_projects": {
+                    "type": "boolean"
+                  },
+                  "view_shared_with_org_tasks": {
+                    "type": "boolean"
+                  }
+                },
+                "type": "object"
+              },
+              "workspace": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "base_role_type",
+              "description",
+              "name",
+              "workspace"
+            ],
+            "type": "object"
           },
           "opt_fields": {
             "items": {
@@ -6663,9 +6991,129 @@
             "maxLength": 8192
           },
           "data": {
-            "type": "object",
-            "maxProperties": 256,
-            "additionalProperties": true
+            "additionalProperties": false,
+            "properties": {
+              "base_role_type": {
+                "enum": [
+                  "guest",
+                  "member",
+                  "admin",
+                  "super_admin"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "description": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "is_standard_role": {
+                "type": "boolean"
+              },
+              "name": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "permissions": {
+                "additionalProperties": false,
+                "properties": {
+                  "allowed_guest_invites": {
+                    "enum": [
+                      "all",
+                      "none"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "assign_roles": {
+                    "type": "boolean"
+                  },
+                  "create_and_edit_ai_automations": {
+                    "type": "boolean"
+                  },
+                  "create_and_edit_ai_teammates": {
+                    "type": "boolean"
+                  },
+                  "create_app_authorization": {
+                    "type": "boolean"
+                  },
+                  "create_global_custom_fields": {
+                    "type": "boolean"
+                  },
+                  "create_goal": {
+                    "type": "boolean"
+                  },
+                  "create_pat_authorization": {
+                    "type": "boolean"
+                  },
+                  "create_portfolio": {
+                    "type": "boolean"
+                  },
+                  "create_project": {
+                    "type": "boolean"
+                  },
+                  "create_read_only_link": {
+                    "type": "boolean"
+                  },
+                  "create_team": {
+                    "type": "boolean"
+                  },
+                  "download_mobile_attachments": {
+                    "type": "boolean"
+                  },
+                  "export_project_data": {
+                    "type": "boolean"
+                  },
+                  "import_data": {
+                    "type": "boolean"
+                  },
+                  "manage_roles": {
+                    "type": "boolean"
+                  },
+                  "proactive_ai": {
+                    "type": "boolean"
+                  },
+                  "share_goal_with_domain": {
+                    "type": "boolean"
+                  },
+                  "share_portfolios_with_org": {
+                    "type": "boolean"
+                  },
+                  "share_teams_with_org": {
+                    "type": "boolean"
+                  },
+                  "standard_ai": {
+                    "type": "boolean"
+                  },
+                  "task_deletion_policy": {
+                    "enum": [
+                      "all",
+                      "owned",
+                      "none"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "upload_attachments": {
+                    "type": "boolean"
+                  },
+                  "view_public_teams": {
+                    "type": "boolean"
+                  },
+                  "view_shared_with_org_portfolios": {
+                    "type": "boolean"
+                  },
+                  "view_shared_with_org_projects": {
+                    "type": "boolean"
+                  },
+                  "view_shared_with_org_tasks": {
+                    "type": "boolean"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
           },
           "opt_fields": {
             "items": {

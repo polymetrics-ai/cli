@@ -3153,6 +3153,9 @@ func sourceContractForAction(operation sourceOperationDescriptor, action *ordere
 		properties, _ := body["properties"].(map[string]any)
 		required := sourceSchemaRequired(body)
 		for _, name := range sortedSourceMapKeys(properties) {
+			if sourceProjectionSchemaReadOnly(properties[name]) {
+				continue
+			}
 			converted, err := sourceProjectionSchema(properties[name])
 			if err != nil && allowBoundedNamedJSON {
 				converted, err = sourceProjectionBoundedNamedJSONSchema(properties[name])
@@ -3280,6 +3283,9 @@ func sourceContractForConcreteVariant(operation sourceOperationDescriptor, actio
 		}
 	}
 	for _, name := range sortedSourceMapKeys(properties) {
+		if sourceProjectionSchemaReadOnly(properties[name]) {
+			continue
+		}
 		converted, err := sourceProjectionSchema(properties[name])
 		if err != nil {
 			converted, err = sourceProjectionBoundedNamedJSONSchema(properties[name])
@@ -3507,6 +3513,13 @@ func sourceProjectionSchema(raw any) (any, error) {
 	if !ok {
 		return nil, fmt.Errorf("source schema is not an object")
 	}
+	if _, exists := schema["allOf"]; exists {
+		flattened, err := sourceProjectionFlattenObjectAllOf(schema)
+		if err != nil {
+			return nil, err
+		}
+		schema = flattened
+	}
 	if _, exists := schema["oneOf"]; exists {
 		return nil, fmt.Errorf("oneOf requires a typed gap")
 	}
@@ -3581,6 +3594,9 @@ func sourceProjectionSchema(raw any) (any, error) {
 		properties, _ := schema["properties"].(map[string]any)
 		convertedProperties := map[string]any{}
 		for _, name := range sortedSourceMapKeys(properties) {
+			if sourceProjectionSchemaReadOnly(properties[name]) {
+				continue
+			}
 			converted, err := sourceProjectionSchema(properties[name])
 			if err != nil {
 				return nil, fmt.Errorf("property %q: %w", name, err)
@@ -3589,11 +3605,148 @@ func sourceProjectionSchema(raw any) (any, error) {
 		}
 		out["properties"] = convertedProperties
 		out["additionalProperties"] = false
-		if required := sourceAnySlice(schema["required"]); len(required) > 0 {
+		if required := sourceProjectionWritableRequired(schema["required"], convertedProperties); len(required) > 0 {
 			out["required"] = required
 		}
 	}
 	return out, nil
+}
+
+// sourceProjectionSchemaReadOnly applies OpenAPI request directionality at the
+// property boundary. A response-owned field can remain in the immutable source
+// contract, but it must never become a caller flag or an executable request
+// field. An allOf arm may carry the annotation after reference resolution, so
+// inspect only each arm's root annotation without treating nested read-only
+// children as making their writable parent read-only.
+func sourceProjectionSchemaReadOnly(raw any) bool {
+	schema, ok := raw.(map[string]any)
+	if !ok {
+		return false
+	}
+	if readOnly, _ := schema["readOnly"].(bool); readOnly {
+		return true
+	}
+	for _, rawArm := range sourceAnySlice(schema["allOf"]) {
+		arm, ok := rawArm.(map[string]any)
+		if !ok {
+			continue
+		}
+		if sourceProjectionSchemaReadOnly(arm) {
+			return true
+		}
+	}
+	return false
+}
+
+func sourceProjectionWritableRequired(raw any, properties map[string]any) []any {
+	result := make([]any, 0)
+	seen := map[string]bool{}
+	for _, value := range sourceAnySlice(raw) {
+		name, ok := value.(string)
+		if !ok || seen[name] {
+			continue
+		}
+		if _, writable := properties[name]; !writable {
+			continue
+		}
+		seen[name] = true
+		result = append(result, name)
+	}
+	return result
+}
+
+// sourceProjectionFlattenObjectAllOf converts a fully source-resolved OpenAPI
+// object intersection into the engine's closed object subset. It is purposely
+// narrower than a general JSON-Schema composition engine: every structural arm
+// must be an object, duplicate properties retain their intersection, and an
+// unsupported/dynamic arm still falls back through the existing typed-gap
+// path. This lets named Asana request objects keep every documented writable
+// field without admitting response-only identifiers through an open JSON map.
+func sourceProjectionFlattenObjectAllOf(schema map[string]any) (map[string]any, error) {
+	rawArms, exists := schema["allOf"]
+	if !exists {
+		return schema, nil
+	}
+	arms, ok := rawArms.([]any)
+	if !ok || len(arms) == 0 {
+		return nil, fmt.Errorf("source schema allOf must be a non-empty array")
+	}
+
+	result := make(map[string]any, len(schema)+2)
+	for key, value := range schema {
+		if key != "allOf" && key != "properties" && key != "required" {
+			result[key] = value
+		}
+	}
+	properties := map[string]any{}
+	if rawProperties, ok := schema["properties"].(map[string]any); ok {
+		for name, value := range rawProperties {
+			properties[name] = value
+		}
+	}
+	required := sourceSchemaRequired(schema)
+
+	for index, rawArm := range arms {
+		arm, ok := rawArm.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("source schema allOf arm %d is not an object", index)
+		}
+		if _, nested := arm["allOf"]; nested {
+			var err error
+			arm, err = sourceProjectionFlattenObjectAllOf(arm)
+			if err != nil {
+				return nil, fmt.Errorf("source schema allOf arm %d: %w", index, err)
+			}
+		}
+		armType, hasType := arm["type"].(string)
+		armProperties, hasProperties := arm["properties"].(map[string]any)
+		armRequired := sourceSchemaRequired(arm)
+		if !hasType && !hasProperties && len(armRequired) == 0 {
+			// An annotation-only allOf arm has no request-validation effect.
+			continue
+		}
+		if hasType && armType != "object" {
+			return nil, fmt.Errorf("source schema allOf arm %d has non-object type %q", index, armType)
+		}
+		for _, name := range sortedSourceMapKeys(armProperties) {
+			if existing, duplicate := properties[name]; duplicate && !reflect.DeepEqual(existing, armProperties[name]) {
+				properties[name] = map[string]any{"allOf": []any{existing, armProperties[name]}}
+				continue
+			}
+			properties[name] = armProperties[name]
+		}
+		for name := range armRequired {
+			required[name] = true
+		}
+		for _, key := range []string{"additionalProperties", "minProperties", "maxProperties"} {
+			value, declared := arm[key]
+			if !declared {
+				continue
+			}
+			if current, alreadyDeclared := result[key]; alreadyDeclared && !reflect.DeepEqual(current, value) {
+				return nil, fmt.Errorf("source schema allOf arms conflict on %s", key)
+			}
+			result[key] = value
+		}
+	}
+	if declaredType, exists := result["type"]; exists && declaredType != "object" {
+		return nil, fmt.Errorf("source schema allOf root has non-object type %v", declaredType)
+	}
+	result["type"] = "object"
+	result["properties"] = properties
+	if len(required) > 0 {
+		names := make([]string, 0, len(required))
+		for name := range required {
+			names = append(names, name)
+		}
+		sort.Strings(names)
+		values := make([]any, len(names))
+		for index := range names {
+			values[index] = names[index]
+		}
+		result["required"] = values
+	}
+	return result, nil
 }
 
 // sourceProjectionBoundedNamedJSONSchema retains a source-owned value whose

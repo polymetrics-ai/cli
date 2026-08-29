@@ -382,6 +382,155 @@ func TestSourceLockedDeferredOperationsAreMaterialized(t *testing.T) {
 
 }
 
+func TestSourceProjectedRequestSchemasRejectReadOnlyProviderFields(t *testing.T) {
+	type readOnlyCase struct {
+		action   string
+		sourceID string
+		fields   []string
+	}
+	tests := []readOnlyCase{
+		{action: "create_allocation", sourceID: "asana.rest.createAllocation", fields: []string{"gid", "resource_type"}},
+		{action: "update_allocation", sourceID: "asana.rest.updateAllocation", fields: []string{"gid", "resource_type"}},
+		{action: "create_budget", sourceID: "asana.rest.createBudget", fields: []string{"gid", "resource_type"}},
+		{action: "update_budget", sourceID: "asana.rest.updateBudget", fields: []string{"gid", "resource_type"}},
+		{action: "create_rate", sourceID: "asana.rest.createRate", fields: []string{"gid", "resource_type"}},
+		{action: "update_rate", sourceID: "asana.rest.updateRate", fields: []string{"gid", "resource_type"}},
+		{action: "create_role", sourceID: "asana.rest.createRole", fields: []string{"creation_time", "gid", "modified_at", "resource_type"}},
+		{action: "update_role", sourceID: "asana.rest.updateRole", fields: []string{"creation_time", "gid", "modified_at", "resource_type"}},
+	}
+
+	descriptorRaw, err := os.ReadFile("sources/asana-operation-descriptor.json")
+	if err != nil {
+		t.Fatalf("read source-locked Asana descriptor: %v", err)
+	}
+	var descriptor struct {
+		Operations []struct {
+			SourceID string `json:"source_id"`
+			Request  struct {
+				Body *struct {
+					Schema any `json:"schema"`
+				} `json:"body"`
+			} `json:"request"`
+		} `json:"operations"`
+	}
+	if err := json.Unmarshal(descriptorRaw, &descriptor); err != nil {
+		t.Fatalf("decode source-locked Asana descriptor: %v", err)
+	}
+	operations := make(map[string]any, len(descriptor.Operations))
+	for _, operation := range descriptor.Operations {
+		if operation.Request.Body != nil {
+			operations[operation.SourceID] = operation.Request.Body.Schema
+		}
+	}
+
+	bundle := loadBundle(t)
+	actions := make(map[string]engine.WriteAction, len(bundle.Writes))
+	for _, action := range bundle.Writes {
+		actions[action.Name] = action
+	}
+	capture := newCaptureServer()
+	defer capture.Close()
+
+	for _, test := range tests {
+		t.Run(test.action, func(t *testing.T) {
+			sourceSchema, ok := operations[test.sourceID]
+			if !ok {
+				t.Fatalf("source operation %q has no request schema", test.sourceID)
+			}
+			sourceReadOnly := map[string]bool{}
+			collectReadOnlyPropertyNames(sourceSchema, sourceReadOnly)
+			gotSourceFields := make([]string, 0, len(sourceReadOnly))
+			for name := range sourceReadOnly {
+				gotSourceFields = append(gotSourceFields, name)
+			}
+			sort.Strings(gotSourceFields)
+			if !reflect.DeepEqual(gotSourceFields, test.fields) {
+				t.Fatalf("source readOnly fields = %v, want locked %v", gotSourceFields, test.fields)
+			}
+
+			action, ok := actions[test.action]
+			if !ok {
+				t.Fatalf("write action is absent")
+			}
+			var recordSchema struct {
+				Properties map[string]struct {
+					AdditionalProperties *bool                      `json:"additionalProperties"`
+					Properties           map[string]json.RawMessage `json:"properties"`
+				} `json:"properties"`
+			}
+			if err := json.Unmarshal(action.RecordSchema, &recordSchema); err != nil {
+				t.Fatalf("decode record schema: %v", err)
+			}
+			dataSchema, ok := recordSchema.Properties["data"]
+			if !ok || dataSchema.AdditionalProperties == nil || *dataSchema.AdditionalProperties {
+				t.Fatalf("data request schema is not closed: %+v", dataSchema)
+			}
+			for _, name := range test.fields {
+				if _, admitted := dataSchema.Properties[name]; admitted {
+					t.Errorf("source readOnly field %q remained in executable data schema", name)
+				}
+			}
+
+			fixtureRaw, err := os.ReadFile(filepath.Join("fixtures", "writes", test.action+".json"))
+			if err != nil {
+				t.Fatalf("read write fixture: %v", err)
+			}
+			var fixture struct {
+				Record connectors.Record `json:"record"`
+			}
+			if err := json.Unmarshal(fixtureRaw, &fixture); err != nil {
+				t.Fatalf("decode write fixture: %v", err)
+			}
+			if _, err := engine.DryRunWrite(context.Background(), bundle, connectors.WriteRequest{Action: test.action, Config: runtimeConfig(capture.URL)}, []connectors.Record{fixture.Record}, engine.HooksFor(bundle.Name)); err != nil {
+				t.Fatalf("documented writable fixture rejected: %v", err)
+			}
+			for _, name := range test.fields {
+				encoded, err := json.Marshal(fixture.Record)
+				if err != nil {
+					t.Fatal(err)
+				}
+				var invalid connectors.Record
+				if err := json.Unmarshal(encoded, &invalid); err != nil {
+					t.Fatal(err)
+				}
+				invalid["data"].(map[string]any)[name] = "forged-response-field"
+				before := capture.Count()
+				if _, err := engine.Write(context.Background(), bundle, connectors.WriteRequest{Action: test.action, Config: runtimeConfig(capture.URL)}, []connectors.Record{invalid}, engine.HooksFor(bundle.Name)); err == nil {
+					t.Errorf("source readOnly field %q was accepted", name)
+				}
+				if got := capture.Count(); got != before {
+					t.Errorf("source readOnly field %q made %d provider request(s), want zero", name, got-before)
+				}
+			}
+		})
+	}
+}
+
+func collectReadOnlyPropertyNames(raw any, names map[string]bool) {
+	switch value := raw.(type) {
+	case map[string]any:
+		if properties, ok := value["properties"].(map[string]any); ok {
+			for name, property := range properties {
+				if object, ok := property.(map[string]any); ok {
+					if readOnly, _ := object["readOnly"].(bool); readOnly {
+						names[name] = true
+					}
+				}
+				collectReadOnlyPropertyNames(property, names)
+			}
+		}
+		for key, child := range value {
+			if key != "properties" {
+				collectReadOnlyPropertyNames(child, names)
+			}
+		}
+	case []any:
+		for _, child := range value {
+			collectReadOnlyPropertyNames(child, names)
+		}
+	}
+}
+
 func TestWriteQueryCellsMatchPinnedFormEncoding(t *testing.T) {
 	type queryCell struct {
 		action          string

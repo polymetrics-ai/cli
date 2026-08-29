@@ -2076,6 +2076,100 @@ func TestSourceProjectionGapKeepsNamedBoundedUnionFieldsReachable(t *testing.T) 
 	}
 }
 
+func TestSourceProjectionRequestSchemaExcludesReadOnlyFieldsAcrossAllOf(t *testing.T) {
+	bundleDir := t.TempDir()
+	writesPath := filepath.Join(bundleDir, "writes.json")
+	cliPath := filepath.Join(bundleDir, "cli_surface.json")
+	writeProjectionFixture(t, writesPath, `{"schema_version":1,"actions":[{"name":"items_create","method":"POST","path":"/items","body_type":"json","body_fields":["data"],"record_schema":{"type":"object","additionalProperties":false,"required":["data"],"properties":{"data":{"type":"object","maxProperties":256,"additionalProperties":true}}},"risk":"standard"}]}`)
+	writeProjectionFixture(t, cliPath, `{"schema_version":1,"commands":[{"path":"items create","intent":"reverse_etl","availability":"implemented","write":"items_create","flags":[{"name":"data","type":"json","maps_to":"record.data","required":true,"max_bytes":1048576}]}]}`)
+	operation := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "items/create", Method: "post", Path: "/items",
+		Request: sourceRequestDescriptor{MediaType: "application/json", Body: &sourceRequestBodyDescriptor{Schema: map[string]any{
+			"type": "object", "required": []any{"data", "server_echo"},
+			"properties": map[string]any{
+				"server_echo": map[string]any{"type": "string", "readOnly": true},
+				"data": map[string]any{"allOf": []any{
+					map[string]any{
+						"type": "object", "required": []any{"gid", "name"},
+						"properties": map[string]any{
+							"gid":  map[string]any{"type": "string", "readOnly": true},
+							"name": map[string]any{"type": "string", "maxLength": json.Number("32")},
+						},
+					},
+					map[string]any{
+						"type": "object", "required": []any{"workspace", "modified_at"},
+						"properties": map[string]any{
+							"workspace":   map[string]any{"type": "string"},
+							"modified_at": map[string]any{"type": "string", "readOnly": true},
+						},
+					},
+				}},
+			},
+		}}},
+		Runtime: sourceRuntimeReachability{Gaps: []sourceContractGap{{
+			Foundation: "cli-request-schema-foundation-r1", Location: "request body", Reason: "source-owned allOf request shape",
+		}}},
+	}
+
+	stats, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{operation}}, false)
+	if err != nil {
+		t.Fatalf("project allOf request contract: %v", err)
+	}
+	if stats.Writes != 1 || stats.Missing != 0 {
+		t.Fatalf("projection stats = %+v, want one direction-safe action", stats)
+	}
+	var projected struct {
+		Actions []struct {
+			RecordSchema json.RawMessage `json:"record_schema"`
+		} `json:"actions"`
+	}
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, writesPath)), &projected); err != nil {
+		t.Fatalf("decode projected writes: %v", err)
+	}
+	if len(projected.Actions) != 1 {
+		t.Fatalf("projected actions = %d, want 1", len(projected.Actions))
+	}
+	var record map[string]any
+	if err := json.Unmarshal(projected.Actions[0].RecordSchema, &record); err != nil {
+		t.Fatalf("decode projected record schema: %v", err)
+	}
+	properties := record["properties"].(map[string]any)
+	if _, exists := properties["server_echo"]; exists {
+		t.Fatalf("top-level readOnly field remained executable: %#v", properties)
+	}
+	data := properties["data"].(map[string]any)
+	if data["additionalProperties"] != false {
+		t.Fatalf("allOf data projection stayed open: %#v", data)
+	}
+	dataProperties := data["properties"].(map[string]any)
+	if len(dataProperties) != 2 || dataProperties["name"] == nil || dataProperties["workspace"] == nil {
+		t.Fatalf("allOf writable properties = %#v, want only name/workspace", dataProperties)
+	}
+	if got := data["required"]; !reflect.DeepEqual(got, []any{"name", "workspace"}) {
+		t.Fatalf("allOf required = %#v, want readOnly names removed", got)
+	}
+	schema, err := engine.CompileSchema(projected.Actions[0].RecordSchema)
+	if err != nil {
+		t.Fatalf("compile projected request schema: %v", err)
+	}
+	if err := schema.Validate(map[string]any{"data": map[string]any{"name": "n", "workspace": "w"}}); err != nil {
+		t.Fatalf("writable request rejected: %v", err)
+	}
+	for _, record := range []map[string]any{
+		{"server_echo": "forged", "data": map[string]any{"name": "n", "workspace": "w"}},
+		{"data": map[string]any{"gid": "forged", "name": "n", "workspace": "w"}},
+		{"data": map[string]any{"modified_at": "forged", "name": "n", "workspace": "w"}},
+	} {
+		if err := schema.Validate(record); err == nil {
+			t.Fatalf("readOnly request unexpectedly validated: %#v", record)
+		}
+	}
+	cli := readProjectionFixture(t, cliPath)
+	if strings.Contains(cli, "server-echo") || strings.Contains(cli, "record.server_echo") {
+		t.Fatalf("readOnly field leaked into command flags: %s", cli)
+	}
+}
+
 // TestSourceProjectionStringUnionKeepsTextCLIAndProviderArms protects the
 // ordinary command spelling for source contracts such as GitHub's issue title.
 // A source oneOf may retain several provider scalar arms, but one named,
