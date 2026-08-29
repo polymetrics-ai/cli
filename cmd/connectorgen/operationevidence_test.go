@@ -22,6 +22,62 @@ func TestOperationEvidenceClassForCommandUsesIntentNotOperationName(t *testing.T
 	}
 }
 
+func TestOperationEvidencePreservesSavedAndInteractiveLanes(t *testing.T) {
+	root := operationEvidenceWorkspace(t)
+	artifact, _, stderr := runOperationEvidenceForTest(t, root, "")
+	if stderr != "" {
+		t.Fatalf("operation-evidence wrote diagnostics on complete invocation: %s", stderr)
+	}
+
+	tests := []struct {
+		name          string
+		sourceID      string
+		enabledLanes  []string
+		disabledLanes []string
+	}{
+		{
+			name:         "stream-backed direct read",
+			sourceID:     "asana.rest.getCustomFieldsForWorkspace",
+			enabledLanes: []string{operationEvidenceClassETL, operationEvidenceClassDirectRead},
+		},
+		{
+			name:         "action-backed direct write",
+			sourceID:     "asana.rest.addCustomFieldSettingForGoal",
+			enabledLanes: []string{operationEvidenceClassReverseETL, operationEvidenceClassDirectWrite},
+		},
+		{
+			name:          "operation-backed direct read",
+			sourceID:      "asana.rest.getAccessRequests",
+			enabledLanes:  []string{operationEvidenceClassDirectRead},
+			disabledLanes: []string{operationEvidenceClassETL, operationEvidenceClassReverseETL},
+		},
+		{
+			name:          "unsupported batch operation",
+			sourceID:      "asana.rest.createBatchRequest",
+			disabledLanes: operationEvidenceClasses,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			row, found := artifact.row(test.sourceID)
+			if !found {
+				t.Fatalf("operation evidence omitted source row %q", test.sourceID)
+			}
+			for _, lane := range test.enabledLanes {
+				classification := row.Classifications[lane]
+				if !classification.Declared || !classification.Enabled {
+					t.Fatalf("%s classification = %+v, want declared and enabled; runtime targets = %v, CLI paths = %v", lane, classification, row.Runtime.Targets, row.CLI.Paths)
+				}
+			}
+			for _, lane := range test.disabledLanes {
+				if classification := row.Classifications[lane]; classification.Enabled {
+					t.Fatalf("%s classification = %+v, want disabled; runtime targets = %v, CLI paths = %v", lane, classification, row.Runtime.Targets, row.CLI.Paths)
+				}
+			}
+		})
+	}
+}
+
 const githubReadOnlySourceID = "github.rest.actions/list-artifacts-for-repo"
 
 func (artifact operationEvidenceArtifact) rollupContaining(rollups []operationEvidenceRollup, sourceID string) (operationEvidenceRollup, bool) {

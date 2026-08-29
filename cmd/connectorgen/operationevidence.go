@@ -884,7 +884,7 @@ func projectOperationEvidenceRow(root, connector string, source operationEvidenc
 		}
 		return row.finalize()
 	}
-	operationEvidenceClassify(&row, commands, disposition.ParityClass)
+	operationEvidenceClassify(&row, targets, commands, disposition.ParityClass)
 	if source.SourceContractUnavailable {
 		for _, class := range operationEvidenceClasses {
 			value := row.Classifications[class]
@@ -1107,8 +1107,19 @@ func operationEvidenceGraphQLRootFieldForOperation(operation engine.OperationSpe
 	return match[1]
 }
 
-func operationEvidenceClassify(row *operationEvidenceRow, commands []engine.CLICommand, dispositionClass string) {
+func operationEvidenceClassify(row *operationEvidenceRow, targets operationEvidenceTargets, commands []engine.CLICommand, dispositionClass string) {
 	operationEvidenceSetClassification(row, operationEvidenceClassForDisposition(dispositionClass), false)
+	// A provider operation can serve both a saved transport lane and an
+	// interactive command lane. The runtime target owns the former; command
+	// intent owns the latter. Keeping them independent prevents a bounded
+	// direct command from erasing the same operation's ETL/reverse-ETL proof.
+	targetEnabled := operationEvidenceHasEnabledCommand(commands)
+	if len(targets.Streams) > 0 {
+		operationEvidenceSetClassification(row, operationEvidenceClassETL, targetEnabled)
+	}
+	if len(targets.Writes) > 0 {
+		operationEvidenceSetClassification(row, operationEvidenceClassReverseETL, targetEnabled)
+	}
 	for _, command := range commands {
 		class := operationEvidenceClassForCommand(command.Intent, command.Operation)
 		operationEvidenceSetClassification(row, class, command.Availability == "implemented")
